@@ -1,0 +1,35 @@
+POSTGRES DATABASE COMMMANDS:
+To insert json:
+create table myjsons(id serial, [column_name] jsonb)
+
+
+
+install prisma:
+npm install @prisma/client prisma
+
+
+to install prisma CLI:
+npx prisma --version
+
+to bring existing database models:
+npx prisma introspect (before doing this, you should have /prisma/schema.prisma in your root folder)
+
+After introspecting your database, you need to generate the Prisma Client, which provides a type-safe API for interacting with your database. Run the following command:
+npx prisma generate
+----------------------------------------
+Now you can use them in:
+
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function getContactById(id: number) {
+  return await prisma.crm_contact.findUnique({
+    where: {
+      id: id,
+    },
+  });
+}
+
+export default getContactById;
+-----------------

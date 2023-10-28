@@ -1,0 +1,259 @@
+.HeaderPage .topBar {
+  height: 10%;
+  width: 100%;
+  background-color: #f1f1f1;
+  padding: 5px 0;
+}
+.HeaderPage #link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.HeaderPage .a p{
+  display: flex;
+  align-items: center;
+}
+.HeaderPage #link:hover{
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}
+
+
+.HeaderPage .topBar {
+  text-align: right;
+}
+
+/* .HeaderPage p{
+  white-space: nowrap;
+} */
+/* .HeaderPage #link p span{
+
+  display: inline-flex;
+}  */
+
+
+.HeaderPage #link{
+  text-decoration: none;
+  color: inherit;
+}
+.HeaderPage #link:hover{
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}
+
+.HeaderPage .floatLeft {
+  float: left;
+}
+
+.HeaderPage .topBar .bold {
+  text-decoration: underline;
+  font-weight: bold;
+  padding: 0 10px 0 10px;
+}
+
+.HeaderPage .logoGrid {
+  display: flex;
+}
+.HeaderPage .logoGrid > * {
+  flex: 1;
+  flex-basis: 0;
+}
+.HeaderPage .logoGrid .item1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
+  margin: 10px;
+}
+
+.HeaderPage .logoGrid .item2 .img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  height: 150px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.HeaderPage .logoGrid .item2 .img img {
+  max-width: 100%;
+  max-height: 100%;
+  /* height:100%; */
+  width: 200px;
+}
+.HeaderPage .logoGrid .item3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
+  font-size: 1.2rem;
+  vertical-align: baseline;
+}
+
+.HeaderPage .logoGrid .item3 p {
+  margin: 15px;
+}
+.HeaderPage .logoGrid .item3 svg {
+  vertical-align: bottom;
+}
+
+/* .logo {
+    display: block;
+    width: 15%;
+    margin-left: auto;
+    margin-right: auto;
+  
+  } */
+
+/* Style the navbar */
+.HeaderPage .navbar {
+  overflow: hidden;
+  /* background-color: rgb(211,204,189); */
+  background-color: #f1f1f1;
+  border-radius: 0px 0px 30px 30px;
+  box-shadow: 2px 8px 10px 1px rgba(0, 0, 0, 0.2);
+  font-size: 1.3rem;
+}
+
+/* Navbar links */
+.HeaderPage .navbar .a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 19px 16px;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
+}
+
+/* Navbar links on mouse-over */
+.HeaderPage .navbar .a:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #d19e25;
+  transition: 0.4s;
+}
+
+/* Active/current link */
+/* .topnav a.active {
+      background-color: #2196F3;
+      color: white;
+    } */
+
+/* Style the input container */
+.HeaderPage .navbar .userDisplay {
+  display: flex;
+  padding-top: 20px;
+  float: right;
+  margin-right: 20px;
+  font-size: 16.5px;
+}
+
+/* .topnav .login-container:hover {
+      background: #ccc;
+    } */
+
+/* .shuffle2{
+      height: 5px;
+      width: 96%;
+      background: linear-gradient(-135deg, #D3CCBD 14px, transparent 0) 0 5px, linear-gradient(135deg, #D3CCBD 20px, #fffaf7 0) 0 5px;
+      background-color: #D3CCBD;
+      background-position: left bottom;
+      background-repeat: repeat-x;
+      background-size: 20px 20px;
+      
+      margin: auto;
+  } */
+
+  .HeaderPage .topBar2 {
+  background-color: #d3ccbd;
+  background-color: #f8f1e9;
+  border-radius: 5px;
+  padding: 0.5% 1%;
+}
+
+/* .span2 span {
+    float: right;
+    margin-right: 10px;
+  } */
+
+  .HeaderPage .span2flex {
+  display: flex;
+  justify-content: space-between;
+}
+.HeaderPage .span2flex2 {
+  display: flex;
+  justify-content: flex-end;
+  text-decoration: none;
+}
+.HeaderPage .loginButton,
+.HeaderPage .registerButton {
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  color: black;
+  text-decoration: none;
+  padding: 0 5px;
+}
+.HeaderPage .loginButton:hover,
+.HeaderPage .registerButton:hover,
+.HeaderPage .logoutButton:hover {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}
+
+.HeaderPage .logoutButton {
+  display: flex;
+  cursor: pointer;
+}
+
+/* Add responsiveness - On small screens, display the navbar vertically instead of horizontally */
+@media screen and (max-width: 600px) {
+  /* .navbar .userDisplay {
+      float: none;
+    } */
+    .HeaderPage .navbar .a {
+    float: none;
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+  .HeaderPage .navbar .quote {
+    display: none;
+  }
+  .HeaderPage .topBar2 {
+    font-size: 90%;
+    overflow: hidden;
+    height: auto;
+    width: 100vw;
+    display: inline-block;
+  }
+
+  .HeaderPage  .logo {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .HeaderPage .logoGrid .item1,
+  .HeaderPage .logoGrid .item3 {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .HeaderPage .navbar .quote {
+    display: none;
+  }
+}

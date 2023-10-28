@@ -1,0 +1,189 @@
+I will install json server
+npm install json-server -g
+
+to use it: 
+json-server --watch --port 4000 [json file relative path]
+
+to access, go to :
+http://localhost:4000/[your_date]
+--------------------------------------------------
+let's install prisma (to use it only in dependency), only client is needed in production
+npm i -D prisma
+
+not let's install prisma client, this will actually execute the sql codes, so you need it in production too
+npm i @prisma/client
+
+
+now initilize prisma, to create a prisma folder and set up all the default, it also creates .env file if you do not have it:
+npx prisma init
+
+now you need to create migration, creates a migration folder and file, and applies to the database, then generates prisma client to make sure all type definitions there is up to date
+npx prisma migrate dev --name [whatever name you want]
+
+prisma client stores type definitions in the node module folder, you do not commit that node_modules to github. 
+So you make generation part of the build process
+----
+
+We will add build process so that it would create connection with database (put it in packages.json file in npm run build)
+
+now install (let's us execute node script, but the script is written in typescript):
+npm i -D ts-node
+
+then we added this to package.json
+  "prisma":{
+    "seed":"ts-node --compiler-options {\"module\":\"commonJS\"} prisma/seed.ts"
+  },
+
+  and create a file in prisma folder called seed.ts (it could be named anything but this is a common name for it)
+  
+I ran, to regenerate the prisma client:
+"npx prisma generate"
+
+
+to test your database run (it will test your seed file and you can see if you fetch data or upload data):
+npx prisma db seed  
+
+You need only one prisma client instance for your entire app (single object that is managing the connection to your database and it manages everything internally)
+create folder called lib in src folder, inside create prisma.ts filde
+
+------
+
+to connect your database within terminal command line:
+railway link
+railway connect postgres
+
+to show all datatables:
+\dt
+
+To insert json:
+create table [table_name](id serial, [column_name] jsonb)
+
+
+------
+to pull models from existing database:
+prisma db pull
+or:
+npx prisma introspect
+rest:
+
+'https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/add-prisma-migrate-to-a-project'
+At the end, after doing all the things in the above url, I ran below and it all worked out
+prisma db push
+-----
+to backup your sql database:
+pg_dump -h containers-us-west-187.railway.app -U postgres -p 7085 -d railway > firat.sql
+-----
+
+
+
+--
+Working product grid with fetch data
+"use client";
+import { useEffect, useState } from "react";
+import ProductCard from "@/components/ProductCard";
+import classes from "@/components/ProductGrid.module.css";
+
+// type fabrics = {
+//   jsonarray: fabric[];
+// };
+
+// type filesArray = {
+//   name: string;
+//   design: string;
+//   annex: string;
+//   variant: string;
+//   imageNo: string;
+// };
+type FilesArray = {
+  name: string;
+  design: string;
+  annex: string;
+  variant: string;
+  imageNo: string;
+};
+type Fabric = {
+  title: string;
+  prefix: string;
+  design: string;
+  files: FilesArray[];
+  length: number;
+  product: string;
+};
+type Data = {
+  id: number;
+  collection: string;
+  data: Fabric[];
+};
+type Product = {
+  name: string;
+};
+
+export default function Example2(props: { product: Product }) {
+  // if (props.product.name === "products_embroidered_sheer_curtain_fabrics") {}
+
+  console.log(props.product.name);
+
+  const [productLoadAmount, setproductLoadAmount] = useState<number>(20);
+  const [fetchData, setFetchData] = useState<Data | null>(null);
+  const [loadedProducts, setloadedProducts] = useState<Fabric[] | null>(null);
+  const [filterUsed, setfilterUsed] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/getFabrics"); // Call your API route
+        if (response.ok) {
+          const result = await response.json();
+          setFetchData(result);
+        } else {
+          console.error("Error fetching data:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    function handleScrollEvent() {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 20
+        // filterUsed === false
+      ) {
+        // console.log("you're at the bottom of the page");
+
+        setproductLoadAmount(productLoadAmount + 20);
+
+        // console.log(loadAmount);
+        // here add more items in the 'filteredData' state from the 'allData' state source.
+      }
+    }
+
+    fetchData();
+    window.addEventListener("scroll", handleScrollEvent);
+    console.log(productLoadAmount);
+    return () => {
+      window.removeEventListener("scroll", handleScrollEvent);
+    };
+  }, []);
+  if (!fetchData) {
+    return <div>...Loading</div>;
+  } else {
+    return (
+      <div className={classes.ProductGrid}>
+        <div
+          className={classes.cover}
+          id="karven-banner"
+          style={{ backgroundImage: "url('/media/karven_banner.png')" }}
+        >
+          <div className={classes.headlineBox}>Embroidery</div>
+        </div>
+        <div className={classes.products}>
+          {fetchData.data.map((fabric, index: number) => {
+            return <ProductCard key={index} product={fabric} />;
+          })}
+        </div>
+      </div>
+    );
+  }
+}
+
+------

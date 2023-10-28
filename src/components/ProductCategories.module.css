@@ -1,0 +1,115 @@
+.ProductCategoriesPage {
+  /* padding: 10px; */
+  /* margin-top: 20px; */
+  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
+  background-color: #f1f1f1 ;
+}
+
+.ProductCategoriesPage .scallop_up {
+  
+  height: 50px;
+  width: 100%;
+  background: -webkit-gradient(
+    radial,
+    50% 100%,
+    30,
+    50% 100%,
+    40,
+    from(#f1f1f1),
+    color-stop(0.49, #f1f1f1),
+    color-stop(0.51, #fff),
+    to(white)
+  );
+  -webkit-background-size: 49px 100%;
+  background-size: 49px 100%;
+  margin-top: 0;
+}
+
+.ProductCategoriesPage .scallop_down {
+  height: 50px;
+  width: 100%;
+  background: -webkit-gradient(
+    radial,
+    50% 0,
+    30,
+    50% 0,
+    40,
+    from(#f1f1f1),
+    color-stop(0.49, #f1f1f1),
+    color-stop(0.51, #fff),
+    to(white)
+  );
+  -webkit-background-size: 49px 100%;
+  background-size: 49px 100%;
+}
+
+.ProductCategoriesPage p {
+  font-size: 1.1rem;
+}
+.ProductCategoriesPage .componentTitle {
+  text-align: center;
+  /* font-family: charter, Georgia, Cambria, times new roman, Times, serif; */
+}
+.ProductCategoriesPage .container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  /* justify-items: stretch; */
+  align-items: flex-start;
+  overflow: hidden;
+  /* padding:30px; */
+  height: max-content;
+  /* margin-right:50px;
+  margin-left:50px; */
+  margin: 20px 50px;
+}
+
+.ProductCategoriesPage .product {
+  width: 250px;
+  /* Adjust the height as needed */
+  height: 300px;
+  /* margin: 20px; */
+  text-align: center;
+  /* background-color: lightgray; */
+  /* padding: 10px; */
+  /* white-space: nowrap;
+    overflow: hidden; */
+  /* height: max-content; */
+}
+
+.ProductCategoriesPage .itemName {
+  margin-top: 6px;
+  text-align: center;
+}
+
+.ProductCategoriesPage .product img {
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ProductCategoriesPage .product h3 {
+  margin-top: 10px;
+  padding: 5px;
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide any overflowing text */
+  text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
+  font-size: calc(14px + 2vmin); /* Set a base font size with a minimum value */
+  max-width: 100%;
+}
+
+/* .solidSheerFabrics img{
+      object-position: 800%;
+      object-fit: none;
+    } */
+
+.ProductCategoriesPage .link {
+  text-decoration: none;
+  color: inherit;
+  margin: 10px;
+  overflow: hidden;
+  /* height: 100%; */
+  /* height:max-content; */
+}

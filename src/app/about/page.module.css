@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap");
+
+.AboutPage {
+  color: #151948;
+  /* overflow: hidden; */
+}
+.AboutPage h1,
+.AboutPage h2,
+.AboutPage h3 {
+  font-family: "Tenor Sans", sans-serif;
+  font-weight: normal;
+}
+
+.AboutPage .textCenter {
+  text-align: center;
+}
+
+.AboutPage .textEnd {
+  text-align: end;
+}
+.AboutPage .video {
+  position: relative;
+  height: 60vh;
+  margin: 2% 0;
+}
+.AboutPage .videoItself {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.AboutPage .headText {
+  /* position: absolute; */
+  /* height: 80%; */
+  background-color: white;
+  /* width: 25%;
+  bottom: 3%;
+  right: 5%;
+  padding: 1.8%; */
+  line-height: 1.4rem;
+  font-size: 1.2rem;
+  padding: 2% 5%;
+  margin: 2% 5%;
+  border: 2px dashed rgba(0, 0, 0, 0.3);
+}
+
+.AboutPage .container {
+  padding: 5%;
+  padding-top:0;
+}
+
+.AboutPage .container .row {
+  display: flex;
+  flex-flow: row nowrap;
+  /* justify-content: space-around; */
+  align-items: stretch;
+  /* justify-content: center; */
+  align-content: center;
+  margin:10px 0;
+}
+
+.AboutPage .container .row > * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.AboutPage .container .row img {
+  max-width: 100%;
+}
+
+.AboutPage .container .row > * {
+  padding: 2%;
+  line-height: 200%;
+}
+
+.AboutPage .container .row1 .box1,
+.AboutPage .container .row2 .box2,
+.AboutPage .container .row3 .box1,
+.AboutPage .container .row4 .box2,
+.AboutPage .row5 .box1,
+.AboutPage .row6 .box2,
+.AboutPage .row7 .box1 {
+  flex: 1 0 0;
+  border:3.5px dashed rgba(21,25,72,0.15);
+}
+.AboutPage .container .row1 .box2,
+.AboutPage .container .row2 .box1,
+.AboutPage .container .row3 .box2,
+.AboutPage .container .row4 .box1,
+.AboutPage .row5 .box2,
+.AboutPage .row6 .box1,
+.AboutPage .row7 .box2 {
+  flex: 1.5 0 0;
+}
+
+.AboutPage .video2 {
+  position: relative;
+  height: 60vh;
+  background-color: grey;
+  margin: 2% 0;
+}
+
+.AboutPage .video2 .text {
+  position: absolute;
+  width: 40%;
+  top: 3%;
+  right: 5%;
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 1.8%;
+  line-height: 1.4rem;
+  font-size: 1.1rem;
+}
+
+@media screen and (max-width: 980px) {
+  .AboutPage .container .row {
+    flex-direction: column;
+  }
+
+  .AboutPage .container .row1 .box1,
+  .AboutPage .container .row2 .box2,
+  .AboutPage .container .row3 .box1,
+  .AboutPage .container .row4 .box2,
+  .AboutPage .container .row5 .box1,
+  .AboutPage .container .row6 .box2,
+  .AboutPage .container .row7 .box1 {
+    order: 1;
+  }
+
+  .AboutPage .container .row img {
+    max-width: 80%;
+    margin: auto;
+  }
+}
+
+@media screen and (min-width: 1080px) {
+  .AboutPage .container .row p {
+    margin-top: 3%;
+    line-height: 1.8rem;
+    font-size: 1.5rem;
+  }
+}

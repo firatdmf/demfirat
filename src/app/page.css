@@ -1,0 +1,115 @@
+
+  .HomePage{
+    margin-top: 15px;
+  }
+  
+  .Home .slider{
+    /* padding: 0 10vw; */
+    margin-top:5px;
+  }
+  
+  .Home .grid1,
+  .Home .grid2,
+  .Home .grid3{
+    padding: 5vh 10vw;
+  }
+  
+  .Home .link {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .Home .grid1 {
+    /* padding: 5vh 10vw; */
+    display: grid;
+    grid-template-areas:
+      "newArrivals upholstery"
+      "newArrivals drapery";
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: 200px 200px;
+    gap: 2vw;
+  }
+  
+  .Home .grid1 > * {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+  }
+  
+  /* ---- */
+  .announcement {
+    padding: 5vh 10vw 0 10vw;
+    display: flex;
+    flex-wrap: wrap;
+    display: none;
+  }
+  
+  .Home .announcement .imageContainer {
+    flex: 1 1 300px;
+  }
+  
+  .Home .announcement .image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .Home .announcement .announcementBox {
+    flex: 1 1 300px;
+    background-color: #f2f2f2;
+    text-align: center;
+    /* align-items: center; */
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .Home .announcement h3 {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+  
+  .Home .announcement p {
+    font-size: 20px;
+    margin-bottom: 15px;
+    line-height: 50px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .Home .announcement .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #d09d34;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+  }
+  
+  .Home .announcement .button:hover {
+    background-color: black;
+    color: #d09d34;
+    transition: 0.15s ease;
+  }
+  
+  @media (max-width: 1080px) {
+    .Home .announcement {
+      flex-direction: column;
+    }
+  
+    .Home .announcementBox {
+      margin-top: 0;
+    }
+  }
+  
+  
+  .HomePage .certifications {
+    margin-top:20px;
+    display: flex;
+    background-color: #d19e25;
+    justify-content: center;
+    padding: 0.5% 0;
+  }
+  

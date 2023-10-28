@@ -1,0 +1,175 @@
+.slider {
+  width: 100%;
+  height: 70vh;
+  position: relative;
+  overflow: hidden;
+  margin: auto;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: all 0.5s ease;
+}
+
+@media screen and (min-width: 600px) {
+  // .slide img {
+  //   width: 100%;
+  //   height: 100%;
+  // }
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.content {
+  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
+  cursor: pointer;
+  position: absolute;
+  top: 23rem;
+  right: 5rem;
+  opacity: 0;
+  width: 33%;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  animation: slide-up 1s ease 0.5s;
+  animation-fill-mode: forwards;
+  // visibility: hidden;
+}
+
+@keyframes slide-up {
+  0% {
+    visibility: visible;
+    top: 23rem;
+  }
+  100% {
+    visibility: visible;
+    top: 15rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .content {
+    width: 70%;
+  }
+}
+
+// @media screen and (max-width:1000px) {
+//   .content{
+//     display: none;
+//   }
+  
+// }
+
+.content > * {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.current {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.current .content {
+  opacity: 1;
+}
+
+.arrow {
+  top: 45%;
+  border: 2px solid white;
+  border-radius: 50%;
+  background-color: transparent;
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  position: absolute;
+  z-index: 999;
+}
+
+.arrow:hover {
+  background: white;
+  color: #777;
+}
+
+.next {
+  right: 1.5rem;
+}
+.prev {
+  left: 1.5rem;
+}
+
+hr {
+  height: 2px;
+  background: white;
+  width: 50%;
+}
+
+// #theButton:hover, #theButton:focus, #theButton:active {
+//   cursor: pointer;
+//   background-color: red;
+// }
+
+#theButton {
+  background-color: red;
+  padding: 20px;
+}
+
+#theButton:hover {
+  cursor: pointer;
+}
+
+.--btn {
+  font-size: 1.6rem;
+  font-weight: 400;
+  padding: 6px 8px;
+  margin: 0 5px 0 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.--btn:hover {
+  transform: translateY(-2px);
+}
+
+.--btn-lg {
+  padding: 8px 10px;
+}
+
+.--btn-block {
+  width: 100%;
+}
+
+.--btn-primary {
+  color: #fff;
+  background: #007bff;
+}
+.--btn-secondary {
+  color: #fff;
+  border: 1px solid #fff;
+  background: transparent;
+}
+.--btn-danger {
+  color: #fff;
+  background: orangered;
+}
+
+.--btn-success {
+  color: #fff;
+  background: #28a745;
+}

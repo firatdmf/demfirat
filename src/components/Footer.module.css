@@ -1,0 +1,86 @@
+.FooterPage ul {
+    margin-top: 1%;
+  }
+  .FooterPage ul li {
+    list-style: none;
+    text-decoration: none;
+    margin: 10% 0 1% 0;
+  }
+  .FooterPage ul li:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #151948;
+  }
+  
+  .FooterPage h3 {
+    border-bottom: 2px solid black;
+    margin-top:2%;
+  }
+  
+  .FooterPage {
+    padding: 1%;
+    background-color: #ebedee;
+    border-top: 0.8px solid black;
+    /* width: 100%; */
+    width: 100wv;
+    /* position: absolute; */
+    /* bottom: 0; */
+  }
+  
+  
+  .FooterPage .footerMenu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px,1fr));
+    column-gap: 5%;
+    overflow: hidden;
+  }
+  
+  .FooterPage .copyright {
+    margin-top:2%;
+    text-align: center;
+    border-top: 1px solid black;
+    padding-top: 1%;
+  }
+  
+  .FooterPage .karvenLogo {
+    width: 50%;
+    height: auto;
+    opacity: 0.9;
+    display: block;
+    margin:0 auto;
+    opacity: 1;
+  }
+  .FooterPage .karvenLogo:hover{
+    opacity:0.9;
+  }
+
+  .FooterPage #link {
+    text-decoration: none;
+    color: inherit;
+  }
+  .FooterPage #link:hover{
+    cursor: pointer;
+  }
+  
+  
+  @media(max-width:600px){
+    .FooterPage  .footerMenu{
+        grid-template-columns: 1fr;
+        
+    }
+    .FooterPage  ul li{
+      margin:0;
+      margin-top:3%;
+    }
+    .FooterPage  .karvenLogo{
+      width:30%;
+      display: block;
+      margin:0 auto;
+      margin-top:10%;
+    }
+    .FooterPage  .col4 p{
+      text-align: center;
+      margin-top:2%;
+    }
+  }
+  
