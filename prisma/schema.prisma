@@ -7,8 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model auth_group {
   id                     Int                      @id @default(autoincrement())
   name                   String                   @unique @db.VarChar(150)
@@ -226,4 +224,15 @@ model collections {
   id         Int    @id @default(autoincrement())
   collection String
   data       Json?  @db.Json
+}
+
+model product_fabrics {
+  design       String   @id @db.VarChar(50)
+  prefix       String?  @db.VarChar(50)
+  files        Json?
+  category     String?  @db.VarChar(50)
+  stock        Int?
+  manufacturer String?  @db.VarChar(100)
+  collection   String?  @db.VarChar(50)
+  tags         String[]
 }

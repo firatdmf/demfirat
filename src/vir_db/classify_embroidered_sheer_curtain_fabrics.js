@@ -128,12 +128,12 @@ let uniqueDesignsObject = (products) => {
       prefix = 'N'
     }
     uniqueArray[index] = {
-      title: item,
+      // title: item,
       prefix,
       design: item,
       files: [],
-      length: 300,
-      product: "embroidered_sheer_curtain_fabrics",
+      width: 300,
+      category: "embroidered_sheer_curtain_fabrics",
     };
   });
   // console.table(uniqueArray);
@@ -179,14 +179,14 @@ let node = async () => {
   console.table(uniqueArray);
   console.log(uniqueArray[4]);
   writeJSON(uniqueArray);
-  // const embroidered_sheer_curtain_fabrics = await prisma.collections.upsert({
-  //   where:{id:1},
-  //   update:{},
-  //   create:{
-  //     data:uniqueArray,
-  //     collection:'products_embroidered_sheer_curtain_fabrics'
-  //   }
-  // })
+  const embroidered_sheer_curtain_fabrics = await prisma.collections.upsert({
+    where:{id:1},
+    update:{},
+    create:{
+      data:uniqueArray,
+      collection:'products_embroidered_sheer_curtain_fabrics'
+    }
+  })
 };
 
 node();

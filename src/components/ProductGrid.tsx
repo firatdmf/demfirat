@@ -69,7 +69,9 @@ export default function Example2(props: { product: Product }) {
         const response = await fetch("/api/getFabrics"); // Call your API route
         if (response.ok) {
           const result = await response.json();
-          setFetchData(result.data);
+          // setFetchData(result.data);
+          console.log(fetchData);
+          
           setloadedProducts(result.data.slice(0, productLoadAmount));
         } else {
           console.error("Error fetching data:", response.statusText);

@@ -67,6 +67,8 @@ npx prisma introspect
 rest:
 
 'https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/add-prisma-migrate-to-a-project'
+
+npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/1_init/migration.sql
 At the end, after doing all the things in the above url, I ran below and it all worked out
 prisma db push
 -----

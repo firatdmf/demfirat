@@ -1,6 +1,5 @@
 [
     {
-        "title": "1002",
         "prefix": "N",
         "design": "1002",
         "files": [
@@ -12,11 +11,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1003",
         "prefix": "N",
         "design": "1003",
         "files": [
@@ -28,11 +26,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1006",
         "prefix": "N",
         "design": "1006",
         "files": [
@@ -51,11 +48,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1008",
         "prefix": "N",
         "design": "1008",
         "files": [
@@ -67,11 +63,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1009",
         "prefix": "N",
         "design": "1009",
         "files": [
@@ -104,11 +99,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1013",
         "prefix": "N",
         "design": "1013",
         "files": [
@@ -120,11 +114,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1014",
         "prefix": "N",
         "design": "1014",
         "files": [
@@ -136,11 +129,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1016",
         "prefix": "N",
         "design": "1016",
         "files": [
@@ -152,11 +144,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1020",
         "prefix": "N",
         "design": "1020",
         "files": [
@@ -168,11 +159,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1021",
         "prefix": "N",
         "design": "1021",
         "files": [
@@ -184,11 +174,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1026",
         "prefix": "N",
         "design": "1026",
         "files": [
@@ -200,11 +189,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1031",
         "prefix": "N",
         "design": "1031",
         "files": [
@@ -223,11 +211,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1037",
         "prefix": "N",
         "design": "1037",
         "files": [
@@ -239,11 +226,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1038",
         "prefix": "N",
         "design": "1038",
         "files": [
@@ -255,11 +241,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1043",
         "prefix": "N",
         "design": "1043",
         "files": [
@@ -271,11 +256,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1045",
         "prefix": "N",
         "design": "1045",
         "files": [
@@ -287,11 +271,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1049",
         "prefix": "N",
         "design": "1049",
         "files": [
@@ -303,11 +286,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1050",
         "prefix": "N",
         "design": "1050",
         "files": [
@@ -319,11 +301,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1053",
         "prefix": "N",
         "design": "1053",
         "files": [
@@ -342,11 +323,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1056",
         "prefix": "N",
         "design": "1056",
         "files": [
@@ -372,11 +352,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1057",
         "prefix": "N",
         "design": "1057",
         "files": [
@@ -388,11 +367,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1064",
         "prefix": "N",
         "design": "1064",
         "files": [
@@ -404,11 +382,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1069",
         "prefix": "N",
         "design": "1069",
         "files": [
@@ -420,11 +397,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1072",
         "prefix": "N",
         "design": "1072",
         "files": [
@@ -436,11 +412,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1089",
         "prefix": "N",
         "design": "1089",
         "files": [
@@ -473,11 +448,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1091",
         "prefix": "N",
         "design": "1091",
         "files": [
@@ -489,11 +463,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1096",
         "prefix": "N",
         "design": "1096",
         "files": [
@@ -505,11 +478,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1102",
         "prefix": "N",
         "design": "1102",
         "files": [
@@ -521,11 +493,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1103",
         "prefix": "N",
         "design": "1103",
         "files": [
@@ -537,11 +508,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1109",
         "prefix": "N",
         "design": "1109",
         "files": [
@@ -553,11 +523,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1114",
         "prefix": "N",
         "design": "1114",
         "files": [
@@ -576,11 +545,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1126",
         "prefix": "N",
         "design": "1126",
         "files": [
@@ -592,11 +560,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1128",
         "prefix": "N",
         "design": "1128",
         "files": [
@@ -615,11 +582,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1130",
         "prefix": "N",
         "design": "1130",
         "files": [
@@ -631,11 +597,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1133",
         "prefix": "N",
         "design": "1133",
         "files": [
@@ -647,11 +612,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1135",
         "prefix": "N",
         "design": "1135",
         "files": [
@@ -670,11 +634,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1136",
         "prefix": "N",
         "design": "1136",
         "files": [
@@ -700,11 +663,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1141",
         "prefix": "N",
         "design": "1141",
         "files": [
@@ -723,11 +685,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1142",
         "prefix": "N",
         "design": "1142",
         "files": [
@@ -746,11 +707,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1143",
         "prefix": "N",
         "design": "1143",
         "files": [
@@ -762,11 +722,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1144",
         "prefix": "N",
         "design": "1144",
         "files": [
@@ -785,11 +744,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1147",
         "prefix": "N",
         "design": "1147",
         "files": [
@@ -801,11 +759,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1148",
         "prefix": "N",
         "design": "1148",
         "files": [
@@ -817,11 +774,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1149",
         "prefix": "N",
         "design": "1149",
         "files": [
@@ -847,11 +803,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1151",
         "prefix": "N",
         "design": "1151",
         "files": [
@@ -863,11 +818,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1153",
         "prefix": "N",
         "design": "1153",
         "files": [
@@ -879,11 +833,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1154",
         "prefix": "N",
         "design": "1154",
         "files": [
@@ -902,11 +855,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1159",
         "prefix": "N",
         "design": "1159",
         "files": [
@@ -918,11 +870,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1164",
         "prefix": "N",
         "design": "1164",
         "files": [
@@ -934,11 +885,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1169",
         "prefix": "N",
         "design": "1169",
         "files": [
@@ -950,11 +900,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1170",
         "prefix": "N",
         "design": "1170",
         "files": [
@@ -966,11 +915,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1172",
         "prefix": "N",
         "design": "1172",
         "files": [
@@ -982,11 +930,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1173",
         "prefix": "N",
         "design": "1173",
         "files": [
@@ -998,11 +945,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1174",
         "prefix": "N",
         "design": "1174",
         "files": [
@@ -1014,11 +960,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1176",
         "prefix": "N",
         "design": "1176",
         "files": [
@@ -1030,11 +975,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1179",
         "prefix": "N",
         "design": "1179",
         "files": [
@@ -1046,11 +990,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1181",
         "prefix": "N",
         "design": "1181",
         "files": [
@@ -1062,11 +1005,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1182",
         "prefix": "N",
         "design": "1182",
         "files": [
@@ -1078,11 +1020,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1184",
         "prefix": "N",
         "design": "1184",
         "files": [
@@ -1094,11 +1035,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1185",
         "prefix": "N",
         "design": "1185",
         "files": [
@@ -1110,11 +1050,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1193",
         "prefix": "N",
         "design": "1193",
         "files": [
@@ -1133,11 +1072,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1198",
         "prefix": "N",
         "design": "1198",
         "files": [
@@ -1156,11 +1094,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1199",
         "prefix": "N",
         "design": "1199",
         "files": [
@@ -1172,11 +1109,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1200",
         "prefix": "N",
         "design": "1200",
         "files": [
@@ -1188,11 +1124,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1201",
         "prefix": "N",
         "design": "1201",
         "files": [
@@ -1204,11 +1139,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1204",
         "prefix": "N",
         "design": "1204",
         "files": [
@@ -1227,11 +1161,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1205",
         "prefix": "N",
         "design": "1205",
         "files": [
@@ -1257,11 +1190,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1207",
         "prefix": "N",
         "design": "1207",
         "files": [
@@ -1273,11 +1205,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1211",
         "prefix": "N",
         "design": "1211",
         "files": [
@@ -1303,11 +1234,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1213",
         "prefix": "N",
         "design": "1213",
         "files": [
@@ -1319,11 +1249,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1214",
         "prefix": "N",
         "design": "1214",
         "files": [
@@ -1335,11 +1264,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1215",
         "prefix": "N",
         "design": "1215",
         "files": [
@@ -1351,11 +1279,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1217",
         "prefix": "N",
         "design": "1217",
         "files": [
@@ -1367,11 +1294,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1218",
         "prefix": "N",
         "design": "1218",
         "files": [
@@ -1383,11 +1309,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1219",
         "prefix": "N",
         "design": "1219",
         "files": [
@@ -1399,11 +1324,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1220",
         "prefix": "N",
         "design": "1220",
         "files": [
@@ -1422,11 +1346,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1228",
         "prefix": "N",
         "design": "1228",
         "files": [
@@ -1438,11 +1361,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12334",
         "prefix": "K",
         "design": "12334",
         "files": [
@@ -1454,11 +1376,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1236",
         "prefix": "N",
         "design": "1236",
         "files": [
@@ -1470,11 +1391,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1237",
         "prefix": "N",
         "design": "1237",
         "files": [
@@ -1486,11 +1406,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1241",
         "prefix": "N",
         "design": "1241",
         "files": [
@@ -1502,11 +1421,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12430",
         "prefix": "K",
         "design": "12430",
         "files": [
@@ -1518,11 +1436,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12443",
         "prefix": "K",
         "design": "12443",
         "files": [
@@ -1541,11 +1458,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12456",
         "prefix": "K",
         "design": "12456",
         "files": [
@@ -1557,11 +1473,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12465",
         "prefix": "K",
         "design": "12465",
         "files": [
@@ -1573,11 +1488,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1246",
         "prefix": "N",
         "design": "1246",
         "files": [
@@ -1589,11 +1503,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12471",
         "prefix": "K",
         "design": "12471",
         "files": [
@@ -1626,11 +1539,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1248",
         "prefix": "N",
         "design": "1248",
         "files": [
@@ -1642,11 +1554,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1249",
         "prefix": "N",
         "design": "1249",
         "files": [
@@ -1658,11 +1569,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12503",
         "prefix": "K",
         "design": "12503",
         "files": [
@@ -1674,11 +1584,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12504",
         "prefix": "K",
         "design": "12504",
         "files": [
@@ -1690,11 +1599,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12513",
         "prefix": "K",
         "design": "12513",
         "files": [
@@ -1706,11 +1614,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12519",
         "prefix": "K",
         "design": "12519",
         "files": [
@@ -1722,11 +1629,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12520",
         "prefix": "K",
         "design": "12520",
         "files": [
@@ -1738,11 +1644,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12522",
         "prefix": "K",
         "design": "12522",
         "files": [
@@ -1754,11 +1659,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12524",
         "prefix": "K",
         "design": "12524",
         "files": [
@@ -1770,11 +1674,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12525",
         "prefix": "K",
         "design": "12525",
         "files": [
@@ -1786,11 +1689,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12526",
         "prefix": "K",
         "design": "12526",
         "files": [
@@ -1809,11 +1711,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12527",
         "prefix": "K",
         "design": "12527",
         "files": [
@@ -1825,11 +1726,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12528",
         "prefix": "K",
         "design": "12528",
         "files": [
@@ -1848,11 +1748,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1252",
         "prefix": "N",
         "design": "1252",
         "files": [
@@ -1864,11 +1763,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12530",
         "prefix": "K",
         "design": "12530",
         "files": [
@@ -1887,11 +1785,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12532",
         "prefix": "K",
         "design": "12532",
         "files": [
@@ -1903,11 +1800,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12533",
         "prefix": "K",
         "design": "12533",
         "files": [
@@ -1919,11 +1815,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12535",
         "prefix": "K",
         "design": "12535",
         "files": [
@@ -1942,11 +1837,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12536",
         "prefix": "K",
         "design": "12536",
         "files": [
@@ -1958,11 +1852,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12537",
         "prefix": "K",
         "design": "12537",
         "files": [
@@ -1974,11 +1867,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1253",
         "prefix": "N",
         "design": "1253",
         "files": [
@@ -1990,11 +1882,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12544",
         "prefix": "K",
         "design": "12544",
         "files": [
@@ -2006,11 +1897,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12545",
         "prefix": "K",
         "design": "12545",
         "files": [
@@ -2022,11 +1912,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12546",
         "prefix": "K",
         "design": "12546",
         "files": [
@@ -2038,11 +1927,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12547",
         "prefix": "K",
         "design": "12547",
         "files": [
@@ -2054,11 +1942,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12548",
         "prefix": "K",
         "design": "12548",
         "files": [
@@ -2077,11 +1964,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12549",
         "prefix": "K",
         "design": "12549",
         "files": [
@@ -2093,11 +1979,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12550",
         "prefix": "K",
         "design": "12550",
         "files": [
@@ -2109,11 +1994,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12551",
         "prefix": "K",
         "design": "12551",
         "files": [
@@ -2125,11 +2009,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12552",
         "prefix": "K",
         "design": "12552",
         "files": [
@@ -2141,11 +2024,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12564",
         "prefix": "K",
         "design": "12564",
         "files": [
@@ -2157,11 +2039,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12565",
         "prefix": "K",
         "design": "12565",
         "files": [
@@ -2173,11 +2054,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1257",
         "prefix": "N",
         "design": "1257",
         "files": [
@@ -2189,11 +2069,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1260",
         "prefix": "N",
         "design": "1260",
         "files": [
@@ -2226,11 +2105,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1261",
         "prefix": "N",
         "design": "1261",
         "files": [
@@ -2242,11 +2120,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1264",
         "prefix": "N",
         "design": "1264",
         "files": [
@@ -2258,11 +2135,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12667",
         "prefix": "K",
         "design": "12667",
         "files": [
@@ -2295,11 +2171,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12668",
         "prefix": "K",
         "design": "12668",
         "files": [
@@ -2311,11 +2186,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1266",
         "prefix": "N",
         "design": "1266",
         "files": [
@@ -2334,11 +2208,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1267",
         "prefix": "N",
         "design": "1267",
         "files": [
@@ -2350,11 +2223,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1268",
         "prefix": "N",
         "design": "1268",
         "files": [
@@ -2380,11 +2252,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1269",
         "prefix": "N",
         "design": "1269",
         "files": [
@@ -2403,11 +2274,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1286",
         "prefix": "N",
         "design": "1286",
         "files": [
@@ -2419,11 +2289,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1288",
         "prefix": "N",
         "design": "1288",
         "files": [
@@ -2435,11 +2304,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1290",
         "prefix": "N",
         "design": "1290",
         "files": [
@@ -2458,11 +2326,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12930",
         "prefix": "K",
         "design": "12930",
         "files": [
@@ -2474,11 +2341,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12K201",
         "prefix": "N",
         "design": "12K201",
         "files": [
@@ -2490,11 +2356,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12K202",
         "prefix": "N",
         "design": "12K202",
         "files": [
@@ -2506,11 +2371,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12K203",
         "prefix": "N",
         "design": "12K203",
         "files": [
@@ -2522,11 +2386,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12K204",
         "prefix": "N",
         "design": "12K204",
         "files": [
@@ -2538,11 +2401,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "12K205",
         "prefix": "N",
         "design": "12K205",
         "files": [
@@ -2554,11 +2416,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13030",
         "prefix": "K",
         "design": "13030",
         "files": [
@@ -2570,11 +2431,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13034",
         "prefix": "K",
         "design": "13034",
         "files": [
@@ -2593,11 +2453,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13036",
         "prefix": "K",
         "design": "13036",
         "files": [
@@ -2609,11 +2468,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13045",
         "prefix": "K",
         "design": "13045",
         "files": [
@@ -2625,11 +2483,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13063",
         "prefix": "K",
         "design": "13063",
         "files": [
@@ -2641,11 +2498,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1314",
         "prefix": "N",
         "design": "1314",
         "files": [
@@ -2657,11 +2513,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1321",
         "prefix": "N",
         "design": "1321",
         "files": [
@@ -2701,11 +2556,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13233",
         "prefix": "K",
         "design": "13233",
         "files": [
@@ -2717,11 +2571,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1324",
         "prefix": "N",
         "design": "1324",
         "files": [
@@ -2740,11 +2593,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1325",
         "prefix": "N",
         "design": "1325",
         "files": [
@@ -2770,11 +2622,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13260",
         "prefix": "K",
         "design": "13260",
         "files": [
@@ -2786,11 +2637,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13262",
         "prefix": "K",
         "design": "13262",
         "files": [
@@ -2802,11 +2652,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13263",
         "prefix": "K",
         "design": "13263",
         "files": [
@@ -2818,11 +2667,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13267",
         "prefix": "K",
         "design": "13267",
         "files": [
@@ -2834,11 +2682,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13272",
         "prefix": "K",
         "design": "13272",
         "files": [
@@ -2850,11 +2697,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13282",
         "prefix": "K",
         "design": "13282",
         "files": [
@@ -2866,11 +2712,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13283",
         "prefix": "K",
         "design": "13283",
         "files": [
@@ -2882,11 +2727,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13288",
         "prefix": "K",
         "design": "13288",
         "files": [
@@ -2898,11 +2742,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1328",
         "prefix": "N",
         "design": "1328",
         "files": [
@@ -2914,11 +2757,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13292",
         "prefix": "K",
         "design": "13292",
         "files": [
@@ -2930,11 +2772,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13296",
         "prefix": "K",
         "design": "13296",
         "files": [
@@ -2946,11 +2787,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13297",
         "prefix": "K",
         "design": "13297",
         "files": [
@@ -2962,11 +2802,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13299",
         "prefix": "K",
         "design": "13299",
         "files": [
@@ -2978,11 +2817,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "13300",
         "prefix": "K",
         "design": "13300",
         "files": [
@@ -2994,11 +2832,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1333",
         "prefix": "N",
         "design": "1333",
         "files": [
@@ -3010,11 +2847,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1334",
         "prefix": "N",
         "design": "1334",
         "files": [
@@ -3026,11 +2862,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1337",
         "prefix": "N",
         "design": "1337",
         "files": [
@@ -3056,11 +2891,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1338!",
         "prefix": "N",
         "design": "1338!",
         "files": [
@@ -3072,11 +2906,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1338",
         "prefix": "N",
         "design": "1338",
         "files": [
@@ -3088,11 +2921,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1339",
         "prefix": "N",
         "design": "1339",
         "files": [
@@ -3104,11 +2936,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1342",
         "prefix": "N",
         "design": "1342",
         "files": [
@@ -3127,11 +2958,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1349",
         "prefix": "N",
         "design": "1349",
         "files": [
@@ -3164,11 +2994,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1351",
         "prefix": "N",
         "design": "1351",
         "files": [
@@ -3180,11 +3009,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1352",
         "prefix": "N",
         "design": "1352",
         "files": [
@@ -3196,11 +3024,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1353",
         "prefix": "N",
         "design": "1353",
         "files": [
@@ -3212,11 +3039,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1354",
         "prefix": "N",
         "design": "1354",
         "files": [
@@ -3242,11 +3068,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1355",
         "prefix": "N",
         "design": "1355",
         "files": [
@@ -3258,11 +3083,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1356",
         "prefix": "N",
         "design": "1356",
         "files": [
@@ -3274,11 +3098,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1357",
         "prefix": "N",
         "design": "1357",
         "files": [
@@ -3297,11 +3120,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1358",
         "prefix": "N",
         "design": "1358",
         "files": [
@@ -3313,11 +3135,10 @@
                 "imageNo": "2"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1359",
         "prefix": "N",
         "design": "1359",
         "files": [
@@ -3343,11 +3164,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1360",
         "prefix": "N",
         "design": "1360",
         "files": [
@@ -3373,11 +3193,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1361",
         "prefix": "N",
         "design": "1361",
         "files": [
@@ -3389,11 +3208,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1362",
         "prefix": "N",
         "design": "1362",
         "files": [
@@ -3412,11 +3230,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1364",
         "prefix": "N",
         "design": "1364",
         "files": [
@@ -3435,11 +3252,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1365",
         "prefix": "N",
         "design": "1365",
         "files": [
@@ -3493,11 +3309,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1367",
         "prefix": "N",
         "design": "1367",
         "files": [
@@ -3516,11 +3331,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1368",
         "prefix": "N",
         "design": "1368",
         "files": [
@@ -3532,11 +3346,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1369",
         "prefix": "N",
         "design": "1369",
         "files": [
@@ -3555,11 +3368,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1370",
         "prefix": "N",
         "design": "1370",
         "files": [
@@ -3599,11 +3411,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1371",
         "prefix": "N",
         "design": "1371",
         "files": [
@@ -3622,11 +3433,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1372",
         "prefix": "N",
         "design": "1372",
         "files": [
@@ -3638,11 +3448,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1373",
         "prefix": "N",
         "design": "1373",
         "files": [
@@ -3668,11 +3477,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1375",
         "prefix": "N",
         "design": "1375",
         "files": [
@@ -3691,11 +3499,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1377",
         "prefix": "N",
         "design": "1377",
         "files": [
@@ -3721,11 +3528,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1379",
         "prefix": "N",
         "design": "1379",
         "files": [
@@ -3751,11 +3557,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1380",
         "prefix": "N",
         "design": "1380",
         "files": [
@@ -3781,11 +3586,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1381",
         "prefix": "N",
         "design": "1381",
         "files": [
@@ -3797,11 +3601,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1382",
         "prefix": "N",
         "design": "1382",
         "files": [
@@ -3820,11 +3623,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1383",
         "prefix": "N",
         "design": "1383",
         "files": [
@@ -3836,11 +3638,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1384",
         "prefix": "N",
         "design": "1384",
         "files": [
@@ -3852,11 +3653,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1387",
         "prefix": "N",
         "design": "1387",
         "files": [
@@ -3868,11 +3668,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1388",
         "prefix": "N",
         "design": "1388",
         "files": [
@@ -3891,11 +3690,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1389",
         "prefix": "N",
         "design": "1389",
         "files": [
@@ -3907,11 +3705,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1390",
         "prefix": "N",
         "design": "1390",
         "files": [
@@ -3923,11 +3720,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1391",
         "prefix": "N",
         "design": "1391",
         "files": [
@@ -3946,11 +3742,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1392",
         "prefix": "N",
         "design": "1392",
         "files": [
@@ -3962,11 +3757,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1393",
         "prefix": "N",
         "design": "1393",
         "files": [
@@ -3978,11 +3772,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1394",
         "prefix": "N",
         "design": "1394",
         "files": [
@@ -3994,11 +3787,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1395",
         "prefix": "N",
         "design": "1395",
         "files": [
@@ -4010,11 +3802,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1396",
         "prefix": "N",
         "design": "1396",
         "files": [
@@ -4026,11 +3817,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1397",
         "prefix": "N",
         "design": "1397",
         "files": [
@@ -4049,11 +3839,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1398",
         "prefix": "N",
         "design": "1398",
         "files": [
@@ -4065,11 +3854,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1399",
         "prefix": "N",
         "design": "1399",
         "files": [
@@ -4088,11 +3876,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1400",
         "prefix": "N",
         "design": "1400",
         "files": [
@@ -4111,11 +3898,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1401",
         "prefix": "N",
         "design": "1401",
         "files": [
@@ -4148,11 +3934,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1402",
         "prefix": "N",
         "design": "1402",
         "files": [
@@ -4164,11 +3949,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1403",
         "prefix": "N",
         "design": "1403",
         "files": [
@@ -4180,11 +3964,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1404",
         "prefix": "N",
         "design": "1404",
         "files": [
@@ -4210,11 +3993,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1405",
         "prefix": "N",
         "design": "1405",
         "files": [
@@ -4233,11 +4015,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1407",
         "prefix": "N",
         "design": "1407",
         "files": [
@@ -4249,11 +4030,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1409",
         "prefix": "N",
         "design": "1409",
         "files": [
@@ -4279,11 +4059,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "1410",
         "prefix": "N",
         "design": "1410",
         "files": [
@@ -4302,11 +4081,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "14721",
         "prefix": "K",
         "design": "14721",
         "files": [
@@ -4318,11 +4096,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "2002",
         "prefix": "N",
         "design": "2002",
         "files": [
@@ -4341,11 +4118,10 @@
                 "imageNo": "2"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24006",
         "prefix": "K",
         "design": "24006",
         "files": [
@@ -4357,11 +4133,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24068",
         "prefix": "K",
         "design": "24068",
         "files": [
@@ -4373,11 +4148,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24111",
         "prefix": "K",
         "design": "24111",
         "files": [
@@ -4389,11 +4163,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24116",
         "prefix": "K",
         "design": "24116",
         "files": [
@@ -4405,11 +4178,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24117",
         "prefix": "K",
         "design": "24117",
         "files": [
@@ -4421,11 +4193,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24347",
         "prefix": "K",
         "design": "24347",
         "files": [
@@ -4479,11 +4250,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24392",
         "prefix": "K",
         "design": "24392",
         "files": [
@@ -4495,11 +4265,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24398",
         "prefix": "K",
         "design": "24398",
         "files": [
@@ -4532,11 +4301,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24402",
         "prefix": "K",
         "design": "24402",
         "files": [
@@ -4576,11 +4344,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24407",
         "prefix": "K",
         "design": "24407",
         "files": [
@@ -4613,11 +4380,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24445",
         "prefix": "K",
         "design": "24445",
         "files": [
@@ -4629,11 +4395,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24451",
         "prefix": "K",
         "design": "24451",
         "files": [
@@ -4645,11 +4410,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24473",
         "prefix": "K",
         "design": "24473",
         "files": [
@@ -4668,11 +4432,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24477",
         "prefix": "K",
         "design": "24477",
         "files": [
@@ -4684,11 +4447,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24491",
         "prefix": "K",
         "design": "24491",
         "files": [
@@ -4700,11 +4462,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24515",
         "prefix": "K",
         "design": "24515",
         "files": [
@@ -4730,11 +4491,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24522",
         "prefix": "K",
         "design": "24522",
         "files": [
@@ -4746,11 +4506,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24523",
         "prefix": "K",
         "design": "24523",
         "files": [
@@ -4762,11 +4521,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24526",
         "prefix": "K",
         "design": "24526",
         "files": [
@@ -4778,11 +4536,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24529",
         "prefix": "K",
         "design": "24529",
         "files": [
@@ -4794,11 +4551,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24530",
         "prefix": "K",
         "design": "24530",
         "files": [
@@ -4810,11 +4566,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24531",
         "prefix": "K",
         "design": "24531",
         "files": [
@@ -4826,11 +4581,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24532",
         "prefix": "K",
         "design": "24532",
         "files": [
@@ -4842,11 +4596,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24533",
         "prefix": "K",
         "design": "24533",
         "files": [
@@ -4879,11 +4632,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24534",
         "prefix": "K",
         "design": "24534",
         "files": [
@@ -4895,11 +4647,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24535",
         "prefix": "K",
         "design": "24535",
         "files": [
@@ -4911,11 +4662,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24536",
         "prefix": "K",
         "design": "24536",
         "files": [
@@ -4934,11 +4684,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24539",
         "prefix": "K",
         "design": "24539",
         "files": [
@@ -4957,11 +4706,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24540",
         "prefix": "K",
         "design": "24540",
         "files": [
@@ -4980,11 +4728,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24541",
         "prefix": "K",
         "design": "24541",
         "files": [
@@ -5003,11 +4750,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24542",
         "prefix": "K",
         "design": "24542",
         "files": [
@@ -5019,11 +4765,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24543",
         "prefix": "K",
         "design": "24543",
         "files": [
@@ -5035,11 +4780,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24544",
         "prefix": "K",
         "design": "24544",
         "files": [
@@ -5051,11 +4795,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24545",
         "prefix": "K",
         "design": "24545",
         "files": [
@@ -5074,11 +4817,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24546",
         "prefix": "K",
         "design": "24546",
         "files": [
@@ -5090,11 +4832,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24547",
         "prefix": "K",
         "design": "24547",
         "files": [
@@ -5113,11 +4854,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24550",
         "prefix": "K",
         "design": "24550",
         "files": [
@@ -5129,11 +4869,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24551",
         "prefix": "K",
         "design": "24551",
         "files": [
@@ -5145,11 +4884,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24552",
         "prefix": "K",
         "design": "24552",
         "files": [
@@ -5161,11 +4899,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24553",
         "prefix": "K",
         "design": "24553",
         "files": [
@@ -5177,11 +4914,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24554",
         "prefix": "K",
         "design": "24554",
         "files": [
@@ -5193,11 +4929,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24555",
         "prefix": "K",
         "design": "24555",
         "files": [
@@ -5216,11 +4951,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24557",
         "prefix": "K",
         "design": "24557",
         "files": [
@@ -5232,11 +4966,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24558",
         "prefix": "K",
         "design": "24558",
         "files": [
@@ -5262,11 +4995,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24559",
         "prefix": "K",
         "design": "24559",
         "files": [
@@ -5278,11 +5010,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24560",
         "prefix": "K",
         "design": "24560",
         "files": [
@@ -5294,11 +5025,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24561",
         "prefix": "K",
         "design": "24561",
         "files": [
@@ -5310,11 +5040,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24562",
         "prefix": "K",
         "design": "24562",
         "files": [
@@ -5340,11 +5069,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24563",
         "prefix": "K",
         "design": "24563",
         "files": [
@@ -5356,11 +5084,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24564",
         "prefix": "K",
         "design": "24564",
         "files": [
@@ -5379,11 +5106,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24565",
         "prefix": "K",
         "design": "24565",
         "files": [
@@ -5395,11 +5121,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24566",
         "prefix": "K",
         "design": "24566",
         "files": [
@@ -5411,11 +5136,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24567",
         "prefix": "K",
         "design": "24567",
         "files": [
@@ -5427,11 +5151,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24569",
         "prefix": "K",
         "design": "24569",
         "files": [
@@ -5443,11 +5166,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24570",
         "prefix": "K",
         "design": "24570",
         "files": [
@@ -5459,11 +5181,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24571",
         "prefix": "K",
         "design": "24571",
         "files": [
@@ -5475,11 +5196,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24572",
         "prefix": "K",
         "design": "24572",
         "files": [
@@ -5491,11 +5211,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24573",
         "prefix": "K",
         "design": "24573",
         "files": [
@@ -5507,11 +5226,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24574",
         "prefix": "K",
         "design": "24574",
         "files": [
@@ -5523,11 +5241,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24576",
         "prefix": "K",
         "design": "24576",
         "files": [
@@ -5539,11 +5256,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24577",
         "prefix": "K",
         "design": "24577",
         "files": [
@@ -5555,11 +5271,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24579",
         "prefix": "K",
         "design": "24579",
         "files": [
@@ -5571,11 +5286,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24580",
         "prefix": "K",
         "design": "24580",
         "files": [
@@ -5594,11 +5308,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24581",
         "prefix": "K",
         "design": "24581",
         "files": [
@@ -5610,11 +5323,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24582",
         "prefix": "K",
         "design": "24582",
         "files": [
@@ -5626,11 +5338,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24583",
         "prefix": "K",
         "design": "24583",
         "files": [
@@ -5642,11 +5353,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24585",
         "prefix": "K",
         "design": "24585",
         "files": [
@@ -5658,11 +5368,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24586",
         "prefix": "K",
         "design": "24586",
         "files": [
@@ -5674,11 +5383,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24587",
         "prefix": "K",
         "design": "24587",
         "files": [
@@ -5690,11 +5398,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24588",
         "prefix": "K",
         "design": "24588",
         "files": [
@@ -5713,11 +5420,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24589",
         "prefix": "K",
         "design": "24589",
         "files": [
@@ -5729,11 +5435,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24592",
         "prefix": "K",
         "design": "24592",
         "files": [
@@ -5745,11 +5450,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24596",
         "prefix": "K",
         "design": "24596",
         "files": [
@@ -5761,11 +5465,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24599",
         "prefix": "K",
         "design": "24599",
         "files": [
@@ -5777,11 +5480,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24600",
         "prefix": "K",
         "design": "24600",
         "files": [
@@ -5793,11 +5495,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24601",
         "prefix": "K",
         "design": "24601",
         "files": [
@@ -5809,11 +5510,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24603",
         "prefix": "K",
         "design": "24603",
         "files": [
@@ -5825,11 +5525,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24604",
         "prefix": "K",
         "design": "24604",
         "files": [
@@ -5841,11 +5540,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24605",
         "prefix": "K",
         "design": "24605",
         "files": [
@@ -5857,11 +5555,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24606",
         "prefix": "K",
         "design": "24606",
         "files": [
@@ -5873,11 +5570,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24608",
         "prefix": "K",
         "design": "24608",
         "files": [
@@ -5889,11 +5585,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24612",
         "prefix": "K",
         "design": "24612",
         "files": [
@@ -5905,11 +5600,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24613",
         "prefix": "K",
         "design": "24613",
         "files": [
@@ -5928,11 +5622,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24614",
         "prefix": "K",
         "design": "24614",
         "files": [
@@ -5951,11 +5644,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24615",
         "prefix": "K",
         "design": "24615",
         "files": [
@@ -5967,11 +5659,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24620",
         "prefix": "K",
         "design": "24620",
         "files": [
@@ -5983,11 +5674,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24621",
         "prefix": "K",
         "design": "24621",
         "files": [
@@ -6006,11 +5696,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24625",
         "prefix": "K",
         "design": "24625",
         "files": [
@@ -6022,11 +5711,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24626",
         "prefix": "K",
         "design": "24626",
         "files": [
@@ -6038,11 +5726,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24627",
         "prefix": "K",
         "design": "24627",
         "files": [
@@ -6054,11 +5741,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24628",
         "prefix": "K",
         "design": "24628",
         "files": [
@@ -6070,11 +5756,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24629",
         "prefix": "K",
         "design": "24629",
         "files": [
@@ -6093,11 +5778,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24630",
         "prefix": "K",
         "design": "24630",
         "files": [
@@ -6116,11 +5800,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24631",
         "prefix": "K",
         "design": "24631",
         "files": [
@@ -6132,11 +5815,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24632",
         "prefix": "K",
         "design": "24632",
         "files": [
@@ -6155,11 +5837,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24633",
         "prefix": "K",
         "design": "24633",
         "files": [
@@ -6185,11 +5866,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24635",
         "prefix": "K",
         "design": "24635",
         "files": [
@@ -6201,11 +5881,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24636",
         "prefix": "K",
         "design": "24636",
         "files": [
@@ -6224,11 +5903,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24637",
         "prefix": "K",
         "design": "24637",
         "files": [
@@ -6247,11 +5925,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24638",
         "prefix": "K",
         "design": "24638",
         "files": [
@@ -6263,11 +5940,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24639",
         "prefix": "K",
         "design": "24639",
         "files": [
@@ -6279,11 +5955,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24640",
         "prefix": "K",
         "design": "24640",
         "files": [
@@ -6302,11 +5977,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24641",
         "prefix": "K",
         "design": "24641",
         "files": [
@@ -6318,11 +5992,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24643",
         "prefix": "K",
         "design": "24643",
         "files": [
@@ -6334,11 +6007,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24644",
         "prefix": "K",
         "design": "24644",
         "files": [
@@ -6350,11 +6022,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24645",
         "prefix": "K",
         "design": "24645",
         "files": [
@@ -6366,11 +6037,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24647",
         "prefix": "K",
         "design": "24647",
         "files": [
@@ -6382,11 +6052,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24650",
         "prefix": "K",
         "design": "24650",
         "files": [
@@ -6398,11 +6067,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24651",
         "prefix": "K",
         "design": "24651",
         "files": [
@@ -6414,11 +6082,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24653",
         "prefix": "K",
         "design": "24653",
         "files": [
@@ -6430,11 +6097,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24654",
         "prefix": "K",
         "design": "24654",
         "files": [
@@ -6446,11 +6112,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24658",
         "prefix": "K",
         "design": "24658",
         "files": [
@@ -6462,11 +6127,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24662",
         "prefix": "K",
         "design": "24662",
         "files": [
@@ -6478,11 +6142,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24663",
         "prefix": "K",
         "design": "24663",
         "files": [
@@ -6494,11 +6157,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24664",
         "prefix": "K",
         "design": "24664",
         "files": [
@@ -6510,11 +6172,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24666",
         "prefix": "K",
         "design": "24666",
         "files": [
@@ -6526,11 +6187,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24667",
         "prefix": "K",
         "design": "24667",
         "files": [
@@ -6542,11 +6202,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24668",
         "prefix": "K",
         "design": "24668",
         "files": [
@@ -6558,11 +6217,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24669",
         "prefix": "K",
         "design": "24669",
         "files": [
@@ -6574,11 +6232,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24671",
         "prefix": "K",
         "design": "24671",
         "files": [
@@ -6590,11 +6247,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "24672",
         "prefix": "K",
         "design": "24672",
         "files": [
@@ -6606,11 +6262,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25030",
         "prefix": "K",
         "design": "25030",
         "files": [
@@ -6622,11 +6277,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25213",
         "prefix": "K",
         "design": "25213",
         "files": [
@@ -6638,11 +6292,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25214",
         "prefix": "K",
         "design": "25214",
         "files": [
@@ -6654,11 +6307,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25218",
         "prefix": "K",
         "design": "25218",
         "files": [
@@ -6670,11 +6322,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25226",
         "prefix": "K",
         "design": "25226",
         "files": [
@@ -6693,11 +6344,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25237",
         "prefix": "K",
         "design": "25237",
         "files": [
@@ -6709,11 +6359,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25250",
         "prefix": "K",
         "design": "25250",
         "files": [
@@ -6732,11 +6381,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25253",
         "prefix": "K",
         "design": "25253",
         "files": [
@@ -6748,11 +6396,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25257",
         "prefix": "K",
         "design": "25257",
         "files": [
@@ -6771,11 +6418,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25260",
         "prefix": "K",
         "design": "25260",
         "files": [
@@ -6794,11 +6440,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25261",
         "prefix": "K",
         "design": "25261",
         "files": [
@@ -6810,11 +6455,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25262",
         "prefix": "K",
         "design": "25262",
         "files": [
@@ -6826,11 +6470,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25263",
         "prefix": "K",
         "design": "25263",
         "files": [
@@ -6842,11 +6485,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25264",
         "prefix": "K",
         "design": "25264",
         "files": [
@@ -6858,11 +6500,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25265",
         "prefix": "K",
         "design": "25265",
         "files": [
@@ -6874,11 +6515,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25266",
         "prefix": "K",
         "design": "25266",
         "files": [
@@ -6897,11 +6537,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25268",
         "prefix": "K",
         "design": "25268",
         "files": [
@@ -6913,11 +6552,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25269",
         "prefix": "K",
         "design": "25269",
         "files": [
@@ -6929,11 +6567,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25270",
         "prefix": "K",
         "design": "25270",
         "files": [
@@ -6945,11 +6582,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25272",
         "prefix": "K",
         "design": "25272",
         "files": [
@@ -6961,11 +6597,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25273",
         "prefix": "K",
         "design": "25273",
         "files": [
@@ -6977,11 +6612,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25274",
         "prefix": "K",
         "design": "25274",
         "files": [
@@ -6993,11 +6627,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25275",
         "prefix": "K",
         "design": "25275",
         "files": [
@@ -7009,11 +6642,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25276",
         "prefix": "K",
         "design": "25276",
         "files": [
@@ -7025,11 +6657,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25277",
         "prefix": "K",
         "design": "25277",
         "files": [
@@ -7041,11 +6672,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25278",
         "prefix": "K",
         "design": "25278",
         "files": [
@@ -7057,11 +6687,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25279",
         "prefix": "K",
         "design": "25279",
         "files": [
@@ -7073,11 +6702,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25280",
         "prefix": "K",
         "design": "25280",
         "files": [
@@ -7089,11 +6717,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25281",
         "prefix": "K",
         "design": "25281",
         "files": [
@@ -7105,11 +6732,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25282",
         "prefix": "K",
         "design": "25282",
         "files": [
@@ -7121,11 +6747,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25283",
         "prefix": "K",
         "design": "25283",
         "files": [
@@ -7137,11 +6762,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25284",
         "prefix": "K",
         "design": "25284",
         "files": [
@@ -7153,11 +6777,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25285",
         "prefix": "K",
         "design": "25285",
         "files": [
@@ -7176,11 +6799,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25286",
         "prefix": "K",
         "design": "25286",
         "files": [
@@ -7199,11 +6821,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25287",
         "prefix": "K",
         "design": "25287",
         "files": [
@@ -7222,11 +6843,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25292",
         "prefix": "K",
         "design": "25292",
         "files": [
@@ -7245,11 +6865,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "25293",
         "prefix": "K",
         "design": "25293",
         "files": [
@@ -7268,11 +6887,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "36008",
         "prefix": "K",
         "design": "36008",
         "files": [
@@ -7284,11 +6902,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "36010",
         "prefix": "K",
         "design": "36010",
         "files": [
@@ -7300,11 +6917,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48006",
         "prefix": "K",
         "design": "48006",
         "files": [
@@ -7330,11 +6946,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48013",
         "prefix": "K",
         "design": "48013",
         "files": [
@@ -7353,11 +6968,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48039",
         "prefix": "K",
         "design": "48039",
         "files": [
@@ -7369,11 +6983,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48043",
         "prefix": "K",
         "design": "48043",
         "files": [
@@ -7385,11 +6998,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48050",
         "prefix": "K",
         "design": "48050",
         "files": [
@@ -7408,11 +7020,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48051",
         "prefix": "K",
         "design": "48051",
         "files": [
@@ -7431,11 +7042,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48052",
         "prefix": "K",
         "design": "48052",
         "files": [
@@ -7447,11 +7057,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48053",
         "prefix": "K",
         "design": "48053",
         "files": [
@@ -7470,11 +7079,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48054",
         "prefix": "K",
         "design": "48054",
         "files": [
@@ -7493,11 +7101,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48055",
         "prefix": "K",
         "design": "48055",
         "files": [
@@ -7516,11 +7123,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48056",
         "prefix": "K",
         "design": "48056",
         "files": [
@@ -7539,11 +7145,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48057",
         "prefix": "K",
         "design": "48057",
         "files": [
@@ -7555,11 +7160,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48058",
         "prefix": "K",
         "design": "48058",
         "files": [
@@ -7578,11 +7182,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48059",
         "prefix": "K",
         "design": "48059",
         "files": [
@@ -7601,11 +7204,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48060",
         "prefix": "K",
         "design": "48060",
         "files": [
@@ -7617,11 +7219,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48061",
         "prefix": "K",
         "design": "48061",
         "files": [
@@ -7640,11 +7241,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48062",
         "prefix": "K",
         "design": "48062",
         "files": [
@@ -7656,11 +7256,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48063",
         "prefix": "K",
         "design": "48063",
         "files": [
@@ -7679,11 +7278,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48064",
         "prefix": "K",
         "design": "48064",
         "files": [
@@ -7695,11 +7293,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48065",
         "prefix": "K",
         "design": "48065",
         "files": [
@@ -7711,11 +7308,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48066",
         "prefix": "K",
         "design": "48066",
         "files": [
@@ -7727,11 +7323,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48067",
         "prefix": "K",
         "design": "48067",
         "files": [
@@ -7750,11 +7345,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48068",
         "prefix": "K",
         "design": "48068",
         "files": [
@@ -7773,11 +7367,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "48072",
         "prefix": "K",
         "design": "48072",
         "files": [
@@ -7796,11 +7389,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49047",
         "prefix": "K",
         "design": "49047",
         "files": [
@@ -7819,11 +7411,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49049",
         "prefix": "K",
         "design": "49049",
         "files": [
@@ -7835,11 +7426,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49051",
         "prefix": "K",
         "design": "49051",
         "files": [
@@ -7851,11 +7441,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49052",
         "prefix": "K",
         "design": "49052",
         "files": [
@@ -7867,11 +7456,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49053",
         "prefix": "K",
         "design": "49053",
         "files": [
@@ -7883,11 +7471,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49054",
         "prefix": "K",
         "design": "49054",
         "files": [
@@ -7899,11 +7486,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49055",
         "prefix": "K",
         "design": "49055",
         "files": [
@@ -7915,11 +7501,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49056",
         "prefix": "K",
         "design": "49056",
         "files": [
@@ -7938,11 +7523,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49057",
         "prefix": "K",
         "design": "49057",
         "files": [
@@ -7961,11 +7545,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49058",
         "prefix": "K",
         "design": "49058",
         "files": [
@@ -7984,11 +7567,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49059",
         "prefix": "K",
         "design": "49059",
         "files": [
@@ -8007,11 +7589,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49060",
         "prefix": "K",
         "design": "49060",
         "files": [
@@ -8023,11 +7604,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49061",
         "prefix": "K",
         "design": "49061",
         "files": [
@@ -8039,11 +7619,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49062",
         "prefix": "K",
         "design": "49062",
         "files": [
@@ -8055,11 +7634,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "49063",
         "prefix": "K",
         "design": "49063",
         "files": [
@@ -8078,11 +7656,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "62005",
         "prefix": "K",
         "design": "62005",
         "files": [
@@ -8094,11 +7671,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "72009",
         "prefix": "K",
         "design": "72009",
         "files": [
@@ -8110,11 +7686,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "72010",
         "prefix": "K",
         "design": "72010",
         "files": [
@@ -8126,11 +7701,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8015",
         "prefix": "K",
         "design": "8015",
         "files": [
@@ -8163,11 +7737,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8154",
         "prefix": "K",
         "design": "8154",
         "files": [
@@ -8186,11 +7759,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8590",
         "prefix": "K",
         "design": "8590",
         "files": [
@@ -8202,11 +7774,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8594",
         "prefix": "K",
         "design": "8594",
         "files": [
@@ -8218,11 +7789,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8651",
         "prefix": "K",
         "design": "8651",
         "files": [
@@ -8241,11 +7811,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8664",
         "prefix": "K",
         "design": "8664",
         "files": [
@@ -8257,11 +7826,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8665",
         "prefix": "K",
         "design": "8665",
         "files": [
@@ -8273,11 +7841,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8674",
         "prefix": "K",
         "design": "8674",
         "files": [
@@ -8296,11 +7863,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8677",
         "prefix": "K",
         "design": "8677",
         "files": [
@@ -8312,11 +7878,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8678",
         "prefix": "K",
         "design": "8678",
         "files": [
@@ -8328,11 +7893,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8679",
         "prefix": "K",
         "design": "8679",
         "files": [
@@ -8351,11 +7915,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8687",
         "prefix": "K",
         "design": "8687",
         "files": [
@@ -8374,11 +7937,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8690",
         "prefix": "K",
         "design": "8690",
         "files": [
@@ -8397,11 +7959,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8692",
         "prefix": "K",
         "design": "8692",
         "files": [
@@ -8413,11 +7974,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8693",
         "prefix": "K",
         "design": "8693",
         "files": [
@@ -8436,11 +7996,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8694",
         "prefix": "K",
         "design": "8694",
         "files": [
@@ -8459,11 +8018,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8695",
         "prefix": "K",
         "design": "8695",
         "files": [
@@ -8482,11 +8040,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8696",
         "prefix": "K",
         "design": "8696",
         "files": [
@@ -8498,11 +8055,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8697",
         "prefix": "K",
         "design": "8697",
         "files": [
@@ -8521,11 +8077,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8698",
         "prefix": "K",
         "design": "8698",
         "files": [
@@ -8544,11 +8099,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8699",
         "prefix": "K",
         "design": "8699",
         "files": [
@@ -8567,11 +8121,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8700",
         "prefix": "K",
         "design": "8700",
         "files": [
@@ -8590,11 +8143,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "8701",
         "prefix": "K",
         "design": "8701",
         "files": [
@@ -8606,11 +8158,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "AP12001",
         "prefix": "N",
         "design": "AP12001",
         "files": [
@@ -8629,11 +8180,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "AP24008",
         "prefix": "N",
         "design": "AP24008",
         "files": [
@@ -8645,11 +8195,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "AP25001",
         "prefix": "N",
         "design": "AP25001",
         "files": [
@@ -8661,11 +8210,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "GL8019",
         "prefix": "N",
         "design": "GL8019",
         "files": [
@@ -8677,11 +8225,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "Manolya",
         "prefix": "N",
         "design": "Manolya",
         "files": [
@@ -8693,11 +8240,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "Sofya",
         "prefix": "N",
         "design": "Sofya",
         "files": [
@@ -8709,11 +8255,10 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     },
     {
-        "title": "Turuva",
         "prefix": "N",
         "design": "Turuva",
         "files": [
@@ -8725,7 +8270,7 @@
                 "imageNo": "1"
             }
         ],
-        "length": 300,
-        "product": "embroidered_sheer_curtain_fabrics"
+        "width": 300,
+        "category": "embroidered_sheer_curtain_fabrics"
     }
 ]
