@@ -4,13 +4,15 @@ import ProductCard from "@/components/ProductCard";
 import classes from "@/components/ProductGrid.module.css";
 import { FaSearch } from "react-icons/fa";
 import Spinner from "@/components/Spinner";
-import { createClient } from "@supabase/supabase-js";
-const supabaseUrl = "https://qteyuvxsjoubyavjjize.supabase.co";
+// import { createClient } from "@supabase/supabase-js";
+// const supabaseUrl = "https://qteyuvxsjoubyavjjize.supabase.co";
 // const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(
-  supabaseUrl,
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0ZXl1dnhzam91YnlhdmpqaXplIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMjYyODA1MSwiZXhwIjoyMDE4MjA0MDUxfQ.MbqYQ80TmYi0Dsz_Dfji7FpMU-L5jfZBG3QCmpr7u1A"
-);
+// const supabase = createClient(
+//   supabaseUrl,
+//   process.env.SUPABASE_SECRET!,
+// );
+
+import supabase from "@/vir_db/supabase";
 
 type FilesArray = {
   name: string;
