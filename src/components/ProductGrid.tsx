@@ -1,24 +1,34 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ProductCard from "@/components/ProductCard";
 import classes from "@/components/ProductGrid.module.css";
 import { FaSearch } from "react-icons/fa";
 import Spinner from "@/components/Spinner";
+import { createClient } from "@supabase/supabase-js";
+const supabaseUrl = "https://qteyuvxsjoubyavjjize.supabase.co";
+// const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(
+  supabaseUrl,
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0ZXl1dnhzam91YnlhdmpqaXplIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMjYyODA1MSwiZXhwIjoyMDE4MjA0MDUxfQ.MbqYQ80TmYi0Dsz_Dfji7FpMU-L5jfZBG3QCmpr7u1A"
+);
 
 type FilesArray = {
   name: string;
   design: string;
   annex: string;
+  prefix: string;
   variant: string;
   imageNo: string;
 };
-type Fabric = {
-  title: string;
+type EmbroideryFabric = {
+  // title: string;
+  created_at: string;
+  id: number;
   prefix: string;
   design: string;
   files: FilesArray[];
-  length: number;
-  product: string;
+  // length: number;
+  // product: string;
 };
 // type Data = {
 //   id: number;
@@ -32,56 +42,117 @@ type Product = {
 function is_numeric(str: string) {
   return /^\d+$/.test(str);
 }
-export default function Example2(props: { product: Product }) {
+export default function ProductGrid(props: { product: Product }) {
   const [productLoadAmount, setproductLoadAmount] = useState<number>(20);
-  const [fetchData, setFetchData] = useState<Fabric[] | null>(null);
-  const [loadedProducts, setloadedProducts] = useState<Fabric[] | null>(null);
+  const [fetchData, setFetchData] = useState<EmbroideryFabric[] | null>(null);
+  const [loadedProducts, setloadedProducts] = useState<
+    EmbroideryFabric[] | null
+  >(null);
   const [filterUsed, setfilterUsed] = useState<boolean>(false);
+  const searchTermRef = useRef<HTMLInputElement | null>(null);
 
   const filter = (e: any) => {
     setfilterUsed(true);
+
     let query = e.currentTarget.value;
-    let prefix = e.currentTarget.value[0];
+    let prefix = query[0];
+    if(!query){
+      setfilterUsed(false);
+      setproductLoadAmount(20)
+      return;
+    }
+    // let query = searchTermRef.current!.value;
+    // let prefix = searchTermRef.current!.value[0];
+    // if (!query) {
+    //   console.log("hello");
+    //   setloadedProducts(fetchData);
+    // }
     // console.log(is_numeric(prefix));
     if (!is_numeric(prefix)) {
-      console.log(query.slice(1));
-      query = query.slice(1);
+      console.log(query?.slice(1));
+      query = query?.slice(1);
+      console.log(`${prefix} is not numeric`);
+
+      // query = query?.slice(1);
+    } else {
+      console.log(`${prefix} is numeric`);
     }
+    if(query.length<4){
+      return;
+    }
+    console.log("the query is:" + query);
+
     // console.log(e);
     // console.log(filterUsed);
-    let array: Fabric[] = [];
+    let array: EmbroideryFabric[] = [];
     fetchData?.map((item, index) => {
+      // console.log(item.design);
+
       if (
         // item.design.includes(e.currentTarget.value, 0)
-        item.design.includes(query, 0)
+        // item.design.includes(query, 0)
+        item.design.toString().includes(query, 0)
+
+        // item.design.toString() === query
+
         // item.design.includes(e.currentTarget.value.slice(0, -1))
       ) {
         array.push(item);
       }
+
     });
     // let filteredData = Array.prototype.concat.apply([], array);
     setloadedProducts(array);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    console.log(filterUsed);
+
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await fetch("/api/getFabrics"); // Call your API route
+    //     if (response.ok) {
+    //       const result = await response.json();
+    //       // setFetchData(result.data);
+    //       console.log(fetchData);
+
+    //       setloadedProducts(result.data.slice(0, productLoadAmount));
+    //     } else {
+    //       console.error("Error fetching data:", response.statusText);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
+
+    const fetchshit = async () => {
       try {
-        const response = await fetch("/api/getFabrics"); // Call your API route
-        if (response.ok) {
-          const result = await response.json();
-          // setFetchData(result.data);
-          console.log(fetchData);
-          
-          setloadedProducts(result.data.slice(0, productLoadAmount));
-        } else {
-          console.error("Error fetching data:", response.statusText);
+        let { data: embroidery_fabric, error } = await supabase
+          .from("embroidery_fabric")
+          .select("*");
+
+        setFetchData(embroidery_fabric);
+        setloadedProducts(embroidery_fabric!.slice(0, productLoadAmount));
+
+        if (error) {
+          // Handle the error if necessary
+          console.error("Error fetching data:", error.message);
+          return;
         }
+        // setFetchData(data());
+        // console.log(embroidery_fabric);
+        // console.log(fetchData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+
+      // console.log(await supabase.from("embroidery_fabric").select("*"));
     };
 
-    fetchData();
+    if (filterUsed == false) {
+      fetchshit();
+    }
+
     function handleScrollEvent() {
       if (
         window.innerHeight + window.scrollY >=
@@ -99,7 +170,7 @@ export default function Example2(props: { product: Product }) {
     return () => {
       window.removeEventListener("scroll", handleScrollEvent);
     };
-  }, [productLoadAmount, filterUsed]);
+  }, [productLoadAmount,filterUsed]);
   if (!fetchData) {
     return (
       <div>
@@ -120,12 +191,17 @@ export default function Example2(props: { product: Product }) {
         <div className={classes.wrap}>
           <div className={classes.search}>
             <input
+              ref={searchTermRef}
               type="text"
               className={classes.searchTerm}
-              placeholder="Enter design number"
+              placeholder="Enter the design number"
               onChange={filter}
             />
-            <button type="submit" className={classes.searchButton}>
+            <button
+              type="submit"
+              className={classes.searchButton}
+              // onClick={filter}
+            >
               {/* <i class="fa fa-search"></i> */}
               <FaSearch />
             </button>

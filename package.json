@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.5.2",
+    "@supabase/supabase-js": "^2.39.0",
+    "convert-array-to-csv": "^2.0.0",
     "mongodb": "^6.2.0",
     "next": "13.5.4",
     "react": "^18",

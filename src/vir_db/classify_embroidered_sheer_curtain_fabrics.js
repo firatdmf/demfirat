@@ -1,8 +1,9 @@
 // I am importing the fs module from the builtin node. FS enables me to read and write files within the system
 const fs = require("fs");
-// import { Prisma, PrismaClient } from '@prisma/client'
-const {PrismaClient} = require("@prisma/client")
-const prisma = new PrismaClient()
+// const Papa = require("papaparse");
+const { convertArrayToCSV } = require("convert-array-to-csv");
+// const {PrismaClient} = require("@prisma/client")
+// const prisma = new PrismaClient()
 // below productsOld array is for reference purposes that I have used before. I am not using anymore.
 let productsOld = [
   "12K201.jpg",
@@ -86,6 +87,12 @@ let classifyImage = (fileName, products) => {
     exists = true;
   }
   // else {
+    if (design > 8000) {
+      prefix = "K";
+    } else {
+      prefix = "N";
+    }
+  object.prefix = prefix
   object.name = fileName;
   object.design = design;
   object.annex = annex;
@@ -122,18 +129,19 @@ let uniqueDesignsObject = (products) => {
   });
   uniqueArray = removeDuplicates(uniqueArray);
   uniqueArray.forEach((item, index) => {
-    if (item>8000){
-      prefix = 'K'
-    }else{
-      prefix = 'N'
+    if (item > 8000) {
+      prefix = "K";
+    } else {
+      prefix = "N";
     }
     uniqueArray[index] = {
       // title: item,
       prefix,
       design: item,
       files: [],
-      width: 300,
-      category: "embroidered_sheer_curtain_fabrics",
+      // belos things are unneccessary
+      // width: 300,
+      // category: "embroidered_sheer_curtain_fabrics",
     };
   });
   // console.table(uniqueArray);
@@ -164,6 +172,32 @@ let writeJSON = (arrayOfObjectData) => {
   );
 };
 
+let writeCSV = (arrayOfObjectData) => {
+  //   // const csvData = Papa.unparse(arrayOfObjectData);
+  //   // const filePath = "./products_embroidered_sheer_curtain_fabrics.csv";
+  //   // fs.writeFileSync(filePath, csvData);
+  //   // console.log(`CSV file saved at: ${filePath}`);
+  const header = ["prefix", "design", "files"];
+
+  const dataArrays = [];
+
+    arrayOfObjectData.map((item) => {
+      dataArrays.push([item.prefix, item.design, JSON.stringify(item.files)]);
+    })
+  ;
+  const csvFromArrayOfArrays = convertArrayToCSV(dataArrays,{
+    header,
+    seperator:','
+  })
+
+  fs.writeFile('./products_embroidered_sheer_curtain_fabrics.csv',csvFromArrayOfArrays,err=>{
+    if(err){
+      console.log(err);
+    }
+    console.log('csv file saved');
+  })
+};
+
 // main function that runs
 let node = async () => {
   const testFolder = "../../public/products/embroidered_sheer_curtain_fabrics";
@@ -179,14 +213,15 @@ let node = async () => {
   console.table(uniqueArray);
   console.log(uniqueArray[4]);
   writeJSON(uniqueArray);
-  const embroidered_sheer_curtain_fabrics = await prisma.collections.upsert({
-    where:{id:1},
-    update:{},
-    create:{
-      data:uniqueArray,
-      collection:'products_embroidered_sheer_curtain_fabrics'
-    }
-  })
+  // const embroidered_sheer_curtain_fabrics = await prisma.collections.upsert({
+  //   where:{id:1},
+  //   update:{},
+  //   create:{
+  //     data:uniqueArray,
+  //     collection:'products_embroidered_sheer_curtain_fabrics'
+  //   }
+  // })
+  writeCSV(uniqueArray);
 };
 
 node();
