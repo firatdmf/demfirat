@@ -27,7 +27,7 @@ let productsOld = [
   "AP12001.jpg",
 ];
 
-// Below function determines if a character is a letter or not.
+// Below function determines if a character is a letter or not (True if it is a letter)
 let isLetter = (str) => {
   return str.length === 1 && str.match(/[a-z]/i);
 };
@@ -37,14 +37,14 @@ let classifyImage = (fileName, products) => {
   let object = {};
   // annex stands for T or I, for tasli and incili respectively
   let annex;
+  let prefix;
   // takeout the file extension from the name of the file and store it in the design variable. This will be altered later on the code
   let design = fileName.split(".")[0];
-
+  // console.log(design);
   // Initializing the variable imageNo
   let imageNo;
   // If the file name icludes - character, it means it has multiple images of this design and variant. So let's take the order number of that design+variant and assign to imageNo variable
   if (fileName.includes("-")) {
-    // imageNo.push(design.split("-")[1]);
     imageNo = design.split("-")[1];
     // Since we have a multiple order we need to alter the design variable so we will eliminate the extra strings beside the design string. Which should be something like 1204 ideally
     design = design.split("-")[0];
@@ -68,39 +68,58 @@ let classifyImage = (fileName, products) => {
   // Let's determine if the design has a tas or inci (This needs to updated for designs that have both inci and tas)
   // For that lets get the second last character
   let secondLastCharacter = design.charAt(design.length - 2);
-  // Now lets determine if it's a letter or not. If it is not a letter, and the character comes right after it is a letter, then it has a variant.
-  if (!isLetter(secondLastCharacter) && isLetter(design.slice(-1))) {
-    // Take out the last character and store it in the variable called annex
-    annex = design.slice(-1);
-    // Let's once again filter out the extra strings from the design variable
-    design = fileName.split(annex)[0];
+  let thirdLastCharacter = design.charAt(design.length - 3);
+  let lastCharacter = design.slice(-1);
+  if (isLetter(lastCharacter)) {
+    if (isLetter(thirdLastCharacter)) {
+      annex = design.slice(-2);
+      // console.log("hello", design, thirdLastCharacter);
+      design = fileName.split(annex)[0];
+    }
+    // Now lets determine if it's a letter or not. If it is not a letter, and the character comes right after it is a letter, then it has a variant.
+    else if (!isLetter(secondLastCharacter)) {
+      // Take out the last character and store it in the variable called annex
+      annex = design.slice(-1);
+      // Let's once again filter out the extra strings from the design variable
+      design = fileName.split(annex)[0];
+    }
   } else {
     annex = "";
   }
 
   // Now at below, we determine if we already have this design in the folder/data
   // If there is, then we store their indexes from the products json file
-  const i = products.findIndex((e) => e.design === design);
+  const productBoolean = products.findIndex((e) => e.design === design);
   // lets initialize a boolean variable and set it equal to false
   let exists = false;
-  if (i > -1) {
+  if (productBoolean > -1) {
     exists = true;
   }
-  // else {
-    if (design > 8000) {
+  if (isLetter(design[0])) {
+    prefix = "";
+    for (let i = 0; i < design.length; i++) {
+      if (isLetter(design[i])) {
+        prefix += design[i];
+      }
+    }
+    design = design.replace(/\D/g, "");
+  } else {
+    if (design > 8000 && !isLetter(design[0])) {
       prefix = "K";
     } else {
       prefix = "N";
     }
-  object.prefix = prefix
+  }
+
+  // design = design.replace(/\D/g, "");
+
+  object.prefix = prefix;
   object.name = fileName;
   object.design = design;
   object.annex = annex;
   object.variant = variant;
   object.imageNo = imageNo;
-  // return console.log(string);
   // }
-  //   console.log(JSON.stringify(object) + " / " + exists);
   return [object, exists];
 };
 
@@ -111,47 +130,72 @@ let classifyEachFile = (productFiles) => {
     let [object, exists] = classifyImage(item, products);
     products.push(object);
   });
-  // console.table(products);
   return products;
 };
 
 let removeDuplicates = (array) => {
-  return array.filter((item, index) => array.indexOf(item) == index);
+  // below is when uniqueArray is just an array of design strings: ['1151','1164']
+  // console.log(array);
+  // newArray =  array.filter((item, index) => array.indexOf(item) === index);
+  // console.log(newArray);
+  // return newArray
+
+  const uniqueMap = new Map();
+  array.forEach((item)=>{
+    const key = `${item.design}-${item.prefix}`;
+    uniqueMap.set(key,item)
+  })
+  return Array.from(uniqueMap.values());
 };
 let getKeyByValue = (object, value) => {
   return Object.keys(object).find((key) => object[key] === value);
 };
 
+// this part is not for files array but for the main object
 let uniqueDesignsObject = (products) => {
+  // let's create a unique array that just consists of unique design numbers, and their corresponding prefixes
   let uniqueArray = [];
-  products.map((item) => {
-    uniqueArray.push(item.design);
-  });
-  uniqueArray = removeDuplicates(uniqueArray);
-  uniqueArray.forEach((item, index) => {
-    if (item > 8000) {
-      prefix = "K";
-    } else {
-      prefix = "N";
+  // let's get them all in uniqueArray
+  products.map((productItem) => {
+
+    // below ensures that we do not include folder names for our output
+    if(productItem.design !==""){
+
+      uniqueArray.push([productItem.design, productItem.prefix]);
     }
+  });
+  // let's make the uniqueArray unique
+  // uniqueArray = removeDuplicates(uniqueArray);
+  // uniqueArray = [...new Set(uniqueArray)]
+  // uniqueArray = uniqueArray.filter((value, index, self) => self.indexOf(value) === index);
+  uniqueArray = uniqueArray.reduce((accumulator, currentValue) => {
+    if (!accumulator.includes(currentValue)) {
+      accumulator.push(currentValue);
+    }
+    return accumulator;
+  }, []);
+
+  // console.log(uniqueArray);
+  // now let's state them as the parents
+  uniqueArray.forEach((productItem, index) => {
+    // now rewrite the data in them.
     uniqueArray[index] = {
       // title: item,
-      prefix,
-      design: item,
+      design: productItem[0],
+      prefix: productItem[1],
       files: [],
       // belos things are unneccessary
       // width: 300,
       // category: "embroidered_sheer_curtain_fabrics",
     };
   });
-  // console.table(uniqueArray);
   return uniqueArray;
 };
 
 let objectAppend = (products, uniqueDesignObject) => {
   products.forEach((item, index) => {
     uniqueDesignObject.forEach((item2, index2) => {
-      if (item.design === item2.design) {
+      if (item.design === item2.design && item.prefix === item2.prefix) {
         item2.files.push(item);
       }
     });
@@ -181,21 +225,24 @@ let writeCSV = (arrayOfObjectData) => {
 
   const dataArrays = [];
 
-    arrayOfObjectData.map((item) => {
-      dataArrays.push([item.prefix, item.design, JSON.stringify(item.files)]);
-    })
-  ;
-  const csvFromArrayOfArrays = convertArrayToCSV(dataArrays,{
+  arrayOfObjectData.map((item) => {
+    dataArrays.push([item.prefix, item.design, JSON.stringify(item.files)]);
+  });
+  const csvFromArrayOfArrays = convertArrayToCSV(dataArrays, {
     header,
-    seperator:','
-  })
+    seperator: ",",
+  });
 
-  fs.writeFile('./products_embroidered_sheer_curtain_fabrics.csv',csvFromArrayOfArrays,err=>{
-    if(err){
-      console.log(err);
+  fs.writeFile(
+    "./products_embroidered_sheer_curtain_fabrics.csv",
+    csvFromArrayOfArrays,
+    (err) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log("csv file saved");
     }
-    console.log('csv file saved');
-  })
+  );
 };
 
 // main function that runs
@@ -206,12 +253,14 @@ let node = async () => {
     return fileName;
   });
   let products = classifyEachFile(productFiles);
-  console.table(products);
+  // console.table(products);
   let uniqueArray = uniqueDesignsObject(products);
-  console.table(uniqueArray);
+  // console.table(uniqueArray);
+  uniqueArray = removeDuplicates(uniqueArray)
+  // console.table(uniqueArray);
   objectAppend(products, uniqueArray);
-  console.table(uniqueArray);
-  console.log(uniqueArray[4]);
+  // console.table(uniqueArray);
+  // console.log(uniqueArray[4]);
   writeJSON(uniqueArray);
   // const embroidered_sheer_curtain_fabrics = await prisma.collections.upsert({
   //   where:{id:1},

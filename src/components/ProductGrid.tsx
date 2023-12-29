@@ -4,16 +4,19 @@ import ProductCard from "@/components/ProductCard";
 import classes from "@/components/ProductGrid.module.css";
 import { FaSearch } from "react-icons/fa";
 import Spinner from "@/components/Spinner";
-// import { createClient } from "@supabase/supabase-js";
-// const supabaseUrl = "https://qteyuvxsjoubyavjjize.supabase.co";
-// const supabaseKey = process.env.SUPABASE_KEY
-// const supabase = createClient(
-//   supabaseUrl,
-//   process.env.SUPABASE_SECRET!,
-// );
+import { createClient } from "@supabase/supabase-js";
+// import supabase from "@/vir_db/supabase";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-import supabase from "@/vir_db/supabase";
+// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
+
+const supabase = createClient(
+  supabaseUrl!,
+  // process.env.SUPABASE_SECRET!,
+  supabaseKey!,
+);
 type FilesArray = {
   name: string;
   design: string;
@@ -58,9 +61,9 @@ export default function ProductGrid(props: { product: Product }) {
 
     let query = e.currentTarget.value;
     let prefix = query[0];
-    if(!query){
+    if (!query) {
       setfilterUsed(false);
-      setproductLoadAmount(20)
+      setproductLoadAmount(20);
       return;
     }
     // let query = searchTermRef.current!.value;
@@ -71,15 +74,15 @@ export default function ProductGrid(props: { product: Product }) {
     // }
     // console.log(is_numeric(prefix));
     if (!is_numeric(prefix)) {
-      console.log(query?.slice(1));
+      // console.log(query?.slice(1));
       query = query?.slice(1);
-      console.log(`${prefix} is not numeric`);
+      // console.log(`${prefix} is not numeric`);
 
       // query = query?.slice(1);
     } else {
       console.log(`${prefix} is numeric`);
     }
-    if(query.length<4){
+    if (query.length < 4) {
       return;
     }
     console.log("the query is:" + query);
@@ -101,14 +104,13 @@ export default function ProductGrid(props: { product: Product }) {
       ) {
         array.push(item);
       }
-
     });
     // let filteredData = Array.prototype.concat.apply([], array);
     setloadedProducts(array);
   };
 
   useEffect(() => {
-    console.log(filterUsed);
+    // console.log(filterUsed);
 
     // const fetchData = async () => {
     //   try {
@@ -130,10 +132,12 @@ export default function ProductGrid(props: { product: Product }) {
     const fetchshit = async () => {
       try {
         let { data: embroidery_fabric, error } = await supabase
-          .from("embroidery_fabric")
+          .from("embroidery_fabric_curtain")
           .select("*");
-
+        // console.log(embroidery_fabric);
+        
         setFetchData(embroidery_fabric);
+        
         setloadedProducts(embroidery_fabric!.slice(0, productLoadAmount));
 
         if (error) {
@@ -172,7 +176,7 @@ export default function ProductGrid(props: { product: Product }) {
     return () => {
       window.removeEventListener("scroll", handleScrollEvent);
     };
-  }, [productLoadAmount,filterUsed]);
+  }, [productLoadAmount, filterUsed]);
   if (!fetchData) {
     return (
       <div>
