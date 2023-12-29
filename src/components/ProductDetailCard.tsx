@@ -67,25 +67,28 @@ function ProductDetailCard({ design }: any) {
   // below is for settings the image carousel look
   const imgs = document.querySelectorAll(".img-select a");
   const imgBtns = [...imgs];
-  let imgId = 1;
+  let imgId:number = 1;
 
   imgBtns.forEach((imgItem) => {
     imgItem.addEventListener("click", (event) => {
       event.preventDefault();
-      imgId = imgItem.dataset.id;
-      slideImage();
+      if(imgItem instanceof HTMLElement){
+
+        imgId = parseInt(imgItem.dataset.id!)
+        slideImage();
+      }
     });
   });
 
   function slideImage() {
     const displayWidth = document.querySelector(
       ".img-showcase img:first-child"
-    ).clientWidth;
+    )!.clientWidth;
 
 
 
 
-    document.querySelector(".img-showcase").style.transform = `translateX(${
+    (document.querySelector(".img-showcase") as HTMLElement).style.transform = `translateX(${
       -(imgId - 1) * displayWidth
     }px)`;
   }
