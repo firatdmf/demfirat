@@ -12,7 +12,7 @@ function About() {
     Demfirat Karven Tekstil.
   </h2> */}
       <div className={`${classes.headText} ${classes.textCenter}`}>
-        <h2>FOUNDER'S STORY</h2>
+        <h2>FOUNDER&aposS STORY</h2>
         <br />
         <p>
           Our parent company, Dem Fırat Karven Tekstil, was established in 1991
@@ -28,7 +28,7 @@ function About() {
           <div className={`${classes.box1} ${classes.textCenter}`}>
             <h1>BROAD SHOULDERS</h1>
             <p>
-              Cuma's parents' negligence and being the eldest among his siblings
+              Cuma&aposs parents&apos negligence and being the eldest among his siblings
               left him with an immense responsibility to work hard and provide
               for his family. So to make money fast, he started crossing the
               Iranian border as a kid to buy goods at a cheaper rate, then
@@ -43,7 +43,7 @@ function About() {
               shops on the West side of the country, in 1991, at the age of 23,
               he opened his first textile shop in Laleli, Istanbul, with a
               business partner. However, in 1997, when his first child was born
-              (that's me!), the partners had disagreements, leading them to
+              (that&aposs me!), the partners had disagreements, leading them to
               separate ways.
             </p>
           </div>
@@ -103,7 +103,7 @@ function About() {
             <h3>MANUFACTURING</h3>
             <h1>2014</h1>
             <p>
-              Soon Cuma's manufacturing partners could not meet his growing
+              Soon Cuma&aposs manufacturing partners could not meet his growing
               market demand. So, he acquired 60,000 SF of empty land and built
               his first textile mill just an hour from Istanbul to fully
               supervise the production and cut unnecessary costs bearing his
@@ -117,7 +117,7 @@ function About() {
             <h1>2020</h1>
             <p>
               Having started a successful company and being able take care of
-              his siblings by employing them has made Cuma's dreams come true.
+              his siblings by employing them has made Cuma&aposs dreams come true.
             </p>
             <p>
               Dem Fırat Karven started as a small family-run textile shop in
