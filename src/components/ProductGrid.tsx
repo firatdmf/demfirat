@@ -5,6 +5,8 @@ import classes from "@/components/ProductGrid.module.css";
 import { FaSearch } from "react-icons/fa";
 import Spinner from "@/components/Spinner";
 import { createClient } from "@supabase/supabase-js";
+import fabricData from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json"
+import Embroidery from "@/app/products/fabrics/embroidery/page";
 // import supabase from "@/vir_db/supabase";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
@@ -27,8 +29,8 @@ type FilesArray = {
 };
 type EmbroideryFabric = {
   // title: string;
-  created_at: string;
-  id: number;
+  // created_at: string;
+  // id: number;
   prefix: string;
   design: string;
   files: FilesArray[];
@@ -131,23 +133,23 @@ export default function ProductGrid(props: { product: Product }) {
 
     const fetchshit = async () => {
       try {
-        let { data: embroidery_fabric, error } = await supabase
-          .from("embroidery_fabric_curtain")
-          .select("*");
-        // console.log(embroidery_fabric);
-        
-        setFetchData(embroidery_fabric);
-        
-        setloadedProducts(embroidery_fabric!.slice(0, productLoadAmount));
+        // let { data: embroidery_fabric, error } = await supabase
+        //   .from("embroidery_fabric_curtain")
+        //   .select("*");
+        // // console.log(embroidery_fabric);
 
-        if (error) {
-          // Handle the error if necessary
-          console.error("Error fetching data:", error.message);
-          return;
-        }
-        // setFetchData(data());
-        // console.log(embroidery_fabric);
-        // console.log(fetchData);
+        
+        setFetchData(fabricData);
+        
+        setloadedProducts(fabricData!.slice(0, productLoadAmount));
+
+        // if (error) {
+        //   // Handle the error if necessary
+        //   console.error("Error fetching data:", error.message);
+        //   return;
+        // }
+
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
