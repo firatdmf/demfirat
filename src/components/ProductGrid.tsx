@@ -8,10 +8,10 @@ import { createClient } from "@supabase/supabase-js";
 import fabricData from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json"
 import Embroidery from "@/app/products/fabrics/embroidery/page";
 // import supabase from "@/vir_db/supabase";
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 
 // const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 
 const supabase = createClient(
