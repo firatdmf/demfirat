@@ -17,7 +17,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const supabase = createClient(
   supabaseUrl!,
   // process.env.SUPABASE_SECRET!,
-  supabaseKey!,
+  supabaseAnonKey!,
 );
 type FilesArray = {
   name: string;
