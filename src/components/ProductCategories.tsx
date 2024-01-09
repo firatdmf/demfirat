@@ -16,26 +16,26 @@ function ProductCategories() {
       imgLink: "/products/kirat/8159.jpg",
       alt: "Embroidered Sheer Fabrics",
     },
-    {
-      name: "Plain Sheer Fabrics",
-      link: "#",
-      imgLink: "/products/woven_sheer_fabrics/otto.jpg",
-      alt: "Solid Sheer Fabrics",
-    },
-    {
-      name: "Embroidered Sheer Bridal Fabrics",
-      link: "#",
-      imgLink: "products/embroidered_sheer_bridal_fabrics/FL_7016.jpg",
-      alt: "Bridal Sheer Fabrics",
-    },
-    {
-      name: "Ready-made Curtain Panels",
-      link: "/Products/ready-made",
-      // imgLink: "/products/ready-made/48061/K48061-cover-photo.jpg",
-      imgLink:
-        "/products/ready-made/72010/72010_champagne/Beige-dandelion-embroidery-sheer-curtain-model-72010-placed-curtain-rod-to-show-the-grommet-dimensions.jpg",
-      alt: "Embroidered Sheer Fabrics",
-    },
+    // {
+    //   name: "Plain Sheer Fabrics",
+    //   link: "#",
+    //   imgLink: "/products/woven_sheer_fabrics/otto.jpg",
+    //   alt: "Solid Sheer Fabrics",
+    // },
+    // {
+    //   name: "Embroidered Sheer Bridal Fabrics",
+    //   link: "#",
+    //   imgLink: "products/embroidered_sheer_bridal_fabrics/FL_7016.jpg",
+    //   alt: "Bridal Sheer Fabrics",
+    // },
+    // {
+    //   name: "Ready-made Curtain Panels",
+    //   link: "/Products/ready-made",
+    //   // imgLink: "/products/ready-made/48061/K48061-cover-photo.jpg",
+    //   imgLink:
+    //     "/products/ready-made/72010/72010_champagne/Beige-dandelion-embroidery-sheer-curtain-model-72010-placed-curtain-rod-to-show-the-grommet-dimensions.jpg",
+    //   alt: "Embroidered Sheer Fabrics",
+    // },
   ];
 
   return (

@@ -77,7 +77,7 @@ function Header() {
         <Link className={classes.a} href="/">
           Home
         </Link>
-        <Link className={classes.a} href="/products">
+        <Link className={classes.a} href="/products/fabrics/embroidery">
           Products
         </Link>
         {/* <Link className={classes.a} to="/fabricUpload">
