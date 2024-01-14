@@ -12,7 +12,7 @@ function About() {
     Demfirat Karven Tekstil.
   </h2> */}
       <div className={`${classes.headText} ${classes.textCenter}`}>
-        <h2>FOUNDER'S STORY</h2>
+        <h2>{`FOUNDER'S STORY`}</h2>
         <br />
         <p>
           Our parent company, Dem Fırat Karven Tekstil, was established in 1991
@@ -27,12 +27,12 @@ function About() {
         <div className={`${classes.row} ${classes.row1}`}>
           <div className={`${classes.box1} ${classes.textCenter}`}>
             <h1>BROAD SHOULDERS</h1>
-            <p>
+            <p>{`
               Cuma's parents' negligence and being the eldest among his siblings
               left him with an immense responsibility to work hard and provide
               for his family. So to make money fast, he started crossing the
               Iranian border as a kid to buy goods at a cheaper rate, then
-              brought and traded them in Turkey.
+              brought and traded them in Turkey.`}
             </p>
             <p>
               Yet, after getting caught numerously and punished by the
@@ -102,12 +102,12 @@ function About() {
           <div className={`${classes.box2} ${classes.textEnd}`}>
             <h3>MANUFACTURING</h3>
             <h1>2014</h1>
-            <p>
+            <p>{`
               Soon Cuma's manufacturing partners could not meet his growing
               market demand. So, he acquired 60,000 SF of empty land and built
               his first textile mill just an hour from Istanbul to fully
               supervise the production and cut unnecessary costs bearing his
-              clients.
+              clients.`}
             </p>
           </div>
         </div>
