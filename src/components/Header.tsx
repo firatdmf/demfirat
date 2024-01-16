@@ -13,14 +13,14 @@ function Header() {
         <span className={classes.span2}>
           <div className={classes.span2flex2}>
             <span>
-              <Link href="/login" className={classes.loginButton}>
+              <Link href="/api/auth/signin" className={classes.loginButton}>
                 {/* <FaSignInAlt /> */}
                 <p>Login</p>
               </Link>
             </span>
             <span>|</span>
             <span>
-              <Link href="/register" className={classes.registerButton}>
+              <Link href="/api/auth/register" className={classes.registerButton}>
                 {/* <FaUser /> */}
                 <p>Register</p>
               </Link>

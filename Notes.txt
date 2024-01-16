@@ -189,3 +189,4 @@ export default function Example2(props: { product: Product }) {
 }
 
 ------
+we use bcrypt library to hash passwords

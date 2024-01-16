@@ -2,17 +2,21 @@
 // this makes it easy to see the default information
 
 import { PrismaClient } from '@prisma/client'
+import {hash} from 'bcrypt'
 // import curtain_fabrics from '@/vir_db/products_embroidered_sheer_curtain_fabrics.json'
 const prisma = new PrismaClient()
 
 async function main() {
+  // 12 is the number of salts around it
+  const password = await hash('test',12)
   const user = await prisma.user.upsert({
     where: { email: 'test@test.com' },
     update: {},
     create: {
       email: 'test@test.com',
       name: 'Test User',
-      password: `$2y$12$GBfcgD6XwaMferSOdYGiduw3Awuo95QAPhxFE0oNJ.Ds8qj3pzEZy`
+      // password: `$2y$12$GBfcgD6XwaMferSOdYGiduw3Awuo95QAPhxFE0oNJ.Ds8qj3pzEZy`
+      password,
     }
   })
   console.log({ user })
