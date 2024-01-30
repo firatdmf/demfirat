@@ -10,6 +10,7 @@ interface Props {
 
 const ProductCard: NextPage<Props> = (props) => {
   const { product } = props;
+  const productType = "embroidered_sheer_curtain_fabrics"
   return (
     <div className={classes.ProductCardComponent}>
       <Link
@@ -19,9 +20,11 @@ const ProductCard: NextPage<Props> = (props) => {
         <div className={classes.card}>
           <div className={classes.image}>
             <img
-              src={"/products/embroidered_sheer_curtain_fabrics/"+product.files[0].name}
-              alt={"Image of the product: " + product.name}
+              src={"/products/"+productType+"/thumbnails/"+product.files[0].name}
+              alt={"Image of the "+productType.replace(/_/g,' ') + " product: " + product.design}
               key={product.files[0].name}
+              // If the thumbnail does not exist, or broken that display the original image instead
+              onError={({currentTarget})=>{currentTarget.onerror=null;currentTarget.src=currentTarget.src.replace('/thumbnails','')}}
             />
           </div>
           {product.theme ? (

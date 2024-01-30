@@ -4,21 +4,25 @@ import ProductCard from "@/components/ProductCard";
 import classes from "@/components/ProductGrid.module.css";
 import { FaSearch } from "react-icons/fa";
 import Spinner from "@/components/Spinner";
-import { createClient } from "@supabase/supabase-js";
-import fabricData from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json"
-import Embroidery from "@/app/products/fabrics/embroidery/page";
+// import { createClient } from "@supabase/supabase-js";
+import fabricData from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json";
+// import {prisma} from "@/lib/prisma"
+
+// below is to check to see if the user is logged in
+import { useSession } from "next-auth/react";
+
 // import supabase from "@/vir_db/supabase";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 
-// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY as string;
 
+// const supabase = createClient(
+//   supabaseUrl!,
+//   // process.env.SUPABASE_SECRET!,
+//   supabaseKey!
+// );
 
-const supabase = createClient(
-  supabaseUrl!,
-  // process.env.SUPABASE_SECRET!,
-  supabaseAnonKey!,
-);
 type FilesArray = {
   name: string;
   design: string;
@@ -46,9 +50,47 @@ type Product = {
   name: string;
 };
 
+// let fabricData = prisma
+// let firat = prisma.products.findMany()
+// console.log(firat);
+// const {data, error} = await supabase .from('products').select()
+// const firat = async()=>{
+//   // await supabase.from('products').select()
+//   await prisma.products.findMany()
+// }
+// console.log(firat());
+
+// console.log(fabricData);
+
 function is_numeric(str: string) {
   return /^\d+$/.test(str);
 }
+
+let shuffle = (array: EmbroideryFabric[], seed: number) => {
+  // <-- ADDED ARGUMENT
+  var m = array.length,
+    t,
+    i;
+
+  // While there remain elements to shuffle…
+  while (m) {
+    // Pick a remaining element…
+    i = Math.floor(random(seed) * m--); // <-- MODIFIED LINE
+
+    // And swap it with the current element.
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+    ++seed; // <-- ADDED LINE
+  }
+
+  return array;
+};
+let random = (seed: number) => {
+  var x = Math.sin(seed++) * 10000;
+  return x - Math.floor(x);
+};
+
 export default function ProductGrid(props: { product: Product }) {
   const [productLoadAmount, setproductLoadAmount] = useState<number>(20);
   const [fetchData, setFetchData] = useState<EmbroideryFabric[] | null>(null);
@@ -57,7 +99,15 @@ export default function ProductGrid(props: { product: Product }) {
   >(null);
   const [filterUsed, setfilterUsed] = useState<boolean>(false);
   const searchTermRef = useRef<HTMLInputElement | null>(null);
-
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      // the user not authenticated, handle here
+      console.log("Not logged in!: " + status);
+    },
+  });
+  console.log(status);
+  
   const filter = (e: any) => {
     setfilterUsed(true);
 
@@ -68,69 +118,27 @@ export default function ProductGrid(props: { product: Product }) {
       setproductLoadAmount(20);
       return;
     }
-    // let query = searchTermRef.current!.value;
-    // let prefix = searchTermRef.current!.value[0];
-    // if (!query) {
-    //   console.log("hello");
-    //   setloadedProducts(fetchData);
-    // }
-    // console.log(is_numeric(prefix));
-    if (!is_numeric(prefix)) {
-      // console.log(query?.slice(1));
-      query = query?.slice(1);
-      // console.log(`${prefix} is not numeric`);
 
-      // query = query?.slice(1);
-    } else {
-      console.log(`${prefix} is numeric`);
+    if (!is_numeric(prefix)) {
+      query = query?.slice(1);
     }
     if (query.length < 4) {
       return;
     }
-    console.log("the query is:" + query);
+    // console.log("the query is:" + query);
 
-    // console.log(e);
-    // console.log(filterUsed);
     let array: EmbroideryFabric[] = [];
     fetchData?.map((item, index) => {
       // console.log(item.design);
 
-      if (
-        // item.design.includes(e.currentTarget.value, 0)
-        // item.design.includes(query, 0)
-        item.design.toString().includes(query, 0)
-
-        // item.design.toString() === query
-
-        // item.design.includes(e.currentTarget.value.slice(0, -1))
-      ) {
+      if (item.design.toString().includes(query, 0)) {
         array.push(item);
       }
     });
-    // let filteredData = Array.prototype.concat.apply([], array);
     setloadedProducts(array);
   };
 
   useEffect(() => {
-    // console.log(filterUsed);
-
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch("/api/getFabrics"); // Call your API route
-    //     if (response.ok) {
-    //       const result = await response.json();
-    //       // setFetchData(result.data);
-    //       console.log(fetchData);
-
-    //       setloadedProducts(result.data.slice(0, productLoadAmount));
-    //     } else {
-    //       console.error("Error fetching data:", response.statusText);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-
     const fetchshit = async () => {
       try {
         // let { data: embroidery_fabric, error } = await supabase
@@ -138,9 +146,8 @@ export default function ProductGrid(props: { product: Product }) {
         //   .select("*");
         // // console.log(embroidery_fabric);
 
-        
         setFetchData(fabricData);
-        
+
         setloadedProducts(fabricData!.slice(0, productLoadAmount));
 
         // if (error) {
@@ -148,8 +155,6 @@ export default function ProductGrid(props: { product: Product }) {
         //   console.error("Error fetching data:", error.message);
         //   return;
         // }
-
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -162,14 +167,23 @@ export default function ProductGrid(props: { product: Product }) {
     }
 
     function handleScrollEvent() {
+      console.log(status);
+      
       if (
-        window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 20 &&
-        filterUsed === false
+        ((window.innerHeight + window.scrollY) >=
+          (document.body.offsetHeight - 20)) &&
+        (filterUsed === false)    
       ) {
         console.log("you're at the bottom of the page");
         setproductLoadAmount(productLoadAmount + 20);
         console.log(productLoadAmount);
+      } else {
+        return (
+          <h3>
+            Please contact info@demfirat.com to open account and see all designs
+          </h3>
+        );
+
         // here add more items in the 'filteredData' state from the 'allData' state source.
       }
     }
@@ -179,6 +193,7 @@ export default function ProductGrid(props: { product: Product }) {
       window.removeEventListener("scroll", handleScrollEvent);
     };
   }, [productLoadAmount, filterUsed]);
+
   if (!fetchData) {
     return (
       <div>
@@ -191,35 +206,70 @@ export default function ProductGrid(props: { product: Product }) {
         <div
           className={classes.cover}
           id="karven-banner"
-          style={{ backgroundImage: "url('/media/karven_banner.png')" }}
+          style={{
+            backgroundImage: "url('/media/karven_banner.webp')",
+            backgroundSize: "900px",
+            // scale:"110%"
+          }}
         >
           <div className={classes.headlineBox}>Embroidery</div>
         </div>
         {/* search bar below */}
-        <div className={classes.wrap}>
-          <div className={classes.search}>
-            <input
-              ref={searchTermRef}
-              type="text"
-              className={classes.searchTerm}
-              placeholder="Enter the design number"
-              onChange={filter}
-            />
-            <button
-              type="submit"
-              className={classes.searchButton}
-              // onClick={filter}
-            >
-              {/* <i class="fa fa-search"></i> */}
-              <FaSearch />
-            </button>
+        {status === "loading" ? (
+          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+            Products
+          </h2>
+        ) : (
+          <div className={classes.wrap}>
+            <div className={classes.search}>
+              <input
+                ref={searchTermRef}
+                type="text"
+                className={classes.searchTerm}
+                placeholder="Enter the design number"
+                onChange={filter}
+              />
+              <button
+                type="submit"
+                className={classes.searchButton}
+                // onClick={filter}
+              >
+                <FaSearch />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
         {/* search bar ends here */}
-        <div className={classes.products}>
-          {loadedProducts?.map((fabric, index: number) => {
+
+        {/* <div className={classes.products}> */}
+
+        {/* {loadedProducts?.map((fabric, index: number) => {
             return <ProductCard key={index} product={fabric} />;
-          })}
+          })} */}
+        {/* </div> */}
+        <div>
+          {status === "loading" ? (
+            <>
+              <div className={classes.products}>
+                {/* {shuffle(fabricData!, 497) */}
+                {fabricData
+                  ?.slice(687, 702)
+                  .map((fabric, index: number) => {
+                    return <ProductCard key={index} product={fabric} />;
+                  })}
+              </div>
+              <h3 style={{ textAlign: "center" }}>
+                To see all the designs, email info@demfirat with your business
+                info and we'll create an online account for you.
+              </h3>
+            </>
+          ) : (
+            <div className={classes.products}>
+              {loadedProducts?.map((fabric, index: number) => {
+                return <ProductCard key={index} product={fabric} />;
+              })}
+            </div>
+          )}
         </div>
       </div>
     );

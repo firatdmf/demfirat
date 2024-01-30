@@ -11,7 +11,7 @@ function ProductCategories() {
     //   alt: "Ready Made Curtain",
     // },
     {
-      name: "Embroidered Sheer Curtain Fabrics",
+      name: "Embroidered Sheer Tulle Curtain Fabrics",
       link: "/products/fabrics/embroidery",
       imgLink: "/products/kirat/8159.jpg",
       alt: "Embroidered Sheer Fabrics",

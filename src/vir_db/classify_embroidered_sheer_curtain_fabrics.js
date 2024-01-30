@@ -2,6 +2,11 @@
 const fs = require("fs");
 // const Papa = require("papaparse");
 const { convertArrayToCSV } = require("convert-array-to-csv");
+// since this is not react, we need to use require instead of below
+// import { prisma } from "@/lib/prisma";
+const { PrismaClient } = require("@prisma/client");
+const currentUniqueArray = require("./products_embroidered_sheer_curtain_fabrics.json");
+// import { PrismaClient } from "@prisma/client";
 // const {PrismaClient} = require("@prisma/client")
 // const prisma = new PrismaClient()
 // below productsOld array is for reference purposes that I have used before. I am not using anymore.
@@ -26,10 +31,23 @@ let productsOld = [
   "Turuva_Paris.jpg",
   "AP12001.jpg",
 ];
-
+let uniqueArray = [];
+const prisma = new PrismaClient();
 // Below function determines if a character is a letter or not (True if it is a letter)
 let isLetter = (str) => {
   return str.length === 1 && str.match(/[a-z]/i);
+};
+
+let designDate = (designName) => {
+  let exists = false
+  for (let index = 0; index < currentUniqueArray.length; ++index) {
+    let product = currentUniqueArray[index];
+    if (product.design === designName) {
+      exists = true
+      return product.date
+    }
+  }
+    return new Date().toJSON().slice(0, 10)
 };
 
 let classifyImage = (fileName, products) => {
@@ -141,10 +159,10 @@ let removeDuplicates = (array) => {
   // return newArray
 
   const uniqueMap = new Map();
-  array.forEach((item)=>{
+  array.forEach((item) => {
     const key = `${item.design}-${item.prefix}`;
-    uniqueMap.set(key,item)
-  })
+    uniqueMap.set(key, item);
+  });
   return Array.from(uniqueMap.values());
 };
 let getKeyByValue = (object, value) => {
@@ -157,10 +175,8 @@ let uniqueDesignsObject = (products) => {
   let uniqueArray = [];
   // let's get them all in uniqueArray
   products.map((productItem) => {
-
     // below ensures that we do not include folder names for our output
-    if(productItem.design !==""){
-
+    if (productItem.design !== "") {
       uniqueArray.push([productItem.design, productItem.prefix]);
     }
   });
@@ -183,6 +199,7 @@ let uniqueDesignsObject = (products) => {
       // title: item,
       design: productItem[0],
       prefix: productItem[1],
+      date:designDate(productItem[0]),
       files: [],
       // belos things are unneccessary
       // width: 300,
@@ -205,6 +222,7 @@ let objectAppend = (products, uniqueDesignObject) => {
 let writeJSON = (arrayOfObjectData) => {
   fs.writeFile(
     "./products_embroidered_sheer_curtain_fabrics.json",
+    // JSON.stringify(arrayOfObjectData, null, 4),
     JSON.stringify(arrayOfObjectData, null, 4),
     (err) => {
       if (err) {
@@ -245,6 +263,20 @@ let writeCSV = (arrayOfObjectData) => {
   );
 };
 
+let writeDB = (uniqueArray) => {
+  uniqueArray.map(async (item, index) => {
+    await prisma.products.upsert({
+      where: { name: item.design },
+      update: { files: item.files },
+      create: { name: item.design, files: item.files },
+    });
+  });
+};
+
+// let custom_sort = (a,b)=>{
+//   return new Date(a.date).getTime() - new Date(b.date).getTime();
+// }
+
 // main function that runs
 let node = async () => {
   const testFolder = "../../public/products/embroidered_sheer_curtain_fabrics";
@@ -256,23 +288,22 @@ let node = async () => {
   // console.table(products);
   let uniqueArray = uniqueDesignsObject(products);
   // console.table(uniqueArray);
-  uniqueArray = removeDuplicates(uniqueArray)
+  uniqueArray = removeDuplicates(uniqueArray);
   // console.table(uniqueArray);
   objectAppend(products, uniqueArray);
-  // console.table(uniqueArray);
+  console.table(uniqueArray);
+  // now let's sort based on the recent date coming first
+  // below is not that great soln but still works
+  // uniqueArray.sort(function(a,b){return a.date.localeCompare(b.date)}).reverse()
+  // this is a better solution because it does not change the original order, just rearranges the new dates on top
+  uniqueArray.sort(function(a,b){return new Date(b.date).getTime() - new Date(a.date).getTime()})
   // console.log(uniqueArray[4]);
   writeJSON(uniqueArray);
-  // const embroidered_sheer_curtain_fabrics = await prisma.collections.upsert({
-  //   where:{id:1},
-  //   update:{},
-  //   create:{
-  //     data:uniqueArray,
-  //     collection:'products_embroidered_sheer_curtain_fabrics'
-  //   }
-  // })
   writeCSV(uniqueArray);
+  // writeDB(uniqueArray)
 };
 
 node();
-
+module.exports.uniqueArray = uniqueArray;
+module.exports.node = node;
 // below is for creating a file of json with your data

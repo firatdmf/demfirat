@@ -190,3 +190,25 @@ export default function Example2(props: { product: Product }) {
 
 ------
 we use bcrypt library to hash passwords
+
+----
+npx prisma generate
+npx prisma migrate dev --name init
+npx prisma db seed (no need to this sometimes)
+--
+below is how you use it with a shared database:
+1 - delete migrations folder in prisma folder
+2 - prisma db pull
+3 - npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql
+4 - review your changes
+5 - prisma db push
+
+-----
+1/21/2024
+
+Middleware:
+Middleware allows you to run code before a request is completed. Then, based on the incoming request, you can 
+modify the response by rewriting, redirecting, modifying the request or response headers, or responding directly.
+Middleware runs before cached content and routes are matched
+
+in your case, middleware.ts should be inside the src folder

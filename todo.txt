@@ -1,10 +1,4 @@
 optimize karven logo, and other images like karven banner
 add email signup
 being able to put products into favorites
-
 pull stories directly from instagram
-qr code pay invoice
-
-gecislerde sayfa en ustten baslamiyor
-
-

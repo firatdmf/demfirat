@@ -1,30 +1,76 @@
+"use client";
 import React from "react";
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
 import { AiFillInstagram, AiOutlineMail } from "react-icons/ai";
+import {TbWorld} from "react-icons/tb"
 import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa"; //fa stands for font awesome (there are many others)
+import { signIn, signOut } from "next-auth/react";
+import { User } from "@/app/user";
+
+// below is to check to see if the user is logged in
+import { useSession } from "next-auth/react";
+
 function Header() {
   const capitilize = function (string: any) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
+
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      // the user not authenticated, handle here
+      // console.log("Not logged in!: " + status);
+    },
+  });
+  const { data: session } = useSession();
+
   return (
     <header className={classes.HeaderPage}>
+      {/* below prints the username if the user is logged in */}
+      {/* <p>{session?.user?.name}</p> */}
       <div className={classes.topBar2}>
         <span className={classes.span2}>
           <div className={classes.span2flex2}>
-            <span>
-              <Link href="/api/auth/signin" className={classes.loginButton}>
-                {/* <FaSignInAlt /> */}
-                <p>Login</p>
-              </Link>
-            </span>
-            <span>|</span>
-            <span>
-              <Link href="/api/auth/register" className={classes.registerButton}>
+            {/* <Link href="/api/auth/signin" className={classes.loginButton}> */}
+            {/* <FaSignInAlt /> */}
+            {/* <p>Login</p> */}
+            {/* </Link> */}
+
+            {!session?.user?.name ? (
+              <span>
+                <button
+                  onClick={() => signIn()}
+                  className={classes.loginButton}
+                >
+                  {/* <FaSignInAlt /> */}
+                  <p>Log In</p>
+                </button>
+              </span>
+            ) : (<>
+            <span>Merhaba, {session?.user?.name}</span>
+               <span>|</span> 
+              <span>
+                <button
+                  onClick={() => signOut()}
+                  className={classes.loginButton}
+                >
+                  <p>Sign Out</p>
+                </button>
+              </span></>
+            )}
+
+            {/* <span>|</span> */}
+            {/* <span> */}
+            {/* <Link href="/api/auth/register" className={classes.registerButton}>
                 {/* <FaUser /> */}
-                <p>Register</p>
-              </Link>
-            </span>
+            {/* <p>Register</p> */}
+            {/* </Link> */}
+
+            {/* <button onClick={() => signOut()} className={classes.loginButton}> */}
+            {/* <p>Sign Out</p> */}
+            {/* </button> */}
+            {/* </span> */}
           </div>
         </span>
       </div>
@@ -60,15 +106,20 @@ function Header() {
               id={classes.link}
             >
               <p>
-                  <AiFillInstagram />
-                    :/karvenhomedecor
+                <AiFillInstagram />
+                :/karvenhomedecor
               </p>
             </Link>
-            <Link href="mailto:info@demfirat.com" className={classes.a} id={classes.link}>
+            <Link
+              href="mailto:info@demfirat.com"
+              className={classes.a}
+              id={classes.link}
+            >
               <p>
-                  <AiOutlineMail />: info@demfirat.com
+                <AiOutlineMail />: info@demfirat.com
               </p>
             </Link>
+            <p> <TbWorld/> Shipping Worldwide</p>
           </div>
         </div>
       </div>
