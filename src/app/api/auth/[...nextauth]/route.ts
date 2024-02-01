@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 return {
+                    // You need to store it as text
                     id: user.id + '',
                     email: user.email,
                     username:user.username,
