@@ -34,6 +34,17 @@ async function main() {
       password,
     }
   })
+  const client = await prisma.user.upsert({
+    where: { username: 'client' },
+    update: {},
+    create: {
+      username: 'client',
+      email: 'client@demfirat.com',
+      name: 'Client',
+      // password: `$2y$12$GBfcgD6XwaMferSOdYGiduw3Awuo95QAPhxFE0oNJ.Ds8qj3pzEZy`
+      password: await hash('1884', 12),
+    }
+  })
   console.log({ user })
 
 
