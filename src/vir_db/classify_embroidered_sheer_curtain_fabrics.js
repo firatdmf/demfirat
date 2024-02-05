@@ -39,15 +39,15 @@ let isLetter = (str) => {
 };
 
 let designDate = (designName) => {
-  let exists = false
+  let exists = false;
   for (let index = 0; index < currentUniqueArray.length; ++index) {
     let product = currentUniqueArray[index];
     if (product.design === designName) {
-      exists = true
-      return product.date
+      exists = true;
+      return product.date;
     }
   }
-    return new Date().toJSON().slice(0, 10)
+  return new Date().toJSON().slice(0, 10);
 };
 
 let classifyImage = (fileName, products) => {
@@ -110,6 +110,7 @@ let classifyImage = (fileName, products) => {
   const productBoolean = products.findIndex((e) => e.design === design);
   // lets initialize a boolean variable and set it equal to false
   let exists = false;
+  // if (productBoolean > -1 || variant ==="video") {
   if (productBoolean > -1) {
     exists = true;
   }
@@ -146,7 +147,12 @@ let classifyEachFile = (productFiles) => {
   let products = [];
   productFiles.map((item, index) => {
     let [object, exists] = classifyImage(item, products);
-    products.push(object);
+    // do not push the video ones
+    // if(!exists && object.variant !== "video"){
+    if(object.variant !== "video"){
+
+      products.push(object);
+    }
   });
   return products;
 };
@@ -199,7 +205,7 @@ let uniqueDesignsObject = (products) => {
       // title: item,
       design: productItem[0],
       prefix: productItem[1],
-      date:designDate(productItem[0]),
+      date: designDate(productItem[0]),
       files: [],
       // belos things are unneccessary
       // width: 300,
@@ -296,7 +302,9 @@ let node = async () => {
   // below is not that great soln but still works
   // uniqueArray.sort(function(a,b){return a.date.localeCompare(b.date)}).reverse()
   // this is a better solution because it does not change the original order, just rearranges the new dates on top
-  uniqueArray.sort(function(a,b){return new Date(b.date).getTime() - new Date(a.date).getTime()})
+  uniqueArray.sort(function (a, b) {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
   // console.log(uniqueArray[4]);
   writeJSON(uniqueArray);
   writeCSV(uniqueArray);
