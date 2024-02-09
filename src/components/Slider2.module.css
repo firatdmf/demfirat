@@ -1,0 +1,52 @@
+/* styles/LandingPage.module.css */
+
+.Slider2 {
+  max-width: 600px; /* Adjust the max-width as per your design */
+  margin: 0 auto;
+}
+
+.heroImage {
+  position: relative;
+  overflow: hidden; /* Ensure the image doesn't overflow its container */
+  object-fit: cover;
+  
+}
+
+.heroImage img {
+  width: 100%; /* Ensure the image takes the full width of its container */
+  height: auto;
+
+  display: block;
+}
+
+.prevBtn,
+.nextBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: white;
+  font-size: 1.5rem;
+  padding: 10px; /* Adjust padding as needed */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+  border: none;
+  outline: none;
+}
+
+.prevBtn {
+  left: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.nextBtn {
+  right: 0;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.prevBtn:hover,
+.nextBtn:hover {
+  background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
+}

@@ -197,7 +197,7 @@ function ProductDetailCard({ design }: any) {
                     Design: <span>{product.design}</span>
                   </li>
                   <li>
-                    Length: <span>{product.length} CM</span>
+                    Length: <span>300 cm</span>
                   </li>
                   <li>
                     Origin: <span>Türkiye</span>
@@ -209,7 +209,7 @@ function ProductDetailCard({ design }: any) {
         </div>
         <div className="sampleRequest">
           <h1>Want a sample?</h1>
-          <p>Send an email to info@karvenhome.com with the SKU number above.</p>
+          <p>Send an email to info@karvenhome.com providing the design name or number.</p>
         </div>
       </div>
     );

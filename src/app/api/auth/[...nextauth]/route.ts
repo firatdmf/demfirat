@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
     secret:process.env.NEXTAUTH_SECRET,
     callbacks: {
         session: ({ session, token }) => {
-            console.log('Session Callback', { session, token });
+            // console.log('Session Callback', { session, token });
             return {
                 ...session,
                 user: {
@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
         // this handles the creation and ma
         // this token will only show up the first time they login unlike the user info
         jwt: ({ token, user }) => {
-            console.log('JWT Callback', { token, user });
+            // console.log('JWT Callback', { token, user });
             // below means the user has already logged in
             if (user) {
                 const u = user as unknown as any

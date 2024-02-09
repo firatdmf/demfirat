@@ -38,6 +38,7 @@ type EmbroideryFabric = {
   prefix: string;
   design: string;
   files: FilesArray[];
+  date:string;
   // length: number;
   // product: string;
 };
@@ -112,16 +113,19 @@ export default function ProductGrid(props: { product: Product }) {
     setfilterUsed(true);
 
     let query = e.currentTarget.value;
-    let prefix = query[0];
+    // let prefix = query[0];
     if (!query) {
       setfilterUsed(false);
       setproductLoadAmount(20);
       return;
     }
 
-    if (!is_numeric(prefix)) {
-      query = query?.slice(1);
-    }
+    // if (!is_numeric(prefix)) {
+    //   query = query?.slice(1);
+    // }
+
+    // get rid of non-numerical values:
+    query = query.replace(/\D/g,'');
     if (query.length < 4) {
       return;
     }
@@ -135,6 +139,7 @@ export default function ProductGrid(props: { product: Product }) {
         array.push(item);
       }
     });
+
     setloadedProducts(array);
   };
 
@@ -146,7 +151,9 @@ export default function ProductGrid(props: { product: Product }) {
         //   .select("*");
         // // console.log(embroidery_fabric);
 
-        setFetchData(fabricData);
+        setFetchData(fabricData.sort(function (a, b) {
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        }));
 
         setloadedProducts(fabricData!.slice(0, productLoadAmount));
 
