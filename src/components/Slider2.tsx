@@ -16,7 +16,7 @@ function Slider2({ images }: Slider2Props) {
       setCurrentImageIndex((prevIndex) =>
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 15000); //changes the image every 15 seconds
+    }, 25000); //changes the image every 15 seconds
 
     return () => clearInterval(interval);
   }, [images.length]);

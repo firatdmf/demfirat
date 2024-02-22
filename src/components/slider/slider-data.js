@@ -1,6 +1,6 @@
 export const sliderData = [
   {
-    image: "/media/factory/karven-factory-building-exterior-resized.jpg",
+    image: "/media/factory/karven-factory-building-exterior-resized.webp",
     heading: "Indulge in Operational Brilliance",
     desc: "Superior quality fabrics through advanced technology and skilled craftsmanship.",
     obj_position: "bottom",
