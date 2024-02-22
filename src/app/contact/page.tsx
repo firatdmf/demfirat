@@ -22,8 +22,8 @@ function Contact() {
           <p>+90 (282) 675-1552 (Office)</p>
           <p>+90 (533) 544-2525 (Mobile)</p>
           <h4>Email:</h4>
-          <p>karvenmuhasebe@gmail.com</p>
-          <p>info@demfirat.com</p>
+          <p>info@demfirat.com (General Inquiries)</p>
+          <p>karvenmuhasebe@gmail.com (Accounting Inquiries)</p>
           <h4>Work Hours</h4>
           <p>24 Hours, All Days</p>
           <h4>Address:</h4>
