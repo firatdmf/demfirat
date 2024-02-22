@@ -13,22 +13,22 @@ const store_images = [
 ];
 
 const factory_images = [
-  "/media/factory/akarven-schiffli-embroidery-closeup2.jpg",
-  // '/media/factory/akarven-schiffli-embroidery.jpg',
-  "/media/factory/akarven-schiffli-embroidery-2.jpg",
-  // '/media/factory/akarven-schiffli-embroidery-closeup.jpg',
-  // '/media/factory/schiffli-embroidery-closup.jpg',
-  // '/media/factory/schiffli-embroidery-closup2.jpg',
-  // '/media/factory/schiffli-embroidery-3.jpg',
+  "/media/factory/akarven-schiffli-embroidery-closeup2.webp",
+  // '/media/factory/akarven-schiffli-embroidery.webp',
+  "/media/factory/akarven-schiffli-embroidery-2.webp",
+  // '/media/factory/akarven-schiffli-embroidery-closeup.webp',
+  // '/media/factory/schiffli-embroidery-closup.webp',
+  // '/media/factory/schiffli-embroidery-closup2.webp',
+  // '/media/factory/schiffli-embroidery-3.webp',
   // '/media/factory/schiffli-embroidery-2.jpeg',
-  // '/media/factory/top-view-schiffli-embroidery-machines.jpg',
-  "/media/factory/flatboard-embroidery-closeup-2.jpg",
-  "/media/factory/schiffli-embroidery-machines.jpg",
+  // '/media/factory/top-view-schiffli-embroidery-machines.webp',
+  "/media/factory/flatboard-embroidery-closeup-2.webp",
+  "/media/factory/schiffli-embroidery-machines.webp",
 
-  // '/media/factory/flatboard-embroidery-closeup.jpg',
+  // '/media/factory/flatboard-embroidery-closeup.webp',
 
   // '/media/factory/quality-control.jpeg',
-  "/media/factory/karven-factory-exterior.jpg",
+  "/media/factory/karven-factory-exterior.webp",
 ];
 const russian_text = [
   `
