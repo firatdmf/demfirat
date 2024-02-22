@@ -95,7 +95,7 @@ function About() {
           <div className={classes.box1}>
             <img
               // src="https://cdn.shopify.com/s/files/1/0570/3945/4375/files/Karven_Tekstil_Factory-Exterior_1080x.jpg?v=1660321830"
-              src="/media/factory/karven-factory-building-exterior-resized.jpg"
+              src="/media/factory/karven-factory-building-exterior-resized.webp"
               alt="Karven Home Factory/Plant Exterior"
             />
           </div>
