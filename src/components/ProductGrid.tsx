@@ -11,6 +11,11 @@ import fabricData from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json
 // below is to check to see if the user is logged in
 import { useSession } from "next-auth/react";
 
+interface ProductGridProps{
+  HeadlineT:string;
+  SearchBarT:string;
+}
+
 // import supabase from "@/vir_db/supabase";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 
@@ -92,7 +97,8 @@ let random = (seed: number) => {
   return x - Math.floor(x);
 };
 
-export default function ProductGrid(props: { product: Product }) {
+// export default function ProductGrid(props: { product: Product }) {
+export default function ProductGrid({HeadlineT, SearchBarT}:ProductGridProps) {
   const [productLoadAmount, setproductLoadAmount] = useState<number>(20);
   const [fetchData, setFetchData] = useState<EmbroideryFabric[] | null>(null);
   const [loadedProducts, setloadedProducts] = useState<
@@ -219,7 +225,7 @@ export default function ProductGrid(props: { product: Product }) {
             // scale:"110%"
           }}
         >
-          <div className={classes.headlineBox}>Embroidery</div>
+          <div className={classes.headlineBox}>{HeadlineT}</div>
         </div>
         {/* search bar below */}
         {status === "loading" ? (
@@ -233,7 +239,7 @@ export default function ProductGrid(props: { product: Product }) {
                 ref={searchTermRef}
                 type="text"
                 className={classes.searchTerm}
-                placeholder="Enter the design number"
+                placeholder={SearchBarT}
                 onChange={filter}
               />
               <button

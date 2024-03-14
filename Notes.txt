@@ -212,3 +212,7 @@ modify the response by rewriting, redirecting, modifying the request or response
 Middleware runs before cached content and routes are matched
 
 in your case, middleware.ts should be inside the src folder
+
+
+below is how you run a tsx file
+npx ts-node src/foo.ts

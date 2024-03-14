@@ -1,6 +1,6 @@
 import React from "react";
 import ProductCategories from "@/components/ProductCategories";
-import "@/app/products/page.css";
+import "./page.css";
 function Products() {
   return (
     <div className="ProductsPage">

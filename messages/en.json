@@ -1,0 +1,79 @@
+{
+  "Slider": {
+    "heading_1": "Indulge in Operational Brilliance",
+    "desc_1": "Superior quality fabrics through advanced technology and skilled craftsmanship.",
+    "heading_2": "Unleash Unlimited Creativity",
+    "desc_2": "Crafting Every Design, Color, and Fabric Imaginable"
+  },
+  "Header":{
+    "ShippingText":"Shipping Worldwide"
+  },
+  "Menu":{
+    "Home":"Home",
+    "Products":"Products",
+    "AboutUs":"About Us",
+    "Contact":"Contact",
+    "SideText":"Think Holistic, Think Embroidered"
+  },
+  "Products":{
+    "Headline":"Products",
+    "EmbroideredSheerCurtainFabrics":"Embroidered Sheer Curtain Fabrics"
+  },
+  "ProductsGrid":{
+    "Headline":"Embroidery",
+    "SearchBar":"Enter the design number here."
+  },
+  "ProductDetailCardPage":{
+    "Design":"Design",
+    "Width":"Width",
+    "Origin":"Country of Origin",
+    "WantASample":"Want a Sample?",
+    "SendEmail":"Send an email to info@karvenhome.com providing the design name or number."
+  },
+  "AboutUsPage":{
+    "Section1Headline":"FOUNDER'S STORY",
+    "Section1Text":"Our parent company, Dem Fırat Karven Tekstil, was established in 1991 in Istanbul by Cuma Ozturk. Cuma was the eldest child in a family with 21 kids. He grew up near the Iranian border on the rural side of Turkey. Because of the lack of resources during his childhood, he dropped out of school at the age of nine and started working at local shops.",
+    "Section2Headline":"BROAD SHOULDERS",
+    "Section2Text1":"Cuma's parents' negligence and being the eldest among his siblings left him with an immense responsibility to work hard and provide for his family. So to make money fast, he started crossing the Iranian border as a kid to buy goods at a cheaper rate, then brought and traded them in Turkey.",
+    "Section2Text2":"Yet, after getting caught numerously and punished by the authorities, he knew he needed to find a long-term, less risky alternative. So at 13, he moved to the West of Turkey all by himself for better job opportunities. After a decade of hard, laborious work at construction sites, restaurants, and retail shops on the West side of the country, in 1991, at the age of 23, he opened his first textile shop in Laleli, Istanbul, with a business partner. However, in 1997, when his first child was born (that's me!), the partners had disagreements, leading them to separate ways.",
+    "Section3Headline":"Going Solo",
+    "Section3Text":"Although his former partners tried to discourage and force him out of business, this only powered him to open his own textile store. His genuine attitude and fine quality of his products made his shop recognized. With the growing demand, he started bringing his siblings left on the East side of the country and employing them one after the other.",
+    "Section4Headline":"FIRST STEP TO OVERSEAS",
+    "Section4Text":"Cuma and his siblings opened their first abroad warehouse in Moscow and started supplying Turkish textiles to the Russian market, later expanding to Ukraine, Belarus, and Kazakhstan.",
+    "Section5Headline":"MANUFACTURING",
+    "Section5Text":"Soon Cuma's manufacturing partners could not meet his growing market demand. So, he acquired 60,000 SF of empty land and built his first textile mill just an hour from Istanbul to fully supervise the production and cut unnecessary costs bearing his clients.",
+    "Section6Headline":"GRATITUDE",
+    "Section6Text1":"Having started a successful company and being able take care of his siblings by employing them has made Cuma's dreams come true.",
+    "Section6Text2":"Dem Fırat Karven started as a small family-run textile shop in Istanbul in 1991. Today we grew into a manufacturing plant that produces over 20 million yards of fabric every month and supplies all around the globe with its strong supply chain network.",
+    "Section6Text3":"The growth has been an exciting and ever-changing journey. However, our core values have always stayed the same. Our growing family is what encourages us to continue providing high-quality products and exceptional customer service."
+  },
+  "ContactPage":{
+    "ManufacturingPlant":"Manufacturing Plant",
+    "FabricShowroom":"Fabric Showroom",
+    "RetailStore":"Retail Store",
+    "WarehouseShowroom":"Warehouse & Showroom",
+    "Representative":"Representative",
+    "GeneralInquiries":"General Inquiries",
+    "AccountingInquiries":"Accounting Inquiries",
+    "Phone":"Phone",
+    "Email":"Email",
+    "Website":"Website",
+    "WorkHours":"Work Hours",
+    "WorkHour1":"24 hours, All days",
+    "WorkHour2":"Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)",
+    "WorkHour3":"Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)",
+    "WorkHour4":"Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)",
+    "Address":"Address",
+    "ProductLines":"Product Lines",
+    "ProductLine1":"Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners",
+    "ProductLine2":"Interior Fabrics: Drapery & Upholstery",
+    "ProductLine3":"Bed Linen, Bedspreads, Furniture Covers, Towels, Kitchen Towels, Towel Sets, Tablecloths, Blankets, Pillows, Mattress Covers, Children's Assortment, Bathrobes, Home Clothes, Sheets, Blankets, Aprons, Sauna Sets, Ironing Board Covers.",
+    "ProductLine4":"Curtain Fabrics, Bed Linen, Bedspreads, Furniture Covers, Towels, Kitchen Towels, Towel Sets, Tablecloths, Blankets, Pillows, Mattress Covers, Children's Assortment, Bathrobes, Home Clothes, Sheets, Blankets, Aprons, Sauna Sets, Ironing Board Covers."
+  },
+  "FooterPage":{
+    "StayConnected":"Stay Connected",
+    "OurStory":"Our Story",
+    "ContactUs":"Contact Us",
+    "AllRightsReserved":"All Rights Reserved"
+  }
+}

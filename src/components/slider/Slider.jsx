@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import { sliderData } from "./slider-data";
+// import { sliderData } from "./slider-data.tsx";
 import "./Slider.scss";
-function Slider() {
+function Slider({sliderData}) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideLength = sliderData.length; //holding the number of items in our array from slider-data.js
   //slideLength = 1 2 3
@@ -49,14 +49,17 @@ function Slider() {
           >
             {index === currentSlide && (
               <>
-                <img src={slide.image} alt={slide.desc} style={{position:"top"}}/>
+                <img
+                  src={slide.image}
+                  alt={slide.desc}
+                  style={{ position: "top" }}
+                />
                 <div className="content">
                   <h2>{slide.heading}</h2>
                   <p>{slide.desc}</p>
                   <hr />
                   {/* <button className="--btn --btn-primary">Get Started!</button> */}
                 </div>
-                
               </>
             )}
           </div>

@@ -1,3 +1,8 @@
+import { useTranslations } from "next-intl";
+
+const t = useTranslations("Slider");
+// console.log(t("title"));
+
 export const sliderData = [
   {
     image: "/media/factory/karven-factory-building-exterior-resized.webp",

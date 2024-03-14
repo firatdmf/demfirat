@@ -1,10 +1,13 @@
-import classes from '@/app/about/page.module.css'
+// import classes from '@/app/about/page.module.css'
+import { useTranslations } from "next-intl";
+import classes from "./page.module.css";
 function About() {
+  const AboutUsPageT = useTranslations("AboutUsPage");
   return (
     <div className={classes.AboutPage}>
       <div className={classes.video}>
         <video autoPlay loop muted className={classes.videoItself}>
-          <source src='/media/karven.mp4' type="video/mp4" />
+          <source src="/media/karven.mp4" type="video/mp4" />
         </video>
       </div>
       {/* <h2 className={classes.textCenter}>
@@ -13,6 +16,7 @@ function About() {
   </h2> */}
       <div className={`${classes.headText} ${classes.textCenter}`}>
         <h2>{`FOUNDER'S STORY`}</h2>
+        {/* <h2>{AboutUsPageT("Section1Headline")}</h2> */}
         <br />
         <p>
           Our parent company, Dem Fırat Karven Tekstil, was established in 1991
@@ -21,18 +25,24 @@ function About() {
           Turkey. Because of the lack of resources during his childhood, he
           dropped out of school at the age of nine and started working at local
           shops.
+          {/* {AboutUsPageT("Section1Text")} */}
         </p>
       </div>
       <div className={`${classes.container}`}>
         <div className={`${classes.row} ${classes.row1}`}>
           <div className={`${classes.box1} ${classes.textCenter}`}>
-            <h1>BROAD SHOULDERS</h1>
-            <p>{`
-              Cuma's parents' negligence and being the eldest among his siblings
+            <h1>
+              Broad Sholders
+              {/* {AboutUsPageT("Section2Headline")} */}
+            </h1>
+            <p>
+              {`Cuma's parents' negligence and being the eldest among his siblings
               left him with an immense responsibility to work hard and provide
               for his family. So to make money fast, he started crossing the
               Iranian border as a kid to buy goods at a cheaper rate, then
               brought and traded them in Turkey.`}
+
+              {/* {AboutUsPageT("Section2Text1")} */}
             </p>
             <p>
               Yet, after getting caught numerously and punished by the
@@ -45,6 +55,7 @@ function About() {
               business partner. However, in 1997, when his first child was born
               (that's me!), the partners had disagreements, leading them to
               separate ways.
+              {/* {AboutUsPageT("Section2Text2")} */}
             </p>
           </div>
           <div className={classes.box2}>
@@ -57,12 +68,13 @@ function About() {
         <div className={`${classes.row} ${classes.row2}`}>
           <div className={classes.box1}>
             <img
-              src='/media/oldStoreFrontPic.jpg'
+              src="/media/oldStoreFrontPic.jpg"
               alt="Store Front of the first store Cuma opened in Laleli"
             />
           </div>
           <div className={`${classes.box2} ${classes.textEnd}`}>
             <h3>GOING SOLO</h3>
+            {/* <h3>{AboutUsPageT('Section3Headline')}</h3> */}
             <h1>1997</h1>
             <p>
               Although his former partners tried to discourage and force him out
@@ -71,17 +83,20 @@ function About() {
               shop recognized. With the growing demand, he started bringing his
               siblings left on the East side of the country and employing them
               one after the other.
+              {/* {AboutUsPageT('Section3Text')} */}
             </p>
           </div>
         </div>
         <div className={`${classes.row} ${classes.row3}`}>
           <div className={classes.box1}>
             <h3>FIRST STEP TO OVERSEAS</h3>
+            {/* <h3>{AboutUsPageT('Section4Headline')}</h3> */}
             <h1>2004</h1>
             <p>
               Cuma and his siblings opened their first abroad warehouse in
               Moscow and started supplying Turkish textiles to the Russian
               market, later expanding to Ukraine, Belarus, and Kazakhstan.
+              {/* {AboutUsPageT('Section4Text')} */}
             </p>
           </div>
           <div className={classes.box2}>
@@ -101,35 +116,42 @@ function About() {
           </div>
           <div className={`${classes.box2} ${classes.textEnd}`}>
             <h3>MANUFACTURING</h3>
+            {/* <h3>{AboutUsPageT('Section5Headline')}</h3> */}
             <h1>2014</h1>
-            <p>{`
+            <p>
+              {`
               Soon Cuma's manufacturing partners could not meet his growing
               market demand. So, he acquired 60,000 SF of empty land and built
               his first textile mill just an hour from Istanbul to fully
               supervise the production and cut unnecessary costs bearing his
               clients.`}
+              {/* {AboutUsPageT('Section5Text')} */}
             </p>
           </div>
         </div>
         <div className={`${classes.row} ${classes.row5}`}>
           <div className={`${classes.box1} ${classes.textCenter}`}>
             <h3>GRATITUDE</h3>
+            {/* <h3>{AboutUsPageT('Section6Headline')}</h3> */}
             <h1>2020</h1>
             <p>
               Having started a successful company and being able take care of
               his siblings by employing them has made Cuma's dreams come true.
+              {/* {AboutUsPageT('Section6Text1')} */}
             </p>
             <p>
               Dem Fırat Karven started as a small family-run textile shop in
               Istanbul in 1991. Today we grew into a manufacturing plant that
               produces over 20 million yards of fabric every month and supplies
               all around the globe with its strong supply chain network.
+              {/* {AboutUsPageT('Section6Text2')} */}
             </p>
             <p>
               The growth has been an exciting and ever-changing journey.
               However, our core values have always stayed the same. Our growing
               family is what encourages us to continue providing high-quality
               products and exceptional customer service.
+              {/* {AboutUsPageT('Section6Text3')} */}
             </p>
           </div>
           <div className={classes.box2}>

@@ -2,7 +2,11 @@
 import classes from "./ProductCategories.module.css";
 import Link from "next/link";
 import db from "@/vir_db/db.js";
-function ProductCategories() {
+interface ProductCategoriesProps{
+  Headline:string;
+  EmbroideredSheerCurtainFabrics:string;
+}
+function ProductCategories({Headline,EmbroideredSheerCurtainFabrics}:ProductCategoriesProps) {
   let productCategories = [
     // {
     //   name: "Read-made Curtains",
@@ -11,7 +15,7 @@ function ProductCategories() {
     //   alt: "Ready Made Curtain",
     // },
     {
-      name: "Embroidered Sheer Tulle Curtain Fabrics",
+      name: EmbroideredSheerCurtainFabrics,
       link: "/products/fabrics/embroidery",
       imgLink: "/products/kirat/8159.jpg",
       alt: "Embroidered Sheer Fabrics",
@@ -41,7 +45,7 @@ function ProductCategories() {
   return (
     <div className={classes.ProductCategoriesPage}>
       <div className={classes.scallop_up}></div>
-      <h2 className={classes.componentTitle}>PRODUCTS</h2>
+      <h2 className={classes.componentTitle}>{Headline}</h2>
       <div className={classes.container}>
         {productCategories.map((item, index) => {
           return (

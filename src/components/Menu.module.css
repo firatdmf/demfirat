@@ -1,0 +1,56 @@
+/* Style the navbar */
+.MenuPage .navbar {
+  overflow: hidden;
+  /* background-color: rgb(211,204,189); */
+  background-color: #f1f1f1;
+  border-radius: 0px 0px 30px 30px;
+  box-shadow: 2px 8px 10px 1px rgba(0, 0, 0, 0.2);
+  font-size: 1.3rem;
+}
+
+/* Navbar links */
+.MenuPage .navbar .a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 19px 16px;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
+}
+
+/* Navbar links on mouse-over */
+.MenuPage .navbar .a:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #d19e25;
+  transition: 0.4s;
+}
+
+.MenuPage .navbar .userDisplay {
+  display: flex;
+  padding-top: 20px;
+  float: right;
+  margin-right: 20px;
+  font-size: 16.5px;
+}
+
+/* Add responsiveness - On small screens, display the navbar vertically instead of horizontally */
+@media screen and (max-width: 600px) {
+  .MenuPage .navbar .a {
+    float: none;
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+  .MenuPage .navbar .quote {
+    display: none;
+  }
+}
+@media screen and (max-width: 768px) {
+  .MenuPage .navbar .quote {
+    display: none;
+  }
+}

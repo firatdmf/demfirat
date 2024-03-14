@@ -1,5 +1,8 @@
-import classes from '@/app/contact/page.module.css'
+import classes from './page.module.css'
+import { useTranslations } from 'next-intl';
+
 function Contact() {
+  const ContactPageT = useTranslations('ContactPage')
     // below function takes a string and capitilize the first letter of each word in it
     const titleCase = function (str:string) {
       let splitStr = str.toLowerCase().split(' ');
@@ -15,26 +18,27 @@ function Contact() {
     <div className={classes.ContactPage}>
             <div className={`${classes.row} ${classes.row1}`}>
         <div className={` ${classes.item} ${classes.textInfo}`}>
-          <h2>Manufacturing Plant (Tekirdağ, Türkiye)</h2>
-          <h4>Representative:</h4>
+          <h2>{ContactPageT('ManufacturingPlant')} (Tekirdağ, Türkiye)</h2>
+          <h4>{ContactPageT('Representative')}:</h4>
           <p>Cuma Öztürk</p>
-          <h4>Phone:</h4>
+          <h4>{ContactPageT('Phone')}:</h4>
           <p>+90 (282) 675-1552 (Office)</p>
           <p>+90 (533) 544-2525 (Mobile)</p>
-          <h4>Email:</h4>
-          <p>info@demfirat.com (General Inquiries)</p>
-          <p>karvenmuhasebe@gmail.com (Accounting Inquiries)</p>
-          <h4>Work Hours</h4>
-          <p>24 Hours, All Days</p>
-          <h4>Address:</h4>
+          <h4>{ContactPageT('Email')}:</h4>
+          <p>info@demfirat.com ({ContactPageT('GeneralInquiries')})</p>
+          <p>karvenmuhasebe@gmail.com ({ContactPageT('AccountingInquiries')})</p>
+          <h4>{ContactPageT('WorkHours')}</h4>
+          <p>{ContactPageT('WorkHour1')}</p>
+          <h4>{ContactPageT('Address')}:</h4>
           <p>
             Karven Tekstil <br />
             Vakıflar OSB Mah D100 Cad No 38 <br />
             Ergene, Tekirdağ 59930 <br />
             Türkiye
           </p>
-          <h4>Product line:</h4>
-          <p>Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners</p>
+          <h4>{ContactPageT('ProductLines')}:</h4>
+          {/* <p>Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners</p> */}
+          <p>{ContactPageT('ProductLine1')}</p>
         </div>
 
         <div className={`${classes.item} ${classes.map} `}>
@@ -76,52 +80,56 @@ function Contact() {
           ></iframe>
         </div>
         <div className={` ${classes.item} ${classes.textInfo}`}>
-          <h2>Fabric Showroom (İstanbul, Türkiye)</h2>
-          <h4>Representative:</h4>
+          <h2>{ContactPageT('FabricShowroom')} (İstanbul, Türkiye)</h2>
+          <h4>{ContactPageT('Representative')}:</h4>
           <p>Özcan Öztürk</p>
           <p>Ercan Öztürk</p>
-          <h4>Phone:</h4>
+          <h4>{ContactPageT('Phone')}:</h4>
           <p>+90 (555) 087-5555 (Özcan)</p>
           <p>+90 (542) 341-4845 (Ercan)</p>
-          <h4>Email:</h4>
+          <h4>{ContactPageT('Email')}:</h4>
           <p>krvn.dmf@gmail.com</p>
           <p>info@demfirat.com</p>
-          <h4>Work Hours</h4>
-          <p>Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)</p>
-          <h4>Address:</h4>
+          <h4>{ContactPageT('WorkHours')}</h4>
+          {/* <p>Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)</p> */}
+          <p>{ContactPageT('WorkHour2')}</p>
+          <h4>{ContactPageT('Address')}:</h4>
           <p>
             Karven Home Collection <br />
             Kemalpaşa Mah Gençtürk Cad No 21A <br />
             Fatih, İstanbul 34134 <br />
             Türkiye
           </p>
-          <h4>Product line:</h4>
-          <p>Interior Fabrics: Drapery & Upholstery</p>
+          <h4>{ContactPageT('ProductLines')}:</h4>
+          {/* <p>Interior Fabrics: Drapery & Upholstery</p> */}
+          <p>{ContactPageT('ProductLine2')}</p>
         </div>
       </div>
 
       <div className={`${classes.row} ${classes.row3}`}>
         <div className={` ${classes.item} ${classes.textInfo}`}>
-          <h2>Retail Store (İstanbul, Türkiye)</h2>
-          <h4>Representative:</h4>
+          <h2>{ContactPageT('RetailStore')} (İstanbul, Türkiye)</h2>
+          <h4>{ContactPageT('Representative')}:</h4>
           <p>Mustafa Öztürk</p>
-          <h4>Phone:</h4>
+          <h4>{ContactPageT('Phone')}:</h4>
           <p>+90 (282) 675-1552 (Office)</p>
           <p>+90 (533) 544-2525 (Mobile)</p>
-          <h4>Email:</h4>
+          <h4>{ContactPageT('Email')}:</h4>
           <p>info@demfirat.com</p>
           <p>mustafadmf@hotmail.com</p>
-          <h4>Work Hours</h4>
-          <p>Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)</p>
-          <h4>Address:</h4>
+          <h4>{ContactPageT('WorkHours')}</h4>
+          {/* <p>Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)</p> */}
+          <p>{ContactPageT('WorkHour3')}</p>
+          <h4>{ContactPageT('Address')}:</h4>
           <p>
             Demfırat Tekstil <br />
             Mesihpaşa Mah Hayriye Tüccarı Cad <br />
             Fatih İstanbul, 34130 <br />
             Türkiye
           </p>
-          <h4>Product line:</h4>
-          <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p>
+          <h4>{ContactPageT('ProductLines')}:</h4>
+          {/* <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p> */}
+          <p>{titleCase(ContactPageT('ProductLine3'))}</p>
         </div>
 
         <div className={`${classes.item} ${classes.map} `}>
@@ -168,29 +176,31 @@ function Contact() {
           ></iframe> */}
         </div>
         <div className={`${classes.item} ${classes.textInfo}`}>
-          <h2>Warehouse & Showroom (Moscow, Russia)</h2>
-          <h4>Representative:</h4>
+          <h2>{ContactPageT('WarehouseShowroom')} (Москва, Pоссия)</h2>
+          <h4>{ContactPageT('Representative')}:</h4>
           <p>Adem Öztürk</p>
-          <h4>Phone:</h4>
+          <h4>{ContactPageT('Phone')}:</h4>
           <p>+7 (968) 738 13 00 (Cell)</p>
           <p>+7 (916) 055 42 02 (Cell)</p>
           <p>+7 (926) 101 25 96 (Office)</p>
-          <h4>Email:</h4>
+          <h4>{ContactPageT('Email')}:</h4>
           <p>demfiratmosk@mail.ru</p>
           <p>karventekstil@mail.ru</p>
-          <h4>Website:</h4>
+          <h4>{ContactPageT('Website')}:</h4>
           <p><a href="https://www.karven.ru" target="_blank" >www.karven.ru</a></p>
-          <h4>Work Hours</h4>
-          <p>Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)</p>
-          <h4>Address:</h4>
+          <h4>{ContactPageT('WorkHours')}</h4>
+          {/* <p>Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)</p> */}
+          <p>{ContactPageT('WorkHour4')}</p>
+          <h4>{ContactPageT('Address')}:</h4>
           <p>
             г. Москва, 2-й Южнопортовый проезд <br />
             д.12Г, стр.1 <br />
             Pоссия
           </p>
           <p>2nd Yuzhnoportovy proezd, 12G, building 1s <br /> Moscow, Russia</p>
-          <h4>Product line:</h4>
-          <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p>
+          <h4>{ContactPageT('ProductLines')}:</h4>
+          {/* <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p> */}
+          <p>{titleCase(ContactPageT('ProductLine4'))}</p>
 
         </div>
       </div>

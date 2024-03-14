@@ -1,8 +1,15 @@
-import React from "react";
 import classes from "@/components/Footer.module.css";
 import Link from "next/link";
 
-function Footer() {
+interface FooterProps{
+  StayConnected:string;
+  OurStory:string;
+  ContactUs:string;
+  AllRightsReserved:string;
+}
+
+
+function Footer({StayConnected,OurStory,ContactUs,AllRightsReserved}:FooterProps) {
   const currentYear = new Date().getFullYear();
   return (
     // <div className="FooterPage" style={{backgroundColor:"black"}}>
@@ -18,7 +25,7 @@ function Footer() {
           }}
         > */}
             <Link href="/about" id={classes.link}>
-              <li>Our Story</li>
+              <li>{OurStory}</li>
             </Link>
             {/* <li>Blog</li> */}
             {/* <li>Our Corporate Heart</li>
@@ -48,7 +55,7 @@ function Footer() {
     </div> */}
 
         <div className={classes.col3}>
-          <h3>Stay Connected</h3>
+          <h3>{StayConnected}</h3>
           <ul>
             {/* <li>Showrooms</li> */}
             {/* <li>Showroom Safety Practices</li> */}
@@ -59,7 +66,7 @@ function Footer() {
           }}
         > */}
             <Link href="/contact" id={classes.link}>
-              <li>Contact Us</li>
+              <li>{ContactUs}</li>
             </Link>
 
             {/* <li onClick={() => window.location = 'mailto:info@karvenhome.com'}>info@karvenhome.com</li> */}
@@ -78,7 +85,7 @@ function Footer() {
         </div>
       </div>
       <div className={classes.copyright}>
-        <p>© {currentYear} Karven Home | All Rights Reserved</p>
+        <p>© {currentYear} Karven Home | {AllRightsReserved}</p>
       </div>
     </div>
   );

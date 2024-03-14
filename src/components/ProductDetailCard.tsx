@@ -3,9 +3,17 @@ import "@/components/ProductDetailCard.css"
 import { useState, useEffect, useRef } from "react";
 import data from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json";
 import { notFound } from "next/navigation";
-
-function ProductDetailCard({ design }: any) {
-  // console.log(design);
+interface pageProps{
+  design:string;
+  designT:string;
+  widthT:string;
+  originT:string;
+  wantASampleT:string;
+  sendEmailT:string
+}
+// function ProductDetailCard({ design }: any) {
+function ProductDetailCard({design,designT,widthT,originT,wantASampleT,sendEmailT}:pageProps) {
+  console.log(typeof(design));
   
   // const API_URL = "/api/fabrics/";
   // const pathname = window.location.pathname;
@@ -194,13 +202,13 @@ function ProductDetailCard({ design }: any) {
               <div className="product-detail">
                 <ul>
                   <li>
-                    Design: <span>{product.design}</span>
+                    {designT}: <span>{product.design}</span>
                   </li>
                   <li>
-                    Length: <span>300 cm</span>
+                    {widthT}: <span>300 cm</span>
                   </li>
                   <li>
-                    Origin: <span>Türkiye</span>
+                    {originT}: <span>Türkiye</span>
                   </li>
                 </ul>
               </div>
@@ -208,8 +216,8 @@ function ProductDetailCard({ design }: any) {
           </div>
         </div>
         <div className="sampleRequest">
-          <h1>Want a sample?</h1>
-          <p>Send an email to info@karvenhome.com providing the design name or number.</p>
+          <h1>{wantASampleT}</h1>
+          <p>{sendEmailT}</p>
         </div>
       </div>
     );

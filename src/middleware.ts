@@ -1,22 +1,29 @@
-// import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-// import { NextResponse } from "next/server";
+import createMiddleware from 'next-intl/middleware';
+// below is not added in this, I wonder if that would cause any problems in future but so far no problem.
+// export {default} from 'next-auth/middleware'
 
-// export async function middleWare(req) {
-//     const res = NextResponse.next();
-//     const supabase = createMiddlewareClient({req,res})
-//     await supabase.auth.getSession()
-// }
+export default createMiddleware({
+    // A list of all locales that are supported
+    locales: ['en', 'id','ru','pl','tr'],
 
-// the above code is from way before that I did not make it work I guess
+    // Used when no locale matches
+    defaultLocale: 'en',
+    localePrefix:'as-needed'
 
-
-
-// below is from ethan to protect routes without having to protecting pages directly
-
-export {default} from 'next-auth/middleware'
-export const config = {matcher:[
+});
+// export const config = {
+//     // Match only internationalized pathnames
+//     matcher: ['/','/dashboard',
+//         '/app/:path*', '/(id|en)/:path*']
+// };
+export const config  = {matcher:[
     '/dashboard',
     '/app/:path*',
-    // '/products/:path*',
-]}
 
+    
+    // '/products/:path*',
+
+    // below is for locale, above is for next auth
+    '/((?!api|static|.*\\..*|_next).*)',
+    '/(id|en|ru)/:path*'
+]}
