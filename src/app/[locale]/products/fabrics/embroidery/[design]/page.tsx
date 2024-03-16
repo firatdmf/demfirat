@@ -12,7 +12,7 @@ function is_numeric(str: string) {
 const page: FC<pageProps> = ({ params }) => {
   const ProductDetailCardT = useTranslations("ProductDetailCardPage");
   let design = params.design;
-  console.log(params);
+  // console.log(params);
 
   let prefix = design[0];
   if (!is_numeric(prefix)) {

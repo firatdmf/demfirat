@@ -1,7 +1,9 @@
 import classes from "./page.module.css";
 import ProductGrid from "@/components/ProductGrid";
 // below two packages is to get session information in server
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from '@/utils/authOptions'
 import { getServerSession } from "next-auth";
 import { User } from "@/app/user";
 import { useTranslations } from "next-intl";

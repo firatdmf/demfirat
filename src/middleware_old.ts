@@ -9,8 +9,8 @@
 
 // the above code is from way before that I did not make it work I guess
 
-import {i18nRouter} from 'next-i18n-router'
-import i18nConfig from './i18nConfig'
+// import {i18nRouter} from 'next-i18n-router'
+// import i18nConfig from './i18nConfig'
 
 // below is from ethan to protect routes without having to protecting pages directly
 
@@ -23,8 +23,8 @@ export const config  = {matcher:[
     // '/products/:path*',
 
     // below is for locale, above is for next auth
-    '/((?!api|static|.*\\..*|_next).*)',
-    '/(id|en)/:path*'
+    // '/((?!api|static|.*\\..*|_next).*)',
+    // '/(id|en)/:path*'
 ]}
 
 // const newConfig  = {matcher:'/((?!api|static|.*\\..*|_next).*)'
@@ -35,6 +35,6 @@ export const config  = {matcher:[
 
 // below takes the user preferred language from the browser and returns it. If it is a language we do not support, it will just return the default locale
 // Takes it from the acceptLanguage header
-export function middleware(request:any){
-    return i18nRouter(request,i18nConfig)
-}
+// export function middleware(request:any){
+//     return i18nRouter(request,i18nConfig)
+// }

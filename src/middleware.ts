@@ -11,17 +11,15 @@ export default createMiddleware({
     localePrefix:'as-needed'
 
 });
-// export const config = {
-//     // Match only internationalized pathnames
-//     matcher: ['/','/dashboard',
-//         '/app/:path*', '/(id|en)/:path*']
-// };
+
+
+
 export const config  = {matcher:[
     '/dashboard',
     '/app/:path*',
 
     
-    // '/products/:path*',
+    '/products/:path*',
 
     // below is for locale, above is for next auth
     '/((?!api|static|.*\\..*|_next).*)',

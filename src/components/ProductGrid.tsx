@@ -180,7 +180,7 @@ export default function ProductGrid({HeadlineT, SearchBarT}:ProductGridProps) {
     }
 
     function handleScrollEvent() {
-      console.log(status);
+      // console.log(status);
       
       if (
         ((window.innerHeight + window.scrollY) >=

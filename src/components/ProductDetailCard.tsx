@@ -1,20 +1,27 @@
 "use client";
-import "@/components/ProductDetailCard.css"
+import "@/components/ProductDetailCard.css";
 import { useState, useEffect, useRef } from "react";
 import data from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json";
 import { notFound } from "next/navigation";
-interface pageProps{
-  design:string;
-  designT:string;
-  widthT:string;
-  originT:string;
-  wantASampleT:string;
-  sendEmailT:string
+interface pageProps {
+  design: string;
+  designT: string;
+  widthT: string;
+  originT: string;
+  wantASampleT: string;
+  sendEmailT: string;
 }
 // function ProductDetailCard({ design }: any) {
-function ProductDetailCard({design,designT,widthT,originT,wantASampleT,sendEmailT}:pageProps) {
-  console.log(typeof(design));
-  
+function ProductDetailCard({
+  design,
+  designT,
+  widthT,
+  originT,
+  wantASampleT,
+  sendEmailT,
+}: pageProps) {
+  // console.log(typeof(design));
+
   // const API_URL = "/api/fabrics/";
   // const pathname = window.location.pathname;
   // const design = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -63,54 +70,71 @@ function ProductDetailCard({design,designT,widthT,originT,wantASampleT,sendEmail
     return variantArray;
   };
 
-  // if (product === null || product === undefined) {
-  //   console.log("does not exist");
-  //   return <div>Hello!!!</div>;
+  // -------------------------------------------------
+  // I am keeping below just to be safe, I put them in useEffect because otherwise document is undefined
+  // below is for settings the image carousel look
+  // below is for settings the image carousel look
+  // const imgs = document.querySelectorAll(".img-select a");
+  // const imgBtns = [...imgs];
+  // let imgId:number = 1;
+
+  // imgBtns.forEach((imgItem) => {
+  //   imgItem.addEventListener("click", (event) => {
+  //     event.preventDefault();
+  //     if(imgItem instanceof HTMLElement){
+
+  //       imgId = parseInt(imgItem.dataset.id!)
+  //       slideImage();
+  //     }
+  //   });
+  // });
+
+  // function slideImage() {
+  //   const displayWidth = document.querySelector(
+  //     ".img-showcase img:first-child"
+  //   )!.clientWidth;
+
+  //   (
+  //     document.querySelector(".img-showcase") as HTMLElement
+  //   ).style.transform = `translateX(${-(imgId - 1) * displayWidth}px)`;
   // }
 
-  // const [variantUrl, setvariantUrl] = useState("");
-  // const [variantArray, setVariantArray] = useState([]);
-
-  // below is for settings the image carousel look
-  // below is for settings the image carousel look
-  const imgs = document.querySelectorAll(".img-select a");
-  const imgBtns = [...imgs];
-  let imgId:number = 1;
-
-  imgBtns.forEach((imgItem) => {
-    imgItem.addEventListener("click", (event) => {
-      event.preventDefault();
-      if(imgItem instanceof HTMLElement){
-
-        imgId = parseInt(imgItem.dataset.id!)
-        slideImage();
-      }
-    });
-  });
-
-  function slideImage() {
-    const displayWidth = document.querySelector(
-      ".img-showcase img:first-child"
-    )!.clientWidth;
-
-
-
-
-    (document.querySelector(".img-showcase") as HTMLElement).style.transform = `translateX(${
-      -(imgId - 1) * displayWidth
-    }px)`;
-  }
-
-  window.addEventListener("resize", slideImage);
+  // window.addEventListener("resize", slideImage);
+  // -------------------------------------------------
 
   useEffect(() => {
+    const imgs = document.querySelectorAll(".img-select a");
+    const imgBtns = [...imgs];
+    let imgId: number = 1;
+    function slideImage() {
+      const displayWidth = document.querySelector(
+        ".img-showcase img:first-child"
+      )!.clientWidth;
+
+      (
+        document.querySelector(".img-showcase") as HTMLElement
+      ).style.transform = `translateX(${-(imgId - 1) * displayWidth}px)`;
+    }
+
+    window.addEventListener("resize", slideImage);
+    imgBtns.forEach((imgItem) => {
+      imgItem.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (imgItem instanceof HTMLElement) {
+          imgId = parseInt(imgItem.dataset.id!);
+          slideImage();
+        }
+      });
+    });
     // console.log(productVariants.length);
     // setvariantUrl(variantArray[0]);
     // console.log(design);
     // console.log(product);
     // console.log(productVariants);
     if (product) {
-      setMainImageUrl("/products/embroidered_sheer_curtain_fabrics/" + product.files[0].name);
+      setMainImageUrl(
+        "/Products/embroidered_sheer_curtain_fabrics/" + product.files[0].name
+      );
     }
   }, []);
 
@@ -131,12 +155,16 @@ function ProductDetailCard({design,designT,widthT,originT,wantASampleT,sendEmail
                     return (
                       <img
                         key={index}
-                        src={"/products/embroidered_sheer_curtain_fabrics/" + item.name}
+                        src={
+                          "/Products/embroidered_sheer_curtain_fabrics/" +
+                          item.name
+                        }
                         // src={mainImageUrl}
                         alt={item.name}
                         onClick={() =>
                           window.open(
-                            "/products/embroidered_sheer_curtain_fabrics/" + item.name,
+                            "/Products/embroidered_sheer_curtain_fabrics/" +
+                              item.name,
                             "_blank"
                           )
                         }
@@ -150,26 +178,35 @@ function ProductDetailCard({design,designT,widthT,originT,wantASampleT,sendEmail
                   return (
                     <div className="img-item" key={index}>
                       <a href="" data-id={index + 1}>
-                        {"/products/embroidered_sheer_curtain_fabrics/" + item.name ===
+                        {"/Products/embroidered_sheer_curtain_fabrics/" +
+                          item.name ===
                         mainImageUrl ? (
                           <img
-                            src={"/products/embroidered_sheer_curtain_fabrics/" + item.name}
+                            src={
+                              "/Products/embroidered_sheer_curtain_fabrics/" +
+                              item.name
+                            }
                             alt=""
                             className="clicked"
                             onClick={() => {
                               setMainImageUrl(
-                                "/products/embroidered_sheer_curtain_fabrics/" + item.name
+                                "/Products/embroidered_sheer_curtain_fabrics/" +
+                                  item.name
                               );
                             }}
                           />
                         ) : (
                           <img
-                            src={"/products/embroidered_sheer_curtain_fabrics/" + item.name}
+                            src={
+                              "/Products/embroidered_sheer_curtain_fabrics/" +
+                              item.name
+                            }
                             alt=""
                             className="non-clicked"
                             onClick={() => {
                               setMainImageUrl(
-                                "/products/embroidered_sheer_curtain_fabrics/" + item.name
+                                "/Products/embroidered_sheer_curtain_fabrics/" +
+                                  item.name
                               );
                             }}
                           />
@@ -178,7 +215,8 @@ function ProductDetailCard({design,designT,widthT,originT,wantASampleT,sendEmail
                           className="variant-label"
                           onClick={() =>
                             setMainImageUrl(
-                              "/products/embroidered_sheer_curtain_fabrics/" + item.name
+                              "/Products/embroidered_sheer_curtain_fabrics/" +
+                                item.name
                             )
                           }
                         >

@@ -2,11 +2,14 @@
 import classes from "./ProductCategories.module.css";
 import Link from "next/link";
 import db from "@/vir_db/db.js";
-interface ProductCategoriesProps{
-  Headline:string;
-  EmbroideredSheerCurtainFabrics:string;
+interface ProductCategoriesProps {
+  Headline: string;
+  EmbroideredSheerCurtainFabrics: string;
 }
-function ProductCategories({Headline,EmbroideredSheerCurtainFabrics}:ProductCategoriesProps) {
+function ProductCategories({
+  Headline,
+  EmbroideredSheerCurtainFabrics,
+}: ProductCategoriesProps) {
   let productCategories = [
     // {
     //   name: "Read-made Curtains",
@@ -17,7 +20,7 @@ function ProductCategories({Headline,EmbroideredSheerCurtainFabrics}:ProductCate
     {
       name: EmbroideredSheerCurtainFabrics,
       link: "/products/fabrics/embroidery",
-      imgLink: "/products/kirat/8159.jpg",
+      imgLink: "/Products/kirat/8159.jpg",
       alt: "Embroidered Sheer Fabrics",
     },
     // {
@@ -48,6 +51,7 @@ function ProductCategories({Headline,EmbroideredSheerCurtainFabrics}:ProductCate
       <h2 className={classes.componentTitle}>{Headline}</h2>
       <div className={classes.container}>
         {productCategories.map((item, index) => {
+          console.log(item.imgLink);
           return (
             // Below link attributes makes the user start on top of the page when going to the link
             <Link
