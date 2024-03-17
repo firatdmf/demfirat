@@ -21,7 +21,7 @@ const ProductCard: NextPage<Props> = (props) => {
         <div className={classes.card}>
           <div className={classes.image}>
             <Image
-              src={"/Products/"+productType+"/thumbnails/"+product.files[0].name}
+              src={"/media/products/"+productType+"/thumbnails/"+product.files[0].name}
               alt={"Image of the "+productType.replace(/_/g,' ') + " product: " + product.design}
               key={product.files[0].name}
               height={500}

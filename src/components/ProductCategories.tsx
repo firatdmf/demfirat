@@ -21,7 +21,7 @@ function ProductCategories({
     {
       name: EmbroideredSheerCurtainFabrics,
       link: "/products/fabrics/embroidery",
-      imgLink: "/Products/kirat/8159.jpg",
+      imgLink: "/media/products/kirat/8159.jpg",
       alt: "Embroidered Sheer Fabrics",
     },
     // {

@@ -134,7 +134,7 @@ function ProductDetailCard({
     // console.log(productVariants);
     if (product) {
       setMainImageUrl(
-        "/Products/embroidered_sheer_curtain_fabrics/" + product.files[0].name
+        "/media/products/embroidered_sheer_curtain_fabrics/" + product.files[0].name
       );
     }
   }, []);
@@ -157,7 +157,7 @@ function ProductDetailCard({
                       <Image
                         key={index}
                         src={
-                          "/Products/embroidered_sheer_curtain_fabrics/" +
+                          "/media/products/embroidered_sheer_curtain_fabrics/" +
                           item.name
                         }
                         // src={mainImageUrl}
@@ -166,7 +166,7 @@ function ProductDetailCard({
                         width={500}
                         onClick={() =>
                           window.open(
-                            "/Products/embroidered_sheer_curtain_fabrics/" +
+                            "/media/products/embroidered_sheer_curtain_fabrics/" +
                               item.name,
                             "_blank"
                           )
@@ -181,12 +181,12 @@ function ProductDetailCard({
                   return (
                     <div className="img-item" key={index}>
                       <a href="" data-id={index + 1}>
-                        {"/Products/embroidered_sheer_curtain_fabrics/" +
+                        {"/media/products/embroidered_sheer_curtain_fabrics/" +
                           item.name ===
                         mainImageUrl ? (
                           <Image
                             src={
-                              "/Products/embroidered_sheer_curtain_fabrics/" +
+                              "/media/products/embroidered_sheer_curtain_fabrics/" +
                               item.name
                             }
                             alt=""
@@ -195,7 +195,7 @@ function ProductDetailCard({
                             width={500}
                             onClick={() => {
                               setMainImageUrl(
-                                "/Products/embroidered_sheer_curtain_fabrics/" +
+                                "/media/products/embroidered_sheer_curtain_fabrics/" +
                                   item.name
                               );
                             }}
@@ -203,14 +203,14 @@ function ProductDetailCard({
                         ) : (
                           <img
                             src={
-                              "/Products/embroidered_sheer_curtain_fabrics/" +
+                              "/media/products/embroidered_sheer_curtain_fabrics/" +
                               item.name
                             }
                             alt=""
                             className="non-clicked"
                             onClick={() => {
                               setMainImageUrl(
-                                "/Products/embroidered_sheer_curtain_fabrics/" +
+                                "/media/products/embroidered_sheer_curtain_fabrics/" +
                                   item.name
                               );
                             }}
@@ -220,7 +220,7 @@ function ProductDetailCard({
                           className="variant-label"
                           onClick={() =>
                             setMainImageUrl(
-                              "/Products/embroidered_sheer_curtain_fabrics/" +
+                              "/media/products/embroidered_sheer_curtain_fabrics/" +
                                 item.name
                             )
                           }
