@@ -1,12 +1,12 @@
 // below is added for language localizations
 const createNextIntlPlugin = require('next-intl/plugin');
 const withNextIntl = createNextIntlPlugin();
-// const { i18n } = require('./next-i18next.config')
-// ----------
 /** @type {import('next').NextConfig} */
+
+console.log('HELLO' + process.env.NODE_PATH);
 const nextConfig = {
   // below is added for language localizations
-  // in18n,
+  // basePath:process.env.NODE_PATH || '',
   reactStrictMode: true,
   // -----
 

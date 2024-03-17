@@ -4,8 +4,10 @@ import { getRequestConfig } from "next-intl/server"
 // I am getting the file names in messages folder to identify which languages I have available
 const fs = require('fs')
 const dir = './messages/'
-const locales = fs.readdirSync(dir) //['en.json', 'id.json','ru.json','pl.json']
+// console.log(__dirname);
 
+// const locales = fs.readdirSync(dir) //['en.json', 'id.json','ru.json','pl.json']
+const locales = ['en.json', 'ru.json', 'tr.json', 'pl.json']
 // below locale is from the url: for example /en
 export default getRequestConfig(async ({ locale }) => {
     if (!locales.includes((locale + '.json') as any))
