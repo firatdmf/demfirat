@@ -21,9 +21,12 @@ const ProductCard: NextPage<Props> = (props) => {
         <div className={classes.card}>
           <div className={classes.image}>
             <Image
-              src={"/products/"+productType+"/thumbnails/"+product.files[0].name}
+              src={"/Products/"+productType+"/thumbnails/"+product.files[0].name}
               alt={"Image of the "+productType.replace(/_/g,' ') + " product: " + product.design}
               key={product.files[0].name}
+              height={500}
+              // quality={100}
+              width={500}
               // If the thumbnail does not exist, or broken that display the original image instead
               onError={({currentTarget})=>{currentTarget.onerror=null;currentTarget.src=currentTarget.src.replace('/thumbnails','')}}
             />

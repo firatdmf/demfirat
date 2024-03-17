@@ -3,6 +3,7 @@ import "@/components/ProductDetailCard.css";
 import { useState, useEffect, useRef } from "react";
 import data from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 interface pageProps {
   design: string;
   designT: string;
@@ -153,7 +154,7 @@ function ProductDetailCard({
                 <div className="img-showcase">
                   {product.files.map((item: any, index: number) => {
                     return (
-                      <img
+                      <Image
                         key={index}
                         src={
                           "/Products/embroidered_sheer_curtain_fabrics/" +
@@ -161,6 +162,8 @@ function ProductDetailCard({
                         }
                         // src={mainImageUrl}
                         alt={item.name}
+                        height={500}
+                        width={500}
                         onClick={() =>
                           window.open(
                             "/Products/embroidered_sheer_curtain_fabrics/" +
@@ -181,13 +184,15 @@ function ProductDetailCard({
                         {"/Products/embroidered_sheer_curtain_fabrics/" +
                           item.name ===
                         mainImageUrl ? (
-                          <img
+                          <Image
                             src={
                               "/Products/embroidered_sheer_curtain_fabrics/" +
                               item.name
                             }
                             alt=""
                             className="clicked"
+                            height={500}
+                            width={500}
                             onClick={() => {
                               setMainImageUrl(
                                 "/Products/embroidered_sheer_curtain_fabrics/" +
