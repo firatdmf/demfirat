@@ -1,6 +1,7 @@
 import classes from "@/components/ProductCard.module.css";
 import { NextPage } from "next";
 import Link from "next/link";
+import Image from "next/image";
 // below is to be used later
 // import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 
@@ -19,8 +20,8 @@ const ProductCard: NextPage<Props> = (props) => {
       >
         <div className={classes.card}>
           <div className={classes.image}>
-            <img
-              src={"/Products/"+productType+"/thumbnails/"+product.files[0].name}
+            <Image
+              src={"/products/"+productType+"/thumbnails/"+product.files[0].name}
               alt={"Image of the "+productType.replace(/_/g,' ') + " product: " + product.design}
               key={product.files[0].name}
               // If the thumbnail does not exist, or broken that display the original image instead

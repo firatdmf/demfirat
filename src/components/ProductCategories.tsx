@@ -2,6 +2,7 @@
 import classes from "./ProductCategories.module.css";
 import Link from "next/link";
 import db from "@/vir_db/db.js";
+import Image from "next/image";
 interface ProductCategoriesProps {
   Headline: string;
   EmbroideredSheerCurtainFabrics: string;
@@ -63,7 +64,7 @@ function ProductCategories({
               }}
             >
               <div className={classes.product}>
-                <img src={item.imgLink} alt={item.alt} />
+                <Image src={item.imgLink} alt={item.alt} width={500} height={500}/>
               </div>
               <p className={classes.itemName}>{item.name}</p>
             </Link>
