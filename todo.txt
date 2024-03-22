@@ -1,4 +1,12 @@
 optimize karven logo, and other images like karven banner
-add email signup
+# add email signup
 being able to put products into favorites
 pull stories directly from instagram
+
+
+Fix karven logo image
+make not found page better
+next image for seo 
+delete unnecessary envrionment variables and codes
+block downloading images
+dynamic multi-language rendering

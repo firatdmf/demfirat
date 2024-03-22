@@ -285,7 +285,7 @@ let writeDB = (uniqueArray) => {
 
 // main function that runs
 let node = async () => {
-  const testFolder = "../../public/products/embroidered_sheer_curtain_fabrics";
+  const testFolder = "../../public/media/products/embroidered_sheer_curtain_fabrics";
   // first read all the file names inside the testfolder
   let productFiles = fs.readdirSync(testFolder).map((fileName, index) => {
     return fileName;
