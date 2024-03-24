@@ -9,4 +9,10 @@ make not found page better
 next image for seo 
 delete unnecessary envrionment variables and codes
 block downloading images
-dynamic multi-language rendering
+dynamic multi-language rendering (url paths)
+fix detail product view image dimensions
+QR info & email to see all degisn translate
+
+There are two 1701 designs
+there are two 24891 designs (the one with skirt is probably the right one.)
+
