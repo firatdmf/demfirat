@@ -1196,6 +1196,14 @@
         "files": [
             {
                 "prefix": "N",
+                "name": "1710_ham-2.webp",
+                "design": "1710",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "2"
+            },
+            {
+                "prefix": "N",
                 "name": "1710_ham.webp",
                 "design": "1710",
                 "annex": "",
