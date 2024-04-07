@@ -7,10 +7,10 @@
   },
   "Header": { "ShippingText": "Dünya çapında nakliye" },
   "Menu": {
-    "Home": "Ev",
+    "Home": "Ana Sayfa",
     "Products": "Ürünler",
     "AboutUs": "Hakkımızda",
-    "Contact": "Temas etmek",
+    "Contact": "İletişim",
     "SideText": "Bütünsel Düşünün, Nakışlı Düşünün"
   },
   "Products": {
