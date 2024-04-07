@@ -102,7 +102,7 @@ function Header(ShippingText: any) {
           <div className={classes.img}>
             <Link href="/" id={classes.link}>
               <img
-                src="/media/karvenLogo.png"
+                src="/media/karvenLogo.webp"
                 alt="logo"
                 className={classes.logo}
               />
