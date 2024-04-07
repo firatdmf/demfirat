@@ -76,7 +76,7 @@ function Footer({StayConnected,OurStory,ContactUs,AllRightsReserved}:FooterProps
         <div className={classes.col4}>
           <img
             className={classes.karvenLogo}
-            src="/media/karvenLogo.png"
+            src="/media/karvenLogo.webp"
             alt="Karven Logo"
           />
           {/* <p style={{ fontWeight: "bold" }}>
