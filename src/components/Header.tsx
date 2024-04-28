@@ -95,7 +95,7 @@ function Header(ShippingText: any) {
               ERGENE TEKIRDAG, 59930 <br />
               TURKIYE
             </p>
-            <p>+90 (533) 544-2525</p>
+            <p>+90 (501) 057-1884</p>
           </div>
         </div>
         <div className={`${classes.item2} ${classes.item}`}>
