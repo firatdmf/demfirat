@@ -1,4 +1,4 @@
-optimize karven logo, and other images like karven banner
+optimize karven logo, and other images like karven banner /
 # add email signup
 being able to put products into favorites
 pull stories directly from instagram
@@ -12,6 +12,8 @@ block downloading images
 dynamic multi-language rendering (url paths)
 fix detail product view image dimensions
 QR info & email to see all degisn translate
+add customer client images
+Give each page a title so you can see on google analytics
 
 There are two 1701 designs
 there are two 24891 designs (the one with skirt is probably the right one.)
