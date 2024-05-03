@@ -55,7 +55,7 @@ function Header(ShippingText: any) {
               </span>
             ) : (
               <>
-                <span>Merhaba, {session?.user?.name}</span>
+                <span>Hello, {session?.user?.name}</span>
                 <span className="ml-2 mr-2">|</span>
                 <span>
                   <button
@@ -119,7 +119,7 @@ function Header(ShippingText: any) {
             >
               <p>
                 <AiFillInstagram />
-                :/karvenhomedecor
+                /karvenhomedecor
               </p>
             </Link>
             <Link
@@ -128,13 +128,13 @@ function Header(ShippingText: any) {
               id={classes.link}
             >
               <p>
-                <AiOutlineMail />: info@demfirat.com
+                <AiOutlineMail />info@demfirat.com
               </p>
             </Link>
-            <p style={{ textTransform: "capitalize" }}>
-              <TbWorld />
+            <p style={{ textTransform: "capitalize", cursor:"default" }}>
+              <TbWorld />{ShippingText["ShippingText"]}
               {/* below is for multi-language compliance */}
-              {ShippingText["ShippingText"]}
+              
             </p>
           </div>
         </div>

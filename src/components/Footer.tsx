@@ -16,7 +16,7 @@ function Footer({StayConnected,OurStory,ContactUs,AllRightsReserved}:FooterProps
     <div className={classes.FooterPage}>
       <div className={classes.footerMenu}>
         <div className={classes.col1}>
-          <h3>Karven Home</h3>
+          <h3>DEMFIRAT Karven</h3>
           <ul>
             {/* <Link
           href="/about"
@@ -68,6 +68,9 @@ function Footer({StayConnected,OurStory,ContactUs,AllRightsReserved}:FooterProps
             <Link href="/contact" id={classes.link}>
               <li>{ContactUs}</li>
             </Link>
+            <Link href="/blogs" id={classes.link}>
+              <li>Blog</li>
+            </Link>
 
             {/* <li onClick={() => window.location = 'mailto:info@karvenhome.com'}>info@karvenhome.com</li> */}
           </ul>
@@ -85,7 +88,7 @@ function Footer({StayConnected,OurStory,ContactUs,AllRightsReserved}:FooterProps
         </div>
       </div>
       <div className={classes.copyright}>
-        <p>© {currentYear} Karven Home | {AllRightsReserved}</p>
+        <p>© {currentYear} Demfirat Karven | {AllRightsReserved}</p>
       </div>
     </div>
   );

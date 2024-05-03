@@ -1,5 +1,5 @@
 .ProductGrid {
-    padding: 20px;
+    padding: 20px 10px ;
   }
   .ProductGrid .products {
     display: grid;
@@ -88,8 +88,9 @@
     /* background: url("../../public/images/cover/karven_banner.png") no-repeat; */
     background-size: 90%;
     background-position: center;
-    border-radius: 0 0 10px 10px;
-    margin: 0 20px;
+    border-radius:30px 30px;
+    border-radius:30px;
+    /* margin: 0 20px; */
     margin-bottom: 5vh;
     height: 250px;
     max-width: 100%;

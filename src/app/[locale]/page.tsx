@@ -10,19 +10,25 @@ import { useTranslations } from "next-intl";
 export default function Home() {
   // below code gives not found error when invalid parameter is provided: http://demfirat.com/asdsadsad
   const sliderLocale = useTranslations("Slider");
-  const ProductsLocale = useTranslations("Products")
+  const ProductsLocale = useTranslations("Products");
   const sliderData = [
     {
-      image: "/media/factory/karven-factory-building-exterior-resized.webp",
-      heading: sliderLocale('heading_1'),
-      desc: sliderLocale('desc_1'),
-      obj_position: "bottom",
+      image: "/media/factory/schiffli-embroidery-3.jpg",
+      heading: sliderLocale("heading_2"),
+      desc: sliderLocale("desc_2"),
+      obj_position: "top",
     },
     {
-      image: "/media/embroideryCover.jpg",
-      heading: sliderLocale('heading_2'),
-      desc: sliderLocale('desc_2'),
+      image: "/media/factory/flatboard-embroidery-closeup.jpg",
+      heading: sliderLocale("heading_3"),
+      desc: sliderLocale("desc_3"),
       obj_position: "top",
+    },
+    {
+      image: "/media/factory/Karven_Tekstil_Factory-Exterior3_edited.jpg",
+      heading: sliderLocale("heading_1"),
+      desc: sliderLocale("desc_1"),
+      obj_position: "bottom",
     },
   ];
 
@@ -34,10 +40,17 @@ export default function Home() {
             <Slider sliderData={sliderData} />
           </div>
         </div>
-        <ProductCategories Headline={ProductsLocale('Headline')} EmbroideredSheerCurtainFabrics={ProductsLocale('EmbroideredSheerCurtainFabrics')}/>
+        <ProductCategories
+          Headline={ProductsLocale("Headline")}
+          EmbroideredSheerCurtainFabrics={ProductsLocale(
+            "EmbroideredSheerCurtainFabrics"
+          )}
+        />
         {/* <p>{t('title')}</p> */}
         <div className="certifications">
-          <p>Global Recycled Standard | NFPA 701 | GOTS | OEKO TEX</p>
+          <b>
+            <p>Global Recycled Standard | NFPA 701 | GOTS | OEKO TEX</p>
+          </b>
         </div>
       </div>
     </main>

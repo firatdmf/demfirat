@@ -13,7 +13,7 @@ import Menu from "@/components/Menu";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DEM FIRAT KARVEN",
+  title: "Demfirat Karven Tekstil",
   description: "Sheer fabric manufacturer in Turkiye",
 };
 interface RootLayoutProps {
