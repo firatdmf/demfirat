@@ -21,7 +21,7 @@ function About() {
         <p>
           Our parent company, Dem Fırat Karven Tekstil, was established in 1991
           in Istanbul by Cuma Ozturk. Cuma was the eldest child in a family with
-          21 kids. He grew up near the eastern border on the rural side of
+          21 kids. He grew up near the Iranian border on the rural side of
           Turkey. Because of the lack of resources during his childhood, he
           dropped out of school at the age of nine and started working at local
           shops.
@@ -29,7 +29,42 @@ function About() {
         </p>
       </div>
       <div className={`${classes.container}`}>
-        
+        {/* <div className={`${classes.row} ${classes.row1}`}>
+          <div className={`${classes.box1} ${classes.textCenter}`}>
+            <h1>
+              Broad Sholders
+              {/* {AboutUsPageT("Section2Headline")} */}
+            </h1>
+            <p>
+              {`Cuma's parents' negligence and being the eldest among his siblings
+              left him with an immense responsibility to work hard and provide
+              for his family. So to make money fast, he started crossing the
+              Iranian border as a kid to buy goods at a cheaper rate, then
+              brought and traded them in Turkey.`}
+
+              {/* {AboutUsPageT("Section2Text1")} */}
+            </p>
+            <p>
+              Yet, after getting caught numerously and punished by the
+              authorities, he knew he needed to find a long-term, less risky
+              alternative. So at 13, he moved to the West of Turkey all by
+              himself for better job opportunities. After a decade of hard,
+              laborious work at construction sites, restaurants, and retail
+              shops on the West side of the country, in 1991, at the age of 23,
+              he opened his first textile shop in Laleli, Istanbul, with a
+              business partner. However, in 1997, when his first child was born
+              (that's me!), the partners had disagreements, leading them to
+              separate ways.
+              {/* {AboutUsPageT("Section2Text2")} */}
+            </p>
+          </div>
+          <div className={classes.box2}>
+            <img
+              src="/media/young_Cuma_working.webp"
+              alt="The Founder of Karven Home sitting on chair with crossed arms"
+            />
+          </div>
+        </div> */}
         <div className={`${classes.row} ${classes.row2}`}>
           <div className={classes.box1}>
             <img
@@ -42,7 +77,8 @@ function About() {
             {/* <h3>{AboutUsPageT('Section3Headline')}</h3> */}
             <h1>1997</h1>
             <p>
-              In 1997, he started his own textile store.
+              Although his former partners tried to discourage and force him out
+              of business, this only powered him to open his own textile store.
               His genuine attitude and fine quality of his products made his
               shop recognized. With the growing demand, he started bringing his
               siblings left on the East side of the country and employing them

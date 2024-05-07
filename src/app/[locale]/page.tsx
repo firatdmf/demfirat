@@ -13,19 +13,19 @@ export default function Home() {
   const ProductsLocale = useTranslations("Products");
   const sliderData = [
     {
-      image: "/media/factory/schiffli-embroidery-3.jpg",
+      image: "/media/factory/schiffli-embroidery-3.webp",
       heading: sliderLocale("heading_2"),
       desc: sliderLocale("desc_2"),
       obj_position: "top",
     },
     {
-      image: "/media/factory/flatboard-embroidery-closeup.jpg",
+      image: "/media/factory/flatboard-embroidery-closeup.webp",
       heading: sliderLocale("heading_3"),
       desc: sliderLocale("desc_3"),
       obj_position: "top",
     },
     {
-      image: "/media/factory/Karven_Tekstil_Factory-Exterior3_edited.jpg",
+      image: "/media/factory/Karven_Tekstil_Factory-Exterior3_edited.webp",
       heading: sliderLocale("heading_1"),
       desc: sliderLocale("desc_1"),
       obj_position: "bottom",
