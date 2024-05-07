@@ -56,7 +56,7 @@ function About() {
           </div>
           <div className={classes.box2}>
             <img
-              src=""
+              src="/media/heimtextile6.jpg"
               alt="The Founder of Karven Home sitting on chair with crossed arms"
             />
           </div>
@@ -64,7 +64,7 @@ function About() {
         <div className={`${classes.row} ${classes.row2}`}>
           <div className={classes.box1}>
             <img
-              src=""
+              src="/media/oldStoreFrontPic.jpg"
               alt="Store Front of the first store Cuma opened in Laleli"
             />
           </div>

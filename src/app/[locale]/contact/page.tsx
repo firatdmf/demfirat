@@ -71,13 +71,16 @@ function Contact() {
             style={{ border: "0" }}
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
-          <iframe
+          {/* <iframe
             title=" "
             src="https://www.google.com/maps/embed?pb=!4v1692136743712!6m8!1m7!1sH95SKn0zsoizFxc2esUcNw!2m2!1d41.01049627569196!2d28.95540105451114!3f298.7412353650941!4f-11.65487231269131!5f0.7820865974627469"
             // allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
+          ></iframe> */}
+          <div className={classes.image}>
+            <img src="/media/store/store-5.jpeg" alt="Demfirat Karven Store Image" />
+          </div>
         </div>
         <div className={` ${classes.item} ${classes.textInfo}`}>
           <h2>{ContactPageT('FabricShowroom')} (İstanbul, Türkiye)</h2>
