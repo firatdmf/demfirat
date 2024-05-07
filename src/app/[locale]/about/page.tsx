@@ -21,7 +21,7 @@ function About() {
         <p>
           Our parent company, Dem Fırat Karven Tekstil, was established in 1991
           in Istanbul by Cuma Ozturk. Cuma was the eldest child in a family with
-          21 kids. He grew up near the Iranian border on the rural side of
+          21 kids. He grew up near the east border on the rural side of
           Turkey. Because of the lack of resources during his childhood, he
           dropped out of school at the age of nine and started working at local
           shops.
