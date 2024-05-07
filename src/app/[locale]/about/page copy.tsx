@@ -29,7 +29,7 @@ function About() {
         </p>
       </div>
       <div className={`${classes.container}`}>
-        {/* <div className={`${classes.row} ${classes.row1}`}>
+        <div className={`${classes.row} ${classes.row1}`}>
           <div className={`${classes.box1} ${classes.textCenter}`}>
             <h1>
               Broad Sholders
@@ -64,7 +64,7 @@ function About() {
               alt="The Founder of Karven Home sitting on chair with crossed arms"
             />
           </div>
-        </div> */}
+        </div>
         <div className={`${classes.row} ${classes.row2}`}>
           <div className={classes.box1}>
             <img
