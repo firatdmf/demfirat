@@ -10,10 +10,7 @@ function About() {
           <source src="/media/karven.mp4" type="video/mp4" />
         </video>
       </div>
-      {/* <h2 className={classes.textCenter}>
-    ...Pearlins Linen is the US branch of the textile manufacturing group
-    Demfirat Karven Tekstil.
-  </h2> */}
+
       <div className={`${classes.headText} ${classes.textCenter}`}>
         <h2>{`FOUNDER'S STORY`}</h2>
         {/* <h2>{AboutUsPageT("Section1Headline")}</h2> */}
@@ -29,7 +26,6 @@ function About() {
         </p>
       </div>
       <div className={`${classes.container}`}>
-        
         <div className={`${classes.row} ${classes.row2}`}>
           <div className={classes.box1}>
             <img
@@ -42,11 +38,10 @@ function About() {
             {/* <h3>{AboutUsPageT('Section3Headline')}</h3> */}
             <h1>1997</h1>
             <p>
-              In 1997, he started his own textile store.
-              His genuine attitude and fine quality of his products made his
-              shop recognized. With the growing demand, he started bringing his
-              siblings left on the East side of the country and employing them
-              one after the other.
+              In 1997, he started his own textile store. His genuine attitude
+              and fine quality of his products made his shop recognized. With
+              the growing demand, he started bringing his siblings left on the
+              East side of the country and employing them one after the other.
               {/* {AboutUsPageT('Section3Text')} */}
             </p>
           </div>
@@ -125,69 +120,7 @@ function About() {
             />
           </div>
         </div>
-        {/* <div className={`${classes.row} ${classes.row6}`}>
-      <div className={classes.box1}>
-        <img
-          src="/images/cover/hometex.jpg"
-          alt="Hometex 2023 Istanbul Team Photograph  "
-        />
       </div>
-      <div className={`${classes.box2} ${classes.textCenter}`}>
-        <h3>HomeTex</h3>
-        <h1>2023</h1>
-      </div>
-    </div> */}
-
-        {/* <div className={`${classes.row} ${classes.row6}`}>
-      <div className={classes.box1}>
-        <img
-          src="https://cdn.shopify.com/s/files/1/0570/3945/4375/files/Z_Moe_at_the_HD_Expo_900x.jpg?v=1660275883"
-          alt="MUHAMMED FIRAT OZTURK standing next to his booth in HD Expo Tradeshow in Las Vegas joined as Pearlins Linen"
-        />
-      </div>
-      <div className={`${classes.box2} ${classes.textCenter}`}>
-        <h3>SHOOTING BEYOND THE</h3>
-        <h1>OCEAN</h1>
-        <p>
-          My dad was well aware of the limitations the lack of educational
-          background brought to his life. Therefore, he sent me to the
-          United States in 2015.
-        </p>
-        <p>
-          Upon earning my degree from Rutgers University with the highest
-          honors in Industrial and Systems Engineering, I started this
-          company, Pearlins Linen, to distribute fabrics and textiles
-          produced in our family mill.(...and started nagging you with my
-          never-ending cold calls and emails)
-        </p>
-      </div>
-    </div>
-    <div className={`${classes.row} ${classes.row7}`}>
-      <div className={classes.box1}>
-        <h3>PEARLINS LINEN</h3>
-        <h1>2021</h1>
-        <p>Today, Pearlins Linen is the leading distributor of home textiles and interior fabrics in the US market, serving the hospitality, department stores, converters, furniture manufacturers, jobbers, and more.</p>
-      </div>
-      <div className={classes.box2}>
-        <img src="https://cdn.shopify.com/s/files/1/0570/3945/4375/files/IMG_2220_1080x.jpg?v=1660322339" alt="PEARLINS LINEN warehouse interior entrance" />
-      </div>
-    </div> */}
-      </div>
-      {/* <img src="https://cdn.shopify.com/s/files/1/0570/3945/4375/files/ec1d7292-a258-4e1c-a520-d17cf5f3d585_51cb89ce-8118-4b60-a48a-0f63cb7e5344_1080x.jpg?v=1660333805" alt="The Founder of Karven Home sitting on chair with crossed arms" /> */}
-      {/* <div className={classes.video2}>
-    <video autoPlay loop muted className={classes.videoItself}>
-      <source src={footerVideo} type="video/mp4" />
-    </video>
-    <div className={classes.text}>
-      <h3>STAY TUNED!</h3>
-      <h2>2024</h2>
-      <br />
-      <p>
-        We are constantly continuing to look for the next first—we are not
-        done innovating yet.
-      </p>
-    </div>
-  </div> */}
     </div>
   );
 }
