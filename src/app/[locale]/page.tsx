@@ -3,6 +3,7 @@ import React from "react";
 import "./page.css";
 import Slider from "@/components/slider/Slider";
 import ProductCategories from "@/components/ProductCategories";
+import ClientTestimonials from "@/components/ClientTestimonials";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
 import { useTranslations } from "next-intl";
@@ -47,6 +48,7 @@ export default function Home() {
           )}
         />
         {/* <p>{t('title')}</p> */}
+        <ClientTestimonials/>
         <div className="certifications">
           <b>
             <p>Global Recycled Standard | NFPA 701 | GOTS | OEKO TEX</p>
