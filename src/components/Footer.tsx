@@ -68,9 +68,9 @@ function Footer({StayConnected,OurStory,ContactUs,AllRightsReserved}:FooterProps
             <Link href="/contact" id={classes.link}>
               <li>{ContactUs}</li>
             </Link>
-            <Link href="/blogs" id={classes.link}>
+            {/* <Link href="/blogs" id={classes.link}>
               <li>Blog</li>
-            </Link>
+            </Link> */}
 
             {/* <li onClick={() => window.location = 'mailto:info@karvenhome.com'}>info@karvenhome.com</li> */}
           </ul>
