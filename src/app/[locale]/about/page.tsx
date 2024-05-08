@@ -20,11 +20,8 @@ function About() {
         <br />
         <p>
           Our parent company, Dem Fırat Karven Tekstil, was established in 1991
-          in Istanbul by Cuma Ozturk. Cuma was the eldest child in a family with
-          21 kids. He grew up near the east border on the rural side of
-          Turkey. Because of the lack of resources during his childhood, he
-          dropped out of school at the age of nine and started working at local
-          shops.
+          in Istanbul by Cuma Ozturk. Cuma was the eldest child in his family. He grew up in the east, rural side of
+          Turkey. Due to limited resources during his childhood, he decided to pursue an entreprenerial journey to support his family. 
           {/* {AboutUsPageT("Section1Text")} */}
         </p>
       </div>
@@ -36,20 +33,18 @@ function About() {
               {/* {AboutUsPageT("Section2Headline")} */}
             </h1>
             <p>
-              {`Cuma's parents' negligence and being the eldest among his siblings
+              {`Being the eldest among his siblings
               left him with an immense responsibility to work hard and provide
               for his family.`}
 
               {/* {AboutUsPageT("Section2Text1")} */}
             </p>
             <p>
-              So at 13, he moved to the West of Turkey all by
-              himself for better job opportunities. After a decade of hard,
-              laborious work at construction sites, restaurants, and retail
-              shops on the West side of the country, in 1991, at the age of 23,
+              So at young age, he moved to the West of Turkey by
+              himself for better opportunities. After a decade of hard,
+              laborious work at various places on the West side of the country at the age of 23,
               he opened his first textile shop in Laleli, Istanbul, with a
-              business partner. However, in 1997, when his first child was born
-              (that's me!), the partners had disagreements, leading them to
+              business partner. However, in 1997, the partners had disagreements, leading them to
               separate ways.
               {/* {AboutUsPageT("Section2Text2")} */}
             </p>
@@ -73,12 +68,9 @@ function About() {
             {/* <h3>{AboutUsPageT('Section3Headline')}</h3> */}
             <h1>1997</h1>
             <p>
-              Although his former partners tried to discourage and force him out
-              of business, this only powered him to open his own textile store.
+              This only powered him to open his own textile store.
               His genuine attitude and fine quality of his products made his
-              shop recognized. With the growing demand, he started bringing his
-              siblings left on the East side of the country and employing them
-              one after the other.
+              shop recognized.
               {/* {AboutUsPageT('Section3Text')} */}
             </p>
           </div>
@@ -89,7 +81,7 @@ function About() {
             {/* <h3>{AboutUsPageT('Section4Headline')}</h3> */}
             <h1>2004</h1>
             <p>
-              Cuma and his siblings opened their first abroad warehouse in
+              Dem Fırat Karven opened its first abroad warehouse in
               Moscow and started supplying Turkish textiles to the Russian
               market, later expanding to Ukraine, Belarus, and Kazakhstan.
               {/* {AboutUsPageT('Section4Text')} */}
@@ -132,7 +124,7 @@ function About() {
             <h1>2020</h1>
             <p>
               Having started a successful company and being able take care of
-              his siblings by employing them has made Cuma's dreams come true.
+              his family has made the dreams come true.
               {/* {AboutUsPageT('Section6Text1')} */}
             </p>
             <p>
