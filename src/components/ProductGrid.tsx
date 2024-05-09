@@ -272,7 +272,7 @@ export default function ProductGrid({HeadlineT, SearchBarT}:ProductGridProps) {
                   })}
               </div>
               <h3 style={{ textAlign: "center" }}>
-                To see all the designs, email info@demfirat with your business
+                To see all the designs, email info@demfirat.com with your business
                 info and we'll create an online account for you.
               </h3>
             </>
