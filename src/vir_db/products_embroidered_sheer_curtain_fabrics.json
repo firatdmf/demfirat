@@ -1,5 +1,95 @@
 [
     {
+        "design": "12926",
+        "prefix": "K",
+        "date": "2024-05-16",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12926_ham.webp",
+                "design": "12926",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12927",
+        "prefix": "K",
+        "date": "2024-05-16",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12927_ham.webp",
+                "design": "12927",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "1761",
+        "prefix": "N",
+        "date": "2024-05-16",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1761_ham.webp",
+                "design": "1761",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "24951",
+        "prefix": "K",
+        "date": "2024-05-16",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "24951_ham.webp",
+                "design": "24951",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "24952",
+        "prefix": "K",
+        "date": "2024-05-16",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "24952_ham.webp",
+                "design": "24952",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12036",
+        "prefix": "AP",
+        "date": "2024-05-16",
+        "files": [
+            {
+                "prefix": "AP",
+                "name": "AP12036_ham.webp",
+                "design": "12036",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
         "design": "12922",
         "prefix": "K",
         "date": "2024-05-08",
