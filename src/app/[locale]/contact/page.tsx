@@ -116,7 +116,7 @@ function Contact() {
           <p>Mustafa Öztürk</p>
           <h4>{ContactPageT('Phone')}:</h4>
           <p>+90 (282) 675-1552 (Office)</p>
-          <p>+90 (533) 544-2525 (Mobile)</p>
+          <p>+90 (533) 648-9208 (Mobile)</p>
           <h4>{ContactPageT('Email')}:</h4>
           <p>info@demfirat.com</p>
           <p>mustafadmf@hotmail.com</p>
