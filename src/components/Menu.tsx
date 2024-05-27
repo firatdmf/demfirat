@@ -4,10 +4,8 @@ import classes from "@/components/Menu.module.css";
 // To get the current locale data
 import { useLocale } from "next-intl";
 
-interface CustomLinkProps extends LinkProps {
-  locale?: string;
-}
-function Menu(menuTArray:any,children:any,locale:any,...props:any) {
+
+function Menu(menuTArray:any) {
     // console.log(menuTArray);
     const localActive = useLocale();
   return (
