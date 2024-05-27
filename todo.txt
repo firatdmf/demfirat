@@ -1,19 +1,21 @@
 optimize karven logo, and other images like karven banner /
-# add email signup
+Fix karven logo image/
+dynamic multi-language rendering (url paths)/
+QR info & email to see all degisn translate/
+add customer client images/
+
+
+add email list signup
 being able to put products into favorites
 pull stories directly from instagram
-
-
-Fix karven logo image
 make not found page better
 next image for seo 
 delete unnecessary envrionment variables and codes
 block downloading images
-dynamic multi-language rendering (url paths)
 fix detail product view image dimensions
-QR info & email to see all degisn translate
-add customer client images
 Give each page a title so you can see on google analytics
+Add blog
+If accessed from Russia redirect to www.karven.ru
 
 There are two 1701 designs
 there are two 24891 designs (the one with skirt is probably the right one.)
