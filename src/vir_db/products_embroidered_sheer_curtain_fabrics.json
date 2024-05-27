@@ -1,5 +1,50 @@
 [
     {
+        "design": "12929",
+        "prefix": "K",
+        "date": "2024-05-27",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12929_ham.webp",
+                "design": "12929",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "1637",
+        "prefix": "N",
+        "date": "2024-05-27",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1637_G119.webp",
+                "design": "1637",
+                "annex": "",
+                "variant": "G119",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "1763",
+        "prefix": "N",
+        "date": "2024-05-27",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1763_ham.webp",
+                "design": "1763",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
         "design": "12926",
         "prefix": "K",
         "date": "2024-05-16",
