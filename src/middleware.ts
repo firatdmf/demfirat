@@ -23,5 +23,5 @@ export const config  = {matcher:[
 
     // below is for locale, above is for next auth
     '/((?!api|static|.*\\..*|_next).*)',
-    '/(id|en|ru)/:path*'
+    '/(tr|pl|en|ru)/:path*'
 ]}
