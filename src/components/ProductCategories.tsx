@@ -52,7 +52,7 @@ function ProductCategories({
       <h2 className={classes.componentTitle}>{Headline}</h2>
       <div className={classes.container}>
         {productCategories.map((item, index) => {
-          console.log(item.imgLink);
+          // console.log(item.imgLink);
           return (
             // Below link attributes makes the user start on top of the page when going to the link
             <Link
