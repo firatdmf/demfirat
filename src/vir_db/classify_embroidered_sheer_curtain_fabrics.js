@@ -269,15 +269,15 @@ let writeCSV = (arrayOfObjectData) => {
   );
 };
 
-let writeDB = (uniqueArray) => {
-  uniqueArray.map(async (item, index) => {
-    await prisma.products.upsert({
-      where: { name: item.design },
-      update: { files: item.files },
-      create: { name: item.design, files: item.files },
-    });
-  });
-};
+// let writeDB = (uniqueArray) => {
+//   uniqueArray.map(async (item, index) => {
+//     await prisma.products.upsert({
+//       where: { name: item.design },
+//       update: { files: item.files },
+//       create: { name: item.design, files: item.files },
+//     });
+//   });
+// };
 
 // let custom_sort = (a,b)=>{
 //   return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -305,6 +305,8 @@ let node = async () => {
   uniqueArray.sort(function (a, b) {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
+  // Below code makes sure we put the imageNo 1 item first in the json file before the imageNo2 so it won't mess up. This will order even if you had more than 2 images
+  uniqueArray.forEach(design=>{design.files.sort((a,b)=>parseInt(a.imageNo)-parseInt(b.imageNo));});
   // console.log(uniqueArray[4]);
   writeJSON(uniqueArray);
   writeCSV(uniqueArray);
