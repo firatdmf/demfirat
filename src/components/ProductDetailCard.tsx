@@ -154,7 +154,25 @@ function ProductDetailCard({
                 <div className="img-showcase">
                   {product.files.map((item: any, index: number) => {
                     return (
-                      <Image
+                      // <Image
+                      //   key={index}
+                      //   src={
+                      //     "/media/products/embroidered_sheer_curtain_fabrics/" +
+                      //     item.name
+                      //   }
+                      //   // src={mainImageUrl}
+                      //   alt={item.name}
+                      //   height={500}
+                      //   width={500}
+                      //   onClick={() =>
+                      //     window.open(
+                      //       "/media/products/embroidered_sheer_curtain_fabrics/" +
+                      //         item.name,
+                      //       "_blank"
+                      //     )
+                      //   }
+                      // />
+                      <img
                         key={index}
                         src={
                           "/media/products/embroidered_sheer_curtain_fabrics/" +
@@ -184,7 +202,23 @@ function ProductDetailCard({
                         {"/media/products/embroidered_sheer_curtain_fabrics/" +
                           item.name ===
                         mainImageUrl ? (
-                          <Image
+                          // <Image
+                          //   src={
+                          //     "/media/products/embroidered_sheer_curtain_fabrics/" +
+                          //     item.name
+                          //   }
+                          //   alt=""
+                          //   className="clicked"
+                          //   height={500}
+                          //   width={500}
+                          //   onClick={() => {
+                          //     setMainImageUrl(
+                          //       "/media/products/embroidered_sheer_curtain_fabrics/" +
+                          //         item.name
+                          //     );
+                          //   }}
+                          // />
+                          <img
                             src={
                               "/media/products/embroidered_sheer_curtain_fabrics/" +
                               item.name

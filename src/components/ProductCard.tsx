@@ -6,12 +6,12 @@ import Image from "next/image";
 // import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 
 interface Props {
-  product:any,
+  product: any;
 }
 
 const ProductCard: NextPage<Props> = (props) => {
   const { product } = props;
-  const productType = "embroidered_sheer_curtain_fabrics"
+  const productType = "embroidered_sheer_curtain_fabrics";
   return (
     <div className={classes.ProductCardComponent}>
       <Link
@@ -20,7 +20,7 @@ const ProductCard: NextPage<Props> = (props) => {
       >
         <div className={classes.card}>
           <div className={classes.image}>
-            <Image
+            {/* <Image
               src={"/media/products/"+productType+"/thumbnails/"+product.files[0].name}
               alt={"Image of the "+productType.replace(/_/g,' ') + " product: " + product.design}
               key={product.files[0].name}
@@ -29,6 +29,32 @@ const ProductCard: NextPage<Props> = (props) => {
               width={500}
               // If the thumbnail does not exist, or broken that display the original image instead
               onError={({currentTarget})=>{currentTarget.onerror=null;currentTarget.src=currentTarget.src.replace('/thumbnails','')}}
+            /> */}
+            <img
+              src={
+                "/media/products/" +
+                productType +
+                "/thumbnails/" +
+                product.files[0].name
+              }
+              alt={
+                "Image of the " +
+                productType.replace(/_/g, " ") +
+                " product: " +
+                product.design
+              }
+              key={product.files[0].name}
+              height={500}
+              // quality={100}
+              width={500}
+              // If the thumbnail does not exist, or broken that display the original image instead
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = currentTarget.src.replace(
+                  "/thumbnails",
+                  ""
+                );
+              }}
             />
           </div>
           {product.theme ? (
@@ -38,7 +64,10 @@ const ProductCard: NextPage<Props> = (props) => {
           ) : (
             ""
           )}
-          <div className={classes.productName}>{product.prefix}{product.design}</div>
+          <div className={classes.productName}>
+            {product.prefix}
+            {product.design}
+          </div>
           <div className={classes.SKU}>{product.sku}</div>
           {/* {heartIcon} */}
           {/* <div className={classes.favorites}>Add to Favorites</div> */}
