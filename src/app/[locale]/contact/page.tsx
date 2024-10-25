@@ -161,7 +161,7 @@ function Contact() {
         <div className={`${classes.item} ${classes.map} `}>
           <div className={classes.image}>
             {/* <img src="/media/heimtextile6.jpg" alt="" /> */}
-            <img src="/media/store/moscow_store_1.png" alt="" />
+            <img src="/media/store/moscow_store_1.jpg" alt="" />
           </div>
           <iframe
             title=" "
