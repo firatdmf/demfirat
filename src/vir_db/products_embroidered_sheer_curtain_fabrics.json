@@ -1,5 +1,140 @@
 [
     {
+        "design": "12683",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12683.webp",
+                "design": "12683",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12684",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12684.webp",
+                "design": "12684",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12687",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12687.webp",
+                "design": "12687",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12689",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12689.webp",
+                "design": "12689",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12705",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12705.webp",
+                "design": "12705",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12706",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12706.webp",
+                "design": "12706",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12707",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12707.webp",
+                "design": "12707",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12715",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12715.webp",
+                "design": "12715",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "12717",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "12717.webp",
+                "design": "12717",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
         "design": "32008",
         "prefix": "K",
         "date": "2024-11-04",
@@ -45,6 +180,21 @@
         ]
     },
     {
+        "design": "8703",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8703_ham.webp",
+                "design": "8703",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
         "design": "8705",
         "prefix": "K",
         "date": "2024-11-04",
@@ -55,6 +205,14 @@
                 "design": "8705",
                 "annex": "",
                 "variant": "G52",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8705_ham.webp",
+                "design": "8705",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -71,6 +229,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8706_ham.webp",
+                "design": "8706",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -85,6 +251,14 @@
                 "design": "8708",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8708_ham.webp",
+                "design": "8708",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -143,6 +317,126 @@
                 "prefix": "K",
                 "name": "8719_ham.webp",
                 "design": "8719",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8722",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8722_ham.webp",
+                "design": "8722",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8723",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8723.webp",
+                "design": "8723",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8724",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8724_ham.webp",
+                "design": "8724",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8726",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8726.webp",
+                "design": "8726",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8728",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8728.webp",
+                "design": "8728",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8729",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8729.webp",
+                "design": "8729",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8730",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8730.webp",
+                "design": "8730",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8733",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8733_ham.webp",
+                "design": "8733",
                 "annex": "",
                 "variant": "ham",
                 "imageNo": "1"
@@ -823,6 +1117,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12685_colors.webp",
+                "design": "12685",
+                "annex": "",
+                "variant": "colors",
+                "imageNo": "1"
             }
         ]
     },
@@ -837,6 +1139,14 @@
                 "design": "12686",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12686_colors.webp",
+                "design": "12686",
+                "annex": "",
+                "variant": "colors",
                 "imageNo": "1"
             }
         ]
@@ -853,6 +1163,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12690-2.webp",
+                "design": "12690",
+                "annex": "",
+                "variant": "",
+                "imageNo": "2"
             }
         ]
     },
@@ -1604,14 +1922,6 @@
         "files": [
             {
                 "prefix": "K",
-                "name": "8001.webp",
-                "design": "8001",
-                "annex": "",
-                "variant": "",
-                "imageNo": "1"
-            },
-            {
-                "prefix": "K",
                 "name": "8001_ham.webp",
                 "design": "8001",
                 "annex": "",
@@ -1676,6 +1986,29 @@
                 "design": "24001",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8001",
+        "prefix": "AP",
+        "date": "2024-09-21",
+        "files": [
+            {
+                "prefix": "AP",
+                "name": "AP8001.webp",
+                "design": "8001",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "AP",
+                "name": "AP8001_ham.webp",
+                "design": "8001",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -2093,6 +2426,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8725-2.webp",
+                "design": "8725",
+                "annex": "",
+                "variant": "",
+                "imageNo": "2"
             }
         ]
     },
@@ -7521,19 +7862,27 @@
         "files": [
             {
                 "prefix": "K",
-                "name": "12526.webp",
-                "design": "12526",
-                "annex": "",
-                "variant": "",
-                "imageNo": "1"
-            },
-            {
-                "prefix": "K",
                 "name": "12526_G07.webp",
                 "design": "12526",
                 "annex": "",
                 "variant": "G07",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12526_ham.webp",
+                "design": "12526",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12526_G07-2.webp",
+                "design": "12526",
+                "annex": "",
+                "variant": "G07",
+                "imageNo": "2"
             }
         ]
     },
@@ -8012,6 +8361,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12563_ham.webp",
+                "design": "12563",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8333,6 +8690,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12696_ham.webp",
+                "design": "12696",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8472,11 +8837,11 @@
             },
             {
                 "prefix": "K",
-                "name": "12704-2.webp",
+                "name": "12704_ham.webp",
                 "design": "12704",
                 "annex": "",
-                "variant": "",
-                "imageNo": "2"
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8491,6 +8856,14 @@
                 "design": "12708",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12708_ham.webp",
+                "design": "12708",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -8507,6 +8880,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12709_ham.webp",
+                "design": "12709",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8521,6 +8902,14 @@
                 "design": "12711",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12711_ham.webp",
+                "design": "12711",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -8537,6 +8926,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12713_ham.webp",
+                "design": "12713",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8551,6 +8948,14 @@
                 "design": "12714",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12714_ham.webp",
+                "design": "12714",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -8567,6 +8972,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12718_ham.webp",
+                "design": "12718",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8577,10 +8990,10 @@
         "files": [
             {
                 "prefix": "K",
-                "name": "12719.webp",
+                "name": "12719_ham.webp",
                 "design": "12719",
                 "annex": "",
-                "variant": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -8597,6 +9010,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12720_ham.webp",
+                "design": "12720",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8612,6 +9033,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12721_ham.webp",
+                "design": "12721",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8626,6 +9055,14 @@
                 "design": "12723",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12723_ham.webp",
+                "design": "12723",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -8657,6 +9094,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12725_ham.webp",
+                "design": "12725",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8672,6 +9117,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12726_ham.webp",
+                "design": "12726",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8686,6 +9139,14 @@
                 "design": "12727",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12727_ham.webp",
+                "design": "12727",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -8732,6 +9193,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12730_ham.webp",
+                "design": "12730",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8746,6 +9215,14 @@
                 "design": "12731",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12731_ham.webp",
+                "design": "12731",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -8773,11 +9250,11 @@
             },
             {
                 "prefix": "K",
-                "name": "12732-2.webp",
+                "name": "12732_ham.webp",
                 "design": "12732",
                 "annex": "",
-                "variant": "",
-                "imageNo": "2"
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8793,6 +9270,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12734_ham.webp",
+                "design": "12734",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -8807,6 +9292,14 @@
                 "design": "12735",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12735_ham.webp",
+                "design": "12735",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -22641,6 +23134,14 @@
             },
             {
                 "prefix": "K",
+                "name": "8707_ham.webp",
+                "design": "8707",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
                 "name": "8707-2.webp",
                 "design": "8707",
                 "annex": "",
@@ -22737,6 +23238,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8727_vison.webp",
+                "design": "8727",
+                "annex": "",
+                "variant": "vison",
+                "imageNo": "1"
             }
         ]
     },
@@ -22751,6 +23260,14 @@
                 "design": "8735",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8735_ham.webp",
+                "design": "8735",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -22887,6 +23404,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8745_ham.webp",
+                "design": "8745",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -22947,6 +23472,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8749_ham.webp",
+                "design": "8749",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -22962,6 +23495,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8750_ham.webp",
+                "design": "8750",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -22976,6 +23517,14 @@
                 "design": "8751",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8751_ham.webp",
+                "design": "8751",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
