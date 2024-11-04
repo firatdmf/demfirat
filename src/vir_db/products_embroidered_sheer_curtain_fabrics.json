@@ -60,6 +60,21 @@
         ]
     },
     {
+        "design": "11977",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "11977_ham.webp",
+                "design": "11977",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
         "design": "12683",
         "prefix": "K",
         "date": "2024-11-04",
@@ -188,6 +203,21 @@
                 "prefix": "K",
                 "name": "12717.webp",
                 "design": "12717",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "1632",
+        "prefix": "N",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1632.webp",
+                "design": "1632",
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
@@ -497,6 +527,21 @@
                 "prefix": "K",
                 "name": "8733_ham.webp",
                 "design": "8733",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8789",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8789_ham.webp",
+                "design": "8789",
                 "annex": "",
                 "variant": "ham",
                 "imageNo": "1"
