@@ -7705,10 +7705,18 @@
         "files": [
             {
                 "prefix": "K",
-                "name": "12551.webp",
+                "name": "12551_G52.webp",
                 "design": "12551",
                 "annex": "",
-                "variant": "",
+                "variant": "G52",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12551_ham.webp",
+                "design": "12551",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             },
             {
