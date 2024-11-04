@@ -4,7 +4,7 @@ const fs = require("fs");
 const { convertArrayToCSV } = require("convert-array-to-csv");
 // since this is not react, we need to use require instead of below
 // import { prisma } from "@/lib/prisma";
-const { PrismaClient } = require("@prisma/client");
+// const { PrismaClient } = require("@prisma/client");
 const currentUniqueArray = require("./products_embroidered_sheer_curtain_fabrics.json");
 // import { PrismaClient } from "@prisma/client";
 // const {PrismaClient} = require("@prisma/client")
@@ -32,7 +32,7 @@ let productsOld = [
   "AP12001.jpg",
 ];
 let uniqueArray = [];
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 // Below function determines if a character is a letter or not (True if it is a letter)
 let isLetter = (str) => {
   return str.length === 1 && str.match(/[a-z]/i);
