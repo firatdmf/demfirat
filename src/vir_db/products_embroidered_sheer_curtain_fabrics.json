@@ -1,5 +1,65 @@
 [
     {
+        "design": "1125",
+        "prefix": "N",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1125.webp",
+                "design": "1125",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "1127",
+        "prefix": "N",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1127.webp",
+                "design": "1127",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "1137",
+        "prefix": "N",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1137.webp",
+                "design": "1137",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "1196",
+        "prefix": "N",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "N",
+                "name": "1196.webp",
+                "design": "1196",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
         "design": "12683",
         "prefix": "K",
         "date": "2024-11-04",
@@ -5752,6 +5812,14 @@
             },
             {
                 "prefix": "N",
+                "name": "1009_K16.webp",
+                "design": "1009",
+                "annex": "",
+                "variant": "K16",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "N",
                 "name": "1009_K49.webp",
                 "design": "1009",
                 "annex": "",
@@ -6158,6 +6226,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "N",
+                "name": "1102-2.webp",
+                "design": "1102",
+                "annex": "",
+                "variant": "",
+                "imageNo": "2"
             }
         ]
     },
@@ -6805,6 +6881,14 @@
                 "design": "1185",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "N",
+                "name": "1185T_K12.webp",
+                "design": "1185",
+                "annex": "T",
+                "variant": "K12",
                 "imageNo": "1"
             },
             {
