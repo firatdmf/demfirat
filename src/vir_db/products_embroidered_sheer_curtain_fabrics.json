@@ -15,6 +15,141 @@
         ]
     },
     {
+        "design": "8106",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8106.webp",
+                "design": "8106",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8212",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8212.webp",
+                "design": "8212",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8705",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8705_G52.webp",
+                "design": "8705",
+                "annex": "",
+                "variant": "G52",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8706",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8706.webp",
+                "design": "8706",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8708",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8708.webp",
+                "design": "8708",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8709",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8709.webp",
+                "design": "8709",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8710",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8710.webp",
+                "design": "8710",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8714",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8714_ham.webp",
+                "design": "8714",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
+        "design": "8719",
+        "prefix": "K",
+        "date": "2024-11-04",
+        "files": [
+            {
+                "prefix": "K",
+                "name": "8719_ham.webp",
+                "design": "8719",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
+            }
+        ]
+    },
+    {
         "design": "1017",
         "prefix": "N",
         "date": "2024-10-25",
@@ -1467,6 +1602,14 @@
         "prefix": "K",
         "date": "2024-09-21",
         "files": [
+            {
+                "prefix": "K",
+                "name": "8001.webp",
+                "design": "8001",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            },
             {
                 "prefix": "K",
                 "name": "8001_ham.webp",
@@ -22214,10 +22357,10 @@
         "files": [
             {
                 "prefix": "K",
-                "name": "8687.webp",
+                "name": "8687_ham.webp",
                 "design": "8687",
                 "annex": "",
-                "variant": "",
+                "variant": "ham",
                 "imageNo": "1"
             },
             {
@@ -22253,11 +22396,11 @@
             },
             {
                 "prefix": "K",
-                "name": "8690-2.webp",
+                "name": "8690_ham.webp",
                 "design": "8690",
                 "annex": "",
-                "variant": "",
-                "imageNo": "2"
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -22322,11 +22465,11 @@
             },
             {
                 "prefix": "K",
-                "name": "8694-2.webp",
+                "name": "8694_ham.webp",
                 "design": "8694",
                 "annex": "",
-                "variant": "",
-                "imageNo": "2"
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -22495,6 +22638,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8707-2.webp",
+                "design": "8707",
+                "annex": "",
+                "variant": "",
+                "imageNo": "2"
             }
         ]
     },
@@ -22509,6 +22660,14 @@
                 "design": "8715",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8715_ham.webp",
+                "design": "8715",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
@@ -22539,6 +22698,14 @@
                 "design": "8720",
                 "annex": "",
                 "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8720_ham.webp",
+                "design": "8720",
+                "annex": "",
+                "variant": "ham",
                 "imageNo": "1"
             }
         ]
