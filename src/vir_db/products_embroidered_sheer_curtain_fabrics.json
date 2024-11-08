@@ -660,6 +660,14 @@
         "files": [
             {
                 "prefix": "K",
+                "name": "8789.webp",
+                "design": "8789",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
                 "name": "8789_ham.webp",
                 "design": "8789",
                 "annex": "",
@@ -1127,6 +1135,14 @@
         "files": [
             {
                 "prefix": "K",
+                "name": "24988.webp",
+                "design": "24988",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "K",
                 "name": "24988_ham.webp",
                 "design": "24988",
                 "annex": "",
@@ -1140,6 +1156,14 @@
         "prefix": "K",
         "date": "2024-10-25",
         "files": [
+            {
+                "prefix": "K",
+                "name": "24993.webp",
+                "design": "24993",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            },
             {
                 "prefix": "K",
                 "name": "24993_ham.webp",
