@@ -12661,6 +12661,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "12859_ham.webp",
+                "design": "12859",
+                "annex": "",
+                "variant": "ham",
+                "imageNo": "1"
             }
         ]
     },
@@ -25585,6 +25593,14 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
+            },
+            {
+                "prefix": "K",
+                "name": "8570-2.webp",
+                "design": "8570",
+                "annex": "",
+                "variant": "",
+                "imageNo": "2"
             }
         ]
     },
