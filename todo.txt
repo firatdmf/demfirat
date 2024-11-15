@@ -17,6 +17,13 @@ Give each page a title so you can see on google analytics
 Add blog
 If accessed from Russia redirect to www.karven.ru
 
-There are two 1701 designs
 there are two 24891 designs (the one with skirt is probably the right one.)
 
+
+
+improvements:
+desene tiklayip geri tusuna basinca en basa donuyor
+desen ana gorunumu fotosu sisko
+translate testimonials to all languages
+add more product lines table runners etc
+adem amca rusya iki yeride koy
