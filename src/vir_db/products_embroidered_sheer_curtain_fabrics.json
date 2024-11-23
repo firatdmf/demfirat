@@ -2233,14 +2233,6 @@
                 "annex": "",
                 "variant": "",
                 "imageNo": "1"
-            },
-            {
-                "prefix": "N",
-                "name": "1461-2.webp",
-                "design": "1461",
-                "annex": "",
-                "variant": "",
-                "imageNo": "2"
             }
         ]
     },
@@ -11212,6 +11204,14 @@
         "prefix": "N",
         "date": "2024-02-05",
         "files": [
+            {
+                "prefix": "N",
+                "name": "1261.webp",
+                "design": "1261",
+                "annex": "",
+                "variant": "",
+                "imageNo": "1"
+            },
             {
                 "prefix": "N",
                 "name": "1261_G07.webp",
