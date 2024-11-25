@@ -6212,14 +6212,6 @@
         "files": [
             {
                 "prefix": "K",
-                "name": "12901.webp",
-                "design": "12901",
-                "annex": "",
-                "variant": "",
-                "imageNo": "1"
-            },
-            {
-                "prefix": "K",
                 "name": "12901T.webp",
                 "design": "12901",
                 "annex": "T",
