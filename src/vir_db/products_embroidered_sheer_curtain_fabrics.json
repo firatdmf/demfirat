@@ -276,6 +276,14 @@
         "files": [
             {
                 "prefix": "N",
+                "name": "1791T.webp",
+                "design": "1791",
+                "annex": "T",
+                "variant": "",
+                "imageNo": "1"
+            },
+            {
+                "prefix": "N",
                 "name": "1791_ham.webp",
                 "design": "1791",
                 "annex": "",
@@ -319,6 +327,14 @@
         "prefix": "N",
         "date": "2024-11-22",
         "files": [
+            {
+                "prefix": "N",
+                "name": "1794T.webp",
+                "design": "1794",
+                "annex": "T",
+                "variant": "",
+                "imageNo": "1"
+            },
             {
                 "prefix": "N",
                 "name": "1794_ham.webp",
