@@ -115,7 +115,7 @@ export default function Home() {
         </div>
         <div className="certifications">
           <b>
-            <p>Global Recycled Standard | NFPA 701 | GOTS | OEKO TEX</p>
+            <p><span>ISO 9001</span> | <span>NFPA 701</span> | <span>GOTS</span> | <span>OEKO TEX</span></p>
           </b>
         </div>
       </div>

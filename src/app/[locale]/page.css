@@ -112,6 +112,12 @@
     background-color: rgba(0,0,0,0.2);
     justify-content: center;
     padding: 0.5% 0;
+    cursor:default
+  }
+
+  .HomePage .certifications span:hover {
+    color:#d09d34;
+    cursor: default;
   }
   
 
