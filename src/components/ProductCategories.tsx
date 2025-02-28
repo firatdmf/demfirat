@@ -13,9 +13,9 @@ function ProductCategories({
 }: ProductCategoriesProps) {
   let productCategories = [
     // {
-    //   name: "Read-made Curtains",
-    //   link: "#",
-    //   imgLink: "/images/ready-made/1337/1337_white/1337_grommets_displayed.jpg",
+    //   name: "Ready-made Curtains",
+    //   link: "/products/curtains/ready_made",
+    //   imgLink: "/media/products/ready-made/1337/1337_white/1337_grommets_displayed.jpg",
     //   alt: "Ready Made Curtain",
     // },
     {
@@ -59,9 +59,9 @@ function ProductCategories({
               href={item.link}
               className={classes.link}
               key={index}
-              onClick={() => {
-                window.scroll(0, 0);
-              }}
+              // onClick={() => {
+              //   window.scroll(0, 0);
+              // }}
             >
               <div className={classes.product}>
                 <Image src={item.imgLink} alt={item.alt} width={500} height={500}/>

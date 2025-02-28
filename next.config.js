@@ -3,7 +3,7 @@ const createNextIntlPlugin = require('next-intl/plugin');
 const withNextIntl = createNextIntlPlugin();
 /** @type {import('next').NextConfig} */
 
-console.log('HELLO' + process.env.NODE_PATH);
+// console.log('HELLO' + process.env.NODE_PATH);
 const nextConfig = {
   // below is added for language localizations
   // basePath:process.env.NODE_PATH || '',
