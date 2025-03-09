@@ -15,7 +15,7 @@ function ProductCategories({
     // {
     //   name: "Ready-made Curtains",
     //   link: "/products/curtains/ready_made",
-    //   imgLink: "/media/products/ready-made/1337/1337_white/1337_grommets_displayed.jpg",
+    //   imgLink: "/image/products/ready-made/1337/1337_white/1337_grommets_displayed.jpg",
     //   alt: "Ready Made Curtain",
     // },
     {

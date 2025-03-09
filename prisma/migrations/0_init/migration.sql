@@ -1,15 +1,4 @@
 -- CreateTable
-CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
-    "username" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "name" TEXT,
-
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "auth_group" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(150) NOT NULL,
@@ -84,11 +73,11 @@ CREATE TABLE "crm_company" (
     "id" BIGSERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "email" VARCHAR(254) NOT NULL,
+    "backgroundInfo" VARCHAR(400) NOT NULL,
     "phone" VARCHAR(15) NOT NULL,
+    "website" VARCHAR(200) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
     "country" VARCHAR(100) NOT NULL,
-    "website" VARCHAR(200) NOT NULL,
-    "backgroundInfo" VARCHAR(400) NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "crm_company_pkey" PRIMARY KEY ("id")
@@ -99,17 +88,17 @@ CREATE TABLE "crm_contact" (
     "id" BIGSERIAL NOT NULL,
     "name" VARCHAR(200) NOT NULL,
     "email" VARCHAR(254) NOT NULL,
-    "address" VARCHAR(255) NOT NULL,
-    "birthday" DATE,
-    "city" VARCHAR(100) NOT NULL,
-    "company_name" VARCHAR(255) NOT NULL,
-    "country" VARCHAR(100) NOT NULL,
-    "job_title" VARCHAR(100) NOT NULL,
     "phone" VARCHAR(15) NOT NULL,
+    "address" VARCHAR(255) NOT NULL,
+    "city" VARCHAR(100) NOT NULL,
     "state" VARCHAR(100) NOT NULL,
     "zip_code" VARCHAR(10) NOT NULL,
-    "company_id" BIGINT,
+    "country" VARCHAR(100) NOT NULL,
+    "birthday" DATE,
+    "company_name" VARCHAR(255) NOT NULL,
+    "job_title" VARCHAR(100) NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
+    "company_id" BIGINT,
 
     CONSTRAINT "crm_contact_pkey" PRIMARY KEY ("id")
 );
@@ -119,9 +108,9 @@ CREATE TABLE "crm_note" (
     "id" BIGSERIAL NOT NULL,
     "content" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
-    "contact_id" BIGINT,
-    "company_id" BIGINT,
     "modified_date" TIMESTAMPTZ(6) NOT NULL,
+    "company_id" BIGINT,
+    "contact_id" BIGINT,
 
     CONSTRAINT "crm_note_pkey" PRIMARY KEY ("id")
 );
@@ -184,16 +173,6 @@ CREATE TABLE "todo_task" (
 );
 
 -- CreateTable
-CREATE TABLE "products" (
-    "id" BIGSERIAL NOT NULL,
-    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "name" TEXT,
-    "files" JSONB[],
-
-    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "accounting_assetaccountsreceivable" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
@@ -211,11 +190,11 @@ CREATE TABLE "accounting_assetaccountsreceivable" (
 CREATE TABLE "accounting_assetcash" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
+    "amount" DECIMAL(10,2) NOT NULL,
     "currency_balance" DECIMAL(10,2),
     "book_id" BIGINT NOT NULL,
     "currency_id" BIGINT NOT NULL,
     "transaction_id" BIGINT,
-    "amount" DECIMAL(10,2) NOT NULL,
 
     CONSTRAINT "accounting_assetcash_pkey" PRIMARY KEY ("id")
 );
@@ -224,16 +203,16 @@ CREATE TABLE "accounting_assetcash" (
 CREATE TABLE "accounting_assetinventorygood" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
+    "modified_at" DATE,
+    "name" VARCHAR(300) NOT NULL,
     "unit_cost" DECIMAL(10,2) NOT NULL,
     "quantity" DECIMAL(12,2) NOT NULL,
+    "stock_type" VARCHAR,
     "status" VARCHAR NOT NULL,
     "warehouse" VARCHAR,
     "location" VARCHAR,
     "book_id" BIGINT NOT NULL,
     "currency_id" BIGINT NOT NULL,
-    "name" VARCHAR(300) NOT NULL,
-    "modified_at" DATE,
-    "stock_type" VARCHAR,
 
     CONSTRAINT "accounting_assetinventorygood_pkey" PRIMARY KEY ("id")
 );
@@ -244,16 +223,16 @@ CREATE TABLE "accounting_assetinventoryrawmaterial" (
     "created_at" TIMESTAMPTZ(6) NOT NULL,
     "name" VARCHAR NOT NULL,
     "stock_id" VARCHAR,
-    "unit_cost" DECIMAL(10,2) NOT NULL,
+    "receipt_number" VARCHAR,
     "unit_of_measurement" VARCHAR,
+    "unit_cost" DECIMAL(10,2) NOT NULL,
     "quantity" DECIMAL(12,2) NOT NULL,
     "warehouse" VARCHAR,
     "location" VARCHAR,
-    "supplier_id" BIGINT,
-    "receipt_number" VARCHAR,
+    "raw_type" VARCHAR NOT NULL,
     "book_id" BIGINT NOT NULL,
     "currency_id" BIGINT NOT NULL,
-    "raw_type" VARCHAR NOT NULL,
+    "supplier_id" BIGINT,
 
     CONSTRAINT "accounting_assetinventoryrawmaterial_pkey" PRIMARY KEY ("id")
 );
@@ -276,7 +255,7 @@ CREATE TABLE "accounting_cashaccount" (
     "book_id" BIGINT NOT NULL,
     "currency_id" BIGINT NOT NULL,
 
-    CONSTRAINT "accounting_cashcategory_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "accounting_cashaccount_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -293,14 +272,14 @@ CREATE TABLE "accounting_currencycategory" (
 CREATE TABLE "accounting_equitycapital" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
-    "amount" DECIMAL(10,2) NOT NULL,
-    "note" TEXT,
     "date_invested" DATE NOT NULL,
+    "amount" DECIMAL(10,2) NOT NULL,
+    "new_shares_issued" INTEGER NOT NULL,
+    "note" TEXT,
     "book_id" BIGINT NOT NULL,
     "cash_account_id" BIGINT NOT NULL,
-    "member_id" BIGINT NOT NULL,
     "currency_id" BIGINT,
-    "new_shares_issued" INTEGER NOT NULL,
+    "member_id" BIGINT NOT NULL,
 
     CONSTRAINT "accounting_equitycapital_pkey" PRIMARY KEY ("id")
 );
@@ -323,16 +302,16 @@ CREATE TABLE "accounting_equitydivident" (
 -- CreateTable
 CREATE TABLE "accounting_equityexpense" (
     "id" BIGSERIAL NOT NULL,
+    "created_at" TIMESTAMPTZ(6) NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
     "date" DATE NOT NULL,
     "description" VARCHAR(200) NOT NULL,
-    "created_at" TIMESTAMPTZ(6) NOT NULL,
     "book_id" BIGINT NOT NULL,
+    "cash_account_id" BIGINT NOT NULL,
     "category_id" BIGINT,
     "currency_id" BIGINT NOT NULL,
-    "cash_account_id" BIGINT NOT NULL,
 
-    CONSTRAINT "accounting_expense_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "accounting_equityexpense_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -342,11 +321,11 @@ CREATE TABLE "accounting_equityrevenue" (
     "amount" DECIMAL(10,2) NOT NULL,
     "date" DATE NOT NULL,
     "description" VARCHAR(200) NOT NULL,
+    "invoice_number" VARCHAR(20),
+    "revenue_type" VARCHAR NOT NULL,
     "book_id" BIGINT NOT NULL,
     "cash_account_id" BIGINT NOT NULL,
     "currency_id" BIGINT,
-    "invoice_number" VARCHAR(20),
-    "revenue_type" VARCHAR NOT NULL,
 
     CONSTRAINT "accounting_equityrevenue_pkey" PRIMARY KEY ("id")
 );
@@ -364,6 +343,7 @@ CREATE TABLE "accounting_intransfer" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
+    "date" DATE,
     "description" VARCHAR(200),
     "book_id" BIGINT NOT NULL,
     "currency_id" BIGINT NOT NULL,
@@ -378,13 +358,13 @@ CREATE TABLE "accounting_invoice" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
     "due_cate" TIMESTAMPTZ(6) NOT NULL,
+    "items" JSONB NOT NULL,
     "invoice_type" VARCHAR NOT NULL,
+    "total" DECIMAL(10,2) NOT NULL,
+    "paid" DECIMAL(10,2) NOT NULL,
     "book_id" BIGINT NOT NULL,
     "company_id" BIGINT,
     "contact_id" BIGINT,
-    "items" JSONB NOT NULL,
-    "paid" DECIMAL(10,2) NOT NULL,
-    "total" DECIMAL(10,2) NOT NULL,
 
     CONSTRAINT "accounting_invoice_pkey" PRIMARY KEY ("id")
 );
@@ -395,11 +375,11 @@ CREATE TABLE "accounting_liabilityaccountspayable" (
     "created_at" TIMESTAMPTZ(6) NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
     "receipt" VARCHAR,
-    "supplier_id" BIGINT,
     "book_id" BIGINT NOT NULL,
     "currency_id" BIGINT NOT NULL,
+    "supplier_id" BIGINT,
 
-    CONSTRAINT "accounting_assetaccountspayable_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "accounting_liabilityaccountspayable_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -424,9 +404,9 @@ CREATE TABLE "accounting_metric" (
 -- CreateTable
 CREATE TABLE "accounting_stakeholderbook" (
     "id" BIGSERIAL NOT NULL,
+    "shares" INTEGER NOT NULL,
     "book_id" BIGINT NOT NULL,
     "member_id" BIGINT,
-    "shares" INTEGER NOT NULL,
 
     CONSTRAINT "accounting_stakeholderbook_pkey" PRIMARY KEY ("id")
 );
@@ -437,11 +417,11 @@ CREATE TABLE "accounting_transaction" (
     "created_at" TIMESTAMPTZ(6) NOT NULL,
     "value" DECIMAL(12,2) NOT NULL,
     "type" VARCHAR(50),
-    "book_id" BIGINT NOT NULL,
-    "currency_id" BIGINT NOT NULL,
-    "account_id" BIGINT,
     "type_pk" INTEGER,
     "account_balance" DECIMAL(12,2),
+    "account_id" BIGINT,
+    "book_id" BIGINT NOT NULL,
+    "currency_id" BIGINT NOT NULL,
 
     CONSTRAINT "accounting_transaction_pkey" PRIMARY KEY ("id")
 );
@@ -452,7 +432,7 @@ CREATE TABLE "authentication_member_permissions" (
     "member_id" BIGINT NOT NULL,
     "permission_id" BIGINT NOT NULL,
 
-    CONSTRAINT "authentication_member_access_levels_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "authentication_member_permissions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -461,7 +441,7 @@ CREATE TABLE "authentication_permission" (
     "name" VARCHAR(100) NOT NULL,
     "description" TEXT,
 
-    CONSTRAINT "authentication_accesslevel_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "authentication_permission_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -480,35 +460,25 @@ CREATE TABLE "crm_supplier" (
 );
 
 -- CreateTable
-CREATE TABLE "marketing_collection" (
-    "id" BIGSERIAL NOT NULL,
-    "title" VARCHAR(255),
-    "description" TEXT,
-    "image" VARCHAR(100),
-    "created_at" TIMESTAMPTZ(6) NOT NULL,
-
-    CONSTRAINT "marketing_collection_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "marketing_product" (
     "id" BIGSERIAL NOT NULL,
-    "created_at" TIMESTAMPTZ(6) NOT NULL,
-    "title" VARCHAR(255),
+    "created_at" TIMESTAMPTZ(6),
+    "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
     "sku" VARCHAR(12),
     "barcode" VARCHAR(14),
     "tags" VARCHAR(100)[],
-    "category" VARCHAR,
     "type" VARCHAR,
     "unit_of_measurement" VARCHAR,
     "quantity" DECIMAL(10,2),
     "price" DECIMAL(10,2),
     "cost" DECIMAL(10,2),
-    "featured" BOOLEAN NOT NULL,
-    "selling_while_out_of_stock" BOOLEAN NOT NULL,
+    "featured" BOOLEAN,
+    "selling_while_out_of_stock" BOOLEAN,
     "weight" DECIMAL(10,2),
-    "unit_of_weight" VARCHAR NOT NULL,
+    "unit_of_weight" VARCHAR,
+    "category_id" BIGINT,
+    "supplier_id" BIGINT,
 
     CONSTRAINT "marketing_product_pkey" PRIMARY KEY ("id")
 );
@@ -517,18 +487,9 @@ CREATE TABLE "marketing_product" (
 CREATE TABLE "marketing_product_collections" (
     "id" BIGSERIAL NOT NULL,
     "product_id" BIGINT NOT NULL,
-    "collection_id" BIGINT NOT NULL,
+    "productcollection_id" BIGINT NOT NULL,
 
     CONSTRAINT "marketing_product_collections_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "marketing_product_vendor" (
-    "id" BIGSERIAL NOT NULL,
-    "product_id" BIGINT NOT NULL,
-    "supplier_id" BIGINT NOT NULL,
-
-    CONSTRAINT "marketing_product_vendor_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -537,6 +498,7 @@ CREATE TABLE "marketing_productfile" (
     "file" VARCHAR(100) NOT NULL,
     "sequence" SMALLINT NOT NULL,
     "product_id" BIGINT,
+    "product_variant_id" BIGINT,
 
     CONSTRAINT "marketing_productfile_pkey" PRIMARY KEY ("id")
 );
@@ -544,13 +506,12 @@ CREATE TABLE "marketing_productfile" (
 -- CreateTable
 CREATE TABLE "marketing_productvariant" (
     "id" BIGSERIAL NOT NULL,
-    "barcode" VARCHAR(14),
-    "description" TEXT,
-    "sku" VARCHAR(12),
-    "price" DECIMAL(10,2),
-    "featured" BOOLEAN NOT NULL,
-    "cost" DECIMAL(10,2),
-    "quantity" DECIMAL(10,2),
+    "variant_sku" VARCHAR(12),
+    "variant_barcode" VARCHAR(14),
+    "variant_quantity" DECIMAL(10,2),
+    "variant_price" DECIMAL(10,2),
+    "variant_cost" DECIMAL(10,2),
+    "variant_featured" BOOLEAN NOT NULL,
     "product_id" BIGINT,
 
     CONSTRAINT "marketing_productvariant_pkey" PRIMARY KEY ("id")
@@ -584,11 +545,39 @@ CREATE TABLE "operating_machine" (
     CONSTRAINT "operating_machine_pkey" PRIMARY KEY ("id")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+-- CreateTable
+CREATE TABLE "accounting_currencyexchange" (
+    "id" BIGSERIAL NOT NULL,
+    "created_at" TIMESTAMPTZ(6) NOT NULL,
+    "from_amount" DECIMAL(10,2) NOT NULL,
+    "to_amount" DECIMAL(10,2) NOT NULL,
+    "date" DATE,
+    "book_id" BIGINT NOT NULL,
+    "from_cash_account_id" BIGINT NOT NULL,
+    "to_cash_account_id" BIGINT NOT NULL,
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+    CONSTRAINT "accounting_currencyexchange_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "marketing_productcategory" (
+    "id" BIGSERIAL NOT NULL,
+    "created_at" TIMESTAMPTZ(6) NOT NULL,
+    "name" VARCHAR(255),
+
+    CONSTRAINT "marketing_productcategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "marketing_productcollection" (
+    "id" BIGSERIAL NOT NULL,
+    "created_at" TIMESTAMPTZ(6) NOT NULL,
+    "title" VARCHAR(255),
+    "description" TEXT,
+    "image" VARCHAR(100),
+
+    CONSTRAINT "marketing_productcollection_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "auth_group_name_key" ON "auth_group"("name");
@@ -669,9 +658,6 @@ CREATE INDEX "todo_task_company_id_fed9e4bc" ON "todo_task"("company_id");
 CREATE INDEX "todo_task_contact_id_4691b54e" ON "todo_task"("contact_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "products_name_key" ON "products"("name");
-
--- CreateIndex
 CREATE INDEX "accounting_assetaccountsreceivable_book_id_9b813c34" ON "accounting_assetaccountsreceivable"("book_id");
 
 -- CreateIndex
@@ -726,13 +712,10 @@ CREATE UNIQUE INDEX "accounting_book_name_key" ON "accounting_book"("name");
 CREATE INDEX "accounting_book_name_6eb9bad9_like" ON "accounting_book"("name");
 
 -- CreateIndex
-CREATE INDEX "accounting_cashcategory_book_id_56033a99" ON "accounting_cashaccount"("book_id");
+CREATE INDEX "accounting_cashaccount_book_id_90f88e20" ON "accounting_cashaccount"("book_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_cashcategory_currency_id_ed9ccd42" ON "accounting_cashaccount"("currency_id");
-
--- CreateIndex
-CREATE INDEX "accounting_cashcategory_name_431b4fdc_like" ON "accounting_cashaccount"("name");
+CREATE INDEX "accounting_cashaccount_currency_id_807cd656" ON "accounting_cashaccount"("currency_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "unique_book_cashaccount" ON "accounting_cashaccount"("book_id", "name");
@@ -759,7 +742,7 @@ CREATE INDEX "accounting_equitycapital_cash_account_id_b51b8a10" ON "accounting_
 CREATE INDEX "accounting_equitycapital_currency_id_fbe16291" ON "accounting_equitycapital"("currency_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_equitycapital_stakeholder_id_249de618" ON "accounting_equitycapital"("member_id");
+CREATE INDEX "accounting_equitycapital_member_id_3a31aa46" ON "accounting_equitycapital"("member_id");
 
 -- CreateIndex
 CREATE INDEX "accounting_equitydivident_book_id_4784d867" ON "accounting_equitydivident"("book_id");
@@ -771,22 +754,22 @@ CREATE INDEX "accounting_equitydivident_cash_account_id_2006fe5d" ON "accounting
 CREATE INDEX "accounting_equitydivident_currency_id_22acf853" ON "accounting_equitydivident"("currency_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_equitydivident_stakeholder_id_5dbb375b" ON "accounting_equitydivident"("member_id");
+CREATE INDEX "accounting_equitydivident_member_id_160e5dde" ON "accounting_equitydivident"("member_id");
 
 -- CreateIndex
 CREATE INDEX "accounting_equityexpense_cash_account_id_bbe4c920" ON "accounting_equityexpense"("cash_account_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_expense_book_id_7cf396e0" ON "accounting_equityexpense"("book_id");
+CREATE INDEX "accounting_equityexpense_book_id_7c69774e" ON "accounting_equityexpense"("book_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_expense_category_id_4c3c6039" ON "accounting_equityexpense"("category_id");
+CREATE INDEX "accounting_equityexpense_category_id_fedd0995" ON "accounting_equityexpense"("category_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_expense_currency_id_4fa319fa" ON "accounting_equityexpense"("currency_id");
+CREATE INDEX "accounting_equityexpense_currency_id_2e603d51" ON "accounting_equityexpense"("currency_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "accounting_equityrevenue_invoice_number_2ddec667_uniq" ON "accounting_equityrevenue"("invoice_number");
+CREATE UNIQUE INDEX "accounting_equityrevenue_invoice_number_key" ON "accounting_equityrevenue"("invoice_number");
 
 -- CreateIndex
 CREATE INDEX "accounting_equityrevenue_book_id_784ed443" ON "accounting_equityrevenue"("book_id");
@@ -828,13 +811,13 @@ CREATE INDEX "accounting_invoice_company_id_38eec83f" ON "accounting_invoice"("c
 CREATE INDEX "accounting_invoice_contact_id_b3fed0ee" ON "accounting_invoice"("contact_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_assetaccountspayable_book_id_5c5fc572" ON "accounting_liabilityaccountspayable"("book_id");
+CREATE INDEX "accounting_liabilityaccountspayable_book_id_333eeb14" ON "accounting_liabilityaccountspayable"("book_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_assetaccountspayable_currency_id_14f235b1" ON "accounting_liabilityaccountspayable"("currency_id");
+CREATE INDEX "accounting_liabilityaccountspayable_currency_id_c8287afc" ON "accounting_liabilityaccountspayable"("currency_id");
 
 -- CreateIndex
-CREATE INDEX "accounting_assetaccountspayable_supplier_id_4b8ecab4" ON "accounting_liabilityaccountspayable"("supplier_id");
+CREATE INDEX "accounting_liabilityaccountspayable_supplier_id_07c161e0" ON "accounting_liabilityaccountspayable"("supplier_id");
 
 -- CreateIndex
 CREATE INDEX "accounting_metric_book_id_2ff86ad8" ON "accounting_metric"("book_id");
@@ -858,43 +841,43 @@ CREATE INDEX "accounting_transaction_book_id_ef611a98" ON "accounting_transactio
 CREATE INDEX "accounting_transaction_currency_id_73d486f9" ON "accounting_transaction"("currency_id");
 
 -- CreateIndex
-CREATE INDEX "authentication_member_access_levels_accesslevel_id_18b0c19b" ON "authentication_member_permissions"("permission_id");
+CREATE INDEX "authentication_member_permissions_member_id_25ee1da1" ON "authentication_member_permissions"("member_id");
 
 -- CreateIndex
-CREATE INDEX "authentication_member_access_levels_member_id_04e54cd1" ON "authentication_member_permissions"("member_id");
+CREATE INDEX "authentication_member_permissions_permission_id_18e23581" ON "authentication_member_permissions"("permission_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "authentication_member_ac_member_id_accesslevel_id_ea9935b1_uniq" ON "authentication_member_permissions"("member_id", "permission_id");
+CREATE UNIQUE INDEX "authentication_member_pe_member_id_permission_id_9c83b1c2_uniq" ON "authentication_member_permissions"("member_id", "permission_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "authentication_accesslevel_name_key" ON "authentication_permission"("name");
+CREATE UNIQUE INDEX "authentication_permission_name_key" ON "authentication_permission"("name");
 
 -- CreateIndex
-CREATE INDEX "authentication_accesslevel_name_d54598b1_like" ON "authentication_permission"("name");
+CREATE INDEX "authentication_permission_name_7b07510c_like" ON "authentication_permission"("name");
 
 -- CreateIndex
-CREATE INDEX "marketing_product_collections_collection_id_ec03201a" ON "marketing_product_collections"("collection_id");
+CREATE INDEX "marketing_product_category_id_c776e438" ON "marketing_product"("category_id");
+
+-- CreateIndex
+CREATE INDEX "marketing_product_supplier_id_c9957948" ON "marketing_product"("supplier_id");
 
 -- CreateIndex
 CREATE INDEX "marketing_product_collections_product_id_ab29b623" ON "marketing_product_collections"("product_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "marketing_product_collec_product_id_collection_id_2d075b49_uniq" ON "marketing_product_collections"("product_id", "collection_id");
+CREATE INDEX "marketing_product_collections_productcollection_id_2189399f" ON "marketing_product_collections"("productcollection_id");
 
 -- CreateIndex
-CREATE INDEX "marketing_product_vendor_product_id_b82003df" ON "marketing_product_vendor"("product_id");
-
--- CreateIndex
-CREATE INDEX "marketing_product_vendor_supplier_id_a37f2935" ON "marketing_product_vendor"("supplier_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "marketing_product_vendor_product_id_supplier_id_d2ac86d5_uniq" ON "marketing_product_vendor"("product_id", "supplier_id");
+CREATE UNIQUE INDEX "marketing_product_collec_product_id_productcollec_e8ddc69b_uniq" ON "marketing_product_collections"("product_id", "productcollection_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "marketing_productfile_sequence_key" ON "marketing_productfile"("sequence");
 
 -- CreateIndex
 CREATE INDEX "marketing_productfile_product_id_68c8359c" ON "marketing_productfile"("product_id");
+
+-- CreateIndex
+CREATE INDEX "marketing_productfile_product_variant_id_74a0d958" ON "marketing_productfile"("product_variant_id");
 
 -- CreateIndex
 CREATE INDEX "marketing_productvariant_product_id_d830f278" ON "marketing_productvariant"("product_id");
@@ -913,6 +896,15 @@ CREATE UNIQUE INDEX "operating_machine_name_key" ON "operating_machine"("name");
 
 -- CreateIndex
 CREATE INDEX "operating_machine_name_eb93fe62_like" ON "operating_machine"("name");
+
+-- CreateIndex
+CREATE INDEX "accounting_currencyexchange_book_id_3626bd75" ON "accounting_currencyexchange"("book_id");
+
+-- CreateIndex
+CREATE INDEX "accounting_currencyexchange_from_cash_account_id_4e5f1e9c" ON "accounting_currencyexchange"("from_cash_account_id");
+
+-- CreateIndex
+CREATE INDEX "accounting_currencyexchange_to_cash_account_id_25a856c2" ON "accounting_currencyexchange"("to_cash_account_id");
 
 -- AddForeignKey
 ALTER TABLE "auth_group_permissions" ADD CONSTRAINT "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" FOREIGN KEY ("permission_id") REFERENCES "auth_permission"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -1104,19 +1096,22 @@ ALTER TABLE "authentication_member_permissions" ADD CONSTRAINT "authentication_m
 ALTER TABLE "authentication_member_permissions" ADD CONSTRAINT "authentication_membe_permission_id_77771c1a_fk_authentic" FOREIGN KEY ("permission_id") REFERENCES "authentication_permission"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "marketing_product_collections" ADD CONSTRAINT "marketing_product_co_collection_id_ec03201a_fk_marketing" FOREIGN KEY ("collection_id") REFERENCES "marketing_collection"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "marketing_product" ADD CONSTRAINT "marketing_product_category_id_c776e438_fk_marketing" FOREIGN KEY ("category_id") REFERENCES "marketing_productcategory"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "marketing_product" ADD CONSTRAINT "marketing_product_supplier_id_c9957948_fk_crm_supplier_id" FOREIGN KEY ("supplier_id") REFERENCES "crm_supplier"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "marketing_product_collections" ADD CONSTRAINT "marketing_product_co_product_id_ab29b623_fk_marketing" FOREIGN KEY ("product_id") REFERENCES "marketing_product"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "marketing_product_vendor" ADD CONSTRAINT "marketing_product_ve_product_id_b82003df_fk_marketing" FOREIGN KEY ("product_id") REFERENCES "marketing_product"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "marketing_product_vendor" ADD CONSTRAINT "marketing_product_ve_supplier_id_a37f2935_fk_crm_suppl" FOREIGN KEY ("supplier_id") REFERENCES "crm_supplier"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "marketing_product_collections" ADD CONSTRAINT "marketing_product_co_productcollection_id_2189399f_fk_marketing" FOREIGN KEY ("productcollection_id") REFERENCES "marketing_productcollection"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "marketing_productfile" ADD CONSTRAINT "marketing_productfil_product_id_68c8359c_fk_marketing" FOREIGN KEY ("product_id") REFERENCES "marketing_product"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "marketing_productfile" ADD CONSTRAINT "marketing_productfil_product_variant_id_74a0d958_fk_marketing" FOREIGN KEY ("product_variant_id") REFERENCES "marketing_productvariant"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "marketing_productvariant" ADD CONSTRAINT "marketing_productvar_product_id_d830f278_fk_marketing" FOREIGN KEY ("product_id") REFERENCES "marketing_product"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -1126,4 +1121,13 @@ ALTER TABLE "marketing_productvariantattributevalue" ADD CONSTRAINT "marketing_p
 
 -- AddForeignKey
 ALTER TABLE "marketing_productvariantattributevalue" ADD CONSTRAINT "marketing_productvar_variant_id_4d257d6d_fk_marketing" FOREIGN KEY ("variant_id") REFERENCES "marketing_productvariant"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "accounting_currencyexchange" ADD CONSTRAINT "accounting_currencye_book_id_3626bd75_fk_accountin" FOREIGN KEY ("book_id") REFERENCES "accounting_book"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "accounting_currencyexchange" ADD CONSTRAINT "accounting_currencye_from_cash_account_id_4e5f1e9c_fk_accountin" FOREIGN KEY ("from_cash_account_id") REFERENCES "accounting_cashaccount"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "accounting_currencyexchange" ADD CONSTRAINT "accounting_currencye_to_cash_account_id_25a856c2_fk_accountin" FOREIGN KEY ("to_cash_account_id") REFERENCES "accounting_cashaccount"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
