@@ -8,6 +8,15 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id       Int     @id @default(autoincrement())
+  username String  @unique
+  email    String  @unique
+  password String
+  name     String?
+}
+
+
 model auth_group {
   id                     Int                      @id @default(autoincrement())
   name                   String                   @unique @db.VarChar(150)

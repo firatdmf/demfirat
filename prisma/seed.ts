@@ -31,7 +31,7 @@ async function main() {
       email: 'firatkarven@gmail.com',
       name: 'Firat',
       // password: `$2y$12$GBfcgD6XwaMferSOdYGiduw3Awuo95QAPhxFE0oNJ.Ds8qj3pzEZy`
-      password,
+      password: await hash('1887', 12),
     }
   })
   const client = await prisma.user.upsert({
@@ -46,17 +46,17 @@ async function main() {
     }
   })
 
-  const password_weronika = await hash('1919', 12)
-  const user_weronika = await prisma.user.upsert({
-    where: {username:'weronika'},
-    update:{},
-    create:{
-      username: 'weronika',
-      email:'import@maxa.pl',
-      name:'Weronika',
-      password: password_weronika
-    }
-  })
+  // const password_weronika = await hash('1919', 12)
+  // const user_weronika = await prisma.user.upsert({
+  //   where: {username:'weronika'},
+  //   update:{},
+  //   create:{
+  //     username: 'weronika',
+  //     email:'import@maxa.pl',
+  //     name:'Weronika',
+  //     password: password_weronika
+  //   }
+  // })
   console.log({ user })
 
 

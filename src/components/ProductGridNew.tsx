@@ -19,7 +19,7 @@ export interface Product {
   type: string | null;
   price: Decimal | null;
   quantity: Decimal | null;
-  unit_of_weight: string;
+  unit_of_weight: string | null;
 }
 
 // export interface ProductWithCategory extends Product {
