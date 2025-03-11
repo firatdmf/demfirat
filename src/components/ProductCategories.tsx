@@ -1,7 +1,6 @@
 "use client";
 import classes from "./ProductCategories.module.css";
 import Link from "next/link";
-import db from "@/vir_db/db.js";
 import Image from "next/image";
 interface ProductCategoriesProps {
   Headline: string;
@@ -12,17 +11,18 @@ function ProductCategories({
   EmbroideredSheerCurtainFabrics,
 }: ProductCategoriesProps) {
   let productCategories = [
-    // {
-    //   name: "Ready-made Curtains",
-    //   link: "/products/curtains/ready_made",
-    //   imgLink: "/image/products/ready-made/1337/1337_white/1337_grommets_displayed.jpg",
-    //   alt: "Ready Made Curtain",
-    // },
     {
-      name: EmbroideredSheerCurtainFabrics,
+      name: "Curtains",
+      link: "/products/curtains/ready_made",
+      imgLink: "/image/product/curtain/1337_grommets_displayed.avif",
+      alt: "Ready Made Curtain",
+    },
+    {
+      // name: EmbroideredSheerCurtainFabrics,
+      name: "Fabrics",
       link: "/products/fabrics/embroidery",
-      imgLink: "/media/products/kirat/8159.jpg",
-      alt: "Embroidered Sheer Fabrics",
+      imgLink: "/image/product/fabric/fabric_category_image.avif",
+      alt: "Fabrics",
     },
     // {
     //   name: "Plain Sheer Fabrics",

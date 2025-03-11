@@ -10,7 +10,6 @@ globalForPrisma.prisma || new PrismaClient({
     // If you want to print every query uncomment below
     // log:['query']
 })
-
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma 
 
 // since we are exporting this, this will only be executed once. After that we will reuse that same prisma client

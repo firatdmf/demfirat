@@ -52,7 +52,7 @@ async function ProductCardNew( {product} : ProductCardNewProps) {
               src={
                 "/image/product/" +
                 product_category_name +"/" +
-                product.sku + "/1337_grommets_displayed.jpg"
+                product.sku + "/" + product.sku + "_thumbnail.avif"
               }
               alt={
                 "Image of the " +
@@ -76,6 +76,7 @@ async function ProductCardNew( {product} : ProductCardNewProps) {
           {/* <div className={classes.productName}>
             {product.sku}
           </div> */}
+          <div className={classes.title}><b>{product.title}</b></div>
           <div className={classes.SKU}>{product.sku}</div>
           {/* {heartIcon} */}
           {/* <div className={classes.favorites}>Add to Favorites</div> */}

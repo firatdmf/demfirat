@@ -16,7 +16,6 @@ model User {
   name     String?
 }
 
-
 model auth_group {
   id                     Int                      @id @default(autoincrement())
   name                   String                   @unique @db.VarChar(150)
