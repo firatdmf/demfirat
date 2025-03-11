@@ -4,6 +4,7 @@ import ProductGridNew from '@/components/ProductGridNew';
 import { Decimal } from "@prisma/client/runtime/library";
 
 import { Product } from '@/components/ProductGridNew';
+import { ProductVariant } from '@/components/ProductGridNew';
 // import { Category } from '@/components/ProductGridNew';
 // import { ProductWithCategory } from '@/components/ProductGridNew';
 
@@ -14,9 +15,17 @@ import { Product } from '@/components/ProductGridNew';
 
 // This is a server component, so we can do async and database calls.
 async function CurtainsReadyMade() {
+  const product_category:ProductVariant[] = await prisma.marketing_productvariant.findMany({})
+  console.log('your product category is:')
+  console.log(product_category);
+  
+
   const products: Product[] = await prisma.marketing_product.findMany({
     orderBy: {
       id: 'desc'
+    },
+    where: {
+      featured: true
     },
 
   });
@@ -26,7 +35,7 @@ async function CurtainsReadyMade() {
       <h1>Hello This is the curtains ready made page.</h1>
       <p>The title of your product is:</p>
       {/* <p>{products?[0].title}</p> */}
-      <ProductGridNew products={products}/>
+      <ProductGridNew products={products} />
     </div>
   )
 }
