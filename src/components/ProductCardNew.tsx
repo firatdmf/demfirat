@@ -48,7 +48,7 @@ async function ProductCardNew( {product} : ProductCardNewProps) {
       >
         <div className={classes.card}>
           <div className={classes.image}>
-            <img
+            {/* <img
               src={
                 "/image/product/" +
                 product_category_name +"/" +
@@ -61,9 +61,8 @@ async function ProductCardNew( {product} : ProductCardNewProps) {
                 product.sku
               }
               key={product.id}
-              height={500}
-              width={500}
-            />
+
+            /> */}
           </div>
           {/* {product.category ? (
 

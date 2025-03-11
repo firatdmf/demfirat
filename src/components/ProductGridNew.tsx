@@ -33,6 +33,9 @@ interface ProductGridNewProps {
 function ProductGridNew({ products }: ProductGridNewProps) {
   return (
     <div className={classes.ProductGridNew}>
+      <div className={classes.filterMenu}>
+        
+      </div>
       <div className={classes.products}>
         {products?.map((product: Product, index: number) => {
           // return <p key={index}>{product.title ?? "No Title"}</p>

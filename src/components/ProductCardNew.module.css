@@ -1,6 +1,6 @@
 .ProductCardNew .card {
     position: relative;
-    height: 350px;
+    height: 300px;
     /* below can be omitted later */
     width:300px;
     /* min-width: 100%; */
@@ -10,27 +10,25 @@
     /* color:white; */
     overflow: hidden;
     /* height: 90%; */
-    max-width: 200px;
+    /* max-width: 200px; */
     /* border:6px dashed rgba(0,0,0,0.2); */
+    background-color: lightblue;
   }
   
-  .ProductCardNew .image {
+  /* .ProductCardNew .image {
     position: relative;
     width: 100%;
-    height: 82%;
-    /* height: 280px; */
     overflow: hidden;
     text-align: center;
-  }
+  } */
   
-  .ProductCardNew .image img {
-    /* width: auto;
-      height: auto; */
+  /* .ProductCardNew .image img {
     height: 100%;
     width: 100%;
     object-fit: cover;
     object-position: bottom;
-  }
+  } */
+
   
   /* .ProductCardNew .collectionName {
       position: absolute;
