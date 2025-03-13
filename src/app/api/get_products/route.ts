@@ -30,56 +30,75 @@ export interface ProductVariant {
 
 }
 
-export interface ProductVariantAttributeValue{
-    id: bigint;
-    value:string;
-    attribute_id?: bigint | null;
-    variant_id?: bigint | null;
+export interface ProductVariantAttribute {
+  id: bigint;
+  name: string | null;
+
+}
+
+export interface ProductVariantAttributeValue {
+  id: bigint;
+  value: string;
+  product_id?: bigint | null;
+  attribute_id?: bigint | null;
+  variant_id?: bigint | null;
 
 }
 
 declare global {
-    interface BigInt {
-        toJSON(): string;
-    }
+  interface BigInt {
+    toJSON(): string;
+  }
 }
 
 interface Data {
-    products?:Product[],
-    product_variants?:ProductVariant[],
-    product_variant_attributes?:any
+  products: Product[];
+  product_variants: ProductVariant[];
+  product_variant_attributes: ProductVariantAttribute[];
+  product_variant_attribute_values: ProductVariantAttributeValue[];
 }
 
 BigInt.prototype.toJSON = function () {
-    return this.toString();
+  return this.toString();
 };
 
-export async function GET(request: Request){
-    let data:Data = {}
-    const products = await prisma.marketing_product.findMany({
-        orderBy: {
-            id: 'desc'
-          },
-          where:{
-            featured: true
-          }
-    })
-    const product_variants = await prisma.marketing_productvariant.findMany({
+export async function GET(request: Request) {
+  let data: Data = {
+    products: [],
+    product_variants: [],
+    product_variant_attributes: [],
+    product_variant_attribute_values: [],
+  }
+  const products = await prisma.marketing_product.findMany({
+    orderBy: {
+      id: 'desc'
+    },
+    where: {
+      featured: true
+    }
+  })
+  const product_variants = await prisma.marketing_productvariant.findMany({
 
-    })
-    const product_variant_attributes = await prisma.marketing_productvariantattributevalue.findMany({
+  })
+  const product_variant_attributes = await prisma.marketing_productvariantattribute.findMany({
 
-    })
-    // console.log(product_variants);
-    // console.log(product_variant_attributes);
-    // data = {...products,...product_variants,...product_variant_attributes}
-    data["products"] = products
-    data["product_variants"] = product_variants
-    data["product_variant_attributes"] = product_variant_attributes
-    // console.log(data);
-    
+  })
+  const product_variant_attribute_values = await prisma.marketing_productvariantattributevalue.findMany({
 
-    
-    
-    return NextResponse.json(data)
+  })
+
+
+  // console.log(product_variants);
+  // console.log(product_variant_attributes);
+  // data = {...products,...product_variants,...product_variant_attributes}
+  data["products"] = products
+  data["product_variants"] = product_variants
+  data["product_variant_attributes"] = product_variant_attributes
+  data["product_variant_attribute_values"] = product_variant_attribute_values
+  // console.log(data);
+
+
+
+
+  return NextResponse.json(data)
 }

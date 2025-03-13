@@ -1,7 +1,9 @@
+"use client"
 import { Decimal } from "@prisma/client/runtime/library";
 import classes from "./ProductGridNew.module.css"
 import ProductCardNew from "./ProductCardNew";
 import Spinner from "@/components/Spinner"
+import { useState } from "react";
 // export interface Category {
 //   id: bigint;
 //   name: string | null;
@@ -35,9 +37,16 @@ export interface ProductVariant {
 
 }
 
-export interface ProductVariantAttributeValue{
+export interface ProductVariantAttribute {
   id: bigint;
-  value:string;
+  name: string | null;
+
+}
+
+export interface ProductVariantAttributeValue {
+  id: bigint;
+  value: string;
+  product_id?: bigint | null;
   attribute_id?: bigint | null;
   variant_id?: bigint | null;
 
@@ -51,12 +60,29 @@ export interface ProductVariantAttributeValue{
 interface ProductGridNewProps {
   products: Product[];
   product_variants: ProductVariant[];
+  product_variant_attributes: ProductVariantAttribute[];
   product_variant_attribute_values: ProductVariantAttributeValue[];
 }
-function ProductGridNew({ products, product_variants, product_variant_attribute_values }: ProductGridNewProps) {
-  if (!products) {
-    console.log('yes no products');
 
+
+function ProductGridNew({ products, product_variants, product_variant_attributes, product_variant_attribute_values }: ProductGridNewProps) {
+
+  const [filteredProducts, setfilteredProducts] = useState<Product[]>(products)
+  const filterProducts = (id: bigint) => {
+    setfilteredProducts(filteredProducts.filter((product) => product.id === id))
+  }
+
+
+
+  console.log("your product variants are");
+
+  console.log(product_variants);
+  console.log("and their values are: ");
+  console.log(product_variant_attribute_values)
+
+
+
+  if (!products) {
     return <Spinner />
   } else {
     return (
@@ -64,20 +90,35 @@ function ProductGridNew({ products, product_variants, product_variant_attribute_
         <div className={classes.FiratDisplay}>
           <div className={classes.filterMenu}>
             <ul>
-              <li>
-                Stock
-              </li>
-              <li>
-                Price
-              </li>
-              <li>
-                Tags
-              </li>
+              {/* color, or size */}
+              {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
+                // Filter the attribute values based on the attribute_id
+                const filteredValues = product_variant_attribute_values.filter(
+                  (value) => value.attribute_id === attribute.id
+                );
+
+                return (
+                  <li key={index}>
+                    {attribute.name}
+                    <ul>
+                      {filteredValues.map((value) => (
+                        // <li key={value.id}>{value.value}</li>
+                        <div key={value.id}>
+                          <label htmlFor={value.value}>{value.value}</label>
+                          <input type="checkbox" id={value.value} name={value.value} value={value.value} />
+                        </div>
+
+                      ))}
+                    </ul>
+                  </li>
+                );
+              })}
             </ul>
+
 
           </div>
           <div className={classes.products}>
-            {products?.map((product: Product, index: number) => {
+            {filteredProducts?.map((product: Product, index: number) => {
               // return <p key={index}>{product.title ?? "No Title"}</p>
               return <ProductCardNew key={index} product={product} />
             })}

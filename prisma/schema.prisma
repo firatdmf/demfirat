@@ -644,29 +644,30 @@ model crm_supplier {
 }
 
 model marketing_product {
-  id                            BigInt                          @id @default(autoincrement())
-  created_at                    DateTime?                       @db.Timestamptz(6)
-  title                         String                          @db.VarChar(255)
-  description                   String?
-  sku                           String?                         @db.VarChar(12)
-  barcode                       String?                         @db.VarChar(14)
-  tags                          String[]                        @db.VarChar(100)
-  type                          String?                         @db.VarChar
-  unit_of_measurement           String?                         @db.VarChar
-  quantity                      Decimal?                        @db.Decimal(10, 2)
-  price                         Decimal?                        @db.Decimal(10, 2)
-  cost                          Decimal?                        @db.Decimal(10, 2)
-  featured                      Boolean?
-  selling_while_out_of_stock    Boolean?
-  weight                        Decimal?                        @db.Decimal(10, 2)
-  unit_of_weight                String?                         @db.VarChar
-  category_id                   BigInt?
-  supplier_id                   BigInt?
-  marketing_productcategory     marketing_productcategory?      @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_category_id_c776e438_fk_marketing")
-  crm_supplier                  crm_supplier?                   @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_supplier_id_c9957948_fk_crm_supplier_id")
-  marketing_product_collections marketing_product_collections[]
-  marketing_productfile         marketing_productfile[]
-  marketing_productvariant      marketing_productvariant[]
+  id                                     BigInt                                   @id @default(autoincrement())
+  created_at                             DateTime?                                @db.Timestamptz(6)
+  title                                  String                                   @db.VarChar(255)
+  description                            String?
+  sku                                    String?                                  @db.VarChar(12)
+  barcode                                String?                                  @db.VarChar(14)
+  tags                                   String[]                                 @db.VarChar(100)
+  type                                   String?                                  @db.VarChar
+  unit_of_measurement                    String?                                  @db.VarChar
+  quantity                               Decimal?                                 @db.Decimal(10, 2)
+  price                                  Decimal?                                 @db.Decimal(10, 2)
+  cost                                   Decimal?                                 @db.Decimal(10, 2)
+  featured                               Boolean?
+  selling_while_out_of_stock             Boolean?
+  weight                                 Decimal?                                 @db.Decimal(10, 2)
+  unit_of_weight                         String?                                  @db.VarChar
+  category_id                            BigInt?
+  supplier_id                            BigInt?
+  marketing_productcategory              marketing_productcategory?               @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_category_id_c776e438_fk_marketing")
+  crm_supplier                           crm_supplier?                            @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_supplier_id_c9957948_fk_crm_supplier_id")
+  marketing_product_collections          marketing_product_collections[]
+  marketing_productfile                  marketing_productfile[]
+  marketing_productvariant               marketing_productvariant[]
+  marketing_productvariantattributevalue marketing_productvariantattributevalue[]
 
   @@index([category_id], map: "marketing_product_category_id_c776e438")
   @@index([supplier_id], map: "marketing_product_supplier_id_c9957948")
@@ -728,12 +729,15 @@ model marketing_productvariantattributevalue {
   value                             String                            @db.VarChar(255)
   attribute_id                      BigInt
   variant_id                        BigInt?
+  product_id                        BigInt?
   marketing_productvariantattribute marketing_productvariantattribute @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_attribute_id_2b0d83d5_fk_marketing")
+  marketing_product                 marketing_product?                @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_id_65518724_fk_marketing")
   marketing_productvariant          marketing_productvariant?         @relation(fields: [variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_variant_id_4d257d6d_fk_marketing")
 
   @@unique([variant_id, attribute_id], map: "marketing_productvariant_variant_id_attribute_id_253d4de3_uniq")
   @@index([attribute_id], map: "marketing_productvariantattributevalue_attribute_id_2b0d83d5")
   @@index([variant_id], map: "marketing_productvariantattributevalue_variant_id_4d257d6d")
+  @@index([product_id], map: "marketing_productvariantattributevalue_product_id_65518724")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.

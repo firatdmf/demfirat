@@ -5,6 +5,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 import { Product } from '@/components/ProductGridNew';
 import { ProductVariant } from '@/components/ProductGridNew';
+import { ProductVariantAttribute } from "@/components/ProductGridNew";
 import { ProductVariantAttributeValue } from "@/components/ProductGridNew";
 
 // import { Category } from '@/components/ProductGridNew';
@@ -37,11 +38,13 @@ async function CurtainsReadyMade() {
   let data
   let products:Product[] = []
   let product_variants:ProductVariant[] = []
+  let product_variant_attributes:ProductVariantAttribute[] = []
   let product_variant_attribute_values:ProductVariantAttributeValue[] = []
   if(response.ok){
     data = await response.json();
     products = data.products
     product_variants = data.product_variants
+    product_variant_attributes = data.product_variant_attributes
     product_variant_attribute_values = data.product_variant_attribute_values
   }
   
@@ -66,7 +69,7 @@ async function CurtainsReadyMade() {
     <div className={classes.CurtainsReadyMadePage}>
 
       {/* <p>{products?[0].title}</p> */}
-      <ProductGridNew products={products} product_variants={product_variants} product_variant_attribute_values = {product_variant_attribute_values} />
+      <ProductGridNew products={products} product_variants={product_variants} product_variant_attributes={product_variant_attributes} product_variant_attribute_values = {product_variant_attribute_values} />
     </div>
   )
 }
