@@ -1,5 +1,42 @@
 import { NextResponse } from 'next/server';
+import { Decimal } from "@prisma/client/runtime/library";
 import { prisma } from '@/lib/prisma';
+
+export interface Product {
+  id: bigint;
+  created_at: Date | null;
+  title: string | null;
+  description: string | null;
+  sku: string | null;
+  barcode: string | null;
+  tags: string[];
+  category_id?: bigint | null;
+  // category: String | null;
+  type: string | null;
+  price: Decimal | null;
+  quantity: Decimal | null;
+  unit_of_weight: string | null;
+}
+
+export interface ProductVariant {
+  id: bigint;
+  variant_sku: string | null;
+  variant_barcode: string | null;
+  variant_quantity: Decimal | null;
+  variant_price: Decimal | null;
+  variant_cost: Decimal | null;
+  variant_featured: boolean | null;
+  product_id: bigint | null;
+
+}
+
+export interface ProductVariantAttributeValue{
+    id: bigint;
+    value:string;
+    attribute_id?: bigint | null;
+    variant_id?: bigint | null;
+
+}
 
 declare global {
     interface BigInt {
@@ -7,11 +44,18 @@ declare global {
     }
 }
 
+interface Data {
+    products?:Product[],
+    product_variants?:ProductVariant[],
+    product_variant_attributes?:any
+}
+
 BigInt.prototype.toJSON = function () {
     return this.toString();
 };
 
 export async function GET(request: Request){
+    let data:Data = {}
     const products = await prisma.marketing_product.findMany({
         orderBy: {
             id: 'desc'
@@ -20,7 +64,22 @@ export async function GET(request: Request){
             featured: true
           }
     })
-    console.log(products);
+    const product_variants = await prisma.marketing_productvariant.findMany({
+
+    })
+    const product_variant_attributes = await prisma.marketing_productvariantattributevalue.findMany({
+
+    })
+    // console.log(product_variants);
+    // console.log(product_variant_attributes);
+    // data = {...products,...product_variants,...product_variant_attributes}
+    data["products"] = products
+    data["product_variants"] = product_variants
+    data["product_variant_attributes"] = product_variant_attributes
+    // console.log(data);
     
-    return NextResponse.json(products)
+
+    
+    
+    return NextResponse.json(data)
 }

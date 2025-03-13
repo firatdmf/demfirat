@@ -50,3 +50,11 @@
   text-decoration: none;
   color: black;
 }
+
+.ProductCardNew .price{
+  color:green;
+}
+
+.ProductCardNew .unauthenticated{
+  color:red;
+}

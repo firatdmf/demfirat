@@ -13,14 +13,14 @@ function ProductCategories({
   let productCategories = [
     {
       name: "Curtains",
-      link: "/products/curtains/ready_made",
+      link: "/product/curtain",
       imgLink: "/image/product/curtain/1337_grommets_displayed.avif",
       alt: "Ready Made Curtain",
     },
     {
       // name: EmbroideredSheerCurtainFabrics,
       name: "Fabrics",
-      link: "/products/fabrics/embroidery",
+      link: "/product/fabrics/embroidery",
       imgLink: "/image/product/fabric/fabric_category_image.avif",
       alt: "Fabrics",
     },

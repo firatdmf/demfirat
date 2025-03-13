@@ -14,7 +14,7 @@ function Menu(menuTArray:any) {
         <a className={classes.a} href="/">
           {menuTArray['menuTArray'][0]}
         </a>
-        <a className={classes.a} href="/products/fabrics/embroidery"  >
+        <a className={classes.a} href="/product/fabrics/embroidery"  >
         {menuTArray['menuTArray'][1]}
         </a>
         <a className={classes.a} href="/about">
