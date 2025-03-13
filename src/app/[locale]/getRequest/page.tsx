@@ -10,11 +10,10 @@ interface FabricData {
   }
 export default function Example2() {
     const [data, setData] = useState<FabricData | null>(null);
-
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch('/api/getFabrics'); // Call your API route
+          const response = await fetch('/api/get_products'); // Call your API route
           if (response.ok) {
             console.log('response was okay');
             
@@ -35,7 +34,7 @@ export default function Example2() {
     if (!data){
         return <div>...Loading</div>
     }else{
-        return <div>{data.data.jsonarray[0].design}</div>
+        return <div>{data.data}</div>
     }
     
 }

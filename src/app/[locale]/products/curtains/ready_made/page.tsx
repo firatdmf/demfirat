@@ -5,6 +5,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 import { Product } from '@/components/ProductGridNew';
 import { ProductVariant } from '@/components/ProductGridNew';
+
 // import { Category } from '@/components/ProductGridNew';
 // import { ProductWithCategory } from '@/components/ProductGridNew';
 
@@ -15,20 +16,27 @@ import { ProductVariant } from '@/components/ProductGridNew';
 
 // This is a server component, so we can do async and database calls.
 async function CurtainsReadyMade() {
-  const product_category:ProductVariant[] = await prisma.marketing_productvariant.findMany({})
-  console.log('your product category is:')
-  console.log(product_category);
+  const link = new URL(`${process.env.NEXTAUTH_URL}/api/get_products`);
+  // const product_category:ProductVariant[] = await prisma.marketing_productvariant.findMany({})
+  // console.log('your product category is:')
+  // console.log(product_category);
   
 
-  const products: Product[] = await prisma.marketing_product.findMany({
-    orderBy: {
-      id: 'desc'
-    },
-    where: {
-      featured: true
-    },
+  // const products: Product[] = await prisma.marketing_product.findMany({
+  //   orderBy: {
+  //     id: 'desc'
+  //   },
+  //   where: {
+  //     featured: true
+  //   },
 
-  });
+  // });
+  const response = await fetch(link);
+  let products:Product[] = []
+  if(response.ok){
+    products = await response.json();
+  }
+
   return (
     <div className={classes.CurtainsReadyMadePage}>
 

@@ -26,18 +26,20 @@ async function ProductCardNew( {product} : ProductCardNewProps) {
   // }
 
 
-  interface ProductCategoryObject{
-    name:string
-  }
+  // interface ProductCategoryObject{
+  //   name:string
+  // }
 
 
   
 
-  // Prisma fails to bring the foreignkey properties, so I did it raw.
-  const product_category:ProductCategoryObject[] = await prisma.$queryRaw`select name from marketing_productcategory where id = ${product.category_id}`;
+  // // Prisma fails to bring the foreignkey properties, so I did it raw.
+  const product_category:any[] = await prisma.$queryRaw`select name from marketing_productcategory where id = ${product.category_id}`;
 
   const product_category_name = product_category[0].name
-  // console.log(typeof(product_category[0].name));
+  console.log(typeof(product_category[0].name));
+  // const product_category_name = "curtain"
+  // console.log(product.category_id)
   
 
   return (
