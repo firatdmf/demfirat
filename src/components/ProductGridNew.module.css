@@ -13,20 +13,43 @@
 }
 
 
-
 .ProductGridNew .FiratDisplay .filterMenu {
-  min-width: 350px;
+  /* min-width: 350px; */
   margin-right: 35px;
   width: 20%;
   /* height: 500px; */
   background-color: lightblue;
   justify-content: center;
   padding:40px;
+  border-radius: 5px;
 }
 
-/* .ProductGridNew .FiratDisplay .filterMenu ul{
-  list-style-type: none;
-} */
+.ProductGridNew .attribute_value_item_box{
+  display: flex;
+}
+
+.ProductGridNew .attribute_value_item_box .link{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color:inherit;
+  margin-left:3px;
+  /* vertical-align: bottom; */
+  /* vertical-align:text-top; */
+}
+
+.ProductGridNew .attribute_value_item_box .link div{
+  margin:2px;
+  /* font-size: 1.4rem; */
+}
+
+
+.ProductGridNew .clearFiltersButton{
+  text-decoration: none;
+}
+
+
+
 
 .ProductGridNew .FiratDisplay .products {
   padding: 0 50px;
@@ -37,7 +60,7 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   justify-content: center;
   align-items: center;
-  justify-items: center;
+  justify-items: start;
 }
 
 .ProductGridNew .loadMoreButton {
@@ -61,10 +84,10 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 .ProductGridNew .search {
-  width: 100%;
+  /* width: 100%; */
   position: relative;
   display: flex;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .ProductGridNew .searchTerm {
@@ -144,6 +167,36 @@
   border: 4px white solid;
 }
 
+.ProductGridNew .iconContainer{
+  display: flex;
+}
+
+.ProductGridNew .filterToggleContainer{
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.ProductGridNew .filterToggleButton {
+  /* margin-left: 1rem; */
+  padding: 0.5rem 1rem;
+  width: 90%;
+  /* margin:0 10px; */
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: none;
+}
+
+.ProductGridNew .filterToggleButton:hover {
+  background-color: #005bb5;
+}
+
+
+
 @media screen and (max-width: 768px) {
   .cover {
     display: none;
@@ -161,8 +214,21 @@
     flex-direction: column;
   }
 
+  .ProductGridNew .filterToggleButton{
+    display:block;
+  }
+
   .ProductGridNew .FiratDisplay .filterMenu {
     width: 100%;
+    margin-right:0;
+  }
+
+  .ProductGridNew .filterMenuClosed {
+    display: none;
+  }
+
+  .ProductGridNew .filterMenuOpen {
+    display: block;
   }
 
   .ProductGridNew .FiratDisplay .products {
