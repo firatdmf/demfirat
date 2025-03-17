@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import classes from "./ProductCategories.module.css";
 import Link from "next/link";
 import Image from "next/image";
