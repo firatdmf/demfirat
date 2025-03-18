@@ -49,7 +49,6 @@ async function CurtainsReadyMade({ searchParams, }: { searchParams: { [key: stri
     product_variant_attribute_values = data.product_variant_attribute_values
   }
 
-
   // ------------------------------------------------------------------------------------------------
   // Below is an api call to our django application
 

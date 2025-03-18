@@ -6,20 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { usePathname } from 'next/navigation'
 import { Decimal } from '@prisma/client/runtime/library';
 import { Product } from '@/components/ProductGridNew';
-// interface Product {
-//   id: bigint;
-//   created_at: Date;
-//   title: string | null;
-//   description: string | null;
-//   sku: string | null;
-//   barcode: string | null;
-//   tags: string[];
-//   category: string | null;
-//   type: string | null;
-//   price: Decimal | null;
-//   quantity: Decimal | null;
-//   // unit_of_weight: string;
-// }
+
 
 interface ProductDetailCardNewProps {
   product:Product

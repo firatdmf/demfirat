@@ -28,7 +28,7 @@ interface ProductCategory {
 // const ProductCardNew: React.FC<ProductCardNewProps> = ({ product }) => {
 function ProductCardNew({ product }: ProductCardNewProps) {
 
-  // Check if the user is logged in.
+  // Check if the user is logged in. If they are then display price.
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -53,7 +53,9 @@ function ProductCardNew({ product }: ProductCardNewProps) {
 
 
   const pathname = usePathname()
+  // product/curtain => curtain
   let product_category_name = pathname.split("/").at(-1);
+  // let product_category_name = product.category_id
 
 
 

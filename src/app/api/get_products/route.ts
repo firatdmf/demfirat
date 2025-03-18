@@ -87,6 +87,9 @@ export async function GET(request: Request) {
 
   })
 
+  
+  
+
 
   // console.log(product_variants);
   // console.log(product_variant_attributes);

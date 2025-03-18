@@ -15,7 +15,7 @@ const ProductCard: NextPage<Props> = (props) => {
   return (
     <div className={classes.ProductCardComponent}>
       <Link
-        href={"/products/fabrics/embroidery/" + product.design}
+        href={"/product/fabrics/embroidery/" + product.design}
         className={classes.link}
       >
         <div className={classes.card}>
