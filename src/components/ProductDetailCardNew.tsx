@@ -41,8 +41,62 @@ function ProductDetailCardNew({ product, imageFiles }: ProductDetailCardNewPageP
 
   const [SelectedThumbIndex, setSelectedThumbIndex] = useState<number | null>(0);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
+  const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
+
   const selectThumb = (index: number) => {
     setSelectedThumbIndex(index);
+  };
+
+  const handleNextImage = () => {
+    if (SelectedThumbIndex !== null) {
+      setSelectedThumbIndex((SelectedThumbIndex + 1) % imageFiles.length);
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (SelectedThumbIndex !== null) {
+      setSelectedThumbIndex((SelectedThumbIndex - 1 + imageFiles.length) % imageFiles.length);
+    }
+  };
+
+  // const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //   const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+  //   const x = ((e.clientX - left) / width) * 100;
+  //   const y = ((e.clientY - top) / height) * 100;
+  //   setZoomPosition({ x, y });
+  //   setZoomBoxPosition({ x: e.clientX, y: e.clientY });
+
+  // };
+  const handleMouseMove = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+    const img = e.currentTarget as HTMLImageElement; // Get the image element
+    
+    // Get intrinsic dimensions of the image
+    const naturalWidth = img.naturalWidth;
+    const naturalHeight = img.naturalHeight;
+  
+    // Get rendered dimensions and position of the image
+    const rect = img.getBoundingClientRect();
+    
+    // Calculate the mouse position relative to the rendered image size
+    const xRelative = (e.clientX - rect.left) / rect.width;
+    const yRelative = (e.clientY - rect.top) / rect.height;
+  
+    // Convert the relative position to the intrinsic size
+    const xPercent = xRelative * 100; // Percentage position within the image
+    const yPercent = yRelative * 100;
+  
+    // Calculate zoom box position based on the cursor location
+    const zoomBoxX = e.clientX - 100; // Offset by half the zoom box size (200px / 2)
+    const zoomBoxY = e.clientY - 100;
+  
+    setZoomPosition({ x: xPercent, y: yPercent });
+    setZoomBoxPosition({ x: zoomBoxX, y: zoomBoxY });
+  };
+
+  const handleMouseLeave = () => {
+    setZoomPosition(null);
+    setZoomBoxPosition(null);
   };
 
   // const handleImageLoad = () => {
@@ -55,7 +109,7 @@ function ProductDetailCardNew({ product, imageFiles }: ProductDetailCardNewPageP
   if (!product) {
     return <div>Loading...</div>;
   }
-  
+
 
 
   return (
@@ -75,7 +129,7 @@ function ProductDetailCardNew({ product, imageFiles }: ProductDetailCardNewPageP
                     <img
                       src={`/image/product/curtain/${product.sku}/${image}`}
                       alt=""
-                      // onLoad={handleImageLoad}
+                    // onLoad={handleImageLoad}
                     />
                   </div>
 
@@ -84,17 +138,34 @@ function ProductDetailCardNew({ product, imageFiles }: ProductDetailCardNewPageP
             })}
           </div>
           <div className={classes.gallery}>
-            <div className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
+            <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
+            <div
+              className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}
+            >
 
               <img
                 src={`/image/product/curtain/${product.sku}/${imageFiles[SelectedThumbIndex ?? 0]}`}
                 alt=""
                 // onLoad={handleImageLoad}
                 // className={imageLoaded ? `${classes.loaded}` : ''}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
               />
+              {zoomPosition && zoomBoxPosition && (
+                <div
+                  className={classes.zoom}
+                  style={{
+                    backgroundImage: `url(/image/product/curtain/${product.sku}/${imageFiles[SelectedThumbIndex ?? 0]})`,
+                    backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                    top: `${zoomBoxPosition.y}px`,
+                    left: `${zoomBoxPosition.x}px`,
+                    // transform: 'translate(-50%, -50%)'
+                  }}
+                />
+              )}
             </div>
 
-
+            <button className={classes.nextButton} onClick={handleNextImage}>{">"}</button>
             {/* <img src="/media/products/embroidered_sheer_curtain_fabrics/1798T_G31.webp" alt="" /> */}
           </div>
 

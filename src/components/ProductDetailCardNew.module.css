@@ -1,3 +1,7 @@
+/* .ProductDetailCardNew {
+    display: flex;
+    justify-content: center;
+} */
 .ProductDetailCardNew .detailCardContainer {
     display: flex;
     background-color: lightblue;
@@ -6,6 +10,8 @@
     margin: 10px;
     justify-content: center;
     gap: 2rem;
+    /* width: max-content; */
+    
 }
 
 .ProductDetailCardNew .detailCardContainer .productMedia {
@@ -47,21 +53,53 @@
 
 .ProductDetailCardNew .detailCardContainer .productMedia .gallery {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     max-height: 100%;
     width: 600px;
     height: 600px;
 
 }
 
+.ProductDetailCardNew .prevButton,
+.ProductDetailCardNew .nextButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.ProductDetailCardNew .prevButton {
+  left: 0;
+}
+
+.ProductDetailCardNew .nextButton {
+  right: 0;
+}
+
+.ProductDetailCardNew .prevButton:hover,
+.ProductDetailCardNew .nextButton:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
 .ProductDetailCardNew .detailCardContainer .productMedia .gallery .img {
     /* aspect-ratio: 1/1; */
     position: relative;
+    padding:10px;
 
     height: 100%;
     width: 100%;
     /* width: auto; */
     /* transition: opacity 0.5s ease-in-out;
     opacity: 0; */
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 10px;
 }
 
 .ProductDetailCardNew .detailCardContainer .productMedia .gallery .img img {
@@ -69,9 +107,29 @@
     width: 100%;
     object-fit: contain;
     /* object-position: bottom; */
-    border-radius: 5px;
 
 }
+.ProductDetailCardNew .gallery .img .zoom {
+    /* position: fixed;
+    width: 200px;
+    height: 200px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: 400%;
+    pointer-events: none;
+    z-index: 2; */
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: 1000%; /* Adjust this to fit the natural size */
+    pointer-events: none;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+  }
 
 /* .ProductDetailCardNew .detailCardContainer .productMedia .gallery  .loaded {
     opacity: 1;
