@@ -51,7 +51,7 @@ async function page({ params, searchParams }: PageProps) {
 
   // make api call to get the product from database
   let data: Data
-  let product
+  let product: Product | null = null
   let product_variants: ProductVariant[] = []
   let product_variant_attributes: ProductVariantAttribute[] = []
   let product_variant_attribute_values: ProductVariantAttributeValue[] = []
@@ -98,7 +98,7 @@ async function page({ params, searchParams }: PageProps) {
       variant_folders.map((variant_folder) => {
         variant_images = fs.readdirSync(path.join(productImageFolder, variant_folder));
         // image_directories.variant_images[folder] = folders.map(image => `image/product/curtain/${product.sku}/${folder}/${image}`);
-        image_directories.variant_images[variant_folder] = variant_images.map(image => `/image/product/curtain/${product.sku}/${variant_folder}/${image}`);
+        image_directories.variant_images[variant_folder] = variant_images.map(image => `/image/product/curtain/${product?.sku}/${variant_folder}/${image}`);
 
       })
       // image_directories.variants = fs.readdirSync()

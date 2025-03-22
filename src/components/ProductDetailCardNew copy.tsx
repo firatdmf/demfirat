@@ -13,14 +13,30 @@ type ProductDetailCardNewPageProps = {
   imageFiles: string[],
   product_category: string | null;
   searchParams: { [key: string]: string | string[] | undefined };
+  image_directories: {
+    thumbnail: string;
+    main_images: string[];
+    variant_images: {
+      [key: string]: string[];
+    };
+  }
 }
 
+type ImageDirectories = {
+  thumbnail: string;
+  main_images: string[];
+  variant_images: {
+    [key: string]: string[];
+  };
+};
+
 // this product passed down from app/[locale]/product/........./[sku]/page.tsx
-function ProductDetailCardNew({ product, product_category, product_variants, product_variant_attributes, product_variant_attribute_values, imageFiles, searchParams }: ProductDetailCardNewPageProps) {
+function ProductDetailCardNew({ product, product_category, product_variants, product_variant_attributes, product_variant_attribute_values, image_directories, searchParams }: ProductDetailCardNewPageProps) {
   const [SelectedThumbIndex, setSelectedThumbIndex] = useState<number | null>(0);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
+  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
 
   const { status } = useSession({
     required: true,
@@ -30,26 +46,48 @@ function ProductDetailCardNew({ product, product_category, product_variants, pro
     },
   });
 
-  console.log(status);
-
-  // Function to set default selections in searchParams
-  const setDefaultSelections = (params: URLSearchParams) => {
+  // Initialize searchParams with default selections
+  useEffect(() => {
+    const initialAttributes: { [key: string]: string } = {};
     product_variant_attributes.forEach(attribute => {
-      const firstValue = product_variant_attribute_values.find(value => value.attribute_id === attribute.id)?.value;
-      if (firstValue && !params.has(attribute.name ?? '')) {
-        params.set(attribute.name ?? '', firstValue);
+      const value = searchParams[attribute.name ?? ''] as string;
+      if (value) {
+        initialAttributes[attribute.name ?? ''] = value;
+      } else {
+        const firstValue = product_variant_attribute_values.find(val => val.attribute_id === attribute.id)?.value;
+        if (firstValue) {
+          initialAttributes[attribute.name ?? ''] = firstValue;
+        }
       }
+    });
+    setSelectedAttributes(initialAttributes);
+  }, [product_variant_attributes, product_variant_attribute_values, searchParams]);
+
+  // Function to find the corresponding product variant based on selected attribute values
+  const findSelectedVariant = () => {
+    return product_variants.find(variant => {
+      return product_variant_attributes.every(attribute => {
+        const paramValue = selectedAttributes[attribute.name ?? ''];
+        const matchingValue = product_variant_attribute_values.find(value => value.attribute_id === attribute.id && value.variant_id === variant.id);
+        return matchingValue && paramValue === matchingValue.value;
+      });
     });
   };
 
-  // Initialize searchParams with default selections
-  const params = new URLSearchParams(searchParams as Record<string, string>);
-  setDefaultSelections(params);
+  const selectedVariant = findSelectedVariant();
+  let imageFiles = [""];
+  if (selectedVariant?.variant_sku) {
+    imageFiles = image_directories.variant_images[selectedVariant.variant_sku];
+  }
 
-  // Update the URL with the default selections
+  // Update the URL with the selected attributes
   useEffect(() => {
-    window.history.replaceState({}, '', `?${params.toString()}`);
-  }, [params]);
+    const newParams = new URLSearchParams();
+    Object.keys(selectedAttributes).forEach(key => {
+      newParams.set(key, selectedAttributes[key]);
+    });
+    window.history.replaceState({}, '', `?${newParams.toString()}`);
+  }, [selectedAttributes]);
 
   const selectThumb = (index: number) => {
     setSelectedThumbIndex(index);
@@ -106,25 +144,13 @@ function ProductDetailCardNew({ product, product_category, product_variants, pro
       .map(value => value.value)))
   }));
 
-  const generateHref = (attributeName: string, value: string) => {
-    const newParams = new URLSearchParams(params);
-    newParams.set(attributeName, value);
-    return `?${newParams.toString()}`;
+  const handleAttributeChange = (attributeName: string, value: string) => {
+    setSelectedThumbIndex(0); // Reset the selected thumb index to 0
+    setSelectedAttributes(prev => ({
+      ...prev,
+      [attributeName]: value
+    }));
   };
-
-  // Function to find the corresponding product variant based on selected attribute values
-  const findSelectedVariant = () => {
-    return product_variants.find(variant => {
-      return product_variant_attributes.every(attribute => {
-        const paramValue = params.get(attribute.name ?? '');
-        const matchingValue = product_variant_attribute_values.find(value => value.attribute_id === attribute.id && value.variant_id === variant.id);
-        return matchingValue && paramValue === matchingValue.value;
-      });
-    });
-  };
-
-  const selectedVariant = findSelectedVariant();
-  console.log("Selected Variant:", selectedVariant);
 
   if (!product) {
     return <div>Loading...</div>;
@@ -135,23 +161,37 @@ function ProductDetailCardNew({ product, product_category, product_variants, pro
       <div className={classes.detailCardContainer}>
         <div className={classes.productMedia}>
           <div className={classes.thumbs}>
-            {imageFiles.map((image, index) => {
+            {selectedVariant && selectedVariant.variant_sku && image_directories.variant_images[selectedVariant.variant_sku] ? image_directories.variant_images[selectedVariant.variant_sku].map((image, index) => {
               return (
                 <div
                   className={`${classes.thumb} ${SelectedThumbIndex === index ? classes.thumb_selected : ''}`}
                   key={index}
                   onClick={() => selectThumb(index)}>
-
                   <div className={classes.img}>
                     <img
-                      src={`/image/product/${product_category}/${product.sku}/${image}`}
+                      src={image}
                       alt=""
                     />
                   </div>
-
                 </div>
               )
-            })}
+            }) :
+              image_directories.main_images.map((image, index) => {
+                return (
+                  <div
+                    className={`${classes.thumb} ${SelectedThumbIndex === index ? classes.thumb_selected : ''}`}
+                    key={index}
+                    onClick={() => selectThumb(index)}>
+                    <div className={classes.img}>
+                      <img
+                        src={image}
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                )
+              })
+            }
           </div>
           <div className={classes.gallery}>
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
@@ -159,7 +199,7 @@ function ProductDetailCardNew({ product, product_category, product_variants, pro
               className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}
             >
               <img
-                src={`/image/product/${product_category}/${product.sku}/${imageFiles[SelectedThumbIndex ?? 0]}`}
+                src={`${imageFiles[SelectedThumbIndex ?? 0]}`}
                 alt=""
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
@@ -168,7 +208,7 @@ function ProductDetailCardNew({ product, product_category, product_variants, pro
                 <div
                   className={classes.zoom}
                   style={{
-                    backgroundImage: `url(/image/product/${product_category}/${product.sku}/${imageFiles[SelectedThumbIndex ?? 0]})`,
+                    backgroundImage: `url(${imageFiles[SelectedThumbIndex ?? 0]})`,
                     backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
                     top: `${zoomBoxPosition.y}px`,
                     left: `${zoomBoxPosition.x}px`,
@@ -190,22 +230,20 @@ function ProductDetailCardNew({ product, product_category, product_variants, pro
                   <label>{attribute.name}</label>
                   <div className={classes.variant_links}>
                     {values.map(value => {
-                      const href = generateHref(attribute.name ?? '', value);
+                      const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                       const paramKey = String(attribute.name);
                       const paramValue = String(value);
 
-                      const currentValues = params.get(paramKey)?.split(',') || [];
-                      const isChecked = currentValues.includes(paramValue);
+                      const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                       return (
                         <div key={value}>
-                          <Link href={href} replace className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}>
+                          <Link href={href} replace className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`} onClick={() => handleAttributeChange(attribute.name ?? '', value)}>
                             {value}
                           </Link>
                         </div>
                       );
                     })}
                   </div>
-
                 </li>
               ))}
             </ul>
