@@ -14,7 +14,7 @@ function ProductCategories({
     {
       name: "Curtains",
       link: "/product/curtain",
-      imgLink: "/image/product/curtain/1337_grommets_displayed.avif",
+      imgLink: "/image/product/curtain/curtain_thumbnail.avif",
       alt: "Ready Made Curtain",
     },
     {
