@@ -47,10 +47,10 @@ export interface ProductVariantAttribute {
 
 export interface ProductVariantAttributeValue {
     id: bigint;
-    value: string;
+    product_variant_attribute_value: string;
     product_id?: bigint | null;
-    attribute_id?: bigint | null;
-    variant_id?: bigint | null;
+    product_variant_attribute_id?: bigint | null;
+    product_variant_id?: bigint | null;
 
 }
 interface Data {
@@ -115,7 +115,7 @@ export async function GET(request: Request) {
 
             // Filter attributes based on attribute_values
             const product_variant_attributes = (await prisma.marketing_productvariantattribute.findMany()).filter(attribute =>
-                product_variant_attribute_values.some(attribute_value => attribute_value.attribute_id === attribute.id)
+                product_variant_attribute_values.some(attribute_value => attribute_value.product_variant_attribute_id === attribute.id)
             );
             // console.log(product_variant_attributes);
 
@@ -123,19 +123,22 @@ export async function GET(request: Request) {
             data["product_category"] = product_category.name
             data["product_variants"] = product_variants
             data["product_variant_attributes"] = product_variant_attributes
-            data["product_variant_attribute_values"] = product_variant_attribute_values
+            data["product_variant_attribute_values"] = product_variant_attribute_values.map(val => ({
+                ...val,
+                value: val.product_variant_attribute_value
+            }));
             // console.log(data);
-            
+
             console.timeEnd('measuredo')
             return NextResponse.json(data)
-            
-            
-            
+
+
+
 
 
 
         }
-    }else{
+    } else {
         return NextResponse.json({ message: "Product not found" }, { status: 404 });
     }
 

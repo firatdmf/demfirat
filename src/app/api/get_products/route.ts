@@ -37,11 +37,11 @@ export interface ProductVariantAttribute {
 }
 
 export interface ProductVariantAttributeValue {
-  id: bigint;
-  value: string;
-  product_id?: bigint | null;
-  attribute_id?: bigint | null;
-  variant_id?: bigint | null;
+    id: bigint;
+    product_variant_attribute_value: string;
+    product_id?: bigint | null;
+    product_variant_attribute_id?: bigint | null;
+    product_variant_id?: bigint | null;
 
 }
 

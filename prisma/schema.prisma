@@ -648,20 +648,22 @@ model marketing_product {
   created_at                             DateTime?                                @db.Timestamptz(6)
   title                                  String                                   @db.VarChar(255)
   description                            String?
-  sku                                    String?                                  @db.VarChar(12)
+  sku                                    String?                                  @unique(map: "marketing_product_sku_4e12cb16_uniq") @db.VarChar(12)
   barcode                                String?                                  @db.VarChar(14)
   tags                                   String[]                                 @db.VarChar(100)
   type                                   String?                                  @db.VarChar
   unit_of_measurement                    String?                                  @db.VarChar
   quantity                               Decimal?                                 @db.Decimal(10, 2)
   price                                  Decimal?                                 @db.Decimal(10, 2)
-  cost                                   Decimal?                                 @db.Decimal(10, 2)
   featured                               Boolean?
   selling_while_out_of_stock             Boolean?
   weight                                 Decimal?                                 @db.Decimal(10, 2)
   unit_of_weight                         String?                                  @db.VarChar
   category_id                            BigInt?
   supplier_id                            BigInt?
+  has_variants                           Boolean
+  datasheet_url                          String?                                  @db.VarChar(200)
+  minimum_inventory_level                Decimal?                                 @db.Decimal(10, 2)
   marketing_productcategory              marketing_productcategory?               @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_category_id_c776e438_fk_marketing")
   crm_supplier                           crm_supplier?                            @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_supplier_id_c9957948_fk_crm_supplier_id")
   marketing_product_collections          marketing_product_collections[]
@@ -671,6 +673,10 @@ model marketing_product {
 
   @@index([category_id], map: "marketing_product_category_id_c776e438")
   @@index([supplier_id], map: "marketing_product_supplier_id_c9957948")
+  @@index([barcode], map: "marketing_product_barcode_1e6ca3df")
+  @@index([barcode], map: "marketing_product_barcode_1e6ca3df_like")
+  @@index([featured], map: "marketing_product_featured_6995ee9a")
+  @@index([sku], map: "marketing_product_sku_4e12cb16_like")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -690,7 +696,6 @@ model marketing_product_collections {
 model marketing_productfile {
   id                       BigInt                    @id @default(autoincrement())
   file                     String                    @db.VarChar(100)
-  sequence                 Int                       @unique @db.SmallInt
   product_id               BigInt?
   product_variant_id       BigInt?
   marketing_product        marketing_product?        @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productfil_product_id_68c8359c_fk_marketing")
@@ -710,11 +715,17 @@ model marketing_productvariant {
   variant_cost                           Decimal?                                 @db.Decimal(10, 2)
   variant_featured                       Boolean
   product_id                             BigInt?
+  variant_datasheet_url                  String?                                  @db.VarChar(200)
+  variant_minimum_inventory_level        Decimal?                                 @db.Decimal(10, 2)
   marketing_productfile                  marketing_productfile[]
   marketing_product                      marketing_product?                       @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_id_d830f278_fk_marketing")
   marketing_productvariantattributevalue marketing_productvariantattributevalue[]
 
   @@index([product_id], map: "marketing_productvariant_product_id_d830f278")
+  @@index([variant_barcode], map: "marketing_productvariant_variant_barcode_dad1695f")
+  @@index([variant_barcode], map: "marketing_productvariant_variant_barcode_dad1695f_like")
+  @@index([variant_sku], map: "marketing_productvariant_variant_sku_4961a567")
+  @@index([variant_sku], map: "marketing_productvariant_variant_sku_4961a567_like")
 }
 
 model marketing_productvariantattribute {
@@ -726,18 +737,20 @@ model marketing_productvariantattribute {
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model marketing_productvariantattributevalue {
   id                                BigInt                            @id @default(autoincrement())
-  value                             String                            @db.VarChar(255)
-  attribute_id                      BigInt
-  variant_id                        BigInt?
+  product_variant_attribute_value   String                            @db.VarChar(255)
+  product_variant_attribute_id      BigInt
+  product_variant_id                BigInt?
   product_id                        BigInt?
-  marketing_productvariantattribute marketing_productvariantattribute @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_attribute_id_2b0d83d5_fk_marketing")
   marketing_product                 marketing_product?                @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_id_65518724_fk_marketing")
-  marketing_productvariant          marketing_productvariant?         @relation(fields: [variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_variant_id_4d257d6d_fk_marketing")
+  marketing_productvariantattribute marketing_productvariantattribute @relation(fields: [product_variant_attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_variant_attr_4836c067_fk_marketing")
+  marketing_productvariant          marketing_productvariant?         @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_variant_id_13dc74f2_fk_marketing")
 
-  @@unique([variant_id, attribute_id], map: "marketing_productvariant_variant_id_attribute_id_253d4de3_uniq")
-  @@index([attribute_id], map: "marketing_productvariantattributevalue_attribute_id_2b0d83d5")
-  @@index([variant_id], map: "marketing_productvariantattributevalue_variant_id_4d257d6d")
+  @@unique([product_variant_id, product_variant_attribute_id], map: "marketing_productvariant_variant_id_attribute_id_253d4de3_uniq")
+  @@index([product_variant_attribute_id], map: "marketing_productvariantattributevalue_attribute_id_2b0d83d5")
+  @@index([product_variant_id], map: "marketing_productvariantattributevalue_variant_id_4d257d6d")
   @@index([product_id], map: "marketing_productvariantattributevalue_product_id_65518724")
+  @@index([product_variant_attribute_value], map: "marketing_productvariantattributevalue_value_17ca7ef7")
+  @@index([product_variant_attribute_value], map: "marketing_productvariantattributevalue_value_17ca7ef7_like")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.

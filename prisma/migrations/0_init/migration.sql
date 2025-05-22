@@ -1,4 +1,15 @@
 -- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "username" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "name" TEXT,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "auth_group" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(150) NOT NULL,
@@ -472,13 +483,15 @@ CREATE TABLE "marketing_product" (
     "unit_of_measurement" VARCHAR,
     "quantity" DECIMAL(10,2),
     "price" DECIMAL(10,2),
-    "cost" DECIMAL(10,2),
     "featured" BOOLEAN,
     "selling_while_out_of_stock" BOOLEAN,
     "weight" DECIMAL(10,2),
     "unit_of_weight" VARCHAR,
     "category_id" BIGINT,
     "supplier_id" BIGINT,
+    "has_variants" BOOLEAN NOT NULL,
+    "datasheet_url" VARCHAR(200),
+    "minimum_inventory_level" DECIMAL(10,2),
 
     CONSTRAINT "marketing_product_pkey" PRIMARY KEY ("id")
 );
@@ -496,7 +509,6 @@ CREATE TABLE "marketing_product_collections" (
 CREATE TABLE "marketing_productfile" (
     "id" BIGSERIAL NOT NULL,
     "file" VARCHAR(100) NOT NULL,
-    "sequence" SMALLINT NOT NULL,
     "product_id" BIGINT,
     "product_variant_id" BIGINT,
 
@@ -513,6 +525,8 @@ CREATE TABLE "marketing_productvariant" (
     "variant_cost" DECIMAL(10,2),
     "variant_featured" BOOLEAN NOT NULL,
     "product_id" BIGINT,
+    "variant_datasheet_url" VARCHAR(200),
+    "variant_minimum_inventory_level" DECIMAL(10,2),
 
     CONSTRAINT "marketing_productvariant_pkey" PRIMARY KEY ("id")
 );
@@ -528,9 +542,10 @@ CREATE TABLE "marketing_productvariantattribute" (
 -- CreateTable
 CREATE TABLE "marketing_productvariantattributevalue" (
     "id" BIGSERIAL NOT NULL,
-    "value" VARCHAR(255) NOT NULL,
-    "attribute_id" BIGINT NOT NULL,
-    "variant_id" BIGINT,
+    "product_variant_attribute_value" VARCHAR(255) NOT NULL,
+    "product_variant_attribute_id" BIGINT NOT NULL,
+    "product_variant_id" BIGINT,
+    "product_id" BIGINT,
 
     CONSTRAINT "marketing_productvariantattributevalue_pkey" PRIMARY KEY ("id")
 );
@@ -578,6 +593,12 @@ CREATE TABLE "marketing_productcollection" (
 
     CONSTRAINT "marketing_productcollection_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "auth_group_name_key" ON "auth_group"("name");
@@ -856,10 +877,25 @@ CREATE UNIQUE INDEX "authentication_permission_name_key" ON "authentication_perm
 CREATE INDEX "authentication_permission_name_7b07510c_like" ON "authentication_permission"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "marketing_product_sku_4e12cb16_uniq" ON "marketing_product"("sku");
+
+-- CreateIndex
 CREATE INDEX "marketing_product_category_id_c776e438" ON "marketing_product"("category_id");
 
 -- CreateIndex
 CREATE INDEX "marketing_product_supplier_id_c9957948" ON "marketing_product"("supplier_id");
+
+-- CreateIndex
+CREATE INDEX "marketing_product_barcode_1e6ca3df" ON "marketing_product"("barcode");
+
+-- CreateIndex
+CREATE INDEX "marketing_product_barcode_1e6ca3df_like" ON "marketing_product"("barcode");
+
+-- CreateIndex
+CREATE INDEX "marketing_product_featured_6995ee9a" ON "marketing_product"("featured");
+
+-- CreateIndex
+CREATE INDEX "marketing_product_sku_4e12cb16_like" ON "marketing_product"("sku");
 
 -- CreateIndex
 CREATE INDEX "marketing_product_collections_product_id_ab29b623" ON "marketing_product_collections"("product_id");
@@ -871,9 +907,6 @@ CREATE INDEX "marketing_product_collections_productcollection_id_2189399f" ON "m
 CREATE UNIQUE INDEX "marketing_product_collec_product_id_productcollec_e8ddc69b_uniq" ON "marketing_product_collections"("product_id", "productcollection_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "marketing_productfile_sequence_key" ON "marketing_productfile"("sequence");
-
--- CreateIndex
 CREATE INDEX "marketing_productfile_product_id_68c8359c" ON "marketing_productfile"("product_id");
 
 -- CreateIndex
@@ -883,13 +916,34 @@ CREATE INDEX "marketing_productfile_product_variant_id_74a0d958" ON "marketing_p
 CREATE INDEX "marketing_productvariant_product_id_d830f278" ON "marketing_productvariant"("product_id");
 
 -- CreateIndex
-CREATE INDEX "marketing_productvariantattributevalue_attribute_id_2b0d83d5" ON "marketing_productvariantattributevalue"("attribute_id");
+CREATE INDEX "marketing_productvariant_variant_barcode_dad1695f" ON "marketing_productvariant"("variant_barcode");
 
 -- CreateIndex
-CREATE INDEX "marketing_productvariantattributevalue_variant_id_4d257d6d" ON "marketing_productvariantattributevalue"("variant_id");
+CREATE INDEX "marketing_productvariant_variant_barcode_dad1695f_like" ON "marketing_productvariant"("variant_barcode");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "marketing_productvariant_variant_id_attribute_id_253d4de3_uniq" ON "marketing_productvariantattributevalue"("variant_id", "attribute_id");
+CREATE INDEX "marketing_productvariant_variant_sku_4961a567" ON "marketing_productvariant"("variant_sku");
+
+-- CreateIndex
+CREATE INDEX "marketing_productvariant_variant_sku_4961a567_like" ON "marketing_productvariant"("variant_sku");
+
+-- CreateIndex
+CREATE INDEX "marketing_productvariantattributevalue_attribute_id_2b0d83d5" ON "marketing_productvariantattributevalue"("product_variant_attribute_id");
+
+-- CreateIndex
+CREATE INDEX "marketing_productvariantattributevalue_variant_id_4d257d6d" ON "marketing_productvariantattributevalue"("product_variant_id");
+
+-- CreateIndex
+CREATE INDEX "marketing_productvariantattributevalue_product_id_65518724" ON "marketing_productvariantattributevalue"("product_id");
+
+-- CreateIndex
+CREATE INDEX "marketing_productvariantattributevalue_value_17ca7ef7" ON "marketing_productvariantattributevalue"("product_variant_attribute_value");
+
+-- CreateIndex
+CREATE INDEX "marketing_productvariantattributevalue_value_17ca7ef7_like" ON "marketing_productvariantattributevalue"("product_variant_attribute_value");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "marketing_productvariant_variant_id_attribute_id_253d4de3_uniq" ON "marketing_productvariantattributevalue"("product_variant_id", "product_variant_attribute_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "operating_machine_name_key" ON "operating_machine"("name");
@@ -1117,10 +1171,13 @@ ALTER TABLE "marketing_productfile" ADD CONSTRAINT "marketing_productfil_product
 ALTER TABLE "marketing_productvariant" ADD CONSTRAINT "marketing_productvar_product_id_d830f278_fk_marketing" FOREIGN KEY ("product_id") REFERENCES "marketing_product"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "marketing_productvariantattributevalue" ADD CONSTRAINT "marketing_productvar_attribute_id_2b0d83d5_fk_marketing" FOREIGN KEY ("attribute_id") REFERENCES "marketing_productvariantattribute"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "marketing_productvariantattributevalue" ADD CONSTRAINT "marketing_productvar_product_id_65518724_fk_marketing" FOREIGN KEY ("product_id") REFERENCES "marketing_product"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "marketing_productvariantattributevalue" ADD CONSTRAINT "marketing_productvar_variant_id_4d257d6d_fk_marketing" FOREIGN KEY ("variant_id") REFERENCES "marketing_productvariant"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "marketing_productvariantattributevalue" ADD CONSTRAINT "marketing_productvar_product_variant_attr_4836c067_fk_marketing" FOREIGN KEY ("product_variant_attribute_id") REFERENCES "marketing_productvariantattribute"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "marketing_productvariantattributevalue" ADD CONSTRAINT "marketing_productvar_product_variant_id_13dc74f2_fk_marketing" FOREIGN KEY ("product_variant_id") REFERENCES "marketing_productvariant"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "accounting_currencyexchange" ADD CONSTRAINT "accounting_currencye_book_id_3626bd75_fk_accountin" FOREIGN KEY ("book_id") REFERENCES "accounting_book"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
