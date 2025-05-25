@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import ProductDetailCardNew from '@/components/ProductDetailCardNew';
+import ProductDetailCardNew from '@/components/ProductDetailCard';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Decimal } from "@prisma/client/runtime/library";
@@ -79,6 +79,8 @@ export async function GET(request: Request) {
     });
 
     if (product) {
+        // console.log("the product you fetched is");
+        // console.log(product);
         let data: Data = {
             product: product,
             product_category: "",
@@ -88,11 +90,20 @@ export async function GET(request: Request) {
         }
 
 
-        const product_category = await prisma.marketing_productcategory.findUniqueOrThrow({
+        const product_category_record = await prisma.marketing_productcategory.findUnique({
             where: {
                 id: Number(product.category_id)
             }
         })
+
+
+
+        let product_category = "";
+        if (!product_category_record) {
+            console.warn(`Category with id ${product.category_id} does not exist in the database.`);
+        } else {
+            product_category = product_category_record.name ?? "";
+        }
         const product_variants = await prisma.marketing_productvariant.findMany({
             where: {
                 product_id: product.id
@@ -106,6 +117,10 @@ export async function GET(request: Request) {
                     product_id: product.id
                 }
             })
+            console.log("here it comes my friend: ");
+            console.log("--------------------------------------------------------------------");
+            console.log(product_variant_attribute_values);
+            console.log("--------------------------------------------------------------------");
             // const product_variant_attributes = (await prisma.marketing_productvariantattribute.findMany()).filter((item)=>item)
 
             // let data ={}
@@ -117,10 +132,10 @@ export async function GET(request: Request) {
             const product_variant_attributes = (await prisma.marketing_productvariantattribute.findMany()).filter(attribute =>
                 product_variant_attribute_values.some(attribute_value => attribute_value.product_variant_attribute_id === attribute.id)
             );
-            // console.log(product_variant_attributes);
+
 
             data["product"] = product
-            data["product_category"] = product_category.name
+            data["product_category"] = product_category
             data["product_variants"] = product_variants
             data["product_variant_attributes"] = product_variant_attributes
             data["product_variant_attribute_values"] = product_variant_attribute_values.map(val => ({

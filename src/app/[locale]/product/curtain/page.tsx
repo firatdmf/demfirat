@@ -1,12 +1,12 @@
 import classes from "./page.module.css"
 import { prisma } from "@/lib/prisma";
-import ProductGridNew from '@/components/ProductGridNew';
+import ProductGridNew from '@/components/ProductGrid';
 import { Decimal } from "@prisma/client/runtime/library";
 
-import { Product } from '@/components/ProductGridNew';
-import { ProductVariant } from '@/components/ProductGridNew';
-import { ProductVariantAttribute } from "@/components/ProductGridNew";
-import { ProductVariantAttributeValue } from "@/components/ProductGridNew";
+import { Product } from '@/components/ProductGrid';
+import { ProductVariant } from '@/components/ProductGrid';
+import { ProductVariantAttribute } from "@/components/ProductGrid";
+import { ProductVariantAttributeValue } from "@/components/ProductGrid";
 
 // import { Category } from '@/components/ProductGridNew';
 // import { ProductWithCategory } from '@/components/ProductGridNew';

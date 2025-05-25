@@ -1,290 +1,256 @@
-"use client";
-import { useEffect, useState, useRef } from "react";
+"use client"
+import { Decimal } from "@prisma/client/runtime/library";
+import classes from "./ProductGrid.module.css";
 import ProductCard from "@/components/ProductCard";
-import classes from "@/components/ProductGrid.module.css";
-import { FaSearch } from "react-icons/fa";
 import Spinner from "@/components/Spinner";
-// import { createClient } from "@supabase/supabase-js";
-import fabricData from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json";
-// import {prisma} from "@/lib/prisma"
+import Link from "next/link";
+import { useRef, useState } from "react";
+// below are react icons
+import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
+import { FaSearch } from "react-icons/fa";
+// import { Product } from "@/lib/interfaces"
 
-// below is to check to see if the user is logged in
-import { useSession } from "next-auth/react";
 
-interface ProductGridProps{
-  HeadlineT:string;
-  SearchBarT:string;
+
+export type Product = {
+  id: bigint;
+  created_at: Date | null;
+  title: string | null;
+  description: string | null;
+  sku: string | null;
+  barcode: string | null;
+  tags: string[];
+  category_id?: bigint | null;
+  type: string | null;
+  price: Decimal | null;
+  quantity: Decimal | null;
+  unit_of_weight: string | null;
 }
 
-// import supabase from "@/vir_db/supabase";
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-
-// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
-// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY as string;
-
-// const supabase = createClient(
-//   supabaseUrl!,
-//   // process.env.SUPABASE_SECRET!,
-//   supabaseKey!
-// );
-
-type FilesArray = {
-  name: string;
-  design: string;
-  annex: string;
-  prefix: string;
-  variant: string;
-  imageNo: string;
-};
-type EmbroideryFabric = {
-  // title: string;
-  // created_at: string;
-  // id: number;
-  prefix: string;
-  design: string;
-  files: FilesArray[];
-  date:string;
-  // length: number;
-  // product: string;
-};
-// type Data = {
-//   id: number;
-//   collection: string;
-//   data: Fabric[];
-// };
-type Product = {
-  name: string;
-};
-
-// let fabricData = prisma
-// let firat = prisma.products.findMany()
-// console.log(firat);
-// const {data, error} = await supabase .from('products').select()
-// const firat = async()=>{
-//   // await supabase.from('products').select()
-//   await prisma.products.findMany()
-// }
-// console.log(firat());
-
-// console.log(fabricData);
-
-function is_numeric(str: string) {
-  return /^\d+$/.test(str);
+export type ProductVariant = {
+  id: bigint;
+  variant_sku: string | null;
+  variant_barcode: string | null;
+  variant_quantity: Decimal | null;
+  variant_price: Decimal | null;
+  variant_cost: Decimal | null;
+  variant_featured: boolean | null;
+  product_id: bigint | null;
 }
 
-let shuffle = (array: EmbroideryFabric[], seed: number) => {
-  // <-- ADDED ARGUMENT
-  var m = array.length,
-    t,
-    i;
+export type ProductVariantAttribute = {
+  id: bigint;
+  name: string | null;
+}
 
-  // While there remain elements to shuffle…
-  while (m) {
-    // Pick a remaining element…
-    i = Math.floor(random(seed) * m--); // <-- MODIFIED LINE
+export type ProductVariantAttributeValue = {
+  id: bigint;
+  product_variant_attribute_value: string;
+  product_id?: bigint | null;
+  attribute_id?: bigint | null;
+  variant_id?: bigint | null;
+}
 
-    // And swap it with the current element.
-    t = array[m];
-    array[m] = array[i];
-    array[i] = t;
-    ++seed; // <-- ADDED LINE
+type SearchParams = {
+  [key: string]: string | string[] | undefined;
+}
+
+type ProductGridProps = {
+  products: Product[];
+  product_variants: ProductVariant[];
+  product_variant_attributes: ProductVariantAttribute[];
+  product_variant_attribute_values: ProductVariantAttributeValue[];
+  // searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
+}
+
+// Below variables are passed down
+function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, searchParams }: ProductGridProps) {
+
+  // console.log("your attribute values are: ");
+  // console.log(product_variant_attribute_values);
+  
+  
+
+  const capitalizeFirstLetter = (val: string | null | undefined) => {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
   }
 
-  return array;
-};
-let random = (seed: number) => {
-  var x = Math.sin(seed++) * 10000;
-  return x - Math.floor(x);
-};
+  // In this component the search bar works with client side components, and the filtering works finely on the server side.
 
-// export default function ProductGrid(props: { product: Product }) {
-export default function ProductGrid({HeadlineT, SearchBarT}:ProductGridProps) {
-  const [productLoadAmount, setproductLoadAmount] = useState<number>(20);
-  const [fetchData, setFetchData] = useState<EmbroideryFabric[] | null>(null);
-  const [loadedProducts, setloadedProducts] = useState<
-    EmbroideryFabric[] | null
-  >(null);
-  const [filterUsed, setfilterUsed] = useState<boolean>(false);
-  const searchTermRef = useRef<HTMLInputElement | null>(null);
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      // the user not authenticated, handle here
-      console.log("Not logged in!: " + status);
-    },
-  });
-  console.log(status);
-  
-  const filter = (e: any) => {
-    setfilterUsed(true);
+  // This is manipulated with with (search params) but we need to initialize it first.
+  let filteredProducts: Product[] = products;
+  // const [fi, setfirst] = useState(second)
+  const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>(filteredProducts)
+  const [SearchFilterUsed, setSearchFilterUsed] = useState<boolean>(false)
+  const [FilterMenuOpen, setFilterMenuOpen] = useState<boolean>(false)
 
+
+  // Handling of the search bar
+  const search_filter = (e: React.ChangeEvent<HTMLInputElement>) => {
     let query = e.currentTarget.value;
-    // let prefix = query[0];
+
     if (!query) {
-      setfilterUsed(false);
-      setproductLoadAmount(20);
-      return;
+      setSearchFilterUsed(false)
+    } else {
+      setSearchFilterUsed(true)
+      // filter the products
+      setSearchFilteredProducts(filteredProducts.filter((product) =>
+        // search product title or product sku and return matching products
+        product.title?.toLowerCase().includes(query.toLowerCase()) || product.sku?.toLowerCase().includes(query.toLowerCase())
+      ))
     }
 
-    // if (!is_numeric(prefix)) {
-    //   query = query?.slice(1);
-    // }
 
-    // get rid of non-numerical values:
-    query = query.replace(/\D/g,'');
-    if (query.length < 4) {
-      return;
-    }
-    // console.log("the query is:" + query);
+  }
 
-    let array: EmbroideryFabric[] = [];
-    fetchData?.map((item, index) => {
-      // console.log(item.design);
+  // if (!searchParams) {
+  //   searchParams = {};
+  // }
 
-      if (item.design.toString().includes(query, 0)) {
-        array.push(item);
+  // If there are search params in the url (filter menu)
+  if (Object.keys(searchParams).length > 0) {
+    console.log("your search params are:");
+
+    console.log(searchParams);
+
+    // Iterate through the search params object
+    Object.entries(searchParams).forEach(([key, value]) => {
+      // attribute names are unique so we use find instead of filter and this returns a single object
+      const attribute = product_variant_attributes.find((attribute) => {
+        return attribute.name === key;
+      });
+      if (attribute) {
+        // If we have a multiple values such as 84 and 95 both selected for size, then we split them by comma (%2C)
+        const values = Array.isArray(value) ? value : value?.split(',');
+        console.log("little values are");
+        console.log(values);
+        
+        
+        
+        // get the appropriate objects from passed down db object that match the attribute and values
+        const attribute_values = product_variant_attribute_values.filter((attribute_value) => {
+          return attribute_value.attribute_id === attribute.id && values?.includes(attribute_value.product_variant_attribute_value);
+        });
+
+
+        // Extract distinct product IDs, eliminating duplicate products
+        const productIds = Array.from(new Set(attribute_values.map((attribute_value) => attribute_value.product_id)));
+        filteredProducts = filteredProducts.filter((product) => productIds.includes(product.id));
+      }else{
+        console.log("you got no attribute defined")
       }
+      // Printing params for reference
+      // console.log(`${key} ${value}`);
     });
+  }
 
-    setloadedProducts(array);
-  };
-
-  useEffect(() => {
-    const fetchshit = async () => {
-      try {
-        // let { data: embroidery_fabric, error } = await supabase
-        //   .from("embroidery_fabric_curtain")
-        //   .select("*");
-        // // console.log(embroidery_fabric);
-
-        setFetchData(fabricData.sort(function (a, b) {
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        }));
-
-        setloadedProducts(fabricData!.slice(0, productLoadAmount));
-
-        // if (error) {
-        //   // Handle the error if necessary
-        //   console.error("Error fetching data:", error.message);
-        //   return;
-        // }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-
-      // console.log(await supabase.from("embroidery_fabric").select("*"));
-    };
-
-    if (filterUsed == false) {
-      fetchshit();
-    }
-
-    function handleScrollEvent() {
-      // console.log(status);
-      
-      if (
-        ((window.innerHeight + window.scrollY) >=
-          (document.body.offsetHeight - 20)) &&
-        (filterUsed === false)    
-      ) {
-        console.log("you're at the bottom of the page");
-        setproductLoadAmount(productLoadAmount + 20);
-        console.log(productLoadAmount);
-      } else {
-        return (
-          <h3>
-            Please contact info@demfirat.com to open account and see all designs
-          </h3>
-        );
-
-        // here add more items in the 'filteredData' state from the 'allData' state source.
-      }
-    }
-    window.addEventListener("scroll", handleScrollEvent);
-
-    return () => {
-      window.removeEventListener("scroll", handleScrollEvent);
-    };
-  }, [productLoadAmount, filterUsed]);
-
-  if (!fetchData) {
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
+  if (!products) {
+    return <Spinner />;
   } else {
     return (
       <div className={classes.ProductGrid}>
-        <div
-          className={classes.cover}
-          id="karven-banner"
-          style={{
-            backgroundImage: "url('/media/karven_banner.webp')",
-            backgroundSize: "900px",
-            // scale:"110%"
-          }}
-        >
-          <div className={classes.headlineBox}>{HeadlineT}</div>
+        <div className={classes.search}>
+          <input
+            type="text"
+            className={classes.searchTerm}
+            placeholder="Search for product title or sku"
+            onChange={search_filter}
+          />
+          {/* This button is for visual only, it is non-functional */}
+          <button
+            className={classes.searchButton}
+          >
+            <FaSearch />
+          </button>
+
         </div>
-        {/* search bar below */}
-        {status === "loading" ? (
-          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-            Products
-          </h2>
-        ) : (
-          <div className={classes.wrap}>
-            <div className={classes.search}>
-              <input
-                ref={searchTermRef}
-                type="text"
-                className={classes.searchTerm}
-                placeholder={SearchBarT}
-                onChange={filter}
-              />
-              <button
-                type="submit"
-                className={classes.searchButton}
-                // onClick={filter}
-              >
-                <FaSearch />
-              </button>
-            </div>
-          </div>
-        )}
-        {/* search bar ends here */}
+        {/* Not shown on computer screen, only for tablets and phones */}
+        <div className={classes.filterToggleContainer}>
+          <button
+            className={classes.filterToggleButton}
+            onClick={() => setFilterMenuOpen(!FilterMenuOpen)}
+          >
+            {FilterMenuOpen ? "Close Filter" : "Open Filter"}
+          </button>
+        </div>
 
-        {/* <div className={classes.products}> */}
 
-        {/* {loadedProducts?.map((fabric, index: number) => {
-            return <ProductCard key={index} product={fabric} />;
-          })} */}
-        {/* </div> */}
-        <div>
-          {status === "loading" ? (
-            <>
-              <div className={classes.products}>
-                {/* {shuffle(fabricData!, 497) */}
-                {fabricData
-                  ?.slice(687, 702)
-                  .map((fabric, index: number) => {
-                    return <ProductCard key={index} product={fabric} />;
-                  })}
-              </div>
-              <h3 style={{ textAlign: "center" }}>
-                To see all the designs, email info@demfirat.com with your business
-                info and we'll create an online account for you.
-              </h3>
-            </>
-          ) : (
-            <div className={classes.products}>
-              {loadedProducts?.map((fabric, index: number) => {
-                return <ProductCard key={index} product={fabric} />;
+
+        <div className={classes.FiratDisplay}>
+          <div className={`${classes.filterMenu} ${FilterMenuOpen ? classes.filterMenuOpen : classes.filterMenuClosed}`}>
+
+
+            <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>Reset Filters</Link>
+            <ul>
+              {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
+
+                // Filter the attribute values based on the attribute_id, delete duplicate values, and iterate through it
+                const filteredValues = product_variant_attribute_values.filter(
+                  (attribute_value) => attribute_value.attribute_id === attribute.id
+                );
+                const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
+                  .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
+                
+                
+                return (
+                  <li key={index}>
+                    {capitalizeFirstLetter(attribute.name)}
+                    <ul>
+                      {uniqueValues.map((attribute_value) => {
+                        // Record<string, string> is a utility type that represents an object with string keys, and string values. 
+                        // in our case, keys are attribute names, and values are either strings or array of strings.
+                        const params = new URLSearchParams(searchParams as Record<string, string>);
+                        const paramKey = String(attribute.name);
+                        const paramValue = String(attribute_value?.product_variant_attribute_value);
+
+                        const currentValues = params.get(paramKey)?.split(',') || [];
+                        const isChecked = currentValues.includes(paramValue);
+
+                        if (isChecked) {
+                          const newValues = currentValues.filter((val) => val !== paramValue);
+                          if (newValues.length > 0) {
+                            params.set(paramKey, newValues.join(','));
+                          } else {
+                            params.delete(paramKey);
+                          }
+                        } else {
+                          currentValues.push(paramValue);
+                          params.set(paramKey, currentValues.join(','));
+                        }
+
+                        const href = `?${params.toString()}`;
+
+                        return (
+                          <div key={attribute_value?.id} className={classes.attribute_value_item_box}>
+                            <Link className={classes.link} href={href} replace={true}>
+                              <div className={classes.icon}>
+                                {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
+                              </div>
+                              <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value)}</div>
+                            </Link>
+                            <br />
+                          </div>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                );
               })}
-            </div>
-          )}
+            </ul>
+          </div>
+          <div className={classes.products}>
+            {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product, index: number) => {
+              return <ProductCard key={index} product={product} />;
+            }) :
+              filteredProducts?.map((product: Product, index: number) => {
+                return <ProductCard key={index} product={product} />;
+              })}
+          </div>
         </div>
       </div>
     );
   }
 }
+
+export default ProductGrid;

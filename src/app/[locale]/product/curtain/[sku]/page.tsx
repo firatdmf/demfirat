@@ -1,11 +1,11 @@
-import ProductDetailCardNew from "@/components/ProductDetailCardNew"
+import ProductDetailCard from "@/components/ProductDetailCard"
 // import { GetServerSideProps } from 'next';
 import { prisma } from '@/lib/prisma';
-import { Product, ProductVariant } from "@/components/ProductGridNew";
-import { ProductVariantAttribute } from "@/components/ProductGridNew";
-import { ProductVariantAttributeValue } from "@/components/ProductGridNew";
+import { Product, ProductVariant,ProductVariantAttributeValue } from "@/lib/interfaces";
+import { ProductVariantAttribute } from "@/components/ProductGrid";
 import fs from 'fs'
 import path from 'path'
+import { log } from "console";
 // import { useRouter } from 'next/router'
 // interface ProductDetailCardProps{
 //   product: Product | null;
@@ -56,6 +56,10 @@ async function page({ params, searchParams }: PageProps) {
   let product_variant_attributes: ProductVariantAttribute[] = []
   let product_variant_attribute_values: ProductVariantAttributeValue[] = []
   let product_category = null
+  // console.log("your sku is ");
+  // console.log(sku);
+
+
   const api_link = new URL(`${process.env.NEXTAUTH_URL}/api/get_product?sku=${sku}`);
   const response = await fetch(api_link)
   if (response.ok) {
@@ -127,7 +131,15 @@ async function page({ params, searchParams }: PageProps) {
 
       {product ?
         <div>
-          <ProductDetailCardNew product={product} product_variants={product_variants} product_variant_attributes={product_variant_attributes} product_variant_attribute_values={product_variant_attribute_values} product_category={product_category} imageFiles={imageFiles} searchParams={searchParams} image_directories = {image_directories} />
+          <ProductDetailCard 
+          product={product} 
+          product_category={product_category} 
+          product_variants={product_variants} 
+          product_variant_attributes={product_variant_attributes} 
+          product_variant_attribute_values={product_variant_attribute_values} 
+          // imageFiles={imageFiles} 
+          searchParams={searchParams} 
+          image_directories={image_directories} />
         </div> : `No product found with sku: ${sku}`}
 
 

@@ -13,8 +13,8 @@ import Menu from "@/components/Menu";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Karven Home Textiles",
-  description: "Sheer fabric manufacturer in Turkiye",
+  title: "Demfirat Karven Home Collection",
+  description: "Your premium home textiles provider.",
 };
 interface RootLayoutProps {
   children: React.ReactNode;

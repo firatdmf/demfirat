@@ -1,12 +1,12 @@
-/* .ProductDetailCardNew {
+/* .ProductDetailCard {
     display: flex;
     justify-content: center;
 } */
 
-.ProductDetailCardNew .productHero  > * {
+.ProductDetailCard .productHero  > * {
     margin-top:1rem;
 }
-.ProductDetailCardNew .variant_menu .variant_links{
+.ProductDetailCard .variant_menu .variant_links{
     display: flex;
     gap:10px;
     text-decoration: none;
@@ -14,11 +14,11 @@
     /* background-color: black; */
 }
 
-.ProductDetailCardNew .variant_menu label{
+.ProductDetailCard .variant_menu label{
     text-transform: capitalize;
 }
 
-.ProductDetailCardNew .variant_menu .variant_links .link{
+.ProductDetailCard .variant_menu .variant_links .link{
     display: block;
     padding:10px 20px;
     margin:2px 0;
@@ -30,7 +30,7 @@
 }
 
 
-.ProductDetailCardNew .variant_menu .variant_links .checked_variant_link{
+.ProductDetailCard .variant_menu .variant_links .checked_variant_link{
     background-color: black;
     color:#d19e25;
 }
@@ -38,7 +38,7 @@
 
 
 
-.ProductDetailCardNew .detailCardContainer {
+.ProductDetailCard .detailCardContainer {
     display: flex;
     background-color: lightblue;
     padding: 10px;
@@ -50,44 +50,44 @@
     
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia {
+.ProductDetailCard .detailCardContainer .productMedia {
     display: flex;
     flex-direction: row;
     gap: 20px;
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia .thumbs {
+.ProductDetailCard .detailCardContainer .productMedia .thumbs {
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: center;
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia .thumbs .thumb {
+.ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb {
     height: 60px;
     width: 60px;
     background-color: white;
     cursor: pointer;
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia .thumbs .thumb_selected {
+.ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb_selected {
     border: 1px solid black;
 }
 
 
-.ProductDetailCardNew .detailCardContainer .productMedia .thumbs .thumb .img {
+.ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb .img {
     aspect-ratio: 1/1;
     position: relative;
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia .thumbs .thumb .img img {
+.ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb .img img {
     height: 100%;
     width: 100%;
     /* object-fit: cover; */
     /* object-position: bottom; */
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia .gallery {
+.ProductDetailCard .detailCardContainer .productMedia .gallery {
     position: relative;
     display: flex;
     align-items: center;
@@ -98,8 +98,8 @@
 
 }
 
-.ProductDetailCardNew .prevButton,
-.ProductDetailCardNew .nextButton {
+.ProductDetailCard .prevButton,
+.ProductDetailCard .nextButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -111,20 +111,20 @@
   z-index: 1;
 }
 
-.ProductDetailCardNew .prevButton {
+.ProductDetailCard .prevButton {
   left: 0;
 }
 
-.ProductDetailCardNew .nextButton {
+.ProductDetailCard .nextButton {
   right: 0;
 }
 
-.ProductDetailCardNew .prevButton:hover,
-.ProductDetailCardNew .nextButton:hover {
+.ProductDetailCard .prevButton:hover,
+.ProductDetailCard .nextButton:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia .gallery .img {
+.ProductDetailCard .detailCardContainer .productMedia .gallery .img {
     /* aspect-ratio: 1/1; */
     position: relative;
     padding:10px;
@@ -138,14 +138,14 @@
     border-radius: 10px;
 }
 
-.ProductDetailCardNew .detailCardContainer .productMedia .gallery .img img {
+.ProductDetailCard .detailCardContainer .productMedia .gallery .img img {
     height: 100%;
     width: 100%;
     object-fit: contain;
     /* object-position: bottom; */
 
 }
-.ProductDetailCardNew .gallery .img .zoom {
+.ProductDetailCard .gallery .img .zoom {
     /* position: fixed;
     width: 200px;
     height: 200px;
@@ -169,11 +169,11 @@
 
 
 
-  .ProductDetailCardNew .detailCardContainer .productHero .productCategory{
+  .ProductDetailCard .detailCardContainer .productHero .productCategory{
     text-transform: capitalize;
   }
 
-/* .ProductDetailCardNew .detailCardContainer .productMedia .gallery  .loaded {
+/* .ProductDetailCard .detailCardContainer .productMedia .gallery  .loaded {
     opacity: 1;
 } */
 
@@ -183,16 +183,16 @@
 } */
 
 @media screen and (max-width: 768px) {
-    .ProductDetailCardNew .detailCardContainer {
+    .ProductDetailCard .detailCardContainer {
         flex-direction: column;
         align-items: center;
     }
 
-    .ProductDetailCardNew .detailCardContainer .productMedia .thumbs {
+    .ProductDetailCard .detailCardContainer .productMedia .thumbs {
         display: none;
     }
 
-    .ProductDetailCardNew .detailCardContainer .productMedia .gallery {
+    .ProductDetailCard .detailCardContainer .productMedia .gallery {
         position: relative;
         width: 300px;
         height: 300px;
@@ -200,7 +200,7 @@
     }
 
 
-    .ProductDetailCardNew .detailCardContainer .productMedia .img {
+    .ProductDetailCard .detailCardContainer .productMedia .img {
         overflow: hidden;
         height: 100%;
         width: 100%;

@@ -46,12 +46,18 @@ const page: FC<pageProps> = ({ params }) => {
   return (
     <div>
       <ProductDetailCard
-        design={design}
-        designT={ProductDetailCardT("Design")}
-        widthT={ProductDetailCardT("Width")}
-        originT={ProductDetailCardT("Origin")}
-        wantASampleT={ProductDetailCardT("WantASample")}
-        sendEmailT={ProductDetailCardT("SendEmail")}
+        product={product}
+        product_variants={product_variants}
+        product_variant_attributes={product_variant_attributes}
+        product_variant_attribute_values={product_variant_attribute_values}
+
+
+        // design={design}
+        // designT={ProductDetailCardT("Design")}
+        // widthT={ProductDetailCardT("Width")}
+        // originT={ProductDetailCardT("Origin")}
+        // wantASampleT={ProductDetailCardT("WantASample")}
+        // sendEmailT={ProductDetailCardT("SendEmail")}
       />
       {/* Your design is: {design} */}
     </div>
