@@ -8,48 +8,11 @@ import { useRef, useState } from "react";
 // below are react icons
 import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
-// import { Product } from "@/lib/interfaces"
+import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces"
 
 
 
-export type Product = {
-  id: bigint;
-  created_at: Date | null;
-  title: string | null;
-  description: string | null;
-  sku: string | null;
-  barcode: string | null;
-  tags: string[];
-  category_id?: bigint | null;
-  type: string | null;
-  price: Decimal | null;
-  quantity: Decimal | null;
-  unit_of_weight: string | null;
-}
 
-export type ProductVariant = {
-  id: bigint;
-  variant_sku: string | null;
-  variant_barcode: string | null;
-  variant_quantity: Decimal | null;
-  variant_price: Decimal | null;
-  variant_cost: Decimal | null;
-  variant_featured: boolean | null;
-  product_id: bigint | null;
-}
-
-export type ProductVariantAttribute = {
-  id: bigint;
-  name: string | null;
-}
-
-export type ProductVariantAttributeValue = {
-  id: bigint;
-  product_variant_attribute_value: string;
-  product_id?: bigint | null;
-  attribute_id?: bigint | null;
-  variant_id?: bigint | null;
-}
 
 type SearchParams = {
   [key: string]: string | string[] | undefined;
@@ -69,8 +32,8 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
   // console.log("your attribute values are: ");
   // console.log(product_variant_attribute_values);
-  
-  
+
+
 
   const capitalizeFirstLetter = (val: string | null | undefined) => {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
@@ -125,19 +88,19 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
         const values = Array.isArray(value) ? value : value?.split(',');
         console.log("little values are");
         console.log(values);
-        
-        
-        
+
+
+
         // get the appropriate objects from passed down db object that match the attribute and values
         const attribute_values = product_variant_attribute_values.filter((attribute_value) => {
-          return attribute_value.attribute_id === attribute.id && values?.includes(attribute_value.product_variant_attribute_value);
+          return attribute_value.product_variant_attribute_id === attribute.id && values?.includes(attribute_value.product_variant_attribute_value);
         });
 
 
         // Extract distinct product IDs, eliminating duplicate products
         const productIds = Array.from(new Set(attribute_values.map((attribute_value) => attribute_value.product_id)));
         filteredProducts = filteredProducts.filter((product) => productIds.includes(product.id));
-      }else{
+      } else {
         console.log("you got no attribute defined")
       }
       // Printing params for reference
@@ -186,54 +149,65 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
 
                 // Filter the attribute values based on the attribute_id, delete duplicate values, and iterate through it
+
                 const filteredValues = product_variant_attribute_values.filter(
-                  (attribute_value) => attribute_value.attribute_id === attribute.id
+                  (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
                 );
-                const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
-                  .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
-                
-                
+                const uniqueValues =
+                  // filteredValues.map(value =>value.product_variant_attribute_value) creates an array of just the values (like ["blue", "red", "blue"]).
+                  // new Set(...) removes duplicates (so you get ["blue", "red"]).
+                  // Array.from(...) turns the Set back into an array.
+                  Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
+                    // .map(value => filteredValues.find(...)) finds the first object in filteredValues for each unique value, so you get an array of objects (not just strings).
+                    .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
+
+                console.log("uniqueValues");
+                console.log(uniqueValues);
+
+
+
                 return (
                   <li key={index}>
                     {capitalizeFirstLetter(attribute.name)}
-                    <ul>
-                      {uniqueValues.map((attribute_value) => {
-                        // Record<string, string> is a utility type that represents an object with string keys, and string values. 
-                        // in our case, keys are attribute names, and values are either strings or array of strings.
-                        const params = new URLSearchParams(searchParams as Record<string, string>);
-                        const paramKey = String(attribute.name);
-                        const paramValue = String(attribute_value?.product_variant_attribute_value);
+                    {/* <p> */}
+                    {uniqueValues.map((attribute_value) => {
+                      // Record<string, string> is a utility type that represents an object with string keys, and string values. 
+                      // in our case, keys are attribute names, and values are either strings or array of strings.
+                      const params = new URLSearchParams(searchParams as Record<string, string>);
+                      const paramKey = String(attribute.name);
+                      const paramValue = String(attribute_value?.product_variant_attribute_value);
 
-                        const currentValues = params.get(paramKey)?.split(',') || [];
-                        const isChecked = currentValues.includes(paramValue);
+                      const currentValues = params.get(paramKey)?.split(',') || [];
+                      const isChecked = currentValues.includes(paramValue);
 
-                        if (isChecked) {
-                          const newValues = currentValues.filter((val) => val !== paramValue);
-                          if (newValues.length > 0) {
-                            params.set(paramKey, newValues.join(','));
-                          } else {
-                            params.delete(paramKey);
-                          }
+                      if (isChecked) {
+                        const newValues = currentValues.filter((val) => val !== paramValue);
+                        if (newValues.length > 0) {
+                          params.set(paramKey, newValues.join(','));
                         } else {
-                          currentValues.push(paramValue);
-                          params.set(paramKey, currentValues.join(','));
+                          params.delete(paramKey);
                         }
+                      } else {
+                        currentValues.push(paramValue);
+                        params.set(paramKey, currentValues.join(','));
+                      }
 
-                        const href = `?${params.toString()}`;
+                      const href = `?${params.toString()}`;
 
-                        return (
-                          <div key={attribute_value?.id} className={classes.attribute_value_item_box}>
-                            <Link className={classes.link} href={href} replace={true}>
-                              <div className={classes.icon}>
-                                {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
-                              </div>
-                              <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value)}</div>
-                            </Link>
-                            <br />
-                          </div>
-                        );
-                      })}
-                    </ul>
+                      return (
+                        <div key={attribute_value?.id} className={classes.attribute_value_item_box}>
+                          <Link className={classes.link} href={href} replace={true}>
+                            <div className={classes.icon}>
+                              {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
+                            </div>
+                            <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value)}</div>
+                          </Link>
+                          <br />
+                        </div>
+                      );
+                    })}
+                    {/* </ul> */}
+                    {/* </p> */}
                   </li>
                 );
               })}

@@ -17,6 +17,9 @@ const nextConfig = {
     // appDir:true,
     serverComponentsExternalPackages: ["@prisma/client", "bcrypt"],
   },
+  // images: {
+  //   domains: ['127.0.0.1', 'localhost', 'app.nejum.com'],
+  // }
 };
 
 // module.exports = nextConfig

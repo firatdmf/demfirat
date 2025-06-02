@@ -3,6 +3,7 @@ import ProductDetailCardNew from '@/components/ProductDetailCard';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Decimal } from "@prisma/client/runtime/library";
+import { ProductFile } from '@/lib/interfaces';
 import { marketing_product, marketing_productvariant, marketing_productvariantattribute, marketing_productvariantattributevalue } from '@prisma/client';
 
 declare global {
@@ -59,6 +60,7 @@ interface Data {
     product_variants: ProductVariant[];
     product_variant_attributes: ProductVariantAttribute[];
     product_variant_attribute_values: ProductVariantAttributeValue[];
+    product_images: ProductFile[];
 }
 
 
@@ -87,6 +89,7 @@ export async function GET(request: Request) {
             product_variants: [],
             product_variant_attributes: [],
             product_variant_attribute_values: [],
+            product_images: [],
         }
 
 
@@ -106,7 +109,8 @@ export async function GET(request: Request) {
         }
         const product_variants = await prisma.marketing_productvariant.findMany({
             where: {
-                product_id: product.id
+                product_id: product.id,
+                // variant_featured: true,
             }
         })
 
@@ -117,10 +121,32 @@ export async function GET(request: Request) {
                     product_id: product.id
                 }
             })
-            console.log("here it comes my friend: ");
-            console.log("--------------------------------------------------------------------");
-            console.log(product_variant_attribute_values);
-            console.log("--------------------------------------------------------------------");
+
+            const product_images = await prisma.marketing_productfile.findMany({
+                where: {
+                    product_id: product.id
+                }
+            })
+            // console.log("here it comes my friend: ");
+            // console.log("--------------------------------------------------------------------");
+            // console.log(product_variant_attribute_values);
+            // product_variant_attribute_values = [
+            //     {
+            //         id: 329n,
+            //         product_variant_attribute_value: 'black',
+            //         product_variant_attribute_id: 1n,
+            //         product_variant_id: 12n,
+            //         product_id: 14n
+            //     },
+            //     {
+            //         id: 330n,
+            //         product_variant_attribute_value: 'blue',
+            //         product_variant_attribute_id: 1n,
+            //         product_variant_id: 9n,
+            //         product_id: 14n
+            //     }
+            // ]
+            // console.log("--------------------------------------------------------------------");
             // const product_variant_attributes = (await prisma.marketing_productvariantattribute.findMany()).filter((item)=>item)
 
             // let data ={}
@@ -142,6 +168,7 @@ export async function GET(request: Request) {
                 ...val,
                 value: val.product_variant_attribute_value
             }));
+            data["product_images"] = product_images
             // console.log(data);
 
             console.timeEnd('measuredo')

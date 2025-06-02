@@ -1,11 +1,10 @@
 import ProductDetailCard from "@/components/ProductDetailCard"
 // import { GetServerSideProps } from 'next';
 import { prisma } from '@/lib/prisma';
-import { Product, ProductVariant,ProductVariantAttributeValue } from "@/lib/interfaces";
-import { ProductVariantAttribute } from "@/components/ProductGrid";
+import { Product, ProductVariant, ProductVariantAttributeValue,ProductVariantAttribute } from "@/lib/interfaces";
 import fs from 'fs'
 import path from 'path'
-import { log } from "console";
+import { ProductFile } from "@/lib/interfaces";
 // import { useRouter } from 'next/router'
 // interface ProductDetailCardProps{
 //   product: Product | null;
@@ -15,7 +14,7 @@ import { log } from "console";
 //   sku: string;
 // }
 
-interface PageProps {
+interface PageParamProps {
   params: {
     sku: string
   }
@@ -28,6 +27,7 @@ type Data = {
   product_variants: ProductVariant[];
   product_variant_attributes: ProductVariantAttribute[];
   product_variant_attribute_values: ProductVariantAttributeValue[];
+  product_images: ProductFile[];
 }
 
 type image_directories = {
@@ -41,8 +41,9 @@ type image_directories = {
 
 
 
+
 // Params is an object that is passed from the url so you put braces around it.
-async function page({ params, searchParams }: PageProps) {
+async function page({ params, searchParams }: PageParamProps) {
 
   // const router = useRouter()
   // const {asd} = router.query
@@ -50,18 +51,20 @@ async function page({ params, searchParams }: PageProps) {
   const sku = params.sku
 
   // make api call to get the product from database
-  let data: Data
-  let product: Product | null = null
-  let product_variants: ProductVariant[] = []
-  let product_variant_attributes: ProductVariantAttribute[] = []
-  let product_variant_attribute_values: ProductVariantAttributeValue[] = []
-  let product_category = null
+  let data: Data;
+  let product: Product | null = null;
+  let product_variants: ProductVariant[] = [];
+  let product_variant_attributes: ProductVariantAttribute[] = [];
+  let product_variant_attribute_values: ProductVariantAttributeValue[] = [];
+  let product_category = null;
+  let product_images: ProductFile[] = [];
   // console.log("your sku is ");
   // console.log(sku);
 
 
   const api_link = new URL(`${process.env.NEXTAUTH_URL}/api/get_product?sku=${sku}`);
   const response = await fetch(api_link)
+  const image_api_link = new URL(`${process.env.NEJUM_API_URL}media/`);
   if (response.ok) {
     data = await response.json();
     // console.log("your data is");
@@ -74,11 +77,16 @@ async function page({ params, searchParams }: PageProps) {
     // console.log(product_variants);
     product_variant_attributes = data.product_variant_attributes
     product_variant_attribute_values = data.product_variant_attribute_values
+    product_images = data.product_images;
 
   } else {
     const message = await response.json()
     console.log(message)
   }
+
+  console.log("your product images are");
+  console.log(product_images);
+
 
 
   let image_directories: image_directories = {
@@ -91,35 +99,12 @@ async function page({ params, searchParams }: PageProps) {
   let imageFiles: string[] = [];
   let variant_images: string[] = []
 
-  if (product && product.sku) {
-    const productImageFolder = path.join(process.cwd(), 'public', 'image', 'product', 'curtain', product.sku);
 
-    try {
-      const files = fs.readdirSync(productImageFolder);
-      // folders represent variant skus
-      const variant_folders = files.filter(file => !file.includes("."))
-      console.log(variant_folders);
-      variant_folders.map((variant_folder) => {
-        variant_images = fs.readdirSync(path.join(productImageFolder, variant_folder));
-        // image_directories.variant_images[folder] = folders.map(image => `image/product/curtain/${product.sku}/${folder}/${image}`);
-        image_directories.variant_images[variant_folder] = variant_images.map(image => `/image/product/curtain/${product?.sku}/${variant_folder}/${image}`);
+  // console.log('your image files are: ');
+  // console.log(imageFiles);
 
-      })
-      // image_directories.variants = fs.readdirSync()
-
-
-      const photoExtensions = /\.(jpg|jpeg|png|gif|avif|webp)$/i;
-      imageFiles = files.filter(file => photoExtensions.test(file) && !file.includes('thumbnail'));
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  console.log('your image files are: ');
-  console.log(imageFiles);
-
-  console.log("your object is");
-  console.log(image_directories);
+  // console.log("your object is");
+  // console.log(image_directories);
 
 
 
@@ -131,15 +116,19 @@ async function page({ params, searchParams }: PageProps) {
 
       {product ?
         <div>
-          <ProductDetailCard 
-          product={product} 
-          product_category={product_category} 
-          product_variants={product_variants} 
-          product_variant_attributes={product_variant_attributes} 
-          product_variant_attribute_values={product_variant_attribute_values} 
-          // imageFiles={imageFiles} 
-          searchParams={searchParams} 
-          image_directories={image_directories} />
+          <ProductDetailCard
+            product={product}
+            product_category={product_category}
+            product_variants={product_variants}
+            product_variant_attributes={product_variant_attributes}
+            product_variant_attribute_values={product_variant_attribute_values}
+            // imageFiles={imageFiles} 
+            searchParams={searchParams}
+            // image_directories={image_directories}
+            product_images={product_images}
+            image_api_link={image_api_link.toString()}
+
+          />
         </div> : `No product found with sku: ${sku}`}
 
 

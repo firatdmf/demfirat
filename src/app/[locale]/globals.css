@@ -44,3 +44,7 @@ Link:hover{
   text-decoration-style: dotted;
   cursor: pointer;
 }
+
+button:hover{
+  cursor: pointer;
+}

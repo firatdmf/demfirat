@@ -2,13 +2,30 @@
 import classes from "./ProductCategories.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { ProductCategory } from "@/lib/interfaces";
+import { titleCase } from "@/lib/functions";
 interface ProductCategoriesProps {
   Headline: string;
-  EmbroideredSheerCurtainFabrics: string;
+  // EmbroideredSheerCurtainFabrics: string;
+  product_categories: ProductCategory[];
 }
 function ProductCategories({
   Headline,
-  EmbroideredSheerCurtainFabrics,
+  // EmbroideredSheerCurtainFabrics,
+  product_categories
+  // =
+  // [
+  // {
+  //   id: 2,
+  //   name: 'fabric',
+  //   image: '/media/product_categories/fabric/fabric_category_image.avif'
+  // },
+  // {
+  //   id: 1,
+  //   name: 'curtain',
+  //   image: '/media/product_categories/curtain/curtain_thumbnail.avif'
+  // }
+  // ]
 }: ProductCategoriesProps) {
   let productCategories = [
     {
@@ -51,22 +68,24 @@ function ProductCategories({
       <div className={classes.scallop_up}></div>
       <h2 className={classes.componentTitle}>{Headline}</h2>
       <div className={classes.container}>
-        {productCategories.map((item, index) => {
+        {(product_categories ?? []).map((product_category, index) => {
           // console.log(item.imgLink);
           return (
             // Below link attributes makes the user start on top of the page when going to the link
             <Link
-              href={item.link}
+              href={"/product/" + product_category.name.toLowerCase()}
               className={classes.link}
               key={index}
-              // onClick={() => {
-              //   window.scroll(0, 0);
-              // }}
+            // onClick={() => {
+            //   window.scroll(0, 0);
+            // }}
             >
               <div className={classes.product}>
-                <Image src={item.imgLink} alt={item.alt} width={500} height={500}/>
+                {product_category.image ? (
+                  <img src={process.env.NEXT_PUBLIC_NEJUM_API_URL + product_category.image} alt={product_category.name + " | product cover image."} width={500} height={500} />
+                ) : <></>}
               </div>
-              <p className={classes.itemName}>{item.name}</p>
+              <p className={classes.itemName}>{titleCase(product_category.name)}</p>
             </Link>
           );
         })}

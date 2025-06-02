@@ -37,11 +37,11 @@ export interface ProductVariantAttribute {
 }
 
 export interface ProductVariantAttributeValue {
-    id: bigint;
-    product_variant_attribute_value: string;
-    product_id?: bigint | null;
-    product_variant_attribute_id?: bigint | null;
-    product_variant_id?: bigint | null;
+  id: bigint;
+  product_variant_attribute_value: string;
+  product_id?: bigint | null;
+  product_variant_attribute_id?: bigint | null;
+  product_variant_id?: bigint | null;
 
 }
 
@@ -86,15 +86,38 @@ export async function GET(request: Request) {
   const product_variant_attribute_values = await prisma.marketing_productvariantattributevalue.findMany({
 
   })
+  console.log("here comesss my friendd");
+  console.log(product_variant_attribute_values);
+  
+  
 
-  
-  
+  const product_files = await prisma.marketing_productfile.findMany({});
+
+  // Group files by product_id
+  const filesByProductId: { [key: string]: any[] } = {};
+  product_files.forEach(file => {
+    const key = file.product_id?.toString() ?? '';
+    if (!filesByProductId[key]) filesByProductId[key] = [];
+    filesByProductId[key].push(file);
+  });
+
+  const productsWithCover = products.map(product => {
+    const files = filesByProductId[product.id.toString()] || [];
+    // Pick the first file as cover, or null if none
+    const coverImage = files.length > 0 ? files[0].file : null;
+    return {
+      ...product,
+      coverImage,
+    };
+  });
+
 
 
   // console.log(product_variants);
   // console.log(product_variant_attributes);
   // data = {...products,...product_variants,...product_variant_attributes}
-  data["products"] = products
+  // data["products"] = products
+  data["products"] = productsWithCover;
   data["product_variants"] = product_variants
   data["product_variant_attributes"] = product_variant_attributes
   data["product_variant_attribute_values"] = product_variant_attribute_values

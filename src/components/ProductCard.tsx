@@ -9,7 +9,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 import { usePathname } from 'next/navigation'
 
 // Importing Product interface from the parent.
-import { Product } from '@/components/ProductGrid';
+import { Product } from '@/lib/interfaces';
 import { useSession } from "next-auth/react";
 // below is to be used later
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
@@ -68,11 +68,14 @@ function ProductCard({ product }: ProductCardProps) {
         <div className={classes.card}>
           <div className={classes.image}>
             <img
-              src={
-                "/image/product/" +
-                product_category_name + "/" +
-                product.sku + "/" + product.sku + "_thumbnail.avif"
-              }
+              src={product.coverImage
+                ? (process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + 'media/' + product.coverImage
+                : "/placeholder.png"}
+              // {
+              // "/image/product_files/" +
+              // product.sku + "/images/" +
+              // product.sku + "/" + product.sku + "_thumbnail.avif"
+              // }
               alt={
                 "Image of the " +
                 product_category_name?.replace(/_/g, " ") +

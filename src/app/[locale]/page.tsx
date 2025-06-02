@@ -6,12 +6,21 @@ import ProductCategories from "@/components/ProductCategories";
 import ClientTestimonials from "@/components/ClientTestimonials";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { ProductCategory } from "@/lib/interfaces";
 // export default async function Home({params:{lang}}) {
-export default function Home() {
+export default async function Home() {
   // below code gives not found error when invalid parameter is provided: http://demfirat.com/asdsadsad
-  const sliderLocale = useTranslations("Slider");
-  const ProductsLocale = useTranslations("Products");
+  const sliderLocale = await getTranslations("Slider");
+  const ProductsLocale = await getTranslations("Products");
+
+  // This is for fetching product categories from Backend API
+  const get_product_categories_API_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_categories`);
+  const get_product_categories_response = await fetch(get_product_categories_API_link)
+  const product_categories: ProductCategory[] = await get_product_categories_response.json();
+
+
   const slickSliderSettings = {
     dots: true,
     infinite: true,
@@ -96,9 +105,10 @@ export default function Home() {
         </div>
         <ProductCategories
           Headline={ProductsLocale("Headline")}
-          EmbroideredSheerCurtainFabrics={ProductsLocale(
-            "EmbroideredSheerCurtainFabrics"
-          )}
+          product_categories={product_categories}
+        // EmbroideredSheerCurtainFabrics={ProductsLocale(
+        //   "EmbroideredSheerCurtainFabrics"
+        // )}
         />
         <div className="clientReviews">
           <h2>Photos from our Clients</h2>
