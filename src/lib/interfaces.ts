@@ -1,5 +1,8 @@
 import { Decimal } from "@prisma/client/runtime/library";
 
+
+// below are for produc interfaces
+// ----------------------------------------------------------------------
 export type Product = {
   id: bigint;
   pk: number;
@@ -66,17 +69,23 @@ export type ProductFile = {
 }
 
 
-export type PageParamProps = {
-  params: {
-    sku: string
-  }
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
 export type ProductCategory = {
   id: bigint;
   name: string;
   created_at: Date;
   image: string | null;
+}
 
+
+// ----------------------------------------------------------------------
+
+export type SearchParams = {
+  [key: string]: string | string[] | undefined;
+}
+
+export type PageParamProps = {
+  params: {
+    sku: string
+  }
+  searchParams: { [key: string]: string | string[] | undefined };
 }

@@ -9,3 +9,9 @@ export const titleCase = function (str: string) {
     // Directly return the joined string
     return splitStr.join(' ');
 }
+
+
+// Below capitilized only the first letter of the string.
+export const capitalizeFirstLetter = (val: string | null | undefined) => {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}

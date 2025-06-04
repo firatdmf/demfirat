@@ -1,22 +1,16 @@
 "use client"
-import { Decimal } from "@prisma/client/runtime/library";
+// import { Decimal } from "@prisma/client/runtime/library";
 import classes from "./ProductGrid.module.css";
 import ProductCard from "@/components/ProductCard";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState } from "react";
 // below are react icons
 import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
-import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces"
-
-
-
-
-
-type SearchParams = {
-  [key: string]: string | string[] | undefined;
-}
+// below are interfaces
+import { SearchParams, Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces"
+import {capitalizeFirstLetter} from "@/lib/functions"
 
 type ProductGridProps = {
   products: Product[];
@@ -32,12 +26,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
   // console.log("your attribute values are: ");
   // console.log(product_variant_attribute_values);
-
-
-
-  const capitalizeFirstLetter = (val: string | null | undefined) => {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-  }
 
   // In this component the search bar works with client side components, and the filtering works finely on the server side.
 
@@ -63,8 +51,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
         product.title?.toLowerCase().includes(query.toLowerCase()) || product.sku?.toLowerCase().includes(query.toLowerCase())
       ))
     }
-
-
   }
 
   // if (!searchParams) {

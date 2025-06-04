@@ -1,7 +1,7 @@
 import ProductDetailCard from "@/components/ProductDetailCard"
 // import { GetServerSideProps } from 'next';
 import { prisma } from '@/lib/prisma';
-import { Product, ProductVariant, ProductVariantAttributeValue,ProductVariantAttribute } from "@/lib/interfaces";
+import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAttribute } from "@/lib/interfaces";
 import fs from 'fs'
 import path from 'path'
 import { ProductFile } from "@/lib/interfaces";
@@ -80,8 +80,14 @@ async function page({ params, searchParams }: PageParamProps) {
     product_images = data.product_images;
 
   } else {
-    const message = await response.json()
-    console.log(message)
+    const response_text = await response.text()
+    try {
+      const response_message = JSON.parse(response_text)
+      console.log(response_message);
+
+    } catch {
+      console.log("Non-JSON error response:", response_text);
+    }
   }
 
   console.log("your product images are");

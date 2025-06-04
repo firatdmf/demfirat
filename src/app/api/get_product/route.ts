@@ -71,14 +71,17 @@ export async function GET(request: Request) {
     };
     const { searchParams } = new URL(request.url);
     const sku = searchParams.get('sku');
+    let product: Product | null = null;
 
-
+    if (!sku) {
+        return NextResponse.json({ message: "SKU is required" }, { status: 400 });
+    } else {
+        product = await prisma.marketing_product.findUnique({
+            where: { sku: sku }
+        });
+    }
     console.time('measuredo')
-    const product = await prisma.marketing_product.findFirst({
-        where: {
-            sku: sku
-        }
-    });
+
 
     if (product) {
         // console.log("the product you fetched is");
