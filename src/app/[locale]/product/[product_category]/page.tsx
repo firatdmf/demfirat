@@ -3,27 +3,27 @@
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
-type PageParamProps = {
-  params: { product_category: string }
-};
-
-type apiResponse = {
-  products: Product[];
-  product_variants: ProductVariant[];
-  product_variant_attributes: ProductVariantAttribute[];
-  product_variant_attribute_values: ProductVariantAttributeValue[];
+export type PageParamProps = {
+  params: {
+    product_category: string
+  }
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
+// type apiResponse = {
+//   products: Product[];
+//   product_variants: ProductVariant[];
+//   product_variant_attributes: ProductVariantAttribute[];
+//   product_variant_attribute_values: ProductVariantAttributeValue[];
+// }
 
-
-
-export default async function Page({ params }: PageParamProps) {
+export default async function Page({ searchParams, params }: PageParamProps) {
   // fetch the products from the API based on the product category
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${params.product_category}`);
   const nejum_response = await fetch(nejum_api_link)
   let errorMessage = "";
   let products: Product[] | null = null;
-  let data: apiResponse;
+  let data;
   if (nejum_response.ok) {
     data = await nejum_response.json();
     products = data.products;
@@ -33,6 +33,7 @@ export default async function Page({ params }: PageParamProps) {
     try {
       const error_data = await nejum_response.json();
       errorMessage = error_data.message || "Unknown error occurred";
+      data = {}
     }
     catch {
       errorMessage = "Failed to fetch products for category: " + params.product_category;
@@ -44,20 +45,13 @@ export default async function Page({ params }: PageParamProps) {
       {errorMessage ? (<div style={{ color: "red" }}>
         {errorMessage}
       </div>) : (<>
-        <div>
-          Hello, I am {params.product_category}
-        </div>
-        <h2>Your products are</h2>
-        <ul>
-          {products && products.map((product: Product, index) => {
-            return (
-              <li key={index}>
-                {product.sku} - {product.title}
-              </li>
-            )
-          })}
-        </ul>
-        <ProductGrid products={products}></ProductGrid>
+        <ProductGrid
+          products={data.products}
+          product_variants={data.product_variants}
+          product_variant_attributes={data.product_variant_attributes}
+          product_variant_attribute_values={data.product_variant_attribute_values}
+          searchParams={searchParams}
+        />
       </>)}
     </div>
   )

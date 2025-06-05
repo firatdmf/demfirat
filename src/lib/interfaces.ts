@@ -25,7 +25,7 @@ export type Product = {
   has_variants: boolean | null;
   datasheet_url: string | null;
   minimum_inventory_level: Decimal | null;
-  coverImage?: string;
+  primary_image?: string;
 }
 
 export type Product_API = {
@@ -44,6 +44,7 @@ export type ProductVariant = {
   variant_cost: Decimal | null;
   variant_featured: boolean | null;
   product_id: bigint | null;
+  primary_image?: string;
 }
 
 export type ProductVariantAttribute = {

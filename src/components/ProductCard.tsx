@@ -68,9 +68,8 @@ function ProductCard({ product }: ProductCardProps) {
         <div className={classes.card}>
           <div className={classes.image}>
             <img
-              src={product.coverImage
-                ? (process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + 'media/' + product.coverImage
-                : "/placeholder.png"}
+              src={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (product.primary_image
+                || "/media/placeholder.webp")}
               // {
               // "/image/product_files/" +
               // product.sku + "/images/" +
@@ -79,7 +78,7 @@ function ProductCard({ product }: ProductCardProps) {
               alt={
                 "Image of the " +
                 product_category_name?.replace(/_/g, " ") +
-                " product: " +
+                " product with sku: " +
                 product.sku
               }
               key={product.id}

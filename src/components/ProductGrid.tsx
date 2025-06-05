@@ -61,7 +61,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   // }
 
   // If there are search params in the url (filter menu)
-  if (Object.keys(searchParams).length > 0) {
+  if (searchParams && Object.keys(searchParams).length > 0) {
     console.log("your search params are:");
 
     console.log(searchParams);
@@ -185,7 +185,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
                       return (
                         <div key={attribute_value?.id} className={classes.attribute_value_item_box}>
-                          <Link className={classes.link} href={href} replace={true}>
+                          <Link className={classes.link} href={href} replace={true} scroll={false}>
                             <div className={classes.icon}>
                               {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
                             </div>
