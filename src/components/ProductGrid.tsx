@@ -10,10 +10,10 @@ import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
 // below are interfaces
 import { SearchParams, Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces"
-import {capitalizeFirstLetter} from "@/lib/functions"
+import { capitalizeFirstLetter } from "@/lib/functions"
 
 type ProductGridProps = {
-  products: Product[];
+  products: Product[] | null;
   product_variants: ProductVariant[];
   product_variant_attributes: ProductVariantAttribute[];
   product_variant_attribute_values: ProductVariantAttributeValue[];
@@ -30,9 +30,9 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   // In this component the search bar works with client side components, and the filtering works finely on the server side.
 
   // This is manipulated with with (search params) but we need to initialize it first.
-  let filteredProducts: Product[] = products;
+  let filteredProducts: Product[] | null = products;
   // const [fi, setfirst] = useState(second)
-  const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>(filteredProducts)
+  const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>(filteredProducts ? filteredProducts : []);
   const [SearchFilterUsed, setSearchFilterUsed] = useState<boolean>(false)
   const [FilterMenuOpen, setFilterMenuOpen] = useState<boolean>(false)
 
@@ -46,10 +46,13 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     } else {
       setSearchFilterUsed(true)
       // filter the products
-      setSearchFilteredProducts(filteredProducts.filter((product) =>
-        // search product title or product sku and return matching products
-        product.title?.toLowerCase().includes(query.toLowerCase()) || product.sku?.toLowerCase().includes(query.toLowerCase())
-      ))
+      if (filteredProducts) {
+        setSearchFilteredProducts(filteredProducts.filter((product) =>
+          // search product title or product sku and return matching products
+          product.title?.toLowerCase().includes(query.toLowerCase()) || product.sku?.toLowerCase().includes(query.toLowerCase())
+        ))
+      }
+
     }
   }
 
@@ -85,7 +88,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
         // Extract distinct product IDs, eliminating duplicate products
         const productIds = Array.from(new Set(attribute_values.map((attribute_value) => attribute_value.product_id)));
-        filteredProducts = filteredProducts.filter((product) => productIds.includes(product.id));
+        filteredProducts = filteredProducts?.filter((product) => productIds.includes(product.id)) || null;
       } else {
         console.log("you got no attribute defined")
       }
