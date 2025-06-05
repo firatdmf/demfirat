@@ -2,6 +2,7 @@
 // This is a server component, so we can do async and database calls.
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
 import classes from "./page.module.css"
+import ProductGrid from '@/components/ProductGrid';
 type PageParamProps = {
   params: { product_category: string }
 };
@@ -56,6 +57,7 @@ export default async function Page({ params }: PageParamProps) {
             )
           })}
         </ul>
+        <ProductGrid products={products}></ProductGrid>
       </>)}
     </div>
   )
