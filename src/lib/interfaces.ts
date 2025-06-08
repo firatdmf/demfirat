@@ -22,7 +22,7 @@ export type Product = {
   unit_of_weight: string | null;
   category_id: bigint | null;
   supplier_id: bigint | null;
-  has_variants: boolean | null;
+  // has_variants: boolean | null;
   datasheet_url: string | null;
   minimum_inventory_level: Decimal | null;
   primary_image?: string;
