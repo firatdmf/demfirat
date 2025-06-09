@@ -131,7 +131,7 @@ async function page({ params, searchParams }: PageParamProps) {
             // imageFiles={imageFiles} 
             searchParams={searchParams}
             // image_directories={image_directories}
-            product_images={product_images}
+            product_files={product_images}
             image_api_link={image_api_link.toString()}
 
           />

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import classes from "./ProductDetailCard.module.css";
-import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile } from '@/lib/interfaces';
+import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory } from '@/lib/interfaces';
 import { useSession } from 'next-auth/react';
 
 
@@ -13,7 +13,7 @@ type ProductDetailCardPageProps = {
   product_variant_attributes: ProductVariantAttribute[] | null,
   product_variant_attribute_values: ProductVariantAttributeValue[] | null,
   searchParams: { [key: string]: string | string[] | undefined };
-  product_images: ProductFile[] | null;
+  product_files: ProductFile[] | null;
   image_api_link?: string;
 };
 
@@ -25,7 +25,7 @@ function ProductDetailCard({
   product_variant_attribute_values,
   searchParams,
   // this is how you pass the images
-  product_images,
+  product_files,
   image_api_link
 }: ProductDetailCardPageProps) {
   const [selectedThumbIndex, setSelectedThumbIndex] = useState<number>(0);
@@ -34,6 +34,8 @@ function ProductDetailCard({
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [filteredImages, setFilteredImages] = useState<ProductFile[]>([]);
+  console.log("your product images are:", product_files);
+
 
 
   const { status } = useSession({
@@ -62,6 +64,8 @@ function ProductDetailCard({
   };
 
   const selectedVariant = findSelectedVariant();
+  console.log("Selected Variant: ", selectedVariant);
+
   // selectedVariant = 
   //   {
   //   id: '6',
@@ -102,21 +106,24 @@ function ProductDetailCard({
 
   // Filter images for the selected variant
   useEffect(() => {
-    if (!product_images) {
+
+    if (!product_files) {
       setFilteredImages([]);
       return;
     }
     if (selectedVariant?.id) {
       setFilteredImages(
-        product_images.filter(
+        product_files.filter(
           img => String(img.product_variant_id) === String(selectedVariant.id)
         )
       );
     } else {
-      setFilteredImages(product_images);
+      setFilteredImages(product_files);
     }
     setSelectedThumbIndex(0); // Reset thumb index on variant change
-  }, [selectedVariant, product_images]);
+  }, [selectedVariant, product_files]);
+  console.log("your product variant attributes are:", product_variant_attributes);
+
 
   // Group attribute values by attribute and filter out duplicates
   const groupedAttributeValues = product_variant_attributes?.map(attribute => ({
@@ -152,11 +159,11 @@ function ProductDetailCard({
     window.history.replaceState({}, '', `?${newParams.toString()}`);
   }, [selectedAttributes]);
 
-  const getImageUrl = (image: string) => {
-    if (!image_api_link) return image;
-    // Remove leading slash if present
-    return image_api_link.replace(/\/$/, '') + '/' + image.replace(/^\//, '');
-  };
+  // const getImageUrl = (image: string) => {
+  //   if (!image_api_link) return image;
+  //   // Remove leading slash if present
+  //   return image_api_link.replace(/\/$/, '') + '/' + image.replace(/^\//, '');
+  // };
 
   // Thumbnail/image navigation
   const selectThumb = (index: number) => setSelectedThumbIndex(index);
@@ -207,7 +214,10 @@ function ProductDetailCard({
   const imageFiles: string[] =
     filteredImages.length > 0
       ? filteredImages.map(img => img.file)
-      : ["/placeholder.png"];
+      // : ["/placeholder.png"];
+      : [("/media/placeholder.webp")];
+
+  // src={}
 
   if (!product) {
     return <div>Loading...</div>;
@@ -225,7 +235,7 @@ function ProductDetailCard({
                 onClick={() => selectThumb(index)}
               >
                 <div className={classes.img}>
-                  <img src={getImageUrl(image)} alt="" />
+                  <img src={process.env.NEXT_PUBLIC_NEJUM_API_URL + image || "/media/placeholder.webp"} alt="" />
                 </div>
               </div>
             ))}
@@ -233,13 +243,27 @@ function ProductDetailCard({
           <div className={classes.gallery}>
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
             <div className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
-              <img
-                src={getImageUrl(imageFiles[selectedThumbIndex]) || "/placeholder.png"}
-                alt=""
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onLoad={() => setImageLoaded(true)}
-              />
+              <Link href={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (imageFiles[selectedThumbIndex]
+                || "/media/placeholder.webp")} target="_blank"
+                onClick={e => {
+                  e.preventDefault();
+                  window.open(
+                    (process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (imageFiles[selectedThumbIndex] || "/media/placeholder.webp"),
+                    'targetWindow',
+                    'width=500,height=500'
+                  );
+                }}>
+
+                <img
+                  // src={getImageUrl(imageFiles[selectedThumbIndex]) || "/placeholder.png"}
+                  src={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (imageFiles[selectedThumbIndex]
+                    || "/media/placeholder.webp")}
+                  alt=""
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  onLoad={() => setImageLoaded(true)}
+                />
+              </Link>
               {zoomPosition && zoomBoxPosition && (
                 <div
                   className={classes.zoom}
@@ -262,7 +286,7 @@ function ProductDetailCard({
 
 
           {/* If the product has variants, display the variant information. */}
-          {product.has_variants && product_variant_attributes && product_variant_attributes.length > 0 ? (
+          {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
                 {groupedAttributeValues?.map(({ attribute, values }) => (
@@ -336,11 +360,12 @@ function ProductDetailCard({
             </div>
           ) : null} */}
           <h3>Description</h3>
-          <ul>
+          {/* <ul>
             <li>Width: 120 inches</li>
             <li>Composition: PES</li>
             <li>Estimated Delivery Time: 3-4 weeks</li>
-          </ul>
+          </ul> */}
+          {product.description}
         </div>
       </div>
     </div>

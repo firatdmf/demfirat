@@ -3,99 +3,92 @@
     justify-content: center;
 } */
 
-.ProductDetailCard .productHero  > * {
-    margin-top:1rem;
+.ProductDetailCard .productHero > * {
+  margin-top: 1rem;
 }
-.ProductDetailCard .variant_menu .variant_links{
-    display: flex;
-    gap:10px;
-    text-decoration: none;
-    /* color:white; */
-    /* background-color: black; */
-}
-
-.ProductDetailCard .variant_menu label{
-    text-transform: capitalize;
+.ProductDetailCard .variant_menu .variant_links {
+  display: flex;
+  gap: 10px;
+  text-decoration: none;
+  /* color:white; */
+  /* background-color: black; */
 }
 
-.ProductDetailCard .variant_menu .variant_links .link{
-    display: block;
-    padding:10px 20px;
-    margin:2px 0;
-    border-radius: 10px;
-    color:blue;
-    text-decoration: none;
-    background-color: rgba(255,255,255,0.5);
-    text-transform: capitalize;
+.ProductDetailCard .variant_menu label {
+  text-transform: capitalize;
 }
 
-
-.ProductDetailCard .variant_menu .variant_links .checked_variant_link{
-    background-color: black;
-    color:#d19e25;
+.ProductDetailCard .variant_menu .variant_links .link {
+  display: block;
+  padding: 10px 20px;
+  margin: 2px 0;
+  border-radius: 10px;
+  color: blue;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  text-transform: capitalize;
 }
 
-
-
+.ProductDetailCard .variant_menu .variant_links .checked_variant_link {
+  background-color: black;
+  color: #d19e25;
+}
 
 .ProductDetailCard .detailCardContainer {
-    display: flex;
-    background-color: lightblue;
-    padding: 10px;
-    border-radius: 10px;
-    margin: 10px;
-    justify-content: center;
-    gap: 2rem;
-    /* width: max-content; */
-    
+  display: flex;
+  background-color: lightblue;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+  justify-content: center;
+  gap: 2rem;
+  /* width: max-content; */
 }
 
 .ProductDetailCard .detailCardContainer .productMedia {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .thumbs {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb {
-    height: 60px;
-    width: 60px;
-    background-color: white;
-    cursor: pointer;
+  height: 60px;
+  width: 60px;
+  background-color: white;
+  cursor: pointer;
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb_selected {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 
-
 .ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb .img {
-    aspect-ratio: 1/1;
-    position: relative;
+  aspect-ratio: 1/1;
+  position: relative;
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb .img img {
-    height: 100%;
-    width: 100%;
-    /* object-fit: cover; */
-    /* object-position: bottom; */
+  height: 100%;
+  width: 100%;
+  /* object-fit: cover; */
+  /* object-position: bottom; */
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .gallery {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-height: 100%;
-    width: 600px;
-    height: 600px;
-
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 100%;
+  width: 600px;
+  height: 600px;
 }
 
 .ProductDetailCard .prevButton,
@@ -125,53 +118,42 @@
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .gallery .img {
-    /* aspect-ratio: 1/1; */
-    position: relative;
-    padding:10px;
+  /* aspect-ratio: 1/1; */
+  position: relative;
+  padding: 10px;
 
-    height: 100%;
-    width: 100%;
-    /* width: auto; */
-    /* transition: opacity 0.5s ease-in-out;
+  height: 100%;
+  width: 100%;
+  /* width: auto; */
+  /* transition: opacity 0.5s ease-in-out;
     opacity: 0; */
-    background-color: rgba(255,255,255,0.5);
-    border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .gallery .img img {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-    /* object-position: bottom; */
-
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  /* object-position: bottom; */
 }
-.ProductDetailCard .gallery .img .zoom {
-    /* position: fixed;
-    width: 200px;
-    height: 200px;
-    border: 2px solid #000;
-    border-radius: 50%;
-    background-repeat: no-repeat;
-    background-size: 400%;
-    pointer-events: none;
-    z-index: 2; */
-    position: fixed;
-    width: 200px;
-    height: 200px;
-    border: 2px solid #000;
-    border-radius: 50%;
-    background-repeat: no-repeat;
-    background-size: 1000%; /* Adjust this to fit the natural size */
-    pointer-events: none;
-    z-index: 2;
-    transform: translate(-50%, -50%);
-  }
 
+/* .ProductDetailCard .gallery .img .zoom {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: 1000%;
+  pointer-events: none;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+} */
 
-
-  .ProductDetailCard .detailCardContainer .productHero .productCategory{
-    text-transform: capitalize;
-  }
+.ProductDetailCard .detailCardContainer .productHero .productCategory {
+  text-transform: capitalize;
+}
 
 /* .ProductDetailCard .detailCardContainer .productMedia .gallery  .loaded {
     opacity: 1;
@@ -183,28 +165,24 @@
 } */
 
 @media screen and (max-width: 768px) {
-    .ProductDetailCard .detailCardContainer {
-        flex-direction: column;
-        align-items: center;
-    }
+  .ProductDetailCard .detailCardContainer {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .ProductDetailCard .detailCardContainer .productMedia .thumbs {
-        display: none;
-    }
+  .ProductDetailCard .detailCardContainer .productMedia .thumbs {
+    display: none;
+  }
 
-    .ProductDetailCard .detailCardContainer .productMedia .gallery {
-        position: relative;
-        width: 300px;
-        height: 300px;
-    
-    }
+  .ProductDetailCard .detailCardContainer .productMedia .gallery {
+    position: relative;
+    width: 300px;
+    height: 300px;
+  }
 
-
-    .ProductDetailCard .detailCardContainer .productMedia .img {
-        overflow: hidden;
-        height: 100%;
-        width: 100%;
-    
-    }
-
+  .ProductDetailCard .detailCardContainer .productMedia .img {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+  }
 }
