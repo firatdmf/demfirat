@@ -23,21 +23,25 @@
   padding: 10px 20px;
   margin: 2px 0;
   border-radius: 10px;
-  color: blue;
+  /* color: blue; */
+  color: black;
   text-decoration: none;
   background-color: rgba(255, 255, 255, 0.5);
   text-transform: capitalize;
+  font-weight: bold;
+  border: 0.5px solid gray;
 }
 
 .ProductDetailCard .variant_menu .variant_links .checked_variant_link {
-  background-color: black;
-  color: #d19e25;
+  /* border: 2px solid teal; */
+  box-shadow: 0px 0px 2px 2px teal;
 }
 
 .ProductDetailCard .detailCardContainer {
   display: flex;
-  background-color: lightblue;
-  padding: 10px;
+  background-color: #f0f5fa;
+  /* background-color: white; */
+  padding: 30px;
   border-radius: 10px;
   margin: 10px;
   justify-content: center;
@@ -55,7 +59,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  justify-content: center;
+  justify-content: top;
 }
 
 .ProductDetailCard .detailCardContainer .productMedia .thumbs .thumb {

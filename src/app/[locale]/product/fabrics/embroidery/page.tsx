@@ -1,5 +1,5 @@
 import classes from "./page.module.css";
-import ProductGrid from "@/components/ProductGrid";
+import ProductGrid_old from "@/components/ProductGrid_old";
 // below two packages is to get session information in server
 // import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 // import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -30,7 +30,7 @@ function Embroidery() {
       <h2>Client Call</h2>
       <User/> */}
       {/* <ProductGrid product={product} /> */}
-      <ProductGrid HeadlineT={ProductsGridT('Headline')} SearchBarT={ProductsGridT('SearchBar')} />
+      <ProductGrid_old HeadlineT={ProductsGridT('Headline')} SearchBarT={ProductsGridT('SearchBar')} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import ProductDetailCard from "@/components/ProductDetailCard";
+import ProductDetailCard_old from "@/components/ProductDetailCard_old";
 import { notFound } from "next/navigation";
 import { useTranslations } from "next-intl";
 interface pageProps {
@@ -45,19 +45,19 @@ const page: FC<pageProps> = ({ params }) => {
 
   return (
     <div>
-      <ProductDetailCard
-        product={product}
-        product_variants={product_variants}
-        product_variant_attributes={product_variant_attributes}
-        product_variant_attribute_values={product_variant_attribute_values}
+      <ProductDetailCard_old
+        // product={product}
+        // product_variants={product_variants}
+        // product_variant_attributes={product_variant_attributes}
+        // product_variant_attribute_values={product_variant_attribute_values}
 
 
-        // design={design}
-        // designT={ProductDetailCardT("Design")}
-        // widthT={ProductDetailCardT("Width")}
-        // originT={ProductDetailCardT("Origin")}
-        // wantASampleT={ProductDetailCardT("WantASample")}
-        // sendEmailT={ProductDetailCardT("SendEmail")}
+        design={design}
+        designT={ProductDetailCardT("Design")}
+        widthT={ProductDetailCardT("Width")}
+        originT={ProductDetailCardT("Origin")}
+        wantASampleT={ProductDetailCardT("WantASample")}
+        sendEmailT={ProductDetailCardT("SendEmail")}
       />
       {/* Your design is: {design} */}
     </div>

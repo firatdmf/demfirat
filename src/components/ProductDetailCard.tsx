@@ -333,7 +333,7 @@ function ProductDetailCard({
                 ) : (
                   <p>Barcode: {product.barcode}</p>
                 )}
-                {selectedVariant && selectedVariant.variant_cost ? (<>
+                {/* {selectedVariant && selectedVariant.variant_cost ? (<>
                   <p>Variant Cost: ${String(selectedVariant.variant_cost)}</p>
                   <button type='submit'>Add to Cart</button>
                 </>
@@ -342,7 +342,7 @@ function ProductDetailCard({
                     <p>Cost: ${product.price}</p>
                     <button type='submit'>Add to Cart</button>
                   </> : <></>
-                )}
+                )} */}
               </div>
             </div>
           ) :
@@ -365,7 +365,8 @@ function ProductDetailCard({
             <li>Composition: PES</li>
             <li>Estimated Delivery Time: 3-4 weeks</li>
           </ul> */}
-          {product.description}
+          <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
+
         </div>
       </div>
     </div>

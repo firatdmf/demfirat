@@ -19,10 +19,12 @@ type ProductGridProps = {
   product_variant_attribute_values: ProductVariantAttributeValue[];
   // searchParams: { [key: string]: string | string[] | undefined };
   searchParams: SearchParams;
+  HeadlineT?:string;
+  SearchBarT?:string
 }
 
 // Below variables are passed down
-function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, searchParams }: ProductGridProps) {
+function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, searchParams, HeadlineT,SearchBarT }: ProductGridProps) {
 
   // console.log("your attribute values are: ");
   // console.log(product_variant_attribute_values);

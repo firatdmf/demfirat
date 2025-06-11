@@ -70,20 +70,44 @@ function ProductCategories({
       <div className={classes.container}>
         {(product_categories ?? []).map((product_category, index) => {
           // console.log(item.imgLink);
-          return (
-            // Below link attributes makes the user start on top of the page when going to the link
+
+          // fabric category was created manually and is complex, so we created it like this.
+          // any other category is printed normally.
+          // when you add woven fabrics in future, you may change it here.
+          return product_category.name.toLowerCase() === "fabric" ? (
+            <Link
+              // href={"/products/" + product_category.name.toLowerCase()+"s"}
+              href = {"/product/fabrics/embroidery"}
+              className={classes.link}
+              key={index}
+            >
+              <div className={classes.product}>
+                {product_category.image ? (
+                  <img
+                    src={process.env.NEXT_PUBLIC_NEJUM_API_URL + product_category.image}
+                    alt={product_category.name + " | product cover image."}
+                    width={500}
+                    height={500}
+                  />
+                ) : null}
+              </div>
+              <p className={classes.itemName}>{titleCase(product_category.name)}</p>
+            </Link>
+          ) : (
             <Link
               href={"/product/" + product_category.name.toLowerCase()}
               className={classes.link}
               key={index}
-            // onClick={() => {
-            //   window.scroll(0, 0);
-            // }}
             >
               <div className={classes.product}>
                 {product_category.image ? (
-                  <img src={process.env.NEXT_PUBLIC_NEJUM_API_URL + product_category.image} alt={product_category.name + " | product cover image."} width={500} height={500} />
-                ) : <></>}
+                  <img
+                    src={process.env.NEXT_PUBLIC_NEJUM_API_URL + product_category.image}
+                    alt={product_category.name + " | product cover image."}
+                    width={500}
+                    height={500}
+                  />
+                ) : null}
               </div>
               <p className={classes.itemName}>{titleCase(product_category.name)}</p>
             </Link>

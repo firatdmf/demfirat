@@ -1,0 +1,124 @@
+.ProductGrid {
+    padding: 20px 10px ;
+  }
+  .ProductGrid .products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 250px));
+    /* setting all the rows the same height */
+    grid-auto-rows: 1fr;
+    justify-items: center;
+    justify-content: center;
+    /* margin:auto; */
+    row-gap: 15px;
+  }
+  
+  .ProductGrid .loadMoreButton {
+    padding: 15px;
+    background-color: #252525;
+    color: #d19e25;
+    font-size: 1.3rem;
+    margin: auto;
+    width: max-content;
+    text-align: center;
+    border-radius: 10px;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .ProductGrid .loadMoreButton:hover {
+    cursor: pointer;
+    color: white;
+  }
+  
+  /* for search bar below */
+  @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+  
+  .ProductGrid .search {
+    width: 100%;
+    position: relative;
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .ProductGrid .searchTerm {
+    width: 100%;
+    border: 3px solid #00b4cc;
+    border-right: none;
+    padding: 5px;
+    height: 36px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9dbfaf;
+  }
+  
+  .ProductGrid .searchTerm:focus {
+    color: #00b4cc;
+  }
+  
+  .ProductGrid .searchButton {
+    width: 40px;
+    height: 36px;
+    border: 1px solid #00b4cc;
+    background: #00b4cc;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  /*Resize the wrap to see the search bar change!*/
+  /* .wrap {
+    width: 30%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  } */
+  
+  /* search bar ends here */
+  
+  /* cover image starts here */
+  .ProductGrid .cover {
+    position: relative;
+    /* border:2px solid black; */
+    /* background: url("https://images.pexels.com/photos/1460890/pexels-photo-1460890.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")
+      no-repeat; */
+    /* background: url("https://i.ibb.co/2WnzfKW/karven-linkedin-banner.png")
+      no-repeat; */
+    /* background: url("../../public/images/cover/karven_banner.png") no-repeat; */
+    background-size: 90%;
+    background-position: center;
+    border-radius:30px 30px;
+    border-radius:30px;
+    /* margin: 0 20px; */
+    margin-bottom: 5vh;
+    height: 250px;
+    max-width: 100%;
+    /* max-height: 100%; */
+    object-fit: cover;
+  }
+  .ProductGrid .headlineBox {
+    display: flex;
+    opacity: 0.95;
+    position: absolute;
+    height: 120px;
+    width: max-content;
+    padding:5px;
+    background: #959aa4;
+    background: rgba(0, 0, 0, 0.8);
+    color: #d19e25;
+    bottom: -10%;
+    left: 2%;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    border: 4px white solid;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .cover {
+      display: none;
+    }
+  }
+  /* cover image ends here */
+  
