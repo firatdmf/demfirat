@@ -68,8 +68,9 @@ function ProductCard({ product }: ProductCardProps) {
         <div className={classes.card}>
           <div className={classes.image}>
             <img
-              src={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (product.primary_image
-                || "/media/placeholder.webp")}
+              // src={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (product.primary_image
+              //   || "/media/placeholder.webp")}
+              src={ product.primary_image || "/media/placeholder.webp"}
               // {
               // "/image/product_files/" +
               // product.sku + "/images/" +

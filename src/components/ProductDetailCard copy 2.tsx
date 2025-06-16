@@ -209,7 +209,6 @@ function ProductDetailCard({
     // const newParams = new URLSearchParams(newAttributes).toString();
     // router.replace(`?${newParams}`);
   };
-  
 
   // Prepare image files for display (fallback to placeholder)
   const imageFiles: string[] =
@@ -236,7 +235,7 @@ function ProductDetailCard({
                 onClick={() => selectThumb(index)}
               >
                 <div className={classes.img}>
-                  <img src={image || "/media/placeholder.webp"} alt="product image" />
+                  <img src={process.env.NEXT_PUBLIC_NEJUM_API_URL + image || "/media/placeholder.webp"} alt="" />
                 </div>
               </div>
             ))}
@@ -244,20 +243,20 @@ function ProductDetailCard({
           <div className={classes.gallery}>
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
             <div className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
-              <Link href={(imageFiles[selectedThumbIndex]
+              <Link href={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (imageFiles[selectedThumbIndex]
                 || "/media/placeholder.webp")} target="_blank"
                 onClick={e => {
                   e.preventDefault();
                   window.open(
-                    ((imageFiles[selectedThumbIndex] || "/media/placeholder.webp"),
-                      'targetWindow',
-                      'width=500,height=500'
-                    ));
+                    (process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (imageFiles[selectedThumbIndex] || "/media/placeholder.webp"),
+                    'targetWindow',
+                    'width=500,height=500'
+                  );
                 }}>
 
                 <img
                   // src={getImageUrl(imageFiles[selectedThumbIndex]) || "/placeholder.png"}
-                  src={(imageFiles[selectedThumbIndex]
+                  src={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (imageFiles[selectedThumbIndex]
                     || "/media/placeholder.webp")}
                   alt=""
                   onMouseMove={handleMouseMove}

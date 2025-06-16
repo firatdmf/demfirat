@@ -84,7 +84,7 @@ function ProductCategories({
               <div className={classes.product}>
                 {product_category.image ? (
                   <img
-                    src={process.env.NEXT_PUBLIC_NEJUM_API_URL + product_category.image}
+                    src={product_category.image}
                     alt={product_category.name + " | product cover image."}
                     width={500}
                     height={500}
@@ -102,7 +102,7 @@ function ProductCategories({
               <div className={classes.product}>
                 {product_category.image ? (
                   <img
-                    src={process.env.NEXT_PUBLIC_NEJUM_API_URL + product_category.image}
+                    src={product_category.image}
                     alt={product_category.name + " | product cover image."}
                     width={500}
                     height={500}

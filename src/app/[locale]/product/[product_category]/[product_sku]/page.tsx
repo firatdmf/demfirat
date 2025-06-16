@@ -43,6 +43,9 @@ export default async function page({ params, searchParams }: PageParamProps) {
     return <div className={classes.error}>Error fetching product details.</div>;
 
   }
+  console.log("your product files in next js are: ", product_files);
+  console.log("its length is", product_files.length)
+  
   return (
     <>      {product ?
       <div>
