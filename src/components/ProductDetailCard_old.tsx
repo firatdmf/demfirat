@@ -144,7 +144,7 @@ function ProductDetailCard({
   } else {
     // image carousel finishes here
     return (
-      <div className="ProductDetailCardPage">
+      <div className="ProductDetailCardPage" id="ProductDetailCardPage">
         <div className="card-wrapper">
           <div className="card">
             {/* card left */}

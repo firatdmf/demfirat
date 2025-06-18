@@ -225,7 +225,7 @@ function ProductDetailCard({
   }
 
   return (
-    <div className={classes.ProductDetailCard}>
+    <div className={classes.ProductDetailCard} id="ProductDetailCard">
       <div className={classes.detailCardContainer}>
         <div className={classes.productMedia}>
           <div className={classes.thumbs}>

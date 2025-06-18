@@ -62,7 +62,7 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <div className={classes.ProductCard}>
       <Link
-        href={product_category_name + "/" + product.sku}
+        href={product_category_name + "/" + product.sku +"#ProductDetailCard"}
         className={classes.link}
       >
         <div className={classes.card}>
