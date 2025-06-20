@@ -16,6 +16,8 @@ const nextConfig = {
     // I guess I do not need appDir anymore because I upgraded to Next 14
     // appDir:true,
     serverComponentsExternalPackages: ["@prisma/client", "bcrypt"],
+    // below is for manually changing cache lifespan.
+    // dynamicIO: true,
   },
   // images: {
   //   domains: ['127.0.0.1', 'localhost', 'app.nejum.com'],

@@ -20,7 +20,7 @@ export type PageParamProps = {
 export default async function Page({ searchParams, params }: PageParamProps) {
   // fetch the products from the API based on the product category
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${params.product_category}`);
-  const nejum_response = await fetch(nejum_api_link, {cache:"no-store"})
+  const nejum_response = await fetch(nejum_api_link)
   let errorMessage = "";
   let products: Product[] | null = null;
   let data;
