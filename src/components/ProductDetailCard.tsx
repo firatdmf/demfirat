@@ -28,6 +28,9 @@ function ProductDetailCard({
   product_files,
   image_api_link
 }: ProductDetailCardPageProps) {
+
+   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
+
   const [selectedThumbIndex, setSelectedThumbIndex] = useState<number>(0);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
@@ -48,6 +51,9 @@ function ProductDetailCard({
 
   // Find the selected variant based on selectedAttributes
   const findSelectedVariant = () => {
+
+   
+
     return product_variants?.find(variant => {
       const variantAttributes = product_variant_attribute_values?.filter(
         vav => String(vav.product_variant_id) === String(variant.id)
@@ -209,14 +215,14 @@ function ProductDetailCard({
     // const newParams = new URLSearchParams(newAttributes).toString();
     // router.replace(`?${newParams}`);
   };
-  
+
 
   // Prepare image files for display (fallback to placeholder)
   const imageFiles: string[] =
     filteredImages.length > 0
       ? filteredImages.map(img => img.file)
       // : ["/placeholder.png"];
-      : [("/media/placeholder.webp")];
+      : [(placeholder_image_link)];
 
   // src={}
 
@@ -236,7 +242,7 @@ function ProductDetailCard({
                 onClick={() => selectThumb(index)}
               >
                 <div className={classes.img}>
-                  <img src={image || "/media/placeholder.webp"} alt="product image" />
+                  <img src={image || placeholder_image_link} alt="product image" />
                 </div>
               </div>
             ))}
@@ -245,11 +251,11 @@ function ProductDetailCard({
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
             <div className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
               <Link href={(imageFiles[selectedThumbIndex]
-                || "/media/placeholder.webp")} target="_blank"
+                || placeholder_image_link)} target="_blank"
                 onClick={e => {
                   e.preventDefault();
                   window.open(
-                    ((imageFiles[selectedThumbIndex] || "/media/placeholder.webp"),
+                    ((imageFiles[selectedThumbIndex] || placeholder_image_link),
                       'targetWindow',
                       'width=500,height=500'
                     ));
@@ -258,7 +264,7 @@ function ProductDetailCard({
                 <img
                   // src={getImageUrl(imageFiles[selectedThumbIndex]) || "/placeholder.png"}
                   src={(imageFiles[selectedThumbIndex]
-                    || "/media/placeholder.webp")}
+                    || placeholder_image_link)}
                   alt=""
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleMouseLeave}

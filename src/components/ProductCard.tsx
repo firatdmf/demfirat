@@ -27,6 +27,7 @@ interface ProductCategory {
 
 // const ProductCardNew: React.FC<ProductCardNewProps> = ({ product }) => {
 function ProductCard({ product }: ProductCardProps) {
+  const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
 
   // Check if the user is logged in. If they are then display price.
   const { status } = useSession({
@@ -70,7 +71,7 @@ function ProductCard({ product }: ProductCardProps) {
             <img
               // src={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (product.primary_image
               //   || "/media/placeholder.webp")}
-              src={ product.primary_image || "/media/placeholder.webp"}
+              src={ product.primary_image || placeholder_image_link}
               // {
               // "/image/product_files/" +
               // product.sku + "/images/" +
