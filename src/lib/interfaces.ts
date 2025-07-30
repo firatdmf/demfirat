@@ -76,7 +76,26 @@ export type ProductCategory = {
   created_at: Date;
   image: string | null;
 }
+// ----------------------------------------------------------------------
+// this is for order interfaces
+export type Order = {
+  id: bigint;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
+  items: OrderItem[];
+}
 
+export type OrderItem = {
+  id: bigint;
+  product_category:string;
+  product_sku:string;
+  product_title: string;
+  description: string | null;
+  quantity: Decimal;
+  status: string;
+  unit_of_measurement:string;
+}
 
 // ----------------------------------------------------------------------
 
