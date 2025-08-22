@@ -26,8 +26,10 @@ export default async function Page({ searchParams, params }: PageParamProps) {
   let data;
   if (nejum_response.ok) {
     data = await nejum_response.json();
-    products = data.products;
-    console.log("Fetched products for category:", params.product_category, products);
+    console.log("your data is", data)
+    // filter out the products that do not have a primary image, this is not working yet for some reason.
+    // products = data.products.filter((p: Product) => !!p.primary_image);
+    console.log("Fetched products for category:", params.product_category);
   } else {
     // Try to parse the error message from the response
     try {
