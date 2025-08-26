@@ -1,8 +1,8 @@
 interface PageParamProps {
-    params: {
+    params: Promise<{
         order_id: bigint;
-    }
-    searchParams: { [key: string]: string | string[] | undefined };
+    }>
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 import { Order, OrderItem } from "@/lib/interfaces";
 import Link from "next/link";
@@ -34,7 +34,8 @@ function getStatusClass(status: string) {
     }
 }
 
-export default async function page({ params, searchParams }: PageParamProps) {
+export default async function page(props: PageParamProps) {
+    const params = await props.params;
     const order_id = params.order_id;
     const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/operating/api/get_order_status/${order_id}`);
     const nejum_response = await fetch(nejum_api_link)
@@ -61,7 +62,6 @@ export default async function page({ params, searchParams }: PageParamProps) {
                         .replace(/\b\w/g, (l) => l.toUpperCase())}
                 </span>
             </p>
-
             {order.items && order.items.length > 0 ? (
                 <div className="overflow-x-auto">
                     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -100,5 +100,4 @@ export default async function page({ params, searchParams }: PageParamProps) {
             )}
         </div>
     );
-
 }

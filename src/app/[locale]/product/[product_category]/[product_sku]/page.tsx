@@ -3,16 +3,18 @@ import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAt
 import classes from "./page.module.css";
 
 interface PageParamProps {
-  params: {
+  params: Promise<{
     product_sku: string
-  }
-  searchParams: { [key: string]: string | string[] | undefined };
+  }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 
-export default async function page({ params, searchParams }: PageParamProps) {
+export default async function page(props: PageParamProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   let product: Product | null = null;
-  let product_category: string | null = null;;
+  let product_category: string | null = null;
   let product_variants: ProductVariant[] = [];
   let product_variant_attributes: ProductVariantAttribute[] = [];
   let product_variant_attribute_values: ProductVariantAttributeValue[] = [];
@@ -45,7 +47,7 @@ export default async function page({ params, searchParams }: PageParamProps) {
   }
   console.log("your product files in next js are: ", product_files);
   console.log("its length is", product_files.length)
-  
+
   return (
     <>      {product ?
       <div>

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, use } from "react";
 import ProductDetailCard_old from "@/components/ProductDetailCard_old";
 import { notFound } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -9,7 +9,8 @@ interface pageProps {
 function is_numeric(str: string) {
   return /^\d+$/.test(str);
 }
-const page: FC<pageProps> = ({ params }) => {
+const page: FC<pageProps> = props => {
+  const params = use(props.params);
   const ProductDetailCardT = useTranslations("ProductDetailCardPage");
   let design = params.design;
   // console.log(params);

@@ -1,3 +1,4 @@
+import { use } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -22,10 +23,17 @@ interface RootLayoutProps {
     locale: string;
   };
 }
-export default function RootLayout({
-  children,
-  params: { locale },
-}: Readonly<RootLayoutProps>) {
+export default function RootLayout(props: Readonly<RootLayoutProps>) {
+  const params = use(props.params);
+
+  const {
+    locale
+  } = params;
+
+  const {
+    children
+  } = props;
+
   let menuT = useTranslations("Menu");
   let headerT = useTranslations("Header");
   // console.log(typeof headerT("ShippingText"));

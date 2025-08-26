@@ -4,10 +4,10 @@ import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttribu
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
 export type PageParamProps = {
-  params: {
+  params: Promise<{
     product_category: string
-  }
-  searchParams: { [key: string]: string | string[] | undefined };
+  }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // type apiResponse = {
@@ -17,7 +17,9 @@ export type PageParamProps = {
 //   product_variant_attribute_values: ProductVariantAttributeValue[];
 // }
 
-export default async function Page({ searchParams, params }: PageParamProps) {
+export default async function Page(props: PageParamProps) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   // fetch the products from the API based on the product category
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${params.product_category}`);
   const nejum_response = await fetch(nejum_api_link)
