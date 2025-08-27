@@ -12,12 +12,10 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   let product_variant_attribute_values: ProductVariantAttributeValue[] = [];
   let product_files: ProductFile[] = [];
   let image_api_link: URL | null = null;
-  // get the sku number from the url parameters. (http://localhost:3000/product/curtain/RN1381), RN1381 in this case.
   // api call to get the product from database
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
-  const nejum_response = await fetch(nejum_api_link)
-  if (nejum_response.ok) {
-    // Handle error response
+  const nejum_response = await fetch(nejum_api_link, { next: { revalidate: 300 } })
+  if (nejum_response.ok && (nejum_response.headers.get('content-type') || '').includes('application/json')) {
     const data = await nejum_response.json()
     product = data.product;
     product_category = data.product_category;
@@ -26,15 +24,14 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     product_variant_attribute_values = data.product_variant_attribute_values || [];
     product_files = data.product_files || [];
     image_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_image?product_sku=${product_sku}`);
-
-    // const product: Product = product_data.product;
-    // return <div>{product_data.title}</div>
-
   } else {
-    const error_data = await nejum_response.json();
-    console.error("Failed to fetch product:", error_data.message || "Unknown error");
+    try {
+      const body = await nejum_response.text();
+      console.error("Failed to fetch product:", nejum_response.status, body.slice(0, 300));
+    } catch {
+      console.error("Failed to fetch product:", nejum_response.status);
+    }
     return <div className={classes.error}>Error fetching product details.</div>;
-
   }
   console.log("your product files in next js are: ", product_files);
   console.log("its length is", product_files.length)
