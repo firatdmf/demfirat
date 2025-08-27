@@ -1,0 +1,6 @@
+.DashboardPage{}
+.PageTitle{font-size:1.5rem;font-weight:600;margin-bottom:1rem}
+.userPanelWrapper{display:flex;justify-content:center}
+.userPanel{display:flex;align-items:center;gap:.75rem;padding:1rem;border:1px solid #e5e7eb;border-radius:.5rem;background:#fff}
+.userPhoto{width:40px;height:40px;border-radius:9999px;background:#e5e7eb}
+.userName{font-weight:600} 

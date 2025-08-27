@@ -1,42 +1,24 @@
-// This is a sample page to show page protection (only accessible via authentication)
-
-
-// below is client side protection, but as you could see, there is latency
-// ----------------------
-// 'use client'
-
-
-// import { useSession } from "next-auth/react";
-
-// export default function Dashboard() {
-//     const {status}= useSession({
-//         required:true,
-//         onUnauthenticated(){
-//             // the user not authenticated, handle here
-//             console.log('Not logged in!');
-            
-//         }
-//     })
-//     if(status=== "loading"){
-//         return 'loading or unautheticated'
-//     }
-//   return <>Super Secret Page</>;
-// }
-// just a mock change ignore this line
-
-
-
-// Now let's do server side protection (this is much much faster)
-// --------------------------------------------
-import { getServerSession } from "next-auth";
-// import { authOptions } from "../../api/auth/[...nextauth]/route";
-import { authOptions } from '@/utils/authOptions'
+import classes from "./page.module.css";
 import { redirect } from "next/navigation";
+// import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
+
 export default async function Dashboard() {
-    const session = await getServerSession(authOptions)
-    if(!session){
-        redirect('/api/auth/signin')
-        
-    }
-  return <>Super Secret Page</>;
+  const session = await getServerSession(authOptions)
+  if(!session){
+    redirect('/api/auth/signin?callbackUrl=/')
+  }
+  const user = session.user;
+  return (
+    <div className={classes.DashboardPage}>
+      <div className={classes.PageTitle}>Dashboard</div>
+      <div className={classes.userPanelWrapper}>
+        <div className={classes.userPanel}>
+          <div className={classes.userPhoto}></div>
+          <div className={classes.userName}>{user?.name || user?.email || 'User'}</div>
+        </div>
+      </div>
+    </div>
+  );
 }

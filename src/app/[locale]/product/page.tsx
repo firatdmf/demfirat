@@ -5,8 +5,9 @@ import classes from './page.module.css'
 import { ProductCategory } from "@/lib/interfaces"
 
 
-export default async function Products() {
-  const productCategoriesT = await getTranslations('Products')
+export default async function Products(props: PageProps<'/[locale]/product'>) {
+  const { locale } = await props.params;
+  const productCategoriesT = await getTranslations({ locale, namespace: "Products" })
 
   const get_product_categories_API_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_categories`);
   const get_product_categories_response = await fetch(get_product_categories_API_link)

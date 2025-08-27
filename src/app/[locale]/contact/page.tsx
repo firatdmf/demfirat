@@ -1,19 +1,17 @@
 import classes from './page.module.css'
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-function Contact() {
-  const ContactPageT = useTranslations('ContactPage')
-    // below function takes a string and capitilize the first letter of each word in it
-    const titleCase = function (str:string) {
-      let splitStr = str.toLowerCase().split(' ');
-      for (let i = 0; i < splitStr.length; i++) {
-        // You do not need to check if i is larger than splitStr length, as your for does that for you
-        // Assign it back to the array
-        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-      }
-      // Directly return the joined string
-      return splitStr.join(' ');
+export default async function Contact(props: PageProps<'/[locale]/contact'>) {
+  const { locale } = await props.params;
+  const ContactPageT = await getTranslations({ locale, namespace: 'ContactPage' });
+  // below function takes a string and capitilize the first letter of each word in it
+  const titleCase = function (str:string) {
+    let splitStr = str.toLowerCase().split(' ');
+    for (let i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
     }
+    return splitStr.join(' ');
+  }
   return (
     <div className={classes.ContactPage}>
             <div className={`${classes.row} ${classes.row1}`}>
@@ -211,5 +209,3 @@ function Contact() {
     </div>
   )
 }
-
-export default Contact

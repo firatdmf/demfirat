@@ -9,29 +9,24 @@ export default function LocaleSwitcher() {
   const localActive = useLocale();
 
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    // console.log(e.target.value);
     const nextLocale = e.target.value;
     const currentPath = window.location.pathname;
 
-    let updatedPath: string;
-    if (localActive === "en") {
-      // If current locale does not show on the url, prepend the new locale to the path
-      updatedPath = currentPath.replace(`/`, `/${nextLocale}/`);
-    } else {
-      const currentLocale = currentPath.split("/")[1]; // Extract current locale from path
-      updatedPath = currentPath.replace(`/${currentLocale}`, `/${nextLocale}`);
-    }
+    const segments = currentPath.split("/");
+    const hasLocale = ["en", "ru", "pl", "tr"].includes(segments[1]);
+    const updatedPath = hasLocale
+      ? currentPath.replace(`/${segments[1]}`, `/${nextLocale}`)
+      : `/${nextLocale}${currentPath}`;
+
     startTransition(() => {
-      // router.replace(`/${nextLocale}`)
       router.push(updatedPath);
     });
   };
   return (
-    // <div>Hello</div>
     <label className="border-2 rounded">
       <p className="sr-only">Change Language</p>
       <select
-        defaultValue={localActive}
+        defaultValue={localActive || "en"}
         className="bg-transparent"
         onChange={onSelectChange}
         disabled={isPending}
