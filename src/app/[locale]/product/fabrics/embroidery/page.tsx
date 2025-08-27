@@ -1,3 +1,4 @@
+"use client"
 import classes from "./page.module.css";
 import ProductGrid_old from "@/components/ProductGrid_old";
 // below two packages is to get session information in server

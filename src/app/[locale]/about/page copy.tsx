@@ -1,8 +1,8 @@
 // import classes from '@/app/about/page.module.css'
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
 import classes from "./page.module.css";
 function About() {
-  const AboutUsPageT = useTranslations("AboutUsPage");
+  // const AboutUsPageT = useTranslations("AboutUsPage");
   return (
     <div className={classes.AboutPage}>
       <div className={classes.video}>

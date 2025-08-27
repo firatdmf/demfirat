@@ -3,12 +3,6 @@
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
-export type PageParamProps = {
-  params: Promise<{
-    product_category: string
-  }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
 
 // type apiResponse = {
 //   products: Product[];
@@ -17,11 +11,11 @@ export type PageParamProps = {
 //   product_variant_attribute_values: ProductVariantAttributeValue[];
 // }
 
-export default async function Page(props: PageParamProps) {
-  const params = await props.params;
+export default async function Page(props: PageProps<'/[locale]/product/[product_category]'>) {
+  const { product_category } = await props.params;
   const searchParams = await props.searchParams;
   // fetch the products from the API based on the product category
-  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${params.product_category}`);
+  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${product_category}`);
   const nejum_response = await fetch(nejum_api_link)
   let errorMessage = "";
   let products: Product[] | null = null;
@@ -31,7 +25,7 @@ export default async function Page(props: PageParamProps) {
     console.log("your data is", data)
     // filter out the products that do not have a primary image, this is not working yet for some reason.
     // products = data.products.filter((p: Product) => !!p.primary_image);
-    console.log("Fetched products for category:", params.product_category);
+    console.log("Fetched products for category:", product_category);
   } else {
     // Try to parse the error message from the response
     try {
@@ -40,7 +34,7 @@ export default async function Page(props: PageParamProps) {
       data = {}
     }
     catch {
-      errorMessage = "Failed to fetch products for category: " + params.product_category;
+      errorMessage = "Failed to fetch products for category: " + product_category;
     }
     console.error(errorMessage);
   }

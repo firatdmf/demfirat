@@ -2,27 +2,26 @@ import React from "react";
 import Link, {LinkProps} from "next/link";
 import classes from "@/components/Menu.module.css";
 // To get the current locale data
-import { useLocale } from "next-intl";
+// import { useLocale } from "next-intl";
 
 
-function Menu(menuTArray:any) {
-    // console.log(menuTArray);
-    const localActive = useLocale();
+function Menu(props: { menuTArray: string[]; locale: string }) {
+    const { menuTArray, locale } = props;
   return (
     <div className={classes.MenuPage}>
       <div className={classes.navbar}>
-        <a className={classes.a} href="/">
-          {menuTArray['menuTArray'][0]}
-        </a>
-        <a className={classes.a} href="/product"  >
-        {menuTArray['menuTArray'][1]}
-        </a>
-        <a className={classes.a} href="/about">
-        {menuTArray['menuTArray'][2]}
-        </a>
-        <a className={classes.a} href="/contact" >
-        {menuTArray['menuTArray'][3]}
-        </a>
+        <Link className={classes.a} href={`/${locale}`}>
+          {menuTArray[0]}
+        </Link>
+        <Link className={classes.a} href={`/${locale}/product`}  >
+        {menuTArray[1]}
+        </Link>
+        <Link className={classes.a} href={`/${locale}/about`}>
+        {menuTArray[2]}
+        </Link>
+        <Link className={classes.a} href={`/${locale}/contact`} >
+        {menuTArray[3]}
+        </Link>
         <p
           className={classes.quote}
           style={{
@@ -32,7 +31,7 @@ function Menu(menuTArray:any) {
             fontSize: "1.1rem",
           }}
         >
-          {menuTArray['menuTArray'][4]}
+          {menuTArray[4]}
         </p>
       </div>
     </div>

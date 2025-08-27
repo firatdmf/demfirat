@@ -1,9 +1,3 @@
-interface PageParamProps {
-    params: Promise<{
-        order_id: bigint;
-    }>
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
 import { Order, OrderItem } from "@/lib/interfaces";
 import Link from "next/link";
 
@@ -34,9 +28,8 @@ function getStatusClass(status: string) {
     }
 }
 
-export default async function page(props: PageParamProps) {
-    const params = await props.params;
-    const order_id = params.order_id;
+export default async function Page(props: PageProps<'/[locale]/order/[order_id]'>) {
+    const { order_id } = await props.params;
     const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/operating/api/get_order_status/${order_id}`);
     const nejum_response = await fetch(nejum_api_link)
     let order: Order = {} as Order;

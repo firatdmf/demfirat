@@ -1,8 +1,9 @@
 // import classes from '@/app/about/page.module.css'
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import classes from "./page.module.css";
-function About() {
-  const AboutUsPageT = useTranslations("AboutUsPage");
+async function About(props: PageProps<'/[locale]/about'>) {
+  const { locale } = await props.params;
+  const AboutUsPageT = await getTranslations({ locale, namespace: "AboutUsPage" });
   return (
     <div className={classes.AboutPage}>
       <div className={classes.video}>

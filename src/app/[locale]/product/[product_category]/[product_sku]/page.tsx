@@ -2,17 +2,9 @@ import ProductDetailCard from "@/components/ProductDetailCard"
 import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAttribute, ProductFile } from "@/lib/interfaces";
 import classes from "./page.module.css";
 
-interface PageParamProps {
-  params: Promise<{
-    product_sku: string
-  }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-
-export default async function page(props: PageParamProps) {
+export default async function Page(props: PageProps<'/[locale]/product/[product_category]/[product_sku]'>) {
+  const { product_sku } = await props.params;
   const searchParams = await props.searchParams;
-  const params = await props.params;
   let product: Product | null = null;
   let product_category: string | null = null;
   let product_variants: ProductVariant[] = [];
@@ -21,7 +13,6 @@ export default async function page(props: PageParamProps) {
   let product_files: ProductFile[] = [];
   let image_api_link: URL | null = null;
   // get the sku number from the url parameters. (http://localhost:3000/product/curtain/RN1381), RN1381 in this case.
-  const product_sku = params.product_sku;
   // api call to get the product from database
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
   const nejum_response = await fetch(nejum_api_link)

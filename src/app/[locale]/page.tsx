@@ -1,4 +1,5 @@
-import Image from "next/image";
+// import Image from "next/image";
+import { use } from "react";
 import React from "react";
 import "./page.css";
 import Slider from "@/components/slider/Slider";
@@ -10,10 +11,15 @@ import ClientTestimonials from "@/components/ClientTestimonials";
 import { getTranslations } from "next-intl/server";
 import { ProductCategory } from "@/lib/interfaces";
 // export default async function Home({params:{lang}}) {
-export default async function Home() {
+export default async function Home(props: PageProps<'/[locale]'>) {
   // below code gives not found error when invalid parameter is provided: http://demfirat.com/asdsadsad
-  const sliderLocale = await getTranslations("Slider");
-  const ProductsLocale = await getTranslations("Products");
+  // const sliderLocale = await getTranslations("Slider");
+  // const ProductsLocale = await getTranslations("Products");
+  const { locale } = await props.params;
+  console.log("your locale is", locale);
+
+  const sliderLocale = await getTranslations({ locale, namespace: "Slider" });
+  const productsLocale = await getTranslations({ locale, namespace: "Products" });
 
   // This is for fetching product categories from Backend API
   const get_product_categories_API_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_categories`);
@@ -104,7 +110,7 @@ export default async function Home() {
           </div>
         </div>
         <ProductCategories
-          Headline={ProductsLocale("Headline")}
+          Headline={productsLocale("Headline")}
           product_categories={product_categories}
         // EmbroideredSheerCurtainFabrics={ProductsLocale(
         //   "EmbroideredSheerCurtainFabrics"

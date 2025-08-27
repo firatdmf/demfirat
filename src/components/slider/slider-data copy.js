@@ -1,7 +1,4 @@
-import { useTranslations } from "next-intl";
-
-const t = useTranslations("Slider");
-// console.log(t("title"));
+// Removed hook usage at top-level; provide static data here instead.
 
 export const sliderData = [
   {

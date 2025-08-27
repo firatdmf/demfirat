@@ -1,8 +1,6 @@
 {
   "extends": "next/core-web-vitals",
-  // below is added by me
-  "rules":{
-    // ESLint: .eslintrc.json: 	Configuration for rule "react/no-unescaped-entities" is invalid: 	Severity should be one of the following: 0 = off, 1 = warn, 2 = error (you passed '"on"'). 
-    "react/no-unescaped-entities":"1"
+  "rules": {
+    "react/no-unescaped-entities": 1
   }
 }

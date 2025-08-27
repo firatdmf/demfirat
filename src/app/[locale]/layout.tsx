@@ -1,11 +1,12 @@
-import { use } from "react";
+// import { use } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Providers } from "./providers";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 // This is how you get 3rd party scripts in your application: We will use it for google analytics
 import Script from "next/script";
 import GoogleAnalytics from "@/lib/googleAnalytics";
@@ -17,14 +18,8 @@ export const metadata: Metadata = {
   title: "DEMFIRAT KARVEN | Home Collection",
   description: "Your premium home textiles provider.",
 };
-interface RootLayoutProps {
-  children: React.ReactNode;
-  params: {
-    locale: string;
-  };
-}
-export default function RootLayout(props: Readonly<RootLayoutProps>) {
-  const params = use(props.params);
+export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
+  const params = await props.params;
 
   const {
     locale
@@ -34,8 +29,10 @@ export default function RootLayout(props: Readonly<RootLayoutProps>) {
     children
   } = props;
 
-  let menuT = useTranslations("Menu");
-  let headerT = useTranslations("Header");
+  // let menuT = useTranslations("Menu");
+  const menuT = await getTranslations({ locale, namespace: "Menu" });
+  // let headerT = useTranslations("Header");
+  const headerT = await getTranslations({ locale, namespace: "Header" });
   // console.log(typeof headerT("ShippingText"));
   // console.log(headerT.raw);
 
@@ -46,7 +43,8 @@ export default function RootLayout(props: Readonly<RootLayoutProps>) {
     menuT("Contact"),
     menuT("SideText"),
   ];
-  const FooterT = useTranslations("FooterPage");
+  // const FooterT = useTranslations("FooterPage");
+  const footerT = await getTranslations({ locale, namespace: "FooterPage" });
 
   return (
     <html lang={locale}>
@@ -55,7 +53,7 @@ export default function RootLayout(props: Readonly<RootLayoutProps>) {
         {/* Provider component wraps the application and passes the props of session information (from the user) */}
         <Providers>
           <Header ShippingText={headerT("ShippingText")}></Header>
-          <Menu menuTArray={menuTArray} />
+          <Menu menuTArray={menuTArray} locale={locale} />
           {/* shipping={menuT('Shipping')} Home={menuT('Home')} Products={menuT('Products')} AboutUs={menuT('AboutUs')} Contact={menuT('Contact')} SideText = {menuT('SideText')}  */}
           {children}
           {/* above {children} now changed to ------- */}
@@ -65,10 +63,10 @@ export default function RootLayout(props: Readonly<RootLayoutProps>) {
           </div> */}
           {/* ------ */}
           <Footer
-            StayConnected={FooterT("StayConnected")}
-            OurStory={FooterT("OurStory")}
-            ContactUs={FooterT("ContactUs")}
-            AllRightsReserved={FooterT("AllRightsReserved")}
+            StayConnected={footerT("StayConnected")}
+            OurStory={footerT("OurStory")}
+            ContactUs={footerT("ContactUs")}
+            AllRightsReserved={footerT("AllRightsReserved")}
           ></Footer>
         </Providers>
       </body>
