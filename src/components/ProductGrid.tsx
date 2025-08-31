@@ -11,6 +11,7 @@ import { FaSearch } from "react-icons/fa";
 // below are interfaces
 import { SearchParams, Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces"
 import { capitalizeFirstLetter } from "@/lib/functions"
+import { log } from "node:console";
 
 type ProductGridProps = {
   products: Product[] | null;
@@ -19,20 +20,23 @@ type ProductGridProps = {
   product_variant_attribute_values: ProductVariantAttributeValue[];
   // searchParams: { [key: string]: string | string[] | undefined };
   searchParams: SearchParams;
-  HeadlineT?:string;
-  SearchBarT?:string
+  HeadlineT?: string;
+  SearchBarT?: string
 }
 
 // Below variables are passed down
-function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, searchParams, HeadlineT,SearchBarT }: ProductGridProps) {
-
+function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, searchParams, HeadlineT, SearchBarT }: ProductGridProps) {
+  // console.log("your products are", products);
+  
+  // console.log("Products in product grid are: ");
+  // console.log(products);
   // console.log("your attribute values are: ");
   // console.log(product_variant_attribute_values);
 
   // In this component the search bar works with client side components, and the filtering works finely on the server side.
 
-  // This is manipulated with with (search params) but we need to initialize it first.
-  let filteredProducts: Product[] | null = products;
+  // This is manipulated with (search params) but we need to initialize it first.
+  let filteredProducts: Product[] | null = products ?? []; // Initialize as an empty array if products is null
   // const [fi, setfirst] = useState(second)
   const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>(filteredProducts ? filteredProducts : []);
   const [SearchFilterUsed, setSearchFilterUsed] = useState<boolean>(false)
@@ -47,7 +51,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       setSearchFilterUsed(false)
     } else {
       setSearchFilterUsed(true)
-      // filter the products
+      // filter the products, if we have them.
       if (filteredProducts) {
         setSearchFilteredProducts(filteredProducts.filter((product) =>
           // search product title or product sku and return matching products
@@ -58,18 +62,12 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     }
   }
 
-  // if (!searchParams) {
-  //   searchParams = {};
-  // }
-
   // If there are search params in the url (filter menu)
   if (searchParams && Object.keys(searchParams).length > 0) {
-    console.log("your search params are:");
-
-    console.log(searchParams);
 
     // Iterate through the search params object
     Object.entries(searchParams).forEach(([key, value]) => {
+      // ?color=white size=84,95
       // attribute names are unique so we use find instead of filter and this returns a single object
       const attribute = product_variant_attributes.find((attribute) => {
         return attribute.name === key;
@@ -77,20 +75,28 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       if (attribute) {
         // If we have a multiple values such as 84 and 95 both selected for size, then we split them by comma (%2C)
         const values = Array.isArray(value) ? value : value?.split(',');
-        console.log("little values are");
-        console.log(values);
-
-
+        // console.log("little values are");
+        // console.log(values);
 
         // get the appropriate objects from passed down db object that match the attribute and values
         const attribute_values = product_variant_attribute_values.filter((attribute_value) => {
           return attribute_value.product_variant_attribute_id === attribute.id && values?.includes(attribute_value.product_variant_attribute_value);
         });
+        // console.log("your attribute values are:");
+        // console.log(attribute_values);
 
+        const attribute_value_ids = attribute_values.map((attribute_value) => attribute_value.id);
+        // const matching_variant_ids =  product_variants.product_variant_attribute_values
+        // In this case, it means: // "Include this variant if it has at least one attribute value that matches the selected filter values."
+        const matching_product_variants = product_variants.filter((variant) => { return variant.product_variant_attribute_values.some(valueId => attribute_value_ids.includes(valueId)) });
+        const matching_product_ids = Array.from(new Set(matching_product_variants.map((variant) => variant.product_id)));
 
-        // Extract distinct product IDs, eliminating duplicate products
-        const productIds = Array.from(new Set(attribute_values.map((attribute_value) => attribute_value.product_id)));
-        filteredProducts = filteredProducts?.filter((product) => productIds.includes(product.id)) || null;
+        // Extract distinct product IDs, eliminating duplicate productss
+        // const productIds = Array.from(new Set(attribute_values.map((attribute_value) => attribute_value.product_id)));
+        filteredProducts = filteredProducts?.filter((product) => matching_product_ids.includes(product.id)) || null;
+        // console.log("filtered products are:");
+        // console.log(filteredProducts);
+
       } else {
         console.log("you got no attribute defined")
       }
@@ -152,8 +158,8 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                     // .map(value => filteredValues.find(...)) finds the first object in filteredValues for each unique value, so you get an array of objects (not just strings).
                     .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
 
-                console.log("uniqueValues");
-                console.log(uniqueValues);
+                // console.log("uniqueValues");
+                // console.log(uniqueValues);
 
 
 
@@ -191,7 +197,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                             <div className={classes.icon}>
                               {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
                             </div>
-                            <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value)}</div>
+                            <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}</div>
                           </Link>
                           <br />
                         </div>
@@ -208,9 +214,13 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product, index: number) => {
               return <ProductCard key={index} product={product} />;
             }) :
-              filteredProducts?.map((product: Product, index: number) => {
-                return <ProductCard key={index} product={product} />;
-              })}
+              // filteredProducts?.map((product: Product, index: number) => {
+              //   return <ProductCard key={index} product={product} />;
+              // })}
+              (Array.isArray(filteredProducts) ? filteredProducts : [])?.map((product: Product, index: number) => (
+                <ProductCard key={index} product={product} />
+              ))
+            }
           </div>
         </div>
       </div>

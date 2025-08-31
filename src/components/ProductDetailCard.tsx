@@ -14,7 +14,7 @@ type ProductDetailCardPageProps = {
   product_variant_attribute_values: ProductVariantAttributeValue[] | null,
   searchParams: { [key: string]: string | string[] | undefined };
   product_files: ProductFile[] | null;
-  image_api_link?: string;
+  // image_api_link?: string;
 };
 
 function ProductDetailCard({
@@ -26,10 +26,10 @@ function ProductDetailCard({
   searchParams,
   // this is how you pass the images
   product_files,
-  image_api_link
+  // image_api_link
 }: ProductDetailCardPageProps) {
 
-   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
+  const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
 
   const [selectedThumbIndex, setSelectedThumbIndex] = useState<number>(0);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -37,7 +37,7 @@ function ProductDetailCard({
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [filteredImages, setFilteredImages] = useState<ProductFile[]>([]);
-  console.log("your product images are:", product_files);
+  // console.log("your product images are:", product_files);
 
 
 
@@ -52,7 +52,7 @@ function ProductDetailCard({
   // Find the selected variant based on selectedAttributes
   const findSelectedVariant = () => {
 
-   
+
 
     return product_variants?.find(variant => {
       const variantAttributes = product_variant_attribute_values?.filter(
@@ -70,7 +70,6 @@ function ProductDetailCard({
   };
 
   const selectedVariant = findSelectedVariant();
-  console.log("Selected Variant: ", selectedVariant);
 
   // selectedVariant = 
   //   {
@@ -103,16 +102,19 @@ function ProductDetailCard({
       }
     });
     setSelectedAttributes(initialAttributes);
-    console.log("below is your selected variant");
+    // console.log("below is your selected variant");
 
-    console.log(selectedVariant);
+    // console.log(selectedVariant);
+
+
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product_variant_attributes, product_variant_attribute_values, searchParams]);
 
   // Filter images for the selected variant
   useEffect(() => {
-
+    console.log("selected variant id:", selectedVariant?.id)
     if (!product_files) {
       setFilteredImages([]);
       return;
@@ -127,8 +129,9 @@ function ProductDetailCard({
       setFilteredImages(product_files);
     }
     setSelectedThumbIndex(0); // Reset thumb index on variant change
+    console.log("Selected Variant: ", selectedVariant);
   }, [selectedVariant, product_files]);
-  console.log("your product variant attributes are:", product_variant_attributes);
+  // console.log("your product variant attributes are:", product_variant_attributes);
 
 
   // Group attribute values by attribute and filter out duplicates

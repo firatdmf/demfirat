@@ -26,6 +26,7 @@ export type Product = {
   datasheet_url: string | null;
   minimum_inventory_level: Decimal | null;
   primary_image?: string;
+  
 }
 
 export type Product_API = {
@@ -45,6 +46,7 @@ export type ProductVariant = {
   variant_featured: boolean | null;
   product_id: bigint | null;
   primary_image?: string;
+  product_variant_attribute_values: bigint[];
 }
 
 export type ProductVariantAttribute = {
@@ -71,10 +73,10 @@ export type ProductFile = {
 
 
 export type ProductCategory = {
-  id: bigint;
+  pk: bigint;
   name: string;
   created_at: Date;
-  image: string | null;
+  image_url: string | null;
 }
 // ----------------------------------------------------------------------
 // this is for order interfaces

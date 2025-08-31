@@ -6,62 +6,24 @@ import { ProductCategory } from "@/lib/interfaces";
 import { titleCase } from "@/lib/functions";
 interface ProductCategoriesProps {
   Headline: string;
-  // EmbroideredSheerCurtainFabrics: string;
   product_categories: ProductCategory[];
 }
 function ProductCategories({
   Headline,
-  // EmbroideredSheerCurtainFabrics,
-  product_categories
-  // =
   // [
   // {
-  //   id: 2,
-  //   name: 'fabric',
-  //   image: '/media/product_categories/fabric/fabric_category_image.avif'
+  //   pk: 1,
+  //   name: 'curtain',
+  //   image_url: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1749961086/curtain_thumbnail_qrff0f.avif'
   // },
   // {
-  //   id: 1,
-  //   name: 'curtain',
-  //   image: '/media/product_categories/curtain/curtain_thumbnail.avif'
+  //   pk: 2,
+  //   name: 'fabric',
+  //   image_url: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1749961112/fabric_category_image_ixm9ts.avif'
   // }
   // ]
+  product_categories
 }: ProductCategoriesProps) {
-  let productCategories = [
-    {
-      name: "Curtains",
-      link: "/product/curtain",
-      imgLink: "/image/product/curtain/curtain_thumbnail.avif",
-      alt: "Ready Made Curtain",
-    },
-    {
-      // name: EmbroideredSheerCurtainFabrics,
-      name: "Fabrics",
-      link: "/product/fabrics/embroidery",
-      imgLink: "/image/product/fabric/fabric_category_image.avif",
-      alt: "Fabrics",
-    },
-    // {
-    //   name: "Plain Sheer Fabrics",
-    //   link: "#",
-    //   imgLink: "/products/woven_sheer_fabrics/otto.jpg",
-    //   alt: "Solid Sheer Fabrics",
-    // },
-    // {
-    //   name: "Embroidered Sheer Bridal Fabrics",
-    //   link: "#",
-    //   imgLink: "products/embroidered_sheer_bridal_fabrics/FL_7016.jpg",
-    //   alt: "Bridal Sheer Fabrics",
-    // },
-    // {
-    //   name: "Ready-made Curtain Panels",
-    //   link: "/Products/ready-made",
-    //   // imgLink: "/products/ready-made/48061/K48061-cover-photo.jpg",
-    //   imgLink:
-    //     "/products/ready-made/72010/72010_champagne/Beige-dandelion-embroidery-sheer-curtain-model-72010-placed-curtain-rod-to-show-the-grommet-dimensions.jpg",
-    //   alt: "Embroidered Sheer Fabrics",
-    // },
-  ];
 
   return (
     <div className={classes.ProductCategoriesPage}>
@@ -77,14 +39,14 @@ function ProductCategories({
           return product_category.name.toLowerCase() === "fabric" ? (
             <Link
               // href={"/products/" + product_category.name.toLowerCase()+"s"}
-              href = {"/product/fabrics/embroidery"}
+              href={"/product/fabrics/embroidery"}
               className={classes.link}
               key={index}
             >
               <div className={classes.product}>
-                {product_category.image ? (
+                {product_category.image_url ? (
                   <img
-                    src={product_category.image}
+                    src={product_category.image_url}
                     alt={product_category.name + " | product cover image."}
                     width={500}
                     height={500}
@@ -100,9 +62,9 @@ function ProductCategories({
               key={index}
             >
               <div className={classes.product}>
-                {product_category.image ? (
+                {product_category.image_url ? (
                   <img
-                    src={product_category.image}
+                    src={product_category.image_url}
                     alt={product_category.name + " | product cover image."}
                     width={500}
                     height={500}

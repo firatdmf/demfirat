@@ -21,8 +21,8 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   let data: any = {};
   if (nejum_response.ok && (nejum_response.headers.get('content-type') || '').includes('application/json')) {
     data = await nejum_response.json();
-    console.log("your data is", data)
-    console.log("Fetched products for category:", product_category);
+    // console.log("your data is", data)
+    // console.log("Fetched products for category:", product_category);
   } else {
     try {
       const body = await nejum_response.text();

@@ -14,16 +14,9 @@ import { useSession } from "next-auth/react";
 // below is to be used later
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 
-
-
 interface ProductCardProps {
   product: Product;
 }
-
-interface ProductCategory {
-  name: string;
-}
-
 
 // const ProductCardNew: React.FC<ProductCardNewProps> = ({ product }) => {
 function ProductCard({ product }: ProductCardProps) {

@@ -23,7 +23,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     product_variant_attributes = data.product_variant_attributes || [];
     product_variant_attribute_values = data.product_variant_attribute_values || [];
     product_files = data.product_files || [];
-    image_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_image?product_sku=${product_sku}`);
+    // image_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_image?product_sku=${product_sku}`);
   } else {
     try {
       const body = await nejum_response.text();
@@ -33,8 +33,8 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     }
     return <div className={classes.error}>Error fetching product details.</div>;
   }
-  console.log("your product files in next js are: ", product_files);
-  console.log("its length is", product_files.length)
+  // console.log("your product files in next js are: ", product_files);
+  // console.log("its length is", product_files.length)
 
   return (
     <>      {product ?
@@ -47,7 +47,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
           product_variant_attribute_values={product_variant_attribute_values}
           searchParams={searchParams}
           product_files={product_files}
-          image_api_link={image_api_link.toString()}
+          // image_api_link={image_api_link.toString()}
 
         />
       </div> : `No product found with sku: ${product_sku}`}
