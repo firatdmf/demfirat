@@ -37,6 +37,7 @@ function ProductDetailCard({
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [filteredImages, setFilteredImages] = useState<ProductFile[]>([]);
+
   // console.log("your product images are:", product_files);
 
 
@@ -50,26 +51,72 @@ function ProductDetailCard({
   });
 
   // Find the selected variant based on selectedAttributes
+  //   const findSelectedVariant = () => {
+  //     console.log(product_variants);
+
+  //     console.log(product_variant_attribute_values);
+
+
+  //     return product_variants?.find(variant => {
+  //       const variantAttributes = product_variant_attribute_values?.filter(
+
+  //         vav => String(vav.product_variant_id) === String(variant.id)
+  //       );
+  //       console.log("variantAttributes:", variantAttributes);
+
+  //       return Object.entries(selectedAttributes).every(([attrName, attrValue]) => {
+  //         const attrDef = product_variant_attributes?.find(attr => attr.name === attrName);
+  //         if (!attrDef) return false;
+  //         const valueObj = variantAttributes?.find(
+  //           vav => String(vav.product_variant_attribute_id) === String(attrDef.id)
+  //         );
+  //         // console.log("selected variant:", valueObj && valueObj.product_variant_attribute_value === attrValue; )
+  //       return valueObj && valueObj.product_variant_attribute_value === attrValue;
+  //     });
+  //   });
+  // };
+
   const findSelectedVariant = () => {
+    if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return undefined;
+    // console.log("All variants:", product_variants);
+    // console.log("All attribute values:", product_variant_attribute_values);
+    // console.log("Selected attributes:", selectedAttributes);
+    // selected attribute is set with url parameters.
 
+    // --------------
+    // return Object.entries(selectedAttributes).forEach(([key, value]) => {
+    //   let product_variant_attribute = product_variant_attributes?.find(attr => attr.name === key)
+    //   let product_variant_attribute_value = product_variant_attribute_values?.find(val => String(val.product_variant_attribute_id) === String(product_variant_attribute?.id && val.product_variant_attribute_value === value));
+    //   let product_variant = product_variants?.find(variant => variant.product_variant_attribute_values?.some(vav => vav === product_variant_attribute_value?.id));
+    // }
+    // )
+    // ----------
 
-
-    return product_variants?.find(variant => {
-      const variantAttributes = product_variant_attribute_values?.filter(
-        vav => String(vav.product_variant_id) === String(variant.id)
-      );
-      return Object.entries(selectedAttributes).every(([attrName, attrValue]) => {
-        const attrDef = product_variant_attributes?.find(attr => attr.name === attrName);
+    return product_variants.find(variant => {
+      // For each selected attribute, check if the variant has the matching attribute value
+      return Object.entries(selectedAttributes).every(([key, value]) => {
+        // Find the attribute definition by name
+        const attrDef = product_variant_attributes.find(attr => attr.name === key);
         if (!attrDef) return false;
-        const valueObj = variantAttributes?.find(
-          vav => String(vav.product_variant_attribute_id) === String(attrDef.id)
+
+        // Find the attribute value object by attribute id and value
+        const valueObj = product_variant_attribute_values.find(
+          val =>
+            String(val.product_variant_attribute_id) === String(attrDef.id) &&
+            val.product_variant_attribute_value === value
         );
-        return valueObj && valueObj.product_variant_attribute_value === attrValue;
+        if (!valueObj) return false;
+
+        // Check if the variant includes this attribute value's id
+        return variant.product_variant_attribute_values?.includes(valueObj.id);
       });
     });
   };
 
-  const selectedVariant = findSelectedVariant();
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | undefined>(findSelectedVariant());
+
+
+  // const selectedVariant = findSelectedVariant();
 
   // selectedVariant = 
   //   {
@@ -82,7 +129,8 @@ function ProductDetailCard({
   //   variant_featured: true,
   //   product_id: '3',
   //   variant_datasheet_url: null,
-  //   variant_minimum_inventory_level: null
+  //   variant_minimum_inventory_level: null,
+  //   product_variant_attribute_values:[2538, 2540]
   // }
 
   // Initialize selectedAttributes from searchParams or defaults
@@ -102,15 +150,34 @@ function ProductDetailCard({
       }
     });
     setSelectedAttributes(initialAttributes);
-    // console.log("below is your selected variant");
-
-    // console.log(selectedVariant);
-
-
-
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product_variant_attributes, product_variant_attribute_values, searchParams]);
+
+
+
+  // 
+
+  useEffect(() => {
+    console.log("now this is running my fellas");
+    Object.entries(selectedAttributes).forEach(([key, value]) => {
+
+      let product_variant_attribute = product_variant_attributes?.find(attr => attr.name === key)
+      let product_variant_attribute_value = product_variant_attribute_values?.find(
+        vav => String(vav.product_variant_attribute_id) === String(product_variant_attribute?.id)
+          && vav.product_variant_attribute_value === value
+      )
+      let product_variant = product_variants?.find(variant => variant.product_variant_attribute_values?.some(vav => vav === product_variant_attribute_value?.id))
+    }
+    )
+
+
+    setSelectedVariant(findSelectedVariant());
+    console.log("selected variant updated to:", findSelectedVariant());
+
+  }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
+
+  // 
 
   // Filter images for the selected variant
   useEffect(() => {
@@ -120,6 +187,8 @@ function ProductDetailCard({
       return;
     }
     if (selectedVariant?.id) {
+      console.log("you have hit here my friends");
+
       setFilteredImages(
         product_files.filter(
           img => String(img.product_variant_id) === String(selectedVariant.id)
@@ -209,6 +278,10 @@ function ProductDetailCard({
   };
 
   const handleAttributeChange = (attributeName: string, value: string) => {
+    console.log("your attribute name is:", attributeName);
+    console.log("and the value is:", value);
+
+
     setSelectedThumbIndex(0);
     setSelectedAttributes(prev => ({
       ...prev,
@@ -317,7 +390,8 @@ function ProductDetailCard({
                                 handleAttributeChange(attribute.name ?? '', value);
                               }}
                             >
-                              {value}
+                              {/* replace underscored with spaces for better client visual */}
+                              {value.replace(/_/g," ")} 
                             </Link>
                           </div>
                         );

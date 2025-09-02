@@ -55,6 +55,7 @@ export type ProductVariantAttribute = {
 }
 
 export type ProductVariantAttributeValue = {
+  variants: any;
   id: bigint;
   product_variant_attribute_value: string;
   product_variant_attribute_id: bigint | null;

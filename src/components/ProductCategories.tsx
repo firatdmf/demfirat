@@ -36,7 +36,7 @@ function ProductCategories({
           // fabric category was created manually and is complex, so we created it like this.
           // any other category is printed normally.
           // when you add woven fabrics in future, you may change it here.
-          return product_category.name.toLowerCase() === "fabric" ? (
+          return (product_category.name.toLowerCase() === "fabrics" ? (
             <Link
               // href={"/products/" + product_category.name.toLowerCase()+"s"}
               href={"/product/fabrics/embroidery"}
@@ -73,7 +73,7 @@ function ProductCategories({
               </div>
               <p className={classes.itemName}>{titleCase(product_category.name)}</p>
             </Link>
-          );
+          ));
         })}
       </div>
       <div className={classes.scallop_down}></div>
