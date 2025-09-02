@@ -36,7 +36,7 @@ function ProductCategories({
           // fabric category was created manually and is complex, so we created it like this.
           // any other category is printed normally.
           // when you add woven fabrics in future, you may change it here.
-          return (product_category.name.toLowerCase() === "fabrics" ? (
+          return (product_category.name.toLowerCase() === "fabric" ? (
             <Link
               // href={"/products/" + product_category.name.toLowerCase()+"s"}
               href={"/product/fabrics/embroidery"}
