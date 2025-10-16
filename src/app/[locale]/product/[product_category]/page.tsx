@@ -37,15 +37,23 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
       {errorMessage ? (<div style={{ color: "red" }}>
         {errorMessage}
       </div>) : (<>
+        {data.product_category_description ? (<div className="text-center mx-16 mt-10 bg-gray-100 py-10 rounded-lg cursor-default select-none">
+          <p className="text-gray-600">{data.product_category_description}</p>
+        </div>) : null}
+
+
         <ProductGrid
           products={data.products}
           product_variants={data.product_variants}
           product_variant_attributes={data.product_variant_attributes}
           product_variant_attribute_values={data.product_variant_attribute_values}
+          product_category = {data.product_category}
+          product_category_description = {data.product_category_description}
           searchParams={searchParams}
         />
-      </>)}
-    </div>
+      </>)
+      }
+    </div >
   )
 }
 

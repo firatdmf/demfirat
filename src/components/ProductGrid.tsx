@@ -19,15 +19,17 @@ type ProductGridProps = {
   product_variant_attributes: ProductVariantAttribute[];
   product_variant_attribute_values: ProductVariantAttributeValue[];
   // searchParams: { [key: string]: string | string[] | undefined };
+  product_category: string | null;
+  product_category_description: string | null;
   searchParams: SearchParams;
   HeadlineT?: string;
   SearchBarT?: string
 }
 
 // Below variables are passed down
-function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, searchParams, HeadlineT, SearchBarT }: ProductGridProps) {
+function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, HeadlineT, SearchBarT }: ProductGridProps) {
   // console.log("your products are", products);
-  
+
   // console.log("Products in product grid are: ");
   // console.log(products);
   // console.log("your attribute values are: ");
@@ -110,6 +112,20 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   } else {
     return (
       <div className={classes.ProductGrid}>
+        <div
+          className={classes.cover}
+          id="karven-banner"
+          style={{
+            backgroundImage: "url('/media/karven_banner.webp')",
+            backgroundSize: "900px",
+            // scale:"110%"
+          }}
+        >
+          {product_category ? (<div className={classes.headlineBox}>{product_category.toUpperCase()}</div>) : null}
+
+        </div>
+        <br />
+        <p className="text-center">{filteredProducts[0].category_id}</p>
         <div className={classes.search}>
           <input
             type="text"

@@ -76,6 +76,7 @@ export type ProductFile = {
 export type ProductCategory = {
   pk: bigint;
   name: string;
+  description: string | null;
   created_at: Date;
   image_url: string | null;
 }

@@ -72,6 +72,7 @@ function ProductCategories({
                 ) : null}
               </div>
               <p className={classes.itemName}>{titleCase(product_category.name)}</p>
+              {/* <p>{product_category.description}</p> */}
             </Link>
           ));
         })}
