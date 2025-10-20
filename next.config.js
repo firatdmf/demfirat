@@ -13,9 +13,34 @@ const nextConfig = {
   // I added these below myself. These prisma and bcrpyt are two libraries that we do not want to add
   // to our client bundle at all. Do not show them on the browser (no client side, only server side)
   serverExternalPackages: ["@prisma/client", "bcrypt"],
-  // images: {
-  //   domains: ['127.0.0.1', 'localhost', 'app.nejum.com'],
-  // }
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'app.nejum.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  }
 };
 
 // module.exports = nextConfig

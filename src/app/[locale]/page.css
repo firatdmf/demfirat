@@ -1,12 +1,8 @@
 
-  .HomePage{
-    margin-top: 15px;
-  }
-  
-  .Home .slider{
-    /* padding: 0 10vw; */
-    margin-top:5px;
-  }
+.HomePage {
+  margin-top: 0;
+  background-color: var(--ivory, #faf8f3);
+}
   
   .Home .grid1,
   .Home .grid2,
@@ -105,31 +101,99 @@
   }
   
   
-  .HomePage .certifications {
-    margin-top:20px;
-    display: flex;
-    /* background-color: #d19e25; */
-    background-color: rgba(0,0,0,0.2);
-    justify-content: center;
-    padding: 0.5% 0;
-    cursor:default
-  }
+.HomePage .certifications {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  display: flex;
+  background: transparent;
+  justify-content: center;
+  padding: 2rem 1rem;
+  cursor: default;
+}
 
-  .HomePage .certifications span:hover {
-    color:#d09d34;
-    cursor: default;
-  }
+.HomePage .certifications p {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--text-dark, #2c2c2c);
+}
+
+.HomePage .certifications span {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 0.5rem;
+}
+
+.HomePage .certifications span:hover {
+  color: var(--gold, #c9a961);
+  cursor: default;
+  transform: scale(1.05);
+}
   
 
-  .HomePage .clientReviews h2{
-    text-align: center;
-    margin-bottom:15px;
+.HomePage .clientReviews {
+  padding: 4rem 2rem 2rem 2rem;
+  background: transparent;
+}
+
+.HomePage .clientReviews h2 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 3rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-dark, #2c2c2c);
+}
+
+.HomePage .clientReviews h2::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
+  margin: 0 auto 1.5rem;
+}
+
+.HomePage .clientReviewsContainer {
+  display: flex;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.HomePage .clientReviewsSlider {
+  display: flex;
+  gap: 2rem;
+  animation: scrollTestimonials 40s linear infinite;
+  will-change: transform;
+}
+
+.HomePage .clientReviewsSlider:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scrollTestimonials {
+  0% {
+    transform: translateX(0);
   }
-  .HomePage .clientReviewsContainer{
-    display: flex;
-    flex-wrap:wrap;
-    gap:25px;
-    align-items: stretch;
-    align-content: center;
-    justify-content: center;
+  100% {
+    transform: translateX(-50%);
   }
+}
+
+@media (max-width: 768px) {
+  .HomePage .clientReviews {
+    padding: 4rem 1rem;
+  }
+  
+  .HomePage .clientReviews h2 {
+    font-size: 2rem;
+  }
+  
+  .HomePage .clientReviewsSlider {
+    animation-duration: 30s;
+  }
+}

@@ -3,7 +3,7 @@ import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAt
 import classes from "./page.module.css";
 
 export default async function Page(props: PageProps<'/[locale]/product/[product_category]/[product_sku]'>) {
-  const { product_sku } = await props.params;
+  const { product_sku, locale } = await props.params;
   const searchParams = await props.searchParams;
   let product: Product | null = null;
   let product_category: string | null = null;
@@ -47,8 +47,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
           product_variant_attribute_values={product_variant_attribute_values}
           searchParams={searchParams}
           product_files={product_files}
-          // image_api_link={image_api_link.toString()}
-
+          locale={locale}
         />
       </div> : `No product found with sku: ${product_sku}`}
 

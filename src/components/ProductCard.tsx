@@ -1,105 +1,169 @@
 "use client"
 import classes from "@/components/ProductCard.module.css";
-import { NextPage } from "next";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import Image from "next/image";
-import { Decimal } from "@prisma/client/runtime/library";
-// used to get the url from the browser
 import { usePathname } from 'next/navigation'
+import { useState } from 'react';
 
 // Importing Product interface from the parent.
 import { Product } from '@/lib/interfaces';
 import { useSession } from "next-auth/react";
-// below is to be used later
+// Icons
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
+import { IoEyeOutline } from "react-icons/io5";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { HiDocumentText } from "react-icons/hi2";
 
 interface ProductCardProps {
   product: Product;
+  locale?: string;
 }
 
-// const ProductCardNew: React.FC<ProductCardNewProps> = ({ product }) => {
-function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product, locale = 'en' }: ProductCardProps) {
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
+  
+  const [imageLoading, setImageLoading] = useState(true);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   // Check if the user is logged in. If they are then display price.
   const { status } = useSession({
-    required: true,
+    required: false,
     onUnauthenticated() {
-      // the user not authenticated, handle here
-      console.log("Not logged in!: " + status);
+      console.log("Not logged in!");
     },
   });
 
-
-
-
-
-  // // Prisma fails to bring the foreignkey properties, so I did it raw.
-  // const product_category:any[] = await prisma.$queryRaw`select name from marketing_productcategory where id = ${product.category_id}`;
-
-  //   const product_category: ProductCategory[] = await prisma.$queryRaw`
-  //   SELECT name 
-  //   FROM marketing_productcategory 
-  //   WHERE id = CAST(${product.category_id} AS bigint)
-  // `;
-  //   const product_category_name = product_category[0]?.name || "unknown";
-
-
-  const pathname = usePathname()
-  // product/curtain => curtain
+  const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);
-  // let product_category_name = product.category_id
+
+  // Format price with currency
+  const formatPrice = (price: string | number) => {
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    }).format(numPrice);
+  };
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsWishlisted(!isWishlisted);
+  };
+
+  const handlePdfClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // PDF oluşturma sayfasına yönlendir - ürün bilgilerini URL parametresi olarak gönder
+    const pdfUrl = `/api/generate-pdf?sku=${product.sku}&title=${encodeURIComponent(product.title)}&image=${encodeURIComponent(product.primary_image || '')}`;
+    window.open(pdfUrl, '_blank');
+  };
 
 
 
   return (
-    <div className={classes.ProductCard}>
-      <Link
-        href={product_category_name + "/" + product.sku +"#ProductDetailCard"}
-        className={classes.link}
-      >
-        <div className={classes.card}>
-          <div className={classes.image}>
-            <img
-              // src={(process.env.NEXT_PUBLIC_NEJUM_API_URL || "") + (product.primary_image
-              //   || "/media/placeholder.webp")}
-              src={ product.primary_image || placeholder_image_link}
-              // {
-              // "/image/product_files/" +
-              // product.sku + "/images/" +
-              // product.sku + "/" + product.sku + "_thumbnail.avif"
-              // }
-              alt={
-                "Image of the " +
-                product_category_name?.replace(/_/g, " ") +
-                " product with sku: " +
-                product.sku
-              }
-              key={product.id}
-            />
-          </div>
-          {/* {product_category_name ? (
-
-            <div className={classes.theme}>
-              <b>{product_category_name}</b>
+    <div className={classes.productCard}>
+      <div className={classes.cardContainer}>
+        {/* Product Image Container */}
+        <div className={classes.imageContainer}>
+          <Link
+            href={product_category_name + "/" + product.sku + "#ProductDetailCard"}
+            className={classes.imageLink}
+          >
+            <div className={classes.imageWrapper}>
+              {imageLoading && (
+                <div className={classes.imageLoader}>
+                  <div className={classes.spinner}></div>
+                </div>
+              )}
+              <img
+                src={imageError ? placeholder_image_link : (product.primary_image || placeholder_image_link)}
+                alt={`${product.title} - ${product.sku}`}
+                className={classes.productImage}
+                onLoad={() => setImageLoading(false)}
+                onError={(e) => {
+                  // First try removing /thumbnails from path (fallback to original image)
+                  const currentSrc = e.currentTarget.src;
+                  if (currentSrc.includes('/thumbnails/')) {
+                    e.currentTarget.src = currentSrc.replace('/thumbnails/', '/');
+                  } else {
+                    // If that also fails, use placeholder
+                    setImageError(true);
+                    setImageLoading(false);
+                  }
+                }}
+                loading="lazy"
+              />
+              <div className={classes.imageOverlay}></div>
             </div>
-          ) : (
-            ""
-          )} */}
-          {/* <div className={classes.productName}>
-            {product.sku}
-          </div> */}
-          <div className={classes.title}><b>{product.title}</b></div>
-          <div className={classes.SKU}>{product.sku}</div>
-          {status === "authenticated" && product.price ?
-            <div className={classes.price}>${String(product.price)}</div> : <></>
+          </Link>
+          
+          {/* Wishlist Button */}
+          <button 
+            className={classes.wishlistBtn}
+            onClick={handleWishlistClick}
+            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+          >
+            {isWishlisted ? <BsSuitHeartFill /> : <BsSuitHeart />}
+          </button>
+
+          {/* PDF Button - Left Bottom */}
+          <button 
+            className={classes.pdfBtn}
+            onClick={handlePdfClick}
+            aria-label={locale === 'tr' ? 'PDF olarak indir' :
+                       locale === 'ru' ? 'Скачать PDF' :
+                       locale === 'pl' ? 'Pobierz PDF' :
+                       locale === 'de' ? 'PDF herunterladen' :
+                       'Download PDF'}
+          >
+            <HiDocumentText />
+          </button>
+
+          {/* Quick Actions */}
+          {
+            /*
+             <div className={classes.quickActions}>
+            <button className={classes.actionBtn} aria-label="Quick view">
+              <IoEyeOutline />
+            </button>
+          </div>
+            */
+
           }
-          <BsSuitHeart />
-          {/* <div className={classes.favorites}>Add to Favorites</div> */}
+         
         </div>
-      </Link >
-    </div >
+
+        {/* Product Info */}
+        <div className={classes.productInfo}>
+          <Link
+            href={product_category_name + "/" + product.sku + "#ProductDetailCard"}
+            className={classes.productLink}
+          >
+            <div className={classes.productTitle}>{product.title}</div>
+            <div className={classes.productSku}>SKU: {product.sku}</div>
+            
+            {/* Price Section */}
+            {status === "authenticated" && product.price ? (
+              <div className={classes.priceSection}>
+                <span className={classes.currentPrice}>
+                  {formatPrice(product.price)}
+                </span>
+              </div>
+            ) : (
+              <div className={classes.loginPrompt}>
+                {locale === 'tr' ? 'Fiyat için giriş yapın' :
+                 locale === 'ru' ? 'Войдите, чтобы увидеть цену' :
+                 locale === 'pl' ? 'Zaloguj się, aby zobaczyć cenę' :
+                 locale === 'de' ? 'Anmelden für Preise' :
+                 'Login to see price'}
+              </div>
+            )}
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 

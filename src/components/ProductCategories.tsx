@@ -1,4 +1,5 @@
-// "use client";
+"use client";
+
 import classes from "./ProductCategories.module.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,77 +8,79 @@ import { titleCase } from "@/lib/functions";
 interface ProductCategoriesProps {
   Headline: string;
   product_categories: ProductCategory[];
+  locale?: string;
 }
 function ProductCategories({
   Headline,
-  // [
-  // {
-  //   pk: 1,
-  //   name: 'curtain',
-  //   image_url: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1749961086/curtain_thumbnail_qrff0f.avif'
-  // },
-  // {
-  //   pk: 2,
-  //   name: 'fabric',
-  //   image_url: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1749961112/fabric_category_image_ixm9ts.avif'
-  // }
-  // ]
-  product_categories
+  product_categories,
+  locale = 'en'
 }: ProductCategoriesProps) {
+
+  const getCategoryDescription = (categoryName: string) => {
+    const name = categoryName.toLowerCase();
+    if (name === 'curtain') {
+      return locale === 'tr' ? 'Lüks perde koleksiyonu - Evinizi zarafetle süsleyin' :
+             locale === 'ru' ? 'Роскошная коллекция штор - украсьте свой дом элегантностью' :
+             locale === 'pl' ? 'Luksusowa kolekcja zasłon - ozdobić dom elegancją' :
+             locale === 'de' ? 'Luxuriöse Vorhang-Kollektion - schmücken Sie Ihr Zuhause mit Eleganz' :
+             'Luxury curtain collection - Decorate your home with elegance';
+    } else if (name === 'fabric') {
+      return locale === 'tr' ? 'Nakışlı kumaş koleksiyonu - Her detayda sanat eseri' :
+             locale === 'ru' ? 'Коллекция вышитых тканей - произведение искусства в каждой детали' :
+             locale === 'pl' ? 'Kolekcja haftowanych tkanin - dzieło sztuki w każdym detalu' :
+             locale === 'de' ? 'Bestickte Stoffkollektion - Kunstwerk in jedem Detail' :
+             'Embroidered fabric collection - Artwork in every detail';
+    }
+    return '';
+  };
 
   return (
     <div className={classes.ProductCategoriesPage}>
-      <div className={classes.scallop_up}></div>
-      <h2 className={classes.componentTitle}>{Headline}</h2>
+      {Headline && <h2 className={classes.componentTitle}>{Headline}</h2>}
       <div className={classes.container}>
         {(product_categories ?? []).map((product_category, index) => {
-          // console.log(item.imgLink);
-
-          // fabric category was created manually and is complex, so we created it like this.
-          // any other category is printed normally.
-          // when you add woven fabrics in future, you may change it here.
-          return (product_category.name.toLowerCase() === "fabric" ? (
+          const href = product_category.name.toLowerCase() === "fabrics" ? 
+                      "/product/fabric" : 
+                      "/product/" + product_category.name.toLowerCase();
+          
+          return (
             <Link
-              // href={"/products/" + product_category.name.toLowerCase()+"s"}
-              href={"/product/fabrics/embroidery"}
+              href={href}
               className={classes.link}
               key={index}
             >
-              <div className={classes.product}>
-                {product_category.image_url ? (
-                  <img
-                    src={product_category.image_url}
-                    alt={product_category.name + " | product cover image."}
-                    width={500}
-                    height={500}
-                  />
-                ) : null}
+              <div className={classes.categoryCard}>
+                <div className={classes.imageContainer}>
+                  {product_category.image_url ? (
+                    <img
+                      src={product_category.image_url}
+                      alt={product_category.name + " | product cover image."}
+                      className={classes.categoryImage}
+                    />
+                  ) : (
+                    <div className={classes.placeholderImage}>
+                      <span>{titleCase(product_category.name)}</span>
+                    </div>
+                  )}
+                </div>
+                <div className={classes.categoryInfo}>
+                  <h3 className={classes.categoryName}>{titleCase(product_category.name)}</h3>
+                  <p className={classes.categoryDescription}>
+                    {getCategoryDescription(product_category.name)}
+                  </p>
+                  <div className={classes.exploreLink}>
+                    {locale === 'tr' ? 'Koleksiyonu Keşfet' :
+                     locale === 'ru' ? 'Исследовать коллекцию' :
+                     locale === 'pl' ? 'Poznaj kolekcję' :
+                     locale === 'de' ? 'Kollektion entdecken' :
+                     'Explore Collection'}
+                  </div>
+                </div>
               </div>
-              <p className={classes.itemName}>{titleCase(product_category.name)}</p>
             </Link>
-          ) : (
-            <Link
-              href={"/product/" + product_category.name.toLowerCase()}
-              className={classes.link}
-              key={index}
-            >
-              <div className={classes.product}>
-                {product_category.image_url ? (
-                  <img
-                    src={product_category.image_url}
-                    alt={product_category.name + " | product cover image."}
-                    width={500}
-                    height={500}
-                  />
-                ) : null}
-              </div>
-              <p className={classes.itemName}>{titleCase(product_category.name)}</p>
-              {/* <p>{product_category.description}</p> */}
-            </Link>
-          ));
+          );
         })}
       </div>
-      <div className={classes.scallop_down}></div>
     </div>
   );
 }

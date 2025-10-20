@@ -1,54 +1,117 @@
-/* @tailwind base; */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap');
+
 @tailwind components;
 @tailwind utilities;
-/*
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --primary-beige: #f5f3ed;
+  --secondary-beige: #e8e3d8;
+  --ivory: #faf8f3;
+  --light-gray: #e0dcd2;
+  --dark-gray: #4a4a4a;
+  --text-dark: #2c2c2c;
+  --gold: #c9a961;
+  --bronze: #b8956a;
+  --white: #ffffff;
+  
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Montserrat', sans-serif;
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
-
-
-
-
-*{
+* {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
-Link {
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: var(--ivory);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+Link,
+a {
   text-decoration: none;
   color: inherit;
+  transition: var(--transition);
 }
-Link:hover{
-  text-decoration: underline;
-  text-decoration-style: dotted;
+
+Link:hover,
+a:hover {
+  color: var(--gold);
   cursor: pointer;
 }
 
-button:hover{
+button {
+  font-family: var(--font-body);
+  transition: var(--transition);
+  border: none;
+  background: none;
+}
+
+button:hover {
   cursor: pointer;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.2;
 }
 
 .error {
-  color:red;
+  color: #dc2626;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--bronze) 100%);
+  color: var(--white);
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-dark);
+  border: 2px solid var(--gold);
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: var(--transition);
+}
+
+.btn-secondary:hover {
+  background: var(--gold);
+  color: var(--white);
 }

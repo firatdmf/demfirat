@@ -2,143 +2,148 @@
 import React from "react";
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
-import { AiFillInstagram, AiOutlineMail } from "react-icons/ai";
-import { TbWorld } from "react-icons/tb";
-import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa"; //fa stands for font awesome (there are many others)
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
 import { signIn, signOut } from "next-auth/react";
-import { User } from "@/app/user";
 import LocaleSwitcher from "./LocaleSwitcher";
-// below is to check to see if the user is logged in
 import { useSession } from "next-auth/react";
+import { useLocale } from "next-intl";
 
-function Header(ShippingText: any) {
-  // shipping:string,Home:string,Products:string, AboutUs:string, Contact:string, SideText:string
+interface HeaderProps {
+  menuTArray: string[];
+}
 
-  const capitilize = function (string: any) {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-  };
-
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      // the user not authenticated, handle here
-      // console.log("Not logged in!: " + status);
-    },
-  });
+function Header({ menuTArray }: HeaderProps) {
   const { data: session } = useSession();
-
-  // This is how you get the language of the user's browser
-  // console.log(window?.navigator.language) ;
+  const locale = useLocale();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
     <header className={classes.HeaderPage}>
-      {/* below prints the username if the user is logged in */}
-      {/* <p>{session?.user?.name}</p> */}
-      <div className={classes.topBar2}>
-        <span className={classes.span2}>
-          <div className={classes.span2flex2}>
-            {/* <Link href="/api/auth/signin" className={classes.loginButton}> */}
-            {/* <FaSignInAlt /> */}
-            {/* <p>Login</p> */}
-            {/* </Link> */}
-            
-            
-            {!session?.user?.name ? (
-              <span>
-                <button
-                  onClick={() => signIn()}
-                  className={classes.loginButton}
-                >
-                  {/* <FaSignInAlt /> */}
-                  <p>Log In</p>
-                </button>
-              </span>
-            ) : (
-              <>
-                <span>Hello, {session?.user?.name}</span>
-                <span className="ml-2 mr-2">|</span>
-                <span>
-                  <button
-                    onClick={() => signOut()}
-                    className={classes.loginButton}
-                  >
-                    <p>Sign Out</p>
-                  </button>
-                </span>
-              </>
-            )}
+      <div className={classes.headerContainer}>
+        {/* Logo - Left Side */}
+        <div className={classes.logoSection}>
+          <Link href={`/${locale}`} className={classes.logoLink}>
+            <img
+              src="/media/karvenLogo.webp"
+              alt="Demfirat Karven Logo"
+              className={classes.logo}
+            />
+          </Link>
+          <span className={classes.slogan}>Bütünsel Düşünün, Nakışlı Düşünün</span>
+        </div>
 
-            {/* <span>|</span> */}
-            {/* <span> */}
-            {/* <Link href="/api/auth/register" className={classes.registerButton}>
-                {/* <FaUser /> */}
-            {/* <p>Register</p> */}
-            {/* </Link> */}
+        {/* Middle Section - Navigation Menu (Desktop) */}
+        <div className={classes.middleSection}>
+          <nav className={classes.mainNav}>
+            <Link href={`/${locale}`} className={classes.navLink}>
+              {menuTArray[0]}
+            </Link>
+            <Link href={`/${locale}/product/fabric`} className={classes.navLink}>
+              Fabrics
+            </Link>
+            <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
+              Curtains
+            </Link>
+            <Link href={`/${locale}/about`} className={classes.navLink}>
+              {menuTArray[2]}
+            </Link>
+            <Link href={`/${locale}/contact`} className={classes.navLink}>
+              {menuTArray[3]}
+            </Link>
+          </nav>
+        </div>
 
-            {/* <button onClick={() => signOut()} className={classes.loginButton}> */}
-            {/* <p>Sign Out</p> */}
-            {/* </button> */}
-            {/* </span> */}
-            <span className="ml-2 mr-2">|</span>
-            <span>
-              <LocaleSwitcher />
-            </span>
+        {/* Mobile Menu Toggle */}
+        <button 
+          className={classes.mobileMenuToggle}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className={mobileMenuOpen ? classes.active : ''}></span>
+          <span className={mobileMenuOpen ? classes.active : ''}></span>
+          <span className={mobileMenuOpen ? classes.active : ''}></span>
+        </button>
+
+        {/* Right Side - Actions */}
+        <div className={classes.actionsSection}>
+          {/* Language Switcher */}
+          <div className={classes.languageSection}>
+            <LocaleSwitcher />
           </div>
-        </span>
+
+          {/* Contact Button */}
+          <Link href={`/${locale}/contact`} className={classes.contactButton}>
+            <span>Bize Ulaşın</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </Link>
+
+          {/* User Authentication */}
+          {!session?.user?.name ? (
+            <button
+              onClick={() => signIn()}
+              className={classes.iconButton}
+              title="Log In"
+            >
+              <FaUser />
+            </button>
+          ) : (
+            <div className={classes.userSection}>
+              <span className={classes.userName}>{session?.user?.name}</span>
+              <button
+                onClick={() => signOut()}
+                className={classes.iconButton}
+                title="Sign Out"
+              >
+                <FaSignOutAlt />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className={classes.logoGrid}>
-        <div className={`${classes.item1} ${classes.item}`}>
-          <div>
-            <p>
-              VAKIFLAR OSB MAH D100 CAD NO 38 <br />
-              ERGENE TEKIRDAG, 59930 <br />
-              TURKIYE
-            </p>
-            <p>+90 (501) 057-1884</p>
-          </div>
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className={classes.mobileMenu}>
+          <Link 
+            href={`/${locale}`} 
+            className={classes.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {menuTArray[0]}
+          </Link>
+          <Link 
+            href={`/${locale}/product/fabrics/embroidery`} 
+            className={classes.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Fabrics
+          </Link>
+          <Link 
+            href={`/${locale}/product/ready-made_curtain`} 
+            className={classes.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Curtains
+          </Link>
+          <Link 
+            href={`/${locale}/about`} 
+            className={classes.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {menuTArray[2]}
+          </Link>
+          <Link 
+            href={`/${locale}/contact`} 
+            className={classes.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {menuTArray[3]}
+          </Link>
         </div>
-        <div className={`${classes.item2} ${classes.item}`}>
-          <div className={classes.img}>
-            <Link href="/" id={classes.link}>
-              <img
-                src="/media/karvenLogo.webp"
-                alt="logo"
-                className={classes.logo}
-              />
-            </Link>
-          </div>
-        </div>
-        <div className={`${classes.item3} ${classes.item}`}>
-          <div>
-            <Link
-              className={classes.a}
-              href="https://www.instagram.com/karvenhomedecor/"
-              target="_blank"
-              id={classes.link}
-            >
-              <p>
-                <AiFillInstagram />
-                /karvenhomedecor
-              </p>
-            </Link>
-            <Link
-              href="mailto:info@demfirat.com"
-              className={classes.a}
-              id={classes.link}
-            >
-              <p>
-                <AiOutlineMail />info@demfirat.com
-              </p>
-            </Link>
-            <p style={{ textTransform: "capitalize", cursor:"default" }}>
-              <TbWorld />{ShippingText["ShippingText"]}
-              {/* below is for multi-language compliance */}
-              
-            </p>
-          </div>
-        </div>
-      </div>
+      )}
     </header>
   );
 }

@@ -1,27 +1,50 @@
-.ClientTestimonialsPage .reviewCard{
-  position: relative;
-  /* height:350px; */
-  width:400px;
-  overflow: hidden;
-  max-width: 300px;
-}
-
-.ClientTestimonialsPage .reviewCard .reviewImage{
+.ClientTestimonialsPage .reviewCard {
   position: relative;
   width: 100%;
-  height: 82%;
+  min-width: 300px;
+  max-width: 350px;
+  flex-shrink: 0;
+  background: transparent;
+  border-radius: 0;
   overflow: hidden;
-  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ClientTestimonialsPage .reviewCard .reviewImage .Image{
+.ClientTestimonialsPage .reviewCard:hover {
+  transform: translateY(-5px);
+}
+
+.ClientTestimonialsPage .reviewCard .reviewImage {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ClientTestimonialsPage .reviewCard .reviewImage .Image {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  object-position: bottom;
+  object-position: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.ClientTestimonialsPage .reviewCard:hover .reviewImage {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
 
-.ClientTestimonialsPage .reviewCard .reviewText{
+.ClientTestimonialsPage .reviewCard:hover .reviewImage .Image {
+  transform: scale(1.02);
+}
+
+.ClientTestimonialsPage .reviewCard .reviewText {
+  padding: 1.5rem 0;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.95rem;
   font-style: italic;
+  line-height: 1.6;
+  color: var(--dark-gray, #4a4a4a);
+  background: transparent;
 }

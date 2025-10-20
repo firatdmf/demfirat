@@ -5,12 +5,8 @@ import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Providers } from "./providers";
-// import { useTranslations } from "next-intl";
 import { getTranslations, getMessages } from "next-intl/server";
-// This is how you get 3rd party scripts in your application: We will use it for google analytics
-import Script from "next/script";
 import GoogleAnalytics from "@/lib/googleAnalytics";
-import Menu from "@/components/Menu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,9 +49,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         <GoogleAnalytics />
         {/* Provider component wraps the application and passes the props of session information (from the user) */}
         <Providers messages={messages} locale={locale}>
-          <Header ShippingText={headerT("ShippingText")}></Header>
-          <Menu menuTArray={menuTArray} locale={locale} />
-          {/* shipping={menuT('Shipping')} Home={menuT('Home')} Products={menuT('Products')} AboutUs={menuT('AboutUs')} Contact={menuT('Contact')} SideText = {menuT('SideText')}  */}
+          <Header menuTArray={menuTArray} />
           {children}
           {/* above {children} now changed to ------- */}
           {/* <div className="flex flex-col min-h-screen max-w-4xl mx-auto">
@@ -68,6 +62,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
             OurStory={footerT("OurStory")}
             ContactUs={footerT("ContactUs")}
             AllRightsReserved={footerT("AllRightsReserved")}
+            locale={locale}
           ></Footer>
         </Providers>
       </body>

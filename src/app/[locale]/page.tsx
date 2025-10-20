@@ -1,9 +1,8 @@
-// import Image from "next/image";
-import { use } from "react";
 import React from "react";
 import "./page.css";
-import Slider from "@/components/slider/Slider";
-import ProductCategories from "@/components/ProductCategories";
+import HeroVideo from "@/components/HeroVideo";
+import ProductShowcase from "@/components/ProductShowcase";
+import AutoSlider from "@/components/AutoSlider";
 import ClientTestimonials from "@/components/ClientTestimonials";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
@@ -115,35 +114,42 @@ export default async function Home(props: PageProps<'/[locale]'>) {
   return (
     <main>
       <div className="HomePage">
-        <div className="Home">
-          <div className="slider">
-            <Slider sliderData={sliderData} />
-          </div>
-        </div>
-        <ProductCategories
-          Headline={productsLocale("Headline")}
-          product_categories={product_categories}
-        // EmbroideredSheerCurtainFabrics={ProductsLocale(
-        //   "EmbroideredSheerCurtainFabrics"
-        // )}
+        <HeroVideo
+          videoSrc="/media/hero-video.mp4"
         />
+        <ProductShowcase
+          title={productsLocale("Headline")}
+          locale={locale}
+        />
+        <AutoSlider locale={locale} />
         <div className="clientReviews">
-          <h2>Photos from our Clients</h2>
+          <h2>
+            {locale === 'tr' ? 'Müşterilerimizden Fotoğraflar' :
+             locale === 'ru' ? 'Фотографии от наших клиентов' :
+             locale === 'pl' ? 'Zdjęcia od naszych klientów' :
+             locale === 'de' ? 'Fotos von unseren Kunden' :
+             'Photos from our Clients'}
+          </h2>
           <div className="clientReviewsContainer">
-            {reviews.map((review, index) => (
-              <ClientTestimonials
-                key={index}
-                image={review.image}
-                name={review.name}
-                review={review.review}
-              />
-            ))}
+            <div className="clientReviewsSlider">
+              {reviews.map((review, index) => (
+                <ClientTestimonials
+                  key={`original-${index}`}
+                  image={review.image}
+                  name={review.name}
+                  review={review.review}
+                />
+              ))}
+              {reviews.map((review, index) => (
+                <ClientTestimonials
+                  key={`duplicate-${index}`}
+                  image={review.image}
+                  name={review.name}
+                  review={review.review}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="certifications">
-          <b>
-            <p><span>ISO 9001</span> | <span>NFPA 701</span> | <span>GOTS</span> | <span>OEKO TEX</span></p>
-          </b>
         </div>
       </div>
     </main>

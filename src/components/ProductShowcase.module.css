@@ -1,0 +1,156 @@
+.showcaseSection {
+  background: linear-gradient(135deg, #5a5a52 0%, #4a4a42 100%);
+  padding: 6rem 2rem;
+  position: relative;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.content {
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.brand {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 3rem;
+  font-weight: 300;
+  color: #ffffff;
+  letter-spacing: 0.1em;
+  text-align: left;
+}
+
+.slogan {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 250px);
+  gap: 1.5rem;
+  margin: 4rem 0;
+}
+
+.galleryItem {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.galleryItem:hover {
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.galleryItem.large {
+  grid-row: span 2;
+  grid-column: span 1;
+}
+
+.galleryItem.wide {
+  grid-column: span 2;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.galleryItem:hover .image {
+  opacity: 0.95;
+}
+
+.ctaContainer {
+  margin-top: 3rem;
+}
+
+.ctaButton {
+  display: inline-block;
+  color: #ffffff;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.ctaButton:hover {
+  color: #c9a961;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 220px);
+  }
+
+  .galleryItem.large {
+    grid-row: span 2;
+  }
+
+  .title {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .showcaseSection {
+    padding: 4rem 1.5rem;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
+  }
+
+  .galleryItem,
+  .galleryItem.large,
+  .galleryItem.wide {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 300px;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .ctaButton {
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .galleryItem {
+    height: 250px;
+  }
+}

@@ -5,62 +5,124 @@
   } */
 
 .ProductGrid .FiratDisplay {
-  padding: 20px;
-  gap: 10px;
+  padding: 1.5rem 2rem;
+  gap: 1.5rem;
   display: flex;
   width: 100%;
-  justify-content: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: flex-start;
 }
 
 
 .ProductGrid .FiratDisplay .filterMenu {
-  /* min-width: 350px; */
-  /* margin-right: 35px; */
-  width: 20%;
-  /* height: 500px; */
-  background-color: lightblue;
-  justify-content: center;
-  padding:40px;
-  border-radius: 5px;
+  width: 280px;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--light-gray, #e0dcd2);
+  height: fit-content;
+  position: sticky;
+  top: 1rem;
+}
+
+.ProductGrid .filterMenu h3 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-dark, #2c2c2c);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--light-gray, #e0dcd2);
+}
+
+.ProductGrid .filterMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ProductGrid .filterMenu li {
+  margin-bottom: 1.5rem;
+}
+
+.ProductGrid .filterMenu li:first-child {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-dark, #2c2c2c);
+  margin-bottom: 0.75rem;
 }
 
 .ProductGrid .attribute_value_item_box{
   display: flex;
+  margin-bottom: 0.5rem;
 }
 
 .ProductGrid .attribute_value_item_box .link{
   display: flex;
   align-items: center;
   text-decoration: none;
-  color:inherit;
-  margin-left:3px;
-  /* vertical-align: bottom; */
-  /* vertical-align:text-top; */
+  color: var(--text-dark, #2c2c2c);
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  width: 100%;
+  background: var(--ivory, #faf8f3);
+  border: 1px solid transparent;
 }
 
-.ProductGrid .attribute_value_item_box .link div{
-  margin:2px;
-  /* font-size: 1.4rem; */
+.ProductGrid .attribute_value_item_box .link:hover {
+  background: var(--primary-beige, #f5f3ed);
+  border-color: var(--gold, #c9a961);
+}
+
+.ProductGrid .attribute_value_item_box .link .icon {
+  margin-right: 0.5rem;
+  color: var(--gold, #c9a961);
+  font-size: 1rem;
+}
+
+.ProductGrid .attribute_value_item_box .link .iconText {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 400;
 }
 
 
 .ProductGrid .clearFiltersButton{
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
+  color: white;
   text-decoration: none;
+  border-radius: 8px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ProductGrid .clearFiltersButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
 }
 
 
 
 
 .ProductGrid .FiratDisplay .products {
-  padding: 0 50px;
-  /* max-width: 80%; */
-  width: 80%;
+  flex: 1;
   display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
-  justify-content: center;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  justify-content: start;
   align-items: start;
-  justify-items: start;
 }
 
 .ProductGrid .loadMoreButton {
@@ -80,41 +142,61 @@
   color: white;
 }
 
-/* for search bar below */
-/* @import url(https://fonts.googleapis.com/css?family=Open+Sans); */
-
+/* Modern search bar */
 .ProductGrid .search {
-  /* width: 100%; */
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
   position: relative;
   display: flex;
-  margin: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  overflow: hidden;
 }
 
 .ProductGrid .searchTerm {
   width: 100%;
-  border: 3px solid #00b4cc;
+  border: 2px solid var(--light-gray, #e0dcd2);
   border-right: none;
-  padding: 5px;
-  height: 36px;
-  border-radius: 5px 0 0 5px;
+  padding: 1rem 1.5rem;
+  height: 56px;
+  border-radius: 50px 0 0 50px;
   outline: none;
-  color: #9dbfaf;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  color: var(--text-dark, #2c2c2c);
+  background: white;
+  transition: all 0.3s ease;
 }
 
 .ProductGrid .searchTerm:focus {
-  color: #00b4cc;
+  border-color: var(--gold, #c9a961);
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+}
+
+.ProductGrid .searchTerm::placeholder {
+  color: rgba(44, 44, 44, 0.5);
 }
 
 .ProductGrid .searchButton {
-  width: 40px;
-  height: 36px;
-  border: 1px solid #00b4cc;
-  background: #00b4cc;
+  width: 60px;
+  height: 56px;
+  border: 2px solid var(--gold, #c9a961);
+  background: var(--gold, #c9a961);
   text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
+  color: white;
+  border-radius: 0 50px 50px 0;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ProductGrid .searchButton:hover {
+  background: var(--bronze, #b8956a);
+  border-color: var(--bronze, #b8956a);
+  transform: scale(1.02);
 }
 
 /*Resize the wrap to see the search bar change!*/
@@ -128,43 +210,46 @@
 
 /* search bar ends here */
 
-/* cover image starts here */
-.ProductGrid .cover {
-  position: relative;
-  /* border:2px solid black; */
-  /* background: url("https://images.pexels.com/photos/1460890/pexels-photo-1460890.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")
-      no-repeat; */
-  /* background: url("https://i.ibb.co/2WnzfKW/karven-linkedin-banner.png")
-      no-repeat; */
-  /* background: url("../../public/images/cover/karven_banner.png") no-repeat; */
-  background-size: 90%;
-  background-position: center;
-  border-radius: 30px 30px;
-  border-radius: 30px;
-  /* margin: 0 20px; */
-  margin-bottom: 5vh;
-  height: 250px;
-  max-width: 100%;
-  /* max-height: 100%; */
-  object-fit: cover;
+/* Modern header section */
+.ProductGrid .headerSection {
+  background: linear-gradient(135deg, var(--primary-beige, #f5f3ed) 0%, var(--ivory, #faf8f3) 100%);
+  padding: 2rem 2rem 1.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  border-radius: 0;
 }
 
-.ProductGrid .headlineBox {
-  display: flex;
-  opacity: 0.95;
-  position: absolute;
-  height: 120px;
-  width: max-content;
-  padding: 5px;
-  background: #959aa4;
-  background: rgba(0, 0, 0, 0.8);
-  color: #d19e25;
-  bottom: -10%;
-  left: 2%;
-  align-items: center;
-  justify-content: center;
-  font-size: 50px;
-  border: 4px white solid;
+.ProductGrid .headerContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ProductGrid .pageTitle {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--text-dark, #2c2c2c);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.ProductGrid .pageTitle::before {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
+  margin: 0 auto 1rem;
+}
+
+.ProductGrid .pageDescription {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-dark, #2c2c2c);
+  line-height: 1.6;
+  opacity: 0.8;
+  margin: 0;
 }
 
 .ProductGrid .iconContainer{
@@ -176,23 +261,28 @@
   position: relative;
   display: flex;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .ProductGrid .filterToggleButton {
-  /* margin-left: 1rem; */
-  padding: 0.5rem 1rem;
-  width: 90%;
-  /* margin:0 10px; */
-  background-color: #0070f3;
+  padding: 1rem 2rem;
+  width: 100%;
+  max-width: 300px;
+  background: linear-gradient(135deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   display: none;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .ProductGrid .filterToggleButton:hover {
-  background-color: #005bb5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
 }
 
 
@@ -207,20 +297,52 @@
 
 
 @media only screen and (max-width: 1080px) {
+  .ProductGrid {
+    padding: 0 1rem;
+  }
+
+  .ProductGrid .headerSection {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .ProductGrid .pageTitle {
+    font-size: 2.5rem;
+  }
+
+  .ProductGrid .pageDescription {
+    font-size: 1rem;
+  }
+
+  .ProductGrid .search {
+    margin: 0 auto 2rem;
+    max-width: 100%;
+  }
+
   .ProductGrid .FiratDisplay {
-    padding: 20px;
-    gap: 10px;
+    padding: 1rem;
+    gap: 1rem;
     display: flex;
     flex-direction: column;
   }
 
   .ProductGrid .filterToggleButton{
-    display:block;
+    display: block;
+    background: var(--gold, #c9a961);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-weight: 500;
+    color: white;
+  }
+
+  .ProductGrid .filterToggleButton:hover {
+    background: var(--bronze, #b8956a);
   }
 
   .ProductGrid .FiratDisplay .filterMenu {
     width: 100%;
-    margin-right:0;
+    margin-bottom: 1rem;
   }
 
   .ProductGrid .filterMenuClosed {
@@ -232,10 +354,8 @@
   }
 
   .ProductGrid .FiratDisplay .products {
-    padding: 0px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
-    justify-items: start;
-    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
   }
 
 }

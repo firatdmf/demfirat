@@ -1,42 +1,70 @@
-import classes from './page.module.css'
-import { getTranslations } from 'next-intl/server';
+'use client';
 
-export default async function Contact(props: PageProps<'/[locale]/contact'>) {
-  const { locale } = await props.params;
-  const ContactPageT = await getTranslations({ locale, namespace: 'ContactPage' });
-  // below function takes a string and capitilize the first letter of each word in it
-  const titleCase = function (str:string) {
-    let splitStr = str.toLowerCase().split(' ');
-    for (let i = 0; i < splitStr.length; i++) {
-      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-    }
-    return splitStr.join(' ');
-  }
+import { useParams } from 'next/navigation';
+import classes from './page.module.css';
+
+export default function Contact() {
+  const params = useParams();
+  const locale = params.locale as string;
+  
+  // Simplified translations - using direct text for now
+  const t = (key: string) => {
+    const translations: Record<string, Record<string, string>> = {
+      ManufacturingPlant: { en: 'Manufacturing Plant', tr: 'Üretim Tesisi', ru: 'Производственный завод' },
+      FabricShowroom: { en: 'Fabric Showroom', tr: 'Kumaş Showroom', ru: 'Шоу-рум тканей' },
+      RetailStore: { en: 'Retail Store', tr: 'Perakende Mağaza', ru: 'Розничный магазин' },
+      WarehouseShowroom: { en: 'Warehouse & Showroom', tr: 'Depo ve Showroom', ru: 'Склад и Шоу-рум' },
+      Representative: { en: 'Representative', tr: 'Temsilci', ru: 'Представитель' },
+      Phone: { en: 'Phone', tr: 'Telefon', ru: 'Телефон' },
+      Email: { en: 'Email', tr: 'E-posta', ru: 'Эл. почта' },
+      Address: { en: 'Address', tr: 'Adres', ru: 'Адрес' },
+      WorkHours: { en: 'Work Hours', tr: 'Çalışma Saatleri', ru: 'Часы работы' },
+      ProductLines: { en: 'Product Lines', tr: 'Ürün Grupları', ru: 'Ассортимент' },
+      Website: { en: 'Website', tr: 'Website', ru: 'Веб-сайт' },
+      GeneralInquiries: { en: 'General Inquiries', tr: 'Genel Sorular', ru: 'Общие вопросы' },
+      AccountingInquiries: { en: 'Accounting Inquiries', tr: 'Muhasebe Soruları', ru: 'Бухгалтерские вопросы' },
+      WorkHour1: { en: 'Mon - Fri 08:30-18:30 (Istanbul Time)', tr: 'Pzt - Cum 08:30-18:30 (İstanbul Saati)', ru: 'Пн - Пт 08:30-18:30 (стамбульское время)' },
+      WorkHour2: { en: 'Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)', tr: 'Pzt - Cum 08:30-19:00, Cmt 08:30-14:00', ru: 'Пн - Пт 08:30-19:00, Сб 08:30-14:00' },
+      WorkHour3: { en: 'Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)', tr: 'Pzt - Cum 09:00-20:30, Cmt 09:00-16:00', ru: 'Пн - Пт 09:00-20:30, Сб 09:00-16:00' },
+      WorkHour4: { en: 'Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)', tr: 'Pzt - Cum 09:00-18:00, Cmt 09:00-16:00', ru: 'Пн - Пт 09:00-18:00, Сб 09:00-16:00' },
+      ProductLine1: { en: 'Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners', tr: 'Perde, Döşemelik ve Gelinlik Kumaşlar & Dantel Masa Örtüleri', ru: 'Ткани для штор, обивки и свадебных платьев' },
+      ProductLine2: { en: 'Interior Fabrics: Drapery & Upholstery', tr: 'İç Mekan Kumaşları: Perde ve Döşemelik', ru: 'Интерьерные ткани: портьеры и обивка' },
+      ProductLine3: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца' },
+      ProductLine4: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца' }
+    };
+    const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : 'en';
+    return translations[key]?.[lang] || key;
+  };
+  const titleCase = (str: string) => {
+    return str.toLowerCase().split(' ').map(word => 
+      word.charAt(0).toUpperCase() + word.substring(1)
+    ).join(' ');
+  };
   return (
     <div className={classes.ContactPage}>
             <div className={`${classes.row} ${classes.row1}`}>
         <div className={` ${classes.item} ${classes.textInfo}`}>
-          <h2>{ContactPageT('ManufacturingPlant')} (Tekirdağ, Türkiye)</h2>
-          <h4>{ContactPageT('Representative')}:</h4>
+          <h2>{t('ManufacturingPlant')} (Tekirdağ, Türkiye)</h2>
+          <h4>{t('Representative')}:</h4>
           <p>Cuma Öztürk</p>
-          <h4>{ContactPageT('Phone')}:</h4>
+          <h4>{t('Phone')}:</h4>
           <p>+90 (282) 675-1552 (Office)</p>
           <p>+90 (533) 544-2525 (Mobile)</p>
-          <h4>{ContactPageT('Email')}:</h4>
-          <p>info@demfirat.com ({ContactPageT('GeneralInquiries')})</p>
-          <p>karvenmuhasebe@gmail.com ({ContactPageT('AccountingInquiries')})</p>
-          <h4>{ContactPageT('WorkHours')}</h4>
-          <p>{ContactPageT('WorkHour1')}</p>
-          <h4>{ContactPageT('Address')}:</h4>
+          <h4>{t('Email')}:</h4>
+          <p>info@demfirat.com ({t('GeneralInquiries')})</p>
+          <p>karvenmuhasebe@gmail.com ({t('AccountingInquiries')})</p>
+          <h4>{t('WorkHours')}</h4>
+          <p>{t('WorkHour1')}</p>
+          <h4>{t('Address')}:</h4>
           <p>
             Karven Tekstil <br />
             Vakıflar OSB Mah D100 Cad No 38 <br />
             Ergene, Tekirdağ 59930 <br />
             Türkiye
           </p>
-          <h4>{ContactPageT('ProductLines')}:</h4>
+          <h4>{t('ProductLines')}:</h4>
           {/* <p>Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners</p> */}
-          <p>{ContactPageT('ProductLine1')}</p>
+          <p>{t('ProductLine1')}</p>
         </div>
 
         <div className={`${classes.item} ${classes.map} `}>
@@ -81,56 +109,56 @@ export default async function Contact(props: PageProps<'/[locale]/contact'>) {
           </div>
         </div>
         <div className={` ${classes.item} ${classes.textInfo}`}>
-          <h2>{ContactPageT('FabricShowroom')} (İstanbul, Türkiye)</h2>
-          <h4>{ContactPageT('Representative')}:</h4>
+          <h2>{t('FabricShowroom')} (İstanbul, Türkiye)</h2>
+          <h4>{t('Representative')}:</h4>
           <p>Özcan Öztürk</p>
           <p>Ercan Öztürk</p>
-          <h4>{ContactPageT('Phone')}:</h4>
+          <h4>{t('Phone')}:</h4>
           <p>+90 (555) 087-5555 (Özcan)</p>
           <p>+90 (542) 341-4845 (Ercan)</p>
-          <h4>{ContactPageT('Email')}:</h4>
+          <h4>{t('Email')}:</h4>
           <p>krvn.dmf@gmail.com</p>
           <p>info@demfirat.com</p>
-          <h4>{ContactPageT('WorkHours')}</h4>
+          <h4>{t('WorkHours')}</h4>
           {/* <p>Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)</p> */}
-          <p>{ContactPageT('WorkHour2')}</p>
-          <h4>{ContactPageT('Address')}:</h4>
+          <p>{t('WorkHour2')}</p>
+          <h4>{t('Address')}:</h4>
           <p>
             Karven Home Collection <br />
             Kemalpaşa Mah Gençtürk Cad No 21A <br />
             Fatih, İstanbul 34134 <br />
             Türkiye
           </p>
-          <h4>{ContactPageT('ProductLines')}:</h4>
+          <h4>{t('ProductLines')}:</h4>
           {/* <p>Interior Fabrics: Drapery & Upholstery</p> */}
-          <p>{ContactPageT('ProductLine2')}</p>
+          <p>{t('ProductLine2')}</p>
         </div>
       </div>
 
       <div className={`${classes.row} ${classes.row3}`}>
         <div className={` ${classes.item} ${classes.textInfo}`}>
-          <h2>{ContactPageT('RetailStore')} (İstanbul, Türkiye)</h2>
-          <h4>{ContactPageT('Representative')}:</h4>
+          <h2>{t('RetailStore')} (İstanbul, Türkiye)</h2>
+          <h4>{t('Representative')}:</h4>
           <p>Mustafa Öztürk</p>
-          <h4>{ContactPageT('Phone')}:</h4>
+          <h4>{t('Phone')}:</h4>
           <p>+90 (282) 675-1552 (Office)</p>
           <p>+90 (533) 648-9208 (Mobile)</p>
-          <h4>{ContactPageT('Email')}:</h4>
+          <h4>{t('Email')}:</h4>
           <p>info@demfirat.com</p>
           <p>mustafadmf@hotmail.com</p>
-          <h4>{ContactPageT('WorkHours')}</h4>
+          <h4>{t('WorkHours')}</h4>
           {/* <p>Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)</p> */}
-          <p>{ContactPageT('WorkHour3')}</p>
-          <h4>{ContactPageT('Address')}:</h4>
+          <p>{t('WorkHour3')}</p>
+          <h4>{t('Address')}:</h4>
           <p>
             Demfırat Tekstil <br />
             Mesihpaşa Mah Hayriye Tüccarı Cad <br />
             Fatih İstanbul, 34130 <br />
             Türkiye
           </p>
-          <h4>{ContactPageT('ProductLines')}:</h4>
+          <h4>{t('ProductLines')}:</h4>
           {/* <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p> */}
-          <p>{titleCase(ContactPageT('ProductLine3'))}</p>
+          <p>{titleCase(t('ProductLine3'))}</p>
         </div>
 
         <div className={`${classes.item} ${classes.map} `}>
@@ -178,31 +206,31 @@ export default async function Contact(props: PageProps<'/[locale]/contact'>) {
           ></iframe> */}
         </div>
         <div className={`${classes.item} ${classes.textInfo}`}>
-          <h2>{ContactPageT('WarehouseShowroom')} (Москва, Pоссия)</h2>
-          <h4>{ContactPageT('Representative')}:</h4>
+          <h2>{t('WarehouseShowroom')} (Москва, Pоссия)</h2>
+          <h4>{t('Representative')}:</h4>
           <p>Adem Öztürk</p>
-          <h4>{ContactPageT('Phone')}:</h4>
+          <h4>{t('Phone')}:</h4>
           <p>+7 (968) 738 13 00 (Cell)</p>
           <p>+7 (916) 055 42 02 (Cell)</p>
           <p>+7 (926) 101 25 96 (Office)</p>
-          <h4>{ContactPageT('Email')}:</h4>
+          <h4>{t('Email')}:</h4>
           <p>demfiratmosk@mail.ru</p>
           <p>karventekstil@mail.ru</p>
-          <h4>{ContactPageT('Website')}:</h4>
+          <h4>{t('Website')}:</h4>
           <p><a href="https://www.karven.ru" target="_blank" >www.karven.ru</a></p>
-          <h4>{ContactPageT('WorkHours')}</h4>
+          <h4>{t('WorkHours')}</h4>
           {/* <p>Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)</p> */}
-          <p>{ContactPageT('WorkHour4')}</p>
-          <h4>{ContactPageT('Address')}:</h4>
+          <p>{t('WorkHour4')}</p>
+          <h4>{t('Address')}:</h4>
           <p>
             г. Москва, 2-й Южнопортовый проезд <br />
             д.12Г, стр.1 <br />
             Pоссия
           </p>
           <p>2nd Yuzhnoportovy proezd, 12G, building 1s <br /> Moscow, Russia</p>
-          <h4>{ContactPageT('ProductLines')}:</h4>
+          <h4>{t('ProductLines')}:</h4>
           {/* <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p> */}
-          <p>{titleCase(ContactPageT('ProductLine4'))}</p>
+          <p>{titleCase(t('ProductLine4'))}</p>
 
         </div>
       </div>

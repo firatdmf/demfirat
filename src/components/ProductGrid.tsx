@@ -18,16 +18,161 @@ type ProductGridProps = {
   product_variants: ProductVariant[];
   product_variant_attributes: ProductVariantAttribute[];
   product_variant_attribute_values: ProductVariantAttributeValue[];
-  // searchParams: { [key: string]: string | string[] | undefined };
   product_category: string | null;
   product_category_description: string | null;
   searchParams: SearchParams;
+  locale?: string;
   HeadlineT?: string;
   SearchBarT?: string
 }
 
+// Translation helper for attribute names
+const translateAttributeName = (name: string, locale: string): string => {
+  const translations: { [key: string]: { [key: string]: string } } = {
+    'color': {
+      'tr': 'Renk',
+      'ru': 'Цвет',
+      'pl': 'Kolor',
+      'de': 'Farbe',
+      'en': 'Color'
+    },
+    'colour': {
+      'tr': 'Renk',
+      'ru': 'Цвет',
+      'pl': 'Kolor',
+      'de': 'Farbe',
+      'en': 'Colour'
+    },
+    'size': {
+      'tr': 'Boyut',
+      'ru': 'Размер',
+      'pl': 'Rozmiar',
+      'de': 'Größe',
+      'en': 'Size'
+    },
+    'width': {
+      'tr': 'Genişlik',
+      'ru': 'Ширина',
+      'pl': 'Szerokość',
+      'de': 'Breite',
+      'en': 'Width'
+    },
+    'height': {
+      'tr': 'Yükseklik',
+      'ru': 'Высота',
+      'pl': 'Wysokość',
+      'de': 'Höhe',
+      'en': 'Height'
+    },
+    'length': {
+      'tr': 'Uzunluk',
+      'ru': 'Длина',
+      'pl': 'Długość',
+      'de': 'Länge',
+      'en': 'Length'
+    },
+    'material': {
+      'tr': 'Malzeme',
+      'ru': 'Материал',
+      'pl': 'Materiał',
+      'de': 'Material',
+      'en': 'Material'
+    },
+    'fabric': {
+      'tr': 'Kumaş',
+      'ru': 'Ткань',
+      'pl': 'Tkanina',
+      'de': 'Stoff',
+      'en': 'Fabric'
+    },
+    'pattern': {
+      'tr': 'Desen',
+      'ru': 'Узор',
+      'pl': 'Wzór',
+      'de': 'Muster',
+      'en': 'Pattern'
+    },
+    'design': {
+      'tr': 'Tasarım',
+      'ru': 'Дизайн',
+      'pl': 'Projekt',
+      'de': 'Design',
+      'en': 'Design'
+    },
+    'style': {
+      'tr': 'Stil',
+      'ru': 'Стиль',
+      'pl': 'Styl',
+      'de': 'Stil',
+      'en': 'Style'
+    },
+    'type': {
+      'tr': 'Tip',
+      'ru': 'Тип',
+      'pl': 'Typ',
+      'de': 'Typ',
+      'en': 'Type'
+    },
+    'category': {
+      'tr': 'Kategori',
+      'ru': 'Категория',
+      'pl': 'Kategoria',
+      'de': 'Kategorie',
+      'en': 'Category'
+    },
+    'collection': {
+      'tr': 'Koleksiyon',
+      'ru': 'Коллекция',
+      'pl': 'Kolekcja',
+      'de': 'Kollektion',
+      'en': 'Collection'
+    },
+    'finish': {
+      'tr': 'Bitiş',
+      'ru': 'Отделка',
+      'pl': 'Wykończenie',
+      'de': 'Finish',
+      'en': 'Finish'
+    },
+    'texture': {
+      'tr': 'Doku',
+      'ru': 'Текстура',
+      'pl': 'Tekstura',
+      'de': 'Textur',
+      'en': 'Texture'
+    },
+    'opacity': {
+      'tr': 'Opaklık',
+      'ru': 'Непрозрачность',
+      'pl': 'Przezroczystość',
+      'de': 'Deckkraft',
+      'en': 'Opacity'
+    },
+    'weight': {
+      'tr': 'Ağırlık',
+      'ru': 'Вес',
+      'pl': 'Waga',
+      'de': 'Gewicht',
+      'en': 'Weight'
+    },
+    'thickness': {
+      'tr': 'Kalınlık',
+      'ru': 'Толщина',
+      'pl': 'Grubość',
+      'de': 'Dicke',
+      'en': 'Thickness'
+    }
+  };
+  
+  const lowerName = name.toLowerCase();
+  if (translations[lowerName] && translations[lowerName][locale]) {
+    return translations[lowerName][locale];
+  }
+  return capitalizeFirstLetter(name);
+};
+
 // Below variables are passed down
-function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, HeadlineT, SearchBarT }: ProductGridProps) {
+function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT }: ProductGridProps) {
   // console.log("your products are", products);
 
   // console.log("Products in product grid are: ");
@@ -112,34 +257,34 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   } else {
     return (
       <div className={classes.ProductGrid}>
-        <div
-          className={classes.cover}
-          id="karven-banner"
-          style={{
-            backgroundImage: "url('/media/karven_banner.webp')",
-            backgroundSize: "900px",
-            // scale:"110%"
-          }}
-        >
-          {product_category ? (<div className={classes.headlineBox}>{product_category.toUpperCase()}</div>) : null}
-
+        <div className={classes.headerSection}>
+          <div className={classes.headerContent}>
+            <h1 className={classes.pageTitle}>
+              {product_category?.toLowerCase().includes('fabric') ? 'Fabrics' :
+               product_category?.toLowerCase().includes('curtain') ? 'Curtains' :
+               'Products'}
+            </h1>
+            {product_category_description && (
+              <p className={classes.pageDescription}>{product_category_description}</p>
+            )}
+          </div>
         </div>
-        <br />
-        <p className="text-center">{filteredProducts[0].category_id}</p>
         <div className={classes.search}>
           <input
             type="text"
             className={classes.searchTerm}
-            placeholder="Search for product title or sku"
+            placeholder={
+              locale === 'tr' ? 'Ürün adı veya SKU ile arayın' :
+              locale === 'ru' ? 'Поиск по названию или SKU' :
+              locale === 'pl' ? 'Szukaj po nazwie lub SKU' :
+              locale === 'de' ? 'Nach Produktname oder SKU suchen' :
+              'Search for product title or sku'
+            }
             onChange={search_filter}
           />
-          {/* This button is for visual only, it is non-functional */}
-          <button
-            className={classes.searchButton}
-          >
+          <button className={classes.searchButton}>
             <FaSearch />
           </button>
-
         </div>
         {/* Not shown on computer screen, only for tablets and phones */}
         <div className={classes.filterToggleContainer}>
@@ -147,7 +292,19 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             className={classes.filterToggleButton}
             onClick={() => setFilterMenuOpen(!FilterMenuOpen)}
           >
-            {FilterMenuOpen ? "Close Filter" : "Open Filter"}
+            {FilterMenuOpen ? (
+              locale === 'tr' ? 'Filtreyi Kapat' :
+              locale === 'ru' ? 'Закрыть фильтр' :
+              locale === 'pl' ? 'Zamknij filtr' :
+              locale === 'de' ? 'Filter schließen' :
+              'Close Filter'
+            ) : (
+              locale === 'tr' ? 'Filtreyi Aç' :
+              locale === 'ru' ? 'Открыть фильтр' :
+              locale === 'pl' ? 'Otwórz filtr' :
+              locale === 'de' ? 'Filter öffnen' :
+              'Open Filter'
+            )}
           </button>
         </div>
 
@@ -157,7 +314,13 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           <div className={`${classes.filterMenu} ${FilterMenuOpen ? classes.filterMenuOpen : classes.filterMenuClosed}`}>
 
 
-            <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>Reset Filters</Link>
+            <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
+              {locale === 'tr' ? 'Filtreleri Temizle' :
+               locale === 'ru' ? 'Очистить фильтры' :
+               locale === 'pl' ? 'Wyczyść filtry' :
+               locale === 'de' ? 'Filter zurücksetzen' :
+               'Reset Filters'}
+            </Link>
             <ul>
               {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
 
@@ -181,7 +344,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
                 return (
                   <li key={index}>
-                    {capitalizeFirstLetter(attribute.name)}
+                    {translateAttributeName(attribute.name || '', locale)}
                     {/* <p> */}
                     {uniqueValues.map((attribute_value) => {
                       // Record<string, string> is a utility type that represents an object with string keys, and string values. 
@@ -228,13 +391,10 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           </div>
           <div className={classes.products}>
             {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product, index: number) => {
-              return <ProductCard key={index} product={product} />;
+              return <ProductCard key={index} product={product} locale={locale} />;
             }) :
-              // filteredProducts?.map((product: Product, index: number) => {
-              //   return <ProductCard key={index} product={product} />;
-              // })}
               (Array.isArray(filteredProducts) ? filteredProducts : [])?.map((product: Product, index: number) => (
-                <ProductCard key={index} product={product} />
+                <ProductCard key={index} product={product} locale={locale} />
               ))
             }
           </div>

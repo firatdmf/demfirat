@@ -1,86 +1,243 @@
+.FooterPage {
+  padding: 5rem 2rem 2rem;
+  background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+  color: rgba(255, 255, 255, 0.8);
+  border-top: 1px solid rgba(201, 169, 97, 0.3);
+}
+
+.FooterPage h3 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  font-size: 1.8rem;
+  letter-spacing: 0.15em;
+}
+
+.FooterPage h4 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.3);
+  padding-bottom: 0.75rem;
+}
+
+.FooterPage .description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+}
+
+.FooterPage .socialIcons {
+  display: flex;
+  gap: 1rem;
+}
+
+.FooterPage .socialIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.FooterPage .socialIcon:hover {
+  background: #c9a961;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+}
+
 .FooterPage ul {
-    margin-top: 1%;
+  margin-top: 0;
+  padding: 0;
+}
+
+.FooterPage ul li {
+  list-style: none;
+  text-decoration: none;
+  margin: 0.75rem 0;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.FooterPage ul li:hover {
+  color: #c9a961;
+  cursor: pointer;
+  transform: translateX(5px);
+}
+  
+  
+.FooterPage .footerMenu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  max-width: 1280px;
+  margin: 0 auto 3rem;
+}
+
+.FooterPage .copyright {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.FooterPage .copyright p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.FooterPage .footerLinks {
+  display: flex;
+  gap: 2rem;
+}
+
+.FooterPage .footerLinks a {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.FooterPage .footerLinks a:hover {
+  color: #c9a961;
+}
+  
+.FooterPage .karvenLogo {
+  width: 60%;
+  max-width: 200px;
+  height: auto;
+  opacity: 0.95;
+  display: block;
+  margin: 0 auto;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: brightness(1.1);
+}
+
+.FooterPage .karvenLogo:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.FooterPage #link {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.FooterPage #link:hover {
+  color: #c9a961;
+  cursor: pointer;
+}
+
+.FooterPage .col1 {
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.FooterPage .col2 ul,
+.FooterPage .col3 ul {
+  list-style: none;
+}
+
+.FooterPage .contactList li {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.FooterPage .contactList strong {
+  color: #c9a961;
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.FooterPage .contactList a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.FooterPage .contactList a:hover {
+  color: #c9a961;
+}
+
+.FooterPage .col4 {
+  text-align: center;
+}
+
+.FooterPage .certifications {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.FooterPage .certifications span {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.FooterPage .certifications span:hover {
+  color: #c9a961;
+}
+  
+  
+@media (max-width: 768px) {
+  .FooterPage {
+    padding: 3rem 1rem 1.5rem;
   }
-  .FooterPage ul li {
-    list-style: none;
-    text-decoration: none;
-    margin: 10% 0 1% 0;
-  }
-  .FooterPage ul li:hover {
-    text-decoration: underline;
-    cursor: pointer;
-    color: #151948;
+  
+  .FooterPage .footerMenu {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
   
   .FooterPage h3 {
-    border-bottom: 2px solid black;
-    margin-top:2%;
+    font-size: 1.5rem;
   }
   
-  .FooterPage {
-    padding: 1%;
-    background-color: #ebedee;
-    border-top: 0.8px solid black;
-    /* width: 100%; */
-    width: 100wv;
-    /* position: absolute; */
-    /* bottom: 0; */
+  .FooterPage h4 {
+    font-size: 1.2rem;
   }
   
-  
-  .FooterPage .footerMenu {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px,1fr));
-    column-gap: 5%;
-    overflow: hidden;
-  }
-  
-  .FooterPage .copyright {
-    margin-top:2%;
-    text-align: center;
-    border-top: 1px solid black;
-    padding-top: 1%;
+  .FooterPage ul li {
+    margin: 0.5rem 0;
   }
   
   .FooterPage .karvenLogo {
     width: 50%;
-    height: auto;
-    opacity: 0.9;
-    display: block;
-    margin:0 auto;
-    opacity: 1;
-  }
-  .FooterPage .karvenLogo:hover{
-    opacity:0.9;
-  }
-
-  .FooterPage #link {
-    text-decoration: none;
-    color: inherit;
-  }
-  .FooterPage #link:hover{
-    cursor: pointer;
+    max-width: 150px;
+    margin-top: 0;
   }
   
-  
-  @media(max-width:600px){
-    .FooterPage  .footerMenu{
-        grid-template-columns: 1fr;
-        
-    }
-    .FooterPage  ul li{
-      margin:0;
-      margin-top:3%;
-    }
-    .FooterPage  .karvenLogo{
-      width:30%;
-      display: block;
-      margin:0 auto;
-      margin-top:10%;
-    }
-    .FooterPage  .col4 p{
-      text-align: center;
-      margin-top:2%;
-    }
+  .FooterPage .certifications {
+    font-size: 0.75rem;
   }
+  
+  .FooterPage .copyright {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .FooterPage .copyright p {
+    font-size: 0.85rem;
+  }
+  
+  .FooterPage .footerLinks {
+    gap: 1rem;
+  }
+}
   

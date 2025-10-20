@@ -12,7 +12,7 @@ import ProductGrid from '@/components/ProductGrid';
 // }
 
 export default async function Page(props: PageProps<'/[locale]/product/[product_category]'>) {
-  const { product_category } = await props.params;
+  const { product_category, locale } = await props.params;
   const searchParams = await props.searchParams;
   // fetch the products from the API based on the product category
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${product_category}`);
@@ -37,9 +37,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
       {errorMessage ? (<div style={{ color: "red" }}>
         {errorMessage}
       </div>) : (<>
-        {data.product_category_description ? (<div className="text-center mx-16 mt-10 bg-gray-100 py-10 rounded-lg cursor-default select-none">
-          <p className="text-gray-600">{data.product_category_description}</p>
-        </div>) : null}
+        
 
 
         <ProductGrid
@@ -50,6 +48,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
           product_category = {data.product_category}
           product_category_description = {data.product_category_description}
           searchParams={searchParams}
+          locale={locale}
         />
       </>)
       }

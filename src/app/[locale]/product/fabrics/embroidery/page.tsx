@@ -1,39 +1,52 @@
-"use client"
-import classes from "./page.module.css";
-import ProductGrid_old from "@/components/ProductGrid_old";
-// below two packages is to get session information in server
-// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { authOptions } from '@/utils/authOptions'
-import { getServerSession } from "next-auth";
-import { User } from "@/app/user";
-import { useTranslations } from "next-intl";
+import ProductGrid from "@/components/ProductGrid";
+import fabricData from "@/vir_db/products_embroidered_sheer_curtain_fabrics.json";
+import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
 
-// type Product = {
-//   name:string,
-// }
-
-// It was async before but it didn't work with useTranslations so I changed it back to normal
-// async function Embroidery() {
-function Embroidery() {
-  // below is to get the session information and display it
-  // authOptions is the same info that is in api/auth/[...nextauth]/route.ts
-  // const session = await getServerSession(authOptions);
-  // const mydata = data[0]
-  const product = {
-    name: "products_embroidered_sheer_curtain_fabrics",
+// Transform fabric data to Product interface format
+const transformFabricToProduct = (fabric: any): Product => {
+  return {
+    id: fabric.design,
+    sku: fabric.design,
+    title: `Design ${fabric.design}`,
+    description: `Embroidered sheer curtain fabric with design ${fabric.design}`,
+    price: "0", // Price will be shown after authentication
+    quantity: "1",
+    barcode: fabric.design,
+    primary_image: fabric.files?.[0] ? `/media/products/embroidered_sheer_curtain_fabrics/thumbnails/${fabric.files[0].name}` : null,
+    category_id: "fabrics",
+    created_at: fabric.date || new Date().toISOString(),
+    updated_at: fabric.date || new Date().toISOString()
   };
-  const ProductsGridT= useTranslations('ProductsGrid')
+};
+
+export default async function EmbroideryPage(props: PageProps<'/[locale]/product/fabrics/embroidery'>) {
+  const { locale } = await props.params;
+  const searchParams = await props.searchParams;
+
+  // Transform fabric data to Product interface
+  const products: Product[] = fabricData.map(transformFabricToProduct);
+
+  // Mock data for variants (embroidery fabrics usually don't have variants)
+  const product_variants: ProductVariant[] = [];
+  const product_variant_attributes: ProductVariantAttribute[] = [];
+  const product_variant_attribute_values: ProductVariantAttributeValue[] = [];
+
   return (
-    <div className={classes.EmbroideryPage}>
-      {/* <h2>Server Session</h2>
-      <pre>{JSON.stringify(session)}</pre>
-      <h2>Client Call</h2>
-      <User/> */}
-      {/* <ProductGrid product={product} /> */}
-      <ProductGrid_old HeadlineT={ProductsGridT('Headline')} SearchBarT={ProductsGridT('SearchBar')} />
-    </div>
+    <ProductGrid
+      products={products}
+      product_variants={product_variants}
+      product_variant_attributes={product_variant_attributes}
+      product_variant_attribute_values={product_variant_attribute_values}
+      product_category="embroidery"
+      product_category_description={
+        locale === 'tr' ? 'Nakışlı şeffaf perde kumaşları - Lüks ev tekstili koleksiyonu' :
+        locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
+        locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
+        locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
+        'Embroidered sheer curtain fabrics - Luxury home textile collection'
+      }
+      searchParams={searchParams}
+      locale={locale}
+    />
   );
 }
-
-export default Embroidery;

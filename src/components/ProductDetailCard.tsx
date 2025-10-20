@@ -14,7 +14,7 @@ type ProductDetailCardPageProps = {
   product_variant_attribute_values: ProductVariantAttributeValue[] | null,
   searchParams: { [key: string]: string | string[] | undefined };
   product_files: ProductFile[] | null;
-  // image_api_link?: string;
+  locale?: string;
 };
 
 function ProductDetailCard({
@@ -24,9 +24,8 @@ function ProductDetailCard({
   product_variant_attributes,
   product_variant_attribute_values,
   searchParams,
-  // this is how you pass the images
   product_files,
-  // image_api_link
+  locale = 'en'
 }: ProductDetailCardPageProps) {
 
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
@@ -443,12 +442,13 @@ function ProductDetailCard({
               <button type='submit'>Add to Cart</button>
             </div>
           ) : null} */}
-          <h3>Description</h3>
-          {/* <ul>
-            <li>Width: 120 inches</li>
-            <li>Composition: PES</li>
-            <li>Estimated Delivery Time: 3-4 weeks</li>
-          </ul> */}
+          <h3>
+            {locale === 'tr' ? 'Açıklama' :
+             locale === 'ru' ? 'Описание' :
+             locale === 'pl' ? 'Opis' :
+             locale === 'de' ? 'Beschreibung' :
+             'Description'}
+          </h3>
           <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
 
         </div>

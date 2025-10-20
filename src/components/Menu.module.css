@@ -1,56 +1,100 @@
 /* Style the navbar */
 .MenuPage .navbar {
   overflow: hidden;
-  /* background-color: rgb(211,204,189); */
-  background-color: #f1f1f1;
-  border-radius: 0px 0px 30px 30px;
-  box-shadow: 2px 8px 10px 1px rgba(0, 0, 0, 0.2);
-  font-size: 1.3rem;
+  background: linear-gradient(135deg, #faf8f3 0%, #f5f3ed 100%);
+  border-radius: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  backdrop-filter: blur(10px);
 }
 
 /* Navbar links */
 .MenuPage .navbar .a {
-  float: left;
-  display: block;
-  color: black;
+  display: inline-block;
+  color: #2c2c2c;
   text-align: center;
-  padding: 19px 16px;
+  padding: 1rem 2rem;
   text-decoration: none;
-  font-size: 1.3rem;
-  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
+  font-size: 1rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.MenuPage .navbar .a::after {
+  content: '';
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #c9a961 0%, #b8956a 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Navbar links on mouse-over */
 .MenuPage .navbar .a:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #d19e25;
-  transition: 0.4s;
+  color: #c9a961;
+}
+
+.MenuPage .navbar .a:hover::after {
+  width: 70%;
+}
+
+.MenuPage .navbar .quote {
+  margin-left: auto;
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #4a4a4a;
+  font-weight: 400;
 }
 
 .MenuPage .navbar .userDisplay {
   display: flex;
-  padding-top: 20px;
-  float: right;
-  margin-right: 20px;
-  font-size: 16.5px;
+  align-items: center;
+  margin-left: auto;
+  font-size: 0.95rem;
 }
 
 /* Add responsiveness - On small screens, display the navbar vertically instead of horizontally */
-@media screen and (max-width: 600px) {
-  .MenuPage .navbar .a {
-    float: none;
-    display: block;
-    text-align: center;
-    width: 100%;
-    margin: 0;
-    padding: 14px;
+@media screen and (max-width: 900px) {
+  .MenuPage .navbar {
+    flex-direction: column;
+    padding: 1rem;
   }
+  
+  .MenuPage .navbar .a {
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .MenuPage .navbar .a::after {
+    bottom: 0.5rem;
+  }
+  
   .MenuPage .navbar .quote {
     display: none;
   }
 }
+
 @media screen and (max-width: 768px) {
   .MenuPage .navbar .quote {
     display: none;
+  }
+  
+  .MenuPage .navbar {
+    font-size: 0.95rem;
   }
 }

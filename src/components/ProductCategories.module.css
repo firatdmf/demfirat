@@ -1,126 +1,215 @@
+/* Modern Product Categories */
 .ProductCategoriesPage {
-  /* padding: 10px; */
-  /* margin-top: 20px; */
-  font-family: charter, Georgia, Cambria, times new roman, Times, serif;
-  background-color: #f1f1f1 ;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  background: transparent;
 }
 
-.ProductCategoriesPage .scallop_up {
-  
-  height: 50px;
-  width: 100%;
-  background: -webkit-gradient(
-    radial,
-    50% 100%,
-    30,
-    50% 100%,
-    40,
-    from(#f1f1f1),
-    color-stop(0.49, #f1f1f1),
-    color-stop(0.51, #fff),
-    to(white)
-  );
-  -webkit-background-size: 49px 100%;
-  background-size: 49px 100%;
-  margin-top: 0;
-}
-
-.ProductCategoriesPage .scallop_down {
-  height: 50px;
-  width: 100%;
-  background: -webkit-gradient(
-    radial,
-    50% 0,
-    30,
-    50% 0,
-    40,
-    from(#f1f1f1),
-    color-stop(0.49, #f1f1f1),
-    color-stop(0.51, #fff),
-    to(white)
-  );
-  -webkit-background-size: 49px 100%;
-  background-size: 49px 100%;
-}
-
-.ProductCategoriesPage p {
-  font-size: 1.1rem;
-}
-.ProductCategoriesPage .componentTitle {
+.componentTitle {
   text-align: center;
-  /* font-family: charter, Georgia, Cambria, times new roman, Times, serif; */
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 3rem;
+  font-weight: 400;
+  margin-bottom: 4rem;
+  color: var(--text-dark, #2c2c2c);
 }
-.ProductCategoriesPage .container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap:90px;
-  /* justify-items: stretch; */
-  align-items: flex-start;
+
+.componentTitle::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
+  margin: 0 auto 1.5rem;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+/* Modern Category Card - Clean & Minimal */
+.categoryCard {
+  background: white;
+  border-radius: 24px;
   overflow: hidden;
-  /* padding:30px; */
-  height: max-content;
-  /* margin-right:50px;
-  margin-left:50px; */
-  margin: 20px 90px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.ProductCategoriesPage .product {
-  width: 250px;
-  /* Adjust the height as needed */
-  height: 300px;
-  /* margin: 20px; */
-  text-align: center;
-  justify-content: center;
-
-  /* background-color: lightgray; */
-  /* padding: 10px; */
-  /* white-space: nowrap;
-    overflow: hidden; */
-  /* height: max-content; */
+.categoryCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 48px rgba(201, 169, 97, 0.2);
 }
 
-.ProductCategoriesPage .itemName {
-  margin-top: 20px;
-  text-align:center;
-  justify-content: center;
-
+/* Image Container - Larger */
+.imageContainer {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #faf8f3 0%, #f5f3ed 100%);
 }
 
-.ProductCategoriesPage .product img {
-  border-radius: 20px;
+.categoryImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  text-align: center;
-  justify-content: center;
-
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s ease;
 }
 
-.ProductCategoriesPage .product h3 {
-  margin-top: 10px;
-  padding: 5px;
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide any overflowing text */
-  text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
-  font-size: calc(14px + 2vmin); /* Set a base font size with a minimum value */
-  max-width: 100%;
+.categoryCard:hover .categoryImage {
+  transform: scale(1.05);
+  filter: brightness(1.05);
 }
 
-/* .solidSheerFabrics img{
-      object-position: 800%;
-      object-fit: none;
-    } */
-
-.ProductCategoriesPage .link {
-  text-decoration: none;
-  color: inherit;
-  margin: 10px;
-  overflow: hidden;
-  /* height: 100%; */
-  /* height:max-content; */
-  text-align: center;
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, var(--primary-beige, #f5f3ed) 0%, var(--ivory, #faf8f3) 100%);
+  color: var(--gold, #c9a961);
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+/* Category Info - Modern & Clean */
+.categoryInfo {
+  padding: 2.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.categoryName {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--text-dark, #2c2c2c);
+  margin: 0;
+  transition: color 0.4s ease;
+  letter-spacing: 0.01em;
+}
+
+.categoryCard:hover .categoryName {
+  color: var(--gold, #c9a961);
+}
+
+.categoryDescription {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(44, 44, 44, 0.65);
+  line-height: 1.7;
+  margin: 0;
+  flex: 1;
+}
+
+.exploreLink {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold, #c9a961);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.exploreLink::after {
+  content: '→';
+  margin-left: 0.75rem;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.categoryCard:hover .exploreLink {
+  color: var(--bronze, #b8956a);
+}
+
+.categoryCard:hover .exploreLink::after {
+  transform: translateX(6px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
   
+  .componentTitle {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .categoryCard {
+    border-radius: 20px;
+  }
+  
+  .categoryCard:hover {
+    transform: translateY(-6px);
+  }
+  
+  .imageContainer {
+    height: 320px;
+  }
+  
+  .categoryInfo {
+    padding: 2rem;
+  }
+  
+  .categoryName {
+    font-size: 2.2rem;
+  }
+  
+  .categoryDescription {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .imageContainer {
+    height: 280px;
+  }
+  
+  .categoryInfo {
+    padding: 1.5rem;
+  }
+  
+  .categoryName {
+    font-size: 1.8rem;
+  }
+  
+  .categoryDescription {
+    font-size: 0.95rem;
+  }
+  
+  .exploreLink {
+    font-size: 0.75rem;
+  }
 }
