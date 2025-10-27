@@ -2,11 +2,10 @@
 import classes from "@/components/ProductCard.module.css";
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Importing Product interface from the parent.
 import { Product } from '@/lib/interfaces';
-import { useSession } from "next-auth/react";
 // Icons
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
@@ -16,22 +15,36 @@ import { HiDocumentText } from "react-icons/hi2";
 interface ProductCardProps {
   product: Product;
   locale?: string;
+  variant_price?: number | null;
 }
 
-function ProductCard({ product, locale = 'en' }: ProductCardProps) {
+function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps) {
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
   
   const [imageLoading, setImageLoading] = useState(true);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [imageSrc, setImageSrc] = useState(product.primary_image || placeholder_image_link);
+  const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
-  // Check if the user is logged in. If they are then display price.
-  const { status } = useSession({
-    required: false,
-    onUnauthenticated() {
-      console.log("Not logged in!");
-    },
-  });
+  // Reset image states when product changes
+  useEffect(() => {
+    const newSrc = product.primary_image || placeholder_image_link;
+    setImageSrc(newSrc);
+    setImageError(false);
+    setHasTriedFallback(false);
+    
+    // Check if image is already cached/loaded
+    const img = new Image();
+    img.src = newSrc;
+    if (img.complete) {
+      setImageLoading(false);
+    } else {
+      setImageLoading(true);
+      img.onload = () => setImageLoading(false);
+      img.onerror = () => setImageLoading(false);
+    }
+  }, [product.primary_image, product.sku]);
 
   const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);
@@ -78,22 +91,27 @@ function ProductCard({ product, locale = 'en' }: ProductCardProps) {
                 </div>
               )}
               <img
-                src={imageError ? placeholder_image_link : (product.primary_image || placeholder_image_link)}
+                src={imageSrc}
                 alt={`${product.title} - ${product.sku}`}
                 className={classes.productImage}
-                onLoad={() => setImageLoading(false)}
-                onError={(e) => {
-                  // First try removing /thumbnails from path (fallback to original image)
-                  const currentSrc = e.currentTarget.src;
-                  if (currentSrc.includes('/thumbnails/')) {
-                    e.currentTarget.src = currentSrc.replace('/thumbnails/', '/');
-                  } else {
-                    // If that also fails, use placeholder
-                    setImageError(true);
+                onLoad={(e) => {
+                  if (e.currentTarget.complete) {
                     setImageLoading(false);
                   }
                 }}
-                loading="lazy"
+                onError={(e) => {
+                  setImageLoading(false);
+                  // First try removing /thumbnails from path (fallback to original image)
+                  const currentSrc = e.currentTarget.src;
+                  if (!hasTriedFallback && currentSrc.includes('/thumbnails/')) {
+                    setHasTriedFallback(true);
+                    setImageSrc(currentSrc.replace('/thumbnails/', '/'));
+                  } else if (!imageError) {
+                    // If that also fails, use placeholder
+                    setImageError(true);
+                    setImageSrc(placeholder_image_link);
+                  }
+                }}
               />
               <div className={classes.imageOverlay}></div>
             </div>
@@ -145,21 +163,26 @@ function ProductCard({ product, locale = 'en' }: ProductCardProps) {
             <div className={classes.productSku}>SKU: {product.sku}</div>
             
             {/* Price Section */}
-            {status === "authenticated" && product.price ? (
-              <div className={classes.priceSection}>
+            <div className={classes.priceSection}>
+              {/* Try variant_price first, then product.price */}
+              {(variant_price && Number(variant_price) > 0) ? (
+                <span className={classes.currentPrice}>
+                  {formatPrice(variant_price)}
+                </span>
+              ) : (product.price && Number(product.price) > 0) ? (
                 <span className={classes.currentPrice}>
                   {formatPrice(product.price)}
                 </span>
-              </div>
-            ) : (
-              <div className={classes.loginPrompt}>
-                {locale === 'tr' ? 'Fiyat için giriş yapın' :
-                 locale === 'ru' ? 'Войдите, чтобы увидеть цену' :
-                 locale === 'pl' ? 'Zaloguj się, aby zobaczyć cenę' :
-                 locale === 'de' ? 'Anmelden für Preise' :
-                 'Login to see price'}
-              </div>
-            )}
+              ) : (
+                <span className={classes.contactPrice}>
+                  {locale === 'tr' ? 'Fiyat için iletişime geçin' :
+                   locale === 'ru' ? 'Свяжитесь для уточнения цены' :
+                   locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
+                   locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
+                   'Contact for price'}
+                </span>
+              )}
+            </div>
           </Link>
         </div>
       </div>

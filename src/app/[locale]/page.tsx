@@ -3,7 +3,7 @@ import "./page.css";
 import HeroVideo from "@/components/HeroVideo";
 import ProductShowcase from "@/components/ProductShowcase";
 import AutoSlider from "@/components/AutoSlider";
-import ClientTestimonials from "@/components/ClientTestimonials";
+import DraggableTestimonials from "@/components/DraggableTestimonials";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
 // import { useTranslations } from "next-intl";
@@ -116,41 +116,17 @@ export default async function Home(props: PageProps<'/[locale]'>) {
       <div className="HomePage">
         <HeroVideo
           videoSrc="/media/hero-video.mp4"
+          subtitle="Premium Textile Collection"
+          title="Where Elegance Meets Embroidery"
+          locale={locale}
+          showCatalogButton={false}
         />
         <ProductShowcase
           title={productsLocale("Headline")}
           locale={locale}
         />
         <AutoSlider locale={locale} />
-        <div className="clientReviews">
-          <h2>
-            {locale === 'tr' ? 'Müşterilerimizden Fotoğraflar' :
-             locale === 'ru' ? 'Фотографии от наших клиентов' :
-             locale === 'pl' ? 'Zdjęcia od naszych klientów' :
-             locale === 'de' ? 'Fotos von unseren Kunden' :
-             'Photos from our Clients'}
-          </h2>
-          <div className="clientReviewsContainer">
-            <div className="clientReviewsSlider">
-              {reviews.map((review, index) => (
-                <ClientTestimonials
-                  key={`original-${index}`}
-                  image={review.image}
-                  name={review.name}
-                  review={review.review}
-                />
-              ))}
-              {reviews.map((review, index) => (
-                <ClientTestimonials
-                  key={`duplicate-${index}`}
-                  image={review.image}
-                  name={review.name}
-                  review={review.review}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <DraggableTestimonials reviews={reviews} locale={locale} />
       </div>
     </main>
   );

@@ -1,14 +1,17 @@
 "use client";
 import React from "react";
 import classes from "./HeroVideo.module.css";
+import CatalogRequestForm from "./CatalogRequestForm";
 
 interface HeroVideoProps {
   videoSrc: string;
   title?: string;
   subtitle?: string;
+  locale?: string;
+  showCatalogButton?: boolean;
 }
 
-export default function HeroVideo({ videoSrc, title, subtitle }: HeroVideoProps) {
+export default function HeroVideo({ videoSrc, title, subtitle, locale = 'en', showCatalogButton = false }: HeroVideoProps) {
   return (
     <div className={classes.heroVideoContainer}>
       <video
@@ -27,6 +30,11 @@ export default function HeroVideo({ videoSrc, title, subtitle }: HeroVideoProps)
           <div className={classes.heroContent}>
             {subtitle && <p className={classes.heroSubtitle}>{subtitle}</p>}
             {title && <h1 className={classes.heroTitle}>{title}</h1>}
+            {showCatalogButton && (
+              <div className={classes.catalogButtonWrapper}>
+                <CatalogRequestForm locale={locale} />
+              </div>
+            )}
           </div>
         </div>
       )}

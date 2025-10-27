@@ -147,35 +147,32 @@ export async function GET(request: NextRequest) {
       }
     }
     
-    // Ürün bilgileri
+    // Ürün bilgileri - basit tablo formatı
     const addInfoRow = (label: string, value: string) => {
+      // Sayfa kontrolü
+      if (yPosition < 100) {
+        const newPage = pdfDoc.addPage([595, 842]);
+        page = newPage as any;
+        yPosition = height - 80;
+      }
+      
       page.drawText(label + ':', {
         x: 70,
         y: yPosition,
-        size: 11,
+        size: 12,
         font: helveticaBold,
         color: goldColor,
       });
       
       page.drawText(value, {
-        x: 220,
+        x: 200,
         y: yPosition,
         size: 11,
         font: helvetica,
         color: darkColor,
       });
       
-      yPosition -= 15;
-      
-      // Alt çizgi
-      page.drawLine({
-        start: { x: 70, y: yPosition },
-        end: { x: width - 70, y: yPosition },
-        thickness: 0.5,
-        color: rgb(0.878, 0.863, 0.824), // #e0dcd2
-      });
-      
-      yPosition -= 20;
+      yPosition -= 25;
     };
     
     // Ürün bilgileri - API'den gelen data varsa onu kullan
@@ -192,264 +189,74 @@ export async function GET(request: NextRequest) {
     addInfoRow('SKU', sku);
     addInfoRow('Category', replaceTurkishChars(productCategory));
     
-    // Ekstra ürün detayları
-    if (product?.barcode) {
-      addInfoRow('Barcode', product.barcode);
-    }
-    if (product?.type) {
-      addInfoRow('Type', replaceTurkishChars(product.type));
-    }
-    if (product?.weight) {
-      addInfoRow('Weight', `${product.weight} ${product.unit_of_weight || 'kg'}`);
-    }
-    if (product?.unit_of_measurement) {
-      addInfoRow('Unit', replaceTurkishChars(product.unit_of_measurement));
-    }
-    if (product?.tags && product.tags.length > 0) {
-      addInfoRow('Tags', replaceTurkishChars(product.tags.join(', ')));
-    }
-    
-    yPosition -= 10;
+    yPosition -= 20;
     
     // Açıklama - metnin uzunluğuna göre satırlara böl
     page.drawText('Description:', {
       x: 70,
       y: yPosition,
-      size: 11,
+      size: 13,
       font: helveticaBold,
       color: goldColor,
     });
     
-    yPosition -= 20;
+    yPosition -= 30;
     
-    // Açıklamayı satırlara böl (maksimum 70 karakter per satır)
+    // Açıklamayı satırlara böl - newline karakterlerini de işle
     const descText = replaceTurkishChars(productDescription);
     const maxCharsPerLine = 70;
-    const words = descText.split(' ');
-    let currentLine = '';
+    const paragraphs = descText.split('\n'); // Paragrafları ayır
     const lines: string[] = [];
     
-    for (const word of words) {
-      if ((currentLine + ' ' + word).length <= maxCharsPerLine) {
-        currentLine += (currentLine ? ' ' : '') + word;
-      } else {
-        if (currentLine) lines.push(currentLine);
-        currentLine = word;
+    // Her paragrafı işle
+    for (const paragraph of paragraphs) {
+      if (!paragraph.trim()) {
+        lines.push(''); // Boş satır ekle
+        continue;
       }
+      
+      const words = paragraph.trim().split(' ');
+      let currentLine = '';
+      
+      for (const word of words) {
+        const testLine = currentLine ? currentLine + ' ' + word : word;
+        if (testLine.length <= maxCharsPerLine) {
+          currentLine = testLine;
+        } else {
+          if (currentLine) lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      if (currentLine) lines.push(currentLine);
     }
-    if (currentLine) lines.push(currentLine);
     
     // Tüm satırları çiz - sayfa biterse yeni sayfa ekle
+    const lineHeight = 20; // Satır yüksekliği
+    
     for (let i = 0; i < lines.length; i++) {
       // Eğer sayfa bitti ise yeni sayfa ekle
-      if (yPosition < 150) {
+      if (yPosition < 100) {
         const newPage = pdfDoc.addPage([595, 842]);
         page = newPage as any;
         yPosition = height - 80;
       }
       
-      page.drawText(lines[i], {
-        x: 70,
-        y: yPosition,
-        size: 10,
-        font: helvetica,
-        color: darkColor,
-      });
-      yPosition -= 15;
-    }
-    
-    yPosition -= 20;
-    
-    // Product Features/Technical Details
-    if (yPosition < 200) {
-      const newPage = pdfDoc.addPage([595, 842]);
-      page = newPage as any;
-      yPosition = height - 80;
-    }
-    
-    page.drawText('Product Details:', {
-      x: 70,
-      y: yPosition,
-      size: 11,
-      font: helveticaBold,
-      color: goldColor,
-    });
-    
-    yPosition -= 20;
-    
-    const productDetails: string[] = [];
-    
-    if (product?.quantity) {
-      productDetails.push(`Available Quantity: ${product.quantity}`);
-    }
-    if (product?.price) {
-      productDetails.push(`Price: $${product.price}`);
-    }
-    if (product?.featured) {
-      productDetails.push('Featured Product: Yes');
-    }
-    if (product?.selling_while_out_of_stock !== undefined) {
-      productDetails.push(`Sell Out of Stock: ${product.selling_while_out_of_stock ? 'Yes' : 'No'}`);
-    }
-    if (product?.datasheet_url) {
-      productDetails.push(`Datasheet: ${product.datasheet_url}`);
-    }
-    if (product?.minimum_inventory_level) {
-      productDetails.push(`Min Inventory Level: ${product.minimum_inventory_level}`);
-    }
-    
-    // Tüm detayları çiz
-    for (const detail of productDetails) {
-      if (yPosition < 120) {
-        const newPage = pdfDoc.addPage([595, 842]);
-        page = newPage as any;
-        yPosition = height - 80;
-      }
-      
-      page.drawText(replaceTurkishChars(detail), {
-        x: 80,
-        y: yPosition,
-        size: 9,
-        font: helvetica,
-        color: darkColor,
-      });
-      yPosition -= 15;
-    }
-    
-    yPosition -= 20;
-    
-    // Product Variants - TÜM varyantları göster
-    if (productVariants && productVariants.length > 0) {
-      // Yeni sayfa gerekirse ekle
-      if (yPosition < 200) {
-        const newPage = pdfDoc.addPage([595, 842]);
-        page = newPage as any;
-        yPosition = height - 80;
-      }
-      
-      page.drawText('Available Variants:', {
-        x: 70,
-        y: yPosition,
-        size: 11,
-        font: helveticaBold,
-        color: goldColor,
-      });
-      
-      yPosition -= 20;
-      
-      // TÜM variantları göster
-      for (let i = 0; i < productVariants.length; i++) {
-        // Sayfa biterse yeni sayfa
-        if (yPosition < 120) {
-          const newPage = pdfDoc.addPage([595, 842]);
-          page = newPage as any;
-          yPosition = height - 80;
-        }
-        
-        const variant = productVariants[i];
-        
-        // Variant numarasını göster
-        page.drawText(`Variant ${i + 1}:`, {
-          x: 80,
+      // Boş satırlar için sadece boşluk bırak
+      if (lines[i].trim() === '') {
+        yPosition -= lineHeight / 2;
+      } else {
+        page.drawText(lines[i], {
+          x: 70,
           y: yPosition,
           size: 10,
-          font: helveticaBold,
-          color: goldColor,
-        });
-        yPosition -= 15;
-        
-        // SKU
-        page.drawText(`  SKU: ${variant.variant_sku || 'N/A'}`, {
-          x: 85,
-          y: yPosition,
-          size: 9,
           font: helvetica,
           color: darkColor,
         });
-        yPosition -= 12;
-        
-        // Variant attributesını bul ve her birini ayrı satırda göster
-        if (variant.product_variant_attribute_values) {
-          variant.product_variant_attribute_values.forEach((attrValId: any) => {
-            const attrVal = productVariantAttributeValues.find((av: any) => String(av.id) === String(attrValId));
-            if (attrVal) {
-              const attr = productVariantAttributes.find((a: any) => String(a.id) === String(attrVal.product_variant_attribute_id));
-              if (attr && attr.name) {
-                // Sayfa biterse yeni sayfa
-                if (yPosition < 100) {
-                  const newPage = pdfDoc.addPage([595, 842]);
-                  page = newPage as any;
-                  yPosition = height - 80;
-                }
-                
-                page.drawText(`  ${attr.name}: ${attrVal.product_variant_attribute_value}`, {
-                  x: 85,
-                  y: yPosition,
-                  size: 9,
-                  font: helvetica,
-                  color: darkColor,
-                });
-                yPosition -= 12;
-              }
-            }
-          });
-        }
-        
-        // Diğer variant bilgileri
-        if (variant.variant_barcode) {
-          if (yPosition < 100) {
-            const newPage = pdfDoc.addPage([595, 842]);
-            page = newPage as any;
-            yPosition = height - 80;
-          }
-          page.drawText(`  Barcode: ${variant.variant_barcode}`, {
-            x: 85,
-            y: yPosition,
-            size: 9,
-            font: helvetica,
-            color: darkColor,
-          });
-          yPosition -= 12;
-        }
-        
-        if (variant.variant_quantity !== undefined && variant.variant_quantity !== null) {
-          if (yPosition < 100) {
-            const newPage = pdfDoc.addPage([595, 842]);
-            page = newPage as any;
-            yPosition = height - 80;
-          }
-          page.drawText(`  Quantity: ${variant.variant_quantity}`, {
-            x: 85,
-            y: yPosition,
-            size: 9,
-            font: helvetica,
-            color: darkColor,
-          });
-          yPosition -= 12;
-        }
-        
-        if (variant.variant_price) {
-          if (yPosition < 100) {
-            const newPage = pdfDoc.addPage([595, 842]);
-            page = newPage as any;
-            yPosition = height - 80;
-          }
-          page.drawText(`  Price: $${variant.variant_price}`, {
-            x: 85,
-            y: yPosition,
-            size: 9,
-            font: helvetica,
-            color: darkColor,
-          });
-          yPosition -= 12;
-        }
-        
-        // Varyantlar arası boşluk
-        yPosition -= 8;
+        yPosition -= lineHeight;
       }
-      
-      yPosition -= 10;
     }
+    
+    yPosition -= 30;
     
     // Footer - Son sayfanın altına ekle
     const pages = pdfDoc.getPages();

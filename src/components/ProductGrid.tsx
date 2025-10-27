@@ -390,12 +390,22 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             </ul>
           </div>
           <div className={classes.products}>
-            {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product, index: number) => {
-              return <ProductCard key={index} product={product} locale={locale} />;
+            {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product) => {
+              // Find first variant price for this product
+              const productVariants = product_variants.filter(v => v.product_id === product.id);
+              const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price 
+                ? Number(productVariants[0].variant_price) 
+                : null;
+              return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} />;
             }) :
-              (Array.isArray(filteredProducts) ? filteredProducts : [])?.map((product: Product, index: number) => (
-                <ProductCard key={index} product={product} locale={locale} />
-              ))
+              (Array.isArray(filteredProducts) ? filteredProducts : [])?.map((product: Product) => {
+                // Find first variant price for this product
+                const productVariants = product_variants.filter(v => v.product_id === product.id);
+                const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price 
+                  ? Number(productVariants[0].variant_price) 
+                  : null;
+                return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} />;
+              })
             }
           </div>
         </div>

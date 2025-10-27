@@ -29,7 +29,13 @@ function Header({ menuTArray }: HeaderProps) {
               className={classes.logo}
             />
           </Link>
-          <span className={classes.slogan}>Bütünsel Düşünün, Nakışlı Düşünün</span>
+          <span className={classes.slogan}>
+            {locale === 'tr' ? 'Bütünsel Düşünün, Nakışlı Düşünün' :
+             locale === 'ru' ? 'Мыслите целостно, Мыслите вышивкой' :
+             locale === 'pl' ? 'Myśl całościowo, Myśl haftem' :
+             locale === 'de' ? 'Ganzheitlich denken, Bestickt denken' :
+             'Think Holistic, Think Embroidered'}
+          </span>
         </div>
 
         {/* Middle Section - Navigation Menu (Desktop) */}
@@ -73,7 +79,13 @@ function Header({ menuTArray }: HeaderProps) {
 
           {/* Contact Button */}
           <Link href={`/${locale}/contact`} className={classes.contactButton}>
-            <span>Bize Ulaşın</span>
+            <span>
+              {locale === 'tr' ? 'Bize Ulaşın' :
+               locale === 'ru' ? 'Свяжитесь с нами' :
+               locale === 'pl' ? 'Skontaktuj się' :
+               locale === 'de' ? 'Kontaktiere uns' :
+               'Contact Us'}
+            </span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>

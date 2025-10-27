@@ -4,6 +4,7 @@ import Link from 'next/link';
 import classes from "./ProductDetailCard.module.css";
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory } from '@/lib/interfaces';
 import { useSession } from 'next-auth/react';
+import { getColorCode } from '@/lib/colorMap';
 
 
 type ProductDetailCardPageProps = {
@@ -36,6 +37,7 @@ function ProductDetailCard({
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [filteredImages, setFilteredImages] = useState<ProductFile[]>([]);
+  const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(false);
 
   // console.log("your product images are:", product_files);
 
@@ -185,7 +187,9 @@ function ProductDetailCard({
       setFilteredImages([]);
       return;
     }
-    if (selectedVariant?.id) {
+    
+    // Sadece kullanıcı varyant seçtiyse varyant resimlerini göster
+    if (userHasSelectedVariant && selectedVariant?.id) {
       console.log("you have hit here my friends");
 
       setFilteredImages(
@@ -194,11 +198,14 @@ function ProductDetailCard({
         )
       );
     } else {
-      setFilteredImages(product_files);
+      // Kullanıcı henüz seçim yapmadıysa veya varyant yoksa, ana ürün resimlerini göster
+      // (product_variant_id null olanlar ana ürün resimleridir)
+      const mainProductImages = product_files.filter(img => !img.product_variant_id);
+      setFilteredImages(mainProductImages.length > 0 ? mainProductImages : product_files);
     }
     setSelectedThumbIndex(0); // Reset thumb index on variant change
     console.log("Selected Variant: ", selectedVariant);
-  }, [selectedVariant, product_files]);
+  }, [selectedVariant, product_files, userHasSelectedVariant]);
   // console.log("your product variant attributes are:", product_variant_attributes);
 
 
@@ -282,6 +289,7 @@ function ProductDetailCard({
 
 
     setSelectedThumbIndex(0);
+    setUserHasSelectedVariant(true); // Kullanıcı varyant seçti
     setSelectedAttributes(prev => ({
       ...prev,
       [attributeName]: value
@@ -374,48 +382,81 @@ function ProductDetailCard({
                 {groupedAttributeValues?.map(({ attribute, values }) => (
                   <li key={attribute.id.toString()}>
                     <label><h3>{attribute.name}</h3></label>
-                    <div className={classes.variant_links}>
-                      {values.map((value: string) => {
-                        const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
-                        const isChecked = selectedAttributes[attribute.name ?? ''] === value;
-                        return (
-                          <div key={value}>
-                            <Link
-                              href={href}
-                              replace
-                              className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}
-                              onClick={e => {
-                                e.preventDefault();
-                                handleAttributeChange(attribute.name ?? '', value);
-                              }}
-                            >
-                              {/* replace underscored with spaces for better client visual */}
-                              {value.replace(/_/g," ")} 
-                            </Link>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    {/* Check if this is Color attribute */}
+                    {attribute.name?.toLowerCase() === 'color' ? (
+                      <div className={classes.color_swatches}>
+                        {values.map((value: string) => {
+                          const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
+                          const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                          return (
+                            <div key={value} className={classes.color_swatch_container}>
+                              <Link
+                                href={href}
+                                replace
+                                className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""}`}
+                                onClick={e => {
+                                  e.preventDefault();
+                                  handleAttributeChange(attribute.name ?? '', value);
+                                }}
+                                style={{ backgroundColor: getColorCode(value) }}
+                                title={value.replace(/_/g, " ")}
+                              >
+                                <span className={classes.sr_only}>{value.replace(/_/g, " ")}</span>
+                              </Link>
+                              <span className={classes.color_label}>{value.replace(/_/g, " ")}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className={classes.variant_links}>
+                        {values.map((value: string) => {
+                          const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
+                          const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                          return (
+                            <div key={value}>
+                              <Link
+                                href={href}
+                                replace
+                                className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}
+                                onClick={e => {
+                                  e.preventDefault();
+                                  handleAttributeChange(attribute.name ?? '', value);
+                                }}
+                              >
+                                {/* replace underscored with spaces for better client visual */}
+                                {value.replace(/_/g," ")} 
+                              </Link>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
               <div className={classes.variant_info}>
-                {selectedVariant && <p>Variant SKU: {selectedVariant.variant_sku}</p>}
-                {selectedVariant && selectedVariant.variant_price ? (
+                {selectedVariant && selectedVariant.variant_sku && (
+                  <p>Variant SKU: {selectedVariant.variant_sku}</p>
+                )}
+                {/* Price - variant veya product price */}
+                {(selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0) ? (
                   <p>Price: ${String(selectedVariant.variant_price)}</p>
-                ) : (
+                ) : (product.price && Number(product.price) > 0) ? (
                   <p>Price: ${String(product.price)}</p>
-                )}
-                {selectedVariant && selectedVariant.variant_quantity ? (
+                ) : null}
+                {/* Quantity */}
+                {(selectedVariant?.variant_quantity && Number(selectedVariant.variant_quantity) > 0) ? (
                   <p>Available Quantity: {Number(selectedVariant.variant_quantity)}</p>
-                ) : (
+                ) : (product.quantity && Number(product.quantity) > 0) ? (
                   <p>Available Quantity: {Number(product.quantity)}</p>
-                )}
-                {selectedVariant && selectedVariant.variant_barcode ? (
-                  <p>Variant Barcode Number: {selectedVariant.variant_barcode}</p>
-                ) : (
+                ) : null}
+                {/* Barcode */}
+                {selectedVariant?.variant_barcode ? (
+                  <p>Variant Barcode: {selectedVariant.variant_barcode}</p>
+                ) : product.barcode ? (
                   <p>Barcode: {product.barcode}</p>
-                )}
+                ) : null}
                 {/* {selectedVariant && selectedVariant.variant_cost ? (<>
                   <p>Variant Cost: ${String(selectedVariant.variant_cost)}</p>
                   <button type='submit'>Add to Cart</button>
@@ -430,7 +471,16 @@ function ProductDetailCard({
             </div>
           ) :
             <div className={classes.parent_product_info}>
-
+              {/* Varyant olmayan ürünler için bilgiler */}
+              {product.price && Number(product.price) > 0 && (
+                <p>Price: ${String(product.price)}</p>
+              )}
+              {product.quantity && Number(product.quantity) > 0 && (
+                <p>Available Quantity: {Number(product.quantity)}</p>
+              )}
+              {product.barcode && (
+                <p>Barcode: {product.barcode}</p>
+              )}
             </div>
           }
 

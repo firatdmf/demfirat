@@ -257,6 +257,77 @@
   border-color: var(--bronze, #b8956a);
 }
 
+/* Color Swatches */
+.color_swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.color_swatch_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color_swatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid var(--light-gray, #e0dcd2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.color_swatch:hover {
+  transform: scale(1.1);
+  border-color: var(--gold, #c9a961);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.checked_color_swatch {
+  border-color: var(--gold, #c9a961);
+  border-width: 4px;
+  box-shadow: 0 0 0 4px rgba(201, 169, 97, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.checked_color_swatch:hover {
+  border-color: var(--bronze, #b8956a);
+}
+
+.color_label {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-dark, #2c2c2c);
+  text-transform: capitalize;
+  text-align: center;
+  white-space: nowrap;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* Variant Info */
 .variant_info {
   background: var(--primary-beige, #f5f3ed);
@@ -383,6 +454,20 @@
     font-size: 0.85rem;
   }
   
+  .color_swatches {
+    gap: 0.75rem;
+  }
+  
+  .color_swatch {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .color_label {
+    font-size: 0.7rem;
+    max-width: 70px;
+  }
+  
   .prevButton,
   .nextButton {
     width: 40px;
@@ -424,5 +509,24 @@
   .variant_info,
   .parent_product_info {
     padding: 1rem;
+  }
+  
+  .color_swatches {
+    gap: 0.5rem;
+  }
+  
+  .color_swatch {
+    width: 40px;
+    height: 40px;
+    border-width: 2px;
+  }
+  
+  .checked_color_swatch {
+    border-width: 3px;
+  }
+  
+  .color_label {
+    font-size: 0.65rem;
+    max-width: 60px;
   }
 }

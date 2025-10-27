@@ -1,0 +1,80 @@
+.clientReviews {
+  padding: 4rem 2rem 2rem 2rem;
+  background: transparent;
+}
+
+.clientReviews h2 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 3rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-dark, #2c2c2c);
+}
+
+.clientReviews h2::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
+  margin: 0 auto 1.5rem;
+}
+
+.clientReviewsContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.clientReviewsSlider {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  scroll-behavior: smooth;
+  padding: 1rem 0;
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.clientReviewsSlider::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.clientReviewsSlider:active {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Prevent image drag */
+.clientReviewsSlider img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+@media (max-width: 768px) {
+  .clientReviews {
+    padding: 4rem 1rem;
+  }
+  
+  .clientReviews h2 {
+    font-size: 2rem;
+  }
+  
+  .clientReviewsSlider {
+    gap: 1rem;
+  }
+}

@@ -262,6 +262,14 @@
   line-height: 1;
 }
 
+.contactPrice {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gold, #c9a961);
+  font-style: italic;
+}
+
 .loginPrompt {
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 0.875rem;

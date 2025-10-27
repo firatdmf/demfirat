@@ -3,6 +3,8 @@
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
+import { Suspense } from 'react';
+import Spinner from '@/components/Spinner';
 
 // type apiResponse = {
 //   products: Product[];
@@ -15,12 +17,19 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   const { product_category, locale } = await props.params;
   const searchParams = await props.searchParams;
   // fetch the products from the API based on the product category
+  const startTime = Date.now();
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${product_category}`);
-  const nejum_response = await fetch(nejum_api_link, { next: { revalidate: 300 } })
+  // Cache for 5 minutes instead of no-store for better performance
+  const nejum_response = await fetch(nejum_api_link, { 
+    next: { revalidate: 300 },
+    // Add timeout header if possible
+  })
   let errorMessage = "";
   let data: any = {};
   if (nejum_response.ok && (nejum_response.headers.get('content-type') || '').includes('application/json')) {
     data = await nejum_response.json();
+    const endTime = Date.now();
+    console.log(`[PERFORMANCE] API call for ${product_category} took ${endTime - startTime}ms`);
     // console.log("your data is", data)
     // console.log("Fetched products for category:", product_category);
   } else {

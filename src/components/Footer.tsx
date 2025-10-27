@@ -19,11 +19,11 @@ function Footer({StayConnected,OurStory,ContactUs,AllRightsReserved,locale}:Foot
         <div className={classes.col1}>
           <h3>Karven</h3>
           <p className={classes.description}>
-            {locale === 'tr' ? '1985’ten beri özenle seçilmiş evler için lüks perde kumaşları üretiyoruz' :
-             locale === 'ru' ? 'С 1985 года создаем роскошные ткани для изысканных домов' :
-             locale === 'pl' ? 'Od 1985 roku tworzymy luksusowe tkaniny zasłonowe dla wymagających domów' :
-             locale === 'de' ? 'Seit 1985 fertigen wir luxuriöse Vorhangstoffe für anspruchsvolle Eigenheime' :
-             'Crafting luxury curtain fabrics for discerning homes since 1985'}
+            {locale === 'tr' ? "1991'den beri özenle seçilmiş evler için lüks perde kumaşları üretiyoruz" :
+             locale === 'ru' ? 'С 1991 года создаем роскошные ткани для изысканных домов' :
+             locale === 'pl' ? 'Od 1991 roku tworzymy luksusowe tkaniny zasłonowe dla wymagających domów' :
+             locale === 'de' ? 'Seit 1991 fertigen wir luxuriöse Vorhangstoffe für anspruchsvolle Eigenheime' :
+             'Crafting luxury curtain fabrics for discerning homes since 1991'}
           </p>
           <div className={classes.socialIcons}>
             <Link 
