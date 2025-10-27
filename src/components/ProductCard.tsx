@@ -94,7 +94,7 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
                 src={imageSrc}
                 alt={`${product.title} - ${product.sku}`}
                 className={classes.productImage}
-                fetchpriority="high"
+                fetchPriority="high"
                 decoding="async"
                 onLoad={(e) => {
                   if (e.currentTarget.complete) {
