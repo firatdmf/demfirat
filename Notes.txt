@@ -216,3 +216,6 @@ in your case, middleware.ts should be inside the src folder
 
 below is how you run a tsx file
 npx ts-node src/foo.ts
+
+
+new note
