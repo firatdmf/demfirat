@@ -27,7 +27,7 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
             {/* Sol büyük resim */}
             <div className={`${classes.galleryItem} ${classes.large}`}>
               <img 
-                src="/media/showcase/showcase-1.jpg" 
+                src="/media/showcase/showcase-1.avif" 
                 alt="Luxury curtain showcase"
                 className={classes.image}
               />
@@ -36,7 +36,7 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
             {/* Sağ üst sol */}
             <div className={classes.galleryItem}>
               <img 
-                src="/media/showcase/showcase-2.jpg" 
+                src="/media/showcase/showcase-2.avif" 
                 alt="Elegant fabric showcase"
                 className={classes.image}
               />
@@ -45,7 +45,7 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
             {/* Sağ üst sağ */}
             <div className={classes.galleryItem}>
               <img 
-                src="/media/showcase/showcase-3.jpg" 
+                src="/media/showcase/showcase-3.avif" 
                 alt="Interior design showcase"
                 className={classes.image}
               />
@@ -54,7 +54,7 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
             {/* Sağ alt geniş */}
             <div className={`${classes.galleryItem} ${classes.wide}`}>
               <img 
-                src="/media/showcase/showcase-4.jpg" 
+                src="/media/showcase/showcase-4.avif" 
                 alt="Living room showcase"
                 className={classes.image}
               />
