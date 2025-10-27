@@ -17,7 +17,7 @@ export default function AutoSlider({ locale }: AutoSliderProps) {
 
   const slides: Slide[] = [
     {
-      image: "/media/slider/slide-1.jpg",
+      image: "/media/slider/slide-1.avif",
       title: locale === 'en' ? 'Luxury Fabrics' : 
              locale === 'ru' ? 'Роскошные ткани' :
              locale === 'pl' ? 'Luksusowe tkaniny' :
@@ -28,7 +28,7 @@ export default function AutoSlider({ locale }: AutoSliderProps) {
                 'Mekanınızı premium tekstillerle dönüştürün'
     },
     {
-      image: "/media/slider/slide-2.jpg",
+      image: "/media/slider/slide-2.avif",
       title: locale === 'en' ? 'Elegant Designs' :
              locale === 'ru' ? 'Элегантный дизайн' :
              locale === 'pl' ? 'Eleganckie projekty' :
@@ -39,7 +39,7 @@ export default function AutoSlider({ locale }: AutoSliderProps) {
                 'Eviniz için el işi mükemmellik'
     },
     {
-      image: "/media/slider/slide-3.jpg",
+      image: "/media/slider/slide-3.avif",
       title: locale === 'en' ? 'Timeless Quality' :
              locale === 'ru' ? 'Вечное качество' :
              locale === 'pl' ? 'Ponadczasowa jakość' :
@@ -50,7 +50,7 @@ export default function AutoSlider({ locale }: AutoSliderProps) {
                 'Kalıcı olmak için üretildi, ilham vermek için tasarlandı'
     },
     {
-      image: "/media/slider/slide-4.jpg",
+      image: "/media/slider/slide-4.avif",
       title: locale === 'en' ? 'Exquisite Craftsmanship' :
              locale === 'ru' ? 'Изысканное мастерство' :
              locale === 'pl' ? 'Wyrafinowane rzemiosło' :
