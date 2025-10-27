@@ -192,20 +192,32 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
   // Handling of the search bar
   const search_filter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let query = e.currentTarget.value;
+    let query = e.currentTarget.value.trim();
+    console.log('[SEARCH] Query:', query);
 
     if (!query) {
       setSearchFilterUsed(false)
+      setSearchFilteredProducts([])
+      console.log('[SEARCH] Cleared search');
     } else {
       setSearchFilterUsed(true)
-      // filter the products, if we have them.
+      // Search in the currently filtered products (after URL params filter)
       if (filteredProducts) {
-        setSearchFilteredProducts(filteredProducts.filter((product) =>
+        const matchedProducts = filteredProducts.filter((product) =>
           // search product title or product sku and return matching products
-          product.title?.toLowerCase().includes(query.toLowerCase()) || product.sku?.toLowerCase().includes(query.toLowerCase())
-        ))
+          product.title?.toLowerCase().includes(query.toLowerCase()) || 
+          product.sku?.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        const uniqueResults = Array.from(
+          new Map(
+            matchedProducts.map(product => [String(product.id), product]) // Use id as unique key
+          ).values()
+        );
+        
+        console.log(`[SEARCH] Found ${matchedProducts.length} matches, ${uniqueResults.length} unique`);
+        setSearchFilteredProducts(uniqueResults)
       }
-
     }
   }
 
