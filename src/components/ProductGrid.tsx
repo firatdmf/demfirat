@@ -4,7 +4,7 @@ import classes from "./ProductGrid.module.css";
 import ProductCard from "@/components/ProductCard";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // below are react icons
 import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
@@ -23,7 +23,8 @@ type ProductGridProps = {
   searchParams: SearchParams;
   locale?: string;
   HeadlineT?: string;
-  SearchBarT?: string
+  SearchBarT?: string;
+  initialDisplayCount?: number;
 }
 
 // Translation helper for attribute names
@@ -172,23 +173,43 @@ const translateAttributeName = (name: string, locale: string): string => {
 };
 
 // Below variables are passed down
-function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT }: ProductGridProps) {
-  // console.log("your products are", products);
-
-  // console.log("Products in product grid are: ");
-  // console.log(products);
-  // console.log("your attribute values are: ");
-  // console.log(product_variant_attribute_values);
-
-  // In this component the search bar works with client side components, and the filtering works finely on the server side.
-
+function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT, initialDisplayCount = 30 }: ProductGridProps) {
+  // Pagination state
+  const [displayCount, setDisplayCount] = useState(initialDisplayCount);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  
   // This is manipulated with (search params) but we need to initialize it first.
   let filteredProducts: Product[] | null = products ?? []; // Initialize as an empty array if products is null
-  // const [fi, setfirst] = useState(second)
-  const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>(filteredProducts ? filteredProducts : []);
+  const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>([]);
   const [SearchFilterUsed, setSearchFilterUsed] = useState<boolean>(false)
   const [FilterMenuOpen, setFilterMenuOpen] = useState<boolean>(false)
 
+  // Infinite scroll handler
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isLoadingMore || SearchFilterUsed) return; // Don't paginate when searching
+      
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Trigger when user is 200px from bottom
+      if (scrollTop + windowHeight >= documentHeight - 200) {
+        const currentProducts = filteredProducts || [];
+        if (displayCount < currentProducts.length) {
+          setIsLoadingMore(true);
+          
+          setTimeout(() => {
+            setDisplayCount(prev => prev + 30);
+            setIsLoadingMore(false);
+          }, 500);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoadingMore, displayCount, filteredProducts, SearchFilterUsed]);
 
   // Handling of the search bar
   const search_filter = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,9 +222,9 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       console.log('[SEARCH] Cleared search');
     } else {
       setSearchFilterUsed(true)
-      // Search in the currently filtered products (after URL params filter)
-      if (filteredProducts) {
-        const matchedProducts = filteredProducts.filter((product) =>
+      // Search in ALL products (before URL filter), not just filteredProducts
+      if (products) {
+        const matchedProducts = products.filter((product) =>
           // search product title or product sku and return matching products
           product.title?.toLowerCase().includes(query.toLowerCase()) || 
           product.sku?.toLowerCase().includes(query.toLowerCase())
@@ -410,7 +431,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                 : null;
               return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} />;
             }) :
-              (Array.isArray(filteredProducts) ? filteredProducts : [])?.map((product: Product) => {
+              (Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
                 // Find first variant price for this product
                 const productVariants = product_variants.filter(v => v.product_id === product.id);
                 const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price 
@@ -421,6 +442,46 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             }
           </div>
         </div>
+        
+        {/* Loading indicator for infinite scroll */}
+        {isLoadingMore && !SearchFilterUsed && (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            padding: '40px',
+            width: '100%'
+          }}>
+            <div style={{ 
+              border: '4px solid #f3f3f3',
+              borderTop: '4px solid #c9a961',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <style>{`
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}</style>
+          </div>
+        )}
+        
+        {/* End message */}
+        {!SearchFilterUsed && filteredProducts && displayCount >= filteredProducts.length && filteredProducts.length > initialDisplayCount && (
+          <div style={{ 
+            textAlign: 'center', 
+            padding: '40px',
+            color: '#666',
+            fontSize: '16px'
+          }}>
+            {locale === 'tr' ? 'Tüm ürünler yüklendi' :
+             locale === 'ru' ? 'Все товары загружены' :
+             locale === 'pl' ? 'Wszystkie produkty załadowane' :
+             'All products loaded'}
+          </div>
+        )}
       </div>
     );
   }

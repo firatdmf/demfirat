@@ -61,12 +61,6 @@ const transformFabricToProduct = (fabric: any, index: number): Product => {
 export default function EmbroideryClient({ locale, searchParams }: EmbroideryClientProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [fabricData, setFabricData] = useState<any[]>([]);
-  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
-  const [page, setPage] = useState(1);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  
-  const PRODUCTS_PER_PAGE = 30;
 
   // Load JSON data asynchronously
   useEffect(() => {
@@ -98,43 +92,6 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
     console.log(`[EMBROIDERY] Total: ${products.length}, Unique: ${uniqueProducts.length}`);
     return uniqueProducts;
   }, [fabricData]);
-
-  // Load initial products and handle pagination
-  useEffect(() => {
-    if (allProducts.length === 0) return;
-    
-    const startIndex = 0;
-    const endIndex = page * PRODUCTS_PER_PAGE;
-    const newProducts = allProducts.slice(startIndex, endIndex);
-    
-    setDisplayedProducts(newProducts);
-    setHasMore(endIndex < allProducts.length);
-  }, [allProducts, page]);
-
-  // Infinite scroll handler
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isLoadingMore || !hasMore) return;
-      
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      
-      // Trigger when user is 200px from bottom
-      if (scrollTop + windowHeight >= documentHeight - 200) {
-        setIsLoadingMore(true);
-        
-        // Simulate loading delay
-        setTimeout(() => {
-          setPage(prev => prev + 1);
-          setIsLoadingMore(false);
-        }, 500);
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isLoadingMore, hasMore]);
 
   const product_variants: ProductVariant[] = [];
   const product_variant_attributes: ProductVariantAttribute[] = [];
@@ -170,66 +127,22 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
   }
 
   return (
-    <>
-      <ProductGrid
-        products={displayedProducts}
-        product_variants={product_variants}
-        product_variant_attributes={product_variant_attributes}
-        product_variant_attribute_values={product_variant_attribute_values}
-        product_category="embroidery"
-        product_category_description={
-          locale === 'tr' ? 'Nakışlı şeffaf perde kumaşları - Lüks ev tekstili koleksiyonu' :
-          locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
-          locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
-          locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
-          'Embroidered sheer curtain fabrics - Luxury home textile collection'
-        }
-        searchParams={searchParams}
-        locale={locale}
-      />
-      
-      {/* Loading indicator for infinite scroll */}
-      {isLoadingMore && (
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          padding: '40px',
-          width: '100%'
-        }}>
-          <div style={{ 
-            border: '4px solid #f3f3f3',
-            borderTop: '4px solid #c9a961',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            animation: 'spin 1s linear infinite'
-          }}></div>
-        </div>
-      )}
-      
-      {/* End of products message */}
-      {!hasMore && displayedProducts.length > 0 && (
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '40px',
-          color: '#666',
-          fontSize: '16px',
-          fontFamily: 'var(--font-body, \'Montserrat\', sans-serif)'
-        }}>
-          {locale === 'tr' ? 'Tüm ürünler yüklendi' :
-           locale === 'ru' ? 'Все товары загружены' :
-           locale === 'pl' ? 'Wszystkie produkty załadowane' :
-           locale === 'de' ? 'Alle Produkte geladen' :
-           'All products loaded'}
-        </div>
-      )}
-      
-      <style>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-    </>
+    <ProductGrid
+      products={allProducts}
+      product_variants={product_variants}
+      product_variant_attributes={product_variant_attributes}
+      product_variant_attribute_values={product_variant_attribute_values}
+      product_category="embroidery"
+      product_category_description={
+        locale === 'tr' ? 'Nakışlı şeffaf perde kumaşları - Lüks ev tekstili koleksiyonu' :
+        locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
+        locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
+        locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
+        'Embroidered sheer curtain fabrics - Luxury home textile collection'
+      }
+      searchParams={searchParams}
+      locale={locale}
+      initialDisplayCount={30}
+    />
   );
 }
