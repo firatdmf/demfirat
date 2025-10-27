@@ -33,7 +33,7 @@ function ProductCategories({
     }
     return '';
   };
-
+  // just a comment
   return (
     <div className={classes.ProductCategoriesPage}>
       {Headline && <h2 className={classes.componentTitle}>{Headline}</h2>}
