@@ -1,5 +1,5 @@
 "use client";
-import React, { useTransition } from "react";
+import React, { useTransition, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 export default function LocaleSwitcher() {

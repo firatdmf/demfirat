@@ -5,17 +5,27 @@ import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttribu
 // Transform fabric data to Product interface format
 const transformFabricToProduct = (fabric: any): Product => {
   return {
-    id: fabric.design,
+    id: fabric.design as any,
+    pk: parseInt(fabric.design) || 0,
     sku: fabric.design,
     title: `Design ${fabric.design}`,
     description: `Embroidered sheer curtain fabric with design ${fabric.design}`,
-    price: "0", // Price will be shown after authentication
-    quantity: "1",
+    price: null, // Price will be shown after authentication
+    quantity: null,
     barcode: fabric.design,
-    primary_image: fabric.files?.[0] ? `/media/products/embroidered_sheer_curtain_fabrics/thumbnails/${fabric.files[0].name}` : null,
-    category_id: "fabrics",
-    created_at: fabric.date || new Date().toISOString(),
-    updated_at: fabric.date || new Date().toISOString()
+    tags: null,
+    type: null,
+    unit_of_measurement: null,
+    featured: false,
+    selling_while_out_of_stock: false,
+    weight: null,
+    unit_of_weight: null,
+    category_id: null,
+    supplier_id: null,
+    datasheet_url: null,
+    minimum_inventory_level: null,
+    primary_image: fabric.files?.[0] ? `/media/products/embroidered_sheer_curtain_fabrics/thumbnails/${fabric.files[0].name}` : undefined,
+    created_at: new Date(fabric.date || Date.now())
   };
 };
 

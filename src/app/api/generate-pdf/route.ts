@@ -300,7 +300,7 @@ export async function GET(request: NextRequest) {
     const pdfBytes = await pdfDoc.save();
     
     // PDF dosyası olarak döndür
-    return new NextResponse(pdfBytes, {
+    return new NextResponse(Buffer.from(pdfBytes), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="product-${sku}.pdf"`,
