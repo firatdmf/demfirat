@@ -59,38 +59,12 @@ function Header({ menuTArray }: HeaderProps) {
           </nav>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button 
-          className={classes.mobileMenuToggle}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span className={mobileMenuOpen ? classes.active : ''}></span>
-          <span className={mobileMenuOpen ? classes.active : ''}></span>
-          <span className={mobileMenuOpen ? classes.active : ''}></span>
-        </button>
-
         {/* Right Side - Actions */}
         <div className={classes.actionsSection}>
           {/* Language Switcher */}
           <div className={classes.languageSection}>
             <LocaleSwitcher />
           </div>
-
-          {/* Contact Button */}
-          <Link href={`/${locale}/contact`} className={classes.contactButton}>
-            <span>
-              {locale === 'tr' ? 'Bize Ulaşın' :
-               locale === 'ru' ? 'Свяжитесь с нами' :
-               locale === 'pl' ? 'Skontaktuj się' :
-               locale === 'de' ? 'Kontaktiere uns' :
-               'Contact Us'}
-            </span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </Link>
 
           {/* User Authentication */}
           {!session?.user?.name ? (
@@ -113,6 +87,17 @@ function Header({ menuTArray }: HeaderProps) {
               </button>
             </div>
           )}
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className={classes.mobileMenuToggle}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className={mobileMenuOpen ? classes.active : ''}></span>
+            <span className={mobileMenuOpen ? classes.active : ''}></span>
+            <span className={mobileMenuOpen ? classes.active : ''}></span>
+          </button>
         </div>
       </div>
 
@@ -127,7 +112,7 @@ function Header({ menuTArray }: HeaderProps) {
             {menuTArray[0]}
           </Link>
           <Link 
-            href={`/${locale}/product/fabrics/embroidery`} 
+            href={`/${locale}/product/fabric`} 
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >

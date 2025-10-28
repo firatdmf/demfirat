@@ -19,6 +19,8 @@
   align-items: center;
   margin-bottom: 3rem;
   padding: 0 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .brand {
@@ -28,6 +30,7 @@
   color: #ffffff;
   letter-spacing: 0.1em;
   text-align: left;
+  flex: 1 1 auto;
 }
 
 .slogan {
@@ -38,6 +41,7 @@
   letter-spacing: 0.05em;
   text-align: right;
   text-transform: uppercase;
+  flex: 1 1 auto;
 }
 
 .gallery {
@@ -102,17 +106,26 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .showcaseSection {
+    padding: 5rem 1.5rem;
+  }
+
+  .header {
+    margin-bottom: 2.5rem;
+  }
+
+  .brand {
+    font-size: 2.5rem;
+  }
+
+  .slogan {
+    font-size: 1.2rem;
+  }
+
   .gallery {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 220px);
-  }
-
-  .galleryItem.large {
-    grid-row: span 2;
-  }
-
-  .title {
-    font-size: 2.8rem;
+    grid-template-rows: repeat(2, 220px);
+    gap: 1.2rem;
+    margin: 3rem 0;
   }
 }
 
@@ -121,36 +134,68 @@
     padding: 4rem 1.5rem;
   }
 
-  .gallery {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 1rem;
+  .header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 2rem;
+    margin-bottom: 2rem;
   }
 
-  .galleryItem,
-  .galleryItem.large,
-  .galleryItem.wide {
-    grid-column: span 1;
-    grid-row: span 1;
-    height: 300px;
-  }
-
-  .title {
+  .brand {
     font-size: 2.2rem;
+    text-align: center;
+    flex: 1 1 100%;
+  }
+
+  .slogan {
+    font-size: 0.9rem;
+    text-align: center;
+    flex: 1 1 100%;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 200px);
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .galleryItem.large {
+    grid-row: span 2;
+    grid-column: span 1;
+  }
+
+  .galleryItem.wide {
+    grid-column: span 2;
   }
 
   .ctaButton {
-    padding: 1rem 2.5rem;
     font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .title {
+  .showcaseSection {
+    padding: 3rem 1rem;
+  }
+
+  .brand {
     font-size: 1.8rem;
   }
 
-  .galleryItem {
-    height: 250px;
+  .slogan {
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 150px);
+    gap: 0.75rem;
+  }
+
+  .ctaButton {
+    font-size: 0.9rem;
   }
 }

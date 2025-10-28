@@ -48,3 +48,36 @@
   color: var(--dark-gray, #4a4a4a);
   background: transparent;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ClientTestimonialsPage .reviewCard {
+    min-width: 280px;
+    max-width: 320px;
+  }
+
+  .ClientTestimonialsPage .reviewCard .reviewImage {
+    height: 360px;
+  }
+
+  .ClientTestimonialsPage .reviewCard .reviewText {
+    font-size: 0.9rem;
+    padding: 1.25rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .ClientTestimonialsPage .reviewCard {
+    min-width: 250px;
+    max-width: 280px;
+  }
+
+  .ClientTestimonialsPage .reviewCard .reviewImage {
+    height: 320px;
+  }
+
+  .ClientTestimonialsPage .reviewCard .reviewText {
+    font-size: 0.85rem;
+    padding: 1rem 0;
+  }
+}

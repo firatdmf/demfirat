@@ -182,7 +182,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   let filteredProducts: Product[] | null = products ?? []; // Initialize as an empty array if products is null
   const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>([]);
   const [SearchFilterUsed, setSearchFilterUsed] = useState<boolean>(false)
-  const [FilterMenuOpen, setFilterMenuOpen] = useState<boolean>(false)
+  const [FilterDrawerOpen, setFilterDrawerOpen] = useState<boolean>(false)
 
   // Infinite scroll handler
   useEffect(() => {
@@ -319,32 +319,119 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             <FaSearch />
           </button>
         </div>
-        {/* Not shown on computer screen, only for tablets and phones */}
-        <div className={classes.filterToggleContainer}>
-          <button
-            className={classes.filterToggleButton}
-            onClick={() => setFilterMenuOpen(!FilterMenuOpen)}
+
+        {/* Mobile Filter Button */}
+        <div className={classes.filterButtonContainer}>
+          <button 
+            className={classes.mobileFilterButton}
+            onClick={() => setFilterDrawerOpen(true)}
+            aria-label="Open filters"
           >
-            {FilterMenuOpen ? (
-              locale === 'tr' ? 'Filtreyi Kapat' :
-              locale === 'ru' ? 'Закрыть фильтр' :
-              locale === 'pl' ? 'Zamknij filtr' :
-              locale === 'de' ? 'Filter schließen' :
-              'Close Filter'
-            ) : (
-              locale === 'tr' ? 'Filtreyi Aç' :
-              locale === 'ru' ? 'Открыть фильтр' :
-              locale === 'pl' ? 'Otwórz filtr' :
-              locale === 'de' ? 'Filter öffnen' :
-              'Open Filter'
-            )}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="4" y1="6" x2="20" y2="6"></line>
+              <line x1="4" y1="12" x2="20" y2="12"></line>
+              <line x1="4" y1="18" x2="14" y2="18"></line>
+              <circle cx="18" cy="18" r="2"></circle>
+            </svg>
+            <span>
+              {locale === 'tr' ? 'Filtrele' :
+               locale === 'ru' ? 'Фильтры' :
+               locale === 'pl' ? 'Filtry' :
+               'Filters'}
+            </span>
           </button>
         </div>
 
+        {/* Mobile Filter Drawer Overlay */}
+        {FilterDrawerOpen && (
+          <div 
+            className={classes.filterDrawerOverlay}
+            onClick={() => setFilterDrawerOpen(false)}
+          >
+            <div 
+              className={`${classes.filterDrawer} ${FilterDrawerOpen ? classes.filterDrawerOpen : ''}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={classes.filterDrawerHeader}>
+                <h3>
+                  {locale === 'tr' ? 'Filtreler' :
+                   locale === 'ru' ? 'Фильтры' :
+                   locale === 'pl' ? 'Filtry' :
+                   'Filters'}
+                </h3>
+                <button 
+                  className={classes.closeDrawerButton}
+                  onClick={() => setFilterDrawerOpen(false)}
+                  aria-label="Close filters"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+              <div className={classes.filterDrawerContent}>
+                <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
+                  {locale === 'tr' ? 'Filtreleri Temizle' :
+                   locale === 'ru' ? 'Очистить фильтры' :
+                   locale === 'pl' ? 'Wyczyść filtry' :
+                   'Reset Filters'}
+                </Link>
+                <ul>
+                  {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
+                    const filteredValues = product_variant_attribute_values.filter(
+                      (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
+                    );
+                    const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
+                      .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
 
+                    return (
+                      <li key={index}>
+                        {translateAttributeName(attribute.name || '', locale)}
+                        {uniqueValues.map((attribute_value) => {
+                          const params = new URLSearchParams(searchParams as Record<string, string>);
+                          const paramKey = String(attribute.name);
+                          const paramValue = String(attribute_value?.product_variant_attribute_value);
+                          const currentValues = params.get(paramKey)?.split(',') || [];
+                          const isChecked = currentValues.includes(paramValue);
+
+                          if (isChecked) {
+                            const newValues = currentValues.filter((val) => val !== paramValue);
+                            if (newValues.length > 0) {
+                              params.set(paramKey, newValues.join(','));
+                            } else {
+                              params.delete(paramKey);
+                            }
+                          } else {
+                            currentValues.push(paramValue);
+                            params.set(paramKey, currentValues.join(','));
+                          }
+
+                          const href = `?${params.toString()}`;
+
+                          return (
+                            <div key={attribute_value?.id} className={classes.attribute_value_item_box}>
+                              <Link className={classes.link} href={href} replace={true} scroll={false}>
+                                <div className={classes.icon}>
+                                  {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
+                                </div>
+                                <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}</div>
+                              </Link>
+                              <br />
+                            </div>
+                          );
+                        })}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className={classes.FiratDisplay}>
-          <div className={`${classes.filterMenu} ${FilterMenuOpen ? classes.filterMenuOpen : classes.filterMenuClosed}`}>
+          <div className={classes.filterMenu}>
 
 
             <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>

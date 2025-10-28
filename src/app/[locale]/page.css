@@ -2,6 +2,8 @@
 .HomePage {
   margin-top: 0;
   background-color: var(--ivory, #faf8f3);
+  width: 100%;
+  overflow-x: hidden;
 }
   
   .Home .grid1,
@@ -117,6 +119,7 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   color: var(--text-dark, #2c2c2c);
+  text-align: center;
 }
 
 .HomePage .certifications span {
@@ -128,6 +131,38 @@
   color: var(--gold, #c9a961);
   cursor: default;
   transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .HomePage .certifications {
+    margin-top: 3rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .HomePage .certifications p {
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+  }
+
+  .HomePage .certifications span {
+    padding: 0 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .HomePage .certifications {
+    margin-top: 2rem;
+    padding: 1rem 0.5rem;
+  }
+
+  .HomePage .certifications p {
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+  }
+
+  .HomePage .certifications span {
+    padding: 0 0.2rem;
+  }
 }
   
 

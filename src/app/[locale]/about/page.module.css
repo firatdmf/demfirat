@@ -171,15 +171,17 @@
   display: inline-block;
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--gold, #c9a961);
-  background: linear-gradient(135deg, rgba(201, 169, 97, 0.08), rgba(201, 169, 97, 0.05));
   padding: 0.5rem 1.5rem;
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.1), rgba(201, 169, 97, 0.05));
   border-radius: 8px;
   margin-bottom: 1rem;
-  letter-spacing: 0.02em;
-  border-left: 4px solid var(--gold, #c9a961);
-  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.15);
+  letter-spacing: 0.05em;
+}
+
+.timelineYearMobile {
+  display: none;
 }
 
 .timelineTitle {
@@ -221,17 +223,29 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .heroTitle {
-    font-size: 3rem;
+    font-size: 3.5rem;
   }
   
   .heroSubtitle {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
+  }
+
+  .timeline {
+    padding: 2.5rem 1.5rem 3rem 1.5rem;
+  }
+
+  .timelineImageWrapper {
+    min-height: 280px;
+  }
+
+  .timelineContent {
+    padding: 1.75rem;
   }
 }
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 40vh;
+    min-height: 50vh;
     padding: 3rem 1.5rem;
   }
 
@@ -240,64 +254,131 @@
   }
   
   .heroSubtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.7;
   }
 
+  /* Modern mobil app stili timeline */
   .timeline {
-    padding: 2rem 1rem 3rem 1rem;
+    padding: 1.5rem 1rem 2rem 1rem;
+    background: transparent;
   }
 
   .timeline::before {
-    left: 2rem;
-  }
-
-  .timeline::before {
-    left: 2rem;
+    display: none;
   }
 
   .timelineItem {
-    grid-template-columns: auto 1fr;
-    gap: 1rem;
-    padding-left: 1rem;
-    margin-bottom: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 2rem;
+    padding: 0;
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   }
 
   .timelineDot {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-  }
-
-  .timelineContent {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .timelineImageWrapper {
-    grid-column: 2;
-    grid-row: 2;
-    width: 100%;
-    height: 220px;
-    margin-top: 1rem;
-  }
-
-  .timelineContent {
-    padding: 1.25rem 1.5rem;
-  }
-  
-  .timelineImageWrapper {
-    margin-top: 1rem;
+    display: none;
   }
 
   .timelineYear {
-    font-size: 2rem;
-    padding: 0.4rem 1.25rem;
+    display: none;
+  }
+
+  .timelineYearMobile {
+    display: block;
+    position: absolute;
+    top: 2.5rem;
+    right: 1rem;
+    font-size: 1.125rem;
+    padding: 0.3rem 0.875rem;
+    background: var(--gold, #c9a961);
+    color: white;
+    border-radius: 16px;
+    z-index: 10;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(201, 169, 97, 0.3);
+  }
+
+  .timelineContent {
+    padding: 1.5rem;
+    order: 2;
+    background: white;
+    border: none;
+    box-shadow: none;
+  }
+
+  .timelineImageWrapper {
+    order: 1;
+    min-height: 220px;
+    margin: 0;
+    border-radius: 0;
+    position: relative;
   }
 
   .timelineTitle {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    margin: 0 0 0.75rem 0;
+    color: var(--text-dark, #2c2c2c);
   }
 
   .timelineDescription {
-    font-size: 0.95rem;
+    font-size: 0.925rem;
+    line-height: 1.65;
+    color: #555;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 45vh;
+    padding: 2.5rem 1rem;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 0.925rem;
+    line-height: 1.65;
+  }
+
+  .timeline {
+    padding: 1rem 0.5rem 1.5rem 0.5rem;
+  }
+
+  .timelineItem {
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .timelineYearMobile {
+    font-size: 1rem;
+    padding: 0.25rem 0.75rem;
+    top: 2rem;
+    right: 0.75rem;
+  }
+
+  .timelineContent {
+    padding: 1.25rem;
+  }
+
+  .timelineImageWrapper {
+    min-height: 180px;
+  }
+
+  .timelineTitle {
+    font-size: 1.2rem;
+    margin: 0 0 0.625rem 0;
+  }
+
+  .timelineDescription {
+    font-size: 0.875rem;
+    line-height: 1.6;
   }
 }

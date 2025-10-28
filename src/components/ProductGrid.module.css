@@ -9,14 +9,17 @@
   gap: 1.5rem;
   display: flex;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   align-items: flex-start;
+  position: relative;
 }
 
 
 .ProductGrid .FiratDisplay .filterMenu {
-  width: 280px;
+  width: 260px;
+  min-width: 260px;
+  flex-shrink: 0;
   background: white;
   padding: 1.5rem;
   border-radius: 12px;
@@ -24,7 +27,9 @@
   border: 1px solid var(--light-gray, #e0dcd2);
   height: fit-content;
   position: sticky;
-  top: 1rem;
+  top: 120px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
 }
 
 .ProductGrid .filterMenu h3 {
@@ -119,8 +124,8 @@
 .ProductGrid .FiratDisplay .products {
   flex: 1;
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   justify-content: start;
   align-items: start;
 }
@@ -256,33 +261,159 @@
   display: flex;
 }
 
-.ProductGrid .filterToggleContainer{
-  width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+/* Mobile Filter Button Container */
+.ProductGrid .filterButtonContainer {
+  display: none;
+  margin: 0 0 1.5rem 1rem;
+  padding: 0;
 }
 
-.ProductGrid .filterToggleButton {
-  padding: 1rem 2rem;
-  width: 100%;
-  max-width: 300px;
+/* Mobile Filter Button */
+.ProductGrid .mobileFilterButton {
+  display: inline-flex;
   background: linear-gradient(135deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
   color: white;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  display: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
   font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.ProductGrid .mobileFilterButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(201, 169, 97, 0.5);
+}
+
+.ProductGrid .mobileFilterButton:active {
+  transform: translateY(0);
+}
+
+.ProductGrid .mobileFilterButton svg {
+  flex-shrink: 0;
+}
+
+/* Filter Drawer Overlay */
+.ProductGrid .filterDrawerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Filter Drawer */
+.ProductGrid .filterDrawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 85%;
+  max-width: 400px;
+  background: white;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Drawer Header */
+.ProductGrid .filterDrawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 2px solid var(--light-gray, #e0dcd2);
+  background: linear-gradient(135deg, var(--primary-beige, #f5f3ed) 0%, var(--ivory, #faf8f3) 100%);
+}
+
+.ProductGrid .filterDrawerHeader h3 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.75rem;
   font-weight: 500;
-  font-size: 1rem;
+  color: var(--text-dark, #2c2c2c);
+  margin: 0;
+}
+
+.ProductGrid .closeDrawerButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid var(--light-gray, #e0dcd2);
+  color: var(--text-dark, #2c2c2c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.ProductGrid .filterToggleButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+.ProductGrid .closeDrawerButton:hover {
+  background: var(--gold, #c9a961);
+  color: white;
+  border-color: var(--gold, #c9a961);
+  transform: rotate(90deg);
+}
+
+/* Drawer Content */
+.ProductGrid .filterDrawerContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.ProductGrid .filterDrawerContent ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ProductGrid .filterDrawerContent li {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--light-gray, #e0dcd2);
+}
+
+.ProductGrid .filterDrawerContent li:last-child {
+  border-bottom: none;
+}
+
+.ProductGrid .filterDrawerContent li:first-child {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-dark, #2c2c2c);
+  margin-bottom: 0.75rem;
 }
 
 
@@ -295,6 +426,23 @@
 
 /* cover image ends here */
 
+
+@media only screen and (max-width: 1200px) {
+  .ProductGrid .FiratDisplay {
+    gap: 1.25rem;
+  }
+
+  .ProductGrid .FiratDisplay .filterMenu {
+    width: 240px;
+    min-width: 240px;
+    padding: 1.25rem;
+  }
+
+  .ProductGrid .FiratDisplay .products {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+}
 
 @media only screen and (max-width: 1080px) {
   .ProductGrid {
@@ -314,48 +462,129 @@
   }
 
   .ProductGrid .search {
-    margin: 0 auto 2rem;
+    margin: 0 auto 1.5rem;
     max-width: 100%;
   }
 
   .ProductGrid .FiratDisplay {
     padding: 1rem;
     gap: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .ProductGrid .filterToggleButton{
-    display: block;
-    background: var(--gold, #c9a961);
-    border: none;
-    border-radius: 8px;
-    padding: 1rem;
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-weight: 500;
-    color: white;
-  }
-
-  .ProductGrid .filterToggleButton:hover {
-    background: var(--bronze, #b8956a);
   }
 
   .ProductGrid .FiratDisplay .filterMenu {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-
-  .ProductGrid .filterMenuClosed {
-    display: none;
-  }
-
-  .ProductGrid .filterMenuOpen {
-    display: block;
+    width: 220px;
+    min-width: 220px;
+    padding: 1rem;
+    top: 110px;
   }
 
   .ProductGrid .FiratDisplay .products {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.875rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .ProductGrid .headerSection {
+    padding: 1.25rem 1rem 1rem;
   }
 
+  .ProductGrid .pageTitle {
+    font-size: 2rem;
+  }
+
+  .ProductGrid .pageTitle::before {
+    width: 60px;
+    height: 2px;
+  }
+
+  .ProductGrid .pageDescription {
+    font-size: 0.95rem;
+  }
+
+  .ProductGrid .search {
+    margin: 0 1rem 1.5rem;
+  }
+
+  .ProductGrid .searchTerm {
+    padding: 0.875rem 1.25rem;
+    height: 50px;
+    font-size: 0.95rem;
+  }
+
+  .ProductGrid .searchButton {
+    width: 50px;
+    height: 50px;
+    font-size: 16px;
+  }
+
+  /* Mobilde filter button göster */
+  .ProductGrid .filterButtonContainer {
+    display: block;
+  }
+
+  /* Desktop sidebar gizle */
+  .ProductGrid .FiratDisplay .filterMenu {
+    display: none;
+  }
+
+  .ProductGrid .FiratDisplay {
+    padding: 0.75rem;
+  }
+
+  /* Grid: 3 sütun mobilde */
+  .ProductGrid .FiratDisplay .products {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .ProductGrid .pageTitle {
+    font-size: 1.75rem;
+  }
+
+  .ProductGrid .pageDescription {
+    font-size: 0.875rem;
+  }
+
+  .ProductGrid .FiratDisplay {
+    padding: 0.5rem;
+  }
+
+  .ProductGrid .filterButtonContainer {
+    margin: 0 0 1.25rem 0.75rem;
+  }
+
+  .ProductGrid .mobileFilterButton {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .ProductGrid .mobileFilterButton svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .ProductGrid .filterDrawer {
+    width: 90%;
+  }
+
+  .ProductGrid .filterDrawerHeader {
+    padding: 1.25rem;
+  }
+
+  .ProductGrid .filterDrawerHeader h3 {
+    font-size: 1.5rem;
+  }
+
+  .ProductGrid .filterDrawerContent {
+    padding: 1.25rem;
+  }
+
+  /* Grid: 2 sütun mobilde */
+  .ProductGrid .FiratDisplay .products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
 }

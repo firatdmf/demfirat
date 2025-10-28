@@ -77,6 +77,7 @@ function About() {
                 </div>
                 <div className={classes.timelineDot}></div>
                 <div className={classes.timelineImageWrapper}>
+                  <span className={classes.timelineYearMobile}>{item.year}</span>
                   <img 
                     src={item.image} 
                     alt={item.title}
@@ -90,6 +91,7 @@ function About() {
             ) : (
               <>
                 <div className={classes.timelineImageWrapper}>
+                  <span className={classes.timelineYearMobile}>{item.year}</span>
                   <img 
                     src={item.image} 
                     alt={item.title}

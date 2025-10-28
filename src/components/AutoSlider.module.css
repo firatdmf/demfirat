@@ -2,6 +2,7 @@
   width: 100%;
   background: #000;
   position: relative;
+  min-height: 600px;
 }
 
 .sliderContainer {
@@ -9,7 +10,7 @@
   margin: 0 auto;
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  height: 700px;
   overflow: hidden;
 }
 
@@ -30,6 +31,7 @@
   opacity: 0;
   transition: opacity 1.5s ease-in-out;
   pointer-events: none;
+  background: #000;
 }
 
 .slide.active {
@@ -40,8 +42,11 @@
 .slideImage {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
   display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .overlay {
@@ -138,6 +143,10 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .sliderContainer {
+    height: 600px;
+  }
+
   .title {
     font-size: 3rem;
   }
@@ -148,6 +157,19 @@
 }
 
 @media (max-width: 768px) {
+  .sliderSection {
+    min-height: 500px;
+  }
+
+  .sliderContainer {
+    height: 500px;
+  }
+
+  .content {
+    width: 85%;
+    padding: 0 1rem;
+  }
+
   .title {
     font-size: 2.5rem;
     margin-bottom: 1rem;
@@ -155,6 +177,7 @@
 
   .subtitle {
     font-size: 1rem;
+    line-height: 1.5;
   }
 
   .dots {
@@ -169,11 +192,29 @@
 }
 
 @media (max-width: 480px) {
+  .sliderSection {
+    min-height: 400px;
+  }
+
+  .sliderContainer {
+    height: 400px;
+  }
+
+  .content {
+    width: 90%;
+  }
+
   .title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
   }
 
   .subtitle {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .dots {
+    bottom: 0.75rem;
   }
 }
