@@ -134,34 +134,33 @@ function ProductDetailCard({
   //   product_variant_attribute_values:[2538, 2540]
   // }
 
+  // Sayfa yüklenince en üste scroll yap
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Initialize selectedAttributes from searchParams or defaults
   useEffect(() => {
     const initialAttributes: { [key: string]: string } = {};
-    let hasUrlParams = false;
     
+    // Her zaman ilk değerleri kullan (URL parametrelerini yok say)
     product_variant_attributes?.forEach(attribute => {
-      const value = searchParams[attribute.name ?? ''] as string;
-      if (value) {
-        initialAttributes[attribute.name ?? ''] = value;
-        hasUrlParams = true;
-      } else {
-        const firstValue = product_variant_attribute_values?.find(
-          val => val.product_variant_attribute_id === attribute.id
-        )?.product_variant_attribute_value;
-        if (firstValue) {
-          initialAttributes[attribute.name ?? ''] = firstValue;
-        }
+      const firstValue = product_variant_attribute_values?.find(
+        val => val.product_variant_attribute_id === attribute.id
+      )?.product_variant_attribute_value;
+      if (firstValue) {
+        initialAttributes[attribute.name ?? ''] = firstValue;
       }
     });
     setSelectedAttributes(initialAttributes);
     
-    // URL parametresi yoksa ve varyantlar varsa, ilk varyant otomatik seçili olsun
-    if (!hasUrlParams && Object.keys(initialAttributes).length > 0) {
+    // Her durumda varyant varsa, varyant resimleri gösterilsin
+    if (Object.keys(initialAttributes).length > 0) {
       setUserHasSelectedVariant(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product_variant_attributes, product_variant_attribute_values, searchParams]);
+  }, [product_variant_attributes, product_variant_attribute_values]);
 
 
 
