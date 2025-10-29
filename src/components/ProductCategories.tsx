@@ -56,6 +56,7 @@ function ProductCategories({
                       src={product_category.image_url}
                       alt={product_category.name + " | product cover image."}
                       className={classes.categoryImage}
+                      loading={index < 2 ? "eager" : "lazy"}
                     />
                   ) : (
                     <div className={classes.placeholderImage}>

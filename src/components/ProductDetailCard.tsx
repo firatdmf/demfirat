@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import classes from "./ProductDetailCard.module.css";
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory } from '@/lib/interfaces';
@@ -31,13 +31,28 @@ function ProductDetailCard({
 
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
 
-  const [selectedThumbIndex, setSelectedThumbIndex] = useState<number>(0);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
-  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
-  const [filteredImages, setFilteredImages] = useState<ProductFile[]>([]);
-  const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(false);
+  // İlk varyant özelliklerini hemen hesapla
+  const getInitialAttributes = () => {
+    const initialAttributes: { [key: string]: string } = {};
+    product_variant_attributes?.forEach(attribute => {
+      const firstValue = product_variant_attribute_values?.find(
+        val => val.product_variant_attribute_id === attribute.id
+      )?.product_variant_attribute_value;
+      if (firstValue) {
+        initialAttributes[attribute.name ?? ''] = firstValue;
+      }
+    });
+    return initialAttributes;
+  };
+
+  const initialAttributes = useMemo(() => getInitialAttributes(), [product_variant_attributes, product_variant_attribute_values]);
+  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>(initialAttributes);
+  const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(
+    product_variant_attributes && product_variant_attributes.length > 0
+  );
 
   // console.log("your product images are:", product_files);
 
@@ -114,7 +129,27 @@ function ProductDetailCard({
     });
   };
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | undefined>(findSelectedVariant());
+  // useMemo ile selectedVariant'ı hesapla
+  const selectedVariant = useMemo(() => {
+    if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return undefined;
+    if (Object.keys(selectedAttributes).length === 0) return undefined;
+    
+    return product_variants.find(variant => {
+      return Object.entries(selectedAttributes).every(([key, value]) => {
+        const attrDef = product_variant_attributes.find(attr => attr.name === key);
+        if (!attrDef) return false;
+        
+        const valueObj = product_variant_attribute_values.find(
+          val =>
+            String(val.product_variant_attribute_id) === String(attrDef.id) &&
+            val.product_variant_attribute_value === value
+        );
+        if (!valueObj) return false;
+        
+        return variant.product_variant_attribute_values?.includes(valueObj.id);
+      });
+    });
+  }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
 
 
   // const selectedVariant = findSelectedVariant();
@@ -139,80 +174,48 @@ function ProductDetailCard({
     window.scrollTo(0, 0);
   }, []);
 
-  // Initialize selectedAttributes from searchParams or defaults
+  // URL parametrelerini güncelle
   useEffect(() => {
-    const initialAttributes: { [key: string]: string } = {};
-    
-    // Her zaman ilk değerleri kullan (URL parametrelerini yok say)
-    product_variant_attributes?.forEach(attribute => {
-      const firstValue = product_variant_attribute_values?.find(
-        val => val.product_variant_attribute_id === attribute.id
-      )?.product_variant_attribute_value;
-      if (firstValue) {
-        initialAttributes[attribute.name ?? ''] = firstValue;
-      }
+    const newParams = new URLSearchParams();
+    Object.keys(selectedAttributes).forEach(key => {
+      newParams.set(key, selectedAttributes[key]);
     });
-    setSelectedAttributes(initialAttributes);
+    window.history.replaceState({}, '', `?${newParams.toString()}`);
+  }, [selectedAttributes]);
+
+
+
+  // useMemo ile filtrelenmiş resimleri hesapla
+  const filteredImages = useMemo(() => {
+    if (!product_files) return [];
     
-    // Her durumda varyant varsa, varyant resimleri gösterilsin
-    if (Object.keys(initialAttributes).length > 0) {
-      setUserHasSelectedVariant(true);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product_variant_attributes, product_variant_attribute_values]);
-
-
-
-  // 
-
-  useEffect(() => {
-    console.log("now this is running my fellas");
-    Object.entries(selectedAttributes).forEach(([key, value]) => {
-
-      let product_variant_attribute = product_variant_attributes?.find(attr => attr.name === key)
-      let product_variant_attribute_value = product_variant_attribute_values?.find(
-        vav => String(vav.product_variant_attribute_id) === String(product_variant_attribute?.id)
-          && vav.product_variant_attribute_value === value
-      )
-      let product_variant = product_variants?.find(variant => variant.product_variant_attribute_values?.some(vav => vav === product_variant_attribute_value?.id))
-    }
-    )
-
-
-    setSelectedVariant(findSelectedVariant());
-    console.log("selected variant updated to:", findSelectedVariant());
-
-  }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
-
-  // 
-
-  // Filter images for the selected variant
-  useEffect(() => {
-    console.log("selected variant id:", selectedVariant?.id)
-    if (!product_files) {
-      setFilteredImages([]);
-      return;
-    }
+    let images: ProductFile[] = [];
     
-    // Sadece kullanıcı varyant seçtiyse varyant resimlerini göster
     if (userHasSelectedVariant && selectedVariant?.id) {
-      console.log("you have hit here my friends");
-
-      setFilteredImages(
-        product_files.filter(
-          img => String(img.product_variant_id) === String(selectedVariant.id)
-        )
+      images = product_files.filter(
+        img => String(img.product_variant_id) === String(selectedVariant.id)
       );
     } else {
-      // Kullanıcı henüz seçim yapmadıysa veya varyant yoksa, ana ürün resimlerini göster
-      // (product_variant_id null olanlar ana ürün resimleridir)
       const mainProductImages = product_files.filter(img => !img.product_variant_id);
-      setFilteredImages(mainProductImages.length > 0 ? mainProductImages : product_files);
+      images = mainProductImages.length > 0 ? mainProductImages : [...product_files];
     }
-    setSelectedThumbIndex(0); // Reset thumb index on variant change
-    console.log("Selected Variant: ", selectedVariant);
+    
+    // Sequence'e göre sırala
+    images.sort((a, b) => {
+      const seqA = a.sequence ?? Number.MAX_SAFE_INTEGER;
+      const seqB = b.sequence ?? Number.MAX_SAFE_INTEGER;
+      return seqA - seqB;
+    });
+    
+    return images;
   }, [selectedVariant, product_files, userHasSelectedVariant]);
+
+  // Thumb index'i sıfırla ve image loaded state'i resetle
+  const [selectedThumbIndex, setSelectedThumbIndex] = useState<number>(0);
+  useEffect(() => {
+    setSelectedThumbIndex(0);
+    setImageLoaded(false);
+  }, [filteredImages]);
   // console.log("your product variant attributes are:", product_variant_attributes);
 
 
@@ -227,28 +230,6 @@ function ProductDetailCard({
       )
     )
   }));
-  // = 
-  //   [
-  //     {
-  //         "attribute": {
-  //             "id": "1",
-  //             "name": "color"
-  //         },
-  //         "values": [
-  //             "blue",
-  //             "black"
-  //         ]
-  //     }
-  // ]
-
-  // Update the URL with the selected attributes
-  useEffect(() => {
-    const newParams = new URLSearchParams();
-    Object.keys(selectedAttributes).forEach(key => {
-      newParams.set(key, selectedAttributes[key]);
-    });
-    window.history.replaceState({}, '', `?${newParams.toString()}`);
-  }, [selectedAttributes]);
 
   // const getImageUrl = (image: string) => {
   //   if (!image_api_link) return image;
@@ -332,7 +313,11 @@ function ProductDetailCard({
                 onClick={() => selectThumb(index)}
               >
                 <div className={classes.img}>
-                  <img src={image || placeholder_image_link} alt="product image" />
+                  <img 
+                    src={image || placeholder_image_link} 
+                    alt="product image"
+                    loading="eager"
+                  />
                 </div>
               </div>
             ))}
@@ -352,10 +337,11 @@ function ProductDetailCard({
                 }}>
 
                 <img
-                  // src={getImageUrl(imageFiles[selectedThumbIndex]) || "/placeholder.png"}
+                  key={imageFiles[selectedThumbIndex]}
                   src={(imageFiles[selectedThumbIndex]
                     || placeholder_image_link)}
-                  alt=""
+                  alt="Product image"
+                  loading="eager"
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleMouseLeave}
                   onLoad={() => setImageLoaded(true)}

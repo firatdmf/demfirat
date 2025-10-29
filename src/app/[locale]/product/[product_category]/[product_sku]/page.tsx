@@ -14,7 +14,11 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   let image_api_link: URL | null = null;
   // api call to get the product from database
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
+  const startTime = performance.now();
   const nejum_response = await fetch(nejum_api_link, { next: { revalidate: 300 } })
+  const endTime = performance.now();
+  const responseTime = (endTime - startTime).toFixed(2);
+  console.log(`API Response Time: ${responseTime}ms for ${product_sku}`);
   if (nejum_response.ok && (nejum_response.headers.get('content-type') || '').includes('application/json')) {
     const data = await nejum_response.json()
     product = data.product;

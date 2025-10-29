@@ -72,24 +72,27 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
                     src="/media/showcase/products-hero.jpg" 
                     alt="Karven textile collection" 
                     className={classes.showcaseImage}
+                    loading="eager"
                   />
                 </div>
                 
-                {/* Slide 2 - Buraya kendi resminizi ekleyin */}
+                {/* Slide 2 */}
                 <div className={classes.slide}>
                   <img 
                     src="/media/showcase/slide-2.jpg" 
                     alt="Karven collection slide 2" 
                     className={classes.showcaseImage}
+                    loading="lazy"
                   />
                 </div>
                 
-                {/* Slide 3 - Buraya kendi resminizi ekleyin */}
+                {/* Slide 3 */}
                 <div className={classes.slide}>
                   <img 
                     src="/media/showcase/slide-3.jpg" 
                     alt="Karven collection slide 3" 
                     className={classes.showcaseImage}
+                    loading="lazy"
                   />
                 </div>
               </div>

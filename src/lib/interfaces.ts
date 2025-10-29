@@ -70,6 +70,7 @@ export type ProductFile = {
   file: string;
   product_id: bigint | null;
   product_variant_id?: bigint | null;
+  sequence?: number | null;
 }
 
 
