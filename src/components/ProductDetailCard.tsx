@@ -51,7 +51,7 @@ function ProductDetailCard({
   const initialAttributes = useMemo(() => getInitialAttributes(), [product_variant_attributes, product_variant_attribute_values]);
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>(initialAttributes);
   const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(
-    product_variant_attributes && product_variant_attributes.length > 0
+    !!(product_variant_attributes && product_variant_attributes.length > 0)
   );
 
   // console.log("your product images are:", product_files);
