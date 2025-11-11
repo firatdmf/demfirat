@@ -1,12 +1,19 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { prisma } from '@/lib/prisma'
-import { compare } from 'bcrypt'
+import GoogleProvider from 'next-auth/providers/google'
+
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt'
     },
+    pages: {
+        signIn: '/login',
+    },
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        }),
         CredentialsProvider({
             name: 'Demfirat',
             credentials: {
@@ -23,45 +30,78 @@ export const authOptions: NextAuthOptions = {
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
-                // handle auth
-                // const user = { id: '1', name: 'Ethan', email: 'test@test.com' }
-                // return user
-
-                // if (!credentials?.email || !credentials.password) {
                 if (!credentials?.username || !credentials.password) {
-                    // null tells auth js that there was an invalid credential set
-                    // not that we cannot connect to the database sort of error
                     return null
                 }
-                const user = await prisma.user.findUnique({
-                    where: {
-                        // email: credentials.email
-                        username: credentials.username
 
+                try {
+                    // Call Django ERP login API
+                    const response = await fetch(
+                        `${process.env.NEJUM_API_URL}/authentication/api/login_web_client/`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: credentials.username,
+                                password: credentials.password,
+                            }),
+                        }
+                    );
+
+                    if (!response.ok) {
+                        return null
                     }
-                })
-                if (!user) {
-                    return null
-                }
 
-                const isPasswordValid = await compare(credentials.password, user.password)
-                if (!isPasswordValid) {
-                    return null
-                }
+                    const data = await response.json();
+                    const user = data.user;
 
-                return {
-                    // You need to store it as text
-                    id: user.id + '',
-                    email: user.email,
-                    username:user.username,
-                    name: user.name,
-                    randomKey: 'Hey, cool'
+                    return {
+                        id: user.id + '',
+                        email: user.email,
+                        username: user.username,
+                        name: user.name,
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    return null
                 }
             }
         })
     ],
     secret:process.env.NEXTAUTH_SECRET,
     callbacks: {
+        async signIn({ user, account, profile }) {
+            // Google OAuth sign in
+            if (account?.provider === 'google' && profile?.email) {
+                try {
+                    // Call Django API to create/check Google user
+                    const response = await fetch(
+                        `${process.env.NEJUM_API_URL}/authentication/api/create_google_client/`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                email: profile.email,
+                                name: profile.name || 'Google User',
+                            }),
+                        }
+                    );
+
+                    if (!response.ok) {
+                        console.error('Error creating Google user');
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Error creating Google user:', error);
+                    return false;
+                }
+            }
+            return true;
+        },
         session: ({ session, token }) => {
             // console.log('Session Callback', { session, token });
             return {

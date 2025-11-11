@@ -68,13 +68,13 @@ function Header({ menuTArray }: HeaderProps) {
 
           {/* User Authentication */}
           {!session?.user?.name ? (
-            <button
-              onClick={() => signIn()}
+            <Link
+              href={`/${locale}/login`}
               className={classes.iconButton}
               title="Log In"
             >
               <FaUser />
-            </button>
+            </Link>
           ) : (
             <div className={classes.userSection}>
               <span className={classes.userName}>{session?.user?.name}</span>
