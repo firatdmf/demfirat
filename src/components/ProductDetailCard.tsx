@@ -220,16 +220,106 @@ function ProductDetailCard({
 
 
   // Group attribute values by attribute and filter out duplicates
-  const groupedAttributeValues = product_variant_attributes?.map(attribute => ({
-    attribute,
-    values: Array.from(
-      new Set(
-        product_variant_attribute_values
-          ?.filter((value: ProductVariantAttributeValue) => value.product_variant_attribute_id === attribute.id)
-          .map((value: ProductVariantAttributeValue) => value.product_variant_attribute_value)
-      )
-    )
-  }));
+  // ONLY show values that actually exist in product_variants
+  // NOW: Also filter based on currently selected attributes (dynamic filtering)
+  const groupedAttributeValues = useMemo(() => {
+    const grouped = product_variant_attributes?.map(attribute => {
+      const currentAttributeName = attribute.name ?? '';
+      
+      // Get all attribute value objects for this attribute
+      const allAttributeValuesForThisAttribute = product_variant_attribute_values?.filter(
+        (value: ProductVariantAttributeValue) => value.product_variant_attribute_id === attribute.id
+      ) || [];
+
+      // Filter variants based on OTHER selected attributes (not the current one)
+      const otherSelectedAttributes = Object.entries(selectedAttributes).filter(
+        ([key]) => key !== currentAttributeName
+      );
+
+      // Find variants that match all OTHER selected attributes
+      let eligibleVariants = product_variants || [];
+      
+      if (otherSelectedAttributes.length > 0) {
+        eligibleVariants = product_variants?.filter(variant => {
+          return otherSelectedAttributes.every(([key, value]) => {
+            const attrDef = product_variant_attributes?.find(attr => attr.name === key);
+            if (!attrDef) return false;
+            
+            const valueObj = product_variant_attribute_values?.find(
+              val =>
+                String(val.product_variant_attribute_id) === String(attrDef.id) &&
+                val.product_variant_attribute_value === value
+            );
+            if (!valueObj) return false;
+            
+            return variant.product_variant_attribute_values?.includes(valueObj.id);
+          });
+        }) || [];
+      }
+
+      // Only keep values that are used in eligible variants
+      const valuesUsedInEligibleVariants = allAttributeValuesForThisAttribute.filter(attrValue => {
+        return eligibleVariants.some(variant => 
+          variant.product_variant_attribute_values?.includes(attrValue.id)
+        );
+      });
+
+      // Extract unique value strings
+      const uniqueValues = Array.from(
+        new Set(
+          valuesUsedInEligibleVariants.map((value: ProductVariantAttributeValue) => value.product_variant_attribute_value)
+        )
+      );
+
+      return {
+        attribute,
+        values: uniqueValues
+      };
+    });
+    
+    // Sort: Color always first, then others
+    return grouped?.sort((a, b) => {
+      const aIsColor = a.attribute.name?.toLowerCase() === 'color';
+      const bIsColor = b.attribute.name?.toLowerCase() === 'color';
+      
+      if (aIsColor && !bIsColor) return -1;
+      if (!aIsColor && bIsColor) return 1;
+      return 0; // Keep original order for non-color attributes
+    });
+  }, [product_variant_attributes, product_variant_attribute_values, product_variants, selectedAttributes]);
+
+  // Tek değerli attribute'ları otomatik olarak seç
+  // VE seçili değer artık mevcut değilse, ilk mevcut değere geç
+  useEffect(() => {
+    if (!groupedAttributeValues) return;
+    
+    const updatedAttributes = { ...selectedAttributes };
+    let hasChanges = false;
+
+    groupedAttributeValues.forEach(({ attribute, values }) => {
+      const attrName = attribute.name ?? '';
+      console.log(`Attribute: ${attrName}, Values: [${values.join(', ')}], Length: ${values.length}`);
+      
+      // Eğer sadece 1 değer varsa ve henüz seçilmemişse, otomatik seç
+      if (values.length === 1 && !updatedAttributes[attrName]) {
+        console.log(`Auto-selecting ${attrName}: ${values[0]}`);
+        updatedAttributes[attrName] = values[0];
+        hasChanges = true;
+      }
+      
+      // Eğer seçili değer artık mevcut değilse, ilk mevcut değere geç
+      if (values.length > 0 && updatedAttributes[attrName] && !values.includes(updatedAttributes[attrName])) {
+        console.log(`Current selection "${updatedAttributes[attrName]}" for ${attrName} is no longer available. Switching to: ${values[0]}`);
+        updatedAttributes[attrName] = values[0];
+        hasChanges = true;
+      }
+    });
+
+    if (hasChanges) {
+      console.log('Updated attributes:', updatedAttributes);
+      setSelectedAttributes(updatedAttributes);
+    }
+  }, [groupedAttributeValues]); // selectedAttributes'u buradan çıkardık, sonsuz loop olmasın
 
   // const getImageUrl = (image: string) => {
   //   if (!image_api_link) return image;
@@ -372,7 +462,7 @@ function ProductDetailCard({
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
-                {groupedAttributeValues?.map(({ attribute, values }) => (
+                {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => (
                   <li key={attribute.id.toString()}>
                     <label><h3>{attribute.name}</h3></label>
                     {/* Check if this is Color attribute */}
