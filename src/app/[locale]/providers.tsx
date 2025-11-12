@@ -3,6 +3,7 @@
 import { SessionProvider } from "next-auth/react"
 import { NextIntlClientProvider } from "next-intl"
 import { FavoriteProvider } from "@/contexts/FavoriteContext"
+import { CartProvider } from "@/contexts/CartContext"
 
 type Props = {
     children?:React.ReactNode
@@ -13,9 +14,11 @@ export const Providers = ({children, messages, locale}:Props) => {
     return (
         <SessionProvider>
             <FavoriteProvider>
-                <NextIntlClientProvider messages={messages} locale={locale}>
-                    {children}
-                </NextIntlClientProvider>
+                <CartProvider>
+                    <NextIntlClientProvider messages={messages} locale={locale}>
+                        {children}
+                    </NextIntlClientProvider>
+                </CartProvider>
             </FavoriteProvider>
         </SessionProvider>
     )

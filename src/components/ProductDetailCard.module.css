@@ -360,6 +360,163 @@
   font-weight: 500;
 }
 
+/* Cart Actions Section */
+.cartActions {
+  background: var(--primary-beige, #f5f3ed);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.quantityWrapper {
+  margin-bottom: 1.5rem;
+}
+
+.quantityWrapper label {
+  display: block;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark, #2c2c2c);
+  margin-bottom: 0.5rem;
+}
+
+.quantityInput {
+  width: 100%;
+  max-width: 150px;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  border: 2px solid var(--light-gray, #e0dcd2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.quantityInput:focus {
+  outline: none;
+  border-color: var(--gold, #c9a961);
+  box-shadow: 0 0 0 4px rgba(201, 169, 97, 0.15);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.addToCartBtn,
+.buyNowBtn,
+.favoriteBtn {
+  padding: 1rem 2rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.addToCartBtn {
+  flex: 1;
+  min-width: 160px;
+  background: var(--gold, #c9a961);
+  color: white;
+  box-shadow: 0 4px 16px rgba(201, 169, 97, 0.3);
+}
+
+.addToCartBtn:hover {
+  background: var(--bronze, #b8956a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201, 169, 97, 0.4);
+}
+
+.buyNowBtn {
+  flex: 1;
+  min-width: 160px;
+  background: var(--text-dark, #2c2c2c);
+  color: white;
+  box-shadow: 0 4px 16px rgba(44, 44, 44, 0.3);
+}
+
+.buyNowBtn:hover {
+  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44, 44, 44, 0.4);
+}
+
+.favoriteBtn {
+  padding: 1rem;
+  width: 56px;
+  height: 56px;
+  background: white;
+  color: var(--gold, #c9a961);
+  border: 2px solid var(--light-gray, #e0dcd2);
+  flex-shrink: 0;
+}
+
+.favoriteBtn:hover {
+  background: var(--primary-beige, #f5f3ed);
+  border-color: var(--gold, #c9a961);
+  transform: translateY(-2px);
+}
+
+.favoriteBtn.favorited {
+  background: var(--gold, #c9a961);
+  color: white;
+  border-color: var(--gold, #c9a961);
+}
+
+.favoriteBtn.favorited:hover {
+  background: var(--bronze, #b8956a);
+}
+
+.favoriteBtn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Success Message */
+.successMessage {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin: 1rem 0;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+  animation: slideInDown 0.4s ease, fadeOut 0.3s ease 2.7s forwards;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
 /* Description Section */
 .productHero h3 {
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
@@ -492,6 +649,25 @@
     width: 40px;
     height: 40px;
     font-size: 16px;
+  }
+  
+  .cartActions {
+    padding: 1.5rem;
+  }
+  
+  .buttonGroup {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .addToCartBtn,
+  .buyNowBtn {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .favoriteBtn {
+    align-self: center;
   }
 }
 

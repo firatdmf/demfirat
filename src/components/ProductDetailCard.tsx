@@ -5,6 +5,8 @@ import classes from "./ProductDetailCard.module.css";
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory } from '@/lib/interfaces';
 import { useSession } from 'next-auth/react';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
+import { useFavorites } from '@/contexts/FavoriteContext';
+import { useCart } from '@/contexts/CartContext';
 
 
 type ProductDetailCardPageProps = {
@@ -107,13 +109,19 @@ function ProductDetailCard({
 
 
 
-  const { status } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       // handle unauthenticated
       console.log("Not logged in!: " + status);
     },
   });
+  
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { refreshCart } = useCart();
+  const [quantity, setQuantity] = useState<string>('1');
+  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string>('');
 
   // Find the selected variant based on selectedAttributes
   //   const findSelectedVariant = () => {
@@ -425,6 +433,88 @@ function ProductDetailCard({
     // const newParams = new URLSearchParams(newAttributes).toString();
     // router.replace(`?${newParams}`);
   };
+  
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numbers and decimal point
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setQuantity(value);
+    }
+  };
+  
+  const handleAddToCart = async () => {
+    if (!session?.user?.email) {
+      alert(t('pleaseLogin'));
+      return;
+    }
+    
+    const qty = parseFloat(quantity);
+    if (isNaN(qty) || qty <= 0) {
+      alert(t('enterValidQuantity'));
+      return;
+    }
+    
+    try {
+      const userId = (session.user as any)?.id || session.user.email;
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            product_sku: product.sku,
+            variant_sku: selectedVariant?.variant_sku || null,
+            quantity: qty
+          }),
+        }
+      );
+      
+      if (response.ok) {
+        setSuccessMessage(t('productAddedToCart'));
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 3000);
+        // Refresh cart count
+        await refreshCart();
+      } else {
+        alert(t('errorAddingToCart'));
+      }
+    } catch (error) {
+      console.error('Cart error:', error);
+      alert(t('errorAddingToCart'));
+    }
+  };
+  
+  const handleBuyNow = async () => {
+    await handleAddToCart();
+    // TODO: Navigate to cart page
+    // router.push('/cart');
+  };
+  
+  const handleToggleFavorite = async () => {
+    await toggleFavorite(product.sku);
+  };
+  
+  // Translation helper
+  const t = (key: string): string => {
+    const translations: Record<string, Record<string, string>> = {
+      quantityMeters: { en: 'Quantity (m)', tr: 'Miktar (m)', ru: 'Количество (м)', pl: 'Ilość (m)', de: 'Menge (m)' },
+      quantityPieces: { en: 'Quantity', tr: 'Adet', ru: 'Количество', pl: 'Ilość', de: 'Menge' },
+      addToCart: { en: 'Add to Cart', tr: 'Sepete Ekle', ru: 'Добавить в корзину', pl: 'Dodaj do koszyka', de: 'In den Warenkorb' },
+      buyNow: { en: 'Buy Now', tr: 'Şimdi Al', ru: 'Купить сейчас', pl: 'Kup teraz', de: 'Jetzt kaufen' },
+      addToFavorites: { en: 'Add to favorites', tr: 'Favorilere ekle', ru: 'Добавить в избранное', pl: 'Dodaj do ulubionych', de: 'Zu Favoriten hinzufügen' },
+      removeFromFavorites: { en: 'Remove from favorites', tr: 'Favorilerden çıkar', ru: 'Удалить из избранного', pl: 'Usuń z ulubionych', de: 'Aus Favoriten entfernen' },
+      productAddedToCart: { en: 'Product added to cart!', tr: 'Ürün sepete eklendi!', ru: 'Товар добавлен в корзину!', pl: 'Produkt dodany do koszyka!', de: 'Produkt zum Warenkorb hinzugefügt!' },
+      pleaseLogin: { en: 'Please log in', tr: 'Lütfen giriş yapın', ru: 'Пожалуйста, войдите', pl: 'Proszę się zalogować', de: 'Bitte einloggen' },
+      enterValidQuantity: { en: 'Please enter a valid quantity', tr: 'Lütfen geçerli bir miktar girin', ru: 'Пожалуйста, введите правильное количество', pl: 'Proszę wprowadzić prawidłową ilość', de: 'Bitte geben Sie eine gültige Menge ein' },
+      errorAddingToCart: { en: 'Error adding to cart', tr: 'Sepete eklenirken bir hata oluştu', ru: 'Ошибка при добавлении в корзину', pl: 'Błąd podczas dodawania do koszyka', de: 'Fehler beim Hinzufügen zum Warenkorb' },
+    };
+    const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : locale === 'de' ? 'de' : 'en';
+    return translations[key]?.[lang] || key;
+  };
+  
+  // Determine if product is fabric (sold by meters) or ready-made curtain (sold by pieces)
+  const isFabricProduct = product_category?.toLowerCase().includes('fabric') || product_category?.toLowerCase().includes('kumaş');
+  const quantityLabel = isFabricProduct ? t('quantityMeters') : t('quantityPieces');
 
 
   // Prepare image files for display (fallback to placeholder)
@@ -633,12 +723,50 @@ function ProductDetailCard({
 
           {/* {selectedVariant && <p>Variant SKU: {selectedVariant.variant_sku}</p>} */}
 
-          {/* {status === "authenticated" && product.price && !selectedVariant ? (
-            <div>
-              <p>${String(product.price)}</p>
-              <button type='submit'>Add to Cart</button>
+          {/* Success Message */}
+          {showSuccessMessage && (
+            <div className={classes.successMessage}>
+              {successMessage}
             </div>
-          ) : null} */}
+          )}
+
+          {/* Cart Actions */}
+          <div className={classes.cartActions}>
+            <div className={classes.quantityWrapper}>
+              <label htmlFor="quantity">{quantityLabel}:</label>
+              <input
+                id="quantity"
+                type="text"
+                value={quantity}
+                onChange={handleQuantityChange}
+                className={classes.quantityInput}
+                placeholder="1.0"
+              />
+            </div>
+            <div className={classes.buttonGroup}>
+              <button onClick={handleAddToCart} className={classes.addToCartBtn}>
+                {t('addToCart')}
+              </button>
+              <button onClick={handleBuyNow} className={classes.buyNowBtn}>
+                {t('buyNow')}
+              </button>
+              <button
+                onClick={handleToggleFavorite}
+                className={`${classes.favoriteBtn} ${isFavorite(product.sku) ? classes.favorited : ''}`}
+                title={isFavorite(product.sku) ? t('removeFromFavorites') : t('addToFavorites')}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    fill={isFavorite(product.sku) ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
           <h3>
             {locale === 'tr' ? 'Açıklama' :
              locale === 'ru' ? 'Описание' :

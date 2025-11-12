@@ -7,6 +7,7 @@ import { signOut } from "next-auth/react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { useSession } from "next-auth/react";
 import { useLocale } from "next-intl";
+import { useCart } from "@/contexts/CartContext";
 
 interface HeaderProps {
   menuTArray: string[];
@@ -15,6 +16,7 @@ interface HeaderProps {
 function Header({ menuTArray }: HeaderProps) {
   const { data: session } = useSession();
   const locale = useLocale();
+  const { cartCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
 
@@ -96,7 +98,12 @@ function Header({ menuTArray }: HeaderProps) {
                   <span className={classes.actionText}>{t('favorites')}</span>
                 </Link>
                 <Link href={`/${locale}/cart`} className={classes.actionButton}>
-                  <FaShoppingCart className={classes.actionIcon} />
+                  <div className={classes.cartIconWrapper}>
+                    <FaShoppingCart className={classes.actionIcon} />
+                    {cartCount > 0 && (
+                      <span className={classes.cartBadge}>{cartCount}</span>
+                    )}
+                  </div>
                   <span className={classes.actionText}>{t('cart')}</span>
                 </Link>
               </>
@@ -143,7 +150,12 @@ function Header({ menuTArray }: HeaderProps) {
                   <span className={classes.actionText}>{t('favorites')}</span>
                 </Link>
                 <Link href={`/${locale}/cart`} className={classes.actionButton}>
-                  <FaShoppingCart className={classes.actionIcon} />
+                  <div className={classes.cartIconWrapper}>
+                    <FaShoppingCart className={classes.actionIcon} />
+                    {cartCount > 0 && (
+                      <span className={classes.cartBadge}>{cartCount}</span>
+                    )}
+                  </div>
                   <span className={classes.actionText}>{t('cart')}</span>
                 </Link>
               </>
