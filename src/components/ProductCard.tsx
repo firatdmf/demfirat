@@ -3,6 +3,8 @@ import classes from "@/components/ProductCard.module.css";
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useFavorites } from '@/contexts/FavoriteContext';
 
 // Importing Product interface from the parent.
 import { Product } from '@/lib/interfaces';
@@ -20,12 +22,16 @@ interface ProductCardProps {
 
 function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps) {
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
+  const { data: session } = useSession();
+  const { isFavorite, toggleFavorite } = useFavorites();
   
   const [imageLoading, setImageLoading] = useState(true);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(product.primary_image || placeholder_image_link);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  
+  const isWishlisted = isFavorite(product.sku);
 
   // Reset image states when product changes
   useEffect(() => {
@@ -59,10 +65,21 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
     }).format(numPrice);
   };
 
-  const handleWishlistClick = (e: React.MouseEvent) => {
+  const handleWishlistClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
+    
+    if (!session?.user?.email) {
+      // Redirect to login if not authenticated
+      window.location.href = `/${locale}/login`;
+      return;
+    }
+
+    if (favoriteLoading) return;
+
+    setFavoriteLoading(true);
+    await toggleFavorite(product.sku);
+    setFavoriteLoading(false);
   };
 
   const handlePdfClick = (e: React.MouseEvent) => {

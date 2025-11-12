@@ -2,6 +2,7 @@
 'use client'
 import { SessionProvider } from "next-auth/react"
 import { NextIntlClientProvider } from "next-intl"
+import { FavoriteProvider } from "@/contexts/FavoriteContext"
 
 type Props = {
     children?:React.ReactNode
@@ -11,9 +12,11 @@ type Props = {
 export const Providers = ({children, messages, locale}:Props) => {
     return (
         <SessionProvider>
-            <NextIntlClientProvider messages={messages} locale={locale}>
-                {children}
-            </NextIntlClientProvider>
+            <FavoriteProvider>
+                <NextIntlClientProvider messages={messages} locale={locale}>
+                    {children}
+                </NextIntlClientProvider>
+            </FavoriteProvider>
         </SessionProvider>
     )
 }
