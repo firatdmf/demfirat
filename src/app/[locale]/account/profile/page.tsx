@@ -101,11 +101,13 @@ export default function ProfilePage() {
   // Load user data from Django API
   useEffect(() => {
     const loadUserData = async () => {
-      if (!session?.user?.id) return;
+      if (!session?.user?.email) return;
 
       try {
+        // Use email to get user ID first, or modify API to accept email
+        const userId = (session.user as any).id || session.user.email;
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_web_client_profile/${session.user.id}/`
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_web_client_profile/${userId}/`
         );
 
         if (response.ok) {
@@ -167,8 +169,9 @@ export default function ProfilePage() {
 
     setLoading(true);
     try {
+      const userId = (session?.user as any)?.id || session?.user?.email;
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_client_address/${session?.user?.id}/`,
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_client_address/${userId}/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -195,8 +198,9 @@ export default function ProfilePage() {
 
   const handleSetDefaultAddress = async (id: string) => {
     try {
+      const userId = (session?.user as any)?.id || session?.user?.email;
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/set_default_address/${session?.user?.id}/${id}/`,
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/set_default_address/${userId}/${id}/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -217,8 +221,9 @@ export default function ProfilePage() {
 
   const handleDeleteAddress = async (id: string) => {
     try {
+      const userId = (session?.user as any)?.id || session?.user?.email;
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/delete_client_address/${session?.user?.id}/${id}/`,
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/delete_client_address/${userId}/${id}/`,
         {
           method: 'DELETE',
         }
@@ -244,21 +249,19 @@ export default function ProfilePage() {
     setMessage(null);
 
     try {
-      if (!session?.user?.id) {
+      const userId = (session?.user as any)?.id || session?.user?.email;
+      if (!userId) {
         throw new Error('User not authenticated');
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${session.user.id}/`,
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${userId}/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: formData.name,
             phone: formData.phone,
-            address: formData.address,
-            city: formData.city,
-            country: formData.country,
             birthdate: formData.birthdate,
           }),
         }
@@ -297,12 +300,13 @@ export default function ProfilePage() {
     }
 
     try {
-      if (!session?.user?.id) {
+      const userId = (session?.user as any)?.id || session?.user?.email;
+      if (!userId) {
         throw new Error('User not authenticated');
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/change_password/${session.user.id}/`,
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/change_password/${userId}/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
