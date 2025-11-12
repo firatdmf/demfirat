@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
-import { FaSignOutAlt, FaUser } from "react-icons/fa";
-import { signIn, signOut } from "next-auth/react";
+import { FaSignOutAlt, FaUser, FaHeart, FaShoppingCart, FaChevronDown } from "react-icons/fa";
+import { signOut } from "next-auth/react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { useSession } from "next-auth/react";
 import { useLocale } from "next-intl";
@@ -15,7 +15,24 @@ interface HeaderProps {
 function Header({ menuTArray }: HeaderProps) {
   const { data: session } = useSession();
   const locale = useLocale();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+
+  // Çeviriler
+  const t = (key: string) => {
+    const translations: Record<string, Record<string, string>> = {
+      login: { en: 'Sign In', tr: 'Giriş Yap', ru: 'Войти', pl: 'Zaloguj się' },
+      myAccount: { en: 'My Account', tr: 'Hesabım', ru: 'Мой аккаунт', pl: 'Moje konto' },
+      favorites: { en: 'Favorites', tr: 'Favorilerim', ru: 'Избранное', pl: 'Ulubione' },
+      cart: { en: 'Cart', tr: 'Sepetim', ru: 'Корзина', pl: 'Koszyk' },
+      myOrders: { en: 'My Orders', tr: 'Siparişlerim', ru: 'Мои заказы', pl: 'Moje zamówienia' },
+      accountInfo: { en: 'Account Info', tr: 'Kullanıcı Bilgilerim', ru: 'Информация об аккаунте', pl: 'Informacje o koncie' },
+      myReviews: { en: 'My Reviews', tr: 'Değerlendirmelerim', ru: 'Мои отзывы', pl: 'Moje recenzje' },
+      signOut: { en: 'Sign Out', tr: 'Çıkış Yap', ru: 'Выйти', pl: 'Wyloguj się' },
+    };
+    const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
+    return translations[key]?.[lang] || key;
+  };
 
   return (
     <header className={classes.HeaderPage}>
@@ -33,7 +50,6 @@ function Header({ menuTArray }: HeaderProps) {
             {locale === 'tr' ? 'Bütünsel Düşünün, Nakışlı Düşünün' :
              locale === 'ru' ? 'Мыслите целостно, Мыслите вышивкой' :
              locale === 'pl' ? 'Myśl całościowo, Myśl haftem' :
-             locale === 'de' ? 'Ganzheitlich denken, Bestickt denken' :
              'Think Holistic, Think Embroidered'}
           </span>
         </div>
@@ -66,27 +82,86 @@ function Header({ menuTArray }: HeaderProps) {
             <LocaleSwitcher />
           </div>
 
-          {/* User Authentication */}
-          {!session?.user?.name ? (
-            <Link
-              href={`/${locale}/login`}
-              className={classes.iconButton}
-              title="Log In"
-            >
-              <FaUser />
-            </Link>
-          ) : (
-            <div className={classes.userSection}>
-              <span className={classes.userName}>{session?.user?.name}</span>
-              <button
-                onClick={() => signOut()}
-                className={classes.iconButton}
-                title="Sign Out"
-              >
-                <FaSignOutAlt />
-              </button>
-            </div>
-          )}
+          {/* User Authentication - Desktop */}
+          <div className={classes.desktopActions}>
+            {!session?.user ? (
+              // Not logged in
+              <>
+                <Link href={`/${locale}/login`} className={classes.actionButton}>
+                  <FaUser className={classes.actionIcon} />
+                  <span className={classes.actionText}>{t('login')}</span>
+                </Link>
+                <Link href={`/${locale}/favorites`} className={classes.actionButton}>
+                  <FaHeart className={classes.actionIcon} />
+                  <span className={classes.actionText}>{t('favorites')}</span>
+                </Link>
+                <Link href={`/${locale}/cart`} className={classes.actionButton}>
+                  <FaShoppingCart className={classes.actionIcon} />
+                  <span className={classes.actionText}>{t('cart')}</span>
+                </Link>
+              </>
+            ) : (
+              // Logged in
+              <>
+                {/* My Account - Dropdown */}
+                <div 
+                  className={classes.accountDropdown}
+                  onMouseEnter={() => setAccountDropdownOpen(true)}
+                  onMouseLeave={() => setAccountDropdownOpen(false)}
+                >
+                  <button className={classes.actionButton}>
+                    <FaUser className={classes.actionIcon} />
+                    <span className={classes.actionText}>{t('myAccount')}</span>
+                    <FaChevronDown className={classes.dropdownIcon} />
+                  </button>
+                  
+                  {accountDropdownOpen && (
+                    <div className={classes.dropdownMenu}>
+                      <Link href={`/${locale}/account/orders`} className={classes.dropdownItem}>
+                        {t('myOrders')}
+                      </Link>
+                      <Link href={`/${locale}/account/profile`} className={classes.dropdownItem}>
+                        {t('accountInfo')}
+                      </Link>
+                      <Link href={`/${locale}/account/reviews`} className={classes.dropdownItem}>
+                        {t('myReviews')}
+                      </Link>
+                      <hr className={classes.dropdownDivider} />
+                      <button 
+                        onClick={() => signOut()}
+                        className={`${classes.dropdownItem} ${classes.signOutBtn}`}
+                      >
+                        <FaSignOutAlt className={classes.dropdownItemIcon} />
+                        {t('signOut')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <Link href={`/${locale}/favorites`} className={classes.actionButton}>
+                  <FaHeart className={classes.actionIcon} />
+                  <span className={classes.actionText}>{t('favorites')}</span>
+                </Link>
+                <Link href={`/${locale}/cart`} className={classes.actionButton}>
+                  <FaShoppingCart className={classes.actionIcon} />
+                  <span className={classes.actionText}>{t('cart')}</span>
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Mobile Actions */}
+          <div className={classes.mobileActions}>
+            {!session?.user ? (
+              <Link href={`/${locale}/login`} className={classes.iconButton} title={t('login')}>
+                <FaUser />
+              </Link>
+            ) : (
+              <Link href={`/${locale}/account/profile`} className={classes.iconButton} title={t('myAccount')}>
+                <FaUser />
+              </Link>
+            )}
+          </div>
 
           {/* Mobile Menu Toggle */}
           <button 
@@ -139,6 +214,35 @@ function Header({ menuTArray }: HeaderProps) {
           >
             {menuTArray[4]}
           </Link>
+          
+          {session?.user && (
+            <>
+              <hr className={classes.mobileDivider} />
+              <Link 
+                href={`/${locale}/account/orders`} 
+                className={classes.mobileNavLink}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t('myOrders')}
+              </Link>
+              <Link 
+                href={`/${locale}/account/profile`} 
+                className={classes.mobileNavLink}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t('accountInfo')}
+              </Link>
+              <button 
+                onClick={() => {
+                  signOut();
+                  setMobileMenuOpen(false);
+                }}
+                className={classes.mobileNavLink}
+              >
+                {t('signOut')}
+              </button>
+            </>
+          )}
         </div>
       )}
     </header>

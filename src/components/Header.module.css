@@ -19,6 +19,7 @@
   height: 100px;
 }
 
+/* Logo Section */
 .HeaderPage .logoSection {
   flex: 0 0 auto;
   display: flex;
@@ -53,6 +54,7 @@
   white-space: nowrap;
 }
 
+/* Middle Navigation */
 .HeaderPage .middleSection {
   flex: 1;
   display: flex;
@@ -97,11 +99,155 @@
   width: 100%;
 }
 
+/* Actions Section */
 .HeaderPage .actionsSection {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 1.5rem;
+}
+
+.HeaderPage .languageSection {
+  display: flex;
+  align-items: center;
+}
+
+/* Desktop Actions */
+.HeaderPage .desktopActions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.HeaderPage .actionButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: transparent;
+  border: 1.5px solid rgba(201, 169, 97, 0.3);
+  border-radius: 25px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c2c2c;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.HeaderPage .actionButton:hover {
+  background: #c9a961;
+  color: #ffffff;
+  border-color: #c9a961;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+}
+
+.HeaderPage .actionIcon {
+  font-size: 1rem;
+}
+
+.HeaderPage .actionText {
+  font-size: 0.9rem;
+}
+
+.HeaderPage .dropdownIcon {
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+  transition: transform 0.3s ease;
+}
+
+/* Account Dropdown */
+.HeaderPage .accountDropdown {
+  position: relative;
+}
+
+.HeaderPage .accountDropdown:hover .dropdownIcon {
+  transform: rotate(180deg);
+}
+
+.HeaderPage .dropdownMenu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem 0;
+  animation: dropdownFadeIn 0.3s ease-out;
+  z-index: 1001;
+}
+
+/* Dropdown köprüsü - mouse ile menüye ulaşmayı sağlar */
+.HeaderPage .dropdownMenu::before {
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  left: 0;
+  right: 0;
+  height: 0.5rem;
+  background: transparent;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.HeaderPage .dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c2c2c;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.HeaderPage .dropdownItem:hover {
+  background: rgba(201, 169, 97, 0.1);
+  color: #c9a961;
+}
+
+.HeaderPage .dropdownItemIcon {
+  font-size: 1rem;
+}
+
+.HeaderPage .dropdownDivider {
+  margin: 0.5rem 0;
+  border: none;
+  border-top: 1px solid rgba(201, 169, 97, 0.2);
+}
+
+.HeaderPage .signOutBtn {
+  color: #d32f2f;
+}
+
+.HeaderPage .signOutBtn:hover {
+  background: rgba(211, 47, 47, 0.1);
+  color: #d32f2f;
+}
+
+/* Mobile Actions */
+.HeaderPage .mobileActions {
+  display: none;
 }
 
 .HeaderPage .iconButton {
@@ -117,7 +263,7 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  order: 2;
+  text-decoration: none;
 }
 
 .HeaderPage .iconButton:hover {
@@ -127,45 +273,7 @@
   transform: translateY(-2px);
 }
 
-.HeaderPage .userSection {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  order: 2;
-}
-
-.HeaderPage .userName {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #2c2c2c;
-}
-
-.HeaderPage .searchButton {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.HeaderPage .searchButton:hover {
-  color: #c9a961;
-  transform: scale(1.1);
-}
-
-.HeaderPage .languageSection {
-  display: flex;
-  align-items: center;
-  order: 1;
-}
-
-
-
-
+/* Mobile Menu Toggle */
 .HeaderPage .mobileMenuToggle {
   display: none;
   flex-direction: column;
@@ -174,7 +282,6 @@
   border: none;
   cursor: pointer;
   padding: 5px;
-  order: 3;
 }
 
 .HeaderPage .mobileMenuToggle span {
@@ -197,6 +304,7 @@
   transform: rotate(-45deg) translate(7px, -6px);
 }
 
+/* Mobile Menu */
 .HeaderPage .mobileMenu {
   position: absolute;
   top: 100%;
@@ -209,6 +317,8 @@
   flex-direction: column;
   padding: 1rem 0;
   animation: slideDown 0.3s ease-out;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
 @keyframes slideDown {
@@ -232,6 +342,13 @@
   letter-spacing: 0.05em;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-left: 3px solid transparent;
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
 }
 
 .HeaderPage .mobileNavLink:hover {
@@ -240,10 +357,38 @@
   color: #c9a961;
 }
 
+.HeaderPage .mobileDivider {
+  margin: 0.75rem 0;
+  border: none;
+  border-top: 1px solid rgba(201, 169, 97, 0.2);
+}
+
 /* Responsive Design */
+@media screen and (max-width: 1200px) {
+  .HeaderPage .mainNav {
+    gap: 2rem;
+  }
+  
+  .HeaderPage .actionText {
+    font-size: 0.85rem;
+  }
+  
+  .HeaderPage .actionButton {
+    padding: 0.6rem 1rem;
+  }
+}
+
 @media screen and (max-width: 1024px) {
   .HeaderPage .middleSection {
     display: none;
+  }
+  
+  .HeaderPage .desktopActions {
+    display: none;
+  }
+  
+  .HeaderPage .mobileActions {
+    display: flex;
   }
   
   .HeaderPage .mobileMenuToggle {
@@ -254,7 +399,6 @@
     padding: 0 2rem;
   }
 }
-
 
 @media screen and (max-width: 768px) {
   .HeaderPage .headerContainer {
@@ -272,14 +416,6 @@
   
   .HeaderPage .actionsSection {
     gap: 1rem;
-  }
-  
-  .HeaderPage .userName {
-    display: none;
-  }
-  
-  .HeaderPage .searchButton {
-    padding: 0.4rem;
   }
 }
 
@@ -305,5 +441,9 @@
   
   .HeaderPage .actionsSection {
     gap: 0.75rem;
+  }
+  
+  .HeaderPage .mobileMenu {
+    max-height: calc(100vh - 75px);
   }
 }
