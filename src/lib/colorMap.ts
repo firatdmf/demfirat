@@ -225,3 +225,44 @@ export const isLightColor = (hexColor: string): boolean => {
   
   return luminance > 0.5;
 };
+
+/**
+ * Renk isminin iki renkli olup olmadığını kontrol eder
+ * Ör: "White-Red", "Pink-DarkBlue" gibi
+ * @param colorName - Renk ismi
+ * @returns true ise iki renkli, false ise tek renk
+ */
+export const isTwoToneColor = (colorName: string): boolean => {
+  if (!colorName) return false;
+  return colorName.includes('-') || colorName.includes('_');
+};
+
+/**
+ * İki renkli renk ismini ayrıştırıp her iki rengin HEX kodunu döndürür
+ * @param colorName - Renk ismi (ör: "White-Red", "Pink-DarkBlue")
+ * @returns { color1: string, color2: string } - HEX kodları
+ */
+export const splitTwoToneColor = (colorName: string): { color1: string; color2: string } => {
+  if (!colorName) return { color1: '#E0E0E0', color2: '#E0E0E0' };
+  
+  // Ayıraç olarak '-' veya '_' kullanılabilir
+  let colors: string[];
+  if (colorName.includes('-')) {
+    colors = colorName.split('-');
+  } else if (colorName.includes('_')) {
+    colors = colorName.split('_');
+  } else {
+    // Tek renk ise, aynı rengi iki kere döndür
+    const singleColor = getColorCode(colorName);
+    return { color1: singleColor, color2: singleColor };
+  }
+  
+  // İlk iki rengi al
+  const color1Name = colors[0]?.trim() || '';
+  const color2Name = colors[1]?.trim() || '';
+  
+  return {
+    color1: getColorCode(color1Name),
+    color2: getColorCode(color2Name)
+  };
+};

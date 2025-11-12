@@ -328,6 +328,25 @@
   border-width: 0;
 }
 
+/* Two-Tone Color Swatch - Split Circle */
+.half_circle_left,
+.half_circle_right {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+}
+
+.half_circle_left {
+  left: 0;
+  border-radius: 50% 0 0 50%;
+}
+
+.half_circle_right {
+  right: 0;
+  border-radius: 0 50% 50% 0;
+}
+
 /* Variant Info */
 .variant_info {
   background: var(--primary-beige, #f5f3ed);

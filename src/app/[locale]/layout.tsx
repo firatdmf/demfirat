@@ -34,11 +34,11 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
   // console.log(headerT.raw);
 
   let menuTArray = [
-    menuT("Home"),
-    menuT("Products"),
-    menuT("AboutUs"),
-    menuT("Contact"),
-    menuT("SideText"),
+    menuT("Home"),      // 0 - Ana Sayfa
+    menuT("Fabrics"),   // 1 - Kumaşlar
+    menuT("Curtains"),  // 2 - Hazır Perdeler
+    menuT("AboutUs"),   // 3 - Hakkımızda
+    menuT("Contact"),   // 4 - İletişim
   ];
   // const FooterT = useTranslations("FooterPage");
   const footerT = await getTranslations({ locale, namespace: "FooterPage" });

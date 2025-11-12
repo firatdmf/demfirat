@@ -45,16 +45,16 @@ function Header({ menuTArray }: HeaderProps) {
               {menuTArray[0]}
             </Link>
             <Link href={`/${locale}/product/fabric`} className={classes.navLink}>
-              Fabrics
+              {menuTArray[1]}
             </Link>
             <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
-              Curtains
-            </Link>
-            <Link href={`/${locale}/about`} className={classes.navLink}>
               {menuTArray[2]}
             </Link>
-            <Link href={`/${locale}/contact`} className={classes.navLink}>
+            <Link href={`/${locale}/about`} className={classes.navLink}>
               {menuTArray[3]}
+            </Link>
+            <Link href={`/${locale}/contact`} className={classes.navLink}>
+              {menuTArray[4]}
             </Link>
           </nav>
         </div>
@@ -116,28 +116,28 @@ function Header({ menuTArray }: HeaderProps) {
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
-            Fabrics
+            {menuTArray[1]}
           </Link>
           <Link 
             href={`/${locale}/product/ready-made_curtain`} 
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
-            Curtains
+            {menuTArray[2]}
           </Link>
           <Link 
             href={`/${locale}/about`} 
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
-            {menuTArray[2]}
+            {menuTArray[3]}
           </Link>
           <Link 
             href={`/${locale}/contact`} 
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
-            {menuTArray[3]}
+            {menuTArray[4]}
           </Link>
         </div>
       )}

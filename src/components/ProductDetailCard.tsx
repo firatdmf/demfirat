@@ -4,7 +4,7 @@ import Link from 'next/link';
 import classes from "./ProductDetailCard.module.css";
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory } from '@/lib/interfaces';
 import { useSession } from 'next-auth/react';
-import { getColorCode } from '@/lib/colorMap';
+import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
 
 
 type ProductDetailCardPageProps = {
@@ -34,25 +34,74 @@ function ProductDetailCard({
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
-  // İlk varyant özelliklerini hemen hesapla
+  
+  // URL parametrelerinden veya ilk varyanttan initial attributes'ı hesapla
   const getInitialAttributes = () => {
     const initialAttributes: { [key: string]: string } = {};
+    
+    // Önce URL parametrelerini kontrol et
+    const hasUrlParams = Object.keys(searchParams).length > 0;
+    console.log('[ProductDetailCard] searchParams:', searchParams);
+    
+    if (hasUrlParams) {
+      // URL'den parametreleri al
+      product_variant_attributes?.forEach(attribute => {
+        const attrName = attribute.name ?? '';
+        const urlValue = searchParams[attrName];
+        
+        if (urlValue && typeof urlValue === 'string') {
+          // URL'deki değerin geçerli olup olmadığını kontrol et
+          const isValidValue = product_variant_attribute_values?.some(
+            val => 
+              val.product_variant_attribute_id === attribute.id &&
+              val.product_variant_attribute_value === urlValue
+          );
+          
+          if (isValidValue) {
+            initialAttributes[attrName] = urlValue;
+            console.log(`[ProductDetailCard] URL'den alındı: ${attrName} = ${urlValue}`);
+          }
+        }
+      });
+    }
+    
+    // Eksik attribute'lar için ilk varyanttan al
     product_variant_attributes?.forEach(attribute => {
-      const firstValue = product_variant_attribute_values?.find(
-        val => val.product_variant_attribute_id === attribute.id
-      )?.product_variant_attribute_value;
-      if (firstValue) {
-        initialAttributes[attribute.name ?? ''] = firstValue;
+      const attrName = attribute.name ?? '';
+      
+      if (!initialAttributes[attrName]) {
+        const firstValue = product_variant_attribute_values?.find(
+          val => val.product_variant_attribute_id === attribute.id
+        )?.product_variant_attribute_value;
+        
+        if (firstValue) {
+          initialAttributes[attrName] = firstValue;
+        }
       }
     });
+    
+    console.log('[ProductDetailCard] Final initialAttributes:', initialAttributes);
     return initialAttributes;
   };
 
-  const initialAttributes = useMemo(() => getInitialAttributes(), [product_variant_attributes, product_variant_attribute_values]);
-  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>(initialAttributes);
+  const initialAttributes = useMemo(() => getInitialAttributes(), [
+    product_variant_attributes, 
+    product_variant_attribute_values, 
+    searchParams
+  ]);
+  
+  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(
     !!(product_variant_attributes && product_variant_attributes.length > 0)
   );
+
+  // URL parametreleri veya initial attributes değiştiğinde selectedAttributes'u güncelle
+  useEffect(() => {
+    // Component ilk mount olduğunda veya URL parametreleri değiştiğinde
+    if (Object.keys(initialAttributes).length > 0) {
+      setSelectedAttributes(initialAttributes);
+    }
+  }, [JSON.stringify(initialAttributes)]); // JSON string ile karşılaştır
 
   // console.log("your product images are:", product_files);
 
@@ -471,6 +520,8 @@ function ProductDetailCard({
                         {values.map((value: string) => {
                           const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                           const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                          const isTwoTone = isTwoToneColor(value);
+                          
                           return (
                             <div key={value} className={classes.color_swatch_container}>
                               <Link
@@ -481,12 +532,25 @@ function ProductDetailCard({
                                   e.preventDefault();
                                   handleAttributeChange(attribute.name ?? '', value);
                                 }}
-                                style={{ backgroundColor: getColorCode(value) }}
-                                title={value.replace(/_/g, " ")}
+                                style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
+                                title={value.replace(/_/g, " ").replace(/-/g, " ")}
                               >
-                                <span className={classes.sr_only}>{value.replace(/_/g, " ")}</span>
+                                {isTwoTone ? (
+                                  // İki renkli swatch - daire yarıya bölünür
+                                  <>
+                                    <span 
+                                      className={classes.half_circle_left}
+                                      style={{ backgroundColor: splitTwoToneColor(value).color1 }}
+                                    />
+                                    <span 
+                                      className={classes.half_circle_right}
+                                      style={{ backgroundColor: splitTwoToneColor(value).color2 }}
+                                    />
+                                  </>
+                                ) : null}
+                                <span className={classes.sr_only}>{value.replace(/_/g, " ").replace(/-/g, " ")}</span>
                               </Link>
-                              <span className={classes.color_label}>{value.replace(/_/g, " ")}</span>
+                              <span className={classes.color_label}>{value.replace(/_/g, " ").replace(/-/g, " ")}</span>
                             </div>
                           );
                         })}
