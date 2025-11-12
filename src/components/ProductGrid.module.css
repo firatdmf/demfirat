@@ -16,106 +16,196 @@
 }
 
 
+/* Modern Filter Sidebar */
 .ProductGrid .FiratDisplay .filterMenu {
-  width: 260px;
-  min-width: 260px;
+  width: 280px;
+  min-width: 280px;
   flex-shrink: 0;
   background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--light-gray, #e0dcd2);
-  height: fit-content;
   position: sticky;
   top: 120px;
   max-height: calc(100vh - 140px);
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.ProductGrid .filterMenu h3 {
+/* Sticky Filter Header */
+.ProductGrid .filterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-beige, #f5f3ed) 0%, var(--ivory, #faf8f3) 100%);
+  border-bottom: 2px solid var(--light-gray, #e0dcd2);
+  flex-shrink: 0;
+}
+
+.ProductGrid .filterTitle {
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
   font-size: 1.5rem;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--text-dark, #2c2c2c);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--light-gray, #e0dcd2);
-}
-
-.ProductGrid .filterMenu ul {
-  list-style: none;
-  padding: 0;
   margin: 0;
 }
 
-.ProductGrid .filterMenu li {
-  margin-bottom: 1.5rem;
-}
-
-.ProductGrid .filterMenu li:first-child {
-  font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text-dark, #2c2c2c);
-  margin-bottom: 0.75rem;
-}
-
-.ProductGrid .attribute_value_item_box{
-  display: flex;
-  margin-bottom: 0.5rem;
-}
-
-.ProductGrid .attribute_value_item_box .link{
-  display: flex;
+.ProductGrid .clearFiltersButton {
+  display: inline-flex;
   align-items: center;
-  text-decoration: none;
-  color: var(--text-dark, #2c2c2c);
-  padding: 0.5rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  width: 100%;
-  background: var(--ivory, #faf8f3);
-  border: 1px solid transparent;
-}
-
-.ProductGrid .attribute_value_item_box .link:hover {
-  background: var(--primary-beige, #f5f3ed);
-  border-color: var(--gold, #c9a961);
-}
-
-.ProductGrid .attribute_value_item_box .link .icon {
-  margin-right: 0.5rem;
-  color: var(--gold, #c9a961);
-  font-size: 1rem;
-}
-
-.ProductGrid .attribute_value_item_box .link .iconText {
-  font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 0.9rem;
-  font-weight: 400;
-}
-
-
-.ProductGrid .clearFiltersButton{
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
+  justify-content: center;
+  padding: 0.5rem 1rem;
   background: linear-gradient(135deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
   color: white;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 20px;
   font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-weight: 500;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.8rem;
   text-align: center;
   transition: all 0.3s ease;
-  margin-bottom: 1.5rem;
-  width: 100%;
-  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.3);
+  white-space: nowrap;
 }
 
 .ProductGrid .clearFiltersButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.4);
+}
+
+/* Scrollable Filter Content */
+.ProductGrid .filterContent {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+/* Custom Scrollbar */
+.ProductGrid .filterContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ProductGrid .filterContent::-webkit-scrollbar-track {
+  background: var(--ivory, #faf8f3);
+}
+
+.ProductGrid .filterContent::-webkit-scrollbar-thumb {
+  background: var(--gold, #c9a961);
+  border-radius: 3px;
+}
+
+.ProductGrid .filterContent::-webkit-scrollbar-thumb:hover {
+  background: var(--bronze, #b8956a);
+}
+
+/* Filter Section (Each Attribute) */
+.ProductGrid .filterSection {
+  border-bottom: 1px solid var(--light-gray, #e0dcd2);
+}
+
+.ProductGrid .filterSection:last-child {
+  border-bottom: none;
+}
+
+/* Filter Section Header - Compact & Professional */
+.ProductGrid .filterSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.5rem;
+  background: white;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-dark, #2c2c2c);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--light-gray, #e0dcd2);
+}
+
+.ProductGrid .filterSectionHeader:hover {
+  background: rgba(201, 169, 97, 0.03);
+}
+
+/* Chevron Icon */
+.ProductGrid .chevron {
+  flex-shrink: 0;
+  color: var(--gold, #c9a961);
+  transition: transform 0.3s ease;
+}
+
+.ProductGrid .chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* Filter Section Content (Scrollable) - Compact */
+.ProductGrid .filterSectionContent {
+  padding: 0.5rem 1rem 0.75rem;
+  background: var(--ivory, #faf8f3);
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar for Sections */
+.ProductGrid .filterSectionContent::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ProductGrid .filterSectionContent::-webkit-scrollbar-track {
+  background: rgba(201, 169, 97, 0.05);
+}
+
+.ProductGrid .filterSectionContent::-webkit-scrollbar-thumb {
+  background: var(--gold, #c9a961);
+  border-radius: 2px;
+}
+
+/* Filter Option (Individual Checkbox) - Compact & Clean */
+.ProductGrid .filterOption {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.375rem;
+  background: white;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-dark, #2c2c2c);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ProductGrid .filterOption:last-child {
+  margin-bottom: 0;
+}
+
+.ProductGrid .filterOption:hover {
+  background: white;
+  border-color: var(--gold, #c9a961);
+  transform: translateX(2px);
+  box-shadow: 0 2px 6px rgba(201, 169, 97, 0.12);
+}
+
+.ProductGrid .checkbox {
+  flex-shrink: 0;
+  color: var(--gold, #c9a961);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.ProductGrid .filterLabel {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #3a3a3a;
 }
 
 
@@ -346,7 +436,7 @@
   }
 }
 
-/* Drawer Header */
+/* Mobile Drawer Header */
 .ProductGrid .filterDrawerHeader {
   display: flex;
   align-items: center;
@@ -354,12 +444,13 @@
   padding: 1.5rem;
   border-bottom: 2px solid var(--light-gray, #e0dcd2);
   background: linear-gradient(135deg, var(--primary-beige, #f5f3ed) 0%, var(--ivory, #faf8f3) 100%);
+  flex-shrink: 0;
 }
 
 .ProductGrid .filterDrawerHeader h3 {
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: 1.75rem;
-  font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: var(--text-dark, #2c2c2c);
   margin: 0;
 }
@@ -376,6 +467,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .ProductGrid .closeDrawerButton:hover {
@@ -385,35 +477,12 @@
   transform: rotate(90deg);
 }
 
-/* Drawer Content */
+/* Mobile Drawer Content */
 .ProductGrid .filterDrawerContent {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem;
-}
-
-.ProductGrid .filterDrawerContent ul {
-  list-style: none;
+  overflow-x: hidden;
   padding: 0;
-  margin: 0;
-}
-
-.ProductGrid .filterDrawerContent li {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--light-gray, #e0dcd2);
-}
-
-.ProductGrid .filterDrawerContent li:last-child {
-  border-bottom: none;
-}
-
-.ProductGrid .filterDrawerContent li:first-child {
-  font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text-dark, #2c2c2c);
-  margin-bottom: 0.75rem;
 }
 
 
@@ -433,9 +502,16 @@
   }
 
   .ProductGrid .FiratDisplay .filterMenu {
-    width: 240px;
-    min-width: 240px;
+    width: 260px;
+    min-width: 260px;
+  }
+
+  .ProductGrid .filterHeader {
     padding: 1.25rem;
+  }
+
+  .ProductGrid .filterTitle {
+    font-size: 1.35rem;
   }
 
   .ProductGrid .FiratDisplay .products {
@@ -472,10 +548,17 @@
   }
 
   .ProductGrid .FiratDisplay .filterMenu {
-    width: 220px;
-    min-width: 220px;
-    padding: 1rem;
+    width: 240px;
+    min-width: 240px;
     top: 110px;
+  }
+
+  .ProductGrid .filterHeader {
+    padding: 1rem;
+  }
+
+  .ProductGrid .filterTitle {
+    font-size: 1.25rem;
   }
 
   .ProductGrid .FiratDisplay .products {

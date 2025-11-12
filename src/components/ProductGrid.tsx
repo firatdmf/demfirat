@@ -183,6 +183,17 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>([]);
   const [SearchFilterUsed, setSearchFilterUsed] = useState<boolean>(false)
   const [FilterDrawerOpen, setFilterDrawerOpen] = useState<boolean>(false)
+  const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set([0])) // First section open by default
+
+  const toggleSection = (index: number) => {
+    const newExpanded = new Set(expandedSections);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedSections(newExpanded);
+  };
 
   // Infinite scroll handler
   useEffect(() => {
@@ -352,6 +363,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               className={`${classes.filterDrawer} ${FilterDrawerOpen ? classes.filterDrawerOpen : ''}`}
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Mobile Drawer Header */}
               <div className={classes.filterDrawerHeader}>
                 <h3>
                   {locale === 'tr' ? 'Filtreler' :
@@ -359,35 +371,158 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                    locale === 'pl' ? 'Filtry' :
                    'Filters'}
                 </h3>
-                <button 
-                  className={classes.closeDrawerButton}
-                  onClick={() => setFilterDrawerOpen(false)}
-                  aria-label="Close filters"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
+                    {locale === 'tr' ? 'Temizle' :
+                     locale === 'ru' ? 'Очистить' :
+                     locale === 'pl' ? 'Wyczyść' :
+                     'Reset'}
+                  </Link>
+                  <button 
+                    className={classes.closeDrawerButton}
+                    onClick={() => setFilterDrawerOpen(false)}
+                    aria-label="Close filters"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <div className={classes.filterDrawerContent}>
-                <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
-                  {locale === 'tr' ? 'Filtreleri Temizle' :
-                   locale === 'ru' ? 'Очистить фильтры' :
-                   locale === 'pl' ? 'Wyczyść filtry' :
-                   'Reset Filters'}
-                </Link>
-                <ul>
-                  {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
-                    const filteredValues = product_variant_attribute_values.filter(
-                      (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
-                    );
-                    const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
-                      .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
 
-                    return (
-                      <li key={index}>
-                        {translateAttributeName(attribute.name || '', locale)}
+              {/* Mobile Drawer Content */}
+              <div className={classes.filterDrawerContent}>
+                {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
+                  const filteredValues = product_variant_attribute_values.filter(
+                    (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
+                  );
+                  const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
+                    .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
+                  
+                  const isExpanded = expandedSections.has(index);
+
+                  return (
+                    <div key={index} className={classes.filterSection}>
+                      <div 
+                        className={classes.filterSectionHeader}
+                        onClick={() => toggleSection(index)}
+                      >
+                        <span>{translateAttributeName(attribute.name || '', locale)}</span>
+                        <svg 
+                          className={`${classes.chevron} ${isExpanded ? classes.chevronOpen : ''}`}
+                          width="16" 
+                          height="16" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2.5"
+                        >
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                      {isExpanded && (
+                        <div className={classes.filterSectionContent}>
+                          {uniqueValues.map((attribute_value) => {
+                            const params = new URLSearchParams(searchParams as Record<string, string>);
+                            const paramKey = String(attribute.name);
+                            const paramValue = String(attribute_value?.product_variant_attribute_value);
+                            const currentValues = params.get(paramKey)?.split(',') || [];
+                            const isChecked = currentValues.includes(paramValue);
+
+                            if (isChecked) {
+                              const newValues = currentValues.filter((val) => val !== paramValue);
+                              if (newValues.length > 0) {
+                                params.set(paramKey, newValues.join(','));
+                              } else {
+                                params.delete(paramKey);
+                              }
+                            } else {
+                              currentValues.push(paramValue);
+                              params.set(paramKey, currentValues.join(','));
+                            }
+
+                            const href = `?${params.toString()}`;
+
+                            return (
+                              <Link 
+                                key={attribute_value?.id} 
+                                className={classes.filterOption} 
+                                href={href} 
+                                replace={true} 
+                                scroll={false}
+                                onClick={() => setFilterDrawerOpen(false)}
+                              >
+                                <div className={classes.checkbox}>
+                                  {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
+                                </div>
+                                <span className={classes.filterLabel}>
+                                  {capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}
+                                </span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className={classes.FiratDisplay}>
+          <div className={classes.filterMenu}>
+            {/* Sticky Reset Button */}
+            <div className={classes.filterHeader}>
+              <h3 className={classes.filterTitle}>
+                {locale === 'tr' ? 'Filtreler' :
+                 locale === 'ru' ? 'Фильтры' :
+                 locale === 'pl' ? 'Filtry' :
+                 'Filters'}
+              </h3>
+              <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
+                {locale === 'tr' ? 'Temizle' :
+                 locale === 'ru' ? 'Очистить' :
+                 locale === 'pl' ? 'Wyczyść' :
+                 locale === 'de' ? 'Zurücksetzen' :
+                 'Reset'}
+              </Link>
+            </div>
+
+            {/* Scrollable Filter Content */}
+            <div className={classes.filterContent}>
+              {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
+                const filteredValues = product_variant_attribute_values.filter(
+                  (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
+                );
+                const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
+                  .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
+                
+                const isExpanded = expandedSections.has(index);
+
+                return (
+                  <div key={index} className={classes.filterSection}>
+                    <div 
+                      className={classes.filterSectionHeader}
+                      onClick={() => toggleSection(index)}
+                    >
+                      <span>{translateAttributeName(attribute.name || '', locale)}</span>
+                      <svg 
+                        className={`${classes.chevron} ${isExpanded ? classes.chevronOpen : ''}`}
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2.5"
+                      >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                    {isExpanded && (
+                      <div className={classes.filterSectionContent}>
                         {uniqueValues.map((attribute_value) => {
                           const params = new URLSearchParams(searchParams as Record<string, string>);
                           const paramKey = String(attribute.name);
@@ -410,104 +545,22 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                           const href = `?${params.toString()}`;
 
                           return (
-                            <div key={attribute_value?.id} className={classes.attribute_value_item_box}>
-                              <Link className={classes.link} href={href} replace={true} scroll={false}>
-                                <div className={classes.icon}>
-                                  {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
-                                </div>
-                                <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}</div>
-                              </Link>
-                              <br />
-                            </div>
+                            <Link key={attribute_value?.id} className={classes.filterOption} href={href} replace={true} scroll={false}>
+                              <div className={classes.checkbox}>
+                                {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
+                              </div>
+                              <span className={classes.filterLabel}>
+                                {capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}
+                              </span>
+                            </Link>
                           );
                         })}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className={classes.FiratDisplay}>
-          <div className={classes.filterMenu}>
-
-
-            <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
-              {locale === 'tr' ? 'Filtreleri Temizle' :
-               locale === 'ru' ? 'Очистить фильтры' :
-               locale === 'pl' ? 'Wyczyść filtry' :
-               locale === 'de' ? 'Filter zurücksetzen' :
-               'Reset Filters'}
-            </Link>
-            <ul>
-              {product_variant_attributes.map((attribute: ProductVariantAttribute, index: number) => {
-
-                // Filter the attribute values based on the attribute_id, delete duplicate values, and iterate through it
-
-                const filteredValues = product_variant_attribute_values.filter(
-                  (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
-                );
-                const uniqueValues =
-                  // filteredValues.map(value =>value.product_variant_attribute_value) creates an array of just the values (like ["blue", "red", "blue"]).
-                  // new Set(...) removes duplicates (so you get ["blue", "red"]).
-                  // Array.from(...) turns the Set back into an array.
-                  Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
-                    // .map(value => filteredValues.find(...)) finds the first object in filteredValues for each unique value, so you get an array of objects (not just strings).
-                    .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
-
-                // console.log("uniqueValues");
-                // console.log(uniqueValues);
-
-
-
-                return (
-                  <li key={index}>
-                    {translateAttributeName(attribute.name || '', locale)}
-                    {/* <p> */}
-                    {uniqueValues.map((attribute_value) => {
-                      // Record<string, string> is a utility type that represents an object with string keys, and string values. 
-                      // in our case, keys are attribute names, and values are either strings or array of strings.
-                      const params = new URLSearchParams(searchParams as Record<string, string>);
-                      const paramKey = String(attribute.name);
-                      const paramValue = String(attribute_value?.product_variant_attribute_value);
-
-                      const currentValues = params.get(paramKey)?.split(',') || [];
-                      const isChecked = currentValues.includes(paramValue);
-
-                      if (isChecked) {
-                        const newValues = currentValues.filter((val) => val !== paramValue);
-                        if (newValues.length > 0) {
-                          params.set(paramKey, newValues.join(','));
-                        } else {
-                          params.delete(paramKey);
-                        }
-                      } else {
-                        currentValues.push(paramValue);
-                        params.set(paramKey, currentValues.join(','));
-                      }
-
-                      const href = `?${params.toString()}`;
-
-                      return (
-                        <div key={attribute_value?.id} className={classes.attribute_value_item_box}>
-                          <Link className={classes.link} href={href} replace={true} scroll={false}>
-                            <div className={classes.icon}>
-                              {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
-                            </div>
-                            <div className={classes.iconText}>{capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}</div>
-                          </Link>
-                          <br />
-                        </div>
-                      );
-                    })}
-                    {/* </ul> */}
-                    {/* </p> */}
-                  </li>
+                      </div>
+                    )}
+                  </div>
                 );
               })}
-            </ul>
+            </div>
           </div>
           <div className={classes.products}>
             {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product) => {
