@@ -254,25 +254,34 @@ export default function ProfilePage() {
         throw new Error('User not authenticated');
       }
 
+      const payload = {
+        name: formData.name,
+        phone: formData.phone,
+        birthdate: formData.birthdate,
+      };
+      
+      console.log('[Profile Update] Sending payload:', payload);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${userId}/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: formData.name,
-            phone: formData.phone,
-            birthdate: formData.birthdate,
-          }),
+          body: JSON.stringify(payload),
         }
       );
 
+      console.log('[Profile Update] Response status:', response.status);
+
       if (response.ok) {
+        const data = await response.json();
+        console.log('[Profile Update] Success:', data);
         showToast('success', t('saveSuccess'));
         setIsEditing(false);
       } else {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Update failed');
+        console.error('[Profile Update] Error response:', errorData);
+        throw new Error(errorData.error || errorData.message || 'Update failed');
       }
     } catch (error) {
       console.error('Error updating profile:', error);
