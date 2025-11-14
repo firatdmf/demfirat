@@ -3,21 +3,50 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { useEffect } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
-import classes from '../account/orders/page.module.css';
+import { useState, useEffect } from 'react';
+import { FaShoppingCart, FaTrash, FaPlus, FaMinus, FaArrowRight, FaBox } from 'react-icons/fa';
+import Link from 'next/link';
+import classes from './page.module.css';
+import { useCart } from '@/contexts/CartContext';
+
+interface CartItem {
+  id: number;
+  product_sku: string;
+  variant_sku: string | null;
+  quantity: string;
+  product_category?: string;
+  variant_attributes?: { [key: string]: string };
+  product?: {
+    title: string;
+    price: string | number | null;
+    primary_image: string;
+    category?: string;
+  };
+}
 
 export default function CartPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const locale = useLocale();
+  const { refreshCart } = useCart();
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updatingItems, setUpdatingItems] = useState<Set<number>>(new Set());
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
-      myCart: { en: 'My Cart', tr: 'Sepetim', ru: 'Моя корзина', pl: 'Mój koszyk' },
+      myCart: { en: 'Shopping Cart', tr: 'Alışveriş Sepeti', ru: 'Корзина', pl: 'Koszyk' },
       emptyCart: { en: 'Your cart is empty', tr: 'Sepetiniz boş', ru: 'Ваша корзина пуста', pl: 'Twój koszyk jest pusty' },
-      comingSoon: { en: 'Shopping cart system coming soon!', tr: 'Alışveriş sepeti sistemi yakında!', ru: 'Система корзины скоро появится!', pl: 'System koszyka wkrótce!' },
+      startShopping: { en: 'Start Shopping', tr: 'Alışverişe Başla', ru: 'Начать покупки', pl: 'Zacznij zakupy' },
+      continueShopping: { en: 'Continue Shopping', tr: 'Alışverişe Devam Et', ru: 'Продолжить покупки', pl: 'Kontynuuj zakupy' },
+      checkout: { en: 'Complete Shopping', tr: 'Alışverişi Tamamla', ru: 'Завершить покупки', pl: 'Zakończ zakupy' },
+      quantity: { en: 'Quantity', tr: 'Miktar', ru: 'Количество', pl: 'Ilość' },
+      subtotal: { en: 'Subtotal', tr: 'Ara Toplam', ru: 'Промежуточный итог', pl: 'Suma częściowa' },
+      total: { en: 'Total', tr: 'Toplam', ru: 'Итого', pl: 'Suma' },
       loading: { en: 'Loading...', tr: 'Yükleniyor...', ru: 'Загрузка...', pl: 'Ładowanie...' },
+      items: { en: 'items', tr: 'ürün', ru: 'товаров', pl: 'przedmiotów' },
+      orderSummary: { en: 'Order Summary', tr: 'Sipariş Özeti', ru: 'Сводка заказа', pl: 'Podsumowanie zamówienia' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -29,10 +58,222 @@ export default function CartPage() {
     }
   }, [status, router, locale]);
 
-  if (status === 'loading') {
+  // Sayfa visibility değişiminde reload'u engelle
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && cartItems.length > 0) {
+        // Sadece cart count'u güncelle, tüm sayfayı reload etme
+        refreshCart();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [cartItems, refreshCart]);
+
+  useEffect(() => {
+    if (session?.user?.email && isInitialLoad) {
+      loadCart();
+      setIsInitialLoad(false);
+    }
+  }, [session, isInitialLoad]);
+
+  const loadCart = async (forceRefresh = false) => {
+    // Eğer veri varsa ve force refresh değilse, tekrar yükleme
+    if (cartItems.length > 0 && !forceRefresh) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const userId = (session?.user as any)?.id || session?.user?.email;
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_cart/${userId}/`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const items = data.cart_items || [];
+        
+        const itemsWithDetails = await Promise.all(
+          items.map(async (item: CartItem) => {
+            try {
+              // Eğer variant_sku varsa, varyant resmini çek
+              if (item.variant_sku) {
+                const variantResponse = await fetch(
+                  `/api/cart/get-variant?variant_sku=${item.variant_sku}&product_sku=${item.product_sku}`
+                );
+                
+                if (variantResponse.ok) {
+                  const variantData = await variantResponse.json();
+                  const variant = variantData.variant;
+                  const variantImage = variantData.primary_image;
+                  const variantAttributes = variantData.variant_attributes || {};
+                  
+                  // Product bilgisini de çek (fiyat ve başlık için)
+                  const productResponse = await fetch(
+                    `/api/cart/get-product?product_sku=${item.product_sku}`
+                  );
+                  
+                  if (productResponse.ok) {
+                    const productData = await productResponse.json();
+                    const product = productData.product;
+                    
+                    return {
+                      ...item,
+                      product_category: productData.product_category || item.product_category,
+                      variant_attributes: variantAttributes,
+                      product: {
+                        title: product?.title || item.product_sku,
+                        price: variant?.variant_price || product?.price || null,
+                        primary_image: variantImage || product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                        category: productData.product_category,
+                      },
+                    };
+                  }
+                }
+              }
+              
+              // Varyant yoksa veya hata olduysa, normal product fetch
+              const productResponse = await fetch(
+                `/api/cart/get-product?product_sku=${item.product_sku}`
+              );
+              
+              if (productResponse.ok && (productResponse.headers.get('content-type') || '').includes('application/json')) {
+                const productData = await productResponse.json();
+                const product = productData.product;
+                if (product) {
+                  return {
+                    ...item,
+                    product_category: productData.product_category || item.product_category,
+                    product: {
+                      title: product.title || item.product_sku,
+                      price: product.price || null,
+                      primary_image: product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                      category: productData.product_category,
+                    },
+                  };
+                }
+              }
+              // Eğer API başarısız olursa, placeholder kullan
+              return {
+                ...item,
+                product: {
+                  title: item.product_sku,
+                  price: null,
+                  primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                },
+              };
+            } catch (error) {
+              console.error(`Error fetching product ${item.product_sku}:`, error);
+              return {
+                ...item,
+                product: {
+                  title: item.product_sku,
+                  price: null,
+                  primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                },
+              };
+            }
+          })
+        );
+        
+        setCartItems(itemsWithDetails);
+      }
+    } catch (error) {
+      console.error('Error loading cart:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateQuantity = async (itemId: number, newQuantity: number) => {
+    if (newQuantity < 0.1) return;
+    setUpdatingItems(prev => new Set(prev).add(itemId));
+    
+    try {
+      const userId = (session?.user as any)?.id || session?.user?.email;
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_cart_item/${userId}/${itemId}/`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ quantity: newQuantity.toString() }),
+        }
+      );
+
+      if (response.ok) {
+        setCartItems(prev =>
+          prev.map(item =>
+            item.id === itemId ? { ...item, quantity: newQuantity.toString() } : item
+          )
+        );
+        // refreshCart() yerine sadece count'u güncelle
+        await refreshCart();
+      }
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    } finally {
+      setUpdatingItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(itemId);
+        return newSet;
+      });
+    }
+  };
+
+  const removeItem = async (itemId: number) => {
+    setUpdatingItems(prev => new Set(prev).add(itemId));
+    
+    try {
+      const userId = (session?.user as any)?.id || session?.user?.email;
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/remove_from_cart/${userId}/${itemId}/`,
+        { method: 'DELETE' }
+      );
+
+      if (response.ok) {
+        setCartItems(prev => prev.filter(item => item.id !== itemId));
+        // Cart count'u güncelle
+        await refreshCart();
+      }
+    } catch (error) {
+      console.error('Error removing item:', error);
+    } finally {
+      setUpdatingItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(itemId);
+        return newSet;
+      });
+    }
+  };
+
+  const calculateSubtotal = () => {
+    return cartItems.reduce((sum, item) => {
+      const price = item.product?.price ? parseFloat(String(item.product.price)) : 0;
+      const quantity = parseFloat(item.quantity);
+      return sum + (price * quantity);
+    }, 0);
+  };
+
+  const formatPrice = (price: string | number | null | undefined) => {
+    if (!price) return null;
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    if (isNaN(numPrice) || numPrice === 0) return null;
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    }).format(numPrice);
+  };
+
+  if (status === 'loading' || loading) {
     return (
       <div className={classes.container}>
-        <div className={classes.loading}>
+        <div className={classes.loadingContainer}>
           <div className={classes.spinner}></div>
           <p>{t('loading')}</p>
         </div>
@@ -40,16 +281,201 @@ export default function CartPage() {
     );
   }
 
+  const subtotal = calculateSubtotal();
+
   return (
     <div className={classes.container}>
-      <div className={classes.card}>
-        <h1>{t('myCart')}</h1>
-        <div className={classes.emptyState}>
-          <FaShoppingCart className={classes.icon} />
-          <h2>{t('emptyCart')}</h2>
-          <p>{t('comingSoon')}</p>
-        </div>
+      <div className={classes.header}>
+        <h1>
+          <FaShoppingCart className={classes.headerIcon} />
+          {t('myCart')}
+        </h1>
+        {cartItems.length > 0 && (
+          <span className={classes.itemCount}>
+            {cartItems.length} {t('items')}
+          </span>
+        )}
       </div>
+
+      {cartItems.length === 0 ? (
+        <div className={classes.emptyState}>
+          <FaBox className={classes.emptyIcon} />
+          <h2>{t('emptyCart')}</h2>
+          <Link href={`/${locale}/product/fabric`} className={classes.startShoppingBtn}>
+            {t('startShopping')}
+          </Link>
+        </div>
+      ) : (
+        <div className={classes.cartGrid}>
+          <div className={classes.cartItems}>
+            {cartItems.map((item) => (
+              <div 
+                key={item.id} 
+                className={`${classes.cartItem} ${updatingItems.has(item.id) ? classes.updating : ''}`}
+              >
+                <Link
+                  href={`/${locale}/product/${item.product_category || 'fabric'}/${item.product_sku}`}
+                  className={classes.itemImageLink}
+                >
+                  <div className={classes.itemImage}>
+                    <img
+                      src={item.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif'}
+                      alt={item.product?.title || item.product_sku}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
+                      }}
+                    />
+                  </div>
+                </Link>
+
+                <div className={classes.itemDetails}>
+                  <Link
+                    href={`/${locale}/product/${item.product_category || 'fabric'}/${item.product_sku}`}
+                    className={classes.itemTitleLink}
+                  >
+                    <h3>{item.product?.title || item.product_sku}</h3>
+                  </Link>
+                  
+                  {/* Variant Attributes */}
+                  {item.variant_attributes && Object.keys(item.variant_attributes).length > 0 && (
+                    <div className={classes.variantAttributes}>
+                      {Object.entries(item.variant_attributes).map(([key, value]) => (
+                        <span key={key} className={classes.variantAttr}>
+                          <strong>{key}:</strong> {value.replace(/_/g, ' ')}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <p className={classes.itemSku}>SKU: {item.product_sku}</p>
+                  {item.product?.category && (
+                    <p className={classes.itemCategory}>
+                      {item.product.category}
+                    </p>
+                  )}
+                </div>
+
+                <div className={classes.itemQuantity}>
+                  <label>{t('quantity')}</label>
+                  <div className={classes.quantityControls}>
+                    <button
+                      onClick={() => updateQuantity(item.id, parseFloat(item.quantity) - 1)}
+                      disabled={updatingItems.has(item.id)}
+                      className={classes.quantityBtn}
+                    >
+                      <FaMinus />
+                    </button>
+                    <input
+                      type="text"
+                      value={item.quantity}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^\d*\.?\d*$/.test(val) && val !== '') {
+                          const num = parseFloat(val);
+                          if (!isNaN(num) && num > 0) {
+                            updateQuantity(item.id, num);
+                          }
+                        }
+                      }}
+                      className={classes.quantityInput}
+                      disabled={updatingItems.has(item.id)}
+                    />
+                    <button
+                      onClick={() => updateQuantity(item.id, parseFloat(item.quantity) + 1)}
+                      disabled={updatingItems.has(item.id)}
+                      className={classes.quantityBtn}
+                    >
+                      <FaPlus />
+                    </button>
+                  </div>
+                </div>
+
+                <div className={classes.itemPrice}>
+                  <div className={classes.priceLabel}>
+                    {locale === 'tr' ? 'Fiyat' : 
+                     locale === 'ru' ? 'Цена' : 
+                     locale === 'pl' ? 'Cena' : 'Price'}
+                  </div>
+                  <div className={classes.priceValue}>
+                    {formatPrice(item.product?.price) || (
+                      <span className={classes.contactPrice}>
+                        {locale === 'tr' ? 'İletişime Geçin' : 
+                         locale === 'ru' ? 'Связаться' : 
+                         locale === 'pl' ? 'Kontakt' : 'Contact'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className={classes.itemTotal}>
+                  <div className={classes.priceLabel}>
+                    {locale === 'tr' ? 'Toplam' : 
+                     locale === 'ru' ? 'Итого' : 
+                     locale === 'pl' ? 'Suma' : 'Total'}
+                  </div>
+                  <div className={classes.priceValue}>
+                    {item.product?.price ? (
+                      formatPrice(parseFloat(String(item.product.price)) * parseFloat(item.quantity))
+                    ) : (
+                      <span className={classes.contactPrice}>
+                        {locale === 'tr' ? 'İletişime Geçin' : 
+                         locale === 'ru' ? 'Связаться' : 
+                         locale === 'pl' ? 'Kontakt' : 'Contact'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => removeItem(item.id)}
+                  disabled={updatingItems.has(item.id)}
+                  className={classes.removeBtn}
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className={classes.orderSummary}>
+            <h2>{t('orderSummary')}</h2>
+            
+            <div className={classes.summaryRow}>
+              <span>{t('subtotal')}</span>
+              <span className={classes.summaryValue}>
+                {formatPrice(subtotal) || '$0.00'}
+              </span>
+            </div>
+
+            {subtotal === 0 && (
+              <div className={classes.summaryNote}>
+                {locale === 'tr' ? 'Fiyatlar için lütfen bizimle iletişime geçin' : 
+                 locale === 'ru' ? 'Пожалуйста, свяжитесь с нами для уточнения цен' : 
+                 locale === 'pl' ? 'Skontaktuj się z nami w sprawie cen' : 
+                 'Please contact us for pricing'}
+              </div>
+            )}
+
+            <div className={classes.summaryDivider}></div>
+
+            <div className={`${classes.summaryRow} ${classes.summaryTotal}`}>
+              <span>{t('total')}</span>
+              <span className={classes.summaryValue}>
+                {formatPrice(subtotal) || '$0.00'}
+              </span>
+            </div>
+
+            <Link href={`/${locale}/checkout`} className={classes.checkoutBtn}>
+              {t('checkout')}
+              <FaArrowRight />
+            </Link>
+
+            <Link href={`/${locale}/product/fabric`} className={classes.continueBtn}>
+              {t('continueShopping')}
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

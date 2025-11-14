@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import classes from "./ProductDetailCard.module.css";
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory } from '@/lib/interfaces';
 import { useSession } from 'next-auth/react';
@@ -109,6 +110,7 @@ function ProductDetailCard({
 
 
 
+  const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -486,8 +488,8 @@ function ProductDetailCard({
   
   const handleBuyNow = async () => {
     await handleAddToCart();
-    // TODO: Navigate to cart page
-    // router.push('/cart');
+    // Navigate to cart page
+    router.push(`/${locale}/cart`);
   };
   
   const handleToggleFavorite = async () => {
