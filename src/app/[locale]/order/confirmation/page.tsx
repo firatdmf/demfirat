@@ -1,22 +1,54 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
-import { FaCheckCircle, FaShoppingBag } from 'react-icons/fa';
+import { FaCheckCircle, FaShoppingBag, FaMapMarkerAlt, FaBox, FaCreditCard, FaHome } from 'react-icons/fa';
+
+interface OrderData {
+  orderId: string;
+  paymentId: string;
+  cartItems: any[];
+  deliveryAddress: any;
+  billingAddress: any;
+  totalAmount: string;
+  currency: string;
+  orderDate: string;
+}
 
 export default function OrderConfirmationPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = useLocale();
+  const [orderData, setOrderData] = useState<OrderData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Clear cart after order confirmation
-    // This can be improved to only clear after successful order creation
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('cart');
+    // Get order data from localStorage
+    const lastOrder = localStorage.getItem('lastOrder');
+    if (lastOrder) {
+      setOrderData(JSON.parse(lastOrder));
+      // Clear after reading
+      localStorage.removeItem('lastOrder');
     }
-  }, []);
+    
+    // Clear cart from backend
+    const userId = searchParams.get('userId');
+    if (userId) {
+      fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${userId}/`, {
+        method: 'POST'
+      }).catch(error => {
+        console.error('Failed to clear cart:', error);
+      });
+    }
+    
+    // Clear local cart
+    localStorage.removeItem('cart');
+    localStorage.removeItem('checkoutData');
+    
+    setLoading(false);
+  }, [searchParams]);
 
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
@@ -24,10 +56,23 @@ export default function OrderConfirmationPage() {
       thankYou: { en: 'Thank you for your purchase', tr: 'Alışverişiniz için teşekkür ederiz', ru: 'Спасибо за покупку', pl: 'Dziękujemy za zakup' },
       orderDetails: { en: 'Order details have been sent to your email address.', tr: 'Sipariş detayları e-posta adresinize gönderilmiştir.', ru: 'Детали заказа отправлены на ваш адрес электронной почты.', pl: 'Szczegóły zamówienia zostały wysłane na Twój adres e-mail.' },
       continueShopping: { en: 'Continue Shopping', tr: 'Alışverişe Devam Et', ru: 'Продолжить покупки', pl: 'Kontynuuj zakupy' },
-      processing: { en: 'Your order is being processed and will be shipped soon.', tr: 'Siparişiniz işleme alınmıştır ve kısa süre içinde kargoya verilecektir.', ru: 'Ваш заказ обрабатывается и скоро будет отправлен.', pl: 'Twoje zamówienie jest przetwarzane i wkrótce zostanie wysłane.' }
+      backToHome: { en: 'Back to Home', tr: 'Ana Sayfaya Dön', ru: 'Вернуться на главную', pl: 'Powrót do strony głównej' },
+      processing: { en: 'Your order is being processed and will be shipped soon.', tr: 'Siparişiniz işleme alınmıştır ve kısa süre içinde kargoya verilecektir.', ru: 'Ваш заказ обрабатывается и скоро будет отправлен.', pl: 'Twoje zamówienie jest przetwarzane i wkrótce zostanie wysłane.' },
+      orderNumber: { en: 'Order Number', tr: 'Sipariş Numarası', ru: 'Номер заказа', pl: 'Numer zamówienia' },
+      paymentId: { en: 'Payment ID', tr: 'Ödeme No', ru: 'ID платежа', pl: 'ID płatności' },
+      orderedItems: { en: 'Ordered Items', tr: 'Sipariş Edilen Ürünler', ru: 'Заказанные товары', pl: 'Zamówione produkty' },
+      deliveryAddress: { en: 'Delivery Address', tr: 'Teslimat Adresi', ru: 'Адрес доставки', pl: 'Adres dostawy' },
+      billingAddress: { en: 'Billing Address', tr: 'Fatura Adresi', ru: 'Адрес выставления счета', pl: 'Adres rozliczeniowy' },
+      totalAmount: { en: 'Total Amount', tr: 'Toplam Tutar', ru: 'Общая сумма', pl: 'Całkowita kwota' },
+      quantity: { en: 'Qty', tr: 'Adet', ru: 'Кол-во', pl: 'Ilość' }
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
+  };
+  
+  const formatPrice = (price: any) => {
+    if (!price) return 'N/A';
+    return `${parseFloat(price).toFixed(2)} ${orderData?.currency || 'TRY'}`;
   };
 
   return (
@@ -124,7 +169,7 @@ export default function OrderConfirmationPage() {
           justifyContent: 'center'
         }}>
           <Link
-            href={`/${locale}/products`}
+            href={`/${locale}`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -146,6 +191,33 @@ export default function OrderConfirmationPage() {
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 4px 15px rgba(201, 169, 97, 0.3)';
+            }}
+          >
+            <FaHome />
+            {t('backToHome')}
+          </Link>
+          
+          <Link
+            href={`/${locale}/product/fabric`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '1rem 2rem',
+              background: 'white',
+              color: '#c9a961',
+              textDecoration: 'none',
+              borderRadius: '10px',
+              fontWeight: 600,
+              fontSize: '1rem',
+              border: '2px solid #c9a961',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#faf8f3';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'white';
             }}
           >
             <FaShoppingBag />

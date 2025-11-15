@@ -132,21 +132,14 @@ export default function CheckoutPage() {
       if (event.origin !== window.location.origin) return;
       
       if (event.data.type === 'PAYMENT_SUCCESS') {
-        console.log('Payment successful, clearing cart and redirecting...');
+        console.log('Payment successful, redirecting to confirmation...');
         
-        // Clear cart from backend
-        if (event.data.userId) {
-          try {
-            await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${event.data.userId}/`, {
-              method: 'POST'
-            });
-          } catch (error) {
-            console.error('Failed to clear cart:', error);
-          }
-        }
-        
-        // Redirect to homepage
-        router.push(`/${locale}`);
+        // Redirect to confirmation page with userId (cart will be cleared there)
+        const queryParams = new URLSearchParams({
+          paymentId: event.data.paymentId,
+          userId: event.data.userId
+        });
+        router.push(`/${locale}/order/confirmation?${queryParams.toString()}`);
       }
     };
 

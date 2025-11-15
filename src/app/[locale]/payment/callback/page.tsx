@@ -83,6 +83,20 @@ export default function PaymentCallbackPage() {
             const orderResult = await orderResponse.json();
             console.log('Order created:', orderResult);
             
+            // Store order result for confirmation page
+            if (orderResult.success) {
+              localStorage.setItem('lastOrder', JSON.stringify({
+                orderId: orderResult.order?.order_id,
+                paymentId: paymentId,
+                cartItems: parsed.cartItems,
+                deliveryAddress: parsed.deliveryAddress,
+                billingAddress: parsed.billingAddress,
+                totalAmount: data.payment?.paidPrice,
+                currency: data.payment?.currency,
+                orderDate: new Date().toISOString()
+              }));
+            }
+            
             // Clear checkout data after order created
             localStorage.removeItem('checkoutData');
           }
@@ -111,9 +125,9 @@ export default function PaymentCallbackPage() {
             console.error('Could not communicate with parent:', error);
           }
         } else {
-          // Normal page - redirect to homepage
+          // Normal page - redirect to confirmation page
           setTimeout(() => {
-            router.push(`/${locale}`);
+            router.push(`/${locale}/order/confirmation?paymentId=${paymentId}`);
           }, 2000);
         }
       } else {
