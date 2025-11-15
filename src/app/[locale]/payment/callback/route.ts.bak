@@ -1,0 +1,44 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  try {
+    // iyzico sends callback data as form data
+    const formData = await request.formData();
+    
+    // Extract all parameters
+    const params: Record<string, string> = {};
+    formData.forEach((value, key) => {
+      params[key] = value.toString();
+    });
+    
+    console.log('===== IYZICO CALLBACK (POST) =====');
+    console.log('Params:', params);
+    
+    const { mdStatus, status, paymentId, conversationId, conversationData } = params;
+    
+    // Build query string for GET page
+    const queryParams = new URLSearchParams({
+      mdStatus: mdStatus || '',
+      status: status || '',
+      paymentId: paymentId || '',
+      conversationId: conversationId || '',
+      conversationData: conversationData || ''
+    });
+    
+    // Get locale from URL
+    const url = new URL(request.url);
+    const locale = url.pathname.split('/')[1] || 'tr';
+    
+    // Redirect to GET version with query params
+    const redirectUrl = `/${locale}/payment/callback?${queryParams.toString()}`;
+    
+    return NextResponse.redirect(new URL(redirectUrl, request.url));
+    
+  } catch (error) {
+    console.error('Callback POST error:', error);
+    return NextResponse.json(
+      { error: 'Callback processing failed' },
+      { status: 500 }
+    );
+  }
+}

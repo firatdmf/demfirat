@@ -70,6 +70,13 @@ export default function CheckoutPage() {
     country: 'Turkey',
   });
 
+  // Credit card form state
+  const [cardHolderName, setCardHolderName] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [userPhone, setUserPhone] = useState('');
+
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
       checkout: { en: 'Checkout', tr: 'Ödeme', ru: 'Оформление заказа', pl: 'Zamówienie' },
@@ -117,6 +124,37 @@ export default function CheckoutPage() {
       setIsInitialLoad(false);
     }
   }, [session, isInitialLoad]);
+
+  // Listen for payment success from popup
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      // Verify origin for security
+      if (event.origin !== window.location.origin) return;
+      
+      if (event.data.type === 'PAYMENT_SUCCESS') {
+        console.log('Payment successful, clearing cart and redirecting...');
+        
+        // Clear cart from backend
+        if (event.data.userId) {
+          try {
+            await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${event.data.userId}/`, {
+              method: 'POST'
+            });
+          } catch (error) {
+            console.error('Failed to clear cart:', error);
+          }
+        }
+        
+        // Redirect to homepage
+        router.push(`/${locale}`);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [router, locale]);
 
   // Sayfa visibility değişiminde reload'u engelle
   useEffect(() => {
@@ -251,6 +289,7 @@ export default function CheckoutPage() {
           
           // Get user phone from web_client
           const userPhone = profileData.web_client?.phone || profileData.phone || '';
+          setUserPhone(userPhone); // Save for payment API
           
           // Extract addresses from profile and add phone to each
           if (profileData.addresses && Array.isArray(profileData.addresses)) {
@@ -301,6 +340,7 @@ export default function CheckoutPage() {
   };
 
   const handleCompleteOrder = async () => {
+    // Validate addresses
     if (!selectedDeliveryAddressId) {
       alert(t('selectAddress'));
       return;
@@ -310,19 +350,208 @@ export default function CheckoutPage() {
       return;
     }
 
+    // Validate card information if payment method is card
+    if (paymentMethod === 'card') {
+      if (!cardHolderName.trim()) {
+        alert(locale === 'tr' ? 'Kart üzerindeki ismi girin' : 'Enter cardholder name');
+        return;
+      }
+      if (!cardNumber.trim() || cardNumber.replace(/\s/g, '').length < 15) {
+        alert(locale === 'tr' ? 'Geçerli bir kart numarası girin' : 'Enter a valid card number');
+        return;
+      }
+      if (!expiryDate.trim() || expiryDate.length < 5) {
+        alert(locale === 'tr' ? 'Son kullanma tarihi girin (AA/YY)' : 'Enter expiry date (MM/YY)');
+        return;
+      }
+      if (!cvv.trim() || cvv.length < 3) {
+        alert(locale === 'tr' ? 'CVV girin' : 'Enter CVV');
+        return;
+      }
+    }
+
     setProcessingOrder(true);
     try {
-      // TODO: Implement order creation API call
-      // const response = await fetch('/api/orders/create', { method: 'POST', body: ... });
+      const userId = (session?.user as any)?.id || session?.user?.email;
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Get selected addresses
+      const deliveryAddress = addresses.find(addr => addr.id === selectedDeliveryAddressId);
+      const billingAddress = sameAsDelivery 
+        ? deliveryAddress 
+        : addresses.find(addr => addr.id === selectedBillingAddressId);
+
+      if (!deliveryAddress || !billingAddress) {
+        alert(locale === 'tr' ? 'Adres bilgisi eksik' : 'Address information missing');
+        return;
+      }
+
+      // For bank transfer, create order directly
+      if (paymentMethod === 'bank_transfer') {
+        // TODO: Create order in Django backend with 'pending_payment' status
+        alert(locale === 'tr' 
+          ? 'Havale/EFT ödemesi için banka bilgileri e-posta ile gönderilecektir.' 
+          : 'Bank transfer details will be sent via email.');
+        router.push(`/${locale}/order/confirmation`);
+        return;
+      }
+
+      // For card payment, initiate iyzico payment
+      const [expMonth, expYear] = expiryDate.split('/');
       
-      // Redirect to order confirmation page
-      router.push(`/${locale}/order/confirmation`);
+      // Get user IP address
+      let buyerIp = '85.34.78.112'; // Default fallback IP
+      try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        buyerIp = ipData.ip;
+      } catch (error) {
+        console.error('Could not fetch IP:', error);
+      }
+
+      // Get exchange rate USD to TRY
+      let exchangeRate = 34.5; // Fallback rate
+      try {
+        const rateResponse = await fetch('/api/exchange-rate');
+        const rateData = await rateResponse.json();
+        if (rateData.success) {
+          exchangeRate = rateData.rate;
+          console.log('Exchange rate USD/TRY:', exchangeRate);
+        }
+      } catch (error) {
+        console.error('Could not fetch exchange rate:', error);
+      }
+
+      // Convert USD to TRY for payment
+      const subtotalTRY = subtotal * exchangeRate;
+      const totalTRY = total * exchangeRate;
+
+      const paymentData = {
+        // Card information
+        cardHolderName: cardHolderName.trim(),
+        cardNumber: cardNumber.replace(/\s/g, ''),
+        expireMonth: expMonth.trim(),
+        expireYear: '20' + expYear.trim(),
+        cvc: cvv.trim(),
+        
+        // Order information (converted to TRY)
+        price: subtotalTRY.toFixed(2),
+        paidPrice: totalTRY.toFixed(2),
+        currency: 'TRY',
+        basketId: `basket-${userId}-${Date.now()}`,
+        paymentGroup: 'PRODUCT',
+        exchangeRate: exchangeRate, // Store for order record
+        originalCurrency: 'USD',
+        originalPrice: subtotal.toFixed(2),
+        
+        // Buyer information
+        buyer: {
+          id: userId,
+          name: cardHolderName.split(' ')[0] || 'Customer',
+          surname: cardHolderName.split(' ').slice(1).join(' ') || 'User',
+          email: session?.user?.email || '',
+          identityNumber: '11111111111', // Test identity number for sandbox
+          registrationAddress: deliveryAddress.address,
+          city: deliveryAddress.city,
+          country: deliveryAddress.country,
+          ip: buyerIp,
+          gsmNumber: userPhone || deliveryAddress.phone || '+905555555555'
+        },
+        
+        // Shipping address
+        shippingAddress: {
+          contactName: cardHolderName.trim(),
+          city: deliveryAddress.city,
+          country: deliveryAddress.country,
+          address: deliveryAddress.address
+        },
+        
+        // Billing address
+        billingAddress: {
+          contactName: cardHolderName.trim(),
+          city: billingAddress.city,
+          country: billingAddress.country,
+          address: billingAddress.address
+        },
+        
+        // Basket items (convert to TRY)
+        basketItems: cartItems.map((item, index) => {
+          const priceUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
+          const quantity = parseFloat(item.quantity);
+          const itemTotalUSD = priceUSD * quantity;
+          const itemTotalTRY = (itemTotalUSD * exchangeRate).toFixed(2);
+          
+          return {
+            id: `item-${index}`,
+            name: item.product?.title || item.product_sku,
+            category1: item.product_category || 'Product',
+            itemType: 'PHYSICAL',
+            price: itemTotalTRY
+          };
+        }),
+        
+        callbackUrl: `${window.location.origin}/api/payment/callback`
+      };
+
+      // Call iyzico payment API
+      const response = await fetch('/api/payment/iyzico', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(paymentData)
+      });
+
+      const result = await response.json();
+      
+      console.log('===== IYZICO RESPONSE =====');
+      console.log('Success:', result.success);
+      console.log('Has threeDSHtmlContent:', !!result.threeDSHtmlContent);
+      console.log('Content length:', result.threeDSHtmlContent?.length);
+      console.log('Content preview:', result.threeDSHtmlContent?.substring(0, 200));
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Payment initialization failed');
+      }
+
+      if (result.success && result.threeDSHtmlContent) {
+        // Decode base64 HTML content
+        let decodedHtml = result.threeDSHtmlContent;
+        try {
+          // Check if it's base64 encoded
+          decodedHtml = atob(result.threeDSHtmlContent);
+          console.log('Decoded HTML preview:', decodedHtml.substring(0, 200));
+        } catch (e) {
+          console.log('Content is not base64, using as-is');
+        }
+        
+        // Store 3D Secure HTML in localStorage
+        localStorage.setItem('threeDSHtmlContent', decodedHtml);
+        
+        // Store checkout data for order creation after payment
+        localStorage.setItem('checkoutData', JSON.stringify({
+          userId: userId,
+          cartItems: cartItems,
+          deliveryAddress: deliveryAddress,
+          billingAddress: billingAddress,
+          exchangeRate: exchangeRate,
+          originalCurrency: 'USD',
+          originalPrice: subtotal.toFixed(2)
+        }));
+        
+        // Open 3D Secure page in new tab
+        const threeDSUrl = `/${locale}/payment/3ds`;
+        window.open(threeDSUrl, '_blank', 'width=600,height=800,scrollbars=yes');
+        
+        // Show info message
+        alert(locale === 'tr'
+          ? '3D Secure do\u011frulama sayfas\u0131 a\u00e7\u0131ld\u0131. L\u00fctfen yeni sekmede i\u015flemi tamamlay\u0131n.'
+          : '3D Secure page opened. Please complete authentication in the new tab.');
+      } else {
+        throw new Error('3D Secure initialization failed');
+      }
     } catch (error) {
       console.error('Error creating order:', error);
-      alert('Order creation failed');
+      alert(locale === 'tr' 
+        ? 'Ödeme başlatılamadı. Lütfen bilgilerinizi kontrol edin.' 
+        : 'Payment failed. Please check your information.');
     } finally {
       setProcessingOrder(false);
     }
@@ -755,6 +984,8 @@ export default function CheckoutPage() {
                 <div className={classes.formGrid}>
                   <input
                     type="text"
+                    value={cardHolderName}
+                    onChange={(e) => setCardHolderName(e.target.value.toUpperCase())}
                     placeholder={
                       locale === 'tr' ? 'Kart Üzerindeki İsim' :
                       locale === 'ru' ? 'Имя на карте' :
@@ -765,6 +996,12 @@ export default function CheckoutPage() {
                   />
                   <input
                     type="text"
+                    value={cardNumber}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      const formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+                      setCardNumber(formatted);
+                    }}
                     placeholder={
                       locale === 'tr' ? 'Kart Numarası' :
                       locale === 'ru' ? 'Номер карты' :
@@ -776,6 +1013,15 @@ export default function CheckoutPage() {
                   />
                   <input
                     type="text"
+                    value={expiryDate}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 2) {
+                        setExpiryDate(value);
+                      } else {
+                        setExpiryDate(value.slice(0, 2) + '/' + value.slice(2, 4));
+                      }
+                    }}
                     placeholder={
                       locale === 'tr' ? 'AA/YY' :
                       locale === 'ru' ? 'ММ/ГГ' :
@@ -787,6 +1033,8 @@ export default function CheckoutPage() {
                   />
                   <input
                     type="text"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
                     placeholder="CVV"
                     maxLength={4}
                     className={classes.input}

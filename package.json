@@ -21,6 +21,7 @@
     "convert-array-to-csv": "^2.0.0",
     "i18next": "^23.10.0",
     "i18next-resources-to-backend": "^1.2.0",
+    "iyzipay": "^2.0.64",
     "mongodb": "^6.2.0",
     "next": "15.5.0",
     "next-auth": "^4.24.5",
