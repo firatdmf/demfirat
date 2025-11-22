@@ -331,6 +331,7 @@ export default function CartPage() {
                 <Link
                   href={`/${locale}/product/${item.product_category || 'fabric'}/${item.product_sku}`}
                   className={classes.itemImageLink}
+                  target="_blank"
                 >
                   <div className={classes.itemImage}>
                     <img
