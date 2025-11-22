@@ -16,6 +16,16 @@ interface CartItem {
   quantity: string;
   product_category?: string;
   variant_attributes?: { [key: string]: string };
+  is_custom_curtain?: boolean;
+  custom_attributes?: {
+    mountingType?: string;
+    pleatType?: string;
+    pleatDensity?: string;
+    width?: string;
+    height?: string;
+    wingType?: string;
+  };
+  custom_price?: string | number;
   product?: {
     title: string;
     price: string | number | null;
@@ -27,10 +37,14 @@ interface CartItem {
 interface Address {
   id: string;
   title: string;
-  address: string;
-  city: string;
-  country: string;
+  first_name?: string;
+  last_name?: string;
   phone?: string;
+  address: string;
+  district?: string;
+  city: string;
+  postal_code?: string;
+  country: string;
   isDefault: boolean;
 }
 
@@ -50,7 +64,7 @@ export default function CheckoutPage() {
   const [processingOrder, setProcessingOrder] = useState(false);
   const [isCartExpanded, setIsCartExpanded] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  
+
   // Horizontal scroll drag state
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -61,14 +75,20 @@ export default function CheckoutPage() {
   // New address form state
   const [newAddress, setNewAddress] = useState({
     title: '',
-    full_name: '',
+    first_name: '',
+    last_name: '',
     phone: '',
     address_line: '',
+    district: '',
     city: '',
     state: '',
     postal_code: '',
     country: 'Turkey',
   });
+
+  // Selected location for new address
+  const [selectedCountry, setSelectedCountry] = useState('Turkey');
+  const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
 
   // Credit card form state
   const [cardHolderName, setCardHolderName] = useState('');
@@ -76,6 +96,19 @@ export default function CheckoutPage() {
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [userPhone, setUserPhone] = useState('');
+
+  // User info state
+  const [userInfo, setUserInfo] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: ''
+  });
+
+  // Location data state
+  const [countries, setCountries] = useState<Array<{ code: string; name: string; flag?: string }>>([]);
+  const [cities, setCities] = useState<Array<{ id: number; name: string }>>([]);
+  const [districts, setDistricts] = useState<Array<{ name: string }>>([]);
 
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
@@ -105,6 +138,17 @@ export default function CheckoutPage() {
       city: { en: 'City', tr: 'Şehir', ru: 'Город', pl: 'Miasto' },
       state: { en: 'State/Province', tr: 'İl/Bölge', ru: 'Штат/Провинция', pl: 'Stan/Województwo' },
       postalCode: { en: 'Postal Code', tr: 'Posta Kodu', ru: 'Почтовый индекс', pl: 'Kod pocztowy' },
+      country: { en: 'Country', tr: 'Ülke', ru: 'Страна', pl: 'Kraj' },
+      district: { en: 'District', tr: 'İlçe', ru: 'Район', pl: 'Dzielnica' },
+      firstName: { en: 'First Name', tr: 'Ad', ru: 'Имя', pl: 'Imię' },
+      lastName: { en: 'Last Name', tr: 'Soyad', ru: 'Фамилия', pl: 'Nazwisko' },
+      userInformation: { en: 'Your Information', tr: 'Bilgileriniz', ru: 'Ваша информация', pl: 'Twoje informacje' },
+      pleaseEnterName: { en: 'Please enter your name', tr: 'Lütfen adınızı girin', ru: 'Введите имя', pl: 'Wprowadź imię' },
+      pleaseEnterPhone: { en: 'Please enter your phone', tr: 'Lütfen telefon numaranızı girin', ru: 'Введите телефон', pl: 'Wprowadź telefon' },
+      pleaseSelectAddress: { en: 'Please select an address', tr: 'Lütfen bir adres seçin', ru: 'Выберите адрес', pl: 'Wybierz adres' },
+      selectCountry: { en: 'Select Country', tr: 'Ülke Seçin', ru: 'Выберите страну', pl: 'Wybierz kraj' },
+      selectCity: { en: 'Select City', tr: 'Şehir Seçin', ru: 'Выберите город', pl: 'Wybierz miasto' },
+      selectDistrict: { en: 'Select District', tr: 'İlçe Seçin', ru: 'Выберите район', pl: 'Wybierz dzielnicę' },
       save: { en: 'Save', tr: 'Kaydet', ru: 'Сохранить', pl: 'Zapisz' },
       cancel: { en: 'Cancel', tr: 'İptal', ru: 'Отмена', pl: 'Anuluj' },
     };
@@ -122,18 +166,64 @@ export default function CheckoutPage() {
     if (session?.user?.email && isInitialLoad) {
       loadCheckoutData();
       setIsInitialLoad(false);
+      // Set user email from session
+      setUserInfo(prev => ({
+        ...prev,
+        email: session.user?.email || ''
+      }));
     }
   }, [session, isInitialLoad]);
+
+  // Load countries on mount
+  useEffect(() => {
+    const loadCountries = async () => {
+      try {
+        const response = await fetch('/api/location/countries');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            setCountries(data.countries);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading countries:', error);
+      }
+    };
+    loadCountries();
+  }, []);
+
+  // Load Turkey cities automatically if Turkey is default
+  useEffect(() => {
+    if (selectedCountry === 'Turkey') {
+      const loadTurkeyCities = async () => {
+        try {
+          const response = await fetch('/api/location/turkey-cities');
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
+              setCities(data.cities);
+            }
+          }
+        } catch (error) {
+          console.error('Error loading Turkey cities:', error);
+        }
+      };
+      loadTurkeyCities();
+    } else {
+      setCities([]);
+      setDistricts([]);
+    }
+  }, [selectedCountry]);
 
   // Listen for payment success from popup
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
       // Verify origin for security
       if (event.origin !== window.location.origin) return;
-      
+
       if (event.data.type === 'PAYMENT_SUCCESS') {
         console.log('Payment successful, redirecting to confirmation...');
-        
+
         // Redirect to confirmation page with userId (cart will be cleared there)
         const queryParams = new URLSearchParams({
           paymentId: event.data.paymentId,
@@ -195,22 +285,22 @@ export default function CheckoutPage() {
                 const variantResponse = await fetch(
                   `/api/cart/get-variant?variant_sku=${item.variant_sku}&product_sku=${item.product_sku}`
                 );
-                
+
                 if (variantResponse.ok) {
                   const variantData = await variantResponse.json();
                   const variant = variantData.variant;
                   const variantImage = variantData.primary_image;
                   const variantAttributes = variantData.variant_attributes || {};
-                  
+
                   // Product bilgisini de çek (fiyat ve başlık için)
                   const productResponse = await fetch(
                     `/api/cart/get-product?product_sku=${item.product_sku}`
                   );
-                  
+
                   if (productResponse.ok) {
                     const productData = await productResponse.json();
                     const product = productData.product;
-                    
+
                     return {
                       ...item,
                       product_category: productData.product_category || item.product_category,
@@ -225,7 +315,7 @@ export default function CheckoutPage() {
                   }
                 }
               }
-              
+
               // Varyant yoksa veya hata olduysa, normal product fetch
               const productResponse = await fetch(
                 `/api/cart/get-product?product_sku=${item.product_sku}`
@@ -279,11 +369,11 @@ export default function CheckoutPage() {
 
         if (profileResponse.ok) {
           const profileData = await profileResponse.json();
-          
+
           // Get user phone from web_client
           const userPhone = profileData.web_client?.phone || profileData.phone || '';
           setUserPhone(userPhone); // Save for payment API
-          
+
           // Extract addresses from profile and add phone to each
           if (profileData.addresses && Array.isArray(profileData.addresses)) {
             const userAddresses = profileData.addresses.map((addr: any) => ({
@@ -315,7 +405,13 @@ export default function CheckoutPage() {
 
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) => {
-      const price = item.product?.price ? parseFloat(String(item.product.price)) : 0;
+      let price = 0;
+      // Özel perde ise custom_price kullan
+      if (item.is_custom_curtain && item.custom_price) {
+        price = parseFloat(String(item.custom_price));
+      } else if (item.product?.price) {
+        price = parseFloat(String(item.product.price));
+      }
       const quantity = parseFloat(item.quantity);
       return sum + (price * quantity);
     }, 0);
@@ -333,13 +429,23 @@ export default function CheckoutPage() {
   };
 
   const handleCompleteOrder = async () => {
+    // Validate user information
+    if (!userInfo.firstName.trim() || !userInfo.lastName.trim()) {
+      alert(t('pleaseEnterName'));
+      return;
+    }
+    if (!userInfo.phone.trim()) {
+      alert(t('pleaseEnterPhone'));
+      return;
+    }
+
     // Validate addresses
     if (!selectedDeliveryAddressId) {
-      alert(t('selectAddress'));
+      alert(t('pleaseSelectAddress'));
       return;
     }
     if (!sameAsDelivery && !selectedBillingAddressId) {
-      alert(t('selectAddress'));
+      alert(t('pleaseSelectAddress'));
       return;
     }
 
@@ -366,11 +472,11 @@ export default function CheckoutPage() {
     setProcessingOrder(true);
     try {
       const userId = (session?.user as any)?.id || session?.user?.email;
-      
+
       // Get selected addresses
       const deliveryAddress = addresses.find(addr => addr.id === selectedDeliveryAddressId);
-      const billingAddress = sameAsDelivery 
-        ? deliveryAddress 
+      const billingAddress = sameAsDelivery
+        ? deliveryAddress
         : addresses.find(addr => addr.id === selectedBillingAddressId);
 
       if (!deliveryAddress || !billingAddress) {
@@ -381,8 +487,8 @@ export default function CheckoutPage() {
       // For bank transfer, create order directly
       if (paymentMethod === 'bank_transfer') {
         // TODO: Create order in Django backend with 'pending_payment' status
-        alert(locale === 'tr' 
-          ? 'Havale/EFT ödemesi için banka bilgileri e-posta ile gönderilecektir.' 
+        alert(locale === 'tr'
+          ? 'Havale/EFT ödemesi için banka bilgileri e-posta ile gönderilecektir.'
           : 'Bank transfer details will be sent via email.');
         router.push(`/${locale}/order/confirmation`);
         return;
@@ -390,7 +496,7 @@ export default function CheckoutPage() {
 
       // For card payment, initiate iyzico payment
       const [expMonth, expYear] = expiryDate.split('/');
-      
+
       // Get user IP address
       let buyerIp = '85.34.78.112'; // Default fallback IP
       try {
@@ -425,7 +531,7 @@ export default function CheckoutPage() {
         expireMonth: expMonth.trim(),
         expireYear: '20' + expYear.trim(),
         cvc: cvv.trim(),
-        
+
         // Order information (converted to TRY)
         price: subtotalTRY.toFixed(2),
         paidPrice: totalTRY.toFixed(2),
@@ -435,7 +541,7 @@ export default function CheckoutPage() {
         exchangeRate: exchangeRate, // Store for order record
         originalCurrency: 'USD',
         originalPrice: subtotal.toFixed(2),
-        
+
         // Buyer information
         buyer: {
           id: userId,
@@ -449,7 +555,7 @@ export default function CheckoutPage() {
           ip: buyerIp,
           gsmNumber: userPhone || deliveryAddress.phone || '+905555555555'
         },
-        
+
         // Shipping address
         shippingAddress: {
           contactName: cardHolderName.trim(),
@@ -457,7 +563,7 @@ export default function CheckoutPage() {
           country: deliveryAddress.country,
           address: deliveryAddress.address
         },
-        
+
         // Billing address
         billingAddress: {
           contactName: cardHolderName.trim(),
@@ -465,14 +571,14 @@ export default function CheckoutPage() {
           country: billingAddress.country,
           address: billingAddress.address
         },
-        
+
         // Basket items (convert to TRY)
         basketItems: cartItems.map((item, index) => {
           const priceUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
           const quantity = parseFloat(item.quantity);
           const itemTotalUSD = priceUSD * quantity;
           const itemTotalTRY = (itemTotalUSD * exchangeRate).toFixed(2);
-          
+
           return {
             id: `item-${index}`,
             name: item.product?.title || item.product_sku,
@@ -481,7 +587,7 @@ export default function CheckoutPage() {
             price: itemTotalTRY
           };
         }),
-        
+
         callbackUrl: `${window.location.origin}/api/payment/callback`
       };
 
@@ -493,7 +599,7 @@ export default function CheckoutPage() {
       });
 
       const result = await response.json();
-      
+
       console.log('===== IYZICO RESPONSE =====');
       console.log('Success:', result.success);
       console.log('Has threeDSHtmlContent:', !!result.threeDSHtmlContent);
@@ -514,10 +620,10 @@ export default function CheckoutPage() {
         } catch (e) {
           console.log('Content is not base64, using as-is');
         }
-        
+
         // Store 3D Secure HTML in localStorage
         localStorage.setItem('threeDSHtmlContent', decodedHtml);
-        
+
         // Store checkout data for order creation after payment
         localStorage.setItem('checkoutData', JSON.stringify({
           userId: userId,
@@ -528,11 +634,11 @@ export default function CheckoutPage() {
           originalCurrency: 'USD',
           originalPrice: subtotal.toFixed(2)
         }));
-        
+
         // Open 3D Secure page in new tab
         const threeDSUrl = `/${locale}/payment/3ds`;
         window.open(threeDSUrl, '_blank', 'width=600,height=800,scrollbars=yes');
-        
+
         // Show info message
         alert(locale === 'tr'
           ? '3D Secure do\u011frulama sayfas\u0131 a\u00e7\u0131ld\u0131. L\u00fctfen yeni sekmede i\u015flemi tamamlay\u0131n.'
@@ -542,8 +648,8 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       console.error('Error creating order:', error);
-      alert(locale === 'tr' 
-        ? 'Ödeme başlatılamadı. Lütfen bilgilerinizi kontrol edin.' 
+      alert(locale === 'tr'
+        ? 'Ödeme başlatılamadı. Lütfen bilgilerinizi kontrol edin.'
         : 'Payment failed. Please check your information.');
     } finally {
       setProcessingOrder(false);
@@ -551,11 +657,129 @@ export default function CheckoutPage() {
   };
 
   const handleAddNewAddress = async () => {
-    // TODO: Implement add address API call
-    console.log('New address:', newAddress);
-    setShowNewAddressForm(false);
-    // Reload addresses
-    loadCheckoutData();
+    try {
+      // Validate required fields
+      if (!newAddress.title.trim()) {
+        alert(t('addressTitle') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        return;
+      }
+      if (!newAddress.first_name.trim() || !newAddress.last_name.trim()) {
+        alert(t('fullName') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        return;
+      }
+      if (!newAddress.phone.trim()) {
+        alert(t('phone') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        return;
+      }
+      if (!newAddress.address_line.trim()) {
+        alert(t('addressLine') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        return;
+      }
+      if (!newAddress.city.trim()) {
+        alert(t('city') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        return;
+      }
+      if (!newAddress.country.trim()) {
+        alert(t('country') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        return;
+      }
+
+      const userId = (session?.user as any)?.id || session?.user?.email;
+
+      // Prepare address data for Django backend
+      const addressData = {
+        web_client_id: userId,
+        title: newAddress.title.trim(),
+        first_name: newAddress.first_name.trim(),
+        last_name: newAddress.last_name.trim(),
+        phone: newAddress.phone.trim(),
+        address: newAddress.address_line.trim(),
+        district: newAddress.district.trim() || '',
+        city: newAddress.city.trim(),
+        state: newAddress.state.trim() || '',
+        postal_code: newAddress.postal_code.trim() || '',
+        country: newAddress.country.trim(),
+        isDefault: addresses.length === 0 // First address is default
+      };
+
+      console.log('Saving address:', addressData);
+
+      // Call Django API to save address
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_client_address/${userId}/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(addressData)
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Address save error:', errorData);
+        throw new Error(errorData.error || 'Failed to save address');
+      }
+
+      const result = await response.json();
+      console.log('Address saved successfully:', result);
+
+      // Add new address to state immediately (optimistic update)
+      const newAddressFromServer: Address = {
+        id: result.address?.id || result.id || String(Date.now()),
+        title: addressData.title,
+        first_name: addressData.first_name,
+        last_name: addressData.last_name,
+        phone: addressData.phone,
+        address: addressData.address,
+        district: addressData.district,
+        city: addressData.city,
+        postal_code: addressData.postal_code,
+        country: addressData.country,
+        isDefault: addressData.isDefault
+      };
+
+      // Update addresses state
+      setAddresses(prev => [...prev, newAddressFromServer]);
+
+      // Select the new address as delivery address
+      setSelectedDeliveryAddressId(newAddressFromServer.id);
+      if (sameAsDelivery) {
+        setSelectedBillingAddressId(newAddressFromServer.id);
+      }
+
+      // Show success message
+      alert(locale === 'tr' 
+        ? 'Adres başarıyla kaydedildi!' 
+        : locale === 'ru' ? 'Адрес успешно сохранен!' 
+        : locale === 'pl' ? 'Adres został pomyślnie zapisany!'
+        : 'Address saved successfully!');
+
+      // Reset form
+      setNewAddress({
+        title: '',
+        first_name: '',
+        last_name: '',
+        phone: '',
+        address_line: '',
+        district: '',
+        city: '',
+        state: '',
+        postal_code: '',
+        country: 'Turkey',
+      });
+      setSelectedCountry('Turkey');
+      setSelectedCityId(null);
+      setShowNewAddressForm(false);
+    } catch (error: any) {
+      console.error('Error saving address:', error);
+      alert(locale === 'tr'
+        ? 'Adres kaydedilemedi: ' + (error.message || 'Bilinmeyen hata')
+        : locale === 'ru' ? 'Не удалось сохранить адрес: ' + (error.message || 'Неизвестная ошибка')
+        : locale === 'pl' ? 'Nie udało się zapisać adresu: ' + (error.message || 'Nieznany błąd')
+        : 'Failed to save address: ' + (error.message || 'Unknown error'));
+    }
   };
 
   // Mouse drag scroll handlers
@@ -563,11 +787,11 @@ export default function CheckoutPage() {
     if (!scrollContainerRef.current) return;
     // Sol mouse button kontrolü (button === 0)
     if (e.button !== 0) return;
-    
+
     setIsDragging(true);
     setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
-    
+
     // Prevent text selection while dragging
     e.preventDefault();
   };
@@ -584,14 +808,14 @@ export default function CheckoutPage() {
     // Sadece drag yapılıyorsa hareket et
     if (!isDragging) return;
     if (!scrollContainerRef.current) return;
-    
+
     e.preventDefault();
-    
+
     // Cancel any pending animation frame
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
-    
+
     // Use requestAnimationFrame for smooth scrolling
     animationFrameRef.current = requestAnimationFrame(() => {
       if (!scrollContainerRef.current) return;
@@ -629,7 +853,7 @@ export default function CheckoutPage() {
         <div className={classes.leftColumn}>
           {/* Cart Items Section - Collapsible */}
           <div className={classes.section}>
-            <div 
+            <div
               className={classes.cartSectionHeader}
               onClick={() => setIsCartExpanded(!isCartExpanded)}
             >
@@ -647,7 +871,7 @@ export default function CheckoutPage() {
             </div>
 
             {isCartExpanded && (
-              <div 
+              <div
                 ref={scrollContainerRef}
                 className={classes.horizontalCartScroll}
                 data-dragging={isDragging}
@@ -668,6 +892,14 @@ export default function CheckoutPage() {
                           e.currentTarget.src = 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
                         }}
                       />
+                      {/* Custom Curtain Badge */}
+                      {item.is_custom_curtain && (
+                        <div className={classes.customBadge}>
+                          {locale === 'tr' ? 'ÖZEL' :
+                            locale === 'ru' ? 'ОСОБ' :
+                              locale === 'pl' ? 'SPEC' : 'CUSTOM'}
+                        </div>
+                      )}
                       <div className={classes.horizontalItemQuantity}>
                         x{item.quantity}
                       </div>
@@ -675,9 +907,18 @@ export default function CheckoutPage() {
                     <div className={classes.horizontalItemInfo}>
                       <div className={classes.horizontalItemTitle}>
                         {item.product?.title || item.product_sku}
+                        {item.is_custom_curtain && (
+                          <span className={classes.customLabel}>
+                            {' '}✂️
+                          </span>
+                        )}
                       </div>
                       <div className={classes.horizontalItemPrice}>
-                        {formatPrice(item.product?.price) || (
+                        {item.is_custom_curtain && item.custom_price ? (
+                          formatPrice(item.custom_price)
+                        ) : formatPrice(item.product?.price) ? (
+                          formatPrice(item.product?.price)
+                        ) : (
                           <span className={classes.contactForPrice}>
                             {locale === 'tr' ? 'İletişim' : 'Contact'}
                           </span>
@@ -689,6 +930,49 @@ export default function CheckoutPage() {
               </div>
             )}
           </div>
+
+          {/* User Information Section */}
+          <div className={classes.section}>
+            <div className={classes.sectionHeader}>
+              <FaUser className={classes.sectionIcon} />
+              <h2>{t('userInformation')}</h2>
+            </div>
+
+            <div className={classes.formGrid}>
+              <input
+                type="text"
+                placeholder={t('firstName') + ' *'}
+                value={userInfo.firstName}
+                onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value })}
+                className={classes.input}
+                required
+              />
+              <input
+                type="text"
+                placeholder={t('lastName') + ' *'}
+                value={userInfo.lastName}
+                onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value })}
+                className={classes.input}
+                required
+              />
+              <input
+                type="tel"
+                placeholder={t('phone') + ' *'}
+                value={userInfo.phone}
+                onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
+                className={classes.input}
+                required
+              />
+              <input
+                type="email"
+                placeholder={t('email')}
+                value={userInfo.email}
+                className={`${classes.input} ${classes.readOnly}`}
+                readOnly
+              />
+            </div>
+          </div>
+
           {/* Delivery Address Section */}
           <div className={classes.section}>
             <div className={classes.sectionHeader}>
@@ -701,9 +985,9 @@ export default function CheckoutPage() {
                 <div className={classes.noAddresses}>
                   <p>
                     {locale === 'tr' ? 'Henüz kayıtlı adresiniz yok' :
-                     locale === 'ru' ? 'У вас еще нет сохраненных адресов' :
-                     locale === 'pl' ? 'Nie masz jeszcze zapisanych adresów' :
-                     'You don\'t have any saved addresses yet'}
+                      locale === 'ru' ? 'У вас еще нет сохраненных адресов' :
+                        locale === 'pl' ? 'Nie masz jeszcze zapisanych adresów' :
+                          'You don\'t have any saved addresses yet'}
                   </p>
                 </div>
               ) : (
@@ -726,9 +1010,9 @@ export default function CheckoutPage() {
                         {address.isDefault && (
                           <span className={classes.defaultBadge}>
                             {locale === 'tr' ? 'Varsayılan' :
-                             locale === 'ru' ? 'По умолчанию' :
-                             locale === 'pl' ? 'Domyślny' :
-                             'Default'}
+                              locale === 'ru' ? 'По умолчанию' :
+                                locale === 'pl' ? 'Domyślny' :
+                                  'Default'}
                           </span>
                         )}
                       </div>
@@ -769,13 +1053,20 @@ export default function CheckoutPage() {
                       placeholder={t('addressTitle')}
                       value={newAddress.title}
                       onChange={(e) => setNewAddress({ ...newAddress, title: e.target.value })}
+                      className={`${classes.input} ${classes.fullWidth}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder={t('firstName')}
+                      value={newAddress.first_name}
+                      onChange={(e) => setNewAddress({ ...newAddress, first_name: e.target.value })}
                       className={classes.input}
                     />
                     <input
                       type="text"
-                      placeholder={t('fullName')}
-                      value={newAddress.full_name}
-                      onChange={(e) => setNewAddress({ ...newAddress, full_name: e.target.value })}
+                      placeholder={t('lastName')}
+                      value={newAddress.last_name}
+                      onChange={(e) => setNewAddress({ ...newAddress, last_name: e.target.value })}
                       className={classes.input}
                     />
                     <input
@@ -783,7 +1074,7 @@ export default function CheckoutPage() {
                       placeholder={t('phone')}
                       value={newAddress.phone}
                       onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
-                      className={classes.input}
+                      className={`${classes.input} ${classes.fullWidth}`}
                     />
                     <input
                       type="text"
@@ -792,20 +1083,100 @@ export default function CheckoutPage() {
                       onChange={(e) => setNewAddress({ ...newAddress, address_line: e.target.value })}
                       className={`${classes.input} ${classes.fullWidth}`}
                     />
-                    <input
-                      type="text"
-                      placeholder={t('city')}
-                      value={newAddress.city}
-                      onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                      className={classes.input}
-                    />
-                    <input
-                      type="text"
-                      placeholder={t('state')}
-                      value={newAddress.state}
-                      onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                      className={classes.input}
-                    />
+
+                    {/* Country Selection */}
+                    <select
+                      value={selectedCountry}
+                      onChange={(e) => {
+                        const country = e.target.value;
+                        setSelectedCountry(country);
+                        setNewAddress({ ...newAddress, country, city: '', district: '', state: '' });
+                        setSelectedCityId(null);
+                        // Cities will be loaded automatically by useEffect
+                      }}
+                      className={`${classes.input} ${classes.fullWidth}`}
+                    >
+                      <option value="">{t('selectCountry')}</option>
+                      {countries.map((country) => (
+                        <option key={country.code} value={country.name}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* City Selection - Show dropdown for Turkey, text input for others */}
+                    {selectedCountry === 'Turkey' ? (
+                      <select
+                        value={selectedCityId || ''}
+                        onChange={async (e) => {
+                          const cityId = parseInt(e.target.value);
+                          setSelectedCityId(cityId);
+                          const city = cities.find(c => c.id === cityId);
+                          if (city) {
+                            setNewAddress({ ...newAddress, city: city.name, district: '' });
+
+                            // Load districts automatically
+                            try {
+                              const response = await fetch(`/api/location/turkey-districts/${cityId}`);
+                              if (response.ok) {
+                                const data = await response.json();
+                                if (data.success) {
+                                  setDistricts(data.districts);
+                                  console.log(`Loaded ${data.districts.length} districts for ${city.name}`);
+                                }
+                              }
+                            } catch (error) {
+                              console.error('Error loading districts:', error);
+                            }
+                          } else {
+                            setDistricts([]);
+                          }
+                        }}
+                        className={classes.input}
+                        disabled={!cities || cities.length === 0}
+                      >
+                        <option value="">{t('selectCity')}</option>
+                        {cities.map((city) => (
+                          <option key={city.id} value={city.id}>
+                            {city.name}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        placeholder={t('city')}
+                        value={newAddress.city}
+                        onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
+                        className={classes.input}
+                      />
+                    )}
+
+                    {/* District Selection - Only for Turkey */}
+                    {selectedCountry === 'Turkey' && selectedCityId ? (
+                      <select
+                        value={newAddress.district}
+                        onChange={(e) => setNewAddress({ ...newAddress, district: e.target.value })}
+                        className={classes.input}
+                        disabled={!selectedCityId}
+                      >
+                        <option value="">{t('selectDistrict')}</option>
+                        {districts.map((district, index) => (
+                          <option key={index} value={district.name}>
+                            {district.name}
+                          </option>
+                        ))}
+                      </select>
+                    ) : selectedCountry !== 'Turkey' ? (
+                      <input
+                        type="text"
+                        placeholder={t('state')}
+                        value={newAddress.state}
+                        onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
+                        className={classes.input}
+                      />
+                    ) : null}
+
                     <input
                       type="text"
                       placeholder={t('postalCode')}
@@ -859,9 +1230,9 @@ export default function CheckoutPage() {
                   <div className={classes.noAddresses}>
                     <p>
                       {locale === 'tr' ? 'Henüz kayıtlı adresiniz yok' :
-                       locale === 'ru' ? 'У вас еще нет сохраненных адресов' :
-                       locale === 'pl' ? 'Nie masz jeszcze zapisanych adresów' :
-                       'You don\'t have any saved addresses yet'}
+                        locale === 'ru' ? 'У вас еще нет сохраненных адресов' :
+                          locale === 'pl' ? 'Nie masz jeszcze zapisanych adresów' :
+                            'You don\'t have any saved addresses yet'}
                     </p>
                   </div>
                 ) : (
@@ -884,9 +1255,9 @@ export default function CheckoutPage() {
                           {address.isDefault && (
                             <span className={classes.defaultBadge}>
                               {locale === 'tr' ? 'Varsayılan' :
-                               locale === 'ru' ? 'По умолчанию' :
-                               locale === 'pl' ? 'Domyślny' :
-                               'Default'}
+                                locale === 'ru' ? 'По умолчанию' :
+                                  locale === 'pl' ? 'Domyślny' :
+                                    'Default'}
                             </span>
                           )}
                         </div>
@@ -964,15 +1335,15 @@ export default function CheckoutPage() {
                 )}
               </div>
             </div>
-            
+
             {/* Credit Card Form - Show when card is selected */}
             {paymentMethod === 'card' && (
               <div className={classes.cardFormWrapper}>
                 <h3>
                   {locale === 'tr' ? 'Kart Bilgileri' :
-                   locale === 'ru' ? 'Данные карты' :
-                   locale === 'pl' ? 'Dane karty' :
-                   'Card Details'}
+                    locale === 'ru' ? 'Данные карты' :
+                      locale === 'pl' ? 'Dane karty' :
+                        'Card Details'}
                 </h3>
                 <div className={classes.formGrid}>
                   <input
@@ -981,9 +1352,9 @@ export default function CheckoutPage() {
                     onChange={(e) => setCardHolderName(e.target.value.toUpperCase())}
                     placeholder={
                       locale === 'tr' ? 'Kart Üzerindeki İsim' :
-                      locale === 'ru' ? 'Имя на карте' :
-                      locale === 'pl' ? 'Imię na karcie' :
-                      'Cardholder Name'
+                        locale === 'ru' ? 'Имя на карте' :
+                          locale === 'pl' ? 'Imię na karcie' :
+                            'Cardholder Name'
                     }
                     className={`${classes.input} ${classes.fullWidth}`}
                   />
@@ -997,9 +1368,9 @@ export default function CheckoutPage() {
                     }}
                     placeholder={
                       locale === 'tr' ? 'Kart Numarası' :
-                      locale === 'ru' ? 'Номер карты' :
-                      locale === 'pl' ? 'Numer karty' :
-                      'Card Number'
+                        locale === 'ru' ? 'Номер карты' :
+                          locale === 'pl' ? 'Numer karty' :
+                            'Card Number'
                     }
                     maxLength={19}
                     className={`${classes.input} ${classes.fullWidth}`}
@@ -1017,9 +1388,9 @@ export default function CheckoutPage() {
                     }}
                     placeholder={
                       locale === 'tr' ? 'AA/YY' :
-                      locale === 'ru' ? 'ММ/ГГ' :
-                      locale === 'pl' ? 'MM/RR' :
-                      'MM/YY'
+                        locale === 'ru' ? 'ММ/ГГ' :
+                          locale === 'pl' ? 'MM/RR' :
+                            'MM/YY'
                     }
                     maxLength={5}
                     className={classes.input}

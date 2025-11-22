@@ -16,6 +16,16 @@ interface CartItem {
   quantity: string;
   product_category?: string;
   variant_attributes?: { [key: string]: string };
+  is_custom_curtain?: boolean;
+  custom_attributes?: {
+    mountingType?: string;
+    pleatType?: string;
+    pleatDensity?: string;
+    width?: string;
+    height?: string;
+    wingType?: string;
+  };
+  custom_price?: string | number;
   product?: {
     title: string;
     price: string | number | null;
@@ -97,7 +107,7 @@ export default function CartPage() {
       if (response.ok) {
         const data = await response.json();
         const items = data.cart_items || [];
-        
+
         const itemsWithDetails = await Promise.all(
           items.map(async (item: CartItem) => {
             try {
@@ -106,22 +116,22 @@ export default function CartPage() {
                 const variantResponse = await fetch(
                   `/api/cart/get-variant?variant_sku=${item.variant_sku}&product_sku=${item.product_sku}`
                 );
-                
+
                 if (variantResponse.ok) {
                   const variantData = await variantResponse.json();
                   const variant = variantData.variant;
                   const variantImage = variantData.primary_image;
                   const variantAttributes = variantData.variant_attributes || {};
-                  
+
                   // Product bilgisini de çek (fiyat ve başlık için)
                   const productResponse = await fetch(
                     `/api/cart/get-product?product_sku=${item.product_sku}`
                   );
-                  
+
                   if (productResponse.ok) {
                     const productData = await productResponse.json();
                     const product = productData.product;
-                    
+
                     return {
                       ...item,
                       product_category: productData.product_category || item.product_category,
@@ -136,12 +146,12 @@ export default function CartPage() {
                   }
                 }
               }
-              
+
               // Varyant yoksa veya hata olduysa, normal product fetch
               const productResponse = await fetch(
                 `/api/cart/get-product?product_sku=${item.product_sku}`
               );
-              
+
               if (productResponse.ok && (productResponse.headers.get('content-type') || '').includes('application/json')) {
                 const productData = await productResponse.json();
                 const product = productData.product;
@@ -180,7 +190,7 @@ export default function CartPage() {
             }
           })
         );
-        
+
         setCartItems(itemsWithDetails);
       }
     } catch (error) {
@@ -193,7 +203,7 @@ export default function CartPage() {
   const updateQuantity = async (itemId: number, newQuantity: number) => {
     if (newQuantity < 0.1) return;
     setUpdatingItems(prev => new Set(prev).add(itemId));
-    
+
     try {
       const userId = (session?.user as any)?.id || session?.user?.email;
       const response = await fetch(
@@ -227,7 +237,7 @@ export default function CartPage() {
 
   const removeItem = async (itemId: number) => {
     setUpdatingItems(prev => new Set(prev).add(itemId));
-    
+
     try {
       const userId = (session?.user as any)?.id || session?.user?.email;
       const response = await fetch(
@@ -253,7 +263,12 @@ export default function CartPage() {
 
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) => {
-      const price = item.product?.price ? parseFloat(String(item.product.price)) : 0;
+      let price = 0;
+      if (item.is_custom_curtain && item.custom_price) {
+        price = parseFloat(String(item.custom_price));
+      } else if (item.product?.price) {
+        price = parseFloat(String(item.product.price));
+      }
       const quantity = parseFloat(item.quantity);
       return sum + (price * quantity);
     }, 0);
@@ -309,8 +324,8 @@ export default function CartPage() {
         <div className={classes.cartGrid}>
           <div className={classes.cartItems}>
             {cartItems.map((item) => (
-              <div 
-                key={item.id} 
+              <div
+                key={item.id}
                 className={`${classes.cartItem} ${updatingItems.has(item.id) ? classes.updating : ''}`}
               >
                 <Link
@@ -325,6 +340,16 @@ export default function CartPage() {
                         e.currentTarget.src = 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
                       }}
                     />
+                    {/* Custom Curtain Badge on Image */}
+                    {item.is_custom_curtain && (
+                      <div className={classes.imageBadge}>
+                        <span className={classes.imageBadgeText}>
+                          {locale === 'tr' ? 'ÖZEL' :
+                            locale === 'ru' ? 'ОСОБ' :
+                              locale === 'pl' ? 'SPEC' : 'CUSTOM'}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </Link>
 
@@ -335,7 +360,43 @@ export default function CartPage() {
                   >
                     <h3>{item.product?.title || item.product_sku}</h3>
                   </Link>
-                  
+
+                  {/* Custom Curtain Badge */}
+                  {item.is_custom_curtain && (
+                    <div className={classes.customCurtainBadge}>
+                      {locale === 'tr' ? '✂️  Özel Perde' :
+                        locale === 'ru' ? '✂️  Индивидуальная штора' :
+                          locale === 'pl' ? '✂️  Niestandardowa засłона' :
+                            '✂️  Custom Curtain'}
+                    </div>
+                  )}
+
+                  {/* Custom Curtain Attributes */}
+                  {item.is_custom_curtain && item.custom_attributes && (
+                    <div className={classes.customAttributes}>
+                      {item.custom_attributes.width && item.custom_attributes.height && (
+                        <span className={classes.customAttr}>
+                          <strong>{locale === 'tr' ? 'Boyut' : locale === 'ru' ? 'Размер' : locale === 'pl' ? 'Rozmiar' : 'Size'}:</strong> {item.custom_attributes.width}cm × {item.custom_attributes.height}cm
+                        </span>
+                      )}
+                      {item.custom_attributes.pleatType && (
+                        <span className={classes.customAttr}>
+                          <strong>{locale === 'tr' ? 'Pile' : locale === 'ru' ? 'Складка' : locale === 'pl' ? 'Fałda' : 'Pleat'}:</strong> {item.custom_attributes.pleatType.replace(/_/g, ' ')}
+                        </span>
+                      )}
+                      {item.custom_attributes.pleatDensity && item.custom_attributes.pleatDensity !== '0' && (
+                        <span className={classes.customAttr}>
+                          <strong>{locale === 'tr' ? 'Sıklık' : locale === 'ru' ? 'Плотность' : locale === 'pl' ? 'Gęstość' : 'Density'}:</strong> {item.custom_attributes.pleatDensity}
+                        </span>
+                      )}
+                      {item.custom_attributes.wingType && (
+                        <span className={classes.customAttr}>
+                          <strong>{locale === 'tr' ? 'Kanat' : locale === 'ru' ? 'Крыло' : locale === 'pl' ? 'Skrzydło' : 'Wing'}:</strong> {item.custom_attributes.wingType === 'single' ? (locale === 'tr' ? 'Tek' : locale === 'ru' ? 'Одинарное' : locale === 'pl' ? 'Pojedyncze' : 'Single') : (locale === 'tr' ? 'Çift' : locale === 'ru' ? 'Двойное' : locale === 'pl' ? 'Podwójne' : 'Double')}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {/* Variant Attributes */}
                   {item.variant_attributes && Object.keys(item.variant_attributes).length > 0 && (
                     <div className={classes.variantAttributes}>
@@ -346,7 +407,7 @@ export default function CartPage() {
                       ))}
                     </div>
                   )}
-                  
+
                   <p className={classes.itemSku}>SKU: {item.product_sku}</p>
                   {item.product?.category && (
                     <p className={classes.itemCategory}>
@@ -392,16 +453,20 @@ export default function CartPage() {
 
                 <div className={classes.itemPrice}>
                   <div className={classes.priceLabel}>
-                    {locale === 'tr' ? 'Fiyat' : 
-                     locale === 'ru' ? 'Цена' : 
-                     locale === 'pl' ? 'Cena' : 'Price'}
+                    {locale === 'tr' ? 'Fiyat' :
+                      locale === 'ru' ? 'Цена' :
+                        locale === 'pl' ? 'Cena' : 'Price'}
                   </div>
                   <div className={classes.priceValue}>
-                    {formatPrice(item.product?.price) || (
+                    {item.is_custom_curtain && item.custom_price ? (
+                      formatPrice(item.custom_price)
+                    ) : formatPrice(item.product?.price) ? (
+                      formatPrice(item.product?.price)
+                    ) : (
                       <span className={classes.contactPrice}>
-                        {locale === 'tr' ? 'İletişime Geçin' : 
-                         locale === 'ru' ? 'Связаться' : 
-                         locale === 'pl' ? 'Kontakt' : 'Contact'}
+                        {locale === 'tr' ? 'İletişime Geçin' :
+                          locale === 'ru' ? 'Связаться' :
+                            locale === 'pl' ? 'Kontakt' : 'Contact'}
                       </span>
                     )}
                   </div>
@@ -409,20 +474,28 @@ export default function CartPage() {
 
                 <div className={classes.itemTotal}>
                   <div className={classes.priceLabel}>
-                    {locale === 'tr' ? 'Toplam' : 
-                     locale === 'ru' ? 'Итого' : 
-                     locale === 'pl' ? 'Suma' : 'Total'}
+                    {locale === 'tr' ? 'Toplam' :
+                      locale === 'ru' ? 'Итого' :
+                        locale === 'pl' ? 'Suma' : 'Total'}
                   </div>
                   <div className={classes.priceValue}>
-                    {item.product?.price ? (
-                      formatPrice(parseFloat(String(item.product.price)) * parseFloat(item.quantity))
-                    ) : (
-                      <span className={classes.contactPrice}>
-                        {locale === 'tr' ? 'İletişime Geçin' : 
-                         locale === 'ru' ? 'Связаться' : 
-                         locale === 'pl' ? 'Kontakt' : 'Contact'}
-                      </span>
-                    )}
+                    {(() => {
+                      let price = 0;
+                      if (item.is_custom_curtain && item.custom_price) {
+                        price = parseFloat(String(item.custom_price));
+                      } else if (item.product?.price) {
+                        price = parseFloat(String(item.product.price));
+                      }
+                      return price > 0 ? (
+                        formatPrice(price * parseFloat(item.quantity))
+                      ) : (
+                        <span className={classes.contactPrice}>
+                          {locale === 'tr' ? 'İletişime Geçin' :
+                            locale === 'ru' ? 'Связаться' :
+                              locale === 'pl' ? 'Kontakt' : 'Contact'}
+                        </span>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -439,7 +512,7 @@ export default function CartPage() {
 
           <div className={classes.orderSummary}>
             <h2>{t('orderSummary')}</h2>
-            
+
             <div className={classes.summaryRow}>
               <span>{t('subtotal')}</span>
               <span className={classes.summaryValue}>
@@ -449,10 +522,10 @@ export default function CartPage() {
 
             {subtotal === 0 && (
               <div className={classes.summaryNote}>
-                {locale === 'tr' ? 'Fiyatlar için lütfen bizimle iletişime geçin' : 
-                 locale === 'ru' ? 'Пожалуйста, свяжитесь с нами для уточнения цен' : 
-                 locale === 'pl' ? 'Skontaktuj się z nami w sprawie cen' : 
-                 'Please contact us for pricing'}
+                {locale === 'tr' ? 'Fiyatlar için lütfen bizimle iletişime geçin' :
+                  locale === 'ru' ? 'Пожалуйста, свяжитесь с нами для уточнения цен' :
+                    locale === 'pl' ? 'Skontaktuj się z nami w sprawie cen' :
+                      'Please contact us for pricing'}
               </div>
             )}
 

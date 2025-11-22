@@ -13,14 +13,19 @@ import Spinner from '@/components/Spinner';
 //   product_variant_attribute_values: ProductVariantAttributeValue[];
 // }
 
-export default async function Page(props: PageProps<'/[locale]/product/[product_category]'>) {
+type Props = {
+  params: Promise<{ locale: string; product_category: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function Page(props: Props) {
   const { product_category, locale } = await props.params;
   const searchParams = await props.searchParams;
   // fetch the products from the API based on the product category
   const startTime = Date.now();
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${product_category}`);
   // Cache for 5 minutes instead of no-store for better performance
-  const nejum_response = await fetch(nejum_api_link, { 
+  const nejum_response = await fetch(nejum_api_link, {
     next: { revalidate: 300 },
     // Add timeout header if possible
   })
@@ -46,7 +51,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
       {errorMessage ? (<div style={{ color: "red" }}>
         {errorMessage}
       </div>) : (<>
-        
+
 
 
         <ProductGrid
@@ -54,8 +59,8 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
           product_variants={data.product_variants}
           product_variant_attributes={data.product_variant_attributes}
           product_variant_attribute_values={data.product_variant_attribute_values}
-          product_category = {data.product_category}
-          product_category_description = {data.product_category_description}
+          product_category={data.product_category}
+          product_category_description={data.product_category_description}
           searchParams={searchParams}
           locale={locale}
         />

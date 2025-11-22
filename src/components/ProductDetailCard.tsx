@@ -1,5 +1,8 @@
 "use client";
 import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
+import CustomCurtainSidebar from './CustomCurtainSidebar';
+import { FaCut } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import classes from "./ProductDetailCard.module.css";
@@ -32,34 +35,46 @@ function ProductDetailCard({
   locale = 'en'
 }: ProductDetailCardPageProps) {
 
+  const t = useTranslations('ProductDetailCard');
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
-  
+  const [isCustomCurtainSidebarOpen, setIsCustomCurtainSidebarOpen] = useState(false);
+
+  // Format price with currency
+  const formatPrice = (price: any) => {
+    const numPrice = parseFloat(String(price));
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: 'USD', // Currently hardcoded to USD as per existing logic
+      minimumFractionDigits: 2
+    }).format(numPrice);
+  };
+
   // URL parametrelerinden veya ilk varyanttan initial attributes'ı hesapla
   const getInitialAttributes = () => {
     const initialAttributes: { [key: string]: string } = {};
-    
+
     // Önce URL parametrelerini kontrol et
     const hasUrlParams = Object.keys(searchParams).length > 0;
     console.log('[ProductDetailCard] searchParams:', searchParams);
-    
+
     if (hasUrlParams) {
       // URL'den parametreleri al
       product_variant_attributes?.forEach(attribute => {
         const attrName = attribute.name ?? '';
         const urlValue = searchParams[attrName];
-        
+
         if (urlValue && typeof urlValue === 'string') {
           // URL'deki değerin geçerli olup olmadığını kontrol et
           const isValidValue = product_variant_attribute_values?.some(
-            val => 
+            val =>
               val.product_variant_attribute_id === attribute.id &&
               val.product_variant_attribute_value === urlValue
           );
-          
+
           if (isValidValue) {
             initialAttributes[attrName] = urlValue;
             console.log(`[ProductDetailCard] URL'den alındı: ${attrName} = ${urlValue}`);
@@ -67,32 +82,32 @@ function ProductDetailCard({
         }
       });
     }
-    
+
     // Eksik attribute'lar için ilk varyanttan al
     product_variant_attributes?.forEach(attribute => {
       const attrName = attribute.name ?? '';
-      
+
       if (!initialAttributes[attrName]) {
         const firstValue = product_variant_attribute_values?.find(
           val => val.product_variant_attribute_id === attribute.id
         )?.product_variant_attribute_value;
-        
+
         if (firstValue) {
           initialAttributes[attrName] = firstValue;
         }
       }
     });
-    
+
     console.log('[ProductDetailCard] Final initialAttributes:', initialAttributes);
     return initialAttributes;
   };
 
   const initialAttributes = useMemo(() => getInitialAttributes(), [
-    product_variant_attributes, 
-    product_variant_attribute_values, 
+    product_variant_attributes,
+    product_variant_attribute_values,
     searchParams
   ]);
-  
+
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(
     !!(product_variant_attributes && product_variant_attributes.length > 0)
@@ -106,10 +121,6 @@ function ProductDetailCard({
     }
   }, [JSON.stringify(initialAttributes)]); // JSON string ile karşılaştır
 
-  // console.log("your product images are:", product_files);
-
-
-
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
@@ -118,54 +129,15 @@ function ProductDetailCard({
       console.log("Not logged in!: " + status);
     },
   });
-  
+
   const { isFavorite, toggleFavorite } = useFavorites();
   const { refreshCart } = useCart();
   const [quantity, setQuantity] = useState<string>('1');
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
 
-  // Find the selected variant based on selectedAttributes
-  //   const findSelectedVariant = () => {
-  //     console.log(product_variants);
-
-  //     console.log(product_variant_attribute_values);
-
-
-  //     return product_variants?.find(variant => {
-  //       const variantAttributes = product_variant_attribute_values?.filter(
-
-  //         vav => String(vav.product_variant_id) === String(variant.id)
-  //       );
-  //       console.log("variantAttributes:", variantAttributes);
-
-  //       return Object.entries(selectedAttributes).every(([attrName, attrValue]) => {
-  //         const attrDef = product_variant_attributes?.find(attr => attr.name === attrName);
-  //         if (!attrDef) return false;
-  //         const valueObj = variantAttributes?.find(
-  //           vav => String(vav.product_variant_attribute_id) === String(attrDef.id)
-  //         );
-  //         // console.log("selected variant:", valueObj && valueObj.product_variant_attribute_value === attrValue; )
-  //       return valueObj && valueObj.product_variant_attribute_value === attrValue;
-  //     });
-  //   });
-  // };
-
   const findSelectedVariant = () => {
     if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return undefined;
-    // console.log("All variants:", product_variants);
-    // console.log("All attribute values:", product_variant_attribute_values);
-    // console.log("Selected attributes:", selectedAttributes);
-    // selected attribute is set with url parameters.
-
-    // --------------
-    // return Object.entries(selectedAttributes).forEach(([key, value]) => {
-    //   let product_variant_attribute = product_variant_attributes?.find(attr => attr.name === key)
-    //   let product_variant_attribute_value = product_variant_attribute_values?.find(val => String(val.product_variant_attribute_id) === String(product_variant_attribute?.id && val.product_variant_attribute_value === value));
-    //   let product_variant = product_variants?.find(variant => variant.product_variant_attribute_values?.some(vav => vav === product_variant_attribute_value?.id));
-    // }
-    // )
-    // ----------
 
     return product_variants.find(variant => {
       // For each selected attribute, check if the variant has the matching attribute value
@@ -192,41 +164,24 @@ function ProductDetailCard({
   const selectedVariant = useMemo(() => {
     if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return undefined;
     if (Object.keys(selectedAttributes).length === 0) return undefined;
-    
+
     return product_variants.find(variant => {
       return Object.entries(selectedAttributes).every(([key, value]) => {
         const attrDef = product_variant_attributes.find(attr => attr.name === key);
         if (!attrDef) return false;
-        
+
         const valueObj = product_variant_attribute_values.find(
           val =>
             String(val.product_variant_attribute_id) === String(attrDef.id) &&
             val.product_variant_attribute_value === value
         );
         if (!valueObj) return false;
-        
+
         return variant.product_variant_attribute_values?.includes(valueObj.id);
       });
     });
   }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
 
-
-  // const selectedVariant = findSelectedVariant();
-
-  // selectedVariant = 
-  //   {
-  //   id: '6',
-  //   variant_sku: 'RK24562GC9',
-  //   variant_barcode: '712179795235',
-  //   variant_quantity: '46',
-  //   variant_price: '0',
-  //   variant_cost: '15.7',
-  //   variant_featured: true,
-  //   product_id: '3',
-  //   variant_datasheet_url: null,
-  //   variant_minimum_inventory_level: null,
-  //   product_variant_attribute_values:[2538, 2540]
-  // }
 
   // Sayfa yüklenince en üste scroll yap
   useEffect(() => {
@@ -247,9 +202,9 @@ function ProductDetailCard({
   // useMemo ile filtrelenmiş resimleri hesapla
   const filteredImages = useMemo(() => {
     if (!product_files) return [];
-    
+
     let images: ProductFile[] = [];
-    
+
     if (userHasSelectedVariant && selectedVariant?.id) {
       images = product_files.filter(
         img => String(img.product_variant_id) === String(selectedVariant.id)
@@ -258,14 +213,14 @@ function ProductDetailCard({
       const mainProductImages = product_files.filter(img => !img.product_variant_id);
       images = mainProductImages.length > 0 ? mainProductImages : [...product_files];
     }
-    
+
     // Sequence'e göre sırala
     images.sort((a, b) => {
       const seqA = a.sequence ?? Number.MAX_SAFE_INTEGER;
       const seqB = b.sequence ?? Number.MAX_SAFE_INTEGER;
       return seqA - seqB;
     });
-    
+
     return images;
   }, [selectedVariant, product_files, userHasSelectedVariant]);
 
@@ -275,7 +230,6 @@ function ProductDetailCard({
     setSelectedThumbIndex(0);
     setImageLoaded(false);
   }, [filteredImages]);
-  // console.log("your product variant attributes are:", product_variant_attributes);
 
 
   // Group attribute values by attribute and filter out duplicates
@@ -284,7 +238,7 @@ function ProductDetailCard({
   const groupedAttributeValues = useMemo(() => {
     const grouped = product_variant_attributes?.map(attribute => {
       const currentAttributeName = attribute.name ?? '';
-      
+
       // Get all attribute value objects for this attribute
       const allAttributeValuesForThisAttribute = product_variant_attribute_values?.filter(
         (value: ProductVariantAttributeValue) => value.product_variant_attribute_id === attribute.id
@@ -297,20 +251,20 @@ function ProductDetailCard({
 
       // Find variants that match all OTHER selected attributes
       let eligibleVariants = product_variants || [];
-      
+
       if (otherSelectedAttributes.length > 0) {
         eligibleVariants = product_variants?.filter(variant => {
           return otherSelectedAttributes.every(([key, value]) => {
             const attrDef = product_variant_attributes?.find(attr => attr.name === key);
             if (!attrDef) return false;
-            
+
             const valueObj = product_variant_attribute_values?.find(
               val =>
                 String(val.product_variant_attribute_id) === String(attrDef.id) &&
                 val.product_variant_attribute_value === value
             );
             if (!valueObj) return false;
-            
+
             return variant.product_variant_attribute_values?.includes(valueObj.id);
           });
         }) || [];
@@ -318,7 +272,7 @@ function ProductDetailCard({
 
       // Only keep values that are used in eligible variants
       const valuesUsedInEligibleVariants = allAttributeValuesForThisAttribute.filter(attrValue => {
-        return eligibleVariants.some(variant => 
+        return eligibleVariants.some(variant =>
           variant.product_variant_attribute_values?.includes(attrValue.id)
         );
       });
@@ -335,12 +289,12 @@ function ProductDetailCard({
         values: uniqueValues
       };
     });
-    
+
     // Sort: Color always first, then others
     return grouped?.sort((a, b) => {
       const aIsColor = a.attribute.name?.toLowerCase() === 'color';
       const bIsColor = b.attribute.name?.toLowerCase() === 'color';
-      
+
       if (aIsColor && !bIsColor) return -1;
       if (!aIsColor && bIsColor) return 1;
       return 0; // Keep original order for non-color attributes
@@ -351,40 +305,35 @@ function ProductDetailCard({
   // VE seçili değer artık mevcut değilse, ilk mevcut değere geç
   useEffect(() => {
     if (!groupedAttributeValues) return;
-    
+
     const updatedAttributes = { ...selectedAttributes };
     let hasChanges = false;
 
     groupedAttributeValues.forEach(({ attribute, values }) => {
       const attrName = attribute.name ?? '';
-      console.log(`Attribute: ${attrName}, Values: [${values.join(', ')}], Length: ${values.length}`);
-      
+      // console.log(`Attribute: ${attrName}, Values: [${values.join(', ')}], Length: ${values.length}`);
+
       // Eğer sadece 1 değer varsa ve henüz seçilmemişse, otomatik seç
       if (values.length === 1 && !updatedAttributes[attrName]) {
-        console.log(`Auto-selecting ${attrName}: ${values[0]}`);
+        // console.log(`Auto-selecting ${attrName}: ${values[0]}`);
         updatedAttributes[attrName] = values[0];
         hasChanges = true;
       }
-      
+
       // Eğer seçili değer artık mevcut değilse, ilk mevcut değere geç
       if (values.length > 0 && updatedAttributes[attrName] && !values.includes(updatedAttributes[attrName])) {
-        console.log(`Current selection "${updatedAttributes[attrName]}" for ${attrName} is no longer available. Switching to: ${values[0]}`);
+        // console.log(`Current selection "${updatedAttributes[attrName]}" for ${attrName} is no longer available. Switching to: ${values[0]}`);
         updatedAttributes[attrName] = values[0];
         hasChanges = true;
       }
     });
 
     if (hasChanges) {
-      console.log('Updated attributes:', updatedAttributes);
+      // console.log('Updated attributes:', updatedAttributes);
       setSelectedAttributes(updatedAttributes);
     }
   }, [groupedAttributeValues]); // selectedAttributes'u buradan çıkardık, sonsuz loop olmasın
 
-  // const getImageUrl = (image: string) => {
-  //   if (!image_api_link) return image;
-  //   // Remove leading slash if present
-  //   return image_api_link.replace(/\/$/, '') + '/' + image.replace(/^\//, '');
-  // };
 
   // Thumbnail/image navigation
   const selectThumb = (index: number) => setSelectedThumbIndex(index);
@@ -421,21 +370,14 @@ function ProductDetailCard({
   };
 
   const handleAttributeChange = (attributeName: string, value: string) => {
-    console.log("your attribute name is:", attributeName);
-    console.log("and the value is:", value);
-
-
     setSelectedThumbIndex(0);
     setUserHasSelectedVariant(true); // Kullanıcı varyant seçti
     setSelectedAttributes(prev => ({
       ...prev,
       [attributeName]: value
     }));
-    // const newAttributes = { ...selectedAttributes, [attributeName]: value };
-    // const newParams = new URLSearchParams(newAttributes).toString();
-    // router.replace(`?${newParams}`);
   };
-  
+
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Only allow numbers and decimal point
@@ -443,19 +385,34 @@ function ProductDetailCard({
       setQuantity(value);
     }
   };
-  
+
+  const handleIncrement = () => {
+    const currentQty = parseFloat(quantity) || 0;
+    const step = isFabricProduct ? 0.5 : 1; // Kumaşlar için 0.5 metre, hazır perdeler için 1 adet
+    setQuantity((currentQty + step).toFixed(1));
+  };
+
+  const handleDecrement = () => {
+    const currentQty = parseFloat(quantity) || 0;
+    const step = isFabricProduct ? 0.5 : 1;
+    const minQty = step;
+    if (currentQty > minQty) {
+      setQuantity(Math.max(minQty, currentQty - step).toFixed(1));
+    }
+  };
+
   const handleAddToCart = async () => {
     if (!session?.user?.email) {
       alert(t('pleaseLogin'));
       return;
     }
-    
+
     const qty = parseFloat(quantity);
     if (isNaN(qty) || qty <= 0) {
       alert(t('enterValidQuantity'));
       return;
     }
-    
+
     try {
       const userId = (session.user as any)?.id || session.user.email;
       const response = await fetch(
@@ -470,7 +427,7 @@ function ProductDetailCard({
           }),
         }
       );
-      
+
       if (response.ok) {
         setSuccessMessage(t('productAddedToCart'));
         setShowSuccessMessage(true);
@@ -485,48 +442,71 @@ function ProductDetailCard({
       alert(t('errorAddingToCart'));
     }
   };
-  
+
+  const handleCustomCurtainAddToCart = async (customizationData: any, totalPrice: number) => {
+    if (!session?.user?.email) {
+      alert(t('pleaseLogin'));
+      return;
+    }
+
+    try {
+      const userId = (session.user as any)?.id || session.user.email;
+
+      // NOTE: This assumes the backend API can handle 'custom_attributes' and 'price_override' or similar.
+      // If not, the backend needs to be updated to support this.
+      // For now, we send the data structure as we expect the backend to receive it.
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            product_sku: product.sku,
+            variant_sku: selectedVariant?.variant_sku || null,
+            quantity: 1, // Custom curtain is 1 unit (but price is calculated)
+            is_custom_curtain: true,
+            custom_attributes: customizationData,
+            custom_price: totalPrice
+          }),
+        }
+      );
+
+      if (response.ok) {
+        setSuccessMessage(t('productAddedToCart'));
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 3000);
+        setIsCustomCurtainSidebarOpen(false);
+        await refreshCart();
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || t('errorAddingToCart'));
+      }
+    } catch (error) {
+      console.error('Cart error:', error);
+      alert(t('errorAddingToCart'));
+    }
+  };
+
   const handleBuyNow = async () => {
     await handleAddToCart();
     // Navigate to cart page
     router.push(`/${locale}/cart`);
   };
-  
+
   const handleToggleFavorite = async () => {
     await toggleFavorite(product.sku);
   };
-  
-  // Translation helper
-  const t = (key: string): string => {
-    const translations: Record<string, Record<string, string>> = {
-      quantityMeters: { en: 'Quantity (m)', tr: 'Miktar (m)', ru: 'Количество (м)', pl: 'Ilość (m)', de: 'Menge (m)' },
-      quantityPieces: { en: 'Quantity', tr: 'Adet', ru: 'Количество', pl: 'Ilość', de: 'Menge' },
-      addToCart: { en: 'Add to Cart', tr: 'Sepete Ekle', ru: 'Добавить в корзину', pl: 'Dodaj do koszyka', de: 'In den Warenkorb' },
-      buyNow: { en: 'Buy Now', tr: 'Şimdi Al', ru: 'Купить сейчас', pl: 'Kup teraz', de: 'Jetzt kaufen' },
-      addToFavorites: { en: 'Add to favorites', tr: 'Favorilere ekle', ru: 'Добавить в избранное', pl: 'Dodaj do ulubionych', de: 'Zu Favoriten hinzufügen' },
-      removeFromFavorites: { en: 'Remove from favorites', tr: 'Favorilerden çıkar', ru: 'Удалить из избранного', pl: 'Usuń z ulubionych', de: 'Aus Favoriten entfernen' },
-      productAddedToCart: { en: 'Product added to cart!', tr: 'Ürün sepete eklendi!', ru: 'Товар добавлен в корзину!', pl: 'Produkt dodany do koszyka!', de: 'Produkt zum Warenkorb hinzugefügt!' },
-      pleaseLogin: { en: 'Please log in', tr: 'Lütfen giriş yapın', ru: 'Пожалуйста, войдите', pl: 'Proszę się zalogować', de: 'Bitte einloggen' },
-      enterValidQuantity: { en: 'Please enter a valid quantity', tr: 'Lütfen geçerli bir miktar girin', ru: 'Пожалуйста, введите правильное количество', pl: 'Proszę wprowadzić prawidłową ilość', de: 'Bitte geben Sie eine gültige Menge ein' },
-      errorAddingToCart: { en: 'Error adding to cart', tr: 'Sepete eklenirken bir hata oluştu', ru: 'Ошибка при добавлении в корзину', pl: 'Błąd podczas dodawania do koszyka', de: 'Fehler beim Hinzufügen zum Warenkorb' },
-    };
-    const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : locale === 'de' ? 'de' : 'en';
-    return translations[key]?.[lang] || key;
-  };
-  
+
   // Determine if product is fabric (sold by meters) or ready-made curtain (sold by pieces)
   const isFabricProduct = product_category?.toLowerCase().includes('fabric') || product_category?.toLowerCase().includes('kumaş');
   const quantityLabel = isFabricProduct ? t('quantityMeters') : t('quantityPieces');
-
 
   // Prepare image files for display (fallback to placeholder)
   const imageFiles: string[] =
     filteredImages.length > 0
       ? filteredImages.map(img => img.file)
-      // : ["/placeholder.png"];
       : [(placeholder_image_link)];
-
-  // src={}
 
   if (!product) {
     return <div>Loading...</div>;
@@ -544,8 +524,8 @@ function ProductDetailCard({
                 onClick={() => selectThumb(index)}
               >
                 <div className={classes.img}>
-                  <img 
-                    src={image || placeholder_image_link} 
+                  <img
+                    src={image || placeholder_image_link}
                     alt="product image"
                     loading="eager"
                   />
@@ -561,10 +541,10 @@ function ProductDetailCard({
                 onClick={e => {
                   e.preventDefault();
                   window.open(
-                    ((imageFiles[selectedThumbIndex] || placeholder_image_link),
-                      'targetWindow',
-                      'width=500,height=500'
-                    ));
+                    ((imageFiles[selectedThumbIndex] || placeholder_image_link)),
+                    'targetWindow',
+                    'width=500,height=500'
+                  );
                 }}>
 
                 <img
@@ -613,7 +593,7 @@ function ProductDetailCard({
                           const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                           const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                           const isTwoTone = isTwoToneColor(value);
-                          
+
                           return (
                             <div key={value} className={classes.color_swatch_container}>
                               <Link
@@ -630,11 +610,11 @@ function ProductDetailCard({
                                 {isTwoTone ? (
                                   // İki renkli swatch - daire yarıya bölünür
                                   <>
-                                    <span 
+                                    <span
                                       className={classes.half_circle_left}
                                       style={{ backgroundColor: splitTwoToneColor(value).color1 }}
                                     />
-                                    <span 
+                                    <span
                                       className={classes.half_circle_right}
                                       style={{ backgroundColor: splitTwoToneColor(value).color2 }}
                                     />
@@ -664,7 +644,7 @@ function ProductDetailCard({
                                 }}
                               >
                                 {/* replace underscored with spaces for better client visual */}
-                                {value.replace(/_/g," ")} 
+                                {value.replace(/_/g, " ")}
                               </Link>
                             </div>
                           );
@@ -680,9 +660,9 @@ function ProductDetailCard({
                 )}
                 {/* Price - variant veya product price */}
                 {(selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0) ? (
-                  <p>Price: ${String(selectedVariant.variant_price)}</p>
+                  <p>Price: {formatPrice(selectedVariant.variant_price)}</p>
                 ) : (product.price && Number(product.price) > 0) ? (
-                  <p>Price: ${String(product.price)}</p>
+                  <p>Price: {formatPrice(product.price)}</p>
                 ) : null}
                 {/* Quantity */}
                 {(selectedVariant?.variant_quantity && Number(selectedVariant.variant_quantity) > 0) ? (
@@ -696,23 +676,13 @@ function ProductDetailCard({
                 ) : product.barcode ? (
                   <p>Barcode: {product.barcode}</p>
                 ) : null}
-                {/* {selectedVariant && selectedVariant.variant_cost ? (<>
-                  <p>Variant Cost: ${String(selectedVariant.variant_cost)}</p>
-                  <button type='submit'>Add to Cart</button>
-                </>
-                ) : (
-                  product.price ? <>
-                    <p>Cost: ${product.price}</p>
-                    <button type='submit'>Add to Cart</button>
-                  </> : <></>
-                )} */}
               </div>
             </div>
           ) :
             <div className={classes.parent_product_info}>
               {/* Varyant olmayan ürünler için bilgiler */}
               {product.price && Number(product.price) > 0 && (
-                <p>Price: ${String(product.price)}</p>
+                <p>Price: {formatPrice(product.price)}</p>
               )}
               {product.quantity && Number(product.quantity) > 0 && (
                 <p>Available Quantity: {Number(product.quantity)}</p>
@@ -722,8 +692,6 @@ function ProductDetailCard({
               )}
             </div>
           }
-
-          {/* {selectedVariant && <p>Variant SKU: {selectedVariant.variant_sku}</p>} */}
 
           {/* Success Message */}
           {showSuccessMessage && (
@@ -736,19 +704,68 @@ function ProductDetailCard({
           <div className={classes.cartActions}>
             <div className={classes.quantityWrapper}>
               <label htmlFor="quantity">{quantityLabel}:</label>
-              <input
-                id="quantity"
-                type="text"
-                value={quantity}
-                onChange={handleQuantityChange}
-                className={classes.quantityInput}
-                placeholder="1.0"
-              />
+              <div className={classes.quantitySelector}>
+                <button
+                  type="button"
+                  onClick={handleDecrement}
+                  className={classes.quantityBtn}
+                  aria-label="Decrease quantity"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </button>
+                <input
+                  id="quantity"
+                  type="text"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  className={classes.quantityInput}
+                  placeholder="1.0"
+                />
+                <button
+                  type="button"
+                  onClick={handleIncrement}
+                  className={classes.quantityBtn}
+                  aria-label="Increase quantity"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div className={classes.buttonGroup}>
               <button onClick={handleAddToCart} className={classes.addToCartBtn}>
                 {t('addToCart')}
               </button>
+
+              {/* Custom Curtain Button - Only for fabrics */}
+              {isFabricProduct && (
+                <button
+                  onClick={() => setIsCustomCurtainSidebarOpen(true)}
+                  className={classes.customCurtainBtn}
+                  style={{
+                    background: 'white',
+                    color: '#c9a961',
+                    border: '2px solid #c9a961',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <FaCut />
+                  {t('customCurtain')}
+                </button>
+              )}
+
               <button onClick={handleBuyNow} className={classes.buyNowBtn}>
                 {t('buyNow')}
               </button>
@@ -771,15 +788,25 @@ function ProductDetailCard({
 
           <h3>
             {locale === 'tr' ? 'Açıklama' :
-             locale === 'ru' ? 'Описание' :
-             locale === 'pl' ? 'Opis' :
-             locale === 'de' ? 'Beschreibung' :
-             'Description'}
+              locale === 'ru' ? 'Описание' :
+                locale === 'pl' ? 'Opis' :
+                  locale === 'de' ? 'Beschreibung' :
+                    'Description'}
           </h3>
           <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
 
         </div>
       </div>
+
+      {/* Custom Curtain Sidebar */}
+      <CustomCurtainSidebar
+        isOpen={isCustomCurtainSidebarOpen}
+        onClose={() => setIsCustomCurtainSidebarOpen(false)}
+        product={product}
+        unitPrice={selectedVariant?.variant_price ? parseFloat(String(selectedVariant.variant_price)) : (product.price ? parseFloat(String(product.price)) : 0)}
+        currency="USD" // Default currency, should be dynamic
+        onAddToCart={handleCustomCurtainAddToCart}
+      />
     </div>
   );
 }

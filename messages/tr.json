@@ -7,7 +7,9 @@
     "heading_3": "Endüstriyel Nakış",
     "desc_3": "Kumaşlarımızın çeşitliliği ve kalitesi ile her tarza ve ihtiyaca uygun çözümler sunuyoruz."
   },
-  "Header": { "ShippingText": "Dünya çapında nakliye" },
+  "Header": {
+    "ShippingText": "Dünya çapında nakliye"
+  },
   "Menu": {
     "Home": "Ana Sayfa",
     "Products": "Ürünler",
@@ -77,5 +79,44 @@
     "OurStory": "Bizim hikayemiz",
     "ContactUs": "Bize Ulaşın",
     "AllRightsReserved": "Her hakkı saklıdır"
+  },
+  "ProductDetailCard": {
+    "quantityMeters": "Miktar (m)",
+    "quantityPieces": "Adet",
+    "addToCart": "Sepete Ekle",
+    "buyNow": "Şimdi Al",
+    "addToFavorites": "Favorilere ekle",
+    "removeFromFavorites": "Favorilerden çıkar",
+    "productAddedToCart": "Ürün sepete eklendi!",
+    "pleaseLogin": "Lütfen giriş yapın",
+    "enterValidQuantity": "Lütfen geçerli bir miktar girin",
+    "errorAddingToCart": "Sepete eklenirken bir hata oluştu",
+    "customCurtain": "Perde Diktir"
+  },
+  "CustomCurtain": {
+    "title": "Perdeni Tasarla",
+    "mountingType": "Montaj Tipi",
+    "cornice": "Korniş",
+    "rustic": "Rustik",
+    "pleatType": "Pile Tipi",
+    "flat": "Yatık Pile",
+    "kanun": "Kanun Pile",
+    "pipe": "Boru Pile",
+    "water_wave": "Su Dalgası",
+    "american": "Amerikan Pile",
+    "extrafor": "Ekstraforlu Düz Dikiş",
+    "pleatDensity": "Pile Sıklığı",
+    "noPleat": "Pilesiz",
+    "dimensions": "Ölçüler",
+    "width": "En (cm)",
+    "height": "Boy (cm)",
+    "wingType": "Kanat Tipi",
+    "singleWing": "Tek Kanat",
+    "doubleWing": "Çift Kanat",
+    "addToCart": "Sepete Ekle",
+    "totalPrice": "Toplam Fiyat",
+    "fabricUsage": "Kumaş Kullanımı",
+    "meter": "m",
+    "buttonText": "Perde Diktir"
   }
 }

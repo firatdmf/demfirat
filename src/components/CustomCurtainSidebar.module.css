@@ -1,0 +1,414 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.3s ease;
+}
+
+.sidebar {
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease;
+}
+
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #faf8f3;
+}
+
+.header h2 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: #c0392b;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #34495e;
+  font-size: 0.95rem;
+}
+
+.icon {
+  color: #c9a961;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.75rem;
+}
+
+.optionBtn {
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.optionBtn:hover {
+  border-color: #c9a961;
+  color: #c9a961;
+}
+
+.optionBtn.selected {
+  background-color: #c9a961;
+  color: white;
+  border-color: #c9a961;
+  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.3);
+}
+
+/* Image Options Grid - For Mounting & Pleat Types */
+.imageOptionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* Pleat Type Grid - 3 columns, smaller cards */
+.pleatTypeGrid {
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 0.75rem !important;
+}
+
+.pleatTypeGrid .imageOptionCard {
+  gap: 0.35rem;
+}
+
+.pleatTypeGrid .imageWrapper {
+  aspect-ratio: 1;
+}
+
+.pleatTypeGrid .optionLabel {
+  padding: 0.5rem 0.25rem;
+  font-size: 0.8rem;
+}
+
+.imageOptionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.imageOptionCard:hover {
+  border-color: #c9a961;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(201, 169, 97, 0.25);
+}
+
+.imageOptionCard.selected {
+  border-color: #c9a961;
+  border-width: 3px;
+  box-shadow: 0 4px 16px rgba(201, 169, 97, 0.35);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.imageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.imageOptionCard:hover .imageWrapper img {
+  transform: scale(1.1);
+}
+
+.checkmark {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #c9a961 0%, #b8956a 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: checkmarkPop 0.3s ease;
+}
+
+@keyframes checkmarkPop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.optionLabel {
+  padding: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #34495e;
+  text-align: center;
+  width: 100%;
+}
+
+.imageOptionCard.selected .optionLabel {
+  color: #c9a961;
+  background: #faf8f3;
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.select:focus {
+  border-color: #c9a961;
+}
+
+.inputRow {
+  display: flex;
+  gap: 1rem;
+}
+
+.inputGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #c9a961;
+}
+
+.summary {
+  margin-top: auto;
+  padding: 1.5rem;
+  background-color: #faf8f3;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.totalPrice {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #2c3e50;
+  border-top: 1px solid #e0dcd2;
+  padding-top: 0.75rem;
+}
+
+.addToCartBtn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #c9a961 0%, #b8956a 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(201, 169, 97, 0.3);
+}
+
+.addToCartBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201, 169, 97, 0.4);
+}
+
+.addToCartBtn:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@media (max-width: 768px) {
+  .imageOptionsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  /* Keep pleat types in 3 columns on tablet */
+  .pleatTypeGrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .pleatTypeGrid .imageOptionCard {
+    flex-direction: column;
+  }
+
+  .pleatTypeGrid .imageWrapper {
+    width: 100%;
+    min-width: unset;
+    aspect-ratio: 1;
+  }
+
+  .pleatTypeGrid .optionLabel {
+    padding: 0.4rem 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .imageOptionCard {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .imageWrapper {
+    width: 120px;
+    min-width: 120px;
+    aspect-ratio: 1;
+  }
+
+  .optionLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    max-width: 100%;
+  }
+
+  /* Pleat types: 2 columns on mobile */
+  .pleatTypeGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  .pleatTypeGrid .optionLabel {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.2rem;
+  }
+
+  .pleatTypeGrid .checkmark {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+
+  .imageWrapper {
+    width: 100px;
+    min-width: 100px;
+  }
+
+  .optionLabel {
+    font-size: 0.85rem;
+  }
+
+  .checkmark {
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+  }
+}

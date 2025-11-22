@@ -9,7 +9,7 @@
 .backgroundGradient {
   position: absolute;
   inset: 0;
-  background: 
+  background:
     radial-gradient(circle at 20% 30%, rgba(201, 169, 97, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 80% 70%, rgba(201, 169, 97, 0.05) 0%, transparent 50%);
   z-index: 0;
@@ -38,7 +38,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .notLoggedIn {
@@ -61,8 +63,17 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.05); }
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 .contentWrapper {
@@ -70,6 +81,69 @@
   margin: 0 auto;
   position: relative;
   z-index: 10;
+  display: flex;
+  gap: 2rem;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.sidebarMenu {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: 0 4px 16px rgba(201, 169, 97, 0.12);
+  position: sticky;
+  top: 2rem;
+}
+
+.menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1.25rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+.menuItem:last-child {
+  margin-bottom: 0;
+}
+
+.menuItem:hover {
+  background: rgba(201, 169, 97, 0.08);
+  color: #c9a961;
+}
+
+.menuItem.active {
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.15), rgba(201, 169, 97, 0.08));
+  color: #c9a961;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.15);
+}
+
+.menuIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Main Content Area */
+.mainContent {
+  flex: 1;
+  min-width: 0;
 }
 
 .profileHeader {
@@ -174,8 +248,15 @@
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .messageIcon {
@@ -594,6 +675,592 @@
     transform: translateX(400px);
     opacity: 0;
   }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.success {
+  border-left: 4px solid #10b981;
+}
+
+.toast.error {
+  border-left: 4px solid #ef4444;
+}
+
+.toastIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.toast.success .toastIcon {
+  background: #10b981;
+  color: white;
+}
+
+.toast.error .toastIcon {
+  background: #ef4444;
+  color: white;
+}
+
+.toastText {
+  flex: 1;
+  color: #2d2d2d;
+  margin-bottom: 1.5rem;
+}
+
+.addressCard {
+  background: #fafaf9;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.addressCard:hover {
+  border-color: rgba(201, 169, 97, 0.4);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.15);
+}
+
+.addressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.addressHeader h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.defaultBadge {
+  display: inline-flex;
+  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #c9a961, #d4af6a);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.addressText {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.25rem 0;
+  line-height: 1.5;
+}
+
+.addressActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.setDefaultBtn {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: white;
+  color: #c9a961;
+  border: 2px solid rgba(201, 169, 97, 0.4);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.setDefaultBtn:hover {
+  background: #c9a961;
+  color: white;
+}
+
+.deleteAddressBtn {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteAddressBtn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #dc2626;
+}
+
+.noAddresses {
+  text-align: center;
+  color: #999;
+  padding: 3rem 1rem;
+  font-size: 1rem;
+}
+
+.addAddressBtn {
+  width: 100%;
+  padding: 1rem;
+  background: white;
+  color: #c9a961;
+  border: 2px dashed rgba(201, 169, 97, 0.4);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.addAddressBtn:hover {
+  background: rgba(201, 169, 97, 0.05);
+  border-color: #c9a961;
+  border-style: solid;
+}
+
+.newAddressForm {
+  background: #fafaf9;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.addressFormActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 300px;
+  z-index: 9999;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.success {
+  border-left: 4px solid #10b981;
+}
+
+.toast.error {
+  border-left: 4px solid #ef4444;
+}
+
+.toastIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.toast.success .toastIcon {
+  background: #10b981;
+  color: white;
+}
+
+.toast.error .toastIcon {
+  background: #ef4444;
+  color: white;
+}
+
+.toastText {
+  flex: 1;
+  color: #2d2d2d;
+  margin-bottom: 1.5rem;
+}
+
+.addressCard {
+  background: #fafaf9;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.addressCard:hover {
+  border-color: rgba(201, 169, 97, 0.4);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.15);
+}
+
+.addressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.addressHeader h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.defaultBadge {
+  display: inline-flex;
+  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #c9a961, #d4af6a);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.addressText {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.25rem 0;
+  line-height: 1.5;
+}
+
+.addressActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.setDefaultBtn {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: white;
+  color: #c9a961;
+  border: 2px solid rgba(201, 169, 97, 0.4);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.setDefaultBtn:hover {
+  background: #c9a961;
+  color: white;
+}
+
+.deleteAddressBtn {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteAddressBtn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #dc2626;
+}
+
+.noAddresses {
+  text-align: center;
+  color: #999;
+  padding: 3rem 1rem;
+  font-size: 1rem;
+}
+
+.addAddressBtn {
+  width: 100%;
+  padding: 1rem;
+  background: white;
+  color: #c9a961;
+  border: 2px dashed rgba(201, 169, 97, 0.4);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.addAddressBtn:hover {
+  background: rgba(201, 169, 97, 0.05);
+  border-color: #c9a961;
+  border-style: solid;
+}
+
+.newAddressForm {
+  background: #fafaf9;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.addressFormActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 300px;
+  z-index: 9999;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.success {
+  border-left: 4px solid #10b981;
+}
+
+.toast.error {
+  border-left: 4px solid #ef4444;
+}
+
+.toastIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.toast.success .toastIcon {
+  background: #10b981;
+  color: white;
+}
+
+.toast.error .toastIcon {
+  background: #ef4444;
+  color: white;
+}
+
+.toastText {
+  flex: 1;
+  color: #2d2d2d;
+  margin-bottom: 1.5rem;
+}
+
+.addressCard {
+  background: #fafaf9;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.addressCard:hover {
+  border-color: rgba(201, 169, 97, 0.4);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.15);
+}
+
+.addressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.addressHeader h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.defaultBadge {
+  display: inline-flex;
+  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #c9a961, #d4af6a);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.addressText {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.25rem 0;
+  line-height: 1.5;
+}
+
+.addressActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.setDefaultBtn {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: white;
+  color: #c9a961;
+  border: 2px solid rgba(201, 169, 97, 0.4);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.setDefaultBtn:hover {
+  background: #c9a961;
+  color: white;
+}
+
+.deleteAddressBtn {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteAddressBtn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #dc2626;
+}
+
+.noAddresses {
+  text-align: center;
+  color: #999;
+  padding: 3rem 1rem;
+  font-size: 1rem;
+}
+
+.addAddressBtn {
+  width: 100%;
+  padding: 1rem;
+  background: white;
+  color: #c9a961;
+  border: 2px dashed rgba(201, 169, 97, 0.4);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.addAddressBtn:hover {
+  background: rgba(201, 169, 97, 0.05);
+  border-color: #c9a961;
+  border-style: solid;
+}
+
+.newAddressForm {
+  background: #fafaf9;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.addressFormActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 300px;
+  z-index: 9999;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -640,54 +1307,7 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .gridContainer {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 1.5rem 1rem;
-  }
-
-  .profileHeader {
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 1.5rem;
-  }
-
-  .avatarSection {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .userInfo h1 {
-    font-size: 1.5rem;
-  }
-
-  .editButton span {
-    display: none;
-  }
-
-  .passwordGrid,
-  .formRow {
-    grid-template-columns: 1fr;
-  }
-
-  .actionButtons {
-    flex-direction: column-reverse;
-  }
-
-  .saveBtn,
-  .cancelBtn {
-    width: 100%;
-    justify-content: center;
-  }
-
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 1rem 0.5rem;
+    grid-template-columns: 1fr !important;
   }
 
   .avatar {
@@ -698,5 +1318,162 @@
 
   .cardTitle h3 {
     font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0.5rem !important;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
+  }
+
+  .contentWrapper {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 100% !important;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Mobile Menu - Grid Layout */
+  .sidebarMenu {
+    position: static !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 Columns */
+    gap: 0.75rem !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .menuItem {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0.75rem !important;
+    background: white !important;
+    border: 1px solid rgba(201, 169, 97, 0.2) !important;
+    border-radius: 12px !important;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.9rem !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .menuItem.active {
+    background: #c9a961 !important;
+    color: white !important;
+    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.2) !important;
+  }
+
+  /* Main Content Fixes */
+  .mainContent {
+    width: 100%;
+    min-width: 0;
+    /* Allow shrinking */
+  }
+
+  .profileHeader {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    padding: 1.25rem !important;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .avatarSection {
+    flex-direction: column !important;
+    width: 100%;
+    align-items: center;
+  }
+
+  .userInfo {
+    text-align: center;
+    width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .userInfo h1 {
+    font-size: 1.35rem;
+    word-break: break-word;
+    /* Prevent long names from overflowing */
+  }
+
+  .userInfo p {
+    word-break: break-all;
+    /* Prevent long emails from overflowing */
+  }
+
+  .editButton {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  /* Card & Form Fixes */
+  .card,
+  .addressCard {
+    padding: 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .passwordGrid,
+  .formRow {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .formGroup {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .input {
+    gap: 0.75rem;
+  }
+
+  .defaultBadge {
+    align-self: flex-start;
+  }
+
+  .addressActions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .setDefaultBtn,
+  .deleteAddressBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem !important;
+  }
+
+  .sidebarMenu {
+    gap: 0.5rem !important;
+  }
+
+  .menuItem {
+    padding: 0.6rem !important;
+    font-size: 0.85rem !important;
+    flex-direction: column;
+    /* Stack icon and text on very small screens */
+    gap: 0.4rem;
+  }
+
+  .menuIcon {
+    font-size: 1.2rem;
   }
 }
