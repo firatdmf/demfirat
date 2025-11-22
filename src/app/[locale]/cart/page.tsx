@@ -364,11 +364,11 @@ export default function CartPage() {
 
                   {/* Custom Curtain Badge */}
                   {item.is_custom_curtain && (
-                    <div className={classes.customCurtainBadge}>
-                      {locale === 'tr' ? '✂️  Özel Perde' :
-                        locale === 'ru' ? '✂️  Индивидуальная штора' :
-                          locale === 'pl' ? '✂️  Niestandardowa засłона' :
-                            '✂️  Custom Curtain'}
+                    <div className={classes.customCurtainBadge}><span className='text-xl'>✂️ </span>
+                      {locale === 'tr' ? 'Özel Perde' :
+                        locale === 'ru' ? 'Индивидуальная штора' :
+                          locale === 'pl' ? 'Niestandardowa засłона' :
+                            'Custom Curtain'}
                     </div>
                   )}
 

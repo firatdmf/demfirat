@@ -761,7 +761,7 @@ function ProductDetailCard({
                     transition: 'all 0.2s'
                   }}
                 >
-                  <FaCut />
+                  <FaCut style={{ fontSize: '2rem' }}/>
                   {t('customCurtain')}
                 </button>
               )}
