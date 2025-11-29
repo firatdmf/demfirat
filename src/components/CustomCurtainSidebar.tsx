@@ -6,6 +6,7 @@ import classes from './CustomCurtainSidebar.module.css';
 import { Product } from '@/lib/interfaces';
 
 import { useTranslations, useLocale } from 'next-intl';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface CustomCurtainSidebarProps {
   isOpen: boolean;
@@ -40,14 +41,12 @@ export default function CustomCurtainSidebar({
   // Translations
   const t = useTranslations('CustomCurtain');
   const locale = useLocale();
+  const { convertPrice } = useCurrency();
 
   // Helper to format price
+  // Helper to format price
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 2
-    }).format(price);
+    return convertPrice(price);
   };
 
   // Available Pleat Densities based on Pleat Type
@@ -151,8 +150,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setMountingType('cornice')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/cornice-mounting.jpg" 
+                  <img
+                    src="/media/curtain-options/cornice-mounting.jpg"
                     alt="Cornice Mounting"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';
@@ -171,8 +170,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setMountingType('rustic')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/rustic-mounting.jpg" 
+                  <img
+                    src="/media/curtain-options/rustic-mounting.jpg"
                     alt="Rustic Mounting"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';
@@ -200,8 +199,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setPleatType('flat')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/pleat-flat.jpg" 
+                  <img
+                    src="/media/curtain-options/pleat-flat.jpg"
                     alt="Flat Pleat"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';
@@ -220,8 +219,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setPleatType('kanun')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/pleat-kanun.jpg" 
+                  <img
+                    src="/media/curtain-options/pleat-kanun.jpg"
                     alt="Kanun Pleat"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';
@@ -240,8 +239,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setPleatType('pipe')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/pleat-pipe.jpg" 
+                  <img
+                    src="/media/curtain-options/pleat-pipe.jpg"
                     alt="Pipe Pleat"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';
@@ -260,8 +259,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setPleatType('water_wave')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/pleat-water-wave.jpg" 
+                  <img
+                    src="/media/curtain-options/pleat-water-wave.jpg"
                     alt="Water Wave Pleat"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';
@@ -280,8 +279,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setPleatType('american')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/pleat-american.jpg" 
+                  <img
+                    src="/media/curtain-options/pleat-american.jpg"
                     alt="American Pleat"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';
@@ -300,8 +299,8 @@ export default function CustomCurtainSidebar({
                 onClick={() => setPleatType('extrafor')}
               >
                 <div className={classes.imageWrapper}>
-                  <img 
-                    src="/media/curtain-options/pleat-extrafor.jpg" 
+                  <img
+                    src="/media/curtain-options/pleat-extrafor.jpg"
                     alt="Extrafor Pleat"
                     onError={(e) => {
                       e.currentTarget.src = '/media/placeholder-curtain.jpg';

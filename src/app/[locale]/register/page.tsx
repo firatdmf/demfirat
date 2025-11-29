@@ -49,22 +49,10 @@ export default function RegisterPage() {
         return;
       }
 
-      // Auto login after registration
-      const result = await signIn('credentials', {
-        username: formData.username,
-        password: formData.password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        setError('Registration successful but login failed. Please login manually.');
-        setTimeout(() => {
-          router.push('/login');
-        }, 2000);
-      } else {
-        router.push('/');
-        router.refresh();
-      }
+      // Show success message and redirect
+      setError(''); // Clear any errors
+      alert('Registration successful! Please check your email to verify your account.');
+      router.push('/login');
     } catch (err) {
       setError('An error occurred. Please try again.');
     } finally {
@@ -82,9 +70,9 @@ export default function RegisterPage() {
       <div className={classes.registerCard}>
         {/* Logo Section */}
         <div className={classes.logoSection}>
-          <img 
-            src="/media/karvenLogo.webp" 
-            alt="Karven Logo" 
+          <img
+            src="/media/karvenLogo.webp"
+            alt="Karven Logo"
             className={classes.logo}
           />
           <h1 className={classes.title}>Create Account</h1>

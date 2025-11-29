@@ -23,7 +23,20 @@ export default async function Page(props: Props) {
   const searchParams = await props.searchParams;
   // fetch the products from the API based on the product category
   const startTime = Date.now();
-  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${product_category}`);
+  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products`);
+  nejum_api_link.searchParams.append("product_category", product_category);
+
+  if (searchParams) {
+    Object.entries(searchParams).forEach(([key, value]) => {
+      if (value) {
+        if (Array.isArray(value)) {
+          value.forEach((v) => nejum_api_link.searchParams.append(key, v));
+        } else {
+          nejum_api_link.searchParams.append(key, value);
+        }
+      }
+    });
+  }
   // Cache for 5 minutes instead of no-store for better performance
   const nejum_response = await fetch(nejum_api_link, {
     next: { revalidate: 300 },

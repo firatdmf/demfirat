@@ -1,8 +1,7 @@
-/* .ProductGrid {
-    display:flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-  } */
+.ProductGrid {
+  width: 100%;
+  position: relative;
+}
 
 .ProductGrid .FiratDisplay {
   padding: 1.5rem 2rem;
@@ -292,63 +291,91 @@
   background: var(--bronze, #b8956a);
   border-color: var(--bronze, #b8956a);
   transform: scale(1.02);
+  padding: 0;
 }
 
-/*Resize the wrap to see the search bar change!*/
-/* .wrap {
-    width: 30%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  } */
-
-/* search bar ends here */
-
-/* Modern header section */
-.ProductGrid .headerSection {
-  background: linear-gradient(135deg, var(--primary-beige, #f5f3ed) 0%, var(--ivory, #faf8f3) 100%);
-  padding: 2rem 2rem 1.5rem;
+/* Modern header section with Hero Image */
+.headerSection {
+  position: relative;
+  background-color: var(--primary-beige, #f5f3ed);
+  padding: 6rem 2rem;
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   border-radius: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  /* 300px'den 200px'e düşürüldü */
 }
 
-.ProductGrid .headerContent {
+.headerBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.headerBackground img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center -50px;
+  /* Negatif değer yukarı kaydırır */
+}
+
+.headerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  /* Dark overlay for text readability */
+  z-index: 2;
+}
+
+.headerContent {
+  position: relative;
   max-width: 800px;
   margin: 0 auto;
+  z-index: 3;
+  color: white;
 }
 
-.ProductGrid .pageTitle {
+.pageTitle {
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: 3rem;
-  font-weight: 400;
-  color: var(--text-dark, #2c2c2c);
-  margin-bottom: 0.5rem;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
   letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.ProductGrid .pageTitle::before {
+.pageTitle::before {
   content: '';
   display: block;
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
-  margin: 0 auto 1rem;
+  width: 100px;
+  height: 4px;
+  background: var(--gold, #c9a961);
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.ProductGrid .pageDescription {
+.pageDescription {
   font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 1.1rem;
-  font-weight: 300;
-  color: var(--text-dark, #2c2c2c);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
-  opacity: 0.8;
   margin: 0;
-}
-
-.ProductGrid .iconContainer{
-  display: flex;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* Mobile Filter Button Container */
@@ -406,6 +433,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -431,6 +459,7 @@
   from {
     transform: translateX(-100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -525,15 +554,15 @@
     padding: 0 1rem;
   }
 
-  .ProductGrid .headerSection {
+  .headerSection {
     padding: 1.5rem 1rem 1rem;
   }
 
-  .ProductGrid .pageTitle {
+  .pageTitle {
     font-size: 2.5rem;
   }
 
-  .ProductGrid .pageDescription {
+  .pageDescription {
     font-size: 1rem;
   }
 
@@ -568,20 +597,20 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .ProductGrid .headerSection {
+  .headerSection {
     padding: 1.25rem 1rem 1rem;
   }
 
-  .ProductGrid .pageTitle {
+  .pageTitle {
     font-size: 2rem;
   }
 
-  .ProductGrid .pageTitle::before {
+  .pageTitle::before {
     width: 60px;
     height: 2px;
   }
 
-  .ProductGrid .pageDescription {
+  .pageDescription {
     font-size: 0.95rem;
   }
 
@@ -623,11 +652,11 @@
 }
 
 @media only screen and (max-width: 480px) {
-  .ProductGrid .pageTitle {
+  .pageTitle {
     font-size: 1.75rem;
   }
 
-  .ProductGrid .pageDescription {
+  .pageDescription {
     font-size: 0.875rem;
   }
 

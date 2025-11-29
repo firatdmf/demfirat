@@ -53,21 +53,24 @@ model auth_permission {
 }
 
 model auth_user {
-  id                         Int                          @id @default(autoincrement())
-  password                   String                       @db.VarChar(128)
-  last_login                 DateTime?                    @db.Timestamptz(6)
-  is_superuser               Boolean
-  username                   String                       @unique @db.VarChar(150)
-  first_name                 String                       @db.VarChar(150)
-  last_name                  String                       @db.VarChar(150)
-  email                      String                       @db.VarChar(254)
-  is_staff                   Boolean
-  is_active                  Boolean
-  date_joined                DateTime                     @db.Timestamptz(6)
-  auth_user_groups           auth_user_groups[]
-  auth_user_user_permissions auth_user_user_permissions[]
-  authentication_member      authentication_member?
-  django_admin_log           django_admin_log[]
+  id                             Int                              @id @default(autoincrement())
+  password                       String                           @db.VarChar(128)
+  last_login                     DateTime?                        @db.Timestamptz(6)
+  is_superuser                   Boolean
+  username                       String                           @unique @db.VarChar(150)
+  first_name                     String                           @db.VarChar(150)
+  last_name                      String                           @db.VarChar(150)
+  email                          String                           @db.VarChar(254)
+  is_staff                       Boolean
+  is_active                      Boolean
+  date_joined                    DateTime                         @db.Timestamptz(6)
+  auth_user_groups               auth_user_groups[]
+  auth_user_user_permissions     auth_user_user_permissions[]
+  authentication_member          authentication_member?
+  django_admin_log               django_admin_log[]
+  email_automation_emailaccount  email_automation_emailaccount?
+  email_automation_emailcampaign email_automation_emailcampaign[]
+  email_automation_emailtemplate email_automation_emailtemplate[]
 
   @@index([username], map: "auth_user_username_6821ab7c_like")
 }
@@ -100,55 +103,66 @@ model auth_user_user_permissions {
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model authentication_member {
-  id                                BigInt                              @id @default(autoincrement())
-  user_id                           Int?                                @unique
-  accounting_equitycapital          accounting_equitycapital[]
-  accounting_equitydivident         accounting_equitydivident[]
-  accounting_stakeholderbook        accounting_stakeholderbook[]
-  auth_user                         auth_user?                          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "authentication_member_user_id_af273d22_fk_auth_user_id")
-  authentication_member_permissions authentication_member_permissions[]
+  id                                                       BigInt                              @id @default(autoincrement())
+  user_id                                                  Int?                                @unique
+  accounting_equitycapital                                 accounting_equitycapital[]
+  accounting_equitydivident                                accounting_equitydivident[]
+  accounting_stakeholderbook                               accounting_stakeholderbook[]
+  auth_user                                                auth_user?                          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "authentication_member_user_id_af273d22_fk_auth_user_id")
+  authentication_member_permissions                        authentication_member_permissions[]
+  todo_task_todo_task_created_by_idToauthentication_member todo_task[]                         @relation("todo_task_created_by_idToauthentication_member")
+  todo_task_todo_task_member_idToauthentication_member     todo_task[]                         @relation("todo_task_member_idToauthentication_member")
+  todo_taskcomment                                         todo_taskcomment[]
 }
 
 model crm_company {
   id                                 BigInt                               @id @default(autoincrement())
-  name                               String                               @db.VarChar(255)
-  email                              String                               @db.VarChar(254)
-  backgroundInfo                     String                               @db.VarChar(400)
-  phone                              String                               @db.VarChar(15)
-  website                            String                               @db.VarChar(200)
+  name                               String                               @unique(map: "crm_company_name_ff15550e_uniq") @db.VarChar(100)
+  backgroundInfo                     String
+  website                            String                               @db.VarChar(100)
   address                            String                               @db.VarChar(255)
-  country                            String                               @db.VarChar(100)
+  country                            String                               @db.VarChar(50)
   created_at                         DateTime                             @db.Timestamptz(6)
+  group_id                           BigInt?
+  status                             String                               @db.VarChar
+  email                              String[]                             @db.VarChar(254)
+  phone                              String[]                             @db.VarChar(20)
   accounting_assetaccountsreceivable accounting_assetaccountsreceivable[]
-  accounting_invoice                 accounting_invoice[]
+  crm_clientgroup                    crm_clientgroup?                     @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "crm_company_group_id_4538be64_fk_crm_clientgroup_id")
+  crm_companyfollowup                crm_companyfollowup?
   crm_contact                        crm_contact[]
   crm_note                           crm_note[]
+  email_automation_emailcampaign     email_automation_emailcampaign?
+  operating_order                    operating_order[]
   todo_task                          todo_task[]
+
+  @@index([group_id], map: "crm_company_group_id_4538be64")
+  @@index([name], map: "crm_company_name_ff15550e_like")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model crm_contact {
   id                                 BigInt                               @id @default(autoincrement())
-  name                               String                               @db.VarChar(200)
-  email                              String                               @db.VarChar(254)
-  phone                              String                               @db.VarChar(15)
-  address                            String                               @db.VarChar(255)
-  city                               String                               @db.VarChar(100)
-  state                              String                               @db.VarChar(100)
-  zip_code                           String                               @db.VarChar(10)
-  country                            String                               @db.VarChar(100)
+  name                               String                               @db.VarChar(50)
+  address                            String
+  country                            String                               @db.VarChar(50)
   birthday                           DateTime?                            @db.Date
-  company_name                       String                               @db.VarChar(255)
-  job_title                          String                               @db.VarChar(100)
+  job_title                          String                               @db.VarChar(25)
   created_at                         DateTime                             @db.Timestamptz(6)
   company_id                         BigInt?
+  backgroundInfo                     String
+  group_id                           BigInt?
+  email                              String[]                             @db.VarChar(254)
+  phone                              String[]                             @db.VarChar(20)
   accounting_assetaccountsreceivable accounting_assetaccountsreceivable[]
-  accounting_invoice                 accounting_invoice[]
   crm_company                        crm_company?                         @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "crm_contact_company_id_5104bcf2_fk_crm_company_id")
+  crm_clientgroup                    crm_clientgroup?                     @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "crm_contact_group_id_f52dd821_fk_crm_clientgroup_id")
   crm_note                           crm_note[]
+  operating_order                    operating_order[]
   todo_task                          todo_task[]
 
   @@index([company_id], map: "crm_contact_company_id_5104bcf2")
+  @@index([group_id], map: "crm_contact_group_id_f52dd821")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -185,11 +199,12 @@ model django_admin_log {
 }
 
 model django_content_type {
-  id               Int                @id @default(autoincrement())
-  app_label        String             @db.VarChar(100)
-  model            String             @db.VarChar(100)
-  auth_permission  auth_permission[]
-  django_admin_log django_admin_log[]
+  id                              Int                               @id @default(autoincrement())
+  app_label                       String                            @db.VarChar(100)
+  model                           String                            @db.VarChar(100)
+  accounting_cashtransactionentry accounting_cashtransactionentry[]
+  auth_permission                 auth_permission[]
+  django_admin_log                django_admin_log[]
 
   @@unique([app_label, model], map: "django_content_type_app_label_model_76bd3d3b_uniq")
 }
@@ -212,20 +227,38 @@ model django_session {
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model todo_task {
-  id           BigInt       @id @default(autoincrement())
-  task_name    String       @db.VarChar(200)
-  due_date     DateTime     @db.Date
-  description  String?
-  completed    Boolean
-  created_at   DateTime     @db.Timestamptz(6)
-  completed_at DateTime     @db.Timestamptz(6)
-  company_id   BigInt?
-  contact_id   BigInt?
-  crm_company  crm_company? @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_task_company_id_fed9e4bc_fk_crm_company_id")
-  crm_contact  crm_contact? @relation(fields: [contact_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_task_contact_id_4691b54e_fk_crm_contact_id")
+  id                                                                   BigInt                 @id @default(autoincrement())
+  name                                                                 String                 @db.VarChar(200)
+  due_date                                                             DateTime               @db.Date
+  description                                                          String?
+  completed                                                            Boolean
+  created_at                                                           DateTime               @db.Timestamptz(6)
+  completed_at                                                         DateTime?              @db.Timestamptz(6)
+  company_id                                                           BigInt?
+  contact_id                                                           BigInt?
+  member_id                                                            BigInt?
+  created_by_id                                                        BigInt?
+  priority                                                             String                 @db.VarChar(10)
+  crm_company                                                          crm_company?           @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_task_company_id_fed9e4bc_fk_crm_company_id")
+  crm_contact                                                          crm_contact?           @relation(fields: [contact_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_task_contact_id_4691b54e_fk_crm_contact_id")
+  authentication_member_todo_task_created_by_idToauthentication_member authentication_member? @relation("todo_task_created_by_idToauthentication_member", fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_task_created_by_id_675890c0_fk_authentication_member_id")
+  authentication_member_todo_task_member_idToauthentication_member     authentication_member? @relation("todo_task_member_idToauthentication_member", fields: [member_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_task_member_id_a7c92483_fk_authentication_member_id")
+  todo_taskcomment                                                     todo_taskcomment[]
 
   @@index([company_id], map: "todo_task_company_id_fed9e4bc")
   @@index([contact_id], map: "todo_task_contact_id_4691b54e")
+  @@index([completed, due_date], map: "todo_task_complet_bf5d0f_idx")
+  @@index([completed], map: "todo_task_completed_3caeee28")
+  @@index([created_by_id, completed, member_id], map: "todo_task_created_bec7de_idx")
+  @@index([created_by_id], map: "todo_task_created_by_id_675890c0")
+  @@index([due_date, completed], map: "todo_task_due_dat_1648b1_idx")
+  @@index([due_date], map: "todo_task_due_date_025b131e")
+  @@index([member_id, completed, priority, due_date], map: "todo_task_member__af86db_idx")
+  @@index([member_id], map: "todo_task_member_id_a7c92483")
+  @@index([name], map: "todo_task_name_88a8ae_idx")
+  @@index([priority, completed], map: "todo_task_priorit_e48da7_idx")
+  @@index([priority], map: "todo_task_priority_705e219a")
+  @@index([priority], map: "todo_task_priority_705e219a_like")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -237,153 +270,124 @@ model accounting_assetaccountsreceivable {
   company_id                  BigInt?
   contact_id                  BigInt?
   currency_id                 BigInt
-  invoice_id                  BigInt?
+  supplier_id                 BigInt?
+  paid                        Boolean
+  paid_to_cash_account_id     BigInt?
   accounting_book             accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_book_id_9b813c34_fk_accountin")
   crm_company                 crm_company?                @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_company_id_17a2d71d_fk_crm_compa")
   crm_contact                 crm_contact?                @relation(fields: [contact_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_contact_id_1f96866a_fk_crm_conta")
   accounting_currencycategory accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_currency_id_3d6903f3_fk_accountin")
-  accounting_invoice          accounting_invoice?         @relation(fields: [invoice_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_invoice_id_f7473197_fk_accountin")
+  accounting_cashaccount      accounting_cashaccount?     @relation(fields: [paid_to_cash_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_paid_to_cash_account_08d9ef05_fk_accountin")
+  crm_supplier                crm_supplier?               @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_supplier_id_3af5c6bb_fk_crm_suppl")
 
   @@index([book_id], map: "accounting_assetaccountsreceivable_book_id_9b813c34")
   @@index([company_id], map: "accounting_assetaccountsreceivable_company_id_17a2d71d")
   @@index([contact_id], map: "accounting_assetaccountsreceivable_contact_id_1f96866a")
   @@index([currency_id], map: "accounting_assetaccountsreceivable_currency_id_3d6903f3")
-  @@index([invoice_id], map: "accounting_assetaccountsreceivable_invoice_id_f7473197")
+  @@index([paid_to_cash_account_id], map: "accounting_assetaccountsre_paid_to_cash_accounts_id_51186421")
+  @@index([supplier_id], map: "accounting_assetaccountsreceivable_supplier_id_3af5c6bb")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model accounting_assetcash {
   id                          BigInt                      @id @default(autoincrement())
   created_at                  DateTime                    @db.Timestamptz(6)
-  amount                      Decimal                     @db.Decimal(10, 2)
-  currency_balance            Decimal?                    @db.Decimal(10, 2)
+  balance                     Decimal?                    @db.Decimal(10, 2)
   book_id                     BigInt
   currency_id                 BigInt
-  transaction_id              BigInt?
+  amount                      Decimal?                    @db.Decimal(10, 2)
+  balance_base                Decimal?                    @db.Decimal(10, 2)
   accounting_book             accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetcash_book_id_c4df870a_fk_accounting_book_id")
   accounting_currencycategory accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetcash_currency_id_0b544ce7_fk_accountin")
-  accounting_transaction      accounting_transaction?     @relation(fields: [transaction_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetcash_transaction_id_b8c3e7c9_fk_accountin")
 
+  @@unique([book_id, currency_id], map: "accounting_assetcash_book_id_currency_id_407a3fcb_uniq")
   @@index([book_id], map: "accounting_assetcash_book_id_c4df870a")
   @@index([currency_id], map: "accounting_assetcash_currency_id_0b544ce7")
-  @@index([transaction_id], map: "accounting_assetcash_transaction_id_b8c3e7c9")
-}
-
-/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
-model accounting_assetinventorygood {
-  id                          BigInt                      @id @default(autoincrement())
-  created_at                  DateTime                    @db.Timestamptz(6)
-  modified_at                 DateTime?                   @db.Date
-  name                        String                      @unique @db.VarChar(300)
-  unit_cost                   Decimal                     @db.Decimal(10, 2)
-  quantity                    Decimal                     @db.Decimal(12, 2)
-  stock_type                  String?                     @db.VarChar
-  status                      String                      @db.VarChar
-  warehouse                   String?                     @db.VarChar
-  location                    String?                     @db.VarChar
-  book_id                     BigInt
-  currency_id                 BigInt
-  accounting_book             accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_book_id_4d578031_fk_accountin")
-  accounting_currencycategory accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_currency_id_d6290f64_fk_accountin")
-
-  @@index([book_id], map: "accounting_assetinventorygood_book_id_4d578031")
-  @@index([currency_id], map: "accounting_assetinventorygood_currency_id_d6290f64")
-  @@index([name], map: "accounting_assetinventorygood_name_fb1611c3_like")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model accounting_assetinventoryrawmaterial {
-  id                          BigInt                      @id @default(autoincrement())
-  created_at                  DateTime                    @db.Timestamptz(6)
-  name                        String                      @db.VarChar
-  stock_id                    String?                     @db.VarChar
-  receipt_number              String?                     @db.VarChar
-  unit_of_measurement         String?                     @db.VarChar
-  unit_cost                   Decimal                     @db.Decimal(10, 2)
-  quantity                    Decimal                     @db.Decimal(12, 2)
-  warehouse                   String?                     @db.VarChar
-  location                    String?                     @db.VarChar
-  raw_type                    String                      @db.VarChar
-  book_id                     BigInt
-  currency_id                 BigInt
-  supplier_id                 BigInt?
-  accounting_book             accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_book_id_687d7f7c_fk_accountin")
-  accounting_currencycategory accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_currency_id_ae5f5615_fk_accountin")
-  crm_supplier                crm_supplier?               @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_supplier_id_859b8417_fk_crm_suppl")
+  id                        BigInt                    @id @default(autoincrement())
+  book_id                   BigInt?
+  raw_material_good_id      BigInt
+  accounting_book           accounting_book?          @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_book_id_687d7f7c_fk_accountin")
+  operating_rawmaterialgood operating_rawmaterialgood @relation(fields: [raw_material_good_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_raw_material_good_id_4752cc4f_fk_operating")
 
-  @@unique([name, supplier_id], map: "unique_name_supplier")
   @@index([book_id], map: "accounting_assetinventoryrawmaterial_book_id_687d7f7c")
-  @@index([currency_id], map: "accounting_assetinventoryrawmaterial_currency_id_ae5f5615")
-  @@index([supplier_id], map: "accounting_assetinventoryrawmaterial_supplier_id_859b8417")
+  @@index([raw_material_good_id], map: "accounting_assetinventoryr_raw_material_good_id_4752cc4f")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model accounting_book {
-  id                                   BigInt                                 @id @default(autoincrement())
-  created_at                           DateTime                               @db.Timestamptz(6)
-  name                                 String                                 @unique @db.VarChar(50)
-  total_shares                         Int
-  accounting_assetaccountsreceivable   accounting_assetaccountsreceivable[]
-  accounting_assetcash                 accounting_assetcash[]
-  accounting_assetinventorygood        accounting_assetinventorygood[]
-  accounting_assetinventoryrawmaterial accounting_assetinventoryrawmaterial[]
-  accounting_cashaccount               accounting_cashaccount[]
-  accounting_currencyexchange          accounting_currencyexchange[]
-  accounting_equitycapital             accounting_equitycapital[]
-  accounting_equitydivident            accounting_equitydivident[]
-  accounting_equityexpense             accounting_equityexpense[]
-  accounting_equityrevenue             accounting_equityrevenue[]
-  accounting_intransfer                accounting_intransfer[]
-  accounting_invoice                   accounting_invoice[]
-  accounting_liabilityaccountspayable  accounting_liabilityaccountspayable[]
-  accounting_metric                    accounting_metric[]
-  accounting_stakeholderbook           accounting_stakeholderbook[]
-  accounting_transaction               accounting_transaction[]
+  id                                    BigInt                                  @id @default(autoincrement())
+  created_at                            DateTime                                @db.Timestamptz(6)
+  name                                  String                                  @unique @db.VarChar(50)
+  total_shares                          Int
+  accounting_assetaccountsreceivable    accounting_assetaccountsreceivable[]
+  accounting_assetcash                  accounting_assetcash[]
+  accounting_assetinventoryfinishedgood accounting_assetinventoryfinishedgood[]
+  accounting_assetinventoryrawmaterial  accounting_assetinventoryrawmaterial[]
+  accounting_cashaccount                accounting_cashaccount[]
+  accounting_cashtransactionentry       accounting_cashtransactionentry[]
+  accounting_currencyexchange           accounting_currencyexchange[]
+  accounting_equitycapital              accounting_equitycapital[]
+  accounting_equitydivident             accounting_equitydivident[]
+  accounting_equityexpense              accounting_equityexpense[]
+  accounting_equityrevenue              accounting_equityrevenue[]
+  accounting_finishedgoodsreceipt       accounting_finishedgoodsreceipt[]
+  accounting_intransfer                 accounting_intransfer[]
+  accounting_liabilityaccountspayable   accounting_liabilityaccountspayable[]
+  accounting_metric                     accounting_metric[]
+  accounting_stakeholderbook            accounting_stakeholderbook[]
+  operating_rawmaterialgoodreceipt      operating_rawmaterialgoodreceipt[]
 
   @@index([name], map: "accounting_book_name_6eb9bad9_like")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model accounting_cashaccount {
-  id                                                                                                   BigInt                        @id @default(autoincrement())
-  name                                                                                                 String                        @db.VarChar(50)
-  balance                                                                                              Decimal                       @db.Decimal(10, 2)
+  id                                                                                                   BigInt                                @id @default(autoincrement())
+  name                                                                                                 String                                @db.VarChar(50)
+  balance                                                                                              Decimal                               @db.Decimal(10, 2)
   book_id                                                                                              BigInt
   currency_id                                                                                          BigInt
-  accounting_book                                                                                      accounting_book               @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashaccount_book_id_90f88e20_fk_accounting_book_id")
-  accounting_currencycategory                                                                          accounting_currencycategory   @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashcateg_currency_id_ed9ccd42_fk_accountin")
-  accounting_currencyexchange_accounting_currencyexchange_from_cash_account_idToaccounting_cashaccount accounting_currencyexchange[] @relation("accounting_currencyexchange_from_cash_account_idToaccounting_cashaccount")
-  accounting_currencyexchange_accounting_currencyexchange_to_cash_account_idToaccounting_cashaccount   accounting_currencyexchange[] @relation("accounting_currencyexchange_to_cash_account_idToaccounting_cashaccount")
+  accounting_assetaccountsreceivable                                                                   accounting_assetaccountsreceivable[]
+  accounting_book                                                                                      accounting_book                       @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashaccount_book_id_90f88e20_fk_accounting_book_id")
+  accounting_currencycategory                                                                          accounting_currencycategory           @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashcateg_currency_id_ed9ccd42_fk_accountin")
+  accounting_cashtransactionentry                                                                      accounting_cashtransactionentry[]
+  accounting_currencyexchange_accounting_currencyexchange_from_cash_account_idToaccounting_cashaccount accounting_currencyexchange[]         @relation("accounting_currencyexchange_from_cash_account_idToaccounting_cashaccount")
+  accounting_currencyexchange_accounting_currencyexchange_to_cash_account_idToaccounting_cashaccount   accounting_currencyexchange[]         @relation("accounting_currencyexchange_to_cash_account_idToaccounting_cashaccount")
   accounting_equitycapital                                                                             accounting_equitycapital[]
   accounting_equitydivident                                                                            accounting_equitydivident[]
   accounting_equityexpense                                                                             accounting_equityexpense[]
   accounting_equityrevenue                                                                             accounting_equityrevenue[]
-  accounting_intransfer_accounting_intransfer_destination_idToaccounting_cashaccount                   accounting_intransfer[]       @relation("accounting_intransfer_destination_idToaccounting_cashaccount")
-  accounting_intransfer_accounting_intransfer_source_idToaccounting_cashaccount                        accounting_intransfer[]       @relation("accounting_intransfer_source_idToaccounting_cashaccount")
-  accounting_transaction                                                                               accounting_transaction[]
+  accounting_finishedgoodsreceipt                                                                      accounting_finishedgoodsreceipt[]
+  accounting_intransfer_accounting_intransfer_from_cash_account_idToaccounting_cashaccount             accounting_intransfer[]               @relation("accounting_intransfer_from_cash_account_idToaccounting_cashaccount")
+  accounting_intransfer_accounting_intransfer_to_cash_account_idToaccounting_cashaccount               accounting_intransfer[]               @relation("accounting_intransfer_to_cash_account_idToaccounting_cashaccount")
+  accounting_liabilityaccountspayable                                                                  accounting_liabilityaccountspayable[]
 
-  @@unique([book_id, name], map: "unique_book_cashaccount")
+  @@unique([book_id, name, currency_id], map: "unique_book_cashaccount_currency")
   @@index([book_id], map: "accounting_cashaccount_book_id_90f88e20")
   @@index([currency_id], map: "accounting_cashaccount_currency_id_807cd656")
 }
 
 model accounting_currencycategory {
-  id                                   BigInt                                 @id @default(autoincrement())
-  code                                 String                                 @unique @db.VarChar(3)
-  name                                 String                                 @unique @db.VarChar(50)
-  symbol                               String?                                @db.VarChar(5)
-  accounting_assetaccountsreceivable   accounting_assetaccountsreceivable[]
-  accounting_assetcash                 accounting_assetcash[]
-  accounting_assetinventorygood        accounting_assetinventorygood[]
-  accounting_assetinventoryrawmaterial accounting_assetinventoryrawmaterial[]
-  accounting_cashaccount               accounting_cashaccount[]
-  accounting_equitycapital             accounting_equitycapital[]
-  accounting_equitydivident            accounting_equitydivident[]
-  accounting_equityexpense             accounting_equityexpense[]
-  accounting_equityrevenue             accounting_equityrevenue[]
-  accounting_intransfer                accounting_intransfer[]
-  accounting_liabilityaccountspayable  accounting_liabilityaccountspayable[]
-  accounting_transaction               accounting_transaction[]
+  id                                    BigInt                                  @id @default(autoincrement())
+  code                                  String                                  @unique @db.VarChar(3)
+  name                                  String                                  @unique @db.VarChar(50)
+  symbol                                String?                                 @db.VarChar(5)
+  accounting_assetaccountsreceivable    accounting_assetaccountsreceivable[]
+  accounting_assetcash                  accounting_assetcash[]
+  accounting_assetinventoryfinishedgood accounting_assetinventoryfinishedgood[]
+  accounting_cashaccount                accounting_cashaccount[]
+  accounting_cashtransactionentry       accounting_cashtransactionentry[]
+  accounting_equitycapital              accounting_equitycapital[]
+  accounting_equitydivident             accounting_equitydivident[]
+  accounting_equityexpense              accounting_equityexpense[]
+  accounting_equityrevenue              accounting_equityrevenue[]
+  accounting_intransfer                 accounting_intransfer[]
+  accounting_liabilityaccountspayable   accounting_liabilityaccountspayable[]
+  operating_rawmaterialgoodreceipt      operating_rawmaterialgoodreceipt[]
 
   @@index([code], map: "accounting_currencycategory_code_afbf6634_like")
   @@index([name], map: "accounting_currencycategory_name_62f10b06_like")
@@ -464,19 +468,20 @@ model accounting_equityrevenue {
   amount                      Decimal                      @db.Decimal(10, 2)
   date                        DateTime                     @db.Date
   description                 String                       @db.VarChar(200)
-  invoice_number              String?                      @unique @db.VarChar(20)
   revenue_type                String                       @db.VarChar
   book_id                     BigInt
   cash_account_id             BigInt
   currency_id                 BigInt?
+  order_id                    BigInt?
   accounting_cashaccount      accounting_cashaccount       @relation(fields: [cash_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_equityrev_cash_account_id_2fb5d4af_fk_accountin")
   accounting_currencycategory accounting_currencycategory? @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_equityrev_currency_id_52d19808_fk_accountin")
+  operating_order             operating_order?             @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_equityrev_order_id_16ca68d7_fk_operating")
   accounting_book             accounting_book              @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_equityrevenue_book_id_784ed443_fk_accounting_book_id")
 
   @@index([book_id], map: "accounting_equityrevenue_book_id_784ed443")
   @@index([cash_account_id], map: "accounting_equityrevenue_cash_account_id_2fb5d4af")
   @@index([currency_id], map: "accounting_equityrevenue_currency_id_52d19808")
-  @@index([invoice_number], map: "accounting_equityrevenue_invoice_number_2ddec667_like")
+  @@index([order_id], map: "accounting_equityrevenue_order_id_16ca68d7")
 }
 
 model accounting_expensecategory {
@@ -489,64 +494,51 @@ model accounting_expensecategory {
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model accounting_intransfer {
-  id                                                                                  BigInt                      @id @default(autoincrement())
-  created_at                                                                          DateTime                    @db.Timestamptz(6)
-  amount                                                                              Decimal                     @db.Decimal(10, 2)
-  date                                                                                DateTime?                   @db.Date
-  description                                                                         String?                     @db.VarChar(200)
-  book_id                                                                             BigInt
-  currency_id                                                                         BigInt
-  destination_id                                                                      BigInt
-  source_id                                                                           BigInt
-  accounting_currencycategory                                                         accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfe_currency_id_fda2e854_fk_accountin")
-  accounting_cashaccount_accounting_intransfer_destination_idToaccounting_cashaccount accounting_cashaccount      @relation("accounting_intransfer_destination_idToaccounting_cashaccount", fields: [destination_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfe_destination_id_c6bc6280_fk_accountin")
-  accounting_cashaccount_accounting_intransfer_source_idToaccounting_cashaccount      accounting_cashaccount      @relation("accounting_intransfer_source_idToaccounting_cashaccount", fields: [source_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfe_source_id_1faa0353_fk_accountin")
-  accounting_book                                                                     accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfer_book_id_e5b465c2_fk_accounting_book_id")
+  id                                                                                        BigInt                      @id @default(autoincrement())
+  created_at                                                                                DateTime                    @db.Timestamptz(6)
+  amount                                                                                    Decimal                     @db.Decimal(10, 2)
+  date                                                                                      DateTime?                   @db.Date
+  description                                                                               String?                     @db.VarChar(200)
+  book_id                                                                                   BigInt
+  currency_id                                                                               BigInt
+  to_cash_account_id                                                                        BigInt
+  from_cash_account_id                                                                      BigInt
+  accounting_currencycategory                                                               accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfe_currency_id_fda2e854_fk_accountin")
+  accounting_cashaccount_accounting_intransfer_from_cash_account_idToaccounting_cashaccount accounting_cashaccount      @relation("accounting_intransfer_from_cash_account_idToaccounting_cashaccount", fields: [from_cash_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfe_from_cash_account_id_89cae7fb_fk_accountin")
+  accounting_cashaccount_accounting_intransfer_to_cash_account_idToaccounting_cashaccount   accounting_cashaccount      @relation("accounting_intransfer_to_cash_account_idToaccounting_cashaccount", fields: [to_cash_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfe_to_cash_account_id_f89023f0_fk_accountin")
+  accounting_book                                                                           accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_intransfer_book_id_e5b465c2_fk_accounting_book_id")
 
   @@index([book_id], map: "accounting_intransfer_book_id_e5b465c2")
   @@index([currency_id], map: "accounting_intransfer_currency_id_fda2e854")
-  @@index([destination_id], map: "accounting_intransfer_destination_id_c6bc6280")
-  @@index([source_id], map: "accounting_intransfer_source_id_1faa0353")
-}
-
-/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
-model accounting_invoice {
-  id                                 BigInt                               @id @default(autoincrement())
-  created_at                         DateTime                             @db.Timestamptz(6)
-  due_cate                           DateTime                             @db.Timestamptz(6)
-  items                              Json
-  invoice_type                       String                               @db.VarChar
-  total                              Decimal                              @db.Decimal(10, 2)
-  paid                               Decimal                              @db.Decimal(10, 2)
-  book_id                            BigInt
-  company_id                         BigInt?
-  contact_id                         BigInt?
-  accounting_assetaccountsreceivable accounting_assetaccountsreceivable[]
-  accounting_book                    accounting_book                      @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_invoice_book_id_3df06427_fk_accounting_book_id")
-  crm_company                        crm_company?                         @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_invoice_company_id_38eec83f_fk_crm_company_id")
-  crm_contact                        crm_contact?                         @relation(fields: [contact_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_invoice_contact_id_b3fed0ee_fk_crm_contact_id")
-
-  @@index([book_id], map: "accounting_invoice_book_id_3df06427")
-  @@index([company_id], map: "accounting_invoice_company_id_38eec83f")
-  @@index([contact_id], map: "accounting_invoice_contact_id_b3fed0ee")
+  @@index([to_cash_account_id], map: "accounting_intransfer_destination_id_c6bc6280")
+  @@index([from_cash_account_id], map: "accounting_intransfer_source_id_1faa0353")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model accounting_liabilityaccountspayable {
-  id                          BigInt                      @id @default(autoincrement())
-  created_at                  DateTime                    @db.Timestamptz(6)
-  amount                      Decimal                     @db.Decimal(10, 2)
-  receipt                     String?                     @db.VarChar
-  book_id                     BigInt
-  currency_id                 BigInt
-  supplier_id                 BigInt?
-  accounting_book             accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_book_id_5c5fc572_fk_accountin")
-  accounting_currencycategory accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_currency_id_14f235b1_fk_accountin")
-  crm_supplier                crm_supplier?               @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_supplier_id_4b8ecab4_fk_crm_suppl")
+  id                               BigInt                            @id @default(autoincrement())
+  created_at                       DateTime                          @db.Timestamptz(6)
+  amount                           Decimal                           @db.Decimal(10, 2)
+  book_id                          BigInt
+  currency_id                      BigInt
+  supplier_id                      BigInt
+  finished_goods_receipt_id        BigInt?
+  raw_material_good_receipt_id     BigInt?
+  paid                             Boolean
+  paid_with_cash_account_id        BigInt?
+  accounting_book                  accounting_book                   @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_book_id_5c5fc572_fk_accountin")
+  accounting_currencycategory      accounting_currencycategory       @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_currency_id_14f235b1_fk_accountin")
+  accounting_finishedgoodsreceipt  accounting_finishedgoodsreceipt?  @relation(fields: [finished_goods_receipt_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_liability_finished_goods_recei_6cdddab8_fk_accountin")
+  accounting_cashaccount           accounting_cashaccount?           @relation(fields: [paid_with_cash_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_liability_paid_with_cash_accou_8837f423_fk_accountin")
+  operating_rawmaterialgoodreceipt operating_rawmaterialgoodreceipt? @relation(fields: [raw_material_good_receipt_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_liability_raw_material_good_re_f0f5f0c6_fk_operating")
+  crm_supplier                     crm_supplier                      @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetacco_supplier_id_4b8ecab4_fk_crm_suppl")
 
   @@index([book_id], map: "accounting_liabilityaccountspayable_book_id_333eeb14")
   @@index([currency_id], map: "accounting_liabilityaccountspayable_currency_id_c8287afc")
   @@index([supplier_id], map: "accounting_liabilityaccountspayable_supplier_id_07c161e0")
+  @@index([finished_goods_receipt_id], map: "accounting_liabilityaccoun_finished_goods_receipt_id_6cdddab8")
+  @@index([paid_with_cash_account_id], map: "accounting_liabilityaccoun_paid_with_cash_account_id_8837f423")
+  @@index([raw_material_good_receipt_id], map: "accounting_liabilityaccoun_raw_material_good_receipt__f0f5f0c6")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -584,28 +576,6 @@ model accounting_stakeholderbook {
   @@index([member_id], map: "accounting_stakeholderbook_member_id_31ff9801")
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
-model accounting_transaction {
-  id                          BigInt                      @id @default(autoincrement())
-  created_at                  DateTime                    @db.Timestamptz(6)
-  value                       Decimal                     @db.Decimal(12, 2)
-  type                        String?                     @db.VarChar(50)
-  type_pk                     Int?
-  account_balance             Decimal?                    @db.Decimal(12, 2)
-  account_id                  BigInt?
-  book_id                     BigInt
-  currency_id                 BigInt
-  accounting_assetcash        accounting_assetcash[]
-  accounting_cashaccount      accounting_cashaccount?     @relation(fields: [account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_transacti_account_id_cd2bdf36_fk_accountin")
-  accounting_currencycategory accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_transacti_currency_id_73d486f9_fk_accountin")
-  accounting_book             accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_transaction_book_id_ef611a98_fk_accounting_book_id")
-
-  @@index([account_id], map: "accounting_transaction_account_id_cd2bdf36")
-  @@index([book_id], map: "accounting_transaction_book_id_ef611a98")
-  @@index([currency_id], map: "accounting_transaction_currency_id_73d486f9")
-}
-
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model authentication_member_permissions {
   id                        BigInt                    @id @default(autoincrement())
@@ -629,47 +599,54 @@ model authentication_permission {
 }
 
 model crm_supplier {
-  id                                   BigInt                                 @id @default(autoincrement())
-  company_name                         String?                                @db.VarChar(300)
-  contact_name                         String?                                @db.VarChar(300)
-  email                                String                                 @db.VarChar(254)
-  phone                                String                                 @db.VarChar(15)
-  website                              String                                 @db.VarChar(200)
-  address                              String                                 @db.VarChar(255)
-  country                              String                                 @db.VarChar(100)
-  created_at                           DateTime                               @db.Timestamptz(6)
-  accounting_assetinventoryrawmaterial accounting_assetinventoryrawmaterial[]
-  accounting_liabilityaccountspayable  accounting_liabilityaccountspayable[]
-  marketing_product                    marketing_product[]
+  id                                  BigInt                                @id @default(autoincrement())
+  company_name                        String?                               @db.VarChar(300)
+  contact_name                        String?                               @db.VarChar(300)
+  email                               String                                @db.VarChar(254)
+  phone                               String                                @db.VarChar(15)
+  website                             String                                @db.VarChar(200)
+  address                             String                                @db.VarChar(255)
+  country                             String                                @db.VarChar(100)
+  created_at                          DateTime                              @db.Timestamptz(6)
+  accounting_assetaccountsreceivable  accounting_assetaccountsreceivable[]
+  accounting_finishedgoodsreceipt     accounting_finishedgoodsreceipt[]
+  accounting_liabilityaccountspayable accounting_liabilityaccountspayable[]
+  marketing_product                   marketing_product[]
+  operating_rawmaterialgoodreceipt    operating_rawmaterialgoodreceipt[]
 }
 
 model marketing_product {
-  id                                     BigInt                                   @id @default(autoincrement())
-  created_at                             DateTime?                                @db.Timestamptz(6)
-  title                                  String                                   @db.VarChar(255)
-  description                            String?
-  sku                                    String?                                  @unique(map: "marketing_product_sku_4e12cb16_uniq") @db.VarChar(12)
-  barcode                                String?                                  @db.VarChar(14)
-  tags                                   String[]                                 @db.VarChar(100)
-  type                                   String?                                  @db.VarChar
-  unit_of_measurement                    String?                                  @db.VarChar
-  quantity                               Decimal?                                 @db.Decimal(10, 2)
-  price                                  Decimal?                                 @db.Decimal(10, 2)
-  featured                               Boolean?
-  selling_while_out_of_stock             Boolean?
-  weight                                 Decimal?                                 @db.Decimal(10, 2)
-  unit_of_weight                         String?                                  @db.VarChar
-  category_id                            BigInt?
-  supplier_id                            BigInt?
-  has_variants                           Boolean
-  datasheet_url                          String?                                  @db.VarChar(200)
-  minimum_inventory_level                Decimal?                                 @db.Decimal(10, 2)
-  marketing_productcategory              marketing_productcategory?               @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_category_id_c776e438_fk_marketing")
-  crm_supplier                           crm_supplier?                            @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_supplier_id_c9957948_fk_crm_supplier_id")
-  marketing_product_collections          marketing_product_collections[]
-  marketing_productfile                  marketing_productfile[]
-  marketing_productvariant               marketing_productvariant[]
-  marketing_productvariantattributevalue marketing_productvariantattributevalue[]
+  id                                                                              BigInt                            @id @default(autoincrement())
+  created_at                                                                      DateTime                          @db.Timestamptz(6)
+  title                                                                           String                            @db.VarChar(255)
+  description                                                                     String?
+  sku                                                                             String?                           @unique(map: "marketing_product_sku_4e12cb16_uniq") @db.VarChar(20)
+  barcode                                                                         String?                           @db.VarChar(14)
+  tags                                                                            String[]                          @db.VarChar(100)
+  type                                                                            String?                           @db.VarChar
+  unit_of_measurement                                                             String?                           @db.VarChar
+  quantity                                                                        Decimal?                          @db.Decimal(10, 2)
+  price                                                                           Decimal?                          @db.Decimal(10, 2)
+  featured                                                                        Boolean?
+  selling_while_out_of_stock                                                      Boolean?
+  weight                                                                          Decimal?                          @db.Decimal(10, 2)
+  unit_of_weight                                                                  String?                           @db.VarChar
+  category_id                                                                     BigInt?
+  supplier_id                                                                     BigInt?
+  datasheet_url                                                                   String?                           @db.VarChar(200)
+  minimum_inventory_level                                                         Decimal?                          @db.Decimal(10, 2)
+  primary_image_id                                                                BigInt?
+  extra_attributes                                                                Json?
+  marketing_productcategory                                                       marketing_productcategory?        @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_category_id_c776e438_fk_marketing")
+  marketing_productfile_marketing_product_primary_image_idTomarketing_productfile marketing_productfile?            @relation("marketing_product_primary_image_idTomarketing_productfile", fields: [primary_image_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_primary_image_id_2aecf8c8_fk_marketing")
+  crm_supplier                                                                    crm_supplier?                     @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_product_supplier_id_c9957948_fk_crm_supplier_id")
+  marketing_product_collections                                                   marketing_product_collections[]
+  marketing_productattribute                                                      marketing_productattribute[]
+  marketing_productattributevalue                                                 marketing_productattributevalue[]
+  marketing_productfile                                                           marketing_productfile[]
+  marketing_productvariant                                                        marketing_productvariant[]
+  operating_orderitem                                                             operating_orderitem[]
+  operating_workinprogressgood                                                    operating_workinprogressgood[]
 
   @@index([category_id], map: "marketing_product_category_id_c776e438")
   @@index([supplier_id], map: "marketing_product_supplier_id_c9957948")
@@ -677,6 +654,7 @@ model marketing_product {
   @@index([barcode], map: "marketing_product_barcode_1e6ca3df_like")
   @@index([featured], map: "marketing_product_featured_6995ee9a")
   @@index([sku], map: "marketing_product_sku_4e12cb16_like")
+  @@index([primary_image_id], map: "marketing_product_primary_image_id_2aecf8c8")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -694,12 +672,16 @@ model marketing_product_collections {
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model marketing_productfile {
-  id                       BigInt                    @id @default(autoincrement())
-  file                     String                    @db.VarChar(100)
-  product_id               BigInt?
-  product_variant_id       BigInt?
-  marketing_product        marketing_product?        @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productfil_product_id_68c8359c_fk_marketing")
-  marketing_productvariant marketing_productvariant? @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productfil_product_variant_id_74a0d958_fk_marketing")
+  id                                                                          BigInt                    @id @default(autoincrement())
+  product_id                                                                  BigInt?
+  product_variant_id                                                          BigInt?
+  sequence                                                                    Int
+  file_url                                                                    String?                   @db.VarChar(200)
+  is_primary                                                                  Boolean
+  file_path                                                                   String?                   @db.VarChar(500)
+  marketing_product_marketing_product_primary_image_idTomarketing_productfile marketing_product[]       @relation("marketing_product_primary_image_idTomarketing_productfile")
+  marketing_product                                                           marketing_product?        @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productfil_product_id_68c8359c_fk_marketing")
+  marketing_productvariant                                                    marketing_productvariant? @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productfil_product_variant_id_74a0d958_fk_marketing")
 
   @@index([product_id], map: "marketing_productfile_product_id_68c8359c")
   @@index([product_variant_id], map: "marketing_productfile_product_variant_id_74a0d958")
@@ -707,19 +689,23 @@ model marketing_productfile {
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model marketing_productvariant {
-  id                                     BigInt                                   @id @default(autoincrement())
-  variant_sku                            String?                                  @db.VarChar(12)
-  variant_barcode                        String?                                  @db.VarChar(14)
-  variant_quantity                       Decimal?                                 @db.Decimal(10, 2)
-  variant_price                          Decimal?                                 @db.Decimal(10, 2)
-  variant_cost                           Decimal?                                 @db.Decimal(10, 2)
-  variant_featured                       Boolean
-  product_id                             BigInt?
-  variant_datasheet_url                  String?                                  @db.VarChar(200)
-  variant_minimum_inventory_level        Decimal?                                 @db.Decimal(10, 2)
-  marketing_productfile                  marketing_productfile[]
-  marketing_product                      marketing_product?                       @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_id_d830f278_fk_marketing")
-  marketing_productvariantattributevalue marketing_productvariantattributevalue[]
+  id                                                        BigInt                                                      @id @default(autoincrement())
+  variant_sku                                               String                                                      @db.VarChar(20)
+  variant_barcode                                           String?                                                     @db.VarChar(14)
+  variant_quantity                                          Decimal?                                                    @db.Decimal(10, 2)
+  variant_price                                             Decimal?                                                    @db.Decimal(10, 2)
+  variant_cost                                              Decimal?                                                    @db.Decimal(10, 2)
+  variant_featured                                          Boolean
+  product_id                                                BigInt
+  variant_datasheet_url                                     String?                                                     @db.VarChar(200)
+  variant_minimum_inventory_level                           Decimal?                                                    @db.Decimal(10, 2)
+  marketing_productattribute                                marketing_productattribute[]
+  marketing_productfile                                     marketing_productfile[]
+  marketing_product                                         marketing_product                                           @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_id_d830f278_fk_marketing")
+  marketing_productvariant_product_variant_attribute_values marketing_productvariant_product_variant_attribute_values[]
+  marketing_productvariantcustomattribute                   marketing_productvariantcustomattribute[]
+  operating_orderitem                                       operating_orderitem[]
+  operating_workinprogressgood                              operating_workinprogressgood[]
 
   @@index([product_id], map: "marketing_productvariant_product_id_d830f278")
   @@index([variant_barcode], map: "marketing_productvariant_variant_barcode_dad1695f")
@@ -730,37 +716,38 @@ model marketing_productvariant {
 
 model marketing_productvariantattribute {
   id                                     BigInt                                   @id @default(autoincrement())
-  name                                   String                                   @db.VarChar(255)
+  name                                   String                                   @unique(map: "marketing_productvariantattribute_name_aa8e5a9e_uniq") @db.VarChar(255)
   marketing_productvariantattributevalue marketing_productvariantattributevalue[]
+
+  @@index([name], map: "marketing_productvariantattribute_name_aa8e5a9e_like")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model marketing_productvariantattributevalue {
-  id                                BigInt                            @id @default(autoincrement())
-  product_variant_attribute_value   String                            @db.VarChar(255)
-  product_variant_attribute_id      BigInt
-  product_variant_id                BigInt?
-  product_id                        BigInt?
-  marketing_product                 marketing_product?                @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_id_65518724_fk_marketing")
-  marketing_productvariantattribute marketing_productvariantattribute @relation(fields: [product_variant_attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_variant_attr_4836c067_fk_marketing")
-  marketing_productvariant          marketing_productvariant?         @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_variant_id_13dc74f2_fk_marketing")
+  id                                                        BigInt                                                      @id @default(autoincrement())
+  product_variant_attribute_value                           String                                                      @db.VarChar(255)
+  product_variant_attribute_id                              BigInt
+  marketing_productvariant_product_variant_attribute_values marketing_productvariant_product_variant_attribute_values[]
+  marketing_productvariantattribute                         marketing_productvariantattribute                           @relation(fields: [product_variant_attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_product_variant_attr_4836c067_fk_marketing")
 
-  @@unique([product_variant_id, product_variant_attribute_id], map: "marketing_productvariant_variant_id_attribute_id_253d4de3_uniq")
+  @@unique([product_variant_attribute_id, product_variant_attribute_value], map: "marketing_productvariant_product_variant_attribut_96a5dfd5_uniq")
   @@index([product_variant_attribute_id], map: "marketing_productvariantattributevalue_attribute_id_2b0d83d5")
-  @@index([product_variant_id], map: "marketing_productvariantattributevalue_variant_id_4d257d6d")
-  @@index([product_id], map: "marketing_productvariantattributevalue_product_id_65518724")
-  @@index([product_variant_attribute_value], map: "marketing_productvariantattributevalue_value_17ca7ef7")
-  @@index([product_variant_attribute_value], map: "marketing_productvariantattributevalue_value_17ca7ef7_like")
+  @@index([product_variant_attribute_id], map: "marketing_p_product_5e14e4_idx")
+  @@index([product_variant_attribute_value], map: "marketing_productvariant_product_variant_attribut_399d868c_like")
+  @@index([product_variant_attribute_value], map: "marketing_productvariantat_product_variant_attribute__399d868c")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model operating_machine {
-  id      BigInt  @id @default(autoincrement())
-  name    String  @unique @db.VarChar(150)
-  max_rpm Int
-  domain  Decimal @db.Decimal(5, 2)
+  id                    BigInt                @id @default(autoincrement())
+  name                  String                @unique @db.VarChar(150)
+  max_rpm               Int
+  domain                Decimal               @db.Decimal(5, 2)
+  workstation_id        BigInt
+  operating_workstation operating_workstation @relation(fields: [workstation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_machine_workstation_id_057537e7_fk_operating")
 
   @@index([name], map: "operating_machine_name_eb93fe62_like")
+  @@index([workstation_id], map: "operating_machine_workstation_id_057537e7")
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -785,8 +772,12 @@ model accounting_currencyexchange {
 model marketing_productcategory {
   id                BigInt              @id @default(autoincrement())
   created_at        DateTime            @db.Timestamptz(6)
-  name              String?             @db.VarChar(255)
+  name              String?             @unique(map: "marketing_productcategory_name_9786e9a4_uniq") @db.VarChar(255)
+  image_url         String?             @db.VarChar(200)
+  description       String?
   marketing_product marketing_product[]
+
+  @@index([name], map: "marketing_productcategory_name_9786e9a4_like")
 }
 
 model marketing_productcollection {
@@ -796,4 +787,579 @@ model marketing_productcollection {
   description                   String?
   image                         String?                         @db.VarChar(100)
   marketing_product_collections marketing_product_collections[]
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model accounting_assetinventoryfinishedgood {
+  id                                  BigInt                                @id @default(autoincrement())
+  created_at                          DateTime                              @db.Timestamptz(6)
+  modified_at                         DateTime?                             @db.Date
+  name                                String                                @unique @db.VarChar(300)
+  unit_cost                           Decimal                               @db.Decimal(10, 2)
+  stock_type                          String?                               @db.VarChar
+  status                              String                                @db.VarChar
+  warehouse                           String?                               @db.VarChar
+  location                            String?                               @db.VarChar
+  book_id                             BigInt
+  currency_id                         BigInt
+  accounting_book                     accounting_book                       @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_book_id_c5d7e41a_fk_accountin")
+  accounting_currencycategory         accounting_currencycategory           @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_assetinve_currency_id_a783b53e_fk_accountin")
+  accounting_finishedgoodsreceiptitem accounting_finishedgoodsreceiptitem[]
+
+  @@index([book_id], map: "accounting_assetinventoryfinishedgood_book_id_c5d7e41a")
+  @@index([currency_id], map: "accounting_assetinventoryfinishedgood_currency_id_a783b53e")
+  @@index([name], map: "accounting_assetinventoryfinishedgood_name_3c06500e_like")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model accounting_cashtransactionentry {
+  id                          BigInt                      @id @default(autoincrement())
+  content_pk                  Int
+  created_at                  DateTime                    @db.Timestamptz(6)
+  amount                      Decimal                     @db.Decimal(12, 2)
+  cash_account_balance        Decimal?                    @db.Decimal(12, 2)
+  amount_in_base_currency     Decimal?                    @db.Decimal(12, 2)
+  book_id                     BigInt
+  cash_account_id             BigInt?
+  content_type_id             Int
+  currency_id                 BigInt
+  total_base_currency_balance Decimal?                    @db.Decimal(12, 2)
+  is_amount_positive          Boolean
+  accounting_book             accounting_book             @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashtrans_book_id_cf59612e_fk_accountin")
+  accounting_cashaccount      accounting_cashaccount?     @relation(fields: [cash_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashtrans_cash_account_id_356caaca_fk_accountin")
+  django_content_type         django_content_type         @relation(fields: [content_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashtrans_content_type_id_381cdf38_fk_django_co")
+  accounting_currencycategory accounting_currencycategory @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_cashtrans_currency_id_a8b08654_fk_accountin")
+
+  @@index([book_id], map: "accounting_cashtransactionentry_book_id_cf59612e")
+  @@index([cash_account_id], map: "accounting_cashtransactionentry_cash_account_id_356caaca")
+  @@index([content_type_id], map: "accounting_cashtransactionentry_content_type_id_381cdf38")
+  @@index([currency_id], map: "accounting_cashtransactionentry_currency_id_a8b08654")
+}
+
+model accounting_currencyexchangerate {
+  id            BigInt   @id @default(autoincrement())
+  from_currency String   @db.VarChar(3)
+  to_currency   String   @db.VarChar(3)
+  rate          Decimal  @db.Decimal(20, 6)
+  date          DateTime @db.Date
+
+  @@unique([from_currency, to_currency, date], map: "accounting_currencyexcha_from_currency_to_currenc_cd25e7fa_uniq")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model accounting_finishedgoodsreceipt {
+  id                                  BigInt                                @id @default(autoincrement())
+  created_at                          DateTime                              @db.Timestamptz(6)
+  receipt_number                      String                                @db.VarChar(50)
+  date                                DateTime?                             @db.Date
+  book_id                             BigInt
+  supplier_id                         BigInt
+  payment_status                      Boolean
+  cash_account_id                     BigInt?
+  accounting_book                     accounting_book                       @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_finishedg_book_id_62bd4f57_fk_accountin")
+  accounting_cashaccount              accounting_cashaccount?               @relation(fields: [cash_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_finishedg_cash_account_id_2feaef6c_fk_accountin")
+  crm_supplier                        crm_supplier                          @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_finishedg_supplier_id_b94b0200_fk_crm_suppl")
+  accounting_finishedgoodsreceiptitem accounting_finishedgoodsreceiptitem[]
+  accounting_liabilityaccountspayable accounting_liabilityaccountspayable[]
+
+  @@index([book_id], map: "accounting_finishedgoodsreceipt_book_id_62bd4f57")
+  @@index([cash_account_id], map: "accounting_finishedgoodsreceipt_payment_type_id_4e4f7c6e")
+  @@index([supplier_id], map: "accounting_finishedgoodsreceipt_supplier_id_b94b0200")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model accounting_finishedgoodsreceiptitem {
+  id                                    BigInt                                 @id @default(autoincrement())
+  created_at                            DateTime                               @db.Timestamptz(6)
+  quantity                              Decimal                                @db.Decimal(10, 2)
+  finished_good_id                      BigInt?
+  goods_receipt_id                      BigInt
+  unit_cost                             Decimal                                @db.Decimal(10, 2)
+  accounting_assetinventoryfinishedgood accounting_assetinventoryfinishedgood? @relation(fields: [finished_good_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_finishedg_finished_good_id_dc169315_fk_accountin")
+  accounting_finishedgoodsreceipt       accounting_finishedgoodsreceipt        @relation(fields: [goods_receipt_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounting_finishedg_goods_receipt_id_d00576ae_fk_accountin")
+
+  @@index([finished_good_id], map: "accounting_finishedgoodsreceiptitem_finished_good_id_dc169315")
+  @@index([goods_receipt_id], map: "accounting_finishedgoodsreceiptitem_goods_receipt_id_d00576ae")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model client_address {
+  id         BigInt     @id @default(autoincrement())
+  title      String     @db.VarChar(100)
+  address    String
+  city       String     @db.VarChar(100)
+  country    String     @db.VarChar(100)
+  is_default Boolean
+  created_at DateTime   @db.Timestamptz(6)
+  updated_at DateTime   @db.Timestamptz(6)
+  client_id  BigInt
+  web_client web_client @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "client_address_client_id_03a31474_fk_web_client_id")
+
+  @@index([client_id], map: "client_address_client_id_03a31474")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model client_cart_item {
+  id                BigInt     @id @default(autoincrement())
+  product_sku       String     @db.VarChar(100)
+  variant_sku       String?    @db.VarChar(100)
+  quantity          Decimal    @db.Decimal(10, 2)
+  created_at        DateTime   @db.Timestamptz(6)
+  updated_at        DateTime   @db.Timestamptz(6)
+  client_id         BigInt
+  custom_attributes Json?
+  custom_price      Decimal?   @db.Decimal(10, 2)
+  is_custom_curtain Boolean
+  web_client        web_client @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "client_cart_item_client_id_630b345e_fk_web_client_id")
+
+  @@index([client_id], map: "client_cart_item_client_id_630b345e")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model client_favorite {
+  id          BigInt     @id @default(autoincrement())
+  product_sku String     @db.VarChar(100)
+  created_at  DateTime   @db.Timestamptz(6)
+  client_id   BigInt
+  web_client  web_client @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "client_favorite_client_id_7230b19f_fk_web_client_id")
+
+  @@unique([client_id, product_sku], map: "client_favorite_client_id_product_sku_6b21fa47_uniq")
+  @@index([client_id], map: "client_favorite_client_id_7230b19f")
+}
+
+model crm_clientgroup {
+  id          BigInt        @id @default(autoincrement())
+  name        String        @unique @db.VarChar(100)
+  description String
+  crm_company crm_company[]
+  crm_contact crm_contact[]
+
+  @@index([name], map: "crm_clientgroup_name_5715a22e_like")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model crm_companyfollowup {
+  id                 BigInt      @id @default(autoincrement())
+  created_at         DateTime    @db.Timestamptz(6)
+  is_active          Boolean
+  last_email_sent_at DateTime?   @db.Timestamptz(6)
+  emails_sent_count  Int
+  stopped_reason     String?     @db.VarChar(100)
+  stopped_at         DateTime?   @db.Timestamptz(6)
+  company_id         BigInt      @unique
+  crm_company        crm_company @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "crm_companyfollowup_company_id_0f13c7ba_fk_crm_company_id")
+}
+
+model debug_toolbar_historyentry {
+  request_id String   @id @db.Uuid
+  data       Json
+  created_at DateTime @db.Timestamptz(6)
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model email_automation_emailaccount {
+  id            BigInt    @id @default(autoincrement())
+  email_address String    @db.VarChar(254)
+  access_token  String
+  refresh_token String
+  token_expiry  DateTime? @db.Timestamptz(6)
+  is_active     Boolean
+  created_at    DateTime  @db.Timestamptz(6)
+  updated_at    DateTime  @db.Timestamptz(6)
+  user_id       Int       @unique
+  auth_user     auth_user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_automation_emailaccount_user_id_6612acdb_fk_auth_user_id")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model email_automation_emailcampaign {
+  id                             BigInt                           @id @default(autoincrement())
+  status                         String                           @db.VarChar(20)
+  emails_sent                    Int
+  last_email_sent_at             DateTime?                        @db.Timestamptz(6)
+  next_email_scheduled_at        DateTime?                        @db.Timestamptz(6)
+  reply_received                 Boolean
+  reply_received_at              DateTime?                        @db.Timestamptz(6)
+  created_at                     DateTime                         @db.Timestamptz(6)
+  updated_at                     DateTime                         @db.Timestamptz(6)
+  company_id                     BigInt                           @unique
+  user_id                        Int
+  crm_company                    crm_company                      @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_automation_ema_company_id_3af27a18_fk_crm_compa")
+  auth_user                      auth_user                        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_automation_emailcampaign_user_id_daddfc55_fk_auth_user_id")
+  email_automation_receivedemail email_automation_receivedemail[]
+  email_automation_sentemail     email_automation_sentemail[]
+
+  @@index([user_id], map: "email_automation_emailcampaign_user_id_daddfc55")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model email_automation_emailtemplate {
+  id                         BigInt                       @id @default(autoincrement())
+  name                       String                       @db.VarChar(200)
+  sequence_number            Int
+  subject                    String                       @db.VarChar(200)
+  body                       String
+  days_after_previous        Int
+  is_active                  Boolean
+  created_at                 DateTime                     @db.Timestamptz(6)
+  updated_at                 DateTime                     @db.Timestamptz(6)
+  user_id                    Int
+  delay_amount               Int
+  delay_unit                 String                       @db.VarChar(10)
+  auth_user                  auth_user                    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_automation_emailtemplate_user_id_e40dcb1e_fk_auth_user_id")
+  email_automation_sentemail email_automation_sentemail[]
+
+  @@unique([user_id, sequence_number], map: "email_automation_emailte_user_id_sequence_number_4b592298_uniq")
+  @@index([user_id], map: "email_automation_emailtemplate_user_id_e40dcb1e")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model email_automation_receivedemail {
+  id                             BigInt                          @id @default(autoincrement())
+  sender_email                   String                          @db.VarChar(254)
+  sender_name                    String                          @db.VarChar(200)
+  subject                        String                          @db.VarChar(500)
+  body                           String
+  gmail_message_id               String                          @unique @db.VarChar(200)
+  gmail_thread_id                String                          @db.VarChar(200)
+  received_at                    DateTime                        @db.Timestamptz(6)
+  processed                      Boolean
+  is_reply                       Boolean
+  created_at                     DateTime                        @db.Timestamptz(6)
+  campaign_id                    BigInt?
+  email_automation_emailcampaign email_automation_emailcampaign? @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_automation_rec_campaign_id_36bf3c2e_fk_email_aut")
+
+  @@index([campaign_id], map: "email_automation_receivedemail_campaign_id_36bf3c2e")
+  @@index([gmail_message_id], map: "email_automation_receivedemail_gmail_message_id_d1babbe2_like")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model email_automation_sentemail {
+  id                             BigInt                          @id @default(autoincrement())
+  recipient_email                String                          @db.VarChar(254)
+  recipient_name                 String                          @db.VarChar(200)
+  subject                        String                          @db.VarChar(200)
+  body                           String
+  gmail_message_id               String                          @db.VarChar(200)
+  gmail_thread_id                String                          @db.VarChar(200)
+  sent_at                        DateTime                        @db.Timestamptz(6)
+  opened                         Boolean
+  replied                        Boolean
+  replied_at                     DateTime?                       @db.Timestamptz(6)
+  error_message                  String
+  campaign_id                    BigInt
+  template_id                    BigInt?
+  email_automation_emailcampaign email_automation_emailcampaign  @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_automation_sen_campaign_id_a98ccf02_fk_email_aut")
+  email_automation_emailtemplate email_automation_emailtemplate? @relation(fields: [template_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_automation_sen_template_id_c4c2548c_fk_email_aut")
+
+  @@index([campaign_id], map: "email_automation_sentemail_campaign_id_a98ccf02")
+  @@index([template_id], map: "email_automation_sentemail_template_id_c4c2548c")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model marketing_productattribute {
+  id                       BigInt                    @id @default(autoincrement())
+  name                     String                    @db.VarChar(255)
+  value                    String                    @db.VarChar(500)
+  sequence                 Int
+  created_at               DateTime                  @db.Timestamptz(6)
+  product_id               BigInt?
+  product_variant_id       BigInt?
+  marketing_product        marketing_product?        @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productatt_product_id_bf9fc2e1_fk_marketing")
+  marketing_productvariant marketing_productvariant? @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productatt_product_variant_id_a02e46df_fk_marketing")
+
+  @@index([product_variant_id, name], map: "marketing_p_product_0910eb_idx")
+  @@index([product_id, name], map: "marketing_p_product_b0d44f_idx")
+  @@index([product_id], map: "marketing_productattribute_product_id_bf9fc2e1")
+  @@index([product_variant_id], map: "marketing_productattribute_product_variant_id_a02e46df")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model marketing_productattributevalue {
+  id                BigInt            @id @default(autoincrement())
+  value             String            @db.VarChar(500)
+  attribute_id      BigInt
+  product_id        BigInt
+  marketing_product marketing_product @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productatt_product_id_051ddd20_fk_marketing")
+
+  @@unique([product_id, attribute_id], map: "marketing_productattribu_product_id_attribute_id_96dd405a_uniq")
+  @@index([attribute_id], map: "marketing_productattributevalue_attribute_id_ab767a71")
+  @@index([product_id], map: "marketing_productattributevalue_product_id_051ddd20")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model marketing_productvariant_product_variant_attribute_values {
+  id                                     BigInt                                 @id @default(autoincrement())
+  productvariant_id                      BigInt
+  productvariantattributevalue_id        BigInt
+  marketing_productvariant               marketing_productvariant               @relation(fields: [productvariant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_productvariant_id_dea88b23_fk_marketing")
+  marketing_productvariantattributevalue marketing_productvariantattributevalue @relation(fields: [productvariantattributevalue_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_productvariantattrib_02158a2e_fk_marketing")
+
+  @@unique([productvariant_id, productvariantattributevalue_id], map: "marketing_productvariant_productvariant_id_produc_cdbdc702_uniq")
+  @@index([productvariant_id], map: "marketing_productvariant_p_productvariant_id_dea88b23")
+  @@index([productvariantattributevalue_id], map: "marketing_productvariant_p_productvariantattributeval_02158a2e")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model marketing_productvariantcustomattribute {
+  id                       BigInt                   @id @default(autoincrement())
+  value                    String                   @db.VarChar(500)
+  attribute_id             BigInt
+  variant_id               BigInt
+  marketing_productvariant marketing_productvariant @relation(fields: [variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productvar_variant_id_748161bc_fk_marketing")
+
+  @@unique([variant_id, attribute_id], map: "marketing_productvariant_variant_id_attribute_id_38392b82_uniq")
+  @@index([attribute_id], map: "marketing_productvariantcustomattribute_attribute_id_9dad8012")
+  @@index([variant_id], map: "marketing_productvariantcustomattribute_variant_id_748161bc")
+}
+
+model operating_location {
+  id          BigInt  @id(map: "operating_warehouse_pkey") @default(autoincrement())
+  name        String  @unique(map: "operating_warehouse_name_key") @db.VarChar(150)
+  location    String? @db.VarChar(255)
+  description String?
+
+  @@index([name], map: "operating_warehouse_name_e2894c6f_like")
+}
+
+model operating_machinecredential {
+  id        BigInt  @id @default(autoincrement())
+  name      String  @unique @db.VarChar(150)
+  api_key   String  @unique @db.VarChar(64)
+  is_active Boolean
+
+  @@index([api_key], map: "operating_machinecredential_api_key_3f9a7431_like")
+  @@index([name], map: "operating_machinecredential_name_ac1cb9ae_like")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_order {
+  id                           BigInt                         @id @default(autoincrement())
+  created_at                   DateTime                       @db.Timestamptz(6)
+  status                       String                         @db.VarChar(32)
+  notes                        String?
+  company_id                   BigInt?
+  contact_id                   BigInt?
+  qr_code_url                  String?                        @db.VarChar(200)
+  updated_at                   DateTime                       @db.Timestamptz(6)
+  web_client_id                BigInt?
+  payment_id                   String?                        @db.VarChar(100)
+  payment_method               String?                        @db.VarChar(50)
+  payment_status               String?                        @db.VarChar(20)
+  original_currency            String?                        @db.VarChar(3)
+  original_price               Decimal?                       @db.Decimal(10, 2)
+  paid_currency                String?                        @db.VarChar(3)
+  paid_amount                  Decimal?                       @db.Decimal(10, 2)
+  exchange_rate                Decimal?                       @db.Decimal(10, 4)
+  card_type                    String?                        @db.VarChar(50)
+  card_association             String?                        @db.VarChar(50)
+  card_last_four               String?                        @db.VarChar(4)
+  delivery_address_title       String?                        @db.VarChar(100)
+  delivery_address             String?
+  delivery_city                String?                        @db.VarChar(100)
+  delivery_country             String?                        @db.VarChar(100)
+  delivery_phone               String?                        @db.VarChar(20)
+  billing_address_title        String?                        @db.VarChar(100)
+  billing_address              String?
+  billing_city                 String?                        @db.VarChar(100)
+  billing_country              String?                        @db.VarChar(100)
+  billing_phone                String?                        @db.VarChar(20)
+  tracking_number              String?                        @db.VarChar(100)
+  shipped_at                   DateTime?                      @db.Timestamptz(6)
+  delivered_at                 DateTime?                      @db.Timestamptz(6)
+  accounting_equityrevenue     accounting_equityrevenue[]
+  crm_company                  crm_company?                   @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_order_company_id_3b1f3f9e_fk_crm_company_id")
+  crm_contact                  crm_contact?                   @relation(fields: [contact_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_order_contact_id_7bc59ebe_fk_crm_contact_id")
+  web_client                   web_client?                    @relation(fields: [web_client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_order_web_client_id_f7ab9ecc_fk_web_client_id")
+  operating_orderitem          operating_orderitem[]
+  operating_pack               operating_pack[]
+  operating_production         operating_production[]
+  operating_workinprogressgood operating_workinprogressgood[]
+
+  @@index([company_id], map: "operating_order_company_id_3b1f3f9e")
+  @@index([contact_id], map: "operating_order_contact_id_7bc59ebe")
+  @@index([web_client_id], map: "operating_order_web_client_id_f7ab9ecc")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_orderitem {
+  id                       BigInt                    @id @default(autoincrement())
+  quantity                 Decimal?                  @db.Decimal(10, 2)
+  price                    Decimal                   @db.Decimal(10, 2)
+  order_id                 BigInt
+  product_id               BigInt
+  description              String?
+  status                   String                    @db.VarChar(32)
+  product_variant_id       BigInt?
+  created_at               DateTime                  @db.Timestamptz(6)
+  updated_at               DateTime                  @db.Timestamptz(6)
+  target_quantity_per_pack Decimal?                  @db.Decimal(10, 2)
+  operating_order          operating_order           @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_orderitem_order_id_0169742d_fk_operating_order_id")
+  marketing_product        marketing_product         @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_orderitem_product_id_bf7c2390_fk_marketing_product_id")
+  marketing_productvariant marketing_productvariant? @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_orderitem_product_variant_id_8ff09ade_fk_marketing")
+  operating_orderitemunit  operating_orderitemunit[]
+
+  @@index([order_id], map: "operating_orderitem_order_id_0169742d")
+  @@index([product_id], map: "operating_orderitem_product_id_bf7c2390")
+  @@index([product_variant_id], map: "operating_orderitem_variant_id_e4cca4cf")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_orderitemunit {
+  id                   BigInt                @id @default(autoincrement())
+  created_at           DateTime              @db.Timestamptz(6)
+  updated_at           DateTime              @db.Timestamptz(6)
+  quantity             Decimal               @db.Decimal(10, 2)
+  qr_code_url          String?               @db.VarChar(200)
+  status               String                @db.VarChar(32)
+  order_item_id        BigInt
+  operating_orderitem  operating_orderitem   @relation(fields: [order_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_orderitemu_order_item_id_aad625f3_fk_operating")
+  operating_packeditem operating_packeditem?
+
+  @@index([order_item_id], map: "operating_orderitemunit_order_item_id_aad625f3")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_pack {
+  id                   BigInt                 @id @default(autoincrement())
+  created_at           DateTime               @db.Timestamptz(6)
+  updated_at           DateTime               @db.Timestamptz(6)
+  pack_number          Int
+  order_id             BigInt
+  operating_order      operating_order        @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_pack_order_id_b220aa4a_fk_operating_order_id")
+  operating_packeditem operating_packeditem[]
+
+  @@unique([order_id, pack_number], map: "operating_pack_order_id_pack_number_003ddffe_uniq")
+  @@index([order_id], map: "operating_pack_order_id_b220aa4a")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_packeditem {
+  id                      BigInt                  @id @default(autoincrement())
+  order_item_unit_id      BigInt                  @unique
+  pack_id                 BigInt
+  operating_orderitemunit operating_orderitemunit @relation(fields: [order_item_unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_packeditem_order_item_unit_id_332ac6c6_fk_operating")
+  operating_pack          operating_pack          @relation(fields: [pack_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_packeditem_pack_id_b0de6219_fk_operating_pack_id")
+
+  @@index([pack_id], map: "operating_packeditem_pack_id_b0de6219")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_production {
+  id              BigInt          @id @default(autoincrement())
+  order_id        BigInt
+  operating_order operating_order @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_production_order_id_aa7c823b_fk_operating_order_id")
+
+  @@index([order_id], map: "operating_production_order_id_aa7c823b")
+}
+
+model operating_rawmaterialgood {
+  id                                   BigInt                                 @id @default(autoincrement())
+  created_at                           DateTime                               @db.Timestamptz(6)
+  modified_at                          DateTime                               @db.Date
+  name                                 String                                 @db.VarChar
+  supplier_sku                         String?                                @db.VarChar
+  sku                                  String                                 @db.VarChar
+  unit_of_measurement                  String?                                @db.VarChar
+  raw_type                             String                                 @db.VarChar
+  quantity                             Decimal?                               @db.Decimal(10, 2)
+  accounting_assetinventoryrawmaterial accounting_assetinventoryrawmaterial[]
+  operating_rawmaterialgooditem        operating_rawmaterialgooditem[]
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_rawmaterialgooditem {
+  id                               BigInt                            @id @default(autoincrement())
+  quantity                         Decimal                           @db.Decimal(10, 2)
+  raw_material_good_id             BigInt?
+  receipt_id                       BigInt?
+  unit_cost                        Decimal                           @db.Decimal(10, 2)
+  operating_rawmaterialgood        operating_rawmaterialgood?        @relation(fields: [raw_material_good_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_rawmateria_raw_material_good_id_95d849bd_fk_operating")
+  operating_rawmaterialgoodreceipt operating_rawmaterialgoodreceipt? @relation(fields: [receipt_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_rawmateria_receipt_id_81e4bec0_fk_operating")
+
+  @@index([raw_material_good_id], map: "operating_rawmaterialgooditem_raw_material_good_id_95d849bd")
+  @@index([receipt_id], map: "operating_rawmaterialgooditem_receipt_id_81e4bec0")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_rawmaterialgoodreceipt {
+  id                                  BigInt                                @id @default(autoincrement())
+  receipt_number                      String?                               @db.VarChar(50)
+  date                                DateTime?                             @db.Date
+  supplier_id                         BigInt
+  book_id                             BigInt?
+  invoice_number                      String?                               @db.VarChar(50)
+  currency_id                         BigInt?
+  accounting_liabilityaccountspayable accounting_liabilityaccountspayable[]
+  operating_rawmaterialgooditem       operating_rawmaterialgooditem[]
+  accounting_book                     accounting_book?                      @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_rawmateria_book_id_5b795a25_fk_accountin")
+  accounting_currencycategory         accounting_currencycategory?          @relation(fields: [currency_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_rawmateria_currency_id_4aec3ca5_fk_accountin")
+  crm_supplier                        crm_supplier                          @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_rawmateria_supplier_id_e1167339_fk_crm_suppl")
+
+  @@unique([supplier_id, receipt_number], map: "unique_supplier_receipt_number")
+  @@index([book_id], map: "operating_rawmaterialgoodreceipt_book_id_5b795a25")
+  @@index([currency_id], map: "operating_rawmaterialgoodreceipt_currency_id_4aec3ca5")
+  @@index([supplier_id], map: "operating_rawmaterialgoodreceipt_supplier_id_e1167339")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model operating_workinprogressgood {
+  id                       BigInt                    @id @default(autoincrement())
+  created_at               DateTime                  @db.Timestamptz(6)
+  modified_at              DateTime?                 @db.Date
+  order_id                 BigInt
+  product_id               BigInt
+  product_variant_id       BigInt?
+  operating_order          operating_order           @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_workinprog_order_id_b8f2310d_fk_operating")
+  marketing_product        marketing_product         @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_workinprog_product_id_774bdd73_fk_marketing")
+  marketing_productvariant marketing_productvariant? @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "operating_workinprog_product_variant_id_0ebdf87e_fk_marketing")
+
+  @@index([order_id], map: "operating_workinprogressgood_order_id_b8f2310d")
+  @@index([product_id], map: "operating_workinprogressgood_product_id_774bdd73")
+  @@index([product_variant_id], map: "operating_workinprogressgood_product_variant_id_0ebdf87e")
+}
+
+model operating_workstation {
+  id                BigInt              @id @default(autoincrement())
+  name              String              @unique @db.VarChar(150)
+  operating_machine operating_machine[]
+
+  @@index([name], map: "operating_workstation_name_692b14cf_like")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model todo_taskcomment {
+  id                    BigInt                @id @default(autoincrement())
+  content               String
+  created_at            DateTime              @db.Timestamptz(6)
+  updated_at            DateTime              @db.Timestamptz(6)
+  author_id             BigInt
+  task_id               BigInt
+  authentication_member authentication_member @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_taskcomment_author_id_bb91f686_fk_authentication_member_id")
+  todo_task             todo_task             @relation(fields: [task_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "todo_taskcomment_task_id_93a771bc_fk_todo_task_id")
+
+  @@index([author_id], map: "todo_taskcomment_author_id_bb91f686")
+  @@index([task_id], map: "todo_taskcomment_task_id_93a771bc")
+}
+
+model web_client {
+  id               BigInt             @id @default(autoincrement())
+  username         String             @unique @db.VarChar(150)
+  email            String             @unique @db.VarChar(254)
+  password         String             @db.VarChar(255)
+  name             String?            @db.VarChar(255)
+  created_at       DateTime           @db.Timestamptz(6)
+  updated_at       DateTime           @db.Timestamptz(6)
+  is_active        Boolean
+  birthdate        DateTime?          @db.Date
+  phone            String?            @db.VarChar(20)
+  client_address   client_address[]
+  client_cart_item client_cart_item[]
+  client_favorite  client_favorite[]
+  operating_order  operating_order[]
+
+  @@index([email], map: "web_client_email_57c95c55_like")
+  @@index([username], map: "web_client_username_22db7feb_like")
 }

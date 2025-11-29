@@ -5,21 +5,25 @@ import { NextIntlClientProvider } from "next-intl"
 import { FavoriteProvider } from "@/contexts/FavoriteContext"
 import { CartProvider } from "@/contexts/CartContext"
 
+import { CurrencyProvider } from "@/contexts/CurrencyContext"
+
 type Props = {
-    children?:React.ReactNode
+    children?: React.ReactNode
     messages: Record<string, unknown>
     locale: string
 }
-export const Providers = ({children, messages, locale}:Props) => {
+export const Providers = ({ children, messages, locale }: Props) => {
     return (
         <SessionProvider>
-            <FavoriteProvider>
-                <CartProvider>
-                    <NextIntlClientProvider messages={messages} locale={locale}>
-                        {children}
-                    </NextIntlClientProvider>
-                </CartProvider>
-            </FavoriteProvider>
+            <CurrencyProvider>
+                <FavoriteProvider>
+                    <CartProvider>
+                        <NextIntlClientProvider messages={messages} locale={locale}>
+                            {children}
+                        </NextIntlClientProvider>
+                    </CartProvider>
+                </FavoriteProvider>
+            </CurrencyProvider>
         </SessionProvider>
     )
 }

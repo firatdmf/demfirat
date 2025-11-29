@@ -13,6 +13,7 @@ import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { HiDocumentText } from "react-icons/hi2";
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface ProductCardProps {
   product: Product;
@@ -21,16 +22,17 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps) {
+  const { convertPrice } = useCurrency();
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
   const { data: session } = useSession();
   const { isFavorite, toggleFavorite } = useFavorites();
-  
+
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(product.primary_image || placeholder_image_link);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
-  
+
   const isWishlisted = isFavorite(product.sku);
 
   // Reset image states when product changes
@@ -39,7 +41,7 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
     setImageSrc(newSrc);
     setImageError(false);
     setHasTriedFallback(false);
-    
+
     // Check if image is already cached/loaded
     const img = new Image();
     img.src = newSrc;
@@ -55,20 +57,16 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
   const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);
 
-  // Format price with currency
+  // Format price with currency (using global context)
   const formatPrice = (price: string | number) => {
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    }).format(numPrice);
+    return convertPrice(numPrice);
   };
 
   const handleWishlistClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!session?.user?.email) {
       // Redirect to login if not authenticated
       window.location.href = `/${locale}/login`;
@@ -135,9 +133,9 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
               <div className={classes.imageOverlay}></div>
             </div>
           </Link>
-          
+
           {/* Wishlist Button */}
-          <button 
+          <button
             className={classes.wishlistBtn}
             onClick={handleWishlistClick}
             aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -146,14 +144,14 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
           </button>
 
           {/* PDF Button - Left Bottom */}
-          <button 
+          <button
             className={classes.pdfBtn}
             onClick={handlePdfClick}
             aria-label={locale === 'tr' ? 'PDF olarak indir' :
-                       locale === 'ru' ? 'Скачать PDF' :
-                       locale === 'pl' ? 'Pobierz PDF' :
-                       locale === 'de' ? 'PDF herunterladen' :
-                       'Download PDF'}
+              locale === 'ru' ? 'Скачать PDF' :
+                locale === 'pl' ? 'Pobierz PDF' :
+                  locale === 'de' ? 'PDF herunterladen' :
+                    'Download PDF'}
           >
             <HiDocumentText />
           </button>
@@ -169,7 +167,7 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
             */
 
           }
-         
+
         </div>
 
         {/* Product Info */}
@@ -180,7 +178,7 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
           >
             <div className={classes.productTitle}>{product.title}</div>
             <div className={classes.productSku}>SKU: {product.sku}</div>
-            
+
             {/* Price Section */}
             <div className={classes.priceSection}>
               {/* Try variant_price first, then product.price */}
@@ -195,10 +193,10 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
               ) : (
                 <span className={classes.contactPrice}>
                   {locale === 'tr' ? 'Fiyat için iletişime geçin' :
-                   locale === 'ru' ? 'Свяжитесь для уточнения цены' :
-                   locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
-                   locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
-                   'Contact for price'}
+                    locale === 'ru' ? 'Свяжитесь для уточнения цены' :
+                      locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
+                        locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
+                          'Contact for price'}
                 </span>
               )}
             </div>

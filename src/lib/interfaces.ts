@@ -26,7 +26,7 @@ export type Product = {
   datasheet_url: string | null;
   minimum_inventory_level: Decimal | null;
   primary_image?: string;
-  
+
 }
 
 export type Product_API = {
@@ -64,6 +64,14 @@ export type ProductVariantAttributeValue = {
   // attribute_id:bigint | null;
 }
 
+export type ProductAttribute = {
+  id: bigint;
+  name: string;
+  value: string;
+  sequence: number;
+  variant_id?: bigint; // Only for variant attributes
+}
+
 
 export type ProductFile = {
   id: bigint;
@@ -93,13 +101,13 @@ export type Order = {
 
 export type OrderItem = {
   id: bigint;
-  product_category:string;
-  product_sku:string;
+  product_category: string;
+  product_sku: string;
   product_title: string;
   description: string | null;
   quantity: Decimal;
   status: string;
-  unit_of_measurement:string;
+  unit_of_measurement: string;
 }
 
 // ----------------------------------------------------------------------

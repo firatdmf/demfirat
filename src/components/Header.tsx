@@ -19,6 +19,8 @@ function Header({ menuTArray }: HeaderProps) {
   const { cartCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const [fabricDropdownOpen, setFabricDropdownOpen] = useState(false);
+  const [mobileFabricOpen, setMobileFabricOpen] = useState(false);
 
   // Çeviriler
   const t = (key: string) => {
@@ -31,6 +33,8 @@ function Header({ menuTArray }: HeaderProps) {
       accountInfo: { en: 'Account Info', tr: 'Kullanıcı Bilgilerim', ru: 'Информация об аккаунте', pl: 'Informacje o koncie' },
       myReviews: { en: 'My Reviews', tr: 'Değerlendirmelerim', ru: 'Мои отзывы', pl: 'Moje recenzje' },
       signOut: { en: 'Sign Out', tr: 'Çıkış Yap', ru: 'Выйти', pl: 'Wyloguj się' },
+      flatFabric: { en: 'Flat Fabric', tr: 'Düz Kumaş', ru: 'Гладкая ткань', pl: 'Gładka tkanina' },
+      patternedFabric: { en: 'Patterned Fabric', tr: 'Desenli Kumaş', ru: 'Узорчатая ткань', pl: 'Wzorzysta tkanina' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -50,9 +54,9 @@ function Header({ menuTArray }: HeaderProps) {
           </Link>
           <span className={classes.slogan}>
             {locale === 'tr' ? 'Bütünsel Düşünün, Nakışlı Düşünün' :
-             locale === 'ru' ? 'Мыслите целостно, Мыслите вышивкой' :
-             locale === 'pl' ? 'Myśl całościowo, Myśl haftem' :
-             'Think Holistic, Think Embroidered'}
+              locale === 'ru' ? 'Мыслите целостно, Мыслите вышивкой' :
+                locale === 'pl' ? 'Myśl całościowo, Myśl haftem' :
+                  'Think Holistic, Think Embroidered'}
           </span>
         </div>
 
@@ -62,9 +66,26 @@ function Header({ menuTArray }: HeaderProps) {
             <Link href={`/${locale}`} className={classes.navLink}>
               {menuTArray[0]}
             </Link>
-            <Link href={`/${locale}/product/fabric`} className={classes.navLink}>
-              {menuTArray[1]}
-            </Link>
+            <div
+              className={classes.navDropdown}
+              onMouseEnter={() => setFabricDropdownOpen(true)}
+              onMouseLeave={() => setFabricDropdownOpen(false)}
+            >
+              <Link href={`/${locale}/product/fabric`} className={classes.navLink}>
+                {menuTArray[1]}
+                <FaChevronDown className={classes.navDropdownIcon} />
+              </Link>
+              {fabricDropdownOpen && (
+                <div className={classes.navDropdownMenu}>
+                  <Link href={`/${locale}/product/fabric?fabric_type=flat`} className={classes.dropdownItem}>
+                    {t('flatFabric')}
+                  </Link>
+                  <Link href={`/${locale}/product/fabric?fabric_type=patterned`} className={classes.dropdownItem}>
+                    {t('patternedFabric')}
+                  </Link>
+                </div>
+              )}
+            </div>
             <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
               {menuTArray[2]}
             </Link>
@@ -111,7 +132,7 @@ function Header({ menuTArray }: HeaderProps) {
               // Logged in
               <>
                 {/* My Account - Dropdown */}
-                <div 
+                <div
                   className={classes.accountDropdown}
                   onMouseEnter={() => setAccountDropdownOpen(true)}
                   onMouseLeave={() => setAccountDropdownOpen(false)}
@@ -121,7 +142,7 @@ function Header({ menuTArray }: HeaderProps) {
                     <span className={classes.actionText}>{t('myAccount')}</span>
                     <FaChevronDown className={classes.dropdownIcon} />
                   </button>
-                  
+
                   {accountDropdownOpen && (
                     <div className={classes.dropdownMenu}>
                       <Link href={`/${locale}/account/orders`} className={classes.dropdownItem}>
@@ -134,7 +155,7 @@ function Header({ menuTArray }: HeaderProps) {
                         {t('myReviews')}
                       </Link>
                       <hr className={classes.dropdownDivider} />
-                      <button 
+                      <button
                         onClick={() => signOut()}
                         className={`${classes.dropdownItem} ${classes.signOutBtn}`}
                       >
@@ -176,7 +197,7 @@ function Header({ menuTArray }: HeaderProps) {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className={classes.mobileMenuToggle}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
@@ -191,60 +212,87 @@ function Header({ menuTArray }: HeaderProps) {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className={classes.mobileMenu}>
-          <Link 
-            href={`/${locale}`} 
+          <Link
+            href={`/${locale}`}
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
             {menuTArray[0]}
           </Link>
-          <Link 
-            href={`/${locale}/product/fabric`} 
-            className={classes.mobileNavLink}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            {menuTArray[1]}
-          </Link>
-          <Link 
-            href={`/${locale}/product/ready-made_curtain`} 
+          <div className={classes.mobileNavDropdown}>
+            <button
+              className={classes.mobileNavLink}
+              onClick={() => setMobileFabricOpen(!mobileFabricOpen)}
+            >
+              {menuTArray[1]}
+              <FaChevronDown className={`${classes.mobileDropdownIcon} ${mobileFabricOpen ? classes.rotated : ''}`} />
+            </button>
+            {mobileFabricOpen && (
+              <div className={classes.mobileSubMenu}>
+                <Link
+                  href={`/${locale}/product/fabric`}
+                  className={classes.mobileSubLink}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {locale === 'tr' ? 'Tüm Kumaşlar' : locale === 'ru' ? 'Все ткани' : locale === 'pl' ? 'Wszystkie tkaniny' : 'All Fabrics'}
+                </Link>
+                <Link
+                  href={`/${locale}/product/fabric?fabric_type=flat`}
+                  className={classes.mobileSubLink}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('flatFabric')}
+                </Link>
+                <Link
+                  href={`/${locale}/product/fabric?fabric_type=patterned`}
+                  className={classes.mobileSubLink}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('patternedFabric')}
+                </Link>
+              </div>
+            )}
+          </div>
+          <Link
+            href={`/${locale}/product/ready-made_curtain`}
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
             {menuTArray[2]}
           </Link>
-          <Link 
-            href={`/${locale}/about`} 
+          <Link
+            href={`/${locale}/about`}
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
             {menuTArray[3]}
           </Link>
-          <Link 
-            href={`/${locale}/contact`} 
+          <Link
+            href={`/${locale}/contact`}
             className={classes.mobileNavLink}
             onClick={() => setMobileMenuOpen(false)}
           >
             {menuTArray[4]}
           </Link>
-          
+
           {session?.user && (
             <>
               <hr className={classes.mobileDivider} />
-              <Link 
-                href={`/${locale}/account/orders`} 
+              <Link
+                href={`/${locale}/account/orders`}
                 className={classes.mobileNavLink}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('myOrders')}
               </Link>
-              <Link 
-                href={`/${locale}/account/profile`} 
+              <Link
+                href={`/${locale}/account/profile`}
                 className={classes.mobileNavLink}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('accountInfo')}
               </Link>
-              <button 
+              <button
                 onClick={() => {
                   signOut();
                   setMobileMenuOpen(false);

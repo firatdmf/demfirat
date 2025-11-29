@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import React, { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import classes from './page.module.css';
 import { FcGoogle } from 'react-icons/fc';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -9,11 +10,29 @@ import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
+  const locale = useLocale();
+  const { data: session, status } = useSession();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (status === 'authenticated' && session) {
+      router.replace(`/${locale}`);
+    }
+  }, [session, status, router, locale]);
+
+  // Show nothing while checking auth status or redirecting
+  if (status === 'loading' || (status === 'authenticated' && session)) {
+    return (
+      <div className={classes.loginContainer}>
+        <div className={classes.loadingSpinner}></div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,9 +69,9 @@ export default function LoginPage() {
       <div className={classes.loginCard}>
         {/* Logo Section */}
         <div className={classes.logoSection}>
-          <img 
-            src="/media/karvenLogo.webp" 
-            alt="Karven Logo" 
+          <img
+            src="/media/karvenLogo.webp"
+            alt="Karven Logo"
             className={classes.logo}
           />
           <h1 className={classes.title}>Welcome Back</h1>
@@ -118,6 +137,14 @@ export default function LoginPage() {
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
+            </div>
+            <div className="text-right mt-2">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-yellow-600 hover:text-yellow-700 transition-colors"
+              >
+                Forgot Password?
+              </Link>
             </div>
           </div>
 

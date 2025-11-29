@@ -8,6 +8,7 @@ import { FaShoppingCart, FaCreditCard, FaMapMarkerAlt, FaUser, FaCheck, FaPhone,
 import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface CartItem {
   id: number;
@@ -53,6 +54,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const locale = useLocale();
   const { refreshCart } = useCart();
+  const { convertPrice } = useCurrency();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedDeliveryAddressId, setSelectedDeliveryAddressId] = useState<string | null>(null);
@@ -421,11 +423,7 @@ export default function CheckoutPage() {
     if (!price) return null;
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
     if (isNaN(numPrice) || numPrice === 0) return null;
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    }).format(numPrice);
+    return convertPrice(numPrice);
   };
 
   const handleCompleteOrder = async () => {
@@ -750,11 +748,11 @@ export default function CheckoutPage() {
       }
 
       // Show success message
-      alert(locale === 'tr' 
-        ? 'Adres başarıyla kaydedildi!' 
-        : locale === 'ru' ? 'Адрес успешно сохранен!' 
-        : locale === 'pl' ? 'Adres został pomyślnie zapisany!'
-        : 'Address saved successfully!');
+      alert(locale === 'tr'
+        ? 'Adres başarıyla kaydedildi!'
+        : locale === 'ru' ? 'Адрес успешно сохранен!'
+          : locale === 'pl' ? 'Adres został pomyślnie zapisany!'
+            : 'Address saved successfully!');
 
       // Reset form
       setNewAddress({
@@ -777,8 +775,8 @@ export default function CheckoutPage() {
       alert(locale === 'tr'
         ? 'Adres kaydedilemedi: ' + (error.message || 'Bilinmeyen hata')
         : locale === 'ru' ? 'Не удалось сохранить адрес: ' + (error.message || 'Неизвестная ошибка')
-        : locale === 'pl' ? 'Nie udało się zapisać adresu: ' + (error.message || 'Nieznany błąd')
-        : 'Failed to save address: ' + (error.message || 'Unknown error'));
+          : locale === 'pl' ? 'Nie udało się zapisać adresu: ' + (error.message || 'Nieznany błąd')
+            : 'Failed to save address: ' + (error.message || 'Unknown error'));
     }
   };
 

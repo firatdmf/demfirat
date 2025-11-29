@@ -181,9 +181,12 @@
 }
 
 @keyframes badgePulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
@@ -213,7 +216,7 @@
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 0.5rem 0;
-  animation: dropdownFadeIn 0.3s ease-out;
+  animation: accountDropdownFadeIn 0.3s ease-out;
   z-index: 1001;
 }
 
@@ -231,8 +234,21 @@
 @keyframes dropdownFadeIn {
   from {
     opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes accountDropdownFadeIn {
+  from {
+    opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -279,6 +295,51 @@
 .HeaderPage .signOutBtn:hover {
   background: rgba(211, 47, 47, 0.1);
   color: #d32f2f;
+}
+
+/* Navigation Dropdown */
+.HeaderPage .navDropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.HeaderPage .navDropdownIcon {
+  font-size: 0.7rem;
+  margin-left: 0.4rem;
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+}
+
+.HeaderPage .navDropdown:hover .navDropdownIcon {
+  transform: rotate(180deg);
+  opacity: 1;
+  color: #c9a961;
+}
+
+.HeaderPage .navDropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem 0;
+  animation: dropdownFadeIn 0.3s ease-out;
+  z-index: 1001;
+}
+
+.HeaderPage .navDropdownMenu::before {
+  content: '';
+  position: absolute;
+  top: -1rem;
+  left: 0;
+  right: 0;
+  height: 1rem;
+  background: transparent;
 }
 
 /* Mobile Actions */
@@ -362,6 +423,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -399,16 +461,62 @@
   border-top: 1px solid rgba(201, 169, 97, 0.2);
 }
 
+/* Mobile Dropdown */
+.HeaderPage .mobileNavDropdown {
+  width: 100%;
+}
+
+.HeaderPage .mobileNavLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.HeaderPage .mobileDropdownIcon {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+  color: #888;
+}
+
+.HeaderPage .mobileDropdownIcon.rotated {
+  transform: rotate(180deg);
+  color: #c9a961;
+}
+
+.HeaderPage .mobileSubMenu {
+  background: rgba(201, 169, 97, 0.05);
+  padding: 0.5rem 0;
+  animation: slideDown 0.2s ease-out;
+}
+
+.HeaderPage .mobileSubLink {
+  display: block;
+  padding: 0.85rem 2rem 0.85rem 3rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #4a4a4a;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.HeaderPage .mobileSubLink:hover {
+  background: rgba(201, 169, 97, 0.1);
+  color: #c9a961;
+  border-left-color: #c9a961;
+}
+
 /* Responsive Design */
 @media screen and (max-width: 1200px) {
   .HeaderPage .mainNav {
     gap: 2rem;
   }
-  
+
   .HeaderPage .actionText {
     font-size: 0.85rem;
   }
-  
+
   .HeaderPage .actionButton {
     padding: 0.6rem 1rem;
   }
@@ -418,19 +526,19 @@
   .HeaderPage .middleSection {
     display: none;
   }
-  
+
   .HeaderPage .desktopActions {
     display: none;
   }
-  
+
   .HeaderPage .mobileActions {
     display: flex;
   }
-  
+
   .HeaderPage .mobileMenuToggle {
     display: flex;
   }
-  
+
   .HeaderPage .headerContainer {
     padding: 0 2rem;
   }
@@ -441,15 +549,15 @@
     padding: 0 1.5rem;
     height: 85px;
   }
-  
+
   .HeaderPage .logo {
     height: 45px;
   }
-  
+
   .HeaderPage .slogan {
     font-size: 0.7rem;
   }
-  
+
   .HeaderPage .actionsSection {
     gap: 1rem;
   }
@@ -460,25 +568,25 @@
     padding: 0 1rem;
     height: 75px;
   }
-  
+
   .HeaderPage .logo {
     height: 38px;
   }
-  
+
   .HeaderPage .slogan {
     font-size: 0.65rem;
   }
-  
+
   .HeaderPage .iconButton {
     width: 36px;
     height: 36px;
     font-size: 1rem;
   }
-  
+
   .HeaderPage .actionsSection {
     gap: 0.75rem;
   }
-  
+
   .HeaderPage .mobileMenu {
     max-height: calc(100vh - 75px);
   }

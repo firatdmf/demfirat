@@ -8,6 +8,7 @@ import { FaShoppingCart, FaTrash, FaPlus, FaMinus, FaArrowRight, FaBox } from 'r
 import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface CartItem {
   id: number;
@@ -39,6 +40,7 @@ export default function CartPage() {
   const router = useRouter();
   const locale = useLocale();
   const { refreshCart } = useCart();
+  const { convertPrice } = useCurrency();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingItems, setUpdatingItems] = useState<Set<number>>(new Set());
@@ -278,11 +280,7 @@ export default function CartPage() {
     if (!price) return null;
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
     if (isNaN(numPrice) || numPrice === 0) return null;
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    }).format(numPrice);
+    return convertPrice(numPrice);
   };
 
   if (status === 'loading' || loading) {

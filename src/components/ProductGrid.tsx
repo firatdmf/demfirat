@@ -86,6 +86,13 @@ const translateAttributeName = (name: string, locale: string): string => {
       'de': 'Stoff',
       'en': 'Fabric'
     },
+    'fabric_type': {
+      'tr': 'Kumaş Tipi',
+      'ru': 'Тип ткани',
+      'pl': 'Rodzaj tkaniny',
+      'de': 'Stoffart',
+      'en': 'Fabric Type'
+    },
     'pattern': {
       'tr': 'Desen',
       'ru': 'Узор',
@@ -164,7 +171,7 @@ const translateAttributeName = (name: string, locale: string): string => {
       'en': 'Thickness'
     }
   };
-  
+
   const lowerName = name.toLowerCase();
   if (translations[lowerName] && translations[lowerName][locale]) {
     return translations[lowerName][locale];
@@ -177,7 +184,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   // Pagination state
   const [displayCount, setDisplayCount] = useState(initialDisplayCount);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  
+
   // This is manipulated with (search params) but we need to initialize it first.
   let filteredProducts: Product[] | null = products ?? []; // Initialize as an empty array if products is null
   const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>([]);
@@ -199,17 +206,17 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   useEffect(() => {
     const handleScroll = () => {
       if (isLoadingMore || SearchFilterUsed) return; // Don't paginate when searching
-      
+
       const scrollTop = window.scrollY;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-      
+
       // Trigger when user is 200px from bottom
       if (scrollTop + windowHeight >= documentHeight - 200) {
         const currentProducts = filteredProducts || [];
         if (displayCount < currentProducts.length) {
           setIsLoadingMore(true);
-          
+
           setTimeout(() => {
             setDisplayCount(prev => prev + 30);
             setIsLoadingMore(false);
@@ -217,7 +224,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
         }
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isLoadingMore, displayCount, filteredProducts, SearchFilterUsed]);
@@ -237,16 +244,16 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       if (products) {
         const matchedProducts = products.filter((product) =>
           // search product title or product sku and return matching products
-          product.title?.toLowerCase().includes(query.toLowerCase()) || 
+          product.title?.toLowerCase().includes(query.toLowerCase()) ||
           product.sku?.toLowerCase().includes(query.toLowerCase())
         );
-        
+
         const uniqueResults = Array.from(
           new Map(
             matchedProducts.map(product => [String(product.id), product]) // Use id as unique key
           ).values()
         );
-        
+
         console.log(`[SEARCH] Found ${matchedProducts.length} matches, ${uniqueResults.length} unique`);
         setSearchFilteredProducts(uniqueResults)
       }
@@ -302,11 +309,27 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     return (
       <div className={classes.ProductGrid}>
         <div className={classes.headerSection}>
+          <div className={classes.headerBackground}>
+            {/* Dynamic Hero Image based on category */}
+            <img
+              src={
+                product_category?.toLowerCase().includes('fabric') ? '/media/hero/fabric-hero.png' :
+                  product_category?.toLowerCase().includes('curtain') ? '/media/ks-curtains-image.jpg' :
+                    '/image/category-hero.jpg'
+              }
+              alt={product_category || 'Category Hero'}
+              onError={(e) => {
+                // Fallback if image fails
+                e.currentTarget.src = '/media/hero/fabric-hero.png';
+              }}
+            />
+          </div>
+          <div className={classes.headerOverlay}></div>
           <div className={classes.headerContent}>
             <h1 className={classes.pageTitle}>
               {product_category?.toLowerCase().includes('fabric') ? 'Fabrics' :
-               product_category?.toLowerCase().includes('curtain') ? 'Curtains' :
-               'Products'}
+                product_category?.toLowerCase().includes('curtain') ? 'Curtains' :
+                  'Products'}
             </h1>
             {product_category_description && (
               <p className={classes.pageDescription}>{product_category_description}</p>
@@ -319,10 +342,10 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             className={classes.searchTerm}
             placeholder={
               locale === 'tr' ? 'Ürün adı veya SKU ile arayın' :
-              locale === 'ru' ? 'Поиск по названию или SKU' :
-              locale === 'pl' ? 'Szukaj po nazwie lub SKU' :
-              locale === 'de' ? 'Nach Produktname oder SKU suchen' :
-              'Search for product title or sku'
+                locale === 'ru' ? 'Поиск по названию или SKU' :
+                  locale === 'pl' ? 'Szukaj po nazwie lub SKU' :
+                    locale === 'de' ? 'Nach Produktname oder SKU suchen' :
+                      'Search for product title or sku'
             }
             onChange={search_filter}
           />
@@ -333,7 +356,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
         {/* Mobile Filter Button */}
         <div className={classes.filterButtonContainer}>
-          <button 
+          <button
             className={classes.mobileFilterButton}
             onClick={() => setFilterDrawerOpen(true)}
             aria-label="Open filters"
@@ -346,20 +369,20 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             </svg>
             <span>
               {locale === 'tr' ? 'Filtrele' :
-               locale === 'ru' ? 'Фильтры' :
-               locale === 'pl' ? 'Filtry' :
-               'Filters'}
+                locale === 'ru' ? 'Фильтры' :
+                  locale === 'pl' ? 'Filtry' :
+                    'Filters'}
             </span>
           </button>
         </div>
 
         {/* Mobile Filter Drawer Overlay */}
         {FilterDrawerOpen && (
-          <div 
+          <div
             className={classes.filterDrawerOverlay}
             onClick={() => setFilterDrawerOpen(false)}
           >
-            <div 
+            <div
               className={`${classes.filterDrawer} ${FilterDrawerOpen ? classes.filterDrawerOpen : ''}`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -367,18 +390,18 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               <div className={classes.filterDrawerHeader}>
                 <h3>
                   {locale === 'tr' ? 'Filtreler' :
-                   locale === 'ru' ? 'Фильтры' :
-                   locale === 'pl' ? 'Filtry' :
-                   'Filters'}
+                    locale === 'ru' ? 'Фильтры' :
+                      locale === 'pl' ? 'Filtry' :
+                        'Filters'}
                 </h3>
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                   <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
                     {locale === 'tr' ? 'Temizle' :
-                     locale === 'ru' ? 'Очистить' :
-                     locale === 'pl' ? 'Wyczyść' :
-                     'Reset'}
+                      locale === 'ru' ? 'Очистить' :
+                        locale === 'pl' ? 'Wyczyść' :
+                          'Reset'}
                   </Link>
-                  <button 
+                  <button
                     className={classes.closeDrawerButton}
                     onClick={() => setFilterDrawerOpen(false)}
                     aria-label="Close filters"
@@ -399,23 +422,23 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                   );
                   const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
                     .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
-                  
+
                   const isExpanded = expandedSections.has(index);
 
                   return (
                     <div key={index} className={classes.filterSection}>
-                      <div 
+                      <div
                         className={classes.filterSectionHeader}
                         onClick={() => toggleSection(index)}
                       >
                         <span>{translateAttributeName(attribute.name || '', locale)}</span>
-                        <svg 
+                        <svg
                           className={`${classes.chevron} ${isExpanded ? classes.chevronOpen : ''}`}
-                          width="16" 
-                          height="16" 
-                          viewBox="0 0 24 24" 
-                          fill="none" 
-                          stroke="currentColor" 
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
                           strokeWidth="2.5"
                         >
                           <polyline points="6 9 12 15 18 9"></polyline>
@@ -445,11 +468,11 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                             const href = `?${params.toString()}`;
 
                             return (
-                              <Link 
-                                key={attribute_value?.id} 
-                                className={classes.filterOption} 
-                                href={href} 
-                                replace={true} 
+                              <Link
+                                key={attribute_value?.id}
+                                className={classes.filterOption}
+                                href={href}
+                                replace={true}
                                 scroll={false}
                                 onClick={() => setFilterDrawerOpen(false)}
                               >
@@ -478,16 +501,16 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             <div className={classes.filterHeader}>
               <h3 className={classes.filterTitle}>
                 {locale === 'tr' ? 'Filtreler' :
-                 locale === 'ru' ? 'Фильтры' :
-                 locale === 'pl' ? 'Filtry' :
-                 'Filters'}
+                  locale === 'ru' ? 'Фильтры' :
+                    locale === 'pl' ? 'Filtry' :
+                      'Filters'}
               </h3>
               <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
                 {locale === 'tr' ? 'Temizle' :
-                 locale === 'ru' ? 'Очистить' :
-                 locale === 'pl' ? 'Wyczyść' :
-                 locale === 'de' ? 'Zurücksetzen' :
-                 'Reset'}
+                  locale === 'ru' ? 'Очистить' :
+                    locale === 'pl' ? 'Wyczyść' :
+                      locale === 'de' ? 'Zurücksetzen' :
+                        'Reset'}
               </Link>
             </div>
 
@@ -499,23 +522,23 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                 );
                 const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
                   .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
-                
+
                 const isExpanded = expandedSections.has(index);
 
                 return (
                   <div key={index} className={classes.filterSection}>
-                    <div 
+                    <div
                       className={classes.filterSectionHeader}
                       onClick={() => toggleSection(index)}
                     >
                       <span>{translateAttributeName(attribute.name || '', locale)}</span>
-                      <svg 
+                      <svg
                         className={`${classes.chevron} ${isExpanded ? classes.chevronOpen : ''}`}
-                        width="16" 
-                        height="16" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
                         strokeWidth="2.5"
                       >
                         <polyline points="6 9 12 15 18 9"></polyline>
@@ -566,32 +589,32 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product) => {
               // Find first variant price for this product
               const productVariants = product_variants.filter(v => v.product_id === product.id);
-              const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price 
-                ? Number(productVariants[0].variant_price) 
+              const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price
+                ? Number(productVariants[0].variant_price)
                 : null;
               return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} />;
             }) :
               (Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
                 // Find first variant price for this product
                 const productVariants = product_variants.filter(v => v.product_id === product.id);
-                const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price 
-                  ? Number(productVariants[0].variant_price) 
+                const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price
+                  ? Number(productVariants[0].variant_price)
                   : null;
                 return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} />;
               })
             }
           </div>
         </div>
-        
+
         {/* Loading indicator for infinite scroll */}
         {isLoadingMore && !SearchFilterUsed && (
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
             padding: '40px',
             width: '100%'
           }}>
-            <div style={{ 
+            <div style={{
               border: '4px solid #f3f3f3',
               borderTop: '4px solid #c9a961',
               borderRadius: '50%',
@@ -607,19 +630,19 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             `}</style>
           </div>
         )}
-        
+
         {/* End message */}
         {!SearchFilterUsed && filteredProducts && displayCount >= filteredProducts.length && filteredProducts.length > initialDisplayCount && (
-          <div style={{ 
-            textAlign: 'center', 
+          <div style={{
+            textAlign: 'center',
             padding: '40px',
             color: '#666',
             fontSize: '16px'
           }}>
             {locale === 'tr' ? 'Tüm ürünler yüklendi' :
-             locale === 'ru' ? 'Все товары загружены' :
-             locale === 'pl' ? 'Wszystkie produkty załadowane' :
-             'All products loaded'}
+              locale === 'ru' ? 'Все товары загружены' :
+                locale === 'pl' ? 'Wszystkie produkty załadowane' :
+                  'All products loaded'}
           </div>
         )}
       </div>

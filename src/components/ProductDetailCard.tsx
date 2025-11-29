@@ -6,11 +6,12 @@ import { FaCut } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import classes from "./ProductDetailCard.module.css";
-import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory } from '@/lib/interfaces';
+import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile, ProductCategory, ProductAttribute } from '@/lib/interfaces';
 import { useSession } from 'next-auth/react';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
 import { useFavorites } from '@/contexts/FavoriteContext';
 import { useCart } from '@/contexts/CartContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 
 type ProductDetailCardPageProps = {
@@ -21,6 +22,8 @@ type ProductDetailCardPageProps = {
   product_variant_attribute_values: ProductVariantAttributeValue[] | null,
   searchParams: { [key: string]: string | string[] | undefined };
   product_files: ProductFile[] | null;
+  product_attributes?: ProductAttribute[] | null;
+  variant_attributes?: ProductAttribute[] | null;
   locale?: string;
 };
 
@@ -32,10 +35,13 @@ function ProductDetailCard({
   product_variant_attribute_values,
   searchParams,
   product_files,
+  product_attributes = [],
+  variant_attributes = [],
   locale = 'en'
 }: ProductDetailCardPageProps) {
 
   const t = useTranslations('ProductDetailCard');
+  const { convertPrice } = useCurrency();
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -46,11 +52,7 @@ function ProductDetailCard({
   // Format price with currency
   const formatPrice = (price: any) => {
     const numPrice = parseFloat(String(price));
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: 'USD', // Currently hardcoded to USD as per existing logic
-      minimumFractionDigits: 2
-    }).format(numPrice);
+    return convertPrice(numPrice);
   };
 
   // URL parametrelerinden veya ilk varyanttan initial attributes'ı hesapla
@@ -576,8 +578,24 @@ function ProductDetailCard({
         <div className={classes.productHero}>
           <h2>{product.title}</h2>
           <p>SKU: {product.sku}</p>
-          {product_category ? <p className={classes.productCategory}>{product_category.toString()}</p> : null}
 
+          {/* Category + Attributes in one row */}
+          <div className={classes.categoryAndAttributes}>
+            {product_category && <span className={classes.productCategory}>{product_category.toString()}</span>}
+            {(() => {
+              const variantAttrs = selectedVariant && variant_attributes
+                ? variant_attributes.filter(attr => attr.variant_id === selectedVariant.id)
+                : [];
+              const attributesToShow = variantAttrs.length > 0 ? variantAttrs : (product_attributes || []);
+
+              return attributesToShow.map((attr, index) => (
+                <span key={`attr-${attr.name}-${index}`} className={classes.attributeBadge}>
+                  <span className={classes.attrName}>{attr.name}:</span>
+                  <span className={classes.attrValue}>{attr.value.replace(/_/g, " ")}</span>
+                </span>
+              ));
+            })()}
+          </div>
 
           {/* If the product has variants, display the variant information. */}
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
@@ -761,7 +779,7 @@ function ProductDetailCard({
                     transition: 'all 0.2s'
                   }}
                 >
-                  <FaCut style={{ fontSize: '2rem' }}/>
+                  <FaCut style={{ fontSize: '2rem' }} />
                   {t('customCurtain')}
                 </button>
               )}
@@ -786,15 +804,25 @@ function ProductDetailCard({
             </div>
           </div>
 
-          <h3>
-            {locale === 'tr' ? 'Açıklama' :
-              locale === 'ru' ? 'Описание' :
-                locale === 'pl' ? 'Opis' :
-                  locale === 'de' ? 'Beschreibung' :
-                    'Description'}
-          </h3>
-          <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
+        </div>
 
+      </div>
+
+      {/* Description Section - Full width centered at bottom */}
+      <div className={classes.descriptionWrapper}>
+        <div className={classes.descriptionSection}>
+          <h3>
+            {locale === 'tr' ? 'Ürün Açıklaması' :
+              locale === 'ru' ? 'Описание товара' :
+                locale === 'pl' ? 'Opis produktu' :
+                  locale === 'de' ? 'Produktbeschreibung' :
+                    'Product Description'}
+          </h3>
+          {product.description && (
+            <div className={classes.descriptionContent}>
+              <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
+            </div>
+          )}
         </div>
       </div>
 

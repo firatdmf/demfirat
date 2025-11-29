@@ -10,6 +10,7 @@ import { Product } from '@/lib/interfaces';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useFavorites } from '@/contexts/FavoriteContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface FavoriteItem {
   id: number;
@@ -22,11 +23,12 @@ export default function FavoritesPage() {
   const router = useRouter();
   const locale = useLocale();
   const { favorites: favoritesSet, toggleFavorite } = useFavorites();
+  const { convertPrice } = useCurrency();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [removingId, setRemovingId] = useState<string | null>(null);
   const pathname = usePathname();
-  
+
   const favorites = Array.from(favoritesSet).map(sku => ({ product_sku: sku, id: 0, created_at: '' }));
 
   const t = (key: string) => {
@@ -86,7 +88,7 @@ export default function FavoritesPage() {
         try {
           const url = `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${category}`;
           console.log('[FAVORITES] Fetching from:', url);
-          
+
           const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -94,7 +96,7 @@ export default function FavoritesPage() {
             },
             cache: 'no-store'
           });
-          
+
           if (response.ok) {
             const data = await response.json();
             if (data.products && Array.isArray(data.products)) {
@@ -110,7 +112,7 @@ export default function FavoritesPage() {
 
       // Filter products by favorite SKUs
       console.log('[FAVORITES] Total products fetched:', allProducts.length);
-      const favoriteProducts = allProducts.filter(product => 
+      const favoriteProducts = allProducts.filter(product =>
         skus.includes(product.sku)
       );
 
@@ -160,7 +162,7 @@ export default function FavoritesPage() {
               {products.map((product) => {
                 const isRemoving = removingId === product.sku;
                 const productCategoryName = pathname.split("/").at(-1);
-                
+
                 return (
                   <div
                     key={product.sku}
@@ -182,15 +184,12 @@ export default function FavoritesPage() {
                         <p className={classes.productSku}>SKU: {product.sku}</p>
                         {product.price && Number(product.price) > 0 && (
                           <span className={classes.productPrice}>
-                            {new Intl.NumberFormat(locale, {
-                              style: 'currency',
-                              currency: 'USD'
-                            }).format(Number(product.price))}
+                            {convertPrice(Number(product.price))}
                           </span>
                         )}
                       </div>
                     </Link>
-                    
+
                     {/* Remove Overlay */}
                     <button
                       className={classes.removeOverlay}

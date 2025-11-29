@@ -1,15 +1,60 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useState, useEffect } from 'react';
 import classes from './page.module.css';
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBirthdayCake, FaSave, FaEdit, FaLock, FaTimes, FaCheck, FaUserCircle } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBirthdayCake, FaSave, FaEdit, FaLock, FaTimes, FaCheck, FaUserCircle, FaBoxOpen, FaTruck, FaClock, FaCog, FaBox, FaTimesCircle, FaChevronRight, FaCreditCard, FaBell, FaGlobe, FaPalette, FaLink } from 'react-icons/fa';
+import { useCurrency } from '@/contexts/CurrencyContext';
+
+// Order types
+interface OrderItem {
+  id: number;
+  product_sku: string | null;
+  product_title: string | null;
+  product_image: string | null;
+  variant_sku: string | null;
+  quantity: string | null;
+  price: string | null;
+  subtotal: string | null;
+  status: string;
+}
+
+interface Order {
+  id: number;
+  status: string;
+  payment_status: string;
+  original_currency: string;
+  original_price: string | null;
+  paid_currency: string;
+  paid_amount: string | null;
+  items_count: number;
+  tracking_number: string | null;
+  shipped_at: string | null;
+  delivered_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface OrderDetail extends Order {
+  payment_method: string;
+  card_type: string | null;
+  card_last_four: string | null;
+  delivery_address_title: string | null;
+  delivery_address: string | null;
+  delivery_city: string | null;
+  delivery_country: string | null;
+  delivery_phone: string | null;
+  items: OrderItem[];
+  total_value: string;
+}
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
+  const { currency: globalCurrency, setCurrency, rates, refreshRates } = useCurrency();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = useLocale();
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -55,13 +100,39 @@ export default function ProfilePage() {
 
   // Location data state
   const [countries, setCountries] = useState<Array<{ code: string; name: string; flag?: string }>>([]);
+
+  // Settings state
+  const [settings, setSettings] = useState({
+    notifications: {
+      email: true,
+      sms: false,
+      newsletter: true
+    },
+    language: 'tr',
+    currency: globalCurrency || 'TRY',
+    theme: 'light'
+  });
   const [cities, setCities] = useState<Array<{ id: number; name: string }>>([]);
   const [districts, setDistricts] = useState<Array<{ name: string }>>([]);
   const [selectedCountry, setSelectedCountry] = useState('Turkey');
   const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
 
-  // Active tab for sidebar navigation
-  const [activeTab, setActiveTab] = useState<'profile' | 'addresses' | 'orders' | 'wishlist' | 'settings'>('profile');
+  // Active tab for sidebar navigation - check URL param first
+  const tabParam = searchParams.get('tab');
+  const initialTab = tabParam === 'orders' || tabParam === 'addresses' || tabParam === 'settings' || tabParam === 'profile'
+    ? tabParam as 'profile' | 'addresses' | 'orders' | 'settings'
+    : 'profile';
+  const [activeTab, setActiveTab] = useState<'profile' | 'addresses' | 'orders' | 'wishlist' | 'settings'>(initialTab);
+
+  // Sync activeTab with URL parameter changes
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'profile' || tab === 'addresses' || tab === 'orders' || tab === 'settings') {
+      setActiveTab(tab);
+    } else {
+      setActiveTab('profile');
+    }
+  }, [searchParams]);
 
   const [isAddingAddress, setIsAddingAddress] = useState(false);
 
@@ -70,6 +141,12 @@ export default function ProfilePage() {
     newPassword: '',
     confirmPassword: '',
   });
+
+  // Order states
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<OrderDetail | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
 
   // Çeviriler
   const t = (key: string) => {
@@ -123,9 +200,135 @@ export default function ProfilePage() {
       logout: { en: 'Logout', tr: 'Çıkış Yap', ru: 'Выйти', pl: 'Wyloguj' },
       noOrders: { en: 'No orders found.', tr: 'Henüz siparişiniz bulunmuyor.', ru: 'Заказы не найдены.', pl: 'Nie znaleziono zamówień.' },
       settingsPlaceholder: { en: 'Settings coming soon.', tr: 'Ayarlar yakında eklenecek.', ru: 'Настройки скоро появятся.', pl: 'Ustawienia wkrótce.' },
+      nameRequired: { en: 'Full name is required', tr: 'Ad Soyad alanı zorunludur', ru: 'Полное имя обязательно', pl: 'Imię i nazwisko jest wymagane' },
+      phoneRequired: { en: 'Phone number is required', tr: 'Telefon numarası zorunludur', ru: 'Номер телефона обязателен', pl: 'Numer telefonu jest wymagany' },
+      // Order translations
+      orderDate: { en: 'Order Date', tr: 'Sipariş Tarihi', ru: 'Дата заказа', pl: 'Data zamówienia' },
+      total: { en: 'Total', tr: 'Toplam', ru: 'Итого', pl: 'Suma' },
+      items: { en: 'items', tr: 'ürün', ru: 'товаров', pl: 'przedmiotów' },
+      viewDetails: { en: 'View Details', tr: 'Detayları Gör', ru: 'Подробнее', pl: 'Zobacz szczegóły' },
+      orderDetails: { en: 'Order Details', tr: 'Sipariş Detayları', ru: 'Детали заказа', pl: 'Szczegóły zamówienia' },
+      deliveryAddress: { en: 'Delivery Address', tr: 'Teslimat Adresi', ru: 'Адрес доставки', pl: 'Adres dostawy' },
+      paymentInfo: { en: 'Payment Info', tr: 'Ödeme Bilgileri', ru: 'Платежная информация', pl: 'Informacje o płatności' },
+      trackingNumber: { en: 'Tracking Number', tr: 'Kargo Takip No', ru: 'Номер отслеживания', pl: 'Numer śledzenia' },
+      shippedAt: { en: 'Shipped Date', tr: 'Kargoya Verilme', ru: 'Дата отправки', pl: 'Data wysyłki' },
+      deliveredAt: { en: 'Delivered Date', tr: 'Teslim Tarihi', ru: 'Дата доставки', pl: 'Data dostawy' },
+      close: { en: 'Close', tr: 'Kapat', ru: 'Закрыть', pl: 'Zamknij' },
+      pending: { en: 'Pending', tr: 'Beklemede', ru: 'В ожидании', pl: 'Oczekujące' },
+      scheduled: { en: 'Scheduled', tr: 'Planlandı', ru: 'Запланировано', pl: 'Zaplanowane' },
+      in_production: { en: 'In Production', tr: 'Hazırlanıyor', ru: 'В производстве', pl: 'W produkcji' },
+      quality_check: { en: 'Quality Check', tr: 'Kalite Kontrol', ru: 'Контроль качества', pl: 'Kontrola jakości' },
+      in_repair: { en: 'In Repair', tr: 'Onarımda', ru: 'В ремонте', pl: 'W naprawie' },
+      ready: { en: 'Ready', tr: 'Hazır', ru: 'Готово', pl: 'Gotowe' },
+      shipped: { en: 'Shipped', tr: 'Kargoya Verildi', ru: 'Отправлено', pl: 'Wysłano' },
+      completed: { en: 'Delivered', tr: 'Teslim Edildi', ru: 'Доставлено', pl: 'Dostarczono' },
+      cancelled: { en: 'Cancelled', tr: 'İptal Edildi', ru: 'Отменено', pl: 'Anulowano' },
+      products: { en: 'Products', tr: 'Ürünler', ru: 'Товары', pl: 'Produkty' },
+      quantity: { en: 'Qty', tr: 'Adet', ru: 'Кол-во', pl: 'Ilość' },
+      price: { en: 'Price', tr: 'Fiyat', ru: 'Цена', pl: 'Cena' },
+      notAvailable: { en: 'N/A', tr: 'Bilinmiyor', ru: 'Н/Д', pl: 'Brak' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
+  };
+
+  // Order helper functions
+  const getStatusIcon = (orderStatus: string) => {
+    switch (orderStatus) {
+      case 'pending': return <FaClock />;
+      case 'scheduled':
+      case 'in_production':
+      case 'quality_check':
+      case 'in_repair': return <FaCog />;
+      case 'ready': return <FaBox />;
+      case 'shipped': return <FaTruck />;
+      case 'completed': return <FaCheck />;
+      case 'cancelled': return <FaTimesCircle />;
+      default: return <FaClock />;
+    }
+  };
+
+  const getStatusClass = (orderStatus: string) => {
+    switch (orderStatus) {
+      case 'pending': return classes.statusPending;
+      case 'scheduled':
+      case 'in_production':
+      case 'quality_check':
+      case 'in_repair': return classes.statusProcessing;
+      case 'ready': return classes.statusReady;
+      case 'shipped': return classes.statusShipped;
+      case 'completed': return classes.statusCompleted;
+      case 'cancelled': return classes.statusCancelled;
+      default: return classes.statusPending;
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(locale === 'tr' ? 'tr-TR' : locale === 'ru' ? 'ru-RU' : locale === 'pl' ? 'pl-PL' : 'en-US', {
+      year: 'numeric', month: 'long', day: 'numeric',
+    });
+  };
+
+  const formatPrice = (price: string | null, currency: string) => {
+    if (!price) return t('notAvailable');
+    const numPrice = parseFloat(price);
+    return new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
+      style: 'currency', currency: currency || 'TRY',
+    }).format(numPrice);
+  };
+
+  // Fetch orders when orders tab is active
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!session?.user || activeTab !== 'orders') return;
+
+      setOrdersLoading(true);
+      try {
+        const userId = (session.user as any).id;
+        if (!userId) {
+          setOrdersLoading(false);
+          return;
+        }
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_orders/${userId}/`
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setOrders(data.orders || []);
+        }
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      } finally {
+        setOrdersLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [session, activeTab]);
+
+  // Fetch order detail
+  const fetchOrderDetail = async (orderId: number) => {
+    if (!session?.user) return;
+
+    setDetailLoading(true);
+    try {
+      const userId = (session.user as any).id;
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_order_detail/${userId}/${orderId}/`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedOrder(data);
+      }
+    } catch (error) {
+      console.error('Error fetching order detail:', error);
+    } finally {
+      setDetailLoading(false);
+    }
   };
 
   // Redirect if not logged in
@@ -156,18 +359,18 @@ export default function ProfilePage() {
             birthdate: data.birthdate || '',
           });
 
-          // Load addresses if available
-          if (data.addresses && Array.isArray(data.addresses)) {
-            setAddresses(data.addresses);
+          if (data.settings) {
+            setSettings(prev => ({
+              ...prev,
+              currency: data.settings.currency || prev.currency,
+              language: data.settings.language || prev.language,
+              theme: data.settings.theme || prev.theme,
+              notifications: {
+                ...prev.notifications,
+                ...data.settings.notifications
+              }
+            }));
           }
-        } else {
-          // Fallback to session data
-          setFormData({
-            name: session.user.name || '',
-            email: session.user.email || '',
-            phone: '',
-            birthdate: '',
-          });
         }
       } catch (error) {
         console.error('Error loading user data:', error);
@@ -224,6 +427,31 @@ export default function ProfilePage() {
       setDistricts([]);
     }
   }, [selectedCountry]);
+
+  // Load addresses when addresses tab is active
+  useEffect(() => {
+    const loadAddresses = async () => {
+      if (!session?.user || activeTab !== 'addresses') return;
+
+      try {
+        const userId = (session.user as any).id || session.user.email;
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_client_addresses/${userId}/`
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.addresses) {
+            setAddresses(data.addresses);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading addresses:', error);
+      }
+    };
+
+    loadAddresses();
+  }, [session, activeTab]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -286,8 +514,6 @@ export default function ProfilePage() {
         country: newAddress.country.trim(),
         isDefault: addresses.length === 0 // First address is default
       };
-
-      console.log('Saving address:', addressData);
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_client_address/${userId}/`,
@@ -408,8 +634,20 @@ export default function ProfilePage() {
   };
 
   const handleSave = async () => {
-    setLoading(true);
     setMessage(null);
+
+    // Validate required fields
+    if (!formData.name || formData.name.trim() === '') {
+      showToast('error', t('nameRequired'));
+      return;
+    }
+
+    if (!formData.phone || formData.phone.trim() === '') {
+      showToast('error', t('phoneRequired'));
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const userId = (session?.user as any)?.id || session?.user?.email;
@@ -448,6 +686,49 @@ export default function ProfilePage() {
       }
     } catch (error) {
       console.error('Error updating profile:', error);
+      showToast('error', t('saveError'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSettingsSave = async () => {
+    setLoading(true);
+    try {
+      const userId = (session?.user as any)?.id || session?.user?.email;
+      if (!userId) throw new Error('User not authenticated');
+
+      console.log('[Settings Save] User ID:', userId);
+      console.log('[Settings Save] Settings to save:', settings);
+      console.log('[Settings Save] Request URL:', `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${userId}/`);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${userId}/`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ settings }),
+        }
+      );
+
+      console.log('[Settings Save] Response status:', response.status);
+      console.log('[Settings Save] Response ok:', response.ok);
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('[Settings Save] Response data:', responseData);
+        showToast('success', t('saveSuccess'));
+        // Update global currency context
+        setCurrency(settings.currency);
+        // Refresh rates immediately to ensure accuracy
+        await refreshRates();
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('[Settings Save] Error response:', errorData);
+        throw new Error('Failed to update settings');
+      }
+    } catch (error) {
+      console.error('[Settings Save] Error:', error);
       showToast('error', t('saveError'));
     } finally {
       setLoading(false);
@@ -495,11 +776,13 @@ export default function ProfilePage() {
         setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       } else {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Password change failed');
+        // Django API returns 'error', check for that first
+        throw new Error(errorData.error || errorData.message || 'Password change failed');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error changing password:', error);
-      showToast('error', t('passwordError'));
+      // Show the specific error message from backend if available
+      showToast('error', error.message || t('passwordError'));
     } finally {
       setPasswordLoading(false);
     }
@@ -538,28 +821,28 @@ export default function ProfilePage() {
           <div className={classes.sidebarMenu}>
             <button
               className={`${classes.menuItem} ${activeTab === 'profile' ? classes.active : ''}`}
-              onClick={() => setActiveTab('profile')}
+              onClick={() => router.push(`/${locale}/account/profile?tab=profile`)}
             >
               <FaUser className={classes.menuIcon} />
               <span>{t('myProfile')}</span>
             </button>
             <button
               className={`${classes.menuItem} ${activeTab === 'addresses' ? classes.active : ''}`}
-              onClick={() => setActiveTab('addresses')}
+              onClick={() => router.push(`/${locale}/account/profile?tab=addresses`)}
             >
               <FaMapMarkerAlt className={classes.menuIcon} />
               <span>{t('myAddresses')}</span>
             </button>
             <button
               className={`${classes.menuItem} ${activeTab === 'orders' ? classes.active : ''}`}
-              onClick={() => setActiveTab('orders')}
+              onClick={() => router.push(`/${locale}/account/profile?tab=orders`)}
             >
               <FaEnvelope className={classes.menuIcon} />
               <span>{t('orders')}</span>
             </button>
             <button
               className={`${classes.menuItem} ${activeTab === 'settings' ? classes.active : ''}`}
-              onClick={() => setActiveTab('settings')}
+              onClick={() => router.push(`/${locale}/account/profile?tab=settings`)}
             >
               <FaLock className={classes.menuIcon} />
               <span>{t('settings')}</span>
@@ -1115,31 +1398,310 @@ export default function ProfilePage() {
             </>
           )}
 
-          {/* Orders Placeholder */}
+          {/* Orders Section */}
           {activeTab === 'orders' && (
             <div className={`${classes.card} ${classes.fullWidthCard}`}>
               <div className={classes.cardTitle}>
-                <FaEnvelope className={classes.titleIcon} />
+                <FaBox className={classes.titleIcon} />
                 <h3>{t('orders')}</h3>
               </div>
               <div className={classes.cardContent}>
-                <p className={classes.noAddresses}>{t('noOrders') || 'No orders found.'}</p>
+                {ordersLoading ? (
+                  <div className={classes.ordersLoading}>
+                    <div className={classes.spinner}></div>
+                  </div>
+                ) : orders.length === 0 ? (
+                  <div className={classes.emptyOrders}>
+                    <FaBoxOpen className={classes.emptyIcon} />
+                    <p>{t('noOrders')}</p>
+                  </div>
+                ) : (
+                  <div className={classes.ordersList}>
+                    {orders.map((order) => (
+                      <div key={order.id} className={classes.orderCard}>
+                        <div className={classes.orderHeader}>
+                          <div className={classes.orderInfo}>
+                            <span className={classes.orderNumber}>#{order.id}</span>
+                            <span className={classes.orderDate}>{formatDate(order.created_at)}</span>
+                          </div>
+                          <div className={`${classes.statusBadge} ${getStatusClass(order.status)}`}>
+                            {getStatusIcon(order.status)}
+                            <span>{t(order.status)}</span>
+                          </div>
+                        </div>
+                        <div className={classes.orderBody}>
+                          <div className={classes.orderSummary}>
+                            <span className={classes.itemCount}>{order.items_count} {t('items')}</span>
+                            <span className={classes.orderTotal}>
+                              {formatPrice(order.original_price, order.original_currency)}
+                            </span>
+                          </div>
+                          {order.tracking_number && (
+                            <div className={classes.trackingInfo}>
+                              <FaTruck />
+                              <span>{t('trackingNumber')}: {order.tracking_number}</span>
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          className={classes.detailsBtn}
+                          onClick={() => fetchOrderDetail(order.id)}
+                        >
+                          {t('viewDetails')}
+                          <FaChevronRight />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className={classes.gridContainer}>
+              {/* Notifications */}
+              <div className={classes.card}>
+                <div className={classes.cardTitle}>
+                  <FaBell className={classes.titleIcon} />
+                  <h3>{t('notifications') || 'Notifications'}</h3>
+                </div>
+                <div className={classes.cardContent}>
+                  <div className={classes.settingItem} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #eee' }}>
+                    <span style={{ fontWeight: 500 }}>{t('emailNotifications') || 'Email Notifications'}</span>
+                    <label className={classes.toggleSwitch}>
+                      <input
+                        type="checkbox"
+                        className={classes.toggleInput}
+                        checked={settings.notifications.email}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          notifications: { ...prev.notifications, email: e.target.checked }
+                        }))}
+                      />
+                      <span className={classes.toggleSlider}></span>
+                    </label>
+                  </div>
+                  <div className={classes.settingItem} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #eee' }}>
+                    <span style={{ fontWeight: 500 }}>{t('smsNotifications') || 'SMS Notifications'}</span>
+                    <label className={classes.toggleSwitch}>
+                      <input
+                        type="checkbox"
+                        className={classes.toggleInput}
+                        checked={settings.notifications.sms}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          notifications: { ...prev.notifications, sms: e.target.checked }
+                        }))}
+                      />
+                      <span className={classes.toggleSlider}></span>
+                    </label>
+                  </div>
+                  <div className={classes.settingItem} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0' }}>
+                    <span style={{ fontWeight: 500 }}>{t('newsletter') || 'Newsletter'}</span>
+                    <label className={classes.toggleSwitch}>
+                      <input
+                        type="checkbox"
+                        className={classes.toggleInput}
+                        checked={settings.notifications.newsletter}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          notifications: { ...prev.notifications, newsletter: e.target.checked }
+                        }))}
+                      />
+                      <span className={classes.toggleSlider}></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Language & Currency */}
+              <div className={classes.card}>
+                <div className={classes.cardTitle}>
+                  <FaGlobe className={classes.titleIcon} />
+                  <h3>{t('preferences') || 'Preferences'}</h3>
+                </div>
+                <div className={classes.cardContent}>
+                  <div className={classes.formGroup}>
+                    <label>{t('language') || 'Language'}</label>
+                    <select
+                      className={classes.input}
+                      value={settings.language}
+                      onChange={(e) => setSettings(prev => ({ ...prev, language: e.target.value }))}
+                    >
+                      <option value="tr">Türkçe</option>
+                      <option value="en">English</option>
+                      <option value="ru">Русский</option>
+                      <option value="pl">Polski</option>
+                    </select>
+                  </div>
+                  <div className={classes.formGroup}>
+                    <label>{t('currency') || 'Currency'}</label>
+                    <select
+                      className={classes.input}
+                      value={settings.currency}
+                      onChange={(e) => setSettings(prev => ({ ...prev, currency: e.target.value }))}
+                    >
+                      <option value="TRY">TRY (₺)</option>
+                      <option value="USD">USD ($)</option>
+                      <option value="EUR">EUR (€)</option>
+                      <option value="RUB">RUB (₽)</option>
+                      <option value="PLN">PLN (zł)</option>
+                    </select>
+                    {settings.currency !== 'USD' && (
+                      <div className={classes.rateInfo} style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <FaClock style={{ color: '#c9a961' }} />
+                        <span>
+                          1 USD = {
+                            (() => {
+                              const rateObj = rates.find(r => r.currency_code === settings.currency);
+                              return rateObj ? `${rateObj.rate} ${settings.currency}` : '...';
+                            })()
+                          }
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Save Button - Full Width at Bottom */}
+              <div style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }}>
+                <button
+                  className={classes.settingsSaveBtn}
+                  onClick={handleSettingsSave}
+                  disabled={loading}
+                  style={{ width: '100%', justifyContent: 'center' }}
+                >
+                  {loading ? (
+                    <div className={classes.btnLoader}></div>
+                  ) : (
+                    <>
+                      <FaSave /> {t('save')}
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Order Detail Modal */}
+          {selectedOrder && (
+            <div className={classes.modalOverlay} onClick={() => setSelectedOrder(null)}>
+              <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
+                <div className={classes.modalHeader}>
+                  <h2>{t('orderDetails')} #{selectedOrder.id}</h2>
+                  <button className={classes.closeBtn} onClick={() => setSelectedOrder(null)}>
+                    <FaTimes />
+                  </button>
+                </div>
+
+                {detailLoading ? (
+                  <div className={classes.modalLoading}>
+                    <div className={classes.spinner}></div>
+                  </div>
+                ) : (
+                  <div className={classes.modalContent}>
+                    {/* Status */}
+                    <div className={classes.detailSection}>
+                      <div className={`${classes.statusBadgeLarge} ${getStatusClass(selectedOrder.status)}`}>
+                        {getStatusIcon(selectedOrder.status)}
+                        <span>{t(selectedOrder.status)}</span>
+                      </div>
+                      <p className={classes.orderDateDetail}>
+                        {t('orderDate')}: {formatDate(selectedOrder.created_at)}
+                      </p>
+                    </div>
+
+                    {/* Tracking */}
+                    {(selectedOrder.tracking_number || selectedOrder.shipped_at || selectedOrder.delivered_at) && (
+                      <div className={classes.detailSection}>
+                        <h3><FaTruck /> {t('trackingNumber')}</h3>
+                        <div className={classes.trackingDetails}>
+                          {selectedOrder.tracking_number && (
+                            <p><strong>{t('trackingNumber')}:</strong> {selectedOrder.tracking_number}</p>
+                          )}
+                          {selectedOrder.shipped_at && (
+                            <p><strong>{t('shippedAt')}:</strong> {formatDate(selectedOrder.shipped_at)}</p>
+                          )}
+                          {selectedOrder.delivered_at && (
+                            <p><strong>{t('deliveredAt')}:</strong> {formatDate(selectedOrder.delivered_at)}</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Products */}
+                    <div className={classes.detailSection}>
+                      <h3><FaBox /> {t('products')}</h3>
+                      <div className={classes.productsList}>
+                        {selectedOrder.items.map((item) => (
+                          <div key={item.id} className={classes.productItem}>
+                            <div className={classes.productImage}>
+                              {item.product_image ? (
+                                <img src={item.product_image} alt={item.product_title || ''} />
+                              ) : (
+                                <FaBox className={classes.placeholderIcon} />
+                              )}
+                            </div>
+                            <div className={classes.productInfo}>
+                              <span className={classes.productTitle}>
+                                {item.product_title || item.product_sku || t('notAvailable')}
+                              </span>
+                              {item.variant_sku && (
+                                <span className={classes.variantSku}>SKU: {item.variant_sku}</span>
+                              )}
+                            </div>
+                            <div className={classes.productQty}>
+                              {t('quantity')}: {item.quantity || 1}
+                            </div>
+                            <div className={classes.productPrice}>
+                              {formatPrice(item.price, selectedOrder.original_currency)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Delivery Address */}
+                    {selectedOrder.delivery_address && (
+                      <div className={classes.detailSection}>
+                        <h3><FaMapMarkerAlt /> {t('deliveryAddress')}</h3>
+                        <div className={classes.addressBox}>
+                          {selectedOrder.delivery_address_title && (
+                            <strong>{selectedOrder.delivery_address_title}</strong>
+                          )}
+                          <p>{selectedOrder.delivery_address}</p>
+                          <p>
+                            {selectedOrder.delivery_city}
+                            {selectedOrder.delivery_country && `, ${selectedOrder.delivery_country}`}
+                          </p>
+                          {selectedOrder.delivery_phone && <p>{selectedOrder.delivery_phone}</p>}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Payment */}
+                    <div className={classes.detailSection}>
+                      <h3><FaCreditCard /> {t('paymentInfo')}</h3>
+                      <div className={classes.paymentBox}>
+                        {selectedOrder.card_type && selectedOrder.card_last_four && (
+                          <p>{selectedOrder.card_type} **** {selectedOrder.card_last_four}</p>
+                        )}
+                        <p className={classes.totalPrice}>
+                          <strong>{t('total')}:</strong> {formatPrice(selectedOrder.total_value, selectedOrder.original_currency)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
           {/* Settings Placeholder */}
-          {activeTab === 'settings' && (
-            <div className={`${classes.card} ${classes.fullWidthCard}`}>
-              <div className={classes.cardTitle}>
-                <FaLock className={classes.titleIcon} />
-                <h3>{t('settings')}</h3>
-              </div>
-              <div className={classes.cardContent}>
-                <p className={classes.noAddresses}>{t('settingsPlaceholder') || 'Settings coming soon.'}</p>
-              </div>
-            </div>
-          )}
+
         </div>
 
         {/* Toast Notification */}
@@ -1152,7 +1714,7 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-    </div>
+    </div >
 
   );
 }

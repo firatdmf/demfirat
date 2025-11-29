@@ -1,6 +1,7 @@
-import { NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import GoogleProvider from 'next-auth/providers/google'
+
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -17,21 +18,16 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
             name: 'Demfirat',
             credentials: {
-                // email: {
-                //     label: 'Email',
-                //     type: 'email',
-                //     placeholder: 'hello@example.com',
-                // },
-                username:{
-                    label:'Username',
-                    type:'text',
-                    placeholder:'Enter your username',
+                username: {
+                    label: 'Username',
+                    type: 'text',
+                    placeholder: 'Enter your username',
                 },
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
                 if (!credentials?.username || !credentials.password) {
-                    return null
+                    return null;
                 }
 
                 try {
@@ -51,26 +47,40 @@ export const authOptions: NextAuthOptions = {
                     );
 
                     if (!response.ok) {
-                        return null
+                        return null;
                     }
 
                     const data = await response.json();
-                    const user = data.user;
+                    console.log('Full Django Login Response:', JSON.stringify(data, null, 2));
+
+                    // Try to find the user object. 
+                    // User mentioned "web_client is actually user", so check for that too.
+                    const user = data.user || data.web_client || data;
+
+                    // Check if user is active (email verified)
+                    if (user && typeof user.is_active !== 'undefined') {
+                        if (user.is_active === false) {
+                            console.log('User is not active (from Django), blocking login');
+                            throw new Error('Please verify your email address.');
+                        }
+                    } else {
+                        console.warn('Django API did not return is_active field. Allowing login.');
+                    }
 
                     return {
                         id: user.id + '',
                         email: user.email,
                         username: user.username,
                         name: user.name,
-                    }
-                } catch (error) {
+                    };
+                } catch (error: any) {
                     console.error('Login error:', error);
-                    return null
+                    throw new Error(error.message || 'Login failed');
                 }
             }
         })
     ],
-    secret:process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async signIn({ user, account, profile }) {
             // Google OAuth sign in
@@ -103,36 +113,25 @@ export const authOptions: NextAuthOptions = {
             return true;
         },
         session: ({ session, token }) => {
-            // console.log('Session Callback', { session, token });
             return {
                 ...session,
                 user: {
-                    // always remember this information is used as cookie, so you need to keep it small
                     ...session.user,
                     id: token.id,
-                    ramdomKey: token.randomKey
+                    randomKey: token.randomKey
                 }
-            }
-            // return session
-
+            };
         },
-        // this handles the creation and ma
-        // this token will only show up the first time they login unlike the user info
         jwt: ({ token, user }) => {
-            // console.log('JWT Callback', { token, user });
-            // below means the user has already logged in
             if (user) {
-                const u = user as unknown as any
+                const u = user as unknown as any;
                 return {
-                    // below logs everything in the token as well as the props that you want to pass through
-                    // so it will also assign random key to the token
                     ...token,
                     id: u.id,
                     randomKey: u.randomKey
-                }
+                };
             }
-            return token
+            return token;
         }
     }
-
-}
+};
