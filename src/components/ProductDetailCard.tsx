@@ -137,6 +137,7 @@ function ProductDetailCard({
   const [quantity, setQuantity] = useState<string>('1');
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'description' | 'details'>('description');
 
   const findSelectedVariant = () => {
     if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return undefined;
@@ -577,7 +578,7 @@ function ProductDetailCard({
         </div>
         <div className={classes.productHero}>
           <h2>{product.title}</h2>
-          <p>SKU: {product.sku}</p>
+          {/* SKU removed from here */}
 
           {/* Category + Attributes in one row */}
           <div className={classes.categoryAndAttributes}>
@@ -604,8 +605,37 @@ function ProductDetailCard({
                 {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => (
                   <li key={attribute.id.toString()}>
                     <label><h3>{attribute.name}</h3></label>
-                    {/* Check if this is Color attribute */}
-                    {attribute.name?.toLowerCase() === 'color' ? (
+                    {/* Check if this is Fabric attribute */}
+                    {attribute.name?.toLowerCase() === 'fabric' || attribute.name?.toLowerCase() === 'kumaş' ? (
+                      <div className={classes.fabric_swatches}>
+                        {values.map((value: string) => {
+                          const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
+                          const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                          // Image path: /media/fabrics/{value}.jpg (assuming jpg, can be adjusted)
+                          // value usually comes as "bamboo", "grek" etc.
+                          const bgImage = `/media/fabrics/${value.toLowerCase()}.avif`;
+
+                          return (
+                            <div key={value} className={classes.fabric_swatch_container}>
+                              <Link
+                                href={href}
+                                replace
+                                className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""}`}
+                                onClick={e => {
+                                  e.preventDefault();
+                                  handleAttributeChange(attribute.name ?? '', value);
+                                }}
+                                style={{ backgroundImage: `url(${bgImage})` }}
+                                title={value.replace(/_/g, " ")}
+                              >
+                                <span className={classes.sr_only}>{value.replace(/_/g, " ")}</span>
+                              </Link>
+                              <span className={classes.color_label}>{value.replace(/_/g, " ")}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : attribute.name?.toLowerCase() === 'color' ? (
                       <div className={classes.color_swatches}>
                         {values.map((value: string) => {
                           const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
@@ -672,42 +702,10 @@ function ProductDetailCard({
                   </li>
                 ))}
               </ul>
-              <div className={classes.variant_info}>
-                {selectedVariant && selectedVariant.variant_sku && (
-                  <p>Variant SKU: {selectedVariant.variant_sku}</p>
-                )}
-                {/* Price - variant veya product price */}
-                {(selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0) ? (
-                  <p>Price: {formatPrice(selectedVariant.variant_price)}</p>
-                ) : (product.price && Number(product.price) > 0) ? (
-                  <p>Price: {formatPrice(product.price)}</p>
-                ) : null}
-                {/* Quantity */}
-                {(selectedVariant?.variant_quantity && Number(selectedVariant.variant_quantity) > 0) ? (
-                  <p>Available Quantity: {Number(selectedVariant.variant_quantity)}</p>
-                ) : (product.quantity && Number(product.quantity) > 0) ? (
-                  <p>Available Quantity: {Number(product.quantity)}</p>
-                ) : null}
-                {/* Barcode */}
-                {selectedVariant?.variant_barcode ? (
-                  <p>Variant Barcode: {selectedVariant.variant_barcode}</p>
-                ) : product.barcode ? (
-                  <p>Barcode: {product.barcode}</p>
-                ) : null}
-              </div>
             </div>
           ) :
             <div className={classes.parent_product_info}>
-              {/* Varyant olmayan ürünler için bilgiler */}
-              {product.price && Number(product.price) > 0 && (
-                <p>Price: {formatPrice(product.price)}</p>
-              )}
-              {product.quantity && Number(product.quantity) > 0 && (
-                <p>Available Quantity: {Number(product.quantity)}</p>
-              )}
-              {product.barcode && (
-                <p>Barcode: {product.barcode}</p>
-              )}
+              {/* Info removed from here */}
             </div>
           }
 
@@ -720,6 +718,21 @@ function ProductDetailCard({
 
           {/* Cart Actions */}
           <div className={classes.cartActions}>
+            {/* Price and Stock Display */}
+            <div className={classes.priceAndStock}>
+              {(selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0) ? (
+                <span className={classes.priceDisplay}>{formatPrice(selectedVariant.variant_price)}</span>
+              ) : (product.price && Number(product.price) > 0) ? (
+                <span className={classes.priceDisplay}>{formatPrice(product.price)}</span>
+              ) : null}
+
+              {(selectedVariant?.variant_quantity && Number(selectedVariant.variant_quantity) > 0) ? (
+                <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {Number(selectedVariant.variant_quantity)}</span>
+              ) : (product.quantity && Number(product.quantity) > 0) ? (
+                <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {Number(product.quantity)}</span>
+              ) : null}
+            </div>
+
             <div className={classes.quantityWrapper}>
               <label htmlFor="quantity">{quantityLabel}:</label>
               <div className={classes.quantitySelector}>
@@ -808,19 +821,111 @@ function ProductDetailCard({
 
       </div>
 
-      {/* Description Section - Full width centered at bottom */}
+      {/* Description Section with Tabs - Full width centered at bottom */}
       <div className={classes.descriptionWrapper}>
-        <div className={classes.descriptionSection}>
-          <h3>
-            {locale === 'tr' ? 'Ürün Açıklaması' :
-              locale === 'ru' ? 'Описание товара' :
-                locale === 'pl' ? 'Opis produktu' :
-                  locale === 'de' ? 'Produktbeschreibung' :
-                    'Product Description'}
-          </h3>
-          {product.description && (
-            <div className={classes.descriptionContent}>
-              <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
+        {/* Tab Buttons */}
+        <div className={classes.tabButtons}>
+          <button
+            className={`${classes.tabButton} ${activeTab === 'description' ? classes.tabButtonActive : ''}`}
+            onClick={() => setActiveTab('description')}
+          >
+            {locale === 'tr' ? 'Açıklama' :
+              locale === 'ru' ? 'Описание' :
+                locale === 'pl' ? 'Opis' :
+                  locale === 'de' ? 'Beschreibung' :
+                    'Description'}
+          </button>
+          <button
+            className={`${classes.tabButton} ${activeTab === 'details' ? classes.tabButtonActive : ''}`}
+            onClick={() => setActiveTab('details')}
+          >
+            {locale === 'tr' ? 'Ürün Detayları' :
+              locale === 'ru' ? 'Детали продукта' :
+                locale === 'pl' ? 'Szczegóły produktu' :
+                  locale === 'de' ? 'Produktdetails' :
+                    'Product Details'}
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        <div className={classes.tabContent}>
+          {/* Description Tab */}
+          {activeTab === 'description' && (
+            <div className={classes.descriptionSection}>
+              {product.description ? (
+                <div className={classes.descriptionContent}>
+                  <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
+                </div>
+              ) : (
+                <p className={classes.noDescription}>
+                  {locale === 'tr' ? 'Açıklama bulunmamaktadır.' :
+                    locale === 'ru' ? 'Описание отсутствует.' :
+                      locale === 'pl' ? 'Brak opisu.' :
+                        locale === 'de' ? 'Keine Beschreibung verfügbar.' :
+                          'No description available.'}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Product Details Tab */}
+          {activeTab === 'details' && (
+            <div className={classes.descriptionSection}>
+              <table className={classes.detailsTable}>
+                <tbody>
+                  {/* SKU */}
+                  <tr>
+                    <td className={classes.detailTableLabel}>SKU</td>
+                    <td className={classes.detailTableValue}>{selectedVariant?.variant_sku || product.sku}</td>
+                  </tr>
+
+                  {/* Barcode */}
+                  {(selectedVariant?.variant_barcode || product.barcode) && (
+                    <tr>
+                      <td className={classes.detailTableLabel}>
+                        {locale === 'tr' ? 'Barkod' :
+                          locale === 'ru' ? 'Штрихкод' :
+                            locale === 'pl' ? 'Kod kreskowy' :
+                              locale === 'de' ? 'Barcode' :
+                                'Barcode'}
+                      </td>
+                      <td className={classes.detailTableValue}>{selectedVariant?.variant_barcode || product.barcode}</td>
+                    </tr>
+                  )}
+
+                  {/* Price */}
+                  {((selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0) || (product.price && Number(product.price) > 0)) && (
+                    <tr>
+                      <td className={classes.detailTableLabel}>
+                        {locale === 'tr' ? 'Fiyat' :
+                          locale === 'ru' ? 'Цена' :
+                            locale === 'pl' ? 'Cena' :
+                              locale === 'de' ? 'Preis' :
+                                'Price'}
+                      </td>
+                      <td className={classes.detailTableValue}>
+                        {formatPrice(selectedVariant?.variant_price || product.price)}
+                      </td>
+                    </tr>
+                  )}
+
+                  {/* Variant Attributes (Color, Size, etc.) */}
+                  {Object.entries(selectedAttributes).map(([attrName, attrValue]) => (
+                    <tr key={attrName}>
+                      <td className={classes.detailTableLabel}>{attrName}</td>
+                      <td className={classes.detailTableValue}>{attrValue.replace(/_/g, " ").replace(/-/g, " ")}</td>
+                    </tr>
+                  ))}
+
+                  {/* Product Attributes */}
+                  {product_attributes && product_attributes.length > 0 && product_attributes.map((attr, index) => (
+                    <tr key={`product-attr-${index}`}>
+                      <td className={classes.detailTableLabel}>{attr.name}</td>
+                      <td className={classes.detailTableValue}>{attr.value.replace(/_/g, " ")}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>

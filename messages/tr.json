@@ -1,122 +1,123 @@
 {
-  "Slider": {
-    "heading_1": "Operasyonel Mükemmelliğin Keyfini Çıkarın",
-    "desc_1": "İleri teknoloji ve yetenekli işçilik sayesinde üstün kaliteli kumaşlar.",
-    "heading_2": "Sınırsız Yaratıcılığı Ortaya Çıkarın",
-    "desc_2": "Hayal Edebileceğiniz Her Tasarım, Renk ve Kumaşı Üretiyoruz",
-    "heading_3": "Endüstriyel Nakış",
-    "desc_3": "Kumaşlarımızın çeşitliliği ve kalitesi ile her tarza ve ihtiyaca uygun çözümler sunuyoruz."
-  },
-  "Header": {
-    "ShippingText": "Dünya çapında nakliye"
-  },
-  "Menu": {
-    "Home": "Ana Sayfa",
-    "Products": "Ürünler",
-    "Fabrics": "Kumaşlar",
-    "Curtains": "Perdeler",
-    "AboutUs": "Hakkımızda",
-    "Contact": "İletişim",
-    "SideText": "Bütünsel Düşünün, Nakışlı Düşünün"
-  },
-  "Products": {
-    "Headline": "Ürünler",
-    "EmbroideredSheerCurtainFabrics": "İşlemeli Sırf Perde Kumaşları"
-  },
-  "ProductsGrid": {
-    "Headline": "Nakış",
-    "SearchBar": "Tasarım numarasını buraya girin."
-  },
-  "ProductDetailCardPage": {
-    "Design": "Tasarım",
-    "Width": "Genişlik",
-    "Origin": "Menşei ülke",
-    "WantASample": "Örnek ister misiniz?",
-    "SendEmail": "Tasarım adını veya numarasını belirterek info@karvenhome.com adresine bir e-posta gönderin."
-  },
-  "AboutUsPage": {
-    "Section1Headline": "KURUCUSUN HİKAYESİ",
-    "Section1Text": "Ana şirketimiz Dem Fırat Karven Tekstil, 1991 yılında Cuma Öztürk tarafından İstanbul'da kuruldu. Cuma, 21 çocuklu bir ailenin en büyük çocuğuydu. Türkiye'nin kırsal kesiminde, İran sınırına yakın bir yerde büyüdü. Çocukluğunda kaynak yetersizliği nedeniyle dokuz yaşında okulu bırakıp yerel dükkanlarda çalışmaya başladı.",
-    "Section2Headline": "GENİŞ OMUZLAR",
-    "Section2Text1": "Cuma'nın ebeveynlerinin ihmali ve kardeşleri arasında en büyüğü olması, ona çok çalışma ve ailesinin geçimini sağlama konusunda büyük bir sorumluluk yükledi. Bu yüzden hızlı para kazanmak için çocukluğunda İran sınırını geçerek daha ucuza mal satın almaya başladı, sonra bunları Türkiye'ye getirip ticaretini yaptı.",
-    "Section2Text2": "Ancak yetkililer tarafından defalarca yakalanıp cezalandırıldıktan sonra uzun vadeli, daha az riskli bir alternatif bulması gerektiğini biliyordu. Böylece 13 yaşında daha iyi iş fırsatları için tek başına Türkiye'nin Batısına taşındı. Ülkenin Batı yakasındaki şantiyelerde, restoranlarda ve perakende mağazalarında on yıl süren zorlu ve zahmetli çalışmanın ardından, 1991 yılında, 23 yaşındayken, bir iş ortağıyla birlikte ilk tekstil mağazasını İstanbul Laleli'de açtı. Ancak 1997 yılında ilk çocuğu doğduğunda (benim!), partnerler arasında anlaşmazlıklar oluştu ve bu da onları ayrı yollara sürükledi.",
-    "Section3Headline": "Yalnız Gitmek",
-    "Section3Text": "Her ne kadar eski ortakları onun cesaretini kırmaya ve işini bırakmaya zorlasa da, bu ona yalnızca kendi tekstil mağazasını açma gücü verdi. Samimi tavrı ve ürünlerinin kalitesi, dükkanının tanınmasını sağladı. Artan talep üzerine ülkenin doğu yakasında kalan kardeşlerini birer birer getirip çalıştırmaya başladı.",
-    "Section4Headline": "YURT DIŞINA İLK ADIM",
-    "Section4Text": "Cuma ve kardeşleri yurt dışındaki ilk depolarını Moskova'da açarak Rusya pazarına Türk tekstil ürünleri tedarik etmeye başladı, daha sonra Ukrayna, Belarus ve Kazakistan'a da açıldı.",
-    "Section5Headline": "ÜRETME",
-    "Section5Text": "Çok geçmeden Cuma'nın üretim ortakları büyüyen pazar talebini karşılayamaz hale geldi. Böylece, üretimi tam olarak denetlemek ve müşterilerinin üstlendiği gereksiz maliyetleri azaltmak için 60.000 SF boş arazi satın aldı ve ilk tekstil fabrikasını İstanbul'dan sadece bir saat uzaklıkta kurdu.",
-    "Section6Headline": "MİNNETTARLIK",
-    "Section6Text1": "Başarılı bir şirket kuran ve kardeşlerini işe alarak onlara bakabilmesi Cuma'nın hayallerini gerçeğe dönüştürdü.",
-    "Section6Text2": "Dem Fırat Karven, 1991 yılında İstanbul'da küçük bir aile işletmesi olarak tekstil mağazası olarak faaliyete başladı. Bugün, her ay 20 milyon metreden fazla kumaş üreten ve güçlü tedarik zinciri ağıyla dünyanın dört bir yanına tedarik sağlayan bir üretim tesisine dönüştük.",
-    "Section6Text3": "Büyüme heyecan verici ve sürekli değişen bir yolculuk oldu. Ancak temel değerlerimiz hep aynı kaldı. Büyüyen ailemiz, bizi yüksek kaliteli ürünler ve olağanüstü müşteri hizmetleri sunmaya devam etmeye teşvik eden şeydir."
-  },
-  "ContactPage": {
-    "ManufacturingPlant": "Üretim tesisi",
-    "FabricShowroom": "Kumaş Showroomu",
-    "RetailStore": "Perakende mağaza",
-    "WarehouseShowroom": "Depo & Showroom",
-    "Representative": "Temsilci",
-    "GeneralInquiries": "Genel Sorular",
-    "AccountingInquiries": "Muhasebe Soruları",
-    "Phone": "Telefon",
-    "Email": "E-posta",
-    "Website": "İnternet sitesi",
-    "WorkHours": "Çalışma saatleri",
-    "WorkHour1": "24 saat, Tüm günler",
-    "WorkHour2": "Pazartesi - Cuma 08:30-19:00, Cumartesi 08:30-14:00 (İstanbul Saati)",
-    "WorkHour3": "Pazartesi - Cuma 09:00-20:30, Cumartesi 09:00-16:00 (İstanbul Saati)",
-    "WorkHour4": "Pazartesi - Cuma 09:00-18:00, Cumartesi 09:00-16:00 (Moskova Saati)",
-    "Address": "Adres",
-    "ProductLines": "Ürün Grupları",
-    "ProductLine1": "Perdelik, Döşemelik ve Gelinlik Kumaşları ve Dantel Masa Örtüleri",
-    "ProductLine2": "İç Mekan Kumaşları: Perdelik ve Döşemelik",
-    "ProductLine3": "Nevresim, Yatak Örtüleri, Mobilya Örtüleri, Havlular, Mutfak Havluları, Havlu Takımları, Masa Örtüleri, Battaniyeler, Yastıklar, Yatak Örtüleri, Çocuk Çeşitleri, Bornozlar, Ev Kıyafetleri, Çarşaflar, Battaniyeler, Önlükler, Sauna Takımları, Ütü Masası Örtüleri.",
-    "ProductLine4": "Perde Kumaşları, Nevresim Takımları, Yatak Örtüleri, Mobilya Örtüleri, Havlular, Mutfak Havluları, Havlu Takımları, Masa Örtüleri, Battaniyeler, Yastıklar, Yatak Örtüleri, Çocuk Çeşitleri, Bornozlar, Ev Kıyafetleri, Çarşaflar, Battaniyeler, Önlükler, Sauna Takımları, Ütü Masası Örtüleri."
-  },
-  "FooterPage": {
-    "StayConnected": "Bağlı kalın",
-    "OurStory": "Bizim hikayemiz",
-    "ContactUs": "Bize Ulaşın",
-    "AllRightsReserved": "Her hakkı saklıdır"
-  },
-  "ProductDetailCard": {
-    "quantityMeters": "Miktar (m)",
-    "quantityPieces": "Adet",
-    "addToCart": "Sepete Ekle",
-    "buyNow": "Şimdi Al",
-    "addToFavorites": "Favorilere ekle",
-    "removeFromFavorites": "Favorilerden çıkar",
-    "productAddedToCart": "Ürün sepete eklendi!",
-    "pleaseLogin": "Lütfen giriş yapın",
-    "enterValidQuantity": "Lütfen geçerli bir miktar girin",
-    "errorAddingToCart": "Sepete eklenirken bir hata oluştu",
-    "customCurtain": "Perde Diktir"
-  },
-  "CustomCurtain": {
-    "title": "Perdeni Tasarla",
-    "mountingType": "Montaj Tipi",
-    "cornice": "Korniş",
-    "rustic": "Rustik",
-    "pleatType": "Pile Tipi",
-    "flat": "Yatık Pile",
-    "kanun": "Kanun Pile",
-    "pipe": "Boru Pile",
-    "water_wave": "Su Dalgası",
-    "american": "Amerikan Pile",
-    "extrafor": "Ekstraforlu Düz Dikiş",
-    "pleatDensity": "Pile Sıklığı",
-    "noPleat": "Pilesiz",
-    "dimensions": "Ölçüler",
-    "width": "En (cm)",
-    "height": "Boy (cm)",
-    "wingType": "Kanat Tipi",
-    "singleWing": "Tek Kanat",
-    "doubleWing": "Çift Kanat",
-    "addToCart": "Sepete Ekle",
-    "totalPrice": "Toplam Fiyat",
-    "fabricUsage": "Kumaş Kullanımı",
-    "meter": "m",
-    "buttonText": "Perde Diktir"
-  }
+    "Slider": {
+        "heading_1": "Operasyonel Mükemmelliğin Keyfini Çıkarın",
+        "desc_1": "İleri teknoloji ve yetenekli işçilik sayesinde üstün kaliteli kumaşlar.",
+        "heading_2": "Sınırsız Yaratıcılığı Ortaya Çıkarın",
+        "desc_2": "Hayal Edebileceğiniz Her Tasarım, Renk ve Kumaşı Üretiyoruz",
+        "heading_3": "Endüstriyel Nakış",
+        "desc_3": "Kumaşlarımızın çeşitliliği ve kalitesi ile her tarza ve ihtiyaca uygun çözümler sunuyoruz."
+    },
+    "Header": {
+        "ShippingText": "Dünya çapında nakliye"
+    },
+    "Menu": {
+        "Home": "Ana Sayfa",
+        "Products": "Ürünler",
+        "Fabrics": "Kumaşlar",
+        "Curtains": "Perdeler",
+        "AboutUs": "Hakkımızda",
+        "Contact": "İletişim",
+        "SideText": "Bütünsel Düşünün, Nakışlı Düşünün"
+    },
+    "Products": {
+        "Headline": "Ürünler",
+        "EmbroideredSheerCurtainFabrics": "İşlemeli Sırf Perde Kumaşları"
+    },
+    "ProductsGrid": {
+        "Headline": "Nakış",
+        "SearchBar": "Tasarım numarasını buraya girin."
+    },
+    "ProductDetailCardPage": {
+        "Design": "Tasarım",
+        "Width": "Genişlik",
+        "Origin": "Menşei ülke",
+        "WantASample": "Örnek ister misiniz?",
+        "SendEmail": "Tasarım adını veya numarasını belirterek info@karvenhome.com adresine bir e-posta gönderin."
+    },
+    "AboutUsPage": {
+        "Section1Headline": "KURUCUSUN HİKAYESİ",
+        "Section1Text": "Ana şirketimiz Dem Fırat Karven Tekstil, 1991 yılında Cuma Öztürk tarafından İstanbul'da kuruldu. Cuma, 21 çocuklu bir ailenin en büyük çocuğuydu. Türkiye'nin kırsal kesiminde, İran sınırına yakın bir yerde büyüdü. Çocukluğunda kaynak yetersizliği nedeniyle dokuz yaşında okulu bırakıp yerel dükkanlarda çalışmaya başladı.",
+        "Section2Headline": "GENİŞ OMUZLAR",
+        "Section2Text1": "Cuma'nın ebeveynlerinin ihmali ve kardeşleri arasında en büyüğü olması, ona çok çalışma ve ailesinin geçimini sağlama konusunda büyük bir sorumluluk yükledi. Bu yüzden hızlı para kazanmak için çocukluğunda İran sınırını geçerek daha ucuza mal satın almaya başladı, sonra bunları Türkiye'ye getirip ticaretini yaptı.",
+        "Section2Text2": "Ancak yetkililer tarafından defalarca yakalanıp cezalandırıldıktan sonra uzun vadeli, daha az riskli bir alternatif bulması gerektiğini biliyordu. Böylece 13 yaşında daha iyi iş fırsatları için tek başına Türkiye'nin Batısına taşındı. Ülkenin Batı yakasındaki şantiyelerde, restoranlarda ve perakende mağazalarında on yıl süren zorlu ve zahmetli çalışmanın ardından, 1991 yılında, 23 yaşındayken, bir iş ortağıyla birlikte ilk tekstil mağazasını İstanbul Laleli'de açtı. Ancak 1997 yılında ilk çocuğu doğduğunda (benim!), partnerler arasında anlaşmazlıklar oluştu ve bu da onları ayrı yollara sürükledi.",
+        "Section3Headline": "Yalnız Gitmek",
+        "Section3Text": "Her ne kadar eski ortakları onun cesaretini kırmaya ve işini bırakmaya zorlasa da, bu ona yalnızca kendi tekstil mağazasını açma gücü verdi. Samimi tavrı ve ürünlerinin kalitesi, dükkanının tanınmasını sağladı. Artan talep üzerine ülkenin doğu yakasında kalan kardeşlerini birer birer getirip çalıştırmaya başladı.",
+        "Section4Headline": "YURT DIŞINA İLK ADIM",
+        "Section4Text": "Cuma ve kardeşleri yurt dışındaki ilk depolarını Moskova'da açarak Rusya pazarına Türk tekstil ürünleri tedarik etmeye başladı, daha sonra Ukrayna, Belarus ve Kazakistan'a da açıldı.",
+        "Section5Headline": "ÜRETME",
+        "Section5Text": "Çok geçmeden Cuma'nın üretim ortakları büyüyen pazar talebini karşılayamaz hale geldi. Böylece, üretimi tam olarak denetlemek ve müşterilerinin üstlendiği gereksiz maliyetleri azaltmak için 60.000 SF boş arazi satın aldı ve ilk tekstil fabrikasını İstanbul'dan sadece bir saat uzaklıkta kurdu.",
+        "Section6Headline": "MİNNETTARLIK",
+        "Section6Text1": "Başarılı bir şirket kuran ve kardeşlerini işe alarak onlara bakabilmesi Cuma'nın hayallerini gerçeğe dönüştürdü.",
+        "Section6Text2": "Dem Fırat Karven, 1991 yılında İstanbul'da küçük bir aile işletmesi olarak tekstil mağazası olarak faaliyete başladı. Bugün, her ay 20 milyon metreden fazla kumaş üreten ve güçlü tedarik zinciri ağıyla dünyanın dört bir yanına tedarik sağlayan bir üretim tesisine dönüştük.",
+        "Section6Text3": "Büyüme heyecan verici ve sürekli değişen bir yolculuk oldu. Ancak temel değerlerimiz hep aynı kaldı. Büyüyen ailemiz, bizi yüksek kaliteli ürünler ve olağanüstü müşteri hizmetleri sunmaya devam etmeye teşvik eden şeydir."
+    },
+    "ContactPage": {
+        "ManufacturingPlant": "Üretim tesisi",
+        "FabricShowroom": "Kumaş Showroomu",
+        "RetailStore": "Perakende mağaza",
+        "WarehouseShowroom": "Depo & Showroom",
+        "Representative": "Temsilci",
+        "GeneralInquiries": "Genel Sorular",
+        "AccountingInquiries": "Muhasebe Soruları",
+        "Phone": "Telefon",
+        "Email": "E-posta",
+        "Website": "İnternet sitesi",
+        "WorkHours": "Çalışma saatleri",
+        "WorkHour1": "24 saat, Tüm günler",
+        "WorkHour2": "Pazartesi - Cuma 08:30-19:00, Cumartesi 08:30-14:00 (İstanbul Saati)",
+        "WorkHour3": "Pazartesi - Cuma 09:00-20:30, Cumartesi 09:00-16:00 (İstanbul Saati)",
+        "WorkHour4": "Pazartesi - Cuma 09:00-18:00, Cumartesi 09:00-16:00 (Moskova Saati)",
+        "Address": "Adres",
+        "ProductLines": "Ürün Grupları",
+        "ProductLine1": "Perdelik, Döşemelik ve Gelinlik Kumaşları ve Dantel Masa Örtüleri",
+        "ProductLine2": "İç Mekan Kumaşları: Perdelik ve Döşemelik",
+        "ProductLine3": "Nevresim, Yatak Örtüleri, Mobilya Örtüleri, Havlular, Mutfak Havluları, Havlu Takımları, Masa Örtüleri, Battaniyeler, Yastıklar, Yatak Örtüleri, Çocuk Çeşitleri, Bornozlar, Ev Kıyafetleri, Çarşaflar, Battaniyeler, Önlükler, Sauna Takımları, Ütü Masası Örtüleri.",
+        "ProductLine4": "Perde Kumaşları, Nevresim Takımları, Yatak Örtüleri, Mobilya Örtüleri, Havlular, Mutfak Havluları, Havlu Takımları, Masa Örtüleri, Battaniyeler, Yastıklar, Yatak Örtüleri, Çocuk Çeşitleri, Bornozlar, Ev Kıyafetleri, Çarşaflar, Battaniyeler, Önlükler, Sauna Takımları, Ütü Masası Örtüleri."
+    },
+    "FooterPage": {
+        "StayConnected": "Bağlı kalın",
+        "OurStory": "Bizim hikayemiz",
+        "ContactUs": "Bize Ulaşın",
+        "AllRightsReserved": "Her hakkı saklıdır"
+    },
+    "ProductDetailCard": {
+        "quantityMeters": "Miktar (m)",
+        "quantityPieces": "Adet",
+        "addToCart": "Sepete Ekle",
+        "buyNow": "Şimdi Al",
+        "addToFavorites": "Favorilere ekle",
+        "removeFromFavorites": "Favorilerden çıkar",
+        "productAddedToCart": "Ürün sepete eklendi!",
+        "pleaseLogin": "Lütfen giriş yapın",
+        "enterValidQuantity": "Lütfen geçerli bir miktar girin",
+        "errorAddingToCart": "Sepete eklenirken bir hata oluştu",
+        "customCurtain": "Perde Diktir",
+        "availableQuantity": "Mevcut Stok"
+    },
+    "CustomCurtain": {
+        "title": "Perdeni Tasarla",
+        "mountingType": "Montaj Tipi",
+        "cornice": "Korniş",
+        "rustic": "Rustik",
+        "pleatType": "Pile Tipi",
+        "flat": "Yatık Pile",
+        "kanun": "Kanun Pile",
+        "pipe": "Boru Pile",
+        "water_wave": "Su Dalgası",
+        "american": "Amerikan Pile",
+        "extrafor": "Ekstraforlu Düz Dikiş",
+        "pleatDensity": "Pile Sıklığı",
+        "noPleat": "Pilesiz",
+        "dimensions": "Ölçüler",
+        "width": "En (cm)",
+        "height": "Boy (cm)",
+        "wingType": "Kanat Tipi",
+        "singleWing": "Tek Kanat",
+        "doubleWing": "Çift Kanat",
+        "addToCart": "Sepete Ekle",
+        "totalPrice": "Toplam Fiyat",
+        "fabricUsage": "Kumaş Kullanımı",
+        "meter": "m",
+        "buttonText": "Perde Diktir"
+    }
 }

@@ -1,0 +1,14 @@
+src/app/[locale]/product/[product_category]/[product_sku]/page.tsx(51,11): error TS2740: Type 'Product' is missing the following properties from type 'Product': slug, images, category, attributes, and 2 more.
+src/components/ProductDetailCard.tsx(201,15): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(value: number | bigint | StringNumericLiteral): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number | bigint | StringNumericLiteral'.
+  Overload 2 of 3, '(value: number | bigint): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number | bigint'.
+  Overload 3 of 3, '(value: number): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+src/components/ProductDetailCard.tsx(392,55): error TS2552: Cannot find name 'variant_attributes'. Did you mean 'variantAttrs'?
+src/components/ProductDetailCard.tsx(393,19): error TS2552: Cannot find name 'variant_attributes'. Did you mean 'variantAttrs'?
+src/components/ProductDetailCard.tsx(393,45): error TS7006: Parameter 'attr' implicitly has an 'any' type.
+src/components/ProductDetailCard.tsx(397,44): error TS7006: Parameter 'attr' implicitly has an 'any' type.
+src/components/ProductDetailCard.tsx(397,50): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/components/ProductDetailCard.tsx(693,9): error TS2740: Type 'Product' is missing the following properties from type 'Product': pk, created_at, tags, type, and 9 more.

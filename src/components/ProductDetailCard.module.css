@@ -459,6 +459,103 @@
   letter-spacing: 0.05em;
 }
 
+/* Price and Stock Display */
+.priceAndStock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.priceDisplay {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold, #c9a961);
+}
+
+.stockDisplay {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Fabric Swatches */
+.fabric_swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.fabric_swatch_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fabric_swatch {
+  display: block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #e5e5e5;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.fabric_swatch:hover {
+  transform: scale(1.1);
+  border-color: var(--gold, #c9a961);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.checked_fabric_swatch {
+  border-color: var(--gold, #c9a961);
+  border-width: 3px;
+  box-shadow: 0 0 0 4px rgba(201, 169, 97, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+/* Product Details List (SKU/Barcode) */
+.productDetailsList {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e5e5;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detailLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.detailValue {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+}
+
 /* Modern Quantity Selector with +/- buttons */
 .quantitySelector {
   display: inline-flex;
@@ -948,7 +1045,7 @@
     word-break: break-word;
   }
 
-  .productHero > p {
+  .productHero>p {
     font-size: 0.7rem;
   }
 
@@ -1149,36 +1246,60 @@
   padding: 0 2rem;
 }
 
-.descriptionSection {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--light-gray, #e0dcd2);
-  text-align: center;
+/* Tab Buttons */
+.tabButtons {
+  display: flex;
+  gap: 0;
+  margin-bottom: 0;
+  border-bottom: 2px solid #e5e5e5;
 }
 
-.descriptionSection h3 {
-  font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: 1.75rem;
-  font-weight: 500;
-  color: #1a1a1a;
-  margin: 0 0 1.5rem 0;
+.tabButton {
+  flex: 1;
+  padding: 1rem 2rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #888;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
   position: relative;
-  display: inline-block;
-  padding-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.descriptionSection h3::after {
+.tabButton:hover {
+  color: var(--gold, #c9a961);
+}
+
+.tabButtonActive {
+  color: var(--gold, #c9a961);
+}
+
+.tabButtonActive::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
+  bottom: -2px;
+  left: 0;
+  right: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
-  border-radius: 2px;
+}
+
+/* Tab Content */
+.tabContent {
+  background: white;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--light-gray, #e0dcd2);
+  border-top: none;
+}
+
+.descriptionSection {
+  padding: 2rem 2.5rem;
+  text-align: center;
 }
 
 .descriptionContent {
@@ -1192,6 +1313,52 @@
   line-height: 1.9;
   color: #555;
   text-align: center;
+}
+
+.noDescription {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  color: #888;
+  font-style: italic;
+}
+
+/* Details Table */
+.detailsTable {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.detailsTable tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detailsTable tr:last-child {
+  border-bottom: none;
+}
+
+.detailTableLabel {
+  padding: 1rem 1.5rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  width: 40%;
+  background: #fafafa;
+  vertical-align: middle;
+}
+
+.detailTableValue {
+  padding: 1rem 1.5rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  vertical-align: middle;
 }
 
 /* ===== RESPONSIVE STYLES ===== */
@@ -1211,19 +1378,28 @@
     margin-top: 1.5rem;
   }
 
-  .descriptionSection {
-    padding: 1.5rem;
-    border-radius: 12px;
+  .tabButton {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
   }
 
-  .descriptionSection h3 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
+  .descriptionSection {
+    padding: 1.5rem;
   }
 
   .descriptionContent p {
     font-size: 0.9rem;
     line-height: 1.7;
+  }
+
+  .detailTableLabel,
+  .detailTableValue {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .detailTableLabel {
+    width: 45%;
   }
 }
 
@@ -1243,16 +1419,49 @@
     margin-top: 1rem;
   }
 
-  .descriptionSection {
-    padding: 1.25rem 1rem;
+  .tabButton {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
   }
 
-  .descriptionSection h3 {
-    font-size: 1.2rem;
+  .descriptionSection {
+    padding: 1.25rem 1rem;
   }
 
   .descriptionContent p {
     font-size: 0.85rem;
     text-align: left;
+  }
+
+  .detailsTable {
+    display: block;
+  }
+
+  .detailsTable tbody {
+    display: block;
+  }
+
+  .detailsTable tr {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0;
+  }
+
+  .detailTableLabel,
+  .detailTableValue {
+    width: 100%;
+    padding: 0.25rem 0;
+    font-size: 0.8rem;
+  }
+
+  .detailTableLabel {
+    background: transparent;
+    color: #888;
+    font-size: 0.7rem;
+  }
+
+  .detailTableValue {
+    font-weight: 600;
   }
 }

@@ -188,152 +188,136 @@ export default function CustomCurtainSidebar({
             </div>
           </div>
 
-          {/* Pleat Type - With Images */}
-          <div className={classes.section}>
-            <label className={classes.label}>
-              <FaCut className={classes.icon} /> {t('pleatType')}
-            </label>
-            <div className={`${classes.imageOptionsGrid} ${classes.pleatTypeGrid}`}>
-              <button
-                className={`${classes.imageOptionCard} ${pleatType === 'flat' ? classes.selected : ''}`}
-                onClick={() => setPleatType('flat')}
-              >
-                <div className={classes.imageWrapper}>
-                  <img
-                    src="/media/curtain-options/pleat-flat.jpg"
-                    alt="Flat Pleat"
-                    onError={(e) => {
-                      e.currentTarget.src = '/media/placeholder-curtain.jpg';
-                    }}
-                  />
-                  {pleatType === 'flat' && (
-                    <div className={classes.checkmark}>
-                      <FaCheck />
-                    </div>
-                  )}
-                </div>
-                <span className={classes.optionLabel}>{t('flat')}</span>
-              </button>
-              <button
-                className={`${classes.imageOptionCard} ${pleatType === 'kanun' ? classes.selected : ''}`}
-                onClick={() => setPleatType('kanun')}
-              >
-                <div className={classes.imageWrapper}>
-                  <img
-                    src="/media/curtain-options/pleat-kanun.jpg"
-                    alt="Kanun Pleat"
-                    onError={(e) => {
-                      e.currentTarget.src = '/media/placeholder-curtain.jpg';
-                    }}
-                  />
-                  {pleatType === 'kanun' && (
-                    <div className={classes.checkmark}>
-                      <FaCheck />
-                    </div>
-                  )}
-                </div>
-                <span className={classes.optionLabel}>{t('kanun')}</span>
-              </button>
-              <button
-                className={`${classes.imageOptionCard} ${pleatType === 'pipe' ? classes.selected : ''}`}
-                onClick={() => setPleatType('pipe')}
-              >
-                <div className={classes.imageWrapper}>
-                  <img
-                    src="/media/curtain-options/pleat-pipe.jpg"
-                    alt="Pipe Pleat"
-                    onError={(e) => {
-                      e.currentTarget.src = '/media/placeholder-curtain.jpg';
-                    }}
-                  />
-                  {pleatType === 'pipe' && (
-                    <div className={classes.checkmark}>
-                      <FaCheck />
-                    </div>
-                  )}
-                </div>
-                <span className={classes.optionLabel}>{t('pipe')}</span>
-              </button>
-              <button
-                className={`${classes.imageOptionCard} ${pleatType === 'water_wave' ? classes.selected : ''}`}
-                onClick={() => setPleatType('water_wave')}
-              >
-                <div className={classes.imageWrapper}>
-                  <img
-                    src="/media/curtain-options/pleat-water-wave.jpg"
-                    alt="Water Wave Pleat"
-                    onError={(e) => {
-                      e.currentTarget.src = '/media/placeholder-curtain.jpg';
-                    }}
-                  />
-                  {pleatType === 'water_wave' && (
-                    <div className={classes.checkmark}>
-                      <FaCheck />
-                    </div>
-                  )}
-                </div>
-                <span className={classes.optionLabel}>{t('water_wave')}</span>
-              </button>
-              <button
-                className={`${classes.imageOptionCard} ${pleatType === 'american' ? classes.selected : ''}`}
-                onClick={() => setPleatType('american')}
-              >
-                <div className={classes.imageWrapper}>
-                  <img
-                    src="/media/curtain-options/pleat-american.jpg"
-                    alt="American Pleat"
-                    onError={(e) => {
-                      e.currentTarget.src = '/media/placeholder-curtain.jpg';
-                    }}
-                  />
-                  {pleatType === 'american' && (
-                    <div className={classes.checkmark}>
-                      <FaCheck />
-                    </div>
-                  )}
-                </div>
-                <span className={classes.optionLabel}>{t('american')}</span>
-              </button>
-              <button
-                className={`${classes.imageOptionCard} ${pleatType === 'extrafor' ? classes.selected : ''}`}
-                onClick={() => setPleatType('extrafor')}
-              >
-                <div className={classes.imageWrapper}>
-                  <img
-                    src="/media/curtain-options/pleat-extrafor.jpg"
-                    alt="Extrafor Pleat"
-                    onError={(e) => {
-                      e.currentTarget.src = '/media/placeholder-curtain.jpg';
-                    }}
-                  />
-                  {pleatType === 'extrafor' && (
-                    <div className={classes.checkmark}>
-                      <FaCheck />
-                    </div>
-                  )}
-                </div>
-                <span className={classes.optionLabel}>{t('extrafor')}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Pleat Density */}
-          <div className={classes.section}>
-            <label className={classes.label}>
-              <FaLayerGroup className={classes.icon} /> {t('pleatDensity')}
-            </label>
-            <div className={classes.optionsGrid}>
-              {availableDensities.map(density => (
+          {/* Pleat Type - Only show if not Rustic mounting */}
+          {mountingType === 'cornice' && (
+            <div className={classes.section}>
+              <label className={classes.label}>
+                <FaCut className={classes.icon} /> {t('pleatType')}
+              </label>
+              <div className={`${classes.imageOptionsGrid} ${classes.pleatTypeGrid}`}>
                 <button
-                  key={density}
-                  className={`${classes.optionBtn} ${pleatDensity === density ? classes.selected : ''}`}
-                  onClick={() => setPleatDensity(density)}
+                  className={`${classes.imageOptionCard} ${pleatType === 'flat' ? classes.selected : ''}`}
+                  onClick={() => setPleatType('flat')}
                 >
-                  {density === '0' ? t('noPleat') : density}
+                  <div className={classes.imageWrapper}>
+                    <img
+                      src="/media/curtain-options/pleat-flat.jpg"
+                      alt="Flat Pleat"
+                      onError={(e) => {
+                        e.currentTarget.src = '/media/placeholder-curtain.jpg';
+                      }}
+                    />
+                    {pleatType === 'flat' && (
+                      <div className={classes.checkmark}>
+                        <FaCheck />
+                      </div>
+                    )}
+                  </div>
+                  <span className={classes.optionLabel}>{t('flat')}</span>
                 </button>
-              ))}
+                <button
+                  className={`${classes.imageOptionCard} ${pleatType === 'kanun' ? classes.selected : ''}`}
+                  onClick={() => setPleatType('kanun')}
+                >
+                  <div className={classes.imageWrapper}>
+                    <img
+                      src="/media/curtain-options/pleat-kanun.jpg"
+                      alt="Kanun Pleat"
+                      onError={(e) => {
+                        e.currentTarget.src = '/media/placeholder-curtain.jpg';
+                      }}
+                    />
+                    {pleatType === 'kanun' && (
+                      <div className={classes.checkmark}>
+                        <FaCheck />
+                      </div>
+                    )}
+                  </div>
+                  <span className={classes.optionLabel}>{t('kanun')}</span>
+                </button>
+                <button
+                  className={`${classes.imageOptionCard} ${pleatType === 'pipe' ? classes.selected : ''}`}
+                  onClick={() => setPleatType('pipe')}
+                >
+                  <div className={classes.imageWrapper}>
+                    <img
+                      src="/media/curtain-options/pleat-pipe.jpg"
+                      alt="Pipe Pleat"
+                      onError={(e) => {
+                        e.currentTarget.src = '/media/placeholder-curtain.jpg';
+                      }}
+                    />
+                    {pleatType === 'pipe' && (
+                      <div className={classes.checkmark}>
+                        <FaCheck />
+                      </div>
+                    )}
+                  </div>
+                  <span className={classes.optionLabel}>{t('pipe')}</span>
+                </button>
+                <button
+                  className={`${classes.imageOptionCard} ${pleatType === 'water_wave' ? classes.selected : ''}`}
+                  onClick={() => setPleatType('water_wave')}
+                >
+                  <div className={classes.imageWrapper}>
+                    <img
+                      src="/media/curtain-options/pleat-water-wave.jpg"
+                      alt="Water Wave Pleat"
+                      onError={(e) => {
+                        e.currentTarget.src = '/media/placeholder-curtain.jpg';
+                      }}
+                    />
+                    {pleatType === 'water_wave' && (
+                      <div className={classes.checkmark}>
+                        <FaCheck />
+                      </div>
+                    )}
+                  </div>
+                  <span className={classes.optionLabel}>{t('water_wave')}</span>
+                </button>
+                <button
+                  className={`${classes.imageOptionCard} ${pleatType === 'american' ? classes.selected : ''}`}
+                  onClick={() => setPleatType('american')}
+                >
+                  <div className={classes.imageWrapper}>
+                    <img
+                      src="/media/curtain-options/pleat-american.jpg"
+                      alt="American Pleat"
+                      onError={(e) => {
+                        e.currentTarget.src = '/media/placeholder-curtain.jpg';
+                      }}
+                    />
+                    {pleatType === 'american' && (
+                      <div className={classes.checkmark}>
+                        <FaCheck />
+                      </div>
+                    )}
+                  </div>
+                  <span className={classes.optionLabel}>{t('american')}</span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Pleat Density - Only show if not Rustic mounting */}
+          {mountingType === 'cornice' && (
+            <div className={classes.section}>
+              <label className={classes.label}>
+                <FaLayerGroup className={classes.icon} /> {t('pleatDensity')}
+              </label>
+              <div className={classes.optionsGrid}>
+                {availableDensities.map(density => (
+                  <button
+                    key={density}
+                    className={`${classes.optionBtn} ${pleatDensity === density ? classes.selected : ''}`}
+                    onClick={() => setPleatDensity(density)}
+                  >
+                    {density === '0' ? t('noPleat') : density}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Dimensions */}
           <div className={classes.section}>
