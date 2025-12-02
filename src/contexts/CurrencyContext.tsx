@@ -61,12 +61,10 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 console.log('Retrying rate fetch in 2 seconds...');
                 setTimeout(() => fetchRates(1), 2000);
             } else {
-                console.warn('Failed to fetch rates after retry. Prices will display in USD.');
-                // If rates are empty, force currency to USD as fallback
-                if (rates.length === 0) {
-                    console.warn('No rates available. Forcing currency to USD.');
-                    setCurrency('USD');
-                }
+                console.warn('Failed to fetch rates after retry. Switching to USD.');
+                // Force currency to USD on failure
+                setCurrency('USD');
+                setRates([]); // Clear rates
             }
         } finally {
             setLoading(false);
@@ -125,6 +123,14 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // Base currency is USD - always works
         if (currency === 'USD') {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(priceInUsd);
+        }
+
+        // If rates haven't loaded yet, fallback to USD silently
+        if (rates.length === 0) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(priceInUsd);
         }
 
         // Find rate for target currency
