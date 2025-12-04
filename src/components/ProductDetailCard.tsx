@@ -416,6 +416,20 @@ function ProductDetailCard({
       return;
     }
 
+    // Stock validation
+    const availableQty = selectedVariant?.variant_quantity
+      ? Number(selectedVariant.variant_quantity)
+      : (product.available_quantity ? Number(product.available_quantity) : Number(product.quantity));
+
+    if (qty > availableQty) {
+      alert(
+        locale === 'tr'
+          ? `Yetersiz stok! Gerekli: ${qty}, Mevcut: ${availableQty}`
+          : `Insufficient stock! Required: ${qty}, Available: ${availableQty}`
+      );
+      return;
+    }
+
     try {
       const userId = (session.user as any)?.id || session.user.email;
       const response = await fetch(
@@ -449,6 +463,28 @@ function ProductDetailCard({
   const handleCustomCurtainAddToCart = async (customizationData: any, totalPrice: number) => {
     if (!session?.user?.email) {
       alert(t('pleaseLogin'));
+      return;
+    }
+
+    // Stock validation for custom curtain
+    const requiredFabric = customizationData.width && customizationData.height
+      ? (parseFloat(customizationData.width) / 100) *
+      (customizationData.wingType === 'double' ? 2 : 1) *
+      (customizationData.pleatDensity && customizationData.pleatDensity !== '0'
+        ? parseFloat(customizationData.pleatDensity.split('x')[1])
+        : 1)
+      : 0;
+
+    const availableQty = selectedVariant?.variant_quantity
+      ? Number(selectedVariant.variant_quantity)
+      : (product.available_quantity ? Number(product.available_quantity) : Number(product.quantity));
+
+    if (requiredFabric > availableQty) {
+      alert(
+        locale === 'tr'
+          ? `Yetersiz stok! Gerekli: ${requiredFabric.toFixed(2)}m, Mevcut: ${availableQty}cm`
+          : `Insufficient stock! Required: ${requiredFabric.toFixed(2)}m, Available: ${availableQty}cm`
+      );
       return;
     }
 
@@ -936,8 +972,10 @@ function ProductDetailCard({
         isOpen={isCustomCurtainSidebarOpen}
         onClose={() => setIsCustomCurtainSidebarOpen(false)}
         product={product}
+        selectedVariant={selectedVariant}
         unitPrice={selectedVariant?.variant_price ? parseFloat(String(selectedVariant.variant_price)) : (product.price ? parseFloat(String(product.price)) : 0)}
         currency="USD" // Default currency, should be dynamic
+        selectedAttributes={selectedAttributes}
         onAddToCart={handleCustomCurtainAddToCart}
       />
     </div>

@@ -119,5 +119,223 @@
         "fabricUsage": "Zużycie tkaniny",
         "meter": "m",
         "buttonText": "Szycie zasłon"
+    },
+    "KVKK": {
+        "title": "General Data Protection Policy",
+        "lastUpdate": "Last update: December 2, 2024",
+        "section1": {
+            "title": "1. Introduction",
+            "text": "At Karven Homedecor, we value your privacy and are committed to protecting your personal data. This General Data Protection Policy outlines how we collect, use, store, and safeguard your information when you visit our website or make a purchase, ensuring transparency and trust for our international customers.",
+            "companyName": "Company Name",
+            "address": "Address",
+            "email": "Email",
+            "phone": "Phone"
+        },
+        "section2": {
+            "title": "2. Data We Collect",
+            "text": "We collect the following types of personal information to provide you with our services:",
+            "items": [
+                "Identity Information: Name, surname",
+                "Contact Information: Email address, phone number, shipping and billing address",
+                "Transaction Information: Order history, product preferences, cart contents",
+                "Technical Information: IP address, device information, cookies",
+                "Payment Information: Encrypted payment details (processed securely by third-party providers)"
+            ]
+        },
+        "section3": {
+            "title": "3. How We Use Your Data",
+            "text": "Your personal data is used for the following purposes:",
+            "items": [
+                "Processing and delivering your orders",
+                "Managing payments and invoicing",
+                "Providing customer support and resolving inquiries",
+                "Improving our website and user experience",
+                "Sending order updates and notifications",
+                "Marketing communications (only with your explicit consent)",
+                "Fraud prevention and security"
+            ]
+        },
+        "section4": {
+            "title": "4. Data Sharing",
+            "text": "We may share your data with trusted third parties solely for operational purposes:",
+            "items": [
+                "Shipping Companies: To deliver your orders",
+                "Payment Processors: To securely process transactions (e.g., iyzico)",
+                "Service Providers: For website hosting and maintenance",
+                "Legal Authorities: If required by law"
+            ],
+            "note": "We do not sell your personal data to third parties."
+        },
+        "section5": {
+            "title": "5. Data Security",
+            "text": "We implement robust security measures to protect your data:",
+            "items": [
+                "SSL encryption for secure data transmission",
+                "PCI-DSS compliant payment processing",
+                "Secure servers and firewalls",
+                "Regular security audits"
+            ]
+        },
+        "section6": {
+            "title": "6. Your Rights",
+            "text": "We respect your rights regarding your personal data. You have the right to:",
+            "items": [
+                "Access the personal data we hold about you",
+                "Request correction of inaccurate data",
+                "Request deletion of your data (subject to legal retention requirements)",
+                "Withdraw consent for marketing communications",
+                "Object to data processing in certain circumstances"
+            ]
+        },
+        "section7": {
+            "title": "7. Cookies",
+            "text": "We use cookies to enhance your browsing experience. These include essential cookies for site functionality and optional analytics cookies to understand how you use our site. You can manage your cookie preferences through your browser settings.",
+            "items": [],
+            "note": ""
+        },
+        "section8": {
+            "title": "8. Retention Period",
+            "text": "We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, including for the purposes of satisfying any legal, accounting, or reporting requirements.",
+            "items": [],
+            "note": ""
+        },
+        "section9": {
+            "title": "9. International Transfers",
+            "text": "As we operate globally, your data may be transferred to and processed in countries other than your own. We ensure that appropriate safeguards are in place to protect your data during such transfers.",
+            "items": []
+        },
+        "section10": {
+            "title": "10. Contact Us",
+            "text": "If you have any questions about this policy or your personal data, please contact us:",
+            "email": "Email",
+            "phone": "Phone",
+            "address": "Address"
+        },
+        "disclaimer": "Note: This policy may be updated periodically to reflect changes in our practices or legal requirements. Please review it regularly."
+    },
+    "ReturnPolicy": {
+        "title": "Return and Withdrawal Policy",
+        "lastUpdate": "Last update: December 2, 2024",
+        "section1": {
+            "title": "1. General Information",
+            "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations."
+        },
+        "section2": {
+            "title": "2. Withdrawal Period",
+            "days": "14 DAYS",
+            "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
+            "items": [
+                "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
+                "If the last day falls on a public holiday, the period extends to the end of the next business day.",
+                "As a seller, we may extend this period at our own initiative.",
+                "For multiple product orders, a separate withdrawal period starts for each product."
+            ]
+        },
+        "section3": {
+            "title": "3. How to Exercise Your Right of Withdrawal",
+            "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
+            "methodsTitle": "Application Methods:",
+            "methods": [
+                "Email: Send your withdrawal notification to info@demfirat.com",
+                "Phone: Call us at +90 (501) 057-1884",
+                "Online Form: Apply online via the \"Return Procedures\" page on our website",
+                "Written Notice: Fill out the withdrawal form and send it to our address"
+            ],
+            "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason."
+        },
+        "section4": {
+            "title": "4. Returning the Product",
+            "text": "After sending us your withdrawal notification:",
+            "steps": [
+                "You must send the product back to us within 10 days.",
+                "The product must be unused, undamaged, and in its original packaging.",
+                "All accessories and documents that came with the product must be included.",
+                "The invoice or delivery note must be sent with the product."
+            ],
+            "packagingTitle": "Packaging Suggestions:",
+            "packagingItems": [
+                "Place the product in its original box.",
+                "Use additional protective material to prevent damage.",
+                "Keep the shipping tracking number.",
+                "Send via insured shipping if possible."
+            ]
+        },
+        "section5": {
+            "title": "5. Shipping Fees",
+            "infoTitle": "Who Pays for Return Shipping?",
+            "infoItems": [
+                "If the product is defective or incorrect: We cover the shipping cost.",
+                "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
+                "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
+            ],
+            "addressTitle": "Return Address:",
+            "addressLines": [
+                "Karven Homedecor",
+                "Vakıflar OSB Mah. D100 Cad. No:38",
+                "Ergene, Tekirdağ 59930",
+                "Turkey"
+            ]
+        },
+        "section6": {
+            "title": "6. Refunds",
+            "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
+            "processTitle": "Return Process:",
+            "processSteps": [
+                "Withdrawal Notification: You inform us of your request.",
+                "Product Return: You ship the product within 10 days.",
+                "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
+                "Refund: Your refund is processed according to your payment method."
+            ],
+            "methodTitle": "Refund Method:",
+            "methodItems": [
+                "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
+                "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
+                "Cash on Delivery: Refunded via EFT to your bank account."
+            ],
+            "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives."
+        },
+        "section7": {
+            "title": "7. Exceptions to the Right of Withdrawal",
+            "text": "The right of withdrawal cannot be exercised in the following cases:",
+            "items": [
+                "Goods prepared according to the customer's wishes or clearly personal needs (Custom Curtains).",
+                "Perishable goods or goods with a short shelf life.",
+                "Goods with protective elements like packaging, tape, or seals opened after delivery, which are unsuitable for return due to health and hygiene reasons.",
+                "Goods that are mixed with other products after delivery and cannot be separated by their nature.",
+                "Opened audio or video recordings, software programs, and computer consumables.",
+                "Services started with the consumer's approval before the withdrawal period ends.",
+                "Services performed instantly in an electronic environment or intangible goods delivered instantly to the consumer.",
+                "Goods whose price is determined in financial markets.",
+                "Books, digital content, and computer consumables."
+            ],
+            "warning": "Hygiene Products: Textile products with opened packaging or protective bands are excluded from the right of withdrawal due to hygiene rules."
+        },
+        "section8": {
+            "title": "8. Defective Products - Warranty Rights",
+            "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
+            "items": [
+                "Request free repair of the product.",
+                "Request replacement with a non-defective equivalent.",
+                "Request a price reduction in proportion to the defect.",
+                "Withdraw from the contract and request a refund."
+            ],
+            "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request."
+        },
+        "section9": {
+            "title": "9. Exchanges",
+            "text": "If you only want to exchange a product (different size, color, etc.), please first return the current product using your right of withdrawal, then create a new order.",
+            "note": "Direct exchanges may be possible depending on stock status. Please contact our customer service to evaluate your situation."
+        },
+        "section10": {
+            "title": "10. Contact",
+            "text": "For returns, withdrawal rights, or any questions:",
+            "contactBox": [
+                "Email: info@demfirat.com",
+                "Phone: +90 (501) 057-1884",
+                "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
+                "Working Hours: Monday - Friday, 09:00 - 18:00"
+            ]
+        },
+        "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade."
     }
 }

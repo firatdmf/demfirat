@@ -73,8 +73,8 @@
   cursor: pointer;
   transform: translateX(5px);
 }
-  
-  
+
+
 .FooterPage .footerMenu {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -114,7 +114,7 @@
 .FooterPage .footerLinks a:hover {
   color: #c9a961;
 }
-  
+
 .FooterPage .karvenLogo {
   width: 60%;
   max-width: 200px;
@@ -192,52 +192,263 @@
 
 .FooterPage .certifications span:hover {
   color: #c9a961;
-}
-  
-  
-@media (max-width: 768px) {
-  .FooterPage {
-    padding: 3rem 1rem 1.5rem;
+
+  .FooterPage .socialIcon:hover {
+    background: #c9a961;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
   }
-  
-  .FooterPage .footerMenu {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-  
-  .FooterPage h3 {
-    font-size: 1.5rem;
-  }
-  
-  .FooterPage h4 {
-    font-size: 1.2rem;
-  }
-  
-  .FooterPage ul li {
-    margin: 0.5rem 0;
-  }
-  
-  .FooterPage .karvenLogo {
-    width: 50%;
-    max-width: 150px;
+
+  .FooterPage ul {
     margin-top: 0;
+    padding: 0;
   }
-  
-  .FooterPage .certifications {
-    font-size: 0.75rem;
+
+  .FooterPage ul li {
+    list-style: none;
+    text-decoration: none;
+    margin: 0.75rem 0;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
+  .FooterPage ul li:hover {
+    color: #c9a961;
+    cursor: pointer;
+    transform: translateX(5px);
+  }
+
+
+  .FooterPage .footerMenu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    max-width: 1280px;
+    margin: 0 auto 3rem;
+  }
+
   .FooterPage .copyright {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .FooterPage .copyright p {
-    font-size: 0.85rem;
-  }
-  
-  .FooterPage .footerLinks {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 1rem;
   }
+
+  .FooterPage .copyright p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+  }
+
+  .FooterPage .footerLinks {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .FooterPage .footerLinks a {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .FooterPage .footerLinks a:hover {
+    color: #c9a961;
+  }
+
+  .FooterPage .karvenLogo {
+    width: 60%;
+    max-width: 200px;
+    height: auto;
+    opacity: 0.95;
+    display: block;
+    margin: 0 auto;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: brightness(1.1);
+  }
+
+  .FooterPage .karvenLogo:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .FooterPage #link {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .FooterPage #link:hover {
+    color: #c9a961;
+    cursor: pointer;
+  }
+
+  .FooterPage .col1 {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .FooterPage .col2 ul,
+  .FooterPage .col3 ul {
+    list-style: none;
+  }
+
+  .FooterPage .contactList li {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+  }
+
+  .FooterPage .contactList strong {
+    color: #c9a961;
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
+  .FooterPage .contactList a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .FooterPage .contactList a:hover {
+    color: #c9a961;
+  }
+
+  .FooterPage .col4 {
+    text-align: center;
+  }
+
+  .FooterPage .certifications {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .FooterPage .certifications span {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .FooterPage .certifications span:hover {
+    color: #c9a961;
+  }
+
+
+  @media (max-width: 768px) {
+    .FooterPage {
+      padding: 3rem 1rem 1.5rem;
+    }
+
+    .FooterPage .footerMenu {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .FooterPage h3 {
+      font-size: 1.5rem;
+    }
+
+    .FooterPage h4 {
+      font-size: 1.2rem;
+    }
+
+    .FooterPage ul li {
+      margin: 0.5rem 0;
+    }
+
+    .FooterPage .karvenLogo {
+      width: 50%;
+      max-width: 150px;
+      margin-top: 0;
+    }
+
+    .FooterPage .certifications {
+      font-size: 0.75rem;
+    }
+
+    .FooterPage .copyright {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .FooterPage .copyright p {
+      font-size: 0.85rem;
+    }
+
+    .FooterPage .footerLinks {
+      gap: 1rem;
+    }
+  }
 }
-  
+
+.iyzicoFooterBadge {
+  margin-top: 20px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(201, 169, 97, 0.2);
+  display: block !important;
+  visibility: visible !important;
+  position: relative;
+  min-height: 100px;
+  /* Space for absolutely positioned logos */
+}
+
+.iyzicoFooterLogo {
+  max-width: 350px;
+  height: auto;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  display: block !important;
+  margin: 0 auto;
+}
+
+.iyzicoColoredLogo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.iyzicoWhiteLogo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-48% );
+  z-index: 2;
+  mix-blend-mode: lighten;
+}
+
+.iyzicoFooterLogo:hover {
+  opacity: 1;
+  transform: translateX(-50%) scale(1.05);
+}
+
+.col4 {
+  min-height: 350px;
+}
+
+@media (max-width: 768px) {
+  .karvenLogo {
+    margin-bottom: 40px !important;
+  }
+
+  .iyzicoFooterBadge {
+    margin-top: 20px;
+  }
+
+  .iyzicoFooterLogo {
+    max-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .iyzicoFooterLogo {
+    max-width: 230px !important;
+  }
+}

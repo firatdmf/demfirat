@@ -6,13 +6,13 @@ import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttribu
 // Dynamically import ProductGrid for code splitting
 const ProductGrid = dynamic(() => import("@/components/ProductGrid"), {
   loading: () => (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      minHeight: '50vh' 
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '50vh'
     }}>
-      <div style={{ 
+      <div style={{
         border: '4px solid #f3f3f3',
         borderTop: '4px solid #c9a961',
         borderRadius: '50%',
@@ -53,6 +53,7 @@ const transformFabricToProduct = (fabric: any, index: number): Product => {
     supplier_id: null,
     datasheet_url: null,
     minimum_inventory_level: null,
+    available_quantity: 0 as any,
     primary_image: fabric.files?.[0] ? `/media/products/embroidered_sheer_curtain_fabrics/thumbnails/${fabric.files[0].name}` : undefined,
     created_at: new Date(fabric.date || Date.now())
   };
@@ -74,21 +75,21 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
         setIsLoading(false);
       }
     };
-    
+
     loadData();
   }, []);
 
   // Process all products only when data is loaded
   const allProducts = useMemo(() => {
     if (fabricData.length === 0) return [];
-    
+
     const products: Product[] = fabricData.map(transformFabricToProduct);
-    
+
     // Remove duplicate products by SKU (keep first occurrence)
     const uniqueProducts: Product[] = Array.from(
       new Map(products.map(product => [product.sku, product])).values()
     );
-    
+
     console.log(`[EMBROIDERY] Total: ${products.length}, Unique: ${uniqueProducts.length}`);
     return uniqueProducts;
   }, [fabricData]);
@@ -99,15 +100,15 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
 
   if (isLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         minHeight: '50vh',
         flexDirection: 'column',
         gap: '20px'
       }}>
-        <div style={{ 
+        <div style={{
           border: '4px solid #f3f3f3',
           borderTop: '4px solid #c9a961',
           borderRadius: '50%',
@@ -135,10 +136,10 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
       product_category="embroidery"
       product_category_description={
         locale === 'tr' ? 'Nakışlı şeffaf perde kumaşları - Lüks ev tekstili koleksiyonu' :
-        locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
-        locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
-        locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
-        'Embroidered sheer curtain fabrics - Luxury home textile collection'
+          locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
+            locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
+              locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
+                'Embroidered sheer curtain fabrics - Luxury home textile collection'
       }
       searchParams={searchParams}
       locale={locale}

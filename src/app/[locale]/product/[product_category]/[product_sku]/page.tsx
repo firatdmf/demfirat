@@ -17,7 +17,8 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   // api call to get the product from database
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
   const startTime = performance.now();
-  const nejum_response = await fetch(nejum_api_link, { next: { revalidate: 300 } })
+  // Disable caching to always fetch fresh product data (including current stock)
+  const nejum_response = await fetch(nejum_api_link, { next: { revalidate: 0 } })
   const endTime = performance.now();
   const responseTime = (endTime - startTime).toFixed(2);
   console.log(`API Response Time: ${responseTime}ms for ${product_sku}`);

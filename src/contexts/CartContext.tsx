@@ -20,6 +20,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
     loadCartCount();
   }, [session?.user?.email]);
 
+  // Listen cart events to update badge without full reload
+  useEffect(() => {
+    const handleCartUpdated = () => {
+      loadCartCount();
+    };
+    const handleCartCleared = () => {
+      setCartCount(0);
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('cartUpdated', handleCartUpdated as EventListener);
+      window.addEventListener('cartCleared', handleCartCleared as EventListener);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('cartUpdated', handleCartUpdated as EventListener);
+        window.removeEventListener('cartCleared', handleCartCleared as EventListener);
+      }
+    };
+  }, []);
+
   const loadCartCount = async () => {
     if (!session?.user?.email) {
       setCartCount(0);

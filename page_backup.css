@@ -1,0 +1,197 @@
+
+
+/* Legal Documents Section - Ultra Minimal & Compact */
+.legalDocumentsSection {
+    margin-top: 20px;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.legalDocumentsSection h3 {
+    display: none;
+}
+
+.legalCheckboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.legalCheckboxes .checkboxWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.legalCheckbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #c9a961;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.legalCheckbox:hover {
+    border-color: #b8956a;
+}
+
+.legalCheckbox:checked {
+    background: #c9a961;
+    border-color: #c9a961;
+}
+
+.legalCheckbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.legalCheckbox:focus {
+    box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.2);
+}
+
+.legalLabel {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #333;
+    cursor: pointer;
+}
+
+.legalLink {
+    background: none;
+    border: none;
+    color: #333;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: normal;
+    padding: 0;
+    text-align: left;
+    line-height: 1.4;
+    transition: color 0.2s;
+}
+
+.legalLink:hover {
+    color: #c9a961;
+}
+
+
+/* Legal Documents Section - Ultra Minimal & Compact */
+.legalDocumentsSection {
+    margin-top: 20px;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.legalDocumentsSection h3 {
+    display: none;
+}
+
+.legalCheckboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.legalCheckboxes .checkboxWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.legalCheckbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #c9a961;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.legalCheckbox:hover {
+    border-color: #b8956a;
+}
+
+.legalCheckbox:checked {
+    background: #c9a961;
+    border-color: #c9a961;
+}
+
+.legalCheckbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.legalCheckbox:focus {
+    box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.2);
+}
+
+.legalLabel {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #333;
+    cursor: pointer;
+}
+
+.legalLink {
+    background: none;
+    border: none;
+    color: #333;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: normal;
+    padding: 0;
+    text-align: left;
+    line-height: 1.4;
+    transition: color 0.2s;
+}
+
+.legalLink:hover {
+    color: #c9a961;
+}
+

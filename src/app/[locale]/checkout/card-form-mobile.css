@@ -1,0 +1,52 @@
+/* Mobile Responsive Enhancements for Card Form */
+
+/* Tablet and below */
+@media (max-width: 768px) {
+    .cardFormWrapper {
+        padding: 1rem;
+    }
+
+    .cardFormWrapper .input {
+        padding: 0.875rem;
+        font-size: 16px;
+        /* Prevents iOS zoom */
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .cardFormWrapper {
+        padding: 0.875rem;
+    }
+
+    .cardFormWrapper .formGrid {
+        grid-template-columns: 1fr !important;
+        gap: 0.625rem;
+    }
+
+    .cardFormWrapper .input {
+        padding: 1rem;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .cardFormWrapper h3 {
+        font-size: 1.125rem;
+        margin-bottom: 0.875rem;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+    .cardFormWrapper {
+        padding: 0.75rem;
+    }
+
+    .cardFormWrapper .formGrid {
+        gap: 0.5rem;
+    }
+
+    .cardFormWrapper .input {
+        padding: 0.875rem;
+    }
+}

@@ -1,0 +1,228 @@
+/* Modal Overlay */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    padding: 1rem;
+}
+
+/* Modal Content */
+.modalContent {
+    background: white;
+    border-radius: 8px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+.modalHeader {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.modalHeader h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #2c2c2c;
+    font-weight: 600;
+}
+
+.headerActions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.printBtn,
+.closeBtn {
+    background: transparent;
+    border: 1px solid #c9a961;
+    color: #c9a961;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.printBtn:hover {
+    background: #c9a961;
+    color: white;
+}
+
+.closeBtn {
+    padding: 0.5rem 0.75rem;
+}
+
+.closeBtn:hover {
+    background: #d32f2f;
+    border-color: #d32f2f;
+    color: white;
+}
+
+/* Body - Scrollable */
+.modalBody {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Sections - All visible, no collapse */
+.section {
+    margin-bottom: 2rem;
+}
+
+.section h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #2c2c2c;
+    border-bottom: 2px solid #c9a961;
+    padding-bottom: 0.5rem;
+}
+
+.section h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem 0;
+    color: #333;
+}
+
+.sectionContent {
+    padding: 0.5rem 0;
+}
+
+.sectionContent p {
+    margin-bottom: 0.75rem;
+}
+
+.sectionContent strong {
+    font-weight: 600;
+    color: #2c2c2c;
+}
+
+.sectionContent ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.sectionContent li {
+    margin-bottom: 0.5rem;
+}
+
+/* Footer */
+.modalFooter {
+    padding: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.signatures {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.signatureBlock {
+    text-align: center;
+}
+
+.signatureBlock p {
+    margin: 0.5rem 0;
+}
+
+.date {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .modalContent {
+        max-width: 95%;
+        max-height: 85vh;
+    }
+
+    .modalHeader {
+        padding: 1rem;
+    }
+
+    .modalHeader h2 {
+        font-size: 1.2rem;
+    }
+
+    .modalBody {
+        padding: 1.5rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .section h3 {
+        font-size: 1rem;
+    }
+
+    .printBtn span {
+        display: none;
+    }
+
+    .signatures {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modalBody {
+        padding: 1rem;
+    }
+
+    .modalHeader {
+        padding: 0.75rem;
+    }
+
+    .headerActions {
+        gap: 0.5rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .modalOverlay {
+        position: static;
+        background: white;
+    }
+
+    .modalHeader {
+        border-bottom: 2px solid #000;
+    }
+
+    .headerActions {
+        display: none;
+    }
+
+    .modalBody {
+        overflow: visible;
+        max-height: none;
+    }
+}

@@ -307,7 +307,7 @@ export default function ProfilePage() {
     };
 
     fetchOrders();
-  }, [session, activeTab]);
+  }, [(session?.user as any)?.id, activeTab]);
 
   // Fetch order detail
   const fetchOrderDetail = async (orderId: number) => {
@@ -1431,9 +1431,16 @@ export default function ProfilePage() {
                         </div>
                         <div className={classes.orderBody}>
                           <div className={classes.orderSummary}>
-                            <span className={classes.itemCount}>{order.items_count} {t('items')}</span>
+                            <span className={classes.itemCount}>
+                              {order.items_count ? `${order.items_count} ${t('items')}` : '-'}
+                            </span>
                             <span className={classes.orderTotal}>
-                              {formatPrice(order.original_price, order.original_currency)}
+                              {order.original_price
+                                ? formatPrice(order.original_price, order.original_currency)
+                                : order.paid_amount
+                                  ? formatPrice(order.paid_amount, order.paid_currency)
+                                  : '-'
+                              }
                             </span>
                           </div>
                           {order.tracking_number && (
@@ -1589,8 +1596,8 @@ export default function ProfilePage() {
           {/* Order Detail Modal */}
           {selectedOrder && (
             <div className={classes.modalOverlay} onClick={() => setSelectedOrder(null)}>
-              <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-                <div className={classes.modalHeader}>
+              <div className={classes.modal} onClick={(e) => e.stopPropagation()} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+                <div className={classes.modalHeader} style={{ position: 'sticky', top: 0, background: 'white', zIndex: 10, borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
                   <h2>{t('orderDetails')} #{selectedOrder.id}</h2>
                   <button className={classes.closeBtn} onClick={() => setSelectedOrder(null)}>
                     <FaTimes />
@@ -1602,7 +1609,7 @@ export default function ProfilePage() {
                     <div className={classes.spinner}></div>
                   </div>
                 ) : (
-                  <div className={classes.modalContent}>
+                  <div className={classes.modalContent} style={{ padding: '1.5rem' }}>
                     {/* Status */}
                     <div className={classes.detailSection}>
                       <div className={`${classes.statusBadgeLarge} ${getStatusClass(selectedOrder.status)}`}>

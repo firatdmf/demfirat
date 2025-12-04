@@ -19,9 +19,10 @@ interface ProductCardProps {
   product: Product;
   locale?: string;
   variant_price?: number | null;
+  allVariantPrices?: number[];
 }
 
-function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps) {
+function ProductCard({ product, locale = 'en', variant_price, allVariantPrices }: ProductCardProps) {
   const { convertPrice } = useCurrency();
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
   const { data: session } = useSession();
@@ -181,24 +182,71 @@ function ProductCard({ product, locale = 'en', variant_price }: ProductCardProps
 
             {/* Price Section */}
             <div className={classes.priceSection}>
-              {/* Try variant_price first, then product.price */}
-              {(variant_price && Number(variant_price) > 0) ? (
-                <span className={classes.currentPrice}>
-                  {formatPrice(variant_price)}
-                </span>
-              ) : (product.price && Number(product.price) > 0) ? (
-                <span className={classes.currentPrice}>
-                  {formatPrice(product.price)}
-                </span>
-              ) : (
-                <span className={classes.contactPrice}>
-                  {locale === 'tr' ? 'Fiyat için iletişime geçin' :
-                    locale === 'ru' ? 'Свяжитесь для уточнения цены' :
-                      locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
-                        locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
-                          'Contact for price'}
-                </span>
-              )}
+              {(() => {
+                // If multiple variant prices provided, check if they're all the same
+                if (allVariantPrices && allVariantPrices.length > 0) {
+                  const validPrices = allVariantPrices.filter(p => p && Number(p) > 0);
+                  if (validPrices.length === 0) {
+                    // No valid prices
+                    return (
+                      <span className={classes.contactPrice}>
+                        {locale === 'tr' ? 'Fiyat için iletişime geçin' :
+                          locale === 'ru' ? 'Свяжитесь для уточнения цены' :
+                            locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
+                              locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
+                                'Contact for price'}
+                      </span>
+                    );
+                  }
+                  
+                  // Check if all prices are the same
+                  const allSame = validPrices.every(p => p === validPrices[0]);
+                  if (allSame) {
+                    // All prices are the same - show single price
+                    return (
+                      <span className={classes.currentPrice}>
+                        {formatPrice(validPrices[0])}
+                      </span>
+                    );
+                  } else {
+                    // Prices differ - show min-max range
+                    const minPrice = Math.min(...validPrices);
+                    const maxPrice = Math.max(...validPrices);
+                    return (
+                      <span className={classes.currentPrice}>
+                        {formatPrice(minPrice)} - {formatPrice(maxPrice)}
+                      </span>
+                    );
+                  }
+                }
+                
+                // Fallback to variant_price or product.price
+                if (variant_price && Number(variant_price) > 0) {
+                  return (
+                    <span className={classes.currentPrice}>
+                      {formatPrice(variant_price)}
+                    </span>
+                  );
+                }
+                if (product.price && Number(product.price) > 0) {
+                  return (
+                    <span className={classes.currentPrice}>
+                      {formatPrice(product.price)}
+                    </span>
+                  );
+                }
+                
+                // No price available
+                return (
+                  <span className={classes.contactPrice}>
+                    {locale === 'tr' ? 'Fiyat için iletişime geçin' :
+                      locale === 'ru' ? 'Свяжитесь для уточнения цены' :
+                        locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
+                          locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
+                            'Contact for price'}
+                  </span>
+                );
+              })()}
             </div>
           </Link>
         </div>

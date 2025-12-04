@@ -1,0 +1,229 @@
+/* Same styles as KVKK.module.css with additions for Return Policy specific elements */
+.container {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 2rem;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    line-height: 1.7;
+    color: #2c2c2c;
+}
+
+.container h1 {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 2.5rem;
+    color: var(--gold, #c9a961);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.lastUpdate {
+    text-align: center;
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 3rem;
+    font-style: italic;
+}
+
+.section {
+    margin-bottom: 2.5rem;
+}
+
+.section h2 {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.75rem;
+    color: #2c2c2c;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--light-gray, #e0dcd2);
+}
+
+.section h3 {
+    font-size: 1.2rem;
+    color: var(--gold, #c9a961);
+    margin: 1.5rem 0 0.75rem;
+    font-weight: 600;
+}
+
+.section p,
+.section ul,
+.section ol {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.section li {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Return Policy Specific Styles */
+.important {
+    background: linear-gradient(135deg, #c9a961 0%, #b8956a 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    margin: 2rem 0;
+    box-shadow: 0 4px 16px rgba(201, 169, 97, 0.3);
+}
+
+.important p:first-child {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.important p:last-child {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.methodBox,
+.shippingInfo,
+.refundProcess {
+    background: var(--ivory, #faf8f3);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.cargoAddress {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+}
+
+.packagingGuide {
+    background: #fff3e0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.timeline {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.timeline li {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.timeline li::before {
+    content: counter(list-item);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: var(--gold, #c9a961);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.exceptionList li {
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.exceptionList li::before {
+    content: "✗";
+    position: absolute;
+    left: 0;
+    color: #d32f2f;
+    font-weight: 700;
+}
+
+.warning {
+    background: #ffebee;
+    border-left: 4px solid #d32f2f;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+}
+
+.warrantyInfo {
+    background: #e3f2fd;
+    padding: 1.25rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+.contactBox {
+    background: var(--ivory, #faf8f3);
+    border: 2px solid var(--gold, #c9a961);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.contactBox p {
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.note {
+    background: #fff8e1;
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.disclaimer {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 3rem;
+}
+
+.disclaimer p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #0d47a1;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .container {
+        margin: 2rem auto;
+        padding: 1.5rem;
+    }
+
+    .container h1 {
+        font-size: 2rem;
+    }
+
+    .important p:first-child {
+        font-size: 2rem;
+    }
+
+    .timeline li {
+        padding-left: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .important {
+        padding: 1.5rem 1rem;
+    }
+
+    .important p:first-child {
+        font-size: 1.75rem;
+    }
+}

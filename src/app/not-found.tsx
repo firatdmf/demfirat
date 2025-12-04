@@ -11,7 +11,7 @@ export default function NotFound() {
   return (
     <html>
       <body className="text-center">
-        <p className="m-10 font-semibold">Nots Found</p>
+        <p className="m-10 font-semibold">Not Found</p>
       </body>
     </html>
   );

@@ -9,6 +9,10 @@ import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import OnBilgilendirmeFormu from '@/components/OnBilgilendirmeFormu';
+import MesafeliSatisSozlesmesi from '@/components/MesafeliSatisSozlesmesi';
+import './iyzico-payment-logo.css';
+import './card-form-mobile.css';
 
 interface CartItem {
   id: number;
@@ -99,6 +103,12 @@ export default function CheckoutPage() {
   const [cvv, setCvv] = useState('');
   const [userPhone, setUserPhone] = useState('');
 
+  // Legal documents state
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [agreedToPreInfo, setAgreedToPreInfo] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPreInfoModal, setShowPreInfoModal] = useState(false);
+
   // User info state
   const [userInfo, setUserInfo] = useState({
     firstName: '',
@@ -153,6 +163,12 @@ export default function CheckoutPage() {
       selectDistrict: { en: 'Select District', tr: 'İlçe Seçin', ru: 'Выберите район', pl: 'Wybierz dzielnicę' },
       save: { en: 'Save', tr: 'Kaydet', ru: 'Сохранить', pl: 'Zapisz' },
       cancel: { en: 'Cancel', tr: 'İptal', ru: 'Отмена', pl: 'Anuluj' },
+      agreeToPreInfo: { en: 'I have read and accept the Preliminary Information Form', tr: 'Ön Bilgilendirme Formunu okudum ve kabul ediyorum', ru: 'Я прочитал и принимаю предварительную информационную форму', pl: 'Przeczytałem i akceptuję wstępny formularz informacyjny' },
+      agreeToTerms: { en: 'I have read and accept the Distance Sales Agreement', tr: 'Mesafeli Satış Sözleşmesini okudum ve kabul ediyorum', ru: 'Я прочитал и принимаю договор дистанционной продажи', pl: 'Przeczytałem i akceptuję umowę sprzedaży na odległość' },
+      pleaseAgreeToPreInfo: { en: 'Please accept the Preliminary Information Form', tr: 'Lütfen Ön Bilgilendirme Formunu kabul edin', ru: 'Пожалуйста, примите предварительную информационную форму', pl: 'Proszę zaakceptować wstępny formularz informacyjny' },
+      pleaseAgreeToTerms: { en: 'Please accept the Distance Sales Agreement', tr: 'Lütfen Mesafeli Satış Sözleşmesini kabul edin', ru: 'Пожалуйста, примите договор дистанционной продажи', pl: 'Proszę zaakceptować umowę sprzedaży na odległość' },
+      legalDocuments: { en: 'Legal Documents', tr: 'Yasal Belgeler', ru: 'Юридические документы', pl: 'Dokumenty prawne' },
+      securePayment: { en: 'Secure Payment', tr: 'Güvenli Ödeme', ru: 'Безопасная оплата', pl: 'Bezpieczna płatność' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -437,6 +453,16 @@ export default function CheckoutPage() {
       return;
     }
 
+    // Validate legal document agreements
+    if (!agreedToPreInfo) {
+      alert(t('pleaseAgreeToPreInfo'));
+      return;
+    }
+    if (!agreedToTerms) {
+      alert(t('pleaseAgreeToTerms'));
+      return;
+    }
+
     // Validate addresses
     if (!selectedDeliveryAddressId) {
       alert(t('pleaseSelectAddress'));
@@ -572,9 +598,24 @@ export default function CheckoutPage() {
 
         // Basket items (convert to TRY)
         basketItems: cartItems.map((item, index) => {
-          const priceUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
-          const quantity = parseFloat(item.quantity);
-          const itemTotalUSD = priceUSD * quantity;
+          let itemTotalUSD = 0;
+
+          if (item.is_custom_curtain) {
+            // Custom curtain: use custom_price if available
+            if (!item.custom_price) {
+              console.warn(`Custom curtain item ${index} has no custom_price!`);
+              // Fallback: use product price as minimum
+              itemTotalUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
+            } else {
+              itemTotalUSD = parseFloat(String(item.custom_price));
+            }
+          } else {
+            // Regular product: calculate from product price and quantity
+            const priceUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
+            const quantity = parseFloat(item.quantity);
+            itemTotalUSD = priceUSD * quantity;
+          }
+
           const itemTotalTRY = (itemTotalUSD * exchangeRate).toFixed(2);
 
           return {
@@ -588,6 +629,12 @@ export default function CheckoutPage() {
 
         callbackUrl: `${window.location.origin}/api/payment/callback`
       };
+
+      console.log('===== CHECKOUT PAYMENT DATA =====');
+      console.log('Basket Items:', JSON.stringify(paymentData.basketItems, null, 2));
+      console.log('Price (USD):', subtotal, '-> TRY:', subtotalTRY);
+      console.log('Total (USD):', total, '-> TRY:', totalTRY);
+      console.log('Full Payment Data:', JSON.stringify(paymentData, null, 2));
 
       // Call iyzico payment API
       const response = await fetch('/api/payment/iyzico', {
@@ -1288,6 +1335,15 @@ export default function CheckoutPage() {
               <h2>{t('paymentMethod')}</h2>
             </div>
 
+            {/* Pay with iyzico Logo - Above payment options */}
+            <div className={classes.payWithIyzicoBadge}>
+              <img
+                src="/media/iyzico/checkout_iyzico_ile_ode/EN/En_Colored_horizontal/pay_with_iyzico_horizontal_colored.svg"
+                alt="Pay with iyzico"
+                className={classes.payWithIyzicoLogo}
+              />
+            </div>
+
             <div className={classes.paymentMethods}>
               <div
                 className={`${classes.paymentCard} ${paymentMethod === 'card' ? classes.selected : ''}`}
@@ -1303,6 +1359,14 @@ export default function CheckoutPage() {
                 <div className={classes.paymentContent}>
                   <FaCreditCard className={classes.paymentIcon} />
                   <span>{t('creditCard')}</span>
+                </div>
+                {/* iyzico Logo Badge - Centered */}
+                <div className={classes.iyzicoCardBadge}>
+                  <img
+                    src="/media/iyzico/footer_iyzico_ile_ode/Colored/logo_band_colored@1X.png"
+                    alt="iyzico"
+                    className={classes.iyzicoPaymentLogo}
+                  />
                 </div>
                 {paymentMethod === 'card' && (
                   <div className={classes.checkmark}>
@@ -1429,6 +1493,49 @@ export default function CheckoutPage() {
               </div>
             </div>
 
+            {/* Legal Documents Section */}
+            <div className={classes.legalDocumentsSection}>
+              <label className={classes.combinedLegalCheckbox}>
+                <input
+                  type="checkbox"
+                  checked={agreedToPreInfo && agreedToTerms}
+                  onChange={(e) => {
+                    const val = e.target.checked;
+                    setAgreedToPreInfo(val);
+                    setAgreedToTerms(val);
+                  }}
+                  className={classes.hiddenCheckbox}
+                />
+                <span className={classes.customCheckbox}>
+                  <FaCheck />
+                </span>
+                <span className={classes.legalText}>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowPreInfoModal(true);
+                    }}
+                    className={classes.legalLink}
+                  >
+                    {locale === 'tr' ? 'Ön bilgilendirme formu' : 'Preliminary Information Form'}
+                  </button>
+                  {locale === 'tr' ? "'nu ve " : ' and '}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowTermsModal(true);
+                    }}
+                    className={classes.legalLink}
+                  >
+                    {locale === 'tr' ? 'Mesafeli satış sözleşmesi' : 'Distance Sales Agreement'}
+                  </button>
+                  {locale === 'tr' ? "'ni onaylıyorum." : ' I approve.'}
+                </span>
+              </label>
+            </div>
+
             {/* Complete Order Button */}
             <button
               onClick={handleCompleteOrder}
@@ -1447,6 +1554,23 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      {/* Legal Document Modals */}
+      <OnBilgilendirmeFormu
+        isOpen={showPreInfoModal}
+        onClose={() => setShowPreInfoModal(false)}
+        locale={locale}
+        userInfo={userInfo}
+      />
+
+      <MesafeliSatisSozlesmesi
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+        locale={locale}
+        userInfo={userInfo}
+        deliveryAddress={addresses.find(addr => addr.id === selectedDeliveryAddressId)}
+        cartItems={cartItems}
+      />
     </div>
   );
 }

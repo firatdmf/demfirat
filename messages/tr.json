@@ -119,5 +119,250 @@
         "fabricUsage": "Kumaş Kullanımı",
         "meter": "m",
         "buttonText": "Perde Diktir"
+    },
+    "KVKK": {
+        "title": "Kişisel Verilerin Korunması ve İşlenmesi Politikası (KVKK)",
+        "lastUpdate": "Son güncelleme: 2 Aralık 2024",
+        "section1": {
+            "title": "1. Veri Sorumlusu",
+            "text": "6698 sayılı Kişisel Verilerin Korunması Kanunu (\"KVKK\") uyarınca, kişisel verileriniz veri sorumlusu sıfatıyla Karven Homedecor tarafından aşağıda açıklanan kapsamda toplanacak ve işlenecektir.",
+            "companyName": "Ticaret Unvanı",
+            "address": "Adres",
+            "email": "E-posta",
+            "phone": "Telefon"
+        },
+        "section2": {
+            "title": "2. İşlenen Kişisel Veriler",
+            "text": "E-ticaret faaliyetlerimiz kapsamında aşağıdaki kişisel verileriniz işlenmektedir:",
+            "items": [
+                "Kimlik Bilgiler: Ad, soyad, T.C. kimlik numarası (fatura tanzimi için gerekli olması halinde)",
+                "İletişim Bilgiler: E-posta adresi, telefon numarası, adres bilgisi",
+                "Müşteri İşlem Bilgileri: Sipariş ve satın alma geçmişi, ürün tercihleri, sepet bilgileri",
+                "İşlem Güvenliği Bilgileri: IP adresi, çerez kayıtları, cihaz bilgileri, log kayıtları",
+                "Finansal Bilgiler: Ödeme bilgileri (kredi kartı son 4 hanesi - şifreli olarak saklanır)",
+                "Görsel/İşitsel Kayıtlar: Müşteri hizmetleri görüşme kayıtları (onay alınarak)"
+            ]
+        },
+        "section3": {
+            "title": "3. Kişisel Verilerin İşlenme Amaçları",
+            "text": "Kişisel verileriniz şu amaçlarla işlenmektedir:",
+            "items": [
+                "Sipariş ve teslimat süreçlerinin yönetimi",
+                "Ödeme işlemlerinin gerçekleştirilmesi ve faturalandırma",
+                "Müşteri memnuniyeti ve hizmet kalitesinin artırılması",
+                "Yasal yükümlülüklerin yerine getirilmesi",
+                "Müşteri hizmetleri desteği sağlanması",
+                "İade, değişim ve cayma hakkı prosedürlerinin yürütülmesi",
+                "Kampanya ve promosyon bilgilendirmeleri (onay alınması halinde)",
+                "Hukuki uyuşmazlıkların çözümü ve hukuki taleplere cevap verilmesi",
+                "Dolandırıcılık önleme ve güvenlik tedbirleri"
+            ]
+        },
+        "section4": {
+            "title": "4. Kişisel Verilerin Aktarılması",
+            "text": "Kişisel verileriniz aşağıdaki kişi ve kurulara aktarılabilir:",
+            "items": [
+                "Kargo Firmaları: Siparişinizin teslimatı için gerekli bilgiler",
+                "Ödeme Kuruluşları: iyzico gibi ödeme hizmet sağlayıcıları",
+                "Bankalar: Para iadesi ve ödeme işlemleri için",
+                "Yetkili Kamu Kurum ve Kuruluşları: Yasal yükümlülük halinde",
+                "Hukuk Müşavirleri: Hukuki işlemlerin yürütülmesi için",
+                "Bulut Hizmet Sağlayıcıları: Veri depolama ve sistem altyapısı için"
+            ],
+            "note": "Yurt dışına veri aktarımı yapıldığı takdirde, KVKK'nın 9. maddesinde öngörülen şartlara uyulmaktadır."
+        },
+        "section5": {
+            "title": "5. Kişisel Verilerin Saklanma Süresi",
+            "text": "Kişisel verileriniz, işlenmesi gerektiren amaç ortadan kalktığında ve yasal saklama yükümlülüklerimiz sona erdiğinde silinir, yok edilir veya anonim hale getirilir.",
+            "items": [
+                "Sipariş Bilgileri: Vergi mevzuatı gereği 10 yıl",
+                "Fatura ve Mali Bilgiler: 10 yıl",
+                "İade/Cayma İşlemleri: 2 yıl",
+                "Pazarlama RIZA Kayıtları: Onay geri çekilene kadar",
+                "Log Kayıtları: Bilgi güvenliği için 2 yıl"
+            ]
+        },
+        "section6": {
+            "title": "6. Kişisel Veri Sahibinin Hakları (KVKK m.11)",
+            "text": "KVKK'nın 11. maddesi uyarınca, kişisel veri sahipleri olarak aşağıdaki haklara sahipsiniz:",
+            "items": [
+                "Kişisel verilerinizin işlenip işlenmediğini öğrenme,",
+                "Kişisel verileriniz işlenmişse buna ilişkin bilgi talep etme,",
+                "Kişisel verilerinizin işlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme,",
+                "Yurt içinde veya yurt dışında kişisel verilerinizin aktarıldığı üçüncü kişileri bilme,",
+                "Kişisel verilerinizin eksik veya yanlış işlenmiş olması hâlinde bunların düzeltilmesini isteme,",
+                "KVKK'nın 7. maddesinde öngörülen şartlar çerçevesinde kişisel verilerinizin silinmesini veya yok edilmesini isteme,",
+                "Düzeltme, silme veya yok edilme işlemlerinin kişisel verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,",
+                "İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme,",
+                "Kişisel verilerin kanuna aykırı olarak işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme."
+            ]
+        },
+        "section7": {
+            "title": "7. Haklarınızı Kullanma",
+            "text": "Yukarıda belirtilen haklarınızı kullanmak için Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ'e uygun olarak başvuruda bulunabilirsiniz.",
+            "methodsTitle": "Başvuru Yöntemleri:",
+            "methods": [
+                "E-posta: info@demfirat.com (Güvenli elektronik imza ile)",
+                "Posta: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930",
+                "Islak İmzalı Dilekçe: Yukarıdaki adrese şahsen teslim"
+            ],
+            "note": "Başvurularınız, talebin niteliğine göre en geç 30 gün içinde ücretsiz olarak sonuçlandırılacaktır. İşlemin ayrıca bir maliyeti gerektirmesi hâlinde, KVKK'da belirtilen tarifedeki ücret talep edilebilir."
+        },
+        "section8": {
+            "title": "8. Çerezler (Cookies)",
+            "text": "Websitemizde kullanıcı deneyimini geliştirmek amacıyla çerezler kullanılmaktadır. Çerezler teknik olarak zorunlu çerezler ve isteğe bağlı çerezler (analitik, pazarlama) olarak sınıflandırılmaktadır.",
+            "items": [
+                "Teknik Çerezler: Sitenin çalışması için gerekli, oturum yönetimi",
+                "Analitik Çerezler: Site kullanımının analiz edilmesi (Google Analytics vb.)",
+                "Pazarlama Çerezleri: Kişiselleştirilmiş reklamlar için (onay alınarak)"
+            ],
+            "note": "Tarayıcı ayarlarınızdan çerezleri yönetebilir veya engelleyebilirsiniz. Ancak teknik çerezlerin engellenmesi, sitenin doğru çalışmamasına neden olabilir."
+        },
+        "section9": {
+            "title": "9. Güvenlik Tedbirleri",
+            "text": "Kişisel verilerinizin güvenliği için aşağıdaki teknik ve idari tedbirler alınmaktadır:",
+            "items": [
+                "SSL (Secure Socket Layer) güvenlik sertifikası ile şifreli veri iletimi",
+                "Ödeme bilgilerinin PCI-DSS standartlarına uygun şekilde işlenmesi",
+                "Güvenlik duvarı (firewall) ve anti-virüs sistemleri",
+                "Yetkisiz erişime karşı güçlü şifreleme yöntemleri",
+                "Erişim yetkilendirme ve log kayıt sistemleri",
+                "Düzenli güvenlik denetimleri ve penetrasyon testleri",
+                "Çalışan eğitimleri ve gizlilik taahhütnameleri"
+            ]
+        },
+        "section10": {
+            "title": "10. İletişim",
+            "text": "KVKK politikamız veya kişisel verilerinizin işlenmesi hakkında sorularınız için:",
+            "email": "E-posta",
+            "phone": "Telefon",
+            "address": "Adres"
+        },
+        "disclaimer": "Not: Bu politika, yasal düzenlemelerdeki değişiklikler ve şirketimizin ticari faaliyetlerindeki güncellemeler doğrultusunda revize edilebilir. Güncel versiyona websitemizden her zaman erişebilirsiniz."
+    },
+    "ReturnPolicy": {
+        "title": "İade ve Cayma Hakkı Şartları",
+        "lastUpdate": "Son güncelleme: 2 Aralık 2024",
+        "section1": {
+            "title": "1. Genel Bilgiler",
+            "text": "Bu sayfa, Karven Homedecor e-ticaret sitesi üzerinden gerçekleştirilen alışverişlerde tüketicilerin cayma hakkı ve iade şartlarını açıklamaktadır. İade ve cayma hakkı, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında düzenlenmektedir."
+        },
+        "section2": {
+            "title": "2. Cayma Hakkı Süresi",
+            "days": "14 GÜN",
+            "text": "Ürününüzü teslim aldığınız tarihten itibaren 14 gün içinde, herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin sözleşmeden cayma hakkına sahipsiniz.",
+            "items": [
+                "Cayma hakkı süresi, ürünün size veya belirttiğiniz üçüncü kişiye teslim edildiği tarihten itibaren başlar",
+                "Son günün resmi tatile denk gelmesi durumunda, süre tatili takip eden ilk iş gününün mesai bitimine kadar uzar",
+                "Satıcı olarak bu süreyi kendi inisiyatifimizle uzatabiliriz",
+                "Birden fazla ürün siparişinde, her ürün için ayrı cayma süresi işlemeye başlar"
+            ]
+        },
+        "section3": {
+            "title": "3. Cayma Hakkının Kullanılması",
+            "text": "Cayma hakkınızı kullanmak için aşağıdaki yöntemlerden birini seçebilirsiniz:",
+            "methodsTitle": "Başvuru Yöntemleri:",
+            "methods": [
+                "E-posta: info@demfirat.com adresine cayma bildiriminizi gönderin",
+                "Telefon: +90 (501) 057-1884 numarasından bizi arayın",
+                "Online Form: Websitemizin \"İade İşlemleri\" sayfasından online başvuru yapın",
+                "Yazılı Bildirim: Cayma bildirim formunu doldurup adresimize gönderin"
+            ],
+            "note": "Önemli: Cayma hakkınız kullanırken sadece \"cayacağınızı\" bildirmeniz yeterlidir. Herhangi bir gerekçe belirtmenize gerek yoktur."
+        },
+        "section4": {
+            "title": "4. Ürünün İade Edilmesi",
+            "text": "Cayma bildiriminizi bize ilettikten sonra:",
+            "steps": [
+                "10 gün içinde ürünü bize geri göndermeniz gerekir",
+                "Ürün kullanılmamış, hasarsız ve orijinal ambalajında olmalıdır",
+                "Ürünle birlikte gelen tüm aksesuar ve belgeler eksiksiz olmalıdır",
+                "Fatura veya teslimat belgesi ürünle birlikte gönderilmelidir"
+            ],
+            "packagingTitle": "Paketleme Önerileri:",
+            "packagingItems": [
+                "Ürünü orijinal kutusuna yerleştirin",
+                "Hasar görmemesi için ek koruyucu malzeme kullanın",
+                "Kargo gönderi numarasını mutlaka saklayın",
+                "Mümkünse sigortalı kargo gönderin"
+            ]
+        },
+        "section5": {
+            "title": "5. Kargo Ücretleri",
+            "infoTitle": "İade Kargo Ücreti Kim Tarafından Ödenir?",
+            "infoItems": [
+                "Ürün ayıplı veya hatalı ise: Kargo ücreti tarafımızca karşılanır",
+                "Sadece cayma hakkı kullanılıyorsa: İade kargo ücreti müşteriye aittir",
+                "Kampanyalı ürünlerde: Gidiş kargosunu üstlendiğimiz durumlar hariç, iade kargo ücreti müşteriye aittir"
+            ],
+            "addressTitle": "İade Adresi:",
+            "addressLines": [
+                "Karven Homedecor",
+                "Vakıflar OSB Mah. D100 Cad. No:38",
+                "Ergene, Tekirdağ 59930",
+                "Türkiye"
+            ]
+        },
+        "section6": {
+            "title": "6. Para İadesi",
+            "text": "Cayma bildiriminizin tarafımıza ulaşmasından itibaren 14 gün içinde, ödediğiniz tutarın tamamını size iade ederiz.",
+            "processTitle": "İade Süreci:",
+            "processSteps": [
+                "Cayma Bildirimi: Talebinizi bize iletiyorsunuz",
+                "Ürün İadesi: 10 gün içinde ürünü kargoya veriyorsunuz",
+                "Ürün Kontrolü: Ürün depomuzda kontrol ediliyor (1-2 iş günü)",
+                "Para İadesi: Ödeme şeklinize göre iadeniz gerçekleştiriliyor"
+            ],
+            "methodTitle": "İade Yöntemi:",
+            "methodItems": [
+                "Kredi Kartı: İade tutarı, kartınıza 2-10 iş günü içinde yansır (banka sürecine bağlı)",
+                "Banka Havalesi (EFT): Hesap bilgilerinizi bildirmeniz durumunda 1-3 iş günü içinde",
+                "Kapıda Ödeme: Banka hesabınıza EFT ile yatırılır"
+            ],
+            "note": "Önemli: Ürünü teslim almadan önce para iadeniz yapılmayacaktır. Ancak, ürün bize ulaşmadan başvurunuz kabul edilir ve süreç başlatılır."
+        },
+        "section7": {
+            "title": "7. Cayma Hakkının Kullanılamayacağı Durumlar",
+            "text": "Aşağıdaki durumlarda cayma hakkı kullanılamaz:",
+            "items": [
+                "Müşterinin istekleri veya açıkça kişisel ihtiyaçları doğrultusunda hazırlanan mallar",
+                "Çabuk bozulabilen veya son kullanma tarihi geçebilecek mallar",
+                "Tesliminden sonra ambalaj, bant, mühür gibi koruyucu unsurları açılmış olan mallardan; iadesi sağlık ve hijyen açısından uygun olmayanlar",
+                "Tesliminden sonra başka ürünlerle karışan ve doğası gereği ayrıştırılması mümkün olmayan mallar",
+                "Malın tesliminden sonra ambalajı açılmış olan ses veya görüntü kayıtlarına, yazılım programlarına ve bilgisayar sarf malzemelerine ilişkin mallar",
+                "Cayma hakkı süresi sona ermeden önce, tüketicinin onayı ile ifasına başlanan hizmetler",
+                "Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallar",
+                "Fiyatı borsa veya teşkilatlanmış diğer piyasalarda belirlenen mallar",
+                "Kitap, dijital içerik ve bilgisayar sarf malzemeleri"
+            ],
+            "warning": "Hijyen Ürünleri: Hijyen kuralları gereği ambalajı veya koruyucu bandı açılmış tekstil ürünleri cayma hakkı kapsamı dışındadır."
+        },
+        "section8": {
+            "title": "8. Ayıplı Ürün - Garanti Hakları",
+            "text": "Ürününüzde bir ayıp (kusur, hata) tespit ederseniz, cayma hakkı yerine Tüketicinin Korunması Hakkında Kanun'un ayıplı mallara ilişkin haklarınızı kullanabilirsiniz:",
+            "items": [
+                "Ürünün ücretsiz onarılmasını isteme",
+                "Ürünün ayıpsız misli ile değiştirilmesini isteme",
+                "Satış bedelinden uygun oranda indirim yapılmasını isteme",
+                "Sözleşmeden dönüp ödediğiniz bedelin iadesini isteme"
+            ],
+            "info": "Ayıplı ürün durumunda, yukarıdakilerden birini seçerek tarafımıza bildirebilirsiniz. Satıcı olarak seçtiğiniz talebi yerine getirmekle yükümlüyüz."
+        },
+        "section9": {
+            "title": "9. Değişim İşlemleri",
+            "text": "Sadece ürün değişimi yapmak istiyorsanız (farklı beden, renk vb.), lütfen önce mevcut ürünü cayma hakkınızı kullanarak iade edin, ardından yeni siparişinizi oluşturun.",
+            "note": "Stok durumuna göre doğrudan değişim de yapılabilir. Müşteri hizmetlerimizle iletişime geçerek durumunuzu değerlendirebilirsiniz."
+        },
+        "section10": {
+            "title": "10. İletişim",
+            "text": "İade, cayma hakkı veya herhangi bir sorunuz için:",
+            "contactBox": [
+                "E-posta: info@demfirat.com",
+                "Telefon: +90 (501) 057-1884",
+                "Adres: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Türkiye",
+                "Çalışma Saatleri: Pazartesi - Cuma, 09:00 - 18:00"
+            ]
+        },
+        "disclaimer": "Tüketici Hakem Heyeti ve Tüketici Mahkemeleri: İşbu sözleşmeden doğabilecek uyuşmazlıklarda, her yıl Ticaret Bakanlığı tarafından ilan edilen parasal sınırlar dâhilinde tüketicinin yerleşim yerinin veya tüketici işleminin yapıldığı yerdeki İl/İlçe Tüketici Hakem Heyetine veya Tüketici Mahkemesine başvurabilirsiniz."
     }
 }

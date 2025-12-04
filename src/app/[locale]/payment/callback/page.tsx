@@ -65,13 +65,21 @@ export default function PaymentCallbackPage() {
             const parsed = JSON.parse(checkoutData);
             userId = parsed.userId;
             
+            // Enrich cart items with product info for ERP visibility
+            const enrichedCartItems = parsed.cartItems.map((item: any) => ({
+              ...item,
+              product_title: item.product?.title || item.product_sku,
+              product_image: item.product?.primary_image,
+              product_category: item.product_category
+            }));
+
             const orderResponse = await fetch('/api/orders/create', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 userId: parsed.userId,
                 paymentData: data.payment,
-                cartItems: parsed.cartItems,
+                cartItems: enrichedCartItems,
                 deliveryAddress: parsed.deliveryAddress,
                 billingAddress: parsed.billingAddress,
                 exchangeRate: parsed.exchangeRate,
@@ -99,6 +107,30 @@ export default function PaymentCallbackPage() {
             
             // Clear checkout data after order created
             localStorage.removeItem('checkoutData');
+            localStorage.removeItem('cart');
+
+            // Clear cart on backend and notify UI badge without page reload
+            try {
+              await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${parsed.userId}/`, { method: 'POST' });
+            } catch (e) {
+              console.error('Failed to clear backend cart:', e);
+            }
+            
+            // Dispatch events for CartContext listeners
+            // If in popup, also notify parent window
+            const isPopup = window.opener && window.opener !== window;
+            if (isPopup) {
+              // Dispatch in popup
+              window.dispatchEvent(new Event('cartCleared'));
+              window.dispatchEvent(new Event('cartUpdated'));
+              // Also dispatch in parent window
+              window.opener.dispatchEvent(new Event('cartCleared'));
+              window.opener.dispatchEvent(new Event('cartUpdated'));
+            } else {
+              // Normal page flow - dispatch in current window
+              window.dispatchEvent(new Event('cartCleared'));
+              window.dispatchEvent(new Event('cartUpdated'));
+            }
           }
         } catch (orderError) {
           console.error('Failed to create order:', orderError);
@@ -127,7 +159,8 @@ export default function PaymentCallbackPage() {
         } else {
           // Normal page - redirect to confirmation page
           setTimeout(() => {
-            router.push(`/${locale}/order/confirmation?paymentId=${paymentId}`);
+            // Include userId so confirmation page can clear server cart if needed
+            router.push(`/${locale}/order/confirmation?paymentId=${paymentId}&userId=${userId ?? ''}`);
           }, 2000);
         }
       } else {

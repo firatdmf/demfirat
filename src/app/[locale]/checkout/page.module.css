@@ -922,3 +922,192 @@ select.input:disabled {
     padding: 1.5rem;
   }
 }
+
+/* Mobile Responsive Card Form */
+@media (max-width: 768px) {
+  .cardFormWrapper {
+    padding: 1rem;
+  }
+
+  .cardFormWrapper .input {
+    padding: 0.875rem;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardFormWrapper {
+    padding: 0.875rem;
+  }
+
+  .cardFormWrapper .formGrid {
+    grid-template-columns: 1fr !important;
+    gap: 0.625rem;
+  }
+
+  .cardFormWrapper .input {
+    padding: 1rem;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .cardFormWrapper h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.875rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .cardFormWrapper {
+    padding: 0.75rem;
+  }
+
+  .cardFormWrapper .formGrid {
+    gap: 0.5rem;
+  }
+
+  .cardFormWrapper .input {
+    padding: 0.875rem;
+  }
+}
+
+/* ===== IYZICO LOGOS ===== */
+
+/* Pay with iyzico Logo - Above Payment Methods */
+.payWithIyzicoBadge {
+  display: flex;
+
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 16px;
+}
+
+.payWithIyzicoLogo {
+  max-width: 140px;
+  height: auto;
+  opacity: 0.9;
+}
+
+/* iyzico Logo Badge - Inside Card Option (Centered) */
+.iyzicoCardBadge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-top: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.iyzicoPaymentLogo {
+  max-width: 320px;
+  height: auto;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  display: block;
+  margin: 0 auto;
+}
+
+.paymentCard:hover .iyzicoPaymentLogo {
+  opacity: 1;
+}
+
+.paymentCard.selected .iyzicoPaymentLogo {
+  opacity: 1;
+}
+
+/* Mobile Responsive - iyzico Logos */
+@media (max-width: 768px) {
+  .payWithIyzicoBadge {
+    padding: 12px 0;
+    margin-bottom: 20px;
+  }
+
+  .payWithIyzicoLogo {
+    max-width: 100px;
+  }
+
+  .iyzicoCardBadge {}
+
+  .iyzicoPaymentLogo {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payWithIyzicoBadge {}
+
+  .payWithIyzicoLogo {
+    max-width: 140px;
+  }
+
+  .iyzicoPaymentLogo {
+    max-width: 140px;
+  }
+}
+
+/* Combined Legal Checkbox Styles */
+.legalDocumentsSection {
+  margin-bottom: 1.5rem;
+}
+
+.combinedLegalCheckbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hiddenCheckbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.customCheckbox {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border: 2px solid var(--light-gray, #e0dcd2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.hiddenCheckbox:checked+.customCheckbox {
+  background-color: var(--gold, #c9a961);
+  border-color: var(--gold, #c9a961);
+}
+
+.legalText {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  color: var(--text-dark, #2c2c2c);
+  line-height: 1.5;
+}
+
+.legalLink {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  color: var(--text-dark, #2c2c2c);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(44, 44, 44, 0.3);
+  transition: color 0.2s ease;
+}
+
+.legalLink:hover {
+  color: var(--gold, #c9a961);
+  text-decoration-color: var(--gold, #c9a961);
+}

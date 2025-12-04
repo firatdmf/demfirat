@@ -587,20 +587,22 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           </div>
           <div className={classes.products}>
             {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product) => {
-              // Find first variant price for this product
+              // Get all variant prices for this product
               const productVariants = product_variants.filter(v => v.product_id === product.id);
-              const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price
-                ? Number(productVariants[0].variant_price)
-                : null;
-              return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} />;
+              const allVariantPrices = productVariants
+                .map(v => v.variant_price ? Number(v.variant_price) : null)
+                .filter(p => p !== null) as number[];
+              const firstVariantPrice = allVariantPrices.length > 0 ? allVariantPrices[0] : null;
+              return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} />;
             }) :
               (Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
-                // Find first variant price for this product
+                // Get all variant prices for this product
                 const productVariants = product_variants.filter(v => v.product_id === product.id);
-                const firstVariantPrice = productVariants.length > 0 && productVariants[0].variant_price
-                  ? Number(productVariants[0].variant_price)
-                  : null;
-                return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} />;
+                const allVariantPrices = productVariants
+                  .map(v => v.variant_price ? Number(v.variant_price) : null)
+                  .filter(p => p !== null) as number[];
+                const firstVariantPrice = allVariantPrices.length > 0 ? allVariantPrices[0] : null;
+                return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} />;
               })
             }
           </div>

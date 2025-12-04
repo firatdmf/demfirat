@@ -15,6 +15,7 @@ export type Product = {
   type: string | null;
   unit_of_measurement: string | null;
   quantity: Decimal | null;
+  available_quantity: Decimal | null;  // Available stock in cm for curtain fabrics
   price: number | null;
   featured: boolean;
   selling_while_out_of_stock: boolean;

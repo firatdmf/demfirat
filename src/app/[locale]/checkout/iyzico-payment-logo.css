@@ -1,0 +1,79 @@
+/* Pay with iyzico Logo - Above Payment Methods */
+.payWithIyzicoBadge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0;
+    margin-bottom: 24px;
+    /* Boşluk eklendi */
+}
+
+.payWithIyzicoLogo {
+    max-width: 120px;
+    height: auto;
+    opacity: 0.9;
+}
+
+/* iyzico Logo Badge - Inside Card Option (Centered) */
+.iyzicoCardBadge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.iyzicoPaymentLogo {
+    max-width: 80px;
+    /* Küçültüldü */
+    height: auto;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    display: block;
+    margin: 0 auto;
+    /* Ortalanmış */
+}
+
+.paymentCard:hover .iyzicoPaymentLogo {
+    opacity: 1;
+}
+
+.paymentCard.selected .iyzicoPaymentLogo {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .payWithIyzicoBadge {
+        padding: 12px 0;
+        margin-bottom: 20px;
+    }
+
+    .payWithIyzicoLogo {
+        max-width: 100px;
+    }
+
+    .iyzicoCardBadge {
+        margin-top: 14px;
+        padding-top: 14px;
+    }
+
+    .iyzicoPaymentLogo {
+        max-width: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .payWithIyzicoBadge {
+        margin-bottom: 16px;
+    }
+
+    .payWithIyzicoLogo {
+        max-width: 90px;
+    }
+
+    .iyzicoPaymentLogo {
+        max-width: 60px;
+    }
+}
