@@ -12,6 +12,7 @@ import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap'
 import { useFavorites } from '@/contexts/FavoriteContext';
 import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { translateTextSync } from '@/lib/translate';
 
 
 type ProductDetailCardPageProps = {
@@ -53,6 +54,16 @@ function ProductDetailCard({
   const formatPrice = (price: any) => {
     const numPrice = parseFloat(String(price));
     return convertPrice(numPrice);
+  };
+
+  // Translation helper for attribute names and values
+  const translateAttributeName = (name: string): string => {
+    return translateTextSync(name, locale);
+  };
+
+  // Translation helper for category names (uses same utility)
+  const translateCategory = (category: string): string => {
+    return translateTextSync(category, locale);
   };
 
   // URL parametrelerinden veya ilk varyanttan initial attributes'ı hesapla
@@ -548,7 +559,7 @@ function ProductDetailCard({
       : [(placeholder_image_link)];
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div>{translateAttributeName('loading...')}</div>;
   }
 
   return (
@@ -613,12 +624,28 @@ function ProductDetailCard({
           </div>
         </div>
         <div className={classes.productHero}>
-          <h2>{product.title}</h2>
+          <div className={classes.titleRow}>
+            <h2>{product.title}</h2>
+            <button
+              onClick={handleToggleFavorite}
+              className={`${classes.titleFavoriteBtn} ${isFavorite(product.sku) ? classes.favorited : ''}`}
+              title={isFavorite(product.sku) ? t('removeFromFavorites') : t('addToFavorites')}
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  fill={isFavorite(product.sku) ? 'currentColor' : 'none'}
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </button>
+          </div>
           {/* SKU removed from here */}
 
           {/* Category + Attributes in one row */}
           <div className={classes.categoryAndAttributes}>
-            {product_category && <span className={classes.productCategory}>{product_category.toString()}</span>}
+            {product_category && <span className={classes.productCategory}>{translateCategory(product_category.toString())}</span>}
             {(() => {
               const variantAttrs = selectedVariant && variant_attributes
                 ? variant_attributes.filter(attr => attr.variant_id === selectedVariant.id)
@@ -627,8 +654,8 @@ function ProductDetailCard({
 
               return attributesToShow.map((attr, index) => (
                 <span key={`attr-${attr.name}-${index}`} className={classes.attributeBadge}>
-                  <span className={classes.attrName}>{attr.name}:</span>
-                  <span className={classes.attrValue}>{attr.value.replace(/_/g, " ")}</span>
+                  <span className={classes.attrName}>{translateAttributeName(attr.name || '')}:</span>
+                  <span className={classes.attrValue}>{translateAttributeName(attr.value)}</span>
                 </span>
               ));
             })()}
@@ -640,7 +667,7 @@ function ProductDetailCard({
               <ul>
                 {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => (
                   <li key={attribute.id.toString()}>
-                    <label><h3>{attribute.name}</h3></label>
+                    <label><h3>{translateAttributeName(attribute.name || '')}</h3></label>
                     {/* Check if this is Fabric attribute */}
                     {attribute.name?.toLowerCase() === 'fabric' || attribute.name?.toLowerCase() === 'kumaş' ? (
                       <div className={classes.fabric_swatches}>
@@ -662,11 +689,11 @@ function ProductDetailCard({
                                   handleAttributeChange(attribute.name ?? '', value);
                                 }}
                                 style={{ backgroundImage: `url(${bgImage})` }}
-                                title={value.replace(/_/g, " ")}
+                                title={translateAttributeName(value)}
                               >
-                                <span className={classes.sr_only}>{value.replace(/_/g, " ")}</span>
+                                <span className={classes.sr_only}>{translateAttributeName(value)}</span>
                               </Link>
-                              <span className={classes.color_label}>{value.replace(/_/g, " ")}</span>
+                              <span className={classes.color_label}>{translateAttributeName(value)}</span>
                             </div>
                           );
                         })}
@@ -689,7 +716,7 @@ function ProductDetailCard({
                                   handleAttributeChange(attribute.name ?? '', value);
                                 }}
                                 style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
-                                title={value.replace(/_/g, " ").replace(/-/g, " ")}
+                                title={translateAttributeName(value)}
                               >
                                 {isTwoTone ? (
                                   // İki renkli swatch - daire yarıya bölünür
@@ -704,9 +731,9 @@ function ProductDetailCard({
                                     />
                                   </>
                                 ) : null}
-                                <span className={classes.sr_only}>{value.replace(/_/g, " ").replace(/-/g, " ")}</span>
+                                <span className={classes.sr_only}>{translateAttributeName(value)}</span>
                               </Link>
-                              <span className={classes.color_label}>{value.replace(/_/g, " ").replace(/-/g, " ")}</span>
+                              <span className={classes.color_label}>{translateAttributeName(value)}</span>
                             </div>
                           );
                         })}
@@ -728,7 +755,7 @@ function ProductDetailCard({
                                 }}
                               >
                                 {/* replace underscored with spaces for better client visual */}
-                                {value.replace(/_/g, " ")}
+                                {translateAttributeName(value)}
                               </Link>
                             </div>
                           );
@@ -807,50 +834,37 @@ function ProductDetailCard({
                 {t('addToCart')}
               </button>
 
-              {/* Custom Curtain Button - Only for fabrics */}
-              {isFabricProduct && (
-                <button
-                  onClick={() => setIsCustomCurtainSidebarOpen(true)}
-                  className={classes.customCurtainBtn}
-                  style={{
-                    background: 'white',
-                    color: '#c9a961',
-                    border: '2px solid #c9a961',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontWeight: '600',
-                    fontSize: '1rem',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  <FaCut style={{ fontSize: '2rem' }} />
-                  {t('customCurtain')}
-                </button>
-              )}
-
               <button onClick={handleBuyNow} className={classes.buyNowBtn}>
                 {t('buyNow')}
               </button>
-              <button
-                onClick={handleToggleFavorite}
-                className={`${classes.favoriteBtn} ${isFavorite(product.sku) ? classes.favorited : ''}`}
-                title={isFavorite(product.sku) ? t('removeFromFavorites') : t('addToFavorites')}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    fill={isFavorite(product.sku) ? 'currentColor' : 'none'}
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                </svg>
-              </button>
             </div>
+
+            {/* Custom Curtain CTA - Below Button Group */}
+            {isFabricProduct && (
+              <div className={classes.customCurtainCTA}>
+                <div className={classes.ctaContent}>
+                  <FaCut className={classes.ctaIcon} />
+                  <div className={classes.ctaText}>
+                    <span className={classes.ctaTitle}>{t('customCurtain')}</span>
+                    <span className={classes.ctaSubtitle}>
+                      {locale === 'tr' ? 'Ölçülerinize göre perde dikimi' :
+                        locale === 'ru' ? 'Пошив штор по вашим размерам' :
+                          locale === 'pl' ? 'Szycie zasłon na wymiar' :
+                            'Curtain tailoring to your measurements'}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsCustomCurtainSidebarOpen(true)}
+                  className={classes.ctaButton}
+                >
+                  {locale === 'tr' ? 'Sipariş Ver' :
+                    locale === 'ru' ? 'Заказать' :
+                      locale === 'pl' ? 'Zamów' :
+                        'Order Now'}
+                </button>
+              </div>
+            )}
           </div>
 
         </div>
@@ -948,16 +962,16 @@ function ProductDetailCard({
                   {/* Variant Attributes (Color, Size, etc.) */}
                   {Object.entries(selectedAttributes).map(([attrName, attrValue]) => (
                     <tr key={attrName}>
-                      <td className={classes.detailTableLabel}>{attrName}</td>
-                      <td className={classes.detailTableValue}>{attrValue.replace(/_/g, " ").replace(/-/g, " ")}</td>
+                      <td className={classes.detailTableLabel}>{translateAttributeName(attrName)}</td>
+                      <td className={classes.detailTableValue}>{translateAttributeName(attrValue)}</td>
                     </tr>
                   ))}
 
                   {/* Product Attributes */}
                   {product_attributes && product_attributes.length > 0 && product_attributes.map((attr, index) => (
                     <tr key={`product-attr-${index}`}>
-                      <td className={classes.detailTableLabel}>{attr.name}</td>
-                      <td className={classes.detailTableValue}>{attr.value.replace(/_/g, " ")}</td>
+                      <td className={classes.detailTableLabel}>{translateAttributeName(attr.name || '')}</td>
+                      <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
                     </tr>
                   ))}
                 </tbody>

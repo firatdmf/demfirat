@@ -169,6 +169,36 @@
   gap: 0.75rem;
 }
 
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.titleFavoriteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #999;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.titleFavoriteBtn:hover {
+  color: #c9a961;
+  transform: scale(1.1);
+}
+
+.titleFavoriteBtn.favorited {
+  color: #e74c3c;
+}
+
+.titleFavoriteBtn.favorited:hover {
+  color: #c0392b;
+}
+
 .productHero h2 {
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
   font-size: 2.25rem;
@@ -204,7 +234,6 @@
   border-radius: 6px;
   font-size: 0.65rem;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--gold, #c9a961);
 }
@@ -229,7 +258,6 @@
 .attrName {
   color: #888;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
@@ -273,7 +301,6 @@
   font-weight: 700;
   color: #475569;
   margin: 0 0 0.4rem 0;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
@@ -368,7 +395,7 @@
   color: #64748b;
   text-align: center;
   white-space: nowrap;
-  max-width: 60px;
+  max-width: 85px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -435,6 +462,70 @@
   margin-bottom: 0;
 }
 
+/* Custom Curtain CTA - Prominent Call to Action */
+.customCurtainCTA {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.08) 0%, rgba(201, 169, 97, 0.15) 100%);
+  border: 2px solid rgba(201, 169, 97, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.ctaContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ctaIcon {
+  font-size: 1.75rem;
+  color: #c9a961;
+  flex-shrink: 0;
+}
+
+.ctaText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.ctaTitle {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2d2d2d;
+}
+
+.ctaSubtitle {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.ctaButton {
+  background: linear-gradient(135deg, #c9a961 0%, #d4b06a 100%);
+  color: white;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.3);
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.4);
+}
+
 /* Cart Actions - Clean & Modern */
 .cartActions {
   background: #fafafa;
@@ -455,7 +546,6 @@
   font-weight: 700;
   color: #475569;
   margin-bottom: 0.75rem;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
@@ -543,7 +633,6 @@
 
 .detailLabel {
   font-size: 0.75rem;
-  text-transform: uppercase;
   color: #888;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -647,7 +736,6 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
@@ -1266,7 +1354,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
@@ -1345,7 +1432,6 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: #666;
-  text-transform: uppercase;
   letter-spacing: 0.03em;
   width: 40%;
   background: #fafafa;

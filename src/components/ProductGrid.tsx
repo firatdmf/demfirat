@@ -27,156 +27,12 @@ type ProductGridProps = {
   initialDisplayCount?: number;
 }
 
-// Translation helper for attribute names
-const translateAttributeName = (name: string, locale: string): string => {
-  const translations: { [key: string]: { [key: string]: string } } = {
-    'color': {
-      'tr': 'Renk',
-      'ru': 'Цвет',
-      'pl': 'Kolor',
-      'de': 'Farbe',
-      'en': 'Color'
-    },
-    'colour': {
-      'tr': 'Renk',
-      'ru': 'Цвет',
-      'pl': 'Kolor',
-      'de': 'Farbe',
-      'en': 'Colour'
-    },
-    'size': {
-      'tr': 'Boyut',
-      'ru': 'Размер',
-      'pl': 'Rozmiar',
-      'de': 'Größe',
-      'en': 'Size'
-    },
-    'width': {
-      'tr': 'Genişlik',
-      'ru': 'Ширина',
-      'pl': 'Szerokość',
-      'de': 'Breite',
-      'en': 'Width'
-    },
-    'height': {
-      'tr': 'Yükseklik',
-      'ru': 'Высота',
-      'pl': 'Wysokość',
-      'de': 'Höhe',
-      'en': 'Height'
-    },
-    'length': {
-      'tr': 'Uzunluk',
-      'ru': 'Длина',
-      'pl': 'Długość',
-      'de': 'Länge',
-      'en': 'Length'
-    },
-    'material': {
-      'tr': 'Malzeme',
-      'ru': 'Материал',
-      'pl': 'Materiał',
-      'de': 'Material',
-      'en': 'Material'
-    },
-    'fabric': {
-      'tr': 'Kumaş',
-      'ru': 'Ткань',
-      'pl': 'Tkanina',
-      'de': 'Stoff',
-      'en': 'Fabric'
-    },
-    'fabric_type': {
-      'tr': 'Kumaş Tipi',
-      'ru': 'Тип ткани',
-      'pl': 'Rodzaj tkaniny',
-      'de': 'Stoffart',
-      'en': 'Fabric Type'
-    },
-    'pattern': {
-      'tr': 'Desen',
-      'ru': 'Узор',
-      'pl': 'Wzór',
-      'de': 'Muster',
-      'en': 'Pattern'
-    },
-    'design': {
-      'tr': 'Tasarım',
-      'ru': 'Дизайн',
-      'pl': 'Projekt',
-      'de': 'Design',
-      'en': 'Design'
-    },
-    'style': {
-      'tr': 'Stil',
-      'ru': 'Стиль',
-      'pl': 'Styl',
-      'de': 'Stil',
-      'en': 'Style'
-    },
-    'type': {
-      'tr': 'Tip',
-      'ru': 'Тип',
-      'pl': 'Typ',
-      'de': 'Typ',
-      'en': 'Type'
-    },
-    'category': {
-      'tr': 'Kategori',
-      'ru': 'Категория',
-      'pl': 'Kategoria',
-      'de': 'Kategorie',
-      'en': 'Category'
-    },
-    'collection': {
-      'tr': 'Koleksiyon',
-      'ru': 'Коллекция',
-      'pl': 'Kolekcja',
-      'de': 'Kollektion',
-      'en': 'Collection'
-    },
-    'finish': {
-      'tr': 'Bitiş',
-      'ru': 'Отделка',
-      'pl': 'Wykończenie',
-      'de': 'Finish',
-      'en': 'Finish'
-    },
-    'texture': {
-      'tr': 'Doku',
-      'ru': 'Текстура',
-      'pl': 'Tekstura',
-      'de': 'Textur',
-      'en': 'Texture'
-    },
-    'opacity': {
-      'tr': 'Opaklık',
-      'ru': 'Непрозрачность',
-      'pl': 'Przezroczystość',
-      'de': 'Deckkraft',
-      'en': 'Opacity'
-    },
-    'weight': {
-      'tr': 'Ağırlık',
-      'ru': 'Вес',
-      'pl': 'Waga',
-      'de': 'Gewicht',
-      'en': 'Weight'
-    },
-    'thickness': {
-      'tr': 'Kalınlık',
-      'ru': 'Толщина',
-      'pl': 'Grubość',
-      'de': 'Dicke',
-      'en': 'Thickness'
-    }
-  };
+// Import centralized translation utility
+import { translateTextSync } from '@/lib/translate';
 
-  const lowerName = name.toLowerCase();
-  if (translations[lowerName] && translations[lowerName][locale]) {
-    return translations[lowerName][locale];
-  }
-  return capitalizeFirstLetter(name);
+// Translation helper using centralized utility
+const translateAttributeName = (name: string, locale: string): string => {
+  return translateTextSync(name, locale);
 };
 
 // Below variables are passed down
@@ -327,13 +183,36 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           <div className={classes.headerOverlay}></div>
           <div className={classes.headerContent}>
             <h1 className={classes.pageTitle}>
-              {product_category?.toLowerCase().includes('fabric') ? 'Fabrics' :
-                product_category?.toLowerCase().includes('curtain') ? 'Curtains' :
-                  'Products'}
+              {product_category?.toLowerCase().includes('fabric')
+                ? (locale === 'tr' ? 'Kumaşlar' :
+                  locale === 'ru' ? 'Ткани' :
+                    locale === 'pl' ? 'Tkaniny' :
+                      locale === 'de' ? 'Stoffe' : 'Fabrics')
+                : product_category?.toLowerCase().includes('curtain')
+                  ? (locale === 'tr' ? 'Perdeler' :
+                    locale === 'ru' ? 'Шторы' :
+                      locale === 'pl' ? 'Zasłony' :
+                        locale === 'de' ? 'Vorhänge' : 'Curtains')
+                  : (locale === 'tr' ? 'Ürünler' :
+                    locale === 'ru' ? 'Продукты' :
+                      locale === 'pl' ? 'Produkty' :
+                        locale === 'de' ? 'Produkte' : 'Products')}
             </h1>
-            {product_category_description && (
-              <p className={classes.pageDescription}>{product_category_description}</p>
-            )}
+            <p className={classes.pageDescription}>
+              {product_category?.toLowerCase().includes('fabric')
+                ? (locale === 'tr' ? 'Nakışlı tül perde kumaşları - Premium ev tekstili koleksiyonu' :
+                  locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
+                    locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
+                      locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
+                        'Embroidered sheer curtain fabrics - Luxury home textile collection')
+                : product_category?.toLowerCase().includes('curtain')
+                  ? (locale === 'tr' ? 'Terziyi beklemeyi bırakın. Premium hazır perdelerimizle bugün mükemmel pencere görünümünü yakalayın. Tamamen bitmiş olarak gelir ve dakikalar içinde pencerelerinizi süsler.' :
+                    locale === 'ru' ? 'Забудьте о портном и ожидании. Получите идеальный вид окна сегодня с нашими премиальными готовыми шторами. Полностью готовы и украсят ваши окна за считанные минуты.' :
+                      locale === 'pl' ? 'Pomiń krawca i czekanie. Uzyskaj idealny wygląd okna już dziś dzięki naszym gotowym zasłonom premium. Całkowicie wykończone i gotowe do dekoracji okien w kilka minut.' :
+                        locale === 'de' ? 'Überspringen Sie den Schneider und das Warten. Erhalten Sie heute den perfekten Fenster-Look mit unseren Premium-Fertigvorhängen. Komplett fertig und bereit, Ihre Fenster in wenigen Minuten zu verschönern.' :
+                          'Skip the tailor and the wait. Get the perfect window look today with our premium ready-made curtains. They arrive fully finished and ready to grace your windows in minutes.')
+                  : product_category_description}
+            </p>
           </div>
         </div>
         <div className={classes.search}>
@@ -480,7 +359,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                                   {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
                                 </div>
                                 <span className={classes.filterLabel}>
-                                  {capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}
+                                  {translateAttributeName(attribute_value?.product_variant_attribute_value || '', locale)}
                                 </span>
                               </Link>
                             );
@@ -573,7 +452,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                                 {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
                               </div>
                               <span className={classes.filterLabel}>
-                                {capitalizeFirstLetter(attribute_value?.product_variant_attribute_value.replace(/_/g, " "))}
+                                {translateAttributeName(attribute_value?.product_variant_attribute_value || '', locale)}
                               </span>
                             </Link>
                           );

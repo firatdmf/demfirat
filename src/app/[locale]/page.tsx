@@ -116,8 +116,14 @@ export default async function Home(props: PageProps<'/[locale]'>) {
       <div className="HomePage">
         <HeroVideo
           videoSrc="/media/hero-video.mp4"
-          subtitle="Premium Textile Collection"
-          title="Where Elegance Meets Embroidery"
+          subtitle={locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
+            locale === 'ru' ? 'Премиальная текстильная коллекция' :
+              locale === 'pl' ? 'Kolekcja Premium Tekstyliów' :
+                'Premium Textile Collection'}
+          title={locale === 'tr' ? 'Zarafet Nakışla Buluşuyor' :
+            locale === 'ru' ? 'Где элегантность встречается с вышивкой' :
+              locale === 'pl' ? 'Gdzie elegancja spotyka haft' :
+                'Where Elegance Meets Embroidery'}
           locale={locale}
           showCatalogButton={false}
         />

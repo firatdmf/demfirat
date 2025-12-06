@@ -68,7 +68,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(true);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [processingOrder, setProcessingOrder] = useState(false);
-  const [isCartExpanded, setIsCartExpanded] = useState(false);
+  const [isCartExpanded, setIsCartExpanded] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Horizontal scroll drag state

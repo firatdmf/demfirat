@@ -1,0 +1,191 @@
+// Translation utility with local cache and Google Translate API integration
+
+// Local cache to avoid repeated API calls in the same session
+const localCache: Map<string, string> = new Map();
+
+// Manual translations for common terms (fallback when API is not available)
+const manualTranslations: { [key: string]: { [key: string]: string } } = {
+    // Attribute Names
+    'color': { 'tr': 'Renk', 'ru': 'Цвет', 'pl': 'Kolor', 'en': 'Color' },
+    'width': { 'tr': 'Genişlik', 'ru': 'Ширина', 'pl': 'Szerokość', 'en': 'Width' },
+    'height': { 'tr': 'Yükseklik', 'ru': 'Высота', 'pl': 'Wysokość', 'en': 'Height' },
+    'fabric': { 'tr': 'Kumaş', 'ru': 'Ткань', 'pl': 'Tkanina', 'en': 'Fabric' },
+    'fabric_type': { 'tr': 'Kumaş Tipi', 'ru': 'Тип ткани', 'pl': 'Rodzaj tkaniny', 'en': 'Fabric Type' },
+    'size': { 'tr': 'Boyut', 'ru': 'Размер', 'pl': 'Rozmiar', 'en': 'Size' },
+    'material': { 'tr': 'Malzeme', 'ru': 'Материал', 'pl': 'Materiał', 'en': 'Material' },
+    'pattern': { 'tr': 'Desen', 'ru': 'Узор', 'pl': 'Wzór', 'en': 'Pattern' },
+    'style': { 'tr': 'Stil', 'ru': 'Стиль', 'pl': 'Styl', 'en': 'Style' },
+    'type': { 'tr': 'Tip', 'ru': 'Тип', 'pl': 'Typ', 'en': 'Type' },
+    'category': { 'tr': 'Kategori', 'ru': 'Категория', 'pl': 'Kategoria', 'en': 'Category' },
+    'collection': { 'tr': 'Koleksiyon', 'ru': 'Коллекция', 'pl': 'Kolekcja', 'en': 'Collection' },
+    'opacity': { 'tr': 'Opaklık', 'ru': 'Непрозрачность', 'pl': 'Przezroczystość', 'en': 'Opacity' },
+    'weight': { 'tr': 'Ağırlık', 'ru': 'Вес', 'pl': 'Waga', 'en': 'Weight' },
+    'cristal': { 'tr': 'Kristal', 'ru': 'Кристалл', 'pl': 'Kryształ', 'en': 'Crystal' },
+
+    // Categories
+    'curtain': { 'tr': 'Perde', 'ru': 'Штора', 'pl': 'Zasłona', 'en': 'Curtain' },
+    'ready-made_curtain': { 'tr': 'Hazır Perde', 'ru': 'Готовые шторы', 'pl': 'Gotowe zasłony', 'en': 'Ready-Made Curtain' },
+
+    // Fabric Type Values
+    'solid': { 'tr': 'Düz', 'ru': 'Однотонный', 'pl': 'Jednolity', 'en': 'Solid' },
+    'embroidery': { 'tr': 'Nakışlı', 'ru': 'Вышивка', 'pl': 'Haft', 'en': 'Embroidery' },
+    'patterned': { 'tr': 'Desenli', 'ru': 'Узорчатый', 'pl': 'Wzorzysty', 'en': 'Patterned' },
+
+    // Yes/No Values
+    'yes': { 'tr': 'Evet', 'ru': 'Да', 'pl': 'Tak', 'en': 'Yes' },
+    'no': { 'tr': 'Hayır', 'ru': 'Нет', 'pl': 'Nie', 'en': 'No' },
+
+    // Basic Colors
+    'ecru': { 'tr': 'Ekru', 'ru': 'Экрю', 'pl': 'Ecru', 'en': 'Ecru' },
+    'whitesmoke': { 'tr': 'Duman Beyazı', 'ru': 'Дымчато-белый', 'pl': 'Biały dymny', 'en': 'White Smoke' },
+    'white': { 'tr': 'Beyaz', 'ru': 'Белый', 'pl': 'Biały', 'en': 'White' },
+    'black': { 'tr': 'Siyah', 'ru': 'Черный', 'pl': 'Czarny', 'en': 'Black' },
+    'beige': { 'tr': 'Bej', 'ru': 'Бежевый', 'pl': 'Beżowy', 'en': 'Beige' },
+    'cream': { 'tr': 'Krem', 'ru': 'Кремовый', 'pl': 'Kremowy', 'en': 'Cream' },
+    'grey': { 'tr': 'Gri', 'ru': 'Серый', 'pl': 'Szary', 'en': 'Grey' },
+    'gray': { 'tr': 'Gri', 'ru': 'Серый', 'pl': 'Szary', 'en': 'Gray' },
+    'brown': { 'tr': 'Kahverengi', 'ru': 'Коричневый', 'pl': 'Brązowy', 'en': 'Brown' },
+    'red': { 'tr': 'Kırmızı', 'ru': 'Красный', 'pl': 'Czerwony', 'en': 'Red' },
+    'blue': { 'tr': 'Mavi', 'ru': 'Синий', 'pl': 'Niebieski', 'en': 'Blue' },
+    'green': { 'tr': 'Yeşil', 'ru': 'Зеленый', 'pl': 'Zielony', 'en': 'Green' },
+    'yellow': { 'tr': 'Sarı', 'ru': 'Желтый', 'pl': 'Żółty', 'en': 'Yellow' },
+    'orange': { 'tr': 'Turuncu', 'ru': 'Оранжевый', 'pl': 'Pomarańczowy', 'en': 'Orange' },
+    'pink': { 'tr': 'Pembe', 'ru': 'Розовый', 'pl': 'Różowy', 'en': 'Pink' },
+    'purple': { 'tr': 'Mor', 'ru': 'Фиолетовый', 'pl': 'Fioletowy', 'en': 'Purple' },
+    'gold': { 'tr': 'Altın', 'ru': 'Золотой', 'pl': 'Złoty', 'en': 'Gold' },
+    'silver': { 'tr': 'Gümüş', 'ru': 'Серебряный', 'pl': 'Srebrny', 'en': 'Silver' },
+    'navy': { 'tr': 'Lacivert', 'ru': 'Темно-синий', 'pl': 'Granatowy', 'en': 'Navy' },
+    'ivory': { 'tr': 'Fildişi', 'ru': 'Слоновая кость', 'pl': 'Kość słoniowa', 'en': 'Ivory' },
+    'wheat': { 'tr': 'Buğday', 'ru': 'Пшеничный', 'pl': 'Pszeniczny', 'en': 'Wheat' },
+    'mint': { 'tr': 'Nane', 'ru': 'Мятный', 'pl': 'Miętowy', 'en': 'Mint' },
+    'deeppink': { 'tr': 'Koyu Pembe', 'ru': 'Темно-розовый', 'pl': 'Głęboki róż', 'en': 'Deep Pink' },
+
+    // Two-tone Colors
+    'grey-white': { 'tr': 'Gri-Beyaz', 'ru': 'Серо-белый', 'pl': 'Szaro-biały', 'en': 'Grey-White' },
+    'grey-ecru': { 'tr': 'Gri-Ekru', 'ru': 'Серо-экрю', 'pl': 'Szaro-ecru', 'en': 'Grey-Ecru' },
+    'gold-beige': { 'tr': 'Altın-Bej', 'ru': 'Золотисто-бежевый', 'pl': 'Złoto-beżowy', 'en': 'Gold-Beige' },
+    'gold-silver': { 'tr': 'Altın-Gümüş', 'ru': 'Золотисто-серебряный', 'pl': 'Złoto-srebrny', 'en': 'Gold-Silver' },
+    'pink-white': { 'tr': 'Pembe-Beyaz', 'ru': 'Розово-белый', 'pl': 'Różowo-biały', 'en': 'Pink-White' },
+    'pink-ecru': { 'tr': 'Pembe-Ekru', 'ru': 'Розово-экрю', 'pl': 'Różowo-ecru', 'en': 'Pink-Ecru' },
+    'navy-gold': { 'tr': 'Lacivert-Altın', 'ru': 'Темно-сине-золотой', 'pl': 'Granatowo-złoty', 'en': 'Navy-Gold' },
+    'teal': { 'tr': 'Çam Yeşili', 'ru': 'Бирюзовый', 'pl': 'Morski', 'en': 'Teal' },
+    'off-white': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },
+    'offwhite': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },
+
+    // Curtain Styles
+    'header': { 'tr': 'Başlık', 'ru': 'Верхняя часть', 'pl': 'Główka', 'en': 'Header' },
+    'rod_pocket': { 'tr': 'Büzgülü', 'ru': 'Карман для карниза', 'pl': 'Tunelowy', 'en': 'Rod Pocket' },
+    'rod pocket': { 'tr': 'Büzgülü', 'ru': 'Карман для карниза', 'pl': 'Tunelowy', 'en': 'Rod Pocket' },
+    'grommet': { 'tr': 'Halkalı', 'ru': 'С люверсами', 'pl': 'Z oczkami', 'en': 'Grommet' },
+
+    // UI Text
+    'loading': { 'tr': 'Yükleniyor', 'ru': 'Загрузка', 'pl': 'Ładowanie', 'en': 'Loading' },
+    'loading...': { 'tr': 'Yükleniyor...', 'ru': 'Загрузка...', 'pl': 'Ładowanie...', 'en': 'Loading...' },
+};
+
+/**
+ * Synchronous translation - checks manual translations first, then triggers API
+ */
+export function translateTextSync(text: string, targetLang: string): string {
+    if (!text) return '';
+
+    console.log('[Translate] Input:', text, 'Target:', targetLang);
+
+    // If target is English, just format and return
+    if (targetLang.toLowerCase() === 'en') {
+        return text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
+    }
+
+    const cacheKey = `${text.toLowerCase()}_${targetLang}`;
+
+    // Check local cache first
+    if (localCache.has(cacheKey)) {
+        console.log('[Translate] From cache:', localCache.get(cacheKey));
+        return localCache.get(cacheKey)!;
+    }
+
+    // Check manual translations
+    const lowerText = text.toLowerCase();
+    if (manualTranslations[lowerText]?.[targetLang]) {
+        const translated = manualTranslations[lowerText][targetLang];
+        console.log('[Translate] Manual found:', translated);
+        localCache.set(cacheKey, translated);
+        return translated;
+    }
+
+    // Fallback text
+    const fallback = text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
+    console.log('[Translate] Not in manual, calling API for:', text);
+
+    // Trigger async translation in background
+    if (typeof window !== 'undefined') {
+        fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, targetLang, sourceLang: 'EN' }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log('[Translate] API response:', data);
+                if (data.translatedText && data.translatedText !== text) {
+                    localCache.set(cacheKey, data.translatedText);
+                }
+            })
+            .catch(err => console.error('[Translate] API error:', err));
+    }
+
+    return fallback;
+}
+
+/**
+ * Async translation - waits for API response
+ */
+export async function translateText(text: string, targetLang: string): Promise<string> {
+    if (!text) return '';
+
+    if (targetLang.toLowerCase() === 'en') {
+        return text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
+    }
+
+    const cacheKey = `${text.toLowerCase()}_${targetLang}`;
+
+    if (localCache.has(cacheKey)) {
+        return localCache.get(cacheKey)!;
+    }
+
+    const lowerText = text.toLowerCase();
+    if (manualTranslations[lowerText]?.[targetLang]) {
+        const result = manualTranslations[lowerText][targetLang];
+        localCache.set(cacheKey, result);
+        return result;
+    }
+
+    try {
+        const response = await fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, targetLang, sourceLang: 'EN' }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const translated = data.translatedText || text;
+            localCache.set(cacheKey, translated);
+            return translated;
+        }
+    } catch (error) {
+        console.error('Translation API error:', error);
+    }
+
+    const fallback = text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
+    localCache.set(cacheKey, fallback);
+    return fallback;
+}
+
+export function addManualTranslation(key: string, translations: { [lang: string]: string }) {
+    manualTranslations[key.toLowerCase()] = { ...manualTranslations[key.toLowerCase()], ...translations };
+}
+
+export function clearTranslationCache() {
+    localCache.clear();
+}

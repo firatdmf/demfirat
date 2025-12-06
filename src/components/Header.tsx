@@ -77,10 +77,10 @@ function Header({ menuTArray }: HeaderProps) {
               </Link>
               {fabricDropdownOpen && (
                 <div className={classes.navDropdownMenu}>
-                  <Link href={`/${locale}/product/fabric?fabric_type=flat`} className={classes.dropdownItem}>
+                  <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.dropdownItem}>
                     {t('flatFabric')}
                   </Link>
-                  <Link href={`/${locale}/product/fabric?fabric_type=patterned`} className={classes.dropdownItem}>
+                  <Link href={`/${locale}/product/fabric?fabric_type=embroidery`} className={classes.dropdownItem}>
                     {t('patternedFabric')}
                   </Link>
                 </div>
@@ -237,14 +237,14 @@ function Header({ menuTArray }: HeaderProps) {
                   {locale === 'tr' ? 'Tüm Kumaşlar' : locale === 'ru' ? 'Все ткани' : locale === 'pl' ? 'Wszystkie tkaniny' : 'All Fabrics'}
                 </Link>
                 <Link
-                  href={`/${locale}/product/fabric?fabric_type=flat`}
+                  href={`/${locale}/product/fabric?fabric_type=solid`}
                   className={classes.mobileSubLink}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {t('flatFabric')}
                 </Link>
                 <Link
-                  href={`/${locale}/product/fabric?fabric_type=patterned`}
+                  href={`/${locale}/product/fabric?fabric_type=embroidery`}
                   className={classes.mobileSubLink}
                   onClick={() => setMobileMenuOpen(false)}
                 >

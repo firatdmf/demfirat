@@ -116,7 +116,12 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
           height: '50px',
           animation: 'spin 1s linear infinite'
         }}></div>
-        <p style={{ color: '#666', fontSize: '16px' }}>Loading products...</p>
+        <p style={{ color: '#666', fontSize: '16px' }}>
+          {locale === 'tr' ? 'Ürünler yükleniyor...' :
+            locale === 'ru' ? 'Загрузка продуктов...' :
+              locale === 'pl' ? 'Ładowanie produktów...' :
+                'Loading products...'}
+        </p>
         <style>{`
           @keyframes spin {
             0% { transform: rotate(0deg); }
