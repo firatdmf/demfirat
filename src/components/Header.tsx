@@ -33,8 +33,8 @@ function Header({ menuTArray }: HeaderProps) {
       accountInfo: { en: 'Account Info', tr: 'Kullanıcı Bilgilerim', ru: 'Информация об аккаунте', pl: 'Informacje o koncie' },
       myReviews: { en: 'My Reviews', tr: 'Değerlendirmelerim', ru: 'Мои отзывы', pl: 'Moje recenzje' },
       signOut: { en: 'Sign Out', tr: 'Çıkış Yap', ru: 'Выйти', pl: 'Wyloguj się' },
-      flatFabric: { en: 'Flat Fabric', tr: 'Düz Kumaş', ru: 'Гладкая ткань', pl: 'Gładka tkanina' },
-      patternedFabric: { en: 'Patterned Fabric', tr: 'Desenli Kumaş', ru: 'Узорчатая ткань', pl: 'Wzorzysta tkanina' },
+      solidFabric: { en: 'Solid Fabric', tr: 'Düz Kumaş', ru: 'Гладкая ткань', pl: 'Gładka tkanina' },
+      embroideredFabric: { en: 'Embroidered Fabric', tr: 'Nakışlı Kumaş', ru: 'Вышитая ткань', pl: 'Haftowana tkanina' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -42,6 +42,7 @@ function Header({ menuTArray }: HeaderProps) {
 
   return (
     <header className={classes.HeaderPage}>
+
       <div className={classes.headerContainer}>
         {/* Logo - Left Side */}
         <div className={classes.logoSection}>
@@ -78,10 +79,10 @@ function Header({ menuTArray }: HeaderProps) {
               {fabricDropdownOpen && (
                 <div className={classes.navDropdownMenu}>
                   <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.dropdownItem}>
-                    {t('flatFabric')}
+                    {t('solidFabric')}
                   </Link>
                   <Link href={`/${locale}/product/fabric?fabric_type=embroidery`} className={classes.dropdownItem}>
-                    {t('patternedFabric')}
+                    {t('embroideredFabric')}
                   </Link>
                 </div>
               )}
@@ -241,14 +242,14 @@ function Header({ menuTArray }: HeaderProps) {
                   className={classes.mobileSubLink}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {t('flatFabric')}
+                  {t('solidFabric')}
                 </Link>
                 <Link
                   href={`/${locale}/product/fabric?fabric_type=embroidery`}
                   className={classes.mobileSubLink}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {t('patternedFabric')}
+                  {t('embroideredFabric')}
                 </Link>
               </div>
             )}
