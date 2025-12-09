@@ -12,7 +12,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DEMFIRAT KARVEN | Home Collection",
+  title: "DEMFIRAT® KARVEN | Home Collection",
   description: "Your premium home textiles provider.",
 };
 export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
