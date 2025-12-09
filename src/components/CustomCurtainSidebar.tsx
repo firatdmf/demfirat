@@ -84,15 +84,25 @@ export default function CustomCurtainSidebar({
   }, [pleatType, availableDensities, pleatDensity]);
 
   // Calculate Price with labor costs
+  // Formula:
+  // 1. Kumaş maliyeti = kumaş_fiyatı × perde_eni(m) × pile_yoğunluğu
+  // 2. Pile dikimi maliyeti (perde eni başına):
+  //    - Amerikan: $2.5/m, Su dalgası: $2.5/m
+  //    - Standart yatık: $1.25/m (pilesiz ise $0)
+  //    - Kanun: $1.25/m, Boru: $1.25/m
+  // 3. Montaj maliyeti (perde eni başına):
+  //    - Rustik: $5/m
+  //    - Korniş: $1.25/m
   useEffect(() => {
     if (!width || !height) {
       setTotalPrice(0);
       return;
     }
 
-    // Perde uzunluğu (width) metreler cinsinden
-    const perdeLengthMeters = parseFloat(width) / 100;
+    // Perde eni (width) metreler cinsinden
+    const curtainWidthMeters = parseFloat(width) / 100;
 
+    // Pile yoğunluğu çarpanı
     let densityMultiplier = 1;
     if (pleatDensity !== '0') {
       // Extract multiplier from string like "1x2.5" -> 2.5
@@ -102,52 +112,66 @@ export default function CustomCurtainSidebar({
       }
     }
 
-    // Kumaş miktarı = Perde Uzunluğu × Pile Yoğunluğu
-    let fabricNeeded = perdeLengthMeters * densityMultiplier;
+    // Kumaş miktarı = Perde Eni × Pile Yoğunluğu
+    let fabricNeeded = curtainWidthMeters * densityMultiplier;
 
+    // Çift kanat ise 2 ile çarp
     if (wingType === 'double') {
       fabricNeeded *= 2;
     }
 
-    // KUMAŞ MALİYETİ = Kumaş Miktarı × Kumaş Fiyatı (pile yoğunluğu ÜNCEKİNDE çarpılır)
+    // 1. KUMAŞ MALİYETİ = Kumaş Miktarı × Kumaş Fiyatı
     const fabricCost = fabricNeeded * unitPrice;
 
-    // Montaj maliyeti (Korniş/Rustik) = Perde Uzunluğu × Montaj Fiyatı $/meter
-    let mountingCost = 0;
-    if (mountingType === 'cornice' || mountingType === 'rustic') {
-      mountingCost = perdeLengthMeters * 5; // $5/meter
-    }
-
-    // Pile tipi maliyeti = Perde Uzunluğu × Pile Fiyatı $/meter (pile yoğunluğu ile çarpılmaz!)
-    let pleatCost = 0;
+    // 2. PİLE DİKİMİ MALİYETİ = Perde Eni × Pile Fiyatı × Pile Yoğunluğu
+    let pleatSewingCost = 0;
     switch (pleatType) {
       case 'flat': // Yatık Pile
         if (pleatDensity === '0') {
-          pleatCost = perdeLengthMeters * 1; // Pilesiz: $1/meter
+          // Pilesiz seçerse - maliyet yok
+          pleatSewingCost = 0;
         } else {
-          pleatCost = perdeLengthMeters * 1.25; // Yatık Pile: $1.25/meter
+          pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier; // $1.25/m × pile
         }
         break;
       case 'american': // Amerikan Pile
-        pleatCost = perdeLengthMeters * 2.5; // $2.5/meter
+        pleatSewingCost = curtainWidthMeters * 2.5 * densityMultiplier; // $2.5/m × pile
         break;
       case 'water_wave': // Su Dalgası
-        pleatCost = perdeLengthMeters * 2.5; // $2.5/meter
+        pleatSewingCost = curtainWidthMeters * 2.5 * densityMultiplier; // $2.5/m × pile
         break;
       case 'kanun': // Kanun Pile
-        pleatCost = perdeLengthMeters * 1.25; // $1.25/meter
+        pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier; // $1.25/m × pile
         break;
       case 'pipe': // Boru Pile
-        pleatCost = perdeLengthMeters * 1.25; // $1.25/meter
+        pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier; // $1.25/m × pile
         break;
       default:
-        pleatCost = perdeLengthMeters * 1.25;
+        pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier;
     }
 
-    // TOPLAM = Kumaş Maliyeti + Montaj Maliyeti + Pile Maliyeti
-    const totalPrice = fabricCost + mountingCost + pleatCost;
+    // Çift kanat ise pile maliyeti de 2 katı
+    if (wingType === 'double') {
+      pleatSewingCost *= 2;
+    }
 
-    setTotalPrice(totalPrice);
+    // 3. MONTAJ MALİYETİ = Perde Eni × Montaj Fiyatı
+    let mountingCost = 0;
+    if (mountingType === 'rustic') {
+      mountingCost = curtainWidthMeters * 5; // Rustik: $5/m
+    } else if (mountingType === 'cornice') {
+      mountingCost = curtainWidthMeters * 1.25; // Korniş: $1.25/m
+    }
+
+    // Çift kanat ise montaj maliyeti de 2 katı
+    if (wingType === 'double') {
+      mountingCost *= 2;
+    }
+
+    // TOPLAM = Kumaş Maliyeti + Pile Dikimi Maliyeti + Montaj Maliyeti
+    const calculatedTotalPrice = fabricCost + pleatSewingCost + mountingCost;
+
+    setTotalPrice(calculatedTotalPrice);
     setRequiredFabric(fabricNeeded);
   }, [width, height, pleatDensity, wingType, mountingType, pleatType, unitPrice]);
 

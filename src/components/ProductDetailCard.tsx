@@ -66,6 +66,43 @@ function ProductDetailCard({
     return translateTextSync(category, locale);
   };
 
+  // Helper to get localized description from JSON format
+  // Format: {"translations": {"tr": {"description": "..."}, "en": {"description": "..."}}}
+  const getLocalizedDescription = (description: string | null | undefined): string | null => {
+    if (!description) return null;
+
+    try {
+      // Check if it's JSON format
+      const parsed = JSON.parse(description);
+
+      // Check for translations object
+      if (parsed.translations && typeof parsed.translations === 'object') {
+        // Try to get the description for current locale
+        const localeData = parsed.translations[locale];
+        if (localeData && localeData.description) {
+          return localeData.description;
+        }
+
+        // Fallback to English if current locale not found
+        if (parsed.translations['en'] && parsed.translations['en'].description) {
+          return parsed.translations['en'].description;
+        }
+
+        // Fallback to first available translation
+        const firstLocale = Object.keys(parsed.translations)[0];
+        if (firstLocale && parsed.translations[firstLocale].description) {
+          return parsed.translations[firstLocale].description;
+        }
+      }
+
+      // If parsed but not in expected format, return original
+      return description;
+    } catch (e) {
+      // Not JSON format, return as-is
+      return description;
+    }
+  };
+
   // URL parametrelerinden veya ilk varyanttan initial attributes'ı hesapla
   const getInitialAttributes = () => {
     const initialAttributes: { [key: string]: string } = {};
@@ -626,20 +663,43 @@ function ProductDetailCard({
         <div className={classes.productHero}>
           <div className={classes.titleRow}>
             <h2>{product.title}</h2>
-            <button
-              onClick={handleToggleFavorite}
-              className={`${classes.titleFavoriteBtn} ${isFavorite(product.sku) ? classes.favorited : ''}`}
-              title={isFavorite(product.sku) ? t('removeFromFavorites') : t('addToFavorites')}
-            >
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                  fill={isFavorite(product.sku) ? 'currentColor' : 'none'}
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-              </svg>
-            </button>
+            <div className={classes.titleActions}>
+              {/* PDF Download Button */}
+              <button
+                onClick={() => {
+                  const pdfUrl = `/api/generate-pdf?sku=${product.sku}&title=${encodeURIComponent(product.title)}&image=${encodeURIComponent(product.primary_image || '')}`;
+                  window.open(pdfUrl, '_blank');
+                }}
+                className={classes.titlePdfBtn}
+                title={locale === 'tr' ? 'PDF olarak indir' :
+                  locale === 'ru' ? 'Скачать PDF' :
+                    locale === 'pl' ? 'Pobierz PDF' :
+                      'Download PDF'}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14,2 14,8 20,8" />
+                  <line x1="12" y1="18" x2="12" y2="12" />
+                  <line x1="9" y1="15" x2="12" y2="18" />
+                  <line x1="15" y1="15" x2="12" y2="18" />
+                </svg>
+              </button>
+              {/* Favorite Button */}
+              <button
+                onClick={handleToggleFavorite}
+                className={`${classes.titleFavoriteBtn} ${isFavorite(product.sku) ? classes.favorited : ''}`}
+                title={isFavorite(product.sku) ? t('removeFromFavorites') : t('addToFavorites')}
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    fill={isFavorite(product.sku) ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
           {/* SKU removed from here */}
 
@@ -902,9 +962,9 @@ function ProductDetailCard({
           {/* Description Tab */}
           {activeTab === 'description' && (
             <div className={classes.descriptionSection}>
-              {product.description ? (
+              {getLocalizedDescription(product.description) ? (
                 <div className={classes.descriptionContent}>
-                  <p style={{ whiteSpace: "pre-line" }}>{product.description}</p>
+                  <p style={{ whiteSpace: "pre-line" }}>{getLocalizedDescription(product.description)}</p>
                 </div>
               ) : (
                 <p className={classes.noDescription}>

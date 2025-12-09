@@ -199,6 +199,27 @@
   color: #c0392b;
 }
 
+.titleActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.titlePdfBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #999;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.titlePdfBtn:hover {
+  color: #c9a961;
+  transform: scale(1.1);
+}
+
 .productHero h2 {
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
   font-size: 2.25rem;

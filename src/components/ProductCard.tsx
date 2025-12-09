@@ -144,19 +144,6 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices }
             {isWishlisted ? <BsSuitHeartFill /> : <BsSuitHeart />}
           </button>
 
-          {/* PDF Button - Left Bottom */}
-          <button
-            className={classes.pdfBtn}
-            onClick={handlePdfClick}
-            aria-label={locale === 'tr' ? 'PDF olarak indir' :
-              locale === 'ru' ? 'Скачать PDF' :
-                locale === 'pl' ? 'Pobierz PDF' :
-                  locale === 'de' ? 'PDF herunterladen' :
-                    'Download PDF'}
-          >
-            <HiDocumentText />
-          </button>
-
           {/* Quick Actions */}
           {
             /*
@@ -198,7 +185,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices }
                       </span>
                     );
                   }
-                  
+
                   // Check if all prices are the same
                   const allSame = validPrices.every(p => p === validPrices[0]);
                   if (allSame) {
@@ -219,7 +206,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices }
                     );
                   }
                 }
-                
+
                 // Fallback to variant_price or product.price
                 if (variant_price && Number(variant_price) > 0) {
                   return (
@@ -235,7 +222,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices }
                     </span>
                   );
                 }
-                
+
                 // No price available
                 return (
                   <span className={classes.contactPrice}>
