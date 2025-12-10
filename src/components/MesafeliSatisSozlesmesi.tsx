@@ -145,11 +145,14 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
             content: locale === 'tr' ? (
                 <>
                     <h4>SATICI (İşletme)</h4>
-                    <p><strong>Ünvan:</strong> DEM FIRAT KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
-                    <p><strong>Adres:</strong> Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Türkiye</p>
+                    <p><strong>Ünvan:</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
+                    <p><strong>Adres:</strong> Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-posta:</strong> info@demfirat.com</p>
-                    <p><strong>Web:</strong> www.karvenhome.com</p>
+                    <p><strong>Web:</strong> www.demfirat.com</p>
 
                     <h4>ALICI (Tüketici)</h4>
                     <p><strong>Ad Soyad:</strong> {userInfo.firstName} {userInfo.lastName}</p>
@@ -162,11 +165,14 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
             ) : (
                 <>
                     <h4>SELLER (Company)</h4>
-                    <p><strong>Company:</strong> DEM FIRAT KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Address:</strong> Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Turkey</p>
+                    <p><strong>Company:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
+                    <p><strong>Address:</strong> Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
                     <p><strong>Email:</strong> info@demfirat.com</p>
-                    <p><strong>Web:</strong> www.karvenhome.com</p>
+                    <p><strong>Web:</strong> www.demfirat.com</p>
 
                     <h4>BUYER (Consumer)</h4>
                     <p><strong>Name:</strong> {userInfo.firstName} {userInfo.lastName}</p>
@@ -182,7 +188,7 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
             title: t('subjectOfContract'),
             content: locale === 'tr' ? (
                 <>
-                    <p>İşbu Sözleşme, ALICI'nın SATICI'ya ait www.karvenhome.com internet sitesinden elektronik ortamda siparişini yaptığı aşağıda nitelikleri ve satış fiyatı belirtilen ürün/ürünlerin satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmelere Dair Yönetmelik hükümleri gereğince tarafların hak ve yükümlülüklerini düzenler.</p>
+                    <p>İşbu Sözleşme, ALICI'nın SATICI'ya ait www.demfirat.com internet sitesinden elektronik ortamda siparişini yaptığı aşağıda nitelikleri ve satış fiyatı belirtilen ürün/ürünlerin satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmelere Dair Yönetmelik hükümleri gereğince tarafların hak ve yükümlülüklerini düzenler.</p>
 
                     <p><strong>Sözleşme Konusu Ürün/Ürünler:</strong></p>
 
@@ -256,7 +262,7 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
                 </>
             ) : (
                 <>
-                    <p>This Agreement regulates the rights and obligations of the parties in accordance with Law No. 6502 on Consumer Protection and the Regulation on Distance Contracts regarding the sale and delivery of the product(s) whose characteristics and sales price are specified below, which the BUYER has ordered electronically from the website www.karvenhome.com belonging to the SELLER.</p>
+                    <p>This Agreement regulates the rights and obligations of the parties in accordance with Law No. 6502 on Consumer Protection and the Regulation on Distance Contracts regarding the sale and delivery of the product(s) whose characteristics and sales price are specified below, which the BUYER has ordered electronically from the website www.demfirat.com belonging to the SELLER.</p>
 
                     <p><strong>Contract Products:</strong></p>
                     <p>All products in your order are covered by this agreement. The type, quantity, brand/model, color, sales price, payment method and basic characteristics of the products are specified on the order summary page.</p>
@@ -559,7 +565,10 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
                     <ul>
                         <li>E-posta: info@demfirat.com</li>
                         <li>Telefon: +90 (501) 057-1884</li>
-                        <li>Adres: Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Türkiye</li>
+                        <li>Adres: Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</li>
                     </ul>
 
                     <p><strong>Sözleşme Nüshaları:</strong> İşbu Sözleşme elektronik ortamda düzenlenmiş olup, bir nüshası ALICI'ya e-posta ile gönderilecektir.</p>
@@ -584,7 +593,10 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
                     <ul>
                         <li>Email: info@demfirat.com</li>
                         <li>Phone: +90 (501) 057-1884</li>
-                        <li>Address: Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Turkey</li>
+                        <li>Address: Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</li>
                     </ul>
 
                     <p><strong>Contract Copies:</strong> This Agreement is prepared electronically and a copy will be sent to BUYER by e-mail.</p>

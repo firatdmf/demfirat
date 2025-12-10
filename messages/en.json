@@ -121,8 +121,8 @@
         "buttonText": "Custom Curtain"
     },
     "KVKK": {
-        "title": "General Data Protection Policy",
-        "lastUpdate": "Last update: December 2, 2024",
+        "title": "Privacy Policy & GDPR",
+        "lastUpdate": "Last update: December 10, 2024",
         "section1": {
             "title": "1. Introduction",
             "text": "At Karven Homedecor, we value your privacy and are committed to protecting your personal data. This General Data Protection Policy outlines how we collect, use, store, and safeguard your information when you visit our website or make a purchase, ensuring transparency and trust for our international customers.",
@@ -214,8 +214,18 @@
         "disclaimer": "Note: This policy may be updated periodically to reflect changes in our practices or legal requirements. Please review it regularly."
     },
     "ReturnPolicy": {
-        "title": "Return and Withdrawal Policy",
-        "lastUpdate": "Last update: December 2, 2024",
+        "title": "Delivery & Return Policy",
+        "lastUpdate": "Last update: December 10, 2024",
+        "delivery": {
+            "title": "Delivery Information",
+            "intro": "Your orders are carefully prepared and shipped as quickly as possible.",
+            "standardTitle": "Standard Products",
+            "standardTime": "Within 3 Business Days",
+            "standardText": "Ready-to-ship products in stock are delivered to the courier within 3 business days after order confirmation.",
+            "customTitle": "Custom Tailored Products",
+            "customTime": "Within 7 Business Days",
+            "customText": "Made-to-measure curtains and custom tailored products are delivered to the courier within 7 business days after order confirmation."
+        },
         "section1": {
             "title": "1. General Information",
             "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations."
@@ -238,7 +248,6 @@
             "methods": [
                 "Email: Send your withdrawal notification to info@demfirat.com",
                 "Phone: Call us at +90 (501) 057-1884",
-                "Online Form: Apply online via the \"Return Procedures\" page on our website",
                 "Written Notice: Fill out the withdrawal form and send it to our address"
             ],
             "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason."
@@ -295,20 +304,10 @@
             "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives."
         },
         "section7": {
-            "title": "7. Exceptions to the Right of Withdrawal",
-            "text": "The right of withdrawal cannot be exercised in the following cases:",
-            "items": [
-                "Goods prepared according to the customer's wishes or clearly personal needs (Custom Curtains).",
-                "Perishable goods or goods with a short shelf life.",
-                "Goods with protective elements like packaging, tape, or seals opened after delivery, which are unsuitable for return due to health and hygiene reasons.",
-                "Goods that are mixed with other products after delivery and cannot be separated by their nature.",
-                "Opened audio or video recordings, software programs, and computer consumables.",
-                "Services started with the consumer's approval before the withdrawal period ends.",
-                "Services performed instantly in an electronic environment or intangible goods delivered instantly to the consumer.",
-                "Goods whose price is determined in financial markets.",
-                "Books, digital content, and computer consumables."
-            ],
-            "warning": "Hygiene Products: Textile products with opened packaging or protective bands are excluded from the right of withdrawal due to hygiene rules."
+            "title": "7. Custom Tailored Products",
+            "text": "Custom tailored products (curtains made to your specific measurements) cannot be returned if the product is not defective.",
+            "items": [],
+            "warning": "Important: Please carefully check your measurements before placing your order to avoid measurement errors."
         },
         "section8": {
             "title": "8. Defective Products - Warranty Rights",

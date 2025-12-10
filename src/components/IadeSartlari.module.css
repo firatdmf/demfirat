@@ -79,6 +79,49 @@
     margin: 0;
 }
 
+/* Delivery Section Styles */
+.deliveryInfo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.deliveryBox {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.deliveryBox:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.deliveryBox h3 {
+    color: var(--gold, #c9a961);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.deliveryTime {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin: 0.75rem 0;
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+}
+
+.deliveryBox p:last-child {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
 .methodBox,
 .shippingInfo,
 .refundProcess {

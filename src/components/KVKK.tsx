@@ -28,8 +28,11 @@ export default function KVKK() {
                 <h2>{t('section1.title')}</h2>
                 <p>{t('section1.text')}</p>
                 <div className={classes.infoBox}>
-                    {t.has('section1.companyName') && <p><strong>{t('section1.companyName')}:</strong> Dem Firat</p>}
-                    {t.has('section1.address') && <p><strong>{t('section1.address')}:</strong> Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Türkiye</p>}
+                    {t.has('section1.companyName') && <p><strong>{t('section1.companyName')}:</strong> Karven Tekstil Sanayi ve Ticaret Limited Şirketi</p>}
+                    {t.has('section1.address') && <p><strong>{t('section1.address')}:</strong> Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</p>}
                     {t.has('section1.email') && <p><strong>{t('section1.email')}:</strong> info@demfirat.com</p>}
                     {t.has('section1.phone') && <p><strong>{t('section1.phone')}:</strong> +90 (501) 057-1884</p>}
                 </div>
@@ -159,7 +162,10 @@ export default function KVKK() {
                 <div className={classes.infoBox}>
                     <p><strong>{t('section10.email')}:</strong> info@demfirat.com</p>
                     <p><strong>{t('section10.phone')}:</strong> +90 (501) 057-1884</p>
-                    <p><strong>{t('section10.address')}:</strong> Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Türkiye</p>
+                    <p><strong>{t('section10.address')}:</strong> DEMFIRAT Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</p>
                 </div>
             </section>
 

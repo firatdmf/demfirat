@@ -23,6 +23,24 @@ export default function IadeSartlari() {
                 {t('lastUpdate')}
             </div>
 
+            {/* Delivery Section */}
+            <section className={classes.section}>
+                <h2>{t('delivery.title')}</h2>
+                <p>{t('delivery.intro')}</p>
+                <div className={classes.deliveryInfo}>
+                    <div className={classes.deliveryBox}>
+                        <h3>{t('delivery.standardTitle')}</h3>
+                        <p className={classes.deliveryTime}>{t('delivery.standardTime')}</p>
+                        <p>{t('delivery.standardText')}</p>
+                    </div>
+                    <div className={classes.deliveryBox}>
+                        <h3>{t('delivery.customTitle')}</h3>
+                        <p className={classes.deliveryTime}>{t('delivery.customTime')}</p>
+                        <p>{t('delivery.customText')}</p>
+                    </div>
+                </div>
+            </section>
+
             {/* Section 1: General Info */}
             <section className={classes.section}>
                 <h2>{t('section1.title')}</h2>

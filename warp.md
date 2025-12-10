@@ -390,7 +390,7 @@ NODE_PATH=/src/app/[locale]
 - Masa örtüleri
 
 **İletişim**:
-- Website: www.karvenhome.com
+- Website: www.demfirat.com
 - Email: info@demfirat.com
 - Tel: +90 (282) 675-1552
 - Adres: Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Türkiye

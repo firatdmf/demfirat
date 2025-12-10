@@ -55,16 +55,16 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
               <li>{ContactUs}</li>
             </Link>
             <Link href={`/${locale}/kvkk`} id={classes.link}>
-              <li>{locale === 'tr' ? 'KVKK' :
-                locale === 'ru' ? 'Защита данных' :
-                  locale === 'pl' ? 'Ochrona danych' :
-                    'GDPR'}</li>
+              <li>{locale === 'tr' ? 'Gizlilik Sözleşmesi ve KVKK' :
+                locale === 'ru' ? 'Политика конфиденциальности' :
+                  locale === 'pl' ? 'Polityka prywatności' :
+                    'Privacy Policy & GDPR'}</li>
             </Link>
             <Link href={`/${locale}/iade-sartlari`} id={classes.link}>
-              <li>{locale === 'tr' ? 'İade Şartları' :
-                locale === 'ru' ? 'Возвраты' :
-                  locale === 'pl' ? 'Zwroty' :
-                    'Returns'}</li>
+              <li>{locale === 'tr' ? 'Teslimat ve İade Şartları' :
+                locale === 'ru' ? 'Доставка и Возвраты' :
+                  locale === 'pl' ? 'Dostawa i Zwroty' :
+                    'Delivery & Returns'}</li>
             </Link>
           </ul>
         </div>
@@ -128,13 +128,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
                   locale === 'de' ? 'Datenschutz' :
                     'Privacy Policy'}
           </Link>
-          <Link href={`/${locale}/mesafeli-satis`} id={classes.link}>
-            {locale === 'tr' ? 'Hizmet Koşulları' :
-              locale === 'ru' ? 'Условия обслуживания' :
-                locale === 'pl' ? 'Warunki usługi' :
-                  locale === 'de' ? 'Nutzungsbedingungen' :
-                    'Terms of Service'}
-          </Link>
+
         </div>
       </div>
     </div>

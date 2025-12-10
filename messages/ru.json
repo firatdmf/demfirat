@@ -121,101 +121,111 @@
         "buttonText": "Пошив штор"
     },
     "KVKK": {
-        "title": "General Data Protection Policy",
-        "lastUpdate": "Last update: December 2, 2024",
+        "title": "Политика конфиденциальности",
+        "lastUpdate": "Последнее обновление: 10 декабря 2024",
         "section1": {
-            "title": "1. Introduction",
-            "text": "At Karven Homedecor, we value your privacy and are committed to protecting your personal data. This General Data Protection Policy outlines how we collect, use, store, and safeguard your information when you visit our website or make a purchase, ensuring transparency and trust for our international customers.",
-            "companyName": "Company Name",
-            "address": "Address",
-            "email": "Email",
-            "phone": "Phone"
+            "title": "1. Введение",
+            "text": "В Karven Homedecor мы ценим вашу конфиденциальность и обязуемся защищать ваши персональные данные. Настоящая Политика защиты данных описывает, как мы собираем, используем, храним и защищаем вашу информацию при посещении нашего сайта или совершении покупок, обеспечивая прозрачность и доверие наших международных клиентов.",
+            "companyName": "Название компании",
+            "address": "Адрес",
+            "email": "Электронная почта",
+            "phone": "Телефон"
         },
         "section2": {
-            "title": "2. Data We Collect",
-            "text": "We collect the following types of personal information to provide you with our services:",
+            "title": "2. Собираемые данные",
+            "text": "Мы собираем следующие типы персональной информации для предоставления вам наших услуг:",
             "items": [
-                "Identity Information: Name, surname",
-                "Contact Information: Email address, phone number, shipping and billing address",
-                "Transaction Information: Order history, product preferences, cart contents",
-                "Technical Information: IP address, device information, cookies",
-                "Payment Information: Encrypted payment details (processed securely by third-party providers)"
+                "Идентификационные данные: Имя, фамилия",
+                "Контактные данные: Адрес электронной почты, номер телефона, адрес доставки и выставления счета",
+                "Информация о транзакциях: История заказов, предпочтения продуктов, содержимое корзины",
+                "Техническая информация: IP-адрес, информация об устройстве, файлы cookie",
+                "Платежная информация: Зашифрованные платежные данные (обрабатываются безопасно сторонними провайдерами)"
             ]
         },
         "section3": {
-            "title": "3. How We Use Your Data",
-            "text": "Your personal data is used for the following purposes:",
+            "title": "3. Как мы используем ваши данные",
+            "text": "Ваши персональные данные используются для следующих целей:",
             "items": [
-                "Processing and delivering your orders",
-                "Managing payments and invoicing",
-                "Providing customer support and resolving inquiries",
-                "Improving our website and user experience",
-                "Sending order updates and notifications",
-                "Marketing communications (only with your explicit consent)",
-                "Fraud prevention and security"
+                "Обработка и доставка ваших заказов",
+                "Управление платежами и выставление счетов",
+                "Предоставление клиентской поддержки и решение запросов",
+                "Улучшение нашего сайта и пользовательского опыта",
+                "Отправка обновлений и уведомлений о заказах",
+                "Маркетинговые коммуникации (только с вашего явного согласия)",
+                "Предотвращение мошенничества и обеспечение безопасности"
             ]
         },
         "section4": {
-            "title": "4. Data Sharing",
-            "text": "We may share your data with trusted third parties solely for operational purposes:",
+            "title": "4. Передача данных",
+            "text": "Мы можем передавать ваши данные доверенным третьим лицам исключительно в операционных целях:",
             "items": [
-                "Shipping Companies: To deliver your orders",
-                "Payment Processors: To securely process transactions (e.g., iyzico)",
-                "Service Providers: For website hosting and maintenance",
-                "Legal Authorities: If required by law"
+                "Транспортные компании: Для доставки ваших заказов",
+                "Платежные системы: Для безопасной обработки транзакций (например, iyzico)",
+                "Поставщики услуг: Для хостинга и обслуживания сайта",
+                "Государственные органы: При необходимости по закону"
             ],
-            "note": "We do not sell your personal data to third parties."
+            "note": "Мы не продаем ваши персональные данные третьим лицам."
         },
         "section5": {
-            "title": "5. Data Security",
-            "text": "We implement robust security measures to protect your data:",
+            "title": "5. Безопасность данных",
+            "text": "Мы применяем надежные меры безопасности для защиты ваших данных:",
             "items": [
-                "SSL encryption for secure data transmission",
-                "PCI-DSS compliant payment processing",
-                "Secure servers and firewalls",
-                "Regular security audits"
+                "SSL-шифрование для безопасной передачи данных",
+                "Обработка платежей в соответствии со стандартом PCI-DSS",
+                "Защищенные серверы и брандмауэры",
+                "Регулярные аудиты безопасности"
             ]
         },
         "section6": {
-            "title": "6. Your Rights",
-            "text": "We respect your rights regarding your personal data. You have the right to:",
+            "title": "6. Ваши права",
+            "text": "Мы уважаем ваши права в отношении персональных данных. Вы имеете право:",
             "items": [
-                "Access the personal data we hold about you",
-                "Request correction of inaccurate data",
-                "Request deletion of your data (subject to legal retention requirements)",
-                "Withdraw consent for marketing communications",
-                "Object to data processing in certain circumstances"
+                "Получить доступ к персональным данным, которые мы храним о вас",
+                "Запросить исправление неточных данных",
+                "Запросить удаление ваших данных (с учетом требований законодательства о хранении)",
+                "Отозвать согласие на маркетинговые коммуникации",
+                "Возражать против обработки данных в определенных обстоятельствах"
             ]
         },
         "section7": {
-            "title": "7. Cookies",
-            "text": "We use cookies to enhance your browsing experience. These include essential cookies for site functionality and optional analytics cookies to understand how you use our site. You can manage your cookie preferences through your browser settings.",
+            "title": "7. Файлы cookie",
+            "text": "Мы используем файлы cookie для улучшения работы с сайтом. К ним относятся необходимые cookies для функционирования сайта и дополнительные аналитические cookies для понимания того, как вы используете наш сайт. Вы можете управлять настройками cookies через настройки браузера.",
             "items": [],
             "note": ""
         },
         "section8": {
-            "title": "8. Retention Period",
-            "text": "We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, including for the purposes of satisfying any legal, accounting, or reporting requirements.",
+            "title": "8. Срок хранения",
+            "text": "Мы храним ваши персональные данные только до тех пор, пока это необходимо для выполнения целей, для которых они были собраны, включая выполнение любых юридических, бухгалтерских или отчетных требований.",
             "items": [],
             "note": ""
         },
         "section9": {
-            "title": "9. International Transfers",
-            "text": "As we operate globally, your data may be transferred to and processed in countries other than your own. We ensure that appropriate safeguards are in place to protect your data during such transfers.",
+            "title": "9. Международная передача",
+            "text": "Поскольку мы работаем на международном уровне, ваши данные могут передаваться и обрабатываться в странах, отличных от вашей. Мы обеспечиваем наличие соответствующих мер защиты ваших данных при таких передачах.",
             "items": []
         },
         "section10": {
-            "title": "10. Contact Us",
-            "text": "If you have any questions about this policy or your personal data, please contact us:",
-            "email": "Email",
-            "phone": "Phone",
-            "address": "Address"
+            "title": "10. Свяжитесь с нами",
+            "text": "Если у вас есть вопросы о данной политике или ваших персональных данных, пожалуйста, свяжитесь с нами:",
+            "email": "Электронная почта",
+            "phone": "Телефон",
+            "address": "Адрес"
         },
-        "disclaimer": "Note: This policy may be updated periodically to reflect changes in our practices or legal requirements. Please review it regularly."
+        "disclaimer": "Примечание: Данная политика может периодически обновляться для отражения изменений в нашей практике или правовых требованиях. Пожалуйста, регулярно проверяйте её."
     },
     "ReturnPolicy": {
-        "title": "Return and Withdrawal Policy",
-        "lastUpdate": "Last update: December 2, 2024",
+        "title": "Доставка и Возвраты",
+        "lastUpdate": "Последнее обновление: 10 декабря 2024",
+        "delivery": {
+            "title": "Информация о доставке",
+            "intro": "Ваши заказы тщательно готовятся и отправляются в кратчайшие сроки.",
+            "standardTitle": "Стандартные товары",
+            "standardTime": "В течение 3 рабочих дней",
+            "standardText": "Готовые к отправке товары на складе передаются курьеру в течение 3 рабочих дней после подтверждения заказа.",
+            "customTitle": "Изделия на заказ",
+            "customTime": "В течение 7 рабочих дней",
+            "customText": "Шторы по индивидуальным размерам и изделия на заказ передаются курьеру в течение 7 рабочих дней после подтверждения заказа."
+        },
         "section1": {
             "title": "1. General Information",
             "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations."
@@ -238,7 +248,6 @@
             "methods": [
                 "Email: Send your withdrawal notification to info@demfirat.com",
                 "Phone: Call us at +90 (501) 057-1884",
-                "Online Form: Apply online via the \"Return Procedures\" page on our website",
                 "Written Notice: Fill out the withdrawal form and send it to our address"
             ],
             "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason."
@@ -295,47 +304,37 @@
             "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives."
         },
         "section7": {
-            "title": "7. Exceptions to the Right of Withdrawal",
-            "text": "The right of withdrawal cannot be exercised in the following cases:",
-            "items": [
-                "Goods prepared according to the customer's wishes or clearly personal needs (Custom Curtains).",
-                "Perishable goods or goods with a short shelf life.",
-                "Goods with protective elements like packaging, tape, or seals opened after delivery, which are unsuitable for return due to health and hygiene reasons.",
-                "Goods that are mixed with other products after delivery and cannot be separated by their nature.",
-                "Opened audio or video recordings, software programs, and computer consumables.",
-                "Services started with the consumer's approval before the withdrawal period ends.",
-                "Services performed instantly in an electronic environment or intangible goods delivered instantly to the consumer.",
-                "Goods whose price is determined in financial markets.",
-                "Books, digital content, and computer consumables."
-            ],
-            "warning": "Hygiene Products: Textile products with opened packaging or protective bands are excluded from the right of withdrawal due to hygiene rules."
+            "title": "7. Изделия на заказ",
+            "text": "Изделия, изготовленные на заказ (шторы, пошитые по вашим индивидуальным размерам), не подлежат возврату, если товар не является дефектным.",
+            "items": [],
+            "warning": "Важно: Пожалуйста, внимательно проверьте свои размеры перед оформлением заказа, чтобы избежать ошибок в замерах."
         },
         "section8": {
-            "title": "8. Defective Products - Warranty Rights",
-            "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
+            "title": "8. Дефектные товары - Гарантийные права",
+            "text": "Если вы обнаружили дефект в вашем товаре, вы можете воспользоваться правами на дефектные товары вместо права отказа:",
             "items": [
-                "Request free repair of the product.",
-                "Request replacement with a non-defective equivalent.",
-                "Request a price reduction in proportion to the defect.",
-                "Withdraw from the contract and request a refund."
+                "Запросить бесплатный ремонт товара.",
+                "Запросить замену на исправный аналог.",
+                "Запросить снижение цены пропорционально дефекту.",
+                "Отказаться от договора и запросить возврат средств."
             ],
-            "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request."
+            "info": "В случае дефектного товара вы можете выбрать один из вышеперечисленных вариантов и уведомить нас. Как продавец, мы обязаны выполнить ваш выбранный запрос."
         },
         "section9": {
-            "title": "9. Exchanges",
-            "text": "If you only want to exchange a product (different size, color, etc.), please first return the current product using your right of withdrawal, then create a new order.",
-            "note": "Direct exchanges may be possible depending on stock status. Please contact our customer service to evaluate your situation."
+            "title": "9. Обмен",
+            "text": "Если вы хотите только обменять товар (другой размер, цвет и т.д.), пожалуйста, сначала верните текущий товар, используя право отказа, а затем создайте новый заказ.",
+            "note": "Прямой обмен возможен в зависимости от наличия на складе. Пожалуйста, свяжитесь с нашей службой поддержки для оценки вашей ситуации."
         },
         "section10": {
-            "title": "10. Contact",
-            "text": "For returns, withdrawal rights, or any questions:",
+            "title": "10. Контакты",
+            "text": "По вопросам возврата, права отказа или другим вопросам:",
             "contactBox": [
                 "Email: info@demfirat.com",
-                "Phone: +90 (501) 057-1884",
-                "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
-                "Working Hours: Monday - Friday, 09:00 - 18:00"
+                "Телефон: +90 (501) 057-1884",
+                "Адрес: Kemalpaşa Mah Gençtürk Cad No 21A, Fatih, İstanbul 34134, Turkey",
+                "Часы работы: Понедельник - Пятница, 09:00 - 18:00"
             ]
         },
-        "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade."
+        "disclaimer": "Потребительские арбитражные комиссии и потребительские суды: В случае споров, вытекающих из данного договора, вы можете обратиться в Потребительскую арбитражную комиссию или Потребительский суд по месту вашего жительства или по месту совершения сделки."
     }
 }

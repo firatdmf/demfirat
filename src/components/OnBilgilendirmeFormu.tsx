@@ -95,35 +95,47 @@ const OnBilgilendirmeFormu: React.FC<OnBilgilendirmeFormuProps> = ({
             title: t('seller'),
             content: locale === 'tr' ? (
                 <>
-                    <p><strong>Ünvan:</strong> DEM FIRAT KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
-                    <p><strong>Adres:</strong> Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Türkiye</p>
+                    <p><strong>Ünvan:</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
+                    <p><strong>Adres:</strong> Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-posta:</strong> info@demfirat.com</p>
-                    <p><strong>Web:</strong> www.karvenhome.com</p>
+                    <p><strong>Web:</strong> www.demfirat.com</p>
                 </>
             ) : locale === 'ru' ? (
                 <>
-                    <p><strong>Название:</strong> DEM FIRAT KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Адрес:</strong> Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Турция</p>
+                    <p><strong>Название:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
+                    <p><strong>Адрес:</strong> Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+             Турция</p>
                     <p><strong>Телефон:</strong> +90 (501) 057-1884</p>
                     <p><strong>Эл. почта:</strong> info@demfirat.com</p>
-                    <p><strong>Сайт:</strong> www.karvenhome.com</p>
+                    <p><strong>Сайт:</strong> www.demfirat.com</p>
                 </>
             ) : locale === 'pl' ? (
                 <>
-                    <p><strong>Nazwa:</strong> DEM FIRAT KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Adres:</strong> Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Turcja</p>
+                    <p><strong>Nazwa:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
+                    <p><strong>Adres:</strong> Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+             Turcja</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-mail:</strong> info@demfirat.com</p>
-                    <p><strong>Strona:</strong> www.karvenhome.com</p>
+                    <p><strong>Strona:</strong> www.demfirat.com</p>
                 </>
             ) : (
                 <>
-                    <p><strong>Company:</strong> DEM FIRAT KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Address:</strong> Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Turkey</p>
+                    <p><strong>Company:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
+                    <p><strong>Address:</strong> Karven Home Collection <br />
+            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Fatih, İstanbul 34134 <br />
+            Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
                     <p><strong>Email:</strong> info@demfirat.com</p>
-                    <p><strong>Web:</strong> www.karvenhome.com</p>
+                    <p><strong>Web:</strong> www.demfirat.com</p>
                 </>
             )
         },
