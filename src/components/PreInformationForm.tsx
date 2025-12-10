@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import classes from './OnBilgilendirmeFormu.module.css';
+import classes from './PreInformationForm.module.css';
 import { FaTimes, FaPrint } from 'react-icons/fa';
 
-interface OnBilgilendirmeFormuProps {
+interface PreInformationFormProps {
     isOpen: boolean;
     onClose: () => void;
     locale: string;
@@ -16,7 +16,7 @@ interface OnBilgilendirmeFormuProps {
     };
 }
 
-const OnBilgilendirmeFormu: React.FC<OnBilgilendirmeFormuProps> = ({
+const PreInformationForm: React.FC<PreInformationFormProps> = ({
     isOpen,
     onClose,
     locale,
@@ -97,9 +97,9 @@ const OnBilgilendirmeFormu: React.FC<OnBilgilendirmeFormuProps> = ({
                 <>
                     <p><strong>Ünvan:</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
                     <p><strong>Adres:</strong> Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-            Türkiye</p>
+                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                        Fatih, İstanbul 34134 <br />
+                        Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-posta:</strong> info@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
@@ -108,9 +108,9 @@ const OnBilgilendirmeFormu: React.FC<OnBilgilendirmeFormuProps> = ({
                 <>
                     <p><strong>Название:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
                     <p><strong>Адрес:</strong> Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-             Турция</p>
+                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                        Fatih, İstanbul 34134 <br />
+                        Турция</p>
                     <p><strong>Телефон:</strong> +90 (501) 057-1884</p>
                     <p><strong>Эл. почта:</strong> info@demfirat.com</p>
                     <p><strong>Сайт:</strong> www.demfirat.com</p>
@@ -119,9 +119,9 @@ const OnBilgilendirmeFormu: React.FC<OnBilgilendirmeFormuProps> = ({
                 <>
                     <p><strong>Nazwa:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
                     <p><strong>Adres:</strong> Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-             Turcja</p>
+                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                        Fatih, İstanbul 34134 <br />
+                        Turcja</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-mail:</strong> info@demfirat.com</p>
                     <p><strong>Strona:</strong> www.demfirat.com</p>
@@ -130,9 +130,9 @@ const OnBilgilendirmeFormu: React.FC<OnBilgilendirmeFormuProps> = ({
                 <>
                     <p><strong>Company:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
                     <p><strong>Address:</strong> Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-            Türkiye</p>
+                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                        Fatih, İstanbul 34134 <br />
+                        Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
                     <p><strong>Email:</strong> info@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
@@ -339,4 +339,4 @@ const OnBilgilendirmeFormu: React.FC<OnBilgilendirmeFormuProps> = ({
     );
 };
 
-export default OnBilgilendirmeFormu;
+export default PreInformationForm;

@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './MesafeliSatisSozlesmesi.module.css';
+import classes from './DistanceSalesContract.module.css';
 import { FaTimes, FaPrint } from 'react-icons/fa';
 
 interface CartItem {
@@ -27,7 +27,7 @@ interface CartItem {
     };
 }
 
-interface MesafeliSatisSozlesmesiProps {
+interface DistanceSalesContractProps {
     isOpen: boolean;
     onClose: () => void;
     locale: string;
@@ -45,7 +45,7 @@ interface MesafeliSatisSozlesmesiProps {
     cartItems?: CartItem[];
 }
 
-const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
+const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
     isOpen,
     onClose,
     locale,
@@ -147,9 +147,9 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
                     <h4>SATICI (İşletme)</h4>
                     <p><strong>Ünvan:</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
                     <p><strong>Adres:</strong> Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-            Türkiye</p>
+                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                        Fatih, İstanbul 34134 <br />
+                        Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-posta:</strong> info@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
@@ -167,9 +167,9 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
                     <h4>SELLER (Company)</h4>
                     <p><strong>Company:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
                     <p><strong>Address:</strong> Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-            Türkiye</p>
+                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                        Fatih, İstanbul 34134 <br />
+                        Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
                     <p><strong>Email:</strong> info@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
@@ -566,9 +566,9 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
                         <li>E-posta: info@demfirat.com</li>
                         <li>Telefon: +90 (501) 057-1884</li>
                         <li>Adres: Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-            Türkiye</li>
+                            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                            Fatih, İstanbul 34134 <br />
+                            Türkiye</li>
                     </ul>
 
                     <p><strong>Sözleşme Nüshaları:</strong> İşbu Sözleşme elektronik ortamda düzenlenmiş olup, bir nüshası ALICI'ya e-posta ile gönderilecektir.</p>
@@ -594,9 +594,9 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
                         <li>Email: info@demfirat.com</li>
                         <li>Phone: +90 (501) 057-1884</li>
                         <li>Address: Karven Home Collection <br />
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-            Fatih, İstanbul 34134 <br />
-            Türkiye</li>
+                            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+                            Fatih, İstanbul 34134 <br />
+                            Türkiye</li>
                     </ul>
 
                     <p><strong>Contract Copies:</strong> This Agreement is prepared electronically and a copy will be sent to BUYER by e-mail.</p>
@@ -651,4 +651,4 @@ const MesafeliSatisSozlesmesi: React.FC<MesafeliSatisSozlesmesiProps> = ({
     );
 };
 
-export default MesafeliSatisSozlesmesi;
+export default DistanceSalesContract;

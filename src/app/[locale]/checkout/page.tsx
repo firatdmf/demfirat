@@ -9,8 +9,8 @@ import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
-import OnBilgilendirmeFormu from '@/components/OnBilgilendirmeFormu';
-import MesafeliSatisSozlesmesi from '@/components/MesafeliSatisSozlesmesi';
+import PreInformationForm from '@/components/PreInformationForm';
+import DistanceSalesContract from '@/components/DistanceSalesContract';
 import './iyzico-payment-logo.css';
 import './card-form-mobile.css';
 
@@ -1556,14 +1556,14 @@ export default function CheckoutPage() {
       </div>
 
       {/* Legal Document Modals */}
-      <OnBilgilendirmeFormu
+      <PreInformationForm
         isOpen={showPreInfoModal}
         onClose={() => setShowPreInfoModal(false)}
         locale={locale}
         userInfo={userInfo}
       />
 
-      <MesafeliSatisSozlesmesi
+      <DistanceSalesContract
         isOpen={showTermsModal}
         onClose={() => setShowTermsModal(false)}
         locale={locale}
