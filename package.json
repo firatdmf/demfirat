@@ -26,7 +26,7 @@
     "iyzipay": "^2.0.64",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.2.0",
-    "next": "15.5.0",
+    "next": "15.5.7",
     "next-auth": "^4.24.5",
     "next-i18n-router": "^5.3.1",
     "next-intl": "^4.0.0",
