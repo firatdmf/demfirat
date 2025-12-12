@@ -66,6 +66,12 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
                   locale === 'pl' ? 'Dostawa i Zwroty' :
                     'Delivery & Returns'}</li>
             </Link>
+            <Link href={`/${locale}/legal/mesafeli-satis-sozlesmesi`} id={classes.link}>
+              <li>{locale === 'tr' ? 'Mesafeli Satış Sözleşmesi' :
+                locale === 'ru' ? 'Договор дистанционной продажи' :
+                  locale === 'pl' ? 'Umowa sprzedaży na odległość' :
+                    'Distance Sales Agreement'}</li>
+            </Link>
           </ul>
         </div>
 

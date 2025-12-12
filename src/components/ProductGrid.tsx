@@ -472,7 +472,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                 .map(v => v.variant_price ? Number(v.variant_price) : null)
                 .filter(p => p !== null) as number[];
               const firstVariantPrice = allVariantPrices.length > 0 ? allVariantPrices[0] : null;
-              return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} />;
+              return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} productVariants={productVariants} />;
             }) :
               (Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
                 // Get all variant prices for this product
@@ -481,7 +481,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                   .map(v => v.variant_price ? Number(v.variant_price) : null)
                   .filter(p => p !== null) as number[];
                 const firstVariantPrice = allVariantPrices.length > 0 ? allVariantPrices[0] : null;
-                return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} />;
+                return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} productVariants={productVariants} />;
               })
             }
           </div>

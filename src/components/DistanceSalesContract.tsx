@@ -80,58 +80,70 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                 pl: 'Drukuj'
             },
             parties: {
-                tr: 'TARAFLAR',
-                en: 'PARTIES',
-                ru: 'СТОРОНЫ',
-                pl: 'STRONY'
+                tr: '1. TARAFLAR',
+                en: '1. PARTIES',
+                ru: '1. СТОРОНЫ',
+                pl: '1. STRONY'
             },
             subjectOfContract: {
-                tr: 'SÖZLEŞMENİN KONUSU',
-                en: 'SUBJECT OF CONTRACT',
-                ru: 'ПРЕДМЕТ ДОГОВОРА',
-                pl: 'PRZEDMIOT UMOWY'
+                tr: '2. SÖZLEŞMENİN KONUSU',
+                en: '2. SUBJECT OF CONTRACT',
+                ru: '2. ПРЕДМЕТ ДОГОВОРА',
+                pl: '2. PRZEDMIOT UMOWY'
             },
             rightsAndObligations: {
-                tr: 'TARAFLARIN HAK VE YÜKÜMLÜLÜKLERİ',
-                en: 'RIGHTS AND OBLIGATIONS OF THE PARTIES',
-                ru: 'ПРАВА И ОБЯЗАННОСТИ СТОРОН',
-                pl: 'PRAWA I OBOWIĄZKI STRON'
+                tr: '3. TARAFLARIN HAK VE YÜKÜMLÜLÜKLERİ',
+                en: '3. RIGHTS AND OBLIGATIONS OF THE PARTIES',
+                ru: '3. ПРАВА И ОБЯЗАННОСТИ СТОРОН',
+                pl: '3. PRAWA I OBOWIĄZKI STRON'
             },
             delivery: {
-                tr: 'TESLİMAT',
-                en: 'DELIVERY',
-                ru: 'ДОСТАВКА',
-                pl: 'DOSTAWA'
+                tr: '4. TESLİMAT',
+                en: '4. DELIVERY',
+                ru: '4. ДОСТАВКА',
+                pl: '4. DOSTAWA'
             },
             payment: {
-                tr: 'ÖDEME',
-                en: 'PAYMENT',
-                ru: 'ОПЛАТА',
-                pl: 'PŁATNOŚĆ'
+                tr: '5. ÖDEME',
+                en: '5. PAYMENT',
+                ru: '5. ОПЛАТА',
+                pl: '5. PŁATNOŚĆ'
             },
             withdrawal: {
-                tr: 'CAYMA HAKKI',
-                en: 'RIGHT OF WITHDRAWAL',
-                ru: 'ПРАВО ОТКАЗА',
-                pl: 'PRAWO ODSTĄPIENIA'
+                tr: '6. CAYMA HAKKI',
+                en: '6. RIGHT OF WITHDRAWAL',
+                ru: '6. ПРАВО ОТКАЗА',
+                pl: '6. PRAWO ODSTĄPIENIA'
+            },
+            defaultClause: {
+                tr: '7. TEMERRÜT HALİ VE HUKUKİ SONUÇLARI',
+                en: '7. DEFAULT AND LEGAL CONSEQUENCES',
+                ru: '7. ПРОСРОЧКА И ПРАВОВЫЕ ПОСЛЕДСТВИЯ',
+                pl: '7. ZWŁOKA I KONSEKWENCJE PRAWNE'
+            },
+            invoiceInfo: {
+                tr: '8. FATURA BİLGİLERİ',
+                en: '8. INVOICE INFORMATION',
+                ru: '8. ИНФОРМАЦИЯ О СЧЕТЕ',
+                pl: '8. INFORMACJE O FAKTURZE'
             },
             defectWarranty: {
-                tr: 'AYIPLI MAL VE GARANTİ',
-                en: 'DEFECTIVE GOODS AND WARRANTY',
-                ru: 'ДЕФЕКТНЫЙ ТОВАР И ГАРАНТИЯ',
-                pl: 'WADLIWY TOWAR I GWARANCJA'
+                tr: '9. AYIPLI MAL VE GARANTİ',
+                en: '9. DEFECTIVE GOODS AND WARRANTY',
+                ru: '9. ДЕФЕКТНЫЙ ТОВАР И ГАРАНТИЯ',
+                pl: '9. WADLIWY TOWAR I GWARANCJA'
             },
             disputeResolution: {
-                tr: 'UYUŞMAZLIK ÇÖZÜMÜ',
-                en: 'DISPUTE RESOLUTION',
-                ru: 'РАЗРЕШЕНИЕ СПОРОВ',
-                pl: 'ROZWIĄZYWANIE SPORÓW'
+                tr: '10. UYUŞMAZLIK ÇÖZÜMÜ',
+                en: '10. DISPUTE RESOLUTION',
+                ru: '10. РАЗРЕШЕНИЕ СПОРОВ',
+                pl: '10. ROZWIĄZYWANIE SPORÓW'
             },
             finalProvisions: {
-                tr: 'SON HÜKÜMLER',
-                en: 'FINAL PROVISIONS',
-                ru: 'ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ',
-                pl: 'POSTANOWIENIA KOŃCOWE'
+                tr: '11. SON HÜKÜMLER',
+                en: '11. FINAL PROVISIONS',
+                ru: '11. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ',
+                pl: '11. POSTANOWIENIA KOŃCOWE'
             }
         };
 
@@ -373,11 +385,11 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
 
                     <p><strong>Güvenli Ödeme:</strong> Tüm kart ödemeleriniz iyzico güvenli ödeme altyapısı ile 3D Secure teknolojisi kullanılarak gerçekleştirilir. Kart bilgileriniz hiçbir şekilde sistemimizde saklanmaz.</p>
 
-                    <p><strong>Para Birimi:</strong> Ürün fiyatları USD cinsinden gösterilmektedir. Kredi kartı ile yapılan ödemelerde, ödeme tutarı bankanız tarafından güncel kur üzerinden TRY'ye çevrilerek tahsil edilir.</p>
+                    <p><strong>Para Birimi:</strong> Ürün fiyatları ayarlardan seçili para birimi üzerinden gösterilmektedir. Kredi kartı ile yapılan ödemelerde, ödeme tutarı seçili para biriminden TRY'ye çevrilerek bankanızdan çekilir.</p>
 
                     <p><strong>Fiyat Bilgisi:</strong></p>
                     <ul>
-                        <li>Listelenen fiyatlar KDV dahildir.</li>
+                        <li>Tüm ürün fiyatları KDV dahildir.</li>
                         <li>Kampanya fiyatları kampanya süresi boyunca geçerlidir.</li>
                         <li>Sipariş onayından sonra fiyat değişikliği yapılmaz.</li>
                     </ul>
@@ -390,11 +402,11 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
 
                     <p><strong>Secure Payment:</strong> All your card payments are made through iyzico secure payment infrastructure using 3D Secure technology. Your card information is not stored in our system in any way.</p>
 
-                    <p><strong>Currency:</strong> Product prices are displayed in USD. For credit card payments, the payment amount is converted to TRY by your bank at the current exchange rate.</p>
+                    <p><strong>Currency:</strong> Product prices are displayed in the currency selected in settings. For credit card payments, the payment amount is converted from the selected currency to TRY and charged from your bank.</p>
 
                     <p><strong>Price Information:</strong></p>
                     <ul>
-                        <li>Listed prices include VAT.</li>
+                        <li>All product prices include VAT.</li>
                         <li>Campaign prices are valid for the campaign period.</li>
                         <li>No price change is made after order confirmation.</li>
                     </ul>
@@ -456,6 +468,50 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                         <li>Products with opened packaging, used or deteriorated</li>
                         <li>Products that cannot be returned due to hygiene requirements</li>
                     </ul>
+                </>
+            )
+        },
+        {
+            title: t('defaultClause'),
+            content: locale === 'tr' ? (
+                <>
+                    <p>ALICI, ödeme işlemlerini kredi kartı ile yaptığı durumda temerrüde düştüğü takdirde, kart sahibi banka ile arasındaki kredi kartı sözleşmesi çerçevesinde faiz ödeyeceğini ve bankaya karşı sorumlu olacağını kabul, beyan ve taahhüt eder.</p>
+                </>
+            ) : (
+                <>
+                    <p>BUYER acknowledges, declares and undertakes that in case of default when making payment by credit card, they will pay interest within the framework of the credit card agreement between them and the cardholder bank and will be liable to the bank.</p>
+                </>
+            )
+        },
+        {
+            title: t('invoiceInfo'),
+            content: locale === 'tr' ? (
+                <>
+                    <p><strong>Fatura Bilgileri:</strong></p>
+                    <ul>
+                        <li><strong>Ad/Soyad/Unvan:</strong> {userInfo.firstName} {userInfo.lastName}</li>
+                        <li><strong>Adres:</strong> {deliveryAddress ? `${deliveryAddress.address}, ${deliveryAddress.city}, ${deliveryAddress.country}` : 'Teslimat adresi ile aynı'}</li>
+                        <li><strong>Telefon:</strong> {userInfo.phone}</li>
+                        <li><strong>E-posta/Kullanıcı Adı:</strong> {userInfo.email}</li>
+                    </ul>
+
+                    <p><strong>Fatura Teslimi:</strong> Fatura, sipariş teslimatı sırasında fatura adresine sipariş ile birlikte teslim edilecektir.</p>
+
+                    <p><strong>E-Fatura:</strong> Talep halinde e-fatura olarak da gönderilebilir. E-fatura talebinizi sipariş sırasında belirtebilirsiniz.</p>
+                </>
+            ) : (
+                <>
+                    <p><strong>Invoice Information:</strong></p>
+                    <ul>
+                        <li><strong>Name/Surname/Title:</strong> {userInfo.firstName} {userInfo.lastName}</li>
+                        <li><strong>Address:</strong> {deliveryAddress ? `${deliveryAddress.address}, ${deliveryAddress.city}, ${deliveryAddress.country}` : 'Same as delivery address'}</li>
+                        <li><strong>Phone:</strong> {userInfo.phone}</li>
+                        <li><strong>Email/Username:</strong> {userInfo.email}</li>
+                    </ul>
+
+                    <p><strong>Invoice Delivery:</strong> Invoice will be delivered together with the order to the invoice address during order delivery.</p>
+
+                    <p><strong>E-Invoice:</strong> Can also be sent as e-invoice upon request. You can specify your e-invoice request during order.</p>
                 </>
             )
         },
@@ -545,9 +601,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
             title: t('finalProvisions'),
             content: locale === 'tr' ? (
                 <>
-                    <p><strong>Sözleşmenin Kabulü:</strong> ALICI, sipariş vermekle birlikte işbu Mesafeli Sat
-
-                        ış Sözleşmesi'nin tüm hükümlerini okuduğunu, anladığını ve kabul ettiğini beyan ve taahhüt eder.</p>
+                    <p><strong>Sözleşmenin Kabulü:</strong> ALICI, sipariş vermekle birlikte işbu Mesafeli Satış Sözleşmesi'nin tüm hükümlerini okuduğunu, anladığını ve kabul ettiğini beyan ve taahhüt eder.</p>
 
                     <p><strong>Sözleşmenin Yürürlüğü:</strong> İşbu Sözleşme, ALICI tarafından elektronik ortamda onaylanması ile yürürlüğe girer.</p>
 

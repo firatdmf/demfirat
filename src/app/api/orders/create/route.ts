@@ -186,9 +186,60 @@ export async function POST(request: NextRequest) {
       // Order is already created successfully
     }
 
+    // ===== E-ARŞİV FATURA OLUŞTUR =====
+    console.log('===== E-ARŞİV FATURA OLUŞTURMA =====');
+    let invoiceData = null;
+    
+    try {
+      // Fatura oluşturma API'sini çağır
+      const invoiceResponse = await fetch(`${request.nextUrl.origin}/api/invoice/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: result.order_id || result.id,
+          orderData: {
+            orderDate: new Date().toISOString().split('T')[0],
+            firstName: deliveryAddress?.first_name || 'Müşteri',
+            lastName: deliveryAddress?.last_name || 'Adı',
+            taxNumber: '11111111111', // Test için - Gerçekte müşteriden alınmalı
+            email: paymentData?.email || 'musteri@email.com',
+            phone: deliveryAddress?.phone || '',
+            deliveryAddress: {
+              address: deliveryAddress?.address || '',
+              city: deliveryAddress?.city || '',
+              district: deliveryAddress?.district,
+              postal_code: deliveryAddress?.postal_code
+            },
+            items: cartItems?.map((item: any) => ({
+              product_sku: item.product_sku,
+              name: item.product?.title || 'Ürün',
+              quantity: item.quantity,
+              price: parseFloat(item.product?.price || item.custom_price || 0) * exchangeRate // TRY'ye çevir
+            })),
+            paymentMethod: 'iyzico_card',
+            exchangeRate: exchangeRate,
+            originalCurrency: originalCurrency
+          }
+        })
+      });
+
+      if (invoiceResponse.ok) {
+        invoiceData = await invoiceResponse.json();
+        console.log('✅ E-Arşiv fatura oluşturuldu:', invoiceData.invoice);
+      } else {
+        const errorData = await invoiceResponse.json();
+        console.error('⚠️ E-Arşiv fatura oluşturulamadı:', errorData.error);
+        // Sipariş oluşturuldu ama fatura oluşturulamadı - devam et
+      }
+    } catch (invoiceError: any) {
+      console.error('⚠️ E-Arşiv fatura hatası:', invoiceError.message);
+      // Fatura oluşturulamazsa sipariş yine de geçerli
+    }
+
     return NextResponse.json({
       success: true,
-      order: result
+      order: result,
+      invoice: invoiceData?.invoice || null
     });
 
   } catch (error: any) {

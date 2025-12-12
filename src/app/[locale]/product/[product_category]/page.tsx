@@ -1,6 +1,6 @@
 // This file brings the products inside the specified product category url param, and provides it to the product grid component.
 // This is a server component, so we can do async and database calls.
-import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
+import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile } from "@/lib/interfaces";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
 import { Suspense } from 'react';

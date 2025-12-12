@@ -1,0 +1,45 @@
+.pageContainer {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.contractContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Override modal styles for standalone page */
+.contractContainer :global(.modalOverlay) {
+    position: relative;
+    background: transparent;
+    min-height: auto;
+}
+
+.contractContainer :global(.modalContent) {
+    position: relative;
+    max-height: none;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.contractContainer :global(.closeBtn) {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .pageContainer {
+        padding: 1rem 0.5rem;
+    }
+
+    .contractContainer {
+        border-radius: 8px;
+    }
+}
