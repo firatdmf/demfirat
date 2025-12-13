@@ -1,313 +1,424 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
-import { FaSignOutAlt, FaUser, FaHeart, FaShoppingCart, FaChevronDown } from "react-icons/fa";
+import { FaUser, FaHeart, FaShoppingCart, FaSearch, FaTimes } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { useSession } from "next-auth/react";
 import { useLocale } from "next-intl";
 import { useCart } from "@/contexts/CartContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { useRouter } from "next/navigation";
+import { getColorCode } from "@/lib/colorMap";
 
 interface HeaderProps {
   menuTArray: string[];
+}
+
+interface Product {
+  id: number;
+  pk?: number;
+  title: string;
+  sku?: string;
+  category_name?: string;
+  primary_image?: string;
+  price?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  colors?: string[];
 }
 
 function Header({ menuTArray }: HeaderProps) {
   const { data: session } = useSession();
   const locale = useLocale();
   const { cartCount } = useCart();
+  const { convertPrice } = useCurrency();
+  const router = useRouter();
+  const searchRef = useRef<HTMLDivElement>(null);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
-  const [fabricDropdownOpen, setFabricDropdownOpen] = useState(false);
-  const [mobileFabricOpen, setMobileFabricOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   // Çeviriler
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
-      login: { en: 'Sign In', tr: 'Giriş Yap', ru: 'Войти', pl: 'Zaloguj się' },
-      myAccount: { en: 'My Account', tr: 'Hesabım', ru: 'Мой аккаунт', pl: 'Moje konto' },
-      favorites: { en: 'Favorites', tr: 'Favorilerim', ru: 'Избранное', pl: 'Ulubione' },
-      cart: { en: 'Cart', tr: 'Sepetim', ru: 'Корзина', pl: 'Koszyk' },
-      myOrders: { en: 'My Orders', tr: 'Siparişlerim', ru: 'Мои заказы', pl: 'Moje zamówienia' },
-      accountInfo: { en: 'Account Info', tr: 'Kullanıcı Bilgilerim', ru: 'Информация об аккаунте', pl: 'Informacje o koncie' },
-      myReviews: { en: 'My Reviews', tr: 'Değerlendirmelerim', ru: 'Мои отзывы', pl: 'Moje recenzje' },
-      signOut: { en: 'Sign Out', tr: 'Çıkış Yap', ru: 'Выйти', pl: 'Wyloguj się' },
+      search: { en: 'Search products...', tr: 'Ürün ara...', ru: 'Поиск товаров...', pl: 'Szukaj produktów...' },
+      login: { en: 'Sign In', tr: 'Giriş', ru: 'Войти', pl: 'Zaloguj' },
+      noResults: { en: 'No products found', tr: 'Ürün bulunamadı', ru: 'Товары не найдены', pl: 'Nie znaleziono produktów' },
+      viewAll: { en: 'View all results', tr: 'Tüm sonuçları gör', ru: 'Все результаты', pl: 'Wszystkie wyniki' },
       solidFabric: { en: 'Solid Fabric', tr: 'Düz Kumaş', ru: 'Гладкая ткань', pl: 'Gładka tkanina' },
       embroideredFabric: { en: 'Embroidered Fabric', tr: 'Nakışlı Kumaş', ru: 'Вышитая ткань', pl: 'Haftowana tkanina' },
+      followUs: { en: 'Follow Us', tr: 'Takip Edin', ru: 'Подписаться', pl: 'Obserwuj' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
   };
 
+  // Click outside to close search results
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Client-side product cache for instant search
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [productsLoaded, setProductsLoaded] = useState(false);
+
+  // Load products once when search is focused - memoized
+  const loadProductsForSearch = useCallback(async () => {
+    if (productsLoaded || allProducts.length > 0) return;
+
+    try {
+      const response = await fetch(`/api/search?q=__all__&limit=500`);
+      if (response.ok) {
+        const data = await response.json();
+        setAllProducts(data.products || []);
+        setProductsLoaded(true);
+      }
+    } catch (error) {
+      // Silent fail
+    }
+  }, [productsLoaded, allProducts.length]);
+
+  // Instant client-side search (no API calls after initial load)
+  useEffect(() => {
+    if (searchQuery.length < 2) {
+      setSearchResults([]);
+      setShowResults(false);
+      return;
+    }
+
+    // If products are loaded, search instantly
+    if (allProducts.length > 0) {
+      const query = searchQuery.toLowerCase();
+      const filtered = allProducts.filter(p =>
+        p.title?.toLowerCase().includes(query) ||
+        p.sku?.toLowerCase().includes(query)
+      ).slice(0, 8);
+
+      setSearchResults(filtered);
+      setShowResults(true);
+      setIsSearching(false);
+      return;
+    }
+
+    // Fallback to API if products not loaded yet
+    setIsSearching(true);
+    const timeout = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&limit=8`);
+        if (response.ok) {
+          const data = await response.json();
+          setSearchResults(data.products || []);
+          setShowResults(true);
+        }
+      } catch (error) { }
+      setIsSearching(false);
+    }, 150);
+
+    return () => clearTimeout(timeout);
+  }, [searchQuery, allProducts]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/${locale}/product/fabric?search=${encodeURIComponent(searchQuery)}`);
+      setShowResults(false);
+      setSearchQuery("");
+    }
+  };
+
+  const handleProductClick = (product: Product) => {
+    // Use SKU for URL, fallback to ID if SKU not available
+    const productIdentifier = product.sku || product.id;
+    router.push(`/${locale}/product/fabric/${productIdentifier}`);
+    setShowResults(false);
+    setSearchQuery("");
+  };
+
   return (
-    <header className={classes.HeaderPage}>
+    <header className={classes.header}>
+      {/* Top Bar */}
+      <div className={classes.topBar}>
+        {/* Logo */}
+        <Link href={`/${locale}`} className={classes.logoLink}>
+          <img
+            src="/media/karvenLogo.webp"
+            alt="Karven"
+            className={classes.logo}
+          />
+        </Link>
 
-      <div className={classes.headerContainer}>
-        {/* Logo - Left Side */}
-        <div className={classes.logoSection}>
-          <Link href={`/${locale}`} className={classes.logoLink}>
-            <img
-              src="/media/karvenLogo.webp"
-              alt="Demfirat Karven Logo"
-              className={classes.logo}
+        {/* Search Bar */}
+        <div className={classes.searchContainer} ref={searchRef}>
+          <form onSubmit={handleSearchSubmit} className={classes.searchForm}>
+            <FaSearch className={classes.searchIcon} />
+            <input
+              type="text"
+              placeholder={t('search')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={loadProductsForSearch}
+              className={classes.searchInput}
             />
-          </Link>
-          <span className={classes.slogan}>
-            {locale === 'tr' ? 'Bütünsel Düşünün, Nakışlı Düşünün' :
-              locale === 'ru' ? 'Мыслите целостно, Мыслите вышивкой' :
-                locale === 'pl' ? 'Myśl całościowo, Myśl haftem' :
-                  'Think Holistic, Think Embroidered'}
-          </span>
-        </div>
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => { setSearchQuery(""); setShowResults(false); }}
+                className={classes.clearButton}
+              >
+                <FaTimes />
+              </button>
+            )}
+          </form>
 
-        {/* Middle Section - Navigation Menu (Desktop) */}
-        <div className={classes.middleSection}>
-          <nav className={classes.mainNav}>
-            <Link href={`/${locale}`} className={classes.navLink}>
-              {menuTArray[0]}
-            </Link>
-            <div
-              className={classes.navDropdown}
-              onMouseEnter={() => setFabricDropdownOpen(true)}
-              onMouseLeave={() => setFabricDropdownOpen(false)}
-            >
-              <Link href={`/${locale}/product/fabric`} className={classes.navLink}>
-                {menuTArray[1]}
-                <FaChevronDown className={classes.navDropdownIcon} />
-              </Link>
-              {fabricDropdownOpen && (
-                <div className={classes.navDropdownMenu}>
-                  <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.dropdownItem}>
-                    {t('solidFabric')}
-                  </Link>
-                  <Link href={`/${locale}/product/fabric?fabric_type=embroidery`} className={classes.dropdownItem}>
-                    {t('embroideredFabric')}
-                  </Link>
+          {/* Search Results Dropdown */}
+          {showResults && (
+            <div className={classes.searchResults}>
+              {isSearching ? (
+                <div className={classes.searchLoading}>
+                  <span className={classes.spinner}></span>
                 </div>
+              ) : searchResults.length > 0 ? (
+                <>
+                  {searchResults.slice(0, 6).map((product) => (
+                    <div
+                      key={product.id}
+                      className={classes.searchResultItem}
+                      onClick={() => handleProductClick(product)}
+                    >
+                      {product.primary_image && (
+                        <img
+                          src={product.primary_image}
+                          alt={product.title}
+                          className={classes.resultImage}
+                        />
+                      )}
+                      <div className={classes.resultInfo}>
+                        <span className={classes.resultTitle}>{product.title}</span>
+                        {product.sku && (
+                          <span className={classes.resultSku}>{product.sku}</span>
+                        )}
+                        <span className={classes.resultPrice}>
+                          {product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice
+                            ? `${convertPrice(product.minPrice)} - ${convertPrice(product.maxPrice)}`
+                            : product.price && Number(product.price) > 0
+                              ? convertPrice(product.price)
+                              : (locale === 'tr' ? 'Fiyat için iletişime geçin' :
+                                locale === 'ru' ? 'Свяжитесь для цены' :
+                                  locale === 'pl' ? 'Skontaktuj się' : 'Contact for price')}
+                        </span>
+                        {product.colors && product.colors.length > 0 && (
+                          <div className={classes.resultColors}>
+                            {product.colors.slice(0, 4).map((color, idx) => (
+                              <span
+                                key={idx}
+                                className={classes.colorSwatch}
+                                style={{ backgroundColor: getColorCode(color) }}
+                                title={color}
+                              />
+                            ))}
+                            {product.colors.length > 4 && (
+                              <span className={classes.moreColors}>+{product.colors.length - 4}</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {searchResults.length > 6 && (
+                    <button
+                      className={classes.viewAllButton}
+                      onClick={handleSearchSubmit}
+                    >
+                      {t('viewAll')} ({searchResults.length})
+                    </button>
+                  )}
+                </>
+              ) : (
+                <div className={classes.noResults}>{t('noResults')}</div>
               )}
             </div>
-            <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
-              {menuTArray[2]}
-            </Link>
-            <Link href={`/${locale}/about`} className={classes.navLink}>
-              {menuTArray[3]}
-            </Link>
-            <Link href={`/${locale}/contact`} className={classes.navLink}>
-              {menuTArray[4]}
-            </Link>
-          </nav>
+          )}
         </div>
 
-        {/* Right Side - Actions */}
-        <div className={classes.actionsSection}>
-          {/* Language Switcher */}
-          <div className={classes.languageSection}>
+        {/* Action Icons */}
+        <div className={classes.actionIcons}>
+          <Link href={`/${locale}/favorites`} className={classes.iconButton} title="Favorites">
+            <FaHeart />
+          </Link>
+
+          {session?.user ? (
+            <div className={classes.userDropdown}>
+              <button className={classes.iconButton} title="Account">
+                <FaUser />
+              </button>
+              <div className={classes.userDropdownMenu}>
+                <Link href={`/${locale}/account/profile`} className={classes.userDropdownItem}>
+                  {locale === 'tr' ? 'Profilim' : locale === 'ru' ? 'Мой профиль' : locale === 'pl' ? 'Mój profil' : 'My Profile'}
+                </Link>
+                <Link href={`/${locale}/account/orders`} className={classes.userDropdownItem}>
+                  {locale === 'tr' ? 'Siparişlerim' : locale === 'ru' ? 'Мои заказы' : locale === 'pl' ? 'Moje zamówienia' : 'My Orders'}
+                </Link>
+                <button onClick={() => signOut()} className={classes.userDropdownItem}>
+                  {locale === 'tr' ? 'Çıkış Yap' : locale === 'ru' ? 'Выйти' : locale === 'pl' ? 'Wyloguj' : 'Sign Out'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Link href={`/${locale}/login`} className={classes.iconButton} title={t('login')}>
+              <FaUser />
+            </Link>
+          )}
+
+          <Link href={`/${locale}/cart`} className={classes.cartButton} title="Cart">
+            <FaShoppingCart />
+            {cartCount > 0 && (
+              <span className={classes.cartBadge}>{cartCount}</span>
+            )}
+          </Link>
+
+          <div className={classes.localeSwitcherDesktop}>
             <LocaleSwitcher />
           </div>
-
-          {/* User Authentication - Desktop */}
-          <div className={classes.desktopActions}>
-            {!session?.user ? (
-              // Not logged in
-              <>
-                <Link href={`/${locale}/login`} className={classes.actionButton}>
-                  <FaUser className={classes.actionIcon} />
-                  <span className={classes.actionText}>{t('login')}</span>
-                </Link>
-                <Link href={`/${locale}/favorites`} className={classes.actionButton}>
-                  <FaHeart className={classes.actionIcon} />
-                  <span className={classes.actionText}>{t('favorites')}</span>
-                </Link>
-                <Link href={`/${locale}/cart`} className={classes.actionButton}>
-                  <div className={classes.cartIconWrapper}>
-                    <FaShoppingCart className={classes.actionIcon} />
-                    {cartCount > 0 && (
-                      <span className={classes.cartBadge}>{cartCount}</span>
-                    )}
-                  </div>
-                  <span className={classes.actionText}>{t('cart')}</span>
-                </Link>
-              </>
-            ) : (
-              // Logged in
-              <>
-                {/* My Account - Dropdown */}
-                <div
-                  className={classes.accountDropdown}
-                  onMouseEnter={() => setAccountDropdownOpen(true)}
-                  onMouseLeave={() => setAccountDropdownOpen(false)}
-                >
-                  <button className={classes.actionButton}>
-                    <FaUser className={classes.actionIcon} />
-                    <span className={classes.actionText}>{t('myAccount')}</span>
-                    <FaChevronDown className={classes.dropdownIcon} />
-                  </button>
-
-                  {accountDropdownOpen && (
-                    <div className={classes.dropdownMenu}>
-                      <Link href={`/${locale}/account/orders`} className={classes.dropdownItem}>
-                        {t('myOrders')}
-                      </Link>
-                      <Link href={`/${locale}/account/profile`} className={classes.dropdownItem}>
-                        {t('accountInfo')}
-                      </Link>
-                      <Link href={`/${locale}/account/reviews`} className={classes.dropdownItem}>
-                        {t('myReviews')}
-                      </Link>
-                      <hr className={classes.dropdownDivider} />
-                      <button
-                        onClick={() => signOut()}
-                        className={`${classes.dropdownItem} ${classes.signOutBtn}`}
-                      >
-                        <FaSignOutAlt className={classes.dropdownItemIcon} />
-                        {t('signOut')}
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <Link href={`/${locale}/favorites`} className={classes.actionButton}>
-                  <FaHeart className={classes.actionIcon} />
-                  <span className={classes.actionText}>{t('favorites')}</span>
-                </Link>
-                <Link href={`/${locale}/cart`} className={classes.actionButton}>
-                  <div className={classes.cartIconWrapper}>
-                    <FaShoppingCart className={classes.actionIcon} />
-                    {cartCount > 0 && (
-                      <span className={classes.cartBadge}>{cartCount}</span>
-                    )}
-                  </div>
-                  <span className={classes.actionText}>{t('cart')}</span>
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile Actions */}
-          <div className={classes.mobileActions}>
-            {!session?.user ? (
-              <Link href={`/${locale}/login`} className={classes.iconButton} title={t('login')}>
-                <FaUser />
-              </Link>
-            ) : (
-              <Link href={`/${locale}/account/profile`} className={classes.iconButton} title={t('myAccount')}>
-                <FaUser />
-              </Link>
-            )}
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className={classes.mobileMenuToggle}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span className={mobileMenuOpen ? classes.active : ''}></span>
-            <span className={mobileMenuOpen ? classes.active : ''}></span>
-            <span className={mobileMenuOpen ? classes.active : ''}></span>
-          </button>
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          className={classes.mobileMenuToggle}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className={mobileMenuOpen ? classes.active : ''}></span>
+          <span className={mobileMenuOpen ? classes.active : ''}></span>
+          <span className={mobileMenuOpen ? classes.active : ''}></span>
+        </button>
       </div>
+
+      {/* Navigation Bar */}
+      <nav className={classes.navBar}>
+        <div className={classes.navContent}>
+          <Link href={`/${locale}`} className={classes.navLink}>
+            {menuTArray[0]}
+          </Link>
+
+          {/* Kumaşlar Mega Menu */}
+          <div className={classes.navDropdown}>
+            <span className={classes.navLink}>
+              {menuTArray[1]}
+              <svg className={classes.dropdownArrow} width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              </svg>
+            </span>
+            <div className={classes.megaMenu}>
+              <div className={classes.megaMenuContent}>
+                <div className={classes.megaMenuCategories}>
+                  <div className={classes.megaMenuColumn}>
+                    <h4 className={classes.megaMenuTitle}>
+                      {locale === 'tr' ? 'Kumaş Çeşitleri' : locale === 'ru' ? 'Виды тканей' : locale === 'pl' ? 'Rodzaje tkanin' : 'Fabric Types'}
+                    </h4>
+                    <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.megaMenuItem}>
+                      {t('solidFabric')}
+                    </Link>
+                    <Link href={`/${locale}/product/fabric?fabric_type=embroidery`} className={classes.megaMenuItem}>
+                      {t('embroideredFabric')}
+                    </Link>
+                    <Link href={`/${locale}/product/fabric`} className={classes.megaMenuItem}>
+                      {locale === 'tr' ? 'Tüm Kumaşlar' : locale === 'ru' ? 'Все ткани' : locale === 'pl' ? 'Wszystkie tkaniny' : 'All Fabrics'}
+                    </Link>
+                  </div>
+                </div>
+                <Link href={`/${locale}/product/fabric`} className={classes.megaMenuImage}>
+                  <img src="/media/hero/fabric-hero.png" alt="Kumaş Koleksiyonu" />
+                  <div className={classes.megaMenuImageOverlay}>
+                    <h3>{locale === 'tr' ? 'Kumaş Koleksiyonu' : locale === 'ru' ? 'Коллекция тканей' : locale === 'pl' ? 'Kolekcja tkanin' : 'Fabric Collection'}</h3>
+                    <span>{locale === 'tr' ? 'ALIŞVERİŞE BAŞLA' : locale === 'ru' ? 'НАЧАТЬ ПОКУПКИ' : locale === 'pl' ? 'ZACZNIJ ZAKUPY' : 'START SHOPPING'}</span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
+            {menuTArray[2]}
+          </Link>
+          <Link href={`/${locale}/about`} className={classes.navLink}>
+            {menuTArray[3]}
+          </Link>
+          <Link href={`/${locale}/contact`} className={classes.navLink}>
+            {menuTArray[4]}
+          </Link>
+          <Link href={`/${locale}/follow-us`} className={`${classes.navLink} ${classes.instagramLink}`}>
+            {t('followUs')}
+          </Link>
+        </div>
+      </nav>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className={classes.mobileMenu}>
-          <Link
-            href={`/${locale}`}
-            className={classes.mobileNavLink}
-            onClick={() => setMobileMenuOpen(false)}
-          >
+          <Link href={`/${locale}`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[0]}
           </Link>
-          <div className={classes.mobileNavDropdown}>
-            <button
-              className={classes.mobileNavLink}
-              onClick={() => setMobileFabricOpen(!mobileFabricOpen)}
-            >
-              {menuTArray[1]}
-              <FaChevronDown className={`${classes.mobileDropdownIcon} ${mobileFabricOpen ? classes.rotated : ''}`} />
-            </button>
-            {mobileFabricOpen && (
-              <div className={classes.mobileSubMenu}>
-                <Link
-                  href={`/${locale}/product/fabric`}
-                  className={classes.mobileSubLink}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {locale === 'tr' ? 'Tüm Kumaşlar' : locale === 'ru' ? 'Все ткани' : locale === 'pl' ? 'Wszystkie tkaniny' : 'All Fabrics'}
-                </Link>
-                <Link
-                  href={`/${locale}/product/fabric?fabric_type=solid`}
-                  className={classes.mobileSubLink}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {t('solidFabric')}
-                </Link>
-                <Link
-                  href={`/${locale}/product/fabric?fabric_type=embroidery`}
-                  className={classes.mobileSubLink}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {t('embroideredFabric')}
-                </Link>
-              </div>
-            )}
-          </div>
-          <Link
-            href={`/${locale}/product/ready-made_curtain`}
-            className={classes.mobileNavLink}
-            onClick={() => setMobileMenuOpen(false)}
-          >
+          <Link href={`/${locale}/product/fabric`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+            {menuTArray[1]}
+          </Link>
+          <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {t('solidFabric')}
+          </Link>
+          <Link href={`/${locale}/product/fabric?fabric_type=embroidery`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {t('embroideredFabric')}
+          </Link>
+          <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[2]}
           </Link>
-          <Link
-            href={`/${locale}/about`}
-            className={classes.mobileNavLink}
-            onClick={() => setMobileMenuOpen(false)}
-          >
+          <Link href={`/${locale}/about`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[3]}
           </Link>
-          <Link
-            href={`/${locale}/contact`}
-            className={classes.mobileNavLink}
-            onClick={() => setMobileMenuOpen(false)}
-          >
+          <Link href={`/${locale}/contact`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[4]}
+          </Link>
+          <Link href={`/${locale}/follow-us`} className={`${classes.mobileNavLink} ${classes.instagramLink}`} onClick={() => setMobileMenuOpen(false)}>
+            {t('followUs')}
+          </Link>
+
+          <hr className={classes.mobileDivider} />
+
+          <Link href={`/${locale}/favorites`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+            <FaHeart className={classes.mobileIcon} /> {locale === 'tr' ? 'Favorilerim' : locale === 'ru' ? 'Избранное' : locale === 'pl' ? 'Ulubione' : 'Favorites'}
           </Link>
 
           {session?.user && (
             <>
-              <hr className={classes.mobileDivider} />
-              <Link
-                href={`/${locale}/account/orders`}
-                className={classes.mobileNavLink}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('myOrders')}
-              </Link>
-              <Link
-                href={`/${locale}/account/profile`}
-                className={classes.mobileNavLink}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('accountInfo')}
+              <Link href={`/${locale}/account/orders`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                {locale === 'tr' ? 'Siparişlerim' : locale === 'ru' ? 'Мои заказы' : locale === 'pl' ? 'Moje zamówienia' : 'My Orders'}
               </Link>
               <button
-                onClick={() => {
-                  signOut();
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => { signOut(); setMobileMenuOpen(false); }}
                 className={classes.mobileNavLink}
               >
-                {t('signOut')}
+                {locale === 'tr' ? 'Çıkış Yap' : locale === 'ru' ? 'Выйти' : locale === 'pl' ? 'Wyloguj' : 'Sign Out'}
               </button>
             </>
           )}
+
+          <hr className={classes.mobileDivider} />
+          <div className={classes.mobileLocale}>
+            <LocaleSwitcher />
+          </div>
         </div>
       )}
     </header>
   );
 }
 
-export default Header;
+export default memo(Header);

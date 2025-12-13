@@ -1,5 +1,7 @@
+import { memo } from "react";
 import classes from "@/components/Footer.module.css";
 import Link from "next/link";
+import { FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 interface FooterProps {
   StayConnected: string;
@@ -11,134 +13,156 @@ interface FooterProps {
 
 function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
-  return (
-    <div className={classes.FooterPage}>
-      <div className={classes.footerMenu}>
-        {/* Company Info */}
-        <div className={classes.col1}>
-          <h3>Karven</h3>
-          <p className={classes.description}>
-            {locale === 'tr' ? "1991'den beri özenle seçilmiş evler için lüks perde kumaşları üretiyoruz" :
-              locale === 'ru' ? 'С 1991 года создаем роскошные ткани для изысканных домов' :
-                locale === 'pl' ? 'Od 1991 roku tworzymy luksusowe tkaniny zasłonowe dla wymagających domów' :
-                  locale === 'de' ? 'Seit 1991 fertigen wir luxuriöse Vorhangstoffe für anspruchsvolle Eigenheime' :
-                    'Crafting luxury curtain fabrics for discerning homes since 1991'}
-          </p>
-          <div className={classes.socialIcons}>
-            <Link
-              href="https://www.instagram.com/karvenhomedecor/"
-              target="_blank"
-              className={classes.socialIcon}
-              title="Instagram"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-              </svg>
-            </Link>
-          </div>
-        </div>
 
-        {/* Links - Modern Layout without Header */}
-        <div className={classes.col2}>
-          <ul>
-            <Link href="/about" id={classes.link}>
-              <li>{OurStory}</li>
-            </Link>
-            <Link href="/product" id={classes.link}>
-              <li>{locale === 'tr' ? 'Ürünler' :
-                locale === 'ru' ? 'Продукты' :
-                  locale === 'pl' ? 'Produkty' :
-                    locale === 'de' ? 'Produkte' :
-                      'Products'}</li>
-            </Link>
-            <Link href="/contact" id={classes.link}>
-              <li>{ContactUs}</li>
-            </Link>
-            <Link href={`/${locale}/kvkk`} id={classes.link}>
-              <li>{locale === 'tr' ? 'Gizlilik Sözleşmesi ve KVKK' :
-                locale === 'ru' ? 'Политика конфиденциальности' :
-                  locale === 'pl' ? 'Polityka prywatności' :
-                    'Privacy Policy & GDPR'}</li>
-            </Link>
-            <Link href={`/${locale}/iade-sartlari`} id={classes.link}>
-              <li>{locale === 'tr' ? 'Teslimat ve İade Şartları' :
-                locale === 'ru' ? 'Доставка и Возвраты' :
-                  locale === 'pl' ? 'Dostawa i Zwroty' :
-                    'Delivery & Returns'}</li>
-            </Link>
-            <Link href={`/${locale}/legal/mesafeli-satis-sozlesmesi`} id={classes.link}>
-              <li>{locale === 'tr' ? 'Mesafeli Satış Sözleşmesi' :
-                locale === 'ru' ? 'Договор дистанционной продажи' :
-                  locale === 'pl' ? 'Umowa sprzedaży na odległość' :
-                    'Distance Sales Agreement'}</li>
-            </Link>
+  // Translations
+  const t = (key: string): string => {
+    const translations: Record<string, Record<string, string>> = {
+      corporate: { en: 'Corporate', tr: 'Kurumsal', ru: 'О компании', pl: 'Firma' },
+      products: { en: 'Products', tr: 'Ürünler', ru: 'Продукты', pl: 'Produkty' },
+      customerServices: { en: 'Customer Services', tr: 'Müşteri Hizmetleri', ru: 'Обслуживание клиентов', pl: 'Obsługa klienta' },
+      contact: { en: 'Contact', tr: 'İletişim', ru: 'Контакты', pl: 'Kontakt' },
+      aboutUs: { en: 'About Us', tr: 'Hakkımızda', ru: 'О нас', pl: 'O nas' },
+      fabrics: { en: 'Fabrics', tr: 'Kumaşlar', ru: 'Ткани', pl: 'Tkaniny' },
+      curtains: { en: 'Ready-Made Curtains', tr: 'Hazır Perde', ru: 'Готовые шторы', pl: 'Gotowe zasłony' },
+      solidFabric: { en: 'Solid Fabrics', tr: 'Düz Kumaşlar', ru: 'Однотонные ткани', pl: 'Gładkie tkaniny' },
+      embroideredFabric: { en: 'Embroidered Fabrics', tr: 'Nakışlı Kumaşlar', ru: 'Вышитые ткани', pl: 'Haftowane tkaniny' },
+      privacyPolicy: { en: 'Privacy Policy & GDPR', tr: 'Gizlilik Sözleşmesi ve KVKK', ru: 'Политика конфиденциальности', pl: 'Polityka prywatności' },
+      deliveryReturns: { en: 'Delivery & Returns', tr: 'Teslimat ve İade Şartları', ru: 'Доставка и возврат', pl: 'Dostawa i zwroty' },
+      distanceSales: { en: 'Distance Sales Agreement', tr: 'Mesafeli Satış Sözleşmesi', ru: 'Договор дистанционной продажи', pl: 'Umowa sprzedaży na odległość' },
+      followUs: { en: 'Follow Us', tr: 'Bizi Takip Edin', ru: 'Подписывайтесь', pl: 'Obserwuj nas' },
+      newsletter: { en: 'Stay updated with our latest collections', tr: 'En son koleksiyonlarımızdan haberdar olun', ru: 'Будьте в курсе наших новинок', pl: 'Bądź na bieżąco z nowościami' },
+      phone: { en: 'Phone', tr: 'Telefon', ru: 'Телефон', pl: 'Telefon' },
+      email: { en: 'Email', tr: 'E-posta', ru: 'Эл. почта', pl: 'E-mail' },
+      address: { en: 'Address', tr: 'Adres', ru: 'Адрес', pl: 'Adres' },
+    };
+    const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
+    return translations[key]?.[lang] || translations[key]?.['en'] || key;
+  };
+
+  return (
+    <footer className={classes.footer}>
+      <div className={classes.footerContent}>
+        {/* Column 1: Corporate */}
+        <div className={classes.column}>
+          <h4 className={classes.columnTitle}>{t('corporate')}</h4>
+          <ul className={classes.linkList}>
+            <li>
+              <Link href={`/${locale}/about`}>{t('aboutUs')}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/contact`}>{ContactUs}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/kvkk`}>{t('privacyPolicy')}</Link>
+            </li>
           </ul>
         </div>
 
-        {/* Contact - Modern Layout without Header */}
-        <div className={classes.col3}>
-          <ul className={classes.contactList}>
+        {/* Column 2: Products */}
+        <div className={classes.column}>
+          <h4 className={classes.columnTitle}>{t('products')}</h4>
+          <ul className={classes.linkList}>
             <li>
-              <strong>{locale === 'tr' ? 'Adres:' :
-                locale === 'ru' ? 'Адрес:' :
-                  locale === 'pl' ? 'Adres:' :
-                    locale === 'de' ? 'Adresse:' :
-                      'Address:'}</strong><br />
-              VAKIFLAR OSB MAH D100 CAD NO 38<br />
-              ERGENE TEKIRDAG, 59930<br />
-              TURKIYE
+              <Link href={`/${locale}/product/fabric`}>{t('fabrics')}</Link>
             </li>
             <li>
-              <strong>{locale === 'tr' ? 'Telefon:' :
-                locale === 'ru' ? 'Телефон:' :
-                  locale === 'pl' ? 'Telefon:' :
-                    locale === 'de' ? 'Telefon:' :
-                      'Phone:'}</strong><br />
+              <Link href={`/${locale}/product/fabric?fabric_type=solid`}>{t('solidFabric')}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/product/fabric?fabric_type=embroidery`}>{t('embroideredFabric')}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/product/ready-made_curtain`}>{t('curtains')}</Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 3: Customer Services */}
+        <div className={classes.column}>
+          <h4 className={classes.columnTitle}>{t('customerServices')}</h4>
+          <ul className={classes.linkList}>
+            <li>
+              <Link href={`/${locale}/iade-sartlari`}>{t('deliveryReturns')}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/legal/mesafeli-satis-sozlesmesi`}>{t('distanceSales')}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/follow-us`}>{t('followUs')}</Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 4: Contact */}
+        <div className={classes.column}>
+          <h4 className={classes.columnTitle}>{t('contact')}</h4>
+          <ul className={classes.contactList}>
+            <li>
+              <FaPhone className={classes.contactIcon} />
               <a href="tel:+905010571884">+90 (501) 057-1884</a>
             </li>
             <li>
-              <strong>Email:</strong><br />
+              <FaEnvelope className={classes.contactIcon} />
               <a href="mailto:info@demfirat.com">info@demfirat.com</a>
+            </li>
+            <li>
+              <FaMapMarkerAlt className={classes.contactIcon} />
+              <span>Ergene, Tekirdağ, Türkiye</span>
             </li>
           </ul>
         </div>
 
-        {/* Logo & Certifications */}
-        <div className={classes.col4}>
+        {/* Column 5: Brand & Social */}
+        <div className={classes.brandColumn}>
           <img
-            className={classes.karvenLogo}
+            className={classes.logo}
             src="/media/karvenLogo.webp"
             alt="Karven Logo"
           />
-          <div className={classes.certifications}>
-            <span>ISO 9001</span> | <span>NFPA 701</span> | <span>GOTS</span> | <span>OEKO TEX</span>
+          <p className={classes.tagline}>{t('newsletter')}</p>
+
+          {/* Social Icons */}
+          <div className={classes.socialSection}>
+            <span className={classes.socialLabel}>{t('followUs')}</span>
+            <div className={classes.socialIcons}>
+              <Link
+                href="https://www.instagram.com/karvenhomedecor/"
+                target="_blank"
+                className={classes.socialIcon}
+                title="Instagram"
+              >
+                <FaInstagram />
+              </Link>
+            </div>
           </div>
-          {/* iyzico Secure Payment Badge */}
-          <div className={classes.iyzicoFooterBadge}>
+
+          {/* Certifications */}
+          <div className={classes.certifications}>
+            <span>ISO 9001</span>
+            <span>NFPA 701</span>
+            <span>GOTS</span>
+            <span>OEKO TEX</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className={classes.bottomBar}>
+        <div className={classes.bottomContent}>
+          <p className={classes.copyright}>
+            © {currentYear} Dem Fırat Karven Tekstil San. Tic. Ltd. Şti. | {AllRightsReserved}
+          </p>
+          <div className={classes.paymentBadge}>
             <img
               src="/media/iyzico/footer_iyzico_ile_ode/Colored/logo_band_colored.svg"
               alt="iyzico ile güvenli ödeme"
-              className={classes.iyzicoFooterLogo}
+              className={classes.iyzicoLogo}
             />
           </div>
         </div>
       </div>
-
-      <div className={classes.copyright}>
-        <p>© {currentYear} Karven | {AllRightsReserved}</p>
-        <div className={classes.footerLinks}>
-          <Link href={`/${locale}/kvkk`} id={classes.link}>
-            {locale === 'tr' ? 'Gizlilik Politikası' :
-              locale === 'ru' ? 'Политика конфиденциальности' :
-                locale === 'pl' ? 'Polityka prywatności' :
-                  locale === 'de' ? 'Datenschutz' :
-                    'Privacy Policy'}
-          </Link>
-
-        </div>
-      </div>
-    </div>
+    </footer>
   );
 }
 
-export default Footer;
+export default memo(Footer);

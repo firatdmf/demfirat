@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 // below are react icons
 import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
-import { FaSearch } from "react-icons/fa";
 // below are interfaces
 import { SearchParams, Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces"
 import { capitalizeFirstLetter } from "@/lib/functions"
@@ -43,8 +42,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
   // This is manipulated with (search params) but we need to initialize it first.
   let filteredProducts: Product[] | null = products ?? []; // Initialize as an empty array if products is null
-  const [SearchFilteredProducts, setSearchFilteredProducts] = useState<Product[]>([]);
-  const [SearchFilterUsed, setSearchFilterUsed] = useState<boolean>(false)
   const [FilterDrawerOpen, setFilterDrawerOpen] = useState<boolean>(false)
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set([0])) // First section open by default
 
@@ -61,7 +58,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   // Infinite scroll handler
   useEffect(() => {
     const handleScroll = () => {
-      if (isLoadingMore || SearchFilterUsed) return; // Don't paginate when searching
+      if (isLoadingMore) return;
 
       const scrollTop = window.scrollY;
       const windowHeight = window.innerHeight;
@@ -83,38 +80,8 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isLoadingMore, displayCount, filteredProducts, SearchFilterUsed]);
+  }, [isLoadingMore, displayCount, filteredProducts]);
 
-  // Handling of the search bar
-  const search_filter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let query = e.currentTarget.value.trim();
-    console.log('[SEARCH] Query:', query);
-
-    if (!query) {
-      setSearchFilterUsed(false)
-      setSearchFilteredProducts([])
-      console.log('[SEARCH] Cleared search');
-    } else {
-      setSearchFilterUsed(true)
-      // Search in ALL products (before URL filter), not just filteredProducts
-      if (products) {
-        const matchedProducts = products.filter((product) =>
-          // search product title or product sku and return matching products
-          product.title?.toLowerCase().includes(query.toLowerCase()) ||
-          product.sku?.toLowerCase().includes(query.toLowerCase())
-        );
-
-        const uniqueResults = Array.from(
-          new Map(
-            matchedProducts.map(product => [String(product.id), product]) // Use id as unique key
-          ).values()
-        );
-
-        console.log(`[SEARCH] Found ${matchedProducts.length} matches, ${uniqueResults.length} unique`);
-        setSearchFilteredProducts(uniqueResults)
-      }
-    }
-  }
 
   // If there are search params in the url (filter menu)
   if (searchParams && Object.keys(searchParams).length > 0) {
@@ -214,23 +181,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                   : product_category_description}
             </p>
           </div>
-        </div>
-        <div className={classes.search}>
-          <input
-            type="text"
-            className={classes.searchTerm}
-            placeholder={
-              locale === 'tr' ? 'Ürün adı veya SKU ile arayın' :
-                locale === 'ru' ? 'Поиск по названию или SKU' :
-                  locale === 'pl' ? 'Szukaj po nazwie lub SKU' :
-                    locale === 'de' ? 'Nach Produktname oder SKU suchen' :
-                      'Search for product title or sku'
-            }
-            onChange={search_filter}
-          />
-          <button className={classes.searchButton}>
-            <FaSearch />
-          </button>
         </div>
 
         {/* Mobile Filter Button */}
@@ -465,30 +415,20 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             </div>
           </div>
           <div className={classes.products}>
-            {SearchFilterUsed ? SearchFilteredProducts?.map((product: Product) => {
+            {(Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
               // Get all variant prices for this product
               const productVariants = product_variants.filter(v => v.product_id === product.id);
               const allVariantPrices = productVariants
                 .map(v => v.variant_price ? Number(v.variant_price) : null)
                 .filter(p => p !== null) as number[];
               const firstVariantPrice = allVariantPrices.length > 0 ? allVariantPrices[0] : null;
-              return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} productVariants={productVariants} />;
-            }) :
-              (Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
-                // Get all variant prices for this product
-                const productVariants = product_variants.filter(v => v.product_id === product.id);
-                const allVariantPrices = productVariants
-                  .map(v => v.variant_price ? Number(v.variant_price) : null)
-                  .filter(p => p !== null) as number[];
-                const firstVariantPrice = allVariantPrices.length > 0 ? allVariantPrices[0] : null;
-                return <ProductCard key={product.sku} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} productVariants={productVariants} />;
-              })
-            }
+              return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} productVariants={productVariants} />;
+            })}
           </div>
         </div>
 
         {/* Loading indicator for infinite scroll */}
-        {isLoadingMore && !SearchFilterUsed && (
+        {isLoadingMore && (
           <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -513,7 +453,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
         )}
 
         {/* End message */}
-        {!SearchFilterUsed && filteredProducts && displayCount >= filteredProducts.length && filteredProducts.length > initialDisplayCount && (
+        {filteredProducts && displayCount >= filteredProducts.length && filteredProducts.length > initialDisplayCount && (
           <div style={{
             textAlign: 'center',
             padding: '40px',

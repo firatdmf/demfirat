@@ -1,0 +1,222 @@
+.instagramSection {
+    max-width: 1400px;
+    margin: 0 auto 4rem auto;
+    padding: 3rem 2rem;
+    background: linear-gradient(180deg, rgba(201, 169, 97, 0.05) 0%, rgba(250, 248, 243, 0) 100%);
+    border-radius: 16px;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.titleWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.instagramIcon {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header h2 {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--text-dark, #2c2c2c);
+    margin: 0;
+}
+
+.subtitle {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Instagram Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.imageCard {
+    display: block;
+    text-decoration: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.imageCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    /* 1:1 Aspect Ratio */
+    overflow: hidden;
+}
+
+.image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.imageCard:hover .image {
+    transform: scale(1.1);
+}
+
+/* Hover Overlay */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(131, 58, 180, 0.85) 0%, rgba(253, 29, 29, 0.85) 50%, rgba(252, 176, 69, 0.85) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.imageCard:hover .overlay {
+    opacity: 1;
+}
+
+.overlayIcon {
+    font-size: 3rem;
+    color: white;
+}
+
+.overlay span {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* CTA Button */
+.ctaWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.followButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+    color: white;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(131, 58, 180, 0.3);
+    transition: all 0.3s ease;
+}
+
+.followButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(131, 58, 180, 0.4);
+    background: linear-gradient(135deg, #9b4dca 0%, #ff4545 50%, #ffc75f 100%);
+}
+
+.buttonIcon {
+    font-size: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .instagramSection {
+        padding: 2rem 1rem;
+        margin-bottom: 3rem;
+    }
+
+    .header h2 {
+        font-size: 2rem;
+    }
+
+    .instagramIcon {
+        font-size: 2rem;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .followButton {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+    }
+
+    .overlayIcon {
+        font-size: 2.5rem;
+    }
+
+    .overlay span {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h2 {
+        font-size: 1.75rem;
+    }
+
+    .titleWrapper {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .followButton {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem 1.5rem;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+}

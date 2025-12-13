@@ -9,6 +9,7 @@ import { getTranslations, getMessages } from "next-intl/server";
 import GoogleAnalytics from "@/lib/googleAnalytics";
 import ScrollToTop from "@/components/ScrollToTop";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

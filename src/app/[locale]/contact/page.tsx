@@ -6,7 +6,7 @@ import classes from './page.module.css';
 export default function Contact() {
   const params = useParams();
   const locale = params.locale as string;
-  
+
   // Simplified translations - using direct text for now
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
@@ -36,13 +36,13 @@ export default function Contact() {
     return translations[key]?.[lang] || key;
   };
   const titleCase = (str: string) => {
-    return str.toLowerCase().split(' ').map(word => 
+    return str.toLowerCase().split(' ').map(word =>
       word.charAt(0).toUpperCase() + word.substring(1)
     ).join(' ');
   };
   return (
     <div className={classes.ContactPage}>
-            <div className={`${classes.row} ${classes.row1}`}>
+      <div className={`${classes.row} ${classes.row1}`}>
         <div className={` ${classes.item} ${classes.textInfo}`}>
           <h2>{t('ManufacturingPlant')} (Tekirdağ, Türkiye)</h2>
           <h4>{t('Representative')}:</h4>
