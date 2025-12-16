@@ -5,6 +5,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       userId,
+      isGuestCheckout,
+      guestInfo,
       paymentData,
       cartItems,
       deliveryAddress,
@@ -16,12 +18,22 @@ export async function POST(request: NextRequest) {
 
     console.log('===== CREATE ORDER =====');
     console.log('User ID:', userId);
+    console.log('Is Guest Checkout:', isGuestCheckout);
+    console.log('Guest Info:', guestInfo);
     console.log('Payment ID:', paymentData?.paymentId);
     console.log('Cart Items:', cartItems?.length);
 
     // Prepare order data for Django backend
     const orderData = {
-      web_client_id: userId,
+      // For guest checkout, web_client_id is null
+      web_client_id: isGuestCheckout ? null : userId,
+
+      // Guest information (for orders without registered user)
+      is_guest_order: isGuestCheckout || false,
+      guest_email: guestInfo?.email || null,
+      guest_phone: guestInfo?.phone || null,
+      guest_first_name: guestInfo?.firstName || null,
+      guest_last_name: guestInfo?.lastName || null,
 
       // Payment info
       payment_id: paymentData?.paymentId,
@@ -189,7 +201,7 @@ export async function POST(request: NextRequest) {
     // ===== E-ARŞİV FATURA OLUŞTUR =====
     console.log('===== E-ARŞİV FATURA OLUŞTURMA =====');
     let invoiceData = null;
-    
+
     try {
       // Fatura oluşturma API'sini çağır
       const invoiceResponse = await fetch(`${request.nextUrl.origin}/api/invoice/create`, {

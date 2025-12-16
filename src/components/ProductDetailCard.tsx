@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import CustomCurtainSidebar from './CustomCurtainSidebar';
+import ProductReviewSection from './ProductReviewSection';
 import { FaCut } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -181,7 +182,7 @@ function ProductDetailCard({
   });
 
   const { isFavorite, toggleFavorite } = useFavorites();
-  const { refreshCart } = useCart();
+  const { refreshCart, addToGuestCart, isGuest } = useCart();
   const [quantity, setQuantity] = useState<string>('1');
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
@@ -453,11 +454,6 @@ function ProductDetailCard({
   };
 
   const handleAddToCart = async () => {
-    if (!session?.user?.email) {
-      alert(t('pleaseLogin'));
-      return;
-    }
-
     const qty = parseFloat(quantity);
     if (isNaN(qty) || qty <= 0) {
       alert(t('enterValidQuantity'));
@@ -479,28 +475,48 @@ function ProductDetailCard({
     }
 
     try {
-      const userId = (session.user as any)?.id || session.user.email;
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            product_sku: product.sku,
-            variant_sku: selectedVariant?.variant_sku || null,
-            quantity: qty
-          }),
-        }
-      );
-
-      if (response.ok) {
+      if (isGuest) {
+        // For guests, add to localStorage cart
+        addToGuestCart({
+          product_sku: product.sku,
+          variant_sku: selectedVariant?.variant_sku || null,
+          quantity: qty.toString(),
+          product_category: product_category || undefined,
+          product: {
+            title: product.title,
+            price: Number(selectedVariant?.variant_price || product.price || 0),
+            primary_image: product.primary_image || placeholder_image_link,
+            category: product_category || undefined,
+          }
+        });
         setSuccessMessage(t('productAddedToCart'));
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 3000);
-        // Refresh cart count
-        await refreshCart();
       } else {
-        alert(t('errorAddingToCart'));
+        // For authenticated users, add via API
+        const userId = (session?.user as any)?.id || session?.user?.email;
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              product_sku: product.sku,
+              variant_sku: selectedVariant?.variant_sku || null,
+              quantity: qty
+            }),
+          }
+        );
+
+        if (response.ok) {
+          setSuccessMessage(t('productAddedToCart'));
+          setShowSuccessMessage(true);
+          setTimeout(() => setShowSuccessMessage(false), 3000);
+          // Refresh cart count
+          await refreshCart();
+        } else {
+          alert(t('errorAddingToCart'));
+        }
       }
     } catch (error) {
       console.error('Cart error:', error);
@@ -509,11 +525,6 @@ function ProductDetailCard({
   };
 
   const handleCustomCurtainAddToCart = async (customizationData: any, totalPrice: number) => {
-    if (!session?.user?.email) {
-      alert(t('pleaseLogin'));
-      return;
-    }
-
     // Stock validation for custom curtain
     const requiredFabric = customizationData.width && customizationData.height
       ? (parseFloat(customizationData.width) / 100) *
@@ -537,37 +548,57 @@ function ProductDetailCard({
     }
 
     try {
-      const userId = (session.user as any)?.id || session.user.email;
-
-      // NOTE: This assumes the backend API can handle 'custom_attributes' and 'price_override' or similar.
-      // If not, the backend needs to be updated to support this.
-      // For now, we send the data structure as we expect the backend to receive it.
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            product_sku: product.sku,
-            variant_sku: selectedVariant?.variant_sku || null,
-            quantity: 1, // Custom curtain is 1 unit (but price is calculated)
-            is_custom_curtain: true,
-            custom_attributes: customizationData,
-            custom_price: totalPrice
-          }),
-        }
-      );
-
-      if (response.ok) {
+      if (isGuest) {
+        // For guests, add to localStorage cart
+        addToGuestCart({
+          product_sku: product.sku,
+          variant_sku: selectedVariant?.variant_sku || null,
+          quantity: '1',
+          product_category: product_category || undefined,
+          is_custom_curtain: true,
+          custom_attributes: customizationData,
+          custom_price: totalPrice,
+          product: {
+            title: product.title,
+            price: totalPrice,
+            primary_image: product.primary_image || placeholder_image_link,
+            category: product_category || undefined,
+          }
+        });
         setSuccessMessage(t('productAddedToCart'));
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 3000);
         setIsCustomCurtainSidebarOpen(false);
-        await refreshCart();
       } else {
-        const errorData = await response.json();
-        alert(errorData.message || t('errorAddingToCart'));
+        // For authenticated users, add via API
+        const userId = (session?.user as any)?.id || session?.user?.email;
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              product_sku: product.sku,
+              variant_sku: selectedVariant?.variant_sku || null,
+              quantity: 1,
+              is_custom_curtain: true,
+              custom_attributes: customizationData,
+              custom_price: totalPrice
+            }),
+          }
+        );
+
+        if (response.ok) {
+          setSuccessMessage(t('productAddedToCart'));
+          setShowSuccessMessage(true);
+          setTimeout(() => setShowSuccessMessage(false), 3000);
+          setIsCustomCurtainSidebarOpen(false);
+          await refreshCart();
+        } else {
+          const errorData = await response.json();
+          alert(errorData.message || t('errorAddingToCart'));
+        }
       }
     } catch (error) {
       console.error('Cart error:', error);
@@ -1051,6 +1082,12 @@ function ProductDetailCard({
         currency="USD" // Default currency, should be dynamic
         selectedAttributes={selectedAttributes}
         onAddToCart={handleCustomCurtainAddToCart}
+      />
+
+      {/* Product Reviews */}
+      <ProductReviewSection
+        productSku={product.sku}
+        productTitle={product.title}
       />
     </div>
   );

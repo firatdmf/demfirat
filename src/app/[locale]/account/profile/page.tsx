@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useState, useEffect } from 'react';
 import classes from './page.module.css';
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBirthdayCake, FaSave, FaEdit, FaLock, FaTimes, FaCheck, FaUserCircle, FaBoxOpen, FaTruck, FaClock, FaCog, FaBox, FaTimesCircle, FaChevronRight, FaCreditCard, FaBell, FaGlobe, FaPalette, FaLink } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBirthdayCake, FaSave, FaEdit, FaLock, FaTimes, FaCheck, FaUserCircle, FaBoxOpen, FaTruck, FaClock, FaCog, FaBox, FaTimesCircle, FaChevronRight, FaCreditCard, FaBell, FaGlobe, FaPalette, FaLink, FaStar } from 'react-icons/fa';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
 // Order types
@@ -49,6 +49,132 @@ interface OrderDetail extends Order {
   items: OrderItem[];
   total_value: string;
 }
+
+// Reviews Tab Content Component
+interface UserReview {
+  id: number;
+  rating: number;
+  comment: string;
+  product_sku: string;
+  product_title: string;
+  product_image: string | null;
+  is_approved: boolean;
+  created_at: string;
+}
+
+function ReviewsTabContent({ userId, locale, onShowToast }: { userId: number; locale: string; onShowToast: (type: 'success' | 'error', text: string) => void }) {
+  const [reviews, setReviews] = useState<UserReview[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!userId) return;
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_reviews/${userId}/`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setReviews(data.reviews || []);
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, [userId]);
+
+  const handleDeleteReview = async (reviewId: number) => {
+    if (!confirm(locale === 'tr' ? 'Bu değerlendirmeyi silmek istediğinize emin misiniz?' : 'Are you sure you want to delete this review?')) return;
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/delete_review/${userId}/${reviewId}/`,
+        { method: 'DELETE' }
+      );
+      if (response.ok) {
+        setReviews(prev => prev.filter(r => r.id !== reviewId));
+        onShowToast('success', locale === 'tr' ? 'Değerlendirme silindi' : 'Review deleted');
+      }
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      onShowToast('error', locale === 'tr' ? 'Silinemedi' : 'Failed to delete');
+    }
+  };
+
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span key={i} style={{ color: i < rating ? '#f59e0b' : '#d1d5db', fontSize: '1rem' }}>★</span>
+    ));
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+  };
+
+  if (loading) return <div style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>{locale === 'tr' ? 'Yükleniyor...' : 'Loading...'}</div>;
+
+  if (reviews.length === 0) {
+    return (
+      <div style={{ padding: '3rem 2rem', textAlign: 'center', color: '#9ca3af' }}>
+        <p>{locale === 'tr' ? 'Henüz değerlendirme yapmadınız.' : locale === 'ru' ? 'У вас пока нет отзывов.' : locale === 'pl' ? 'Nie masz jeszcze opinii.' : 'You have not written any reviews yet.'}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      {reviews.map((review) => (
+        <div key={review.id} style={{
+          display: 'flex',
+          gap: '1rem',
+          padding: '1rem',
+          background: '#f9fafb',
+          borderRadius: '12px',
+          border: '1px solid #e5e7eb'
+        }}>
+          {review.product_image && (
+            <img
+              src={review.product_image}
+              alt={review.product_title}
+              style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
+            />
+          )}
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, color: '#1f2937' }}>{review.product_title}</h4>
+                <div style={{ marginTop: '0.25rem' }}>{renderStars(review.rating)}</div>
+              </div>
+              <button
+                onClick={() => handleDeleteReview(review.id)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#ef4444',
+                  cursor: 'pointer',
+                  fontSize: '0.8rem'
+                }}
+              >
+                {locale === 'tr' ? 'Sil' : 'Delete'}
+              </button>
+            </div>
+            {review.comment && (
+              <p style={{ margin: '0.5rem 0', color: '#4b5563', fontSize: '0.9rem', lineHeight: 1.5 }}>{review.comment}</p>
+            )}
+            <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{formatDate(review.created_at)}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -119,15 +245,15 @@ export default function ProfilePage() {
 
   // Active tab for sidebar navigation - check URL param first
   const tabParam = searchParams.get('tab');
-  const initialTab = tabParam === 'orders' || tabParam === 'addresses' || tabParam === 'settings' || tabParam === 'profile'
-    ? tabParam as 'profile' | 'addresses' | 'orders' | 'settings'
+  const initialTab = tabParam === 'orders' || tabParam === 'addresses' || tabParam === 'settings' || tabParam === 'profile' || tabParam === 'reviews'
+    ? tabParam as 'profile' | 'addresses' | 'orders' | 'settings' | 'reviews'
     : 'profile';
-  const [activeTab, setActiveTab] = useState<'profile' | 'addresses' | 'orders' | 'wishlist' | 'settings'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'profile' | 'addresses' | 'orders' | 'wishlist' | 'settings' | 'reviews'>(initialTab);
 
   // Sync activeTab with URL parameter changes
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab === 'profile' || tab === 'addresses' || tab === 'orders' || tab === 'settings') {
+    if (tab === 'profile' || tab === 'addresses' || tab === 'orders' || tab === 'settings' || tab === 'reviews') {
       setActiveTab(tab);
     } else {
       setActiveTab('profile');
@@ -846,6 +972,13 @@ export default function ProfilePage() {
             >
               <FaLock className={classes.menuIcon} />
               <span>{t('settings')}</span>
+            </button>
+            <button
+              className={`${classes.menuItem} ${activeTab === 'reviews' ? classes.active : ''}`}
+              onClick={() => router.push(`/${locale}/account/profile?tab=reviews`)}
+            >
+              <FaStar className={classes.menuIcon} />
+              <span>{locale === 'tr' ? 'Değerlendirmelerim' : locale === 'ru' ? 'Мои отзывы' : locale === 'pl' ? 'Moje Opinie' : 'My Reviews'}</span>
             </button>
           </div>
         </div>
@@ -1703,6 +1836,25 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Reviews Tab */}
+          {activeTab === 'reviews' && (
+            <div className={classes.reviewsSection}>
+              <div className={classes.card}>
+                <div className={classes.cardTitle}>
+                  <FaStar className={classes.titleIcon} />
+                  <h3>{locale === 'tr' ? 'Değerlendirmelerim' : locale === 'ru' ? 'Мои отзывы' : locale === 'pl' ? 'Moje Opinie' : 'My Reviews'}</h3>
+                </div>
+                <div className={classes.cardContent}>
+                  <ReviewsTabContent
+                    userId={(session?.user as any)?.id}
+                    locale={locale}
+                    onShowToast={showToast}
+                  />
+                </div>
               </div>
             </div>
           )}

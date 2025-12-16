@@ -336,5 +336,40 @@
             ]
         },
         "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade."
+    },
+    "OrderTracking": {
+        "title": "Order Tracking",
+        "subtitle": "Enter your order number to track your order status",
+        "orderNumber": "Order Number",
+        "orderNumberPlaceholder": "e.g., DK0000001",
+        "search": "Search",
+        "searching": "Searching...",
+        "hint": "You can find your order number in your order confirmation email",
+        "enterOrderNumber": "Please enter your order number",
+        "notFound": "Order not found. Please check your order number.",
+        "orderDate": "Order Date",
+        "orderStatus": "Order Status",
+        "trackingInfo": "Shipping Information",
+        "carrier": "Carrier",
+        "trackingNumber": "Tracking Number",
+        "shippedAt": "Shipped At",
+        "deliveredAt": "Delivered At",
+        "orderItems": "Order Items",
+        "quantity": "Qty",
+        "price": "Price",
+        "deliveryAddress": "Delivery Address",
+        "phone": "Phone",
+        "total": "Total",
+        "status": {
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "preparing": "Preparing",
+            "shipped": "Shipped",
+            "in_transit": "In Transit",
+            "out_for_delivery": "Out for Delivery",
+            "delivered": "Delivered",
+            "cancelled": "Cancelled",
+            "returned": "Returned"
+        }
     }
 }

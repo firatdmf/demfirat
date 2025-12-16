@@ -364,5 +364,40 @@
             ]
         },
         "disclaimer": "Tüketici Hakem Heyeti ve Tüketici Mahkemeleri: İşbu sözleşmeden doğabilecek uyuşmazlıklarda, her yıl Ticaret Bakanlığı tarafından ilan edilen parasal sınırlar dâhilinde tüketicinin yerleşim yerinin veya tüketici işleminin yapıldığı yerdeki İl/İlçe Tüketici Hakem Heyetine veya Tüketici Mahkemesine başvurabilirsiniz."
+    },
+    "OrderTracking": {
+        "title": "Sipariş Takibi",
+        "subtitle": "Siparişinizin durumunu öğrenmek için sipariş numaranızı girin",
+        "orderNumber": "Sipariş Numarası",
+        "orderNumberPlaceholder": "Örn: DK0000001",
+        "search": "Ara",
+        "searching": "Aranıyor...",
+        "hint": "Sipariş numaranızı sipariş onay e-postanızda bulabilirsiniz",
+        "enterOrderNumber": "Lütfen sipariş numaranızı girin",
+        "notFound": "Sipariş bulunamadı. Lütfen sipariş numarasını kontrol edin.",
+        "orderDate": "Sipariş Tarihi",
+        "orderStatus": "Sipariş Durumu",
+        "trackingInfo": "Kargo Bilgileri",
+        "carrier": "Kargo Şirketi",
+        "trackingNumber": "Takip Numarası",
+        "shippedAt": "Kargoya Verildi",
+        "deliveredAt": "Teslim Edildi",
+        "orderItems": "Sipariş Ürünleri",
+        "quantity": "Adet",
+        "price": "Fiyat",
+        "deliveryAddress": "Teslimat Adresi",
+        "phone": "Telefon",
+        "total": "Toplam",
+        "status": {
+            "pending": "Beklemede",
+            "confirmed": "Onaylandı",
+            "preparing": "Hazırlanıyor",
+            "shipped": "Kargoya Verildi",
+            "in_transit": "Yolda",
+            "out_for_delivery": "Dağıtımda",
+            "delivered": "Teslim Edildi",
+            "cancelled": "İptal Edildi",
+            "returned": "İade Edildi"
+        }
     }
 }

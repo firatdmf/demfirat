@@ -7,6 +7,57 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
+/* Utility Bar - Top Strip */
+.utilityBar {
+  background: #2c2c2c;
+  font-size: 0.8rem;
+}
+
+.utilityContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.utilityPromo {
+  color: #c9a961;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.utilityLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.utilityLink {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.utilityLink:hover {
+  color: #c9a961;
+}
+
+.utilityIcon {
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .utilityBar {
+    display: none;
+  }
+}
+
 /* Top Bar */
 .topBar {
   max-width: 1400px;
@@ -796,4 +847,13 @@
     height: 32px;
     font-size: 0.9rem;
   }
+}
+
+.mobileSectionTitle {
+  padding: 1rem 1.5rem 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin-top: 0.5rem;
+  letter-spacing: -0.01em;
 }

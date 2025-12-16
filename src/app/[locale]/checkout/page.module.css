@@ -234,6 +234,22 @@
   margin: 0;
 }
 
+/* Guest Address Form */
+.guestAddressForm {
+  background: rgba(201, 169, 97, 0.03);
+  border: 2px solid rgba(201, 169, 97, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.guestAddressNote {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  color: var(--gold, #c9a961);
+  margin: 0 0 1rem 0;
+  font-weight: 500;
+}
+
 /* New Address Form */
 .newAddressForm {
   border: 2px solid var(--gold, #c9a961);
@@ -1110,4 +1126,149 @@ select.input:disabled {
 .legalLink:hover {
   color: var(--gold, #c9a961);
   text-decoration-color: var(--gold, #c9a961);
+}
+
+/* 3DS Modal Styles */
+.modal3DSOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.modal3DSContent {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal3DSHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--light-gray, #e0dcd2);
+  background: var(--ivory, #faf8f3);
+}
+
+.modal3DSHeader h2 {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-dark, #2c2c2c);
+  margin: 0;
+}
+
+.modal3DSClose {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-dark, #2c2c2c);
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.modal3DSClose:hover {
+  color: var(--gold, #c9a961);
+  transform: scale(1.1);
+}
+
+.modal3DSBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal3DSLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 300px;
+}
+
+.modal3DSLoading .spinner {
+  width: 60px;
+  height: 60px;
+}
+
+.modal3DSLoading p {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.1rem;
+  color: rgba(44, 44, 44, 0.7);
+  margin: 0;
+}
+
+/* 3DS iFrame and embedded content */
+.modal3DSBody>div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal3DSBody form,
+.modal3DSBody iframe {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .modal3DSContent {
+    max-width: 95vw;
+    max-height: 90vh;
+    border-radius: 12px;
+  }
+
+  .modal3DSHeader {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .modal3DSHeader h2 {
+    font-size: 1.25rem;
+  }
+
+  .modal3DSBody {
+    padding: 1.5rem;
+  }
 }

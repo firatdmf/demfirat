@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import HelpWidget from "@/components/HelpWidget";
 import { Providers } from "./providers";
 import { getTranslations, getMessages } from "next-intl/server";
 import GoogleAnalytics from "@/lib/googleAnalytics";
@@ -67,6 +68,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
             AllRightsReserved={footerT("AllRightsReserved")}
             locale={locale}
           ></Footer>
+          <HelpWidget />
         </Providers>
       </body>
     </html>

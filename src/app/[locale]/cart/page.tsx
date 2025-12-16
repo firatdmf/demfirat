@@ -9,6 +9,7 @@ import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import GuestCheckoutModal from '@/components/GuestCheckoutModal';
 
 interface CartItem {
   id: number;
@@ -39,12 +40,13 @@ export default function CartPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const locale = useLocale();
-  const { refreshCart } = useCart();
+  const { refreshCart, guestCart, removeFromGuestCart, updateGuestCartQuantity, isGuest } = useCart();
   const { convertPrice } = useCurrency();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [updatingItems, setUpdatingItems] = useState<Set<number>>(new Set());
+  const [updatingItems, setUpdatingItems] = useState<Set<number | string>>(new Set());
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [showGuestModal, setShowGuestModal] = useState(false);
 
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
@@ -64,11 +66,7 @@ export default function CartPage() {
     return translations[key]?.[lang] || key;
   };
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push(`/${locale}/login`);
-    }
-  }, [status, router, locale]);
+  // Removed login redirect - guests can now use cart
 
   // Sayfa visibility değişiminde reload'u engelle
   useEffect(() => {
@@ -85,12 +83,72 @@ export default function CartPage() {
     };
   }, [cartItems, refreshCart]);
 
+  // Load cart based on authentication status
   useEffect(() => {
-    if (session?.user?.email && isInitialLoad) {
+    if (status === 'loading') return;
+
+    if (isGuest) {
+      // For guests, load cart from context (localStorage)
+      loadGuestCart();
+    } else if (session?.user?.email && isInitialLoad) {
+      // For authenticated users, load from API
       loadCart();
       setIsInitialLoad(false);
     }
-  }, [session, isInitialLoad]);
+  }, [session, isInitialLoad, status, isGuest, guestCart]);
+
+  // Load guest cart items with product details
+  const loadGuestCart = async () => {
+    if (guestCart.length === 0) {
+      setCartItems([]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const itemsWithDetails = await Promise.all(
+        guestCart.map(async (item) => {
+          try {
+            const productResponse = await fetch(
+              `/api/cart/get-product?product_sku=${item.product_sku}`
+            );
+            if (productResponse.ok) {
+              const productData = await productResponse.json();
+              const product = productData.product;
+              return {
+                ...item,
+                id: item.id as any, // Keep string ID for guests
+                product_category: productData.product_category || item.product_category,
+                product: {
+                  title: product?.title || item.product_sku,
+                  price: item.custom_price || product?.price || null,
+                  primary_image: product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                  category: productData.product_category,
+                },
+              };
+            }
+          } catch (error) {
+            console.error(`Error fetching product ${item.product_sku}:`, error);
+          }
+          return {
+            ...item,
+            id: item.id as any,
+            product: {
+              title: item.product_sku,
+              price: null,
+              primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+            },
+          };
+        })
+      );
+      setCartItems(itemsWithDetails as CartItem[]);
+    } catch (error) {
+      console.error('Error loading guest cart:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadCart = async (forceRefresh = false) => {
     // Eğer veri varsa ve force refresh değilse, tekrar yükleme
@@ -202,29 +260,39 @@ export default function CartPage() {
     }
   };
 
-  const updateQuantity = async (itemId: number, newQuantity: number) => {
+  const updateQuantity = async (itemId: number | string, newQuantity: number) => {
     if (newQuantity < 0.1) return;
     setUpdatingItems(prev => new Set(prev).add(itemId));
 
     try {
-      const userId = (session?.user as any)?.id || session?.user?.email;
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_cart_item/${userId}/${itemId}/`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ quantity: newQuantity.toString() }),
-        }
-      );
-
-      if (response.ok) {
+      if (isGuest) {
+        // For guests, update in context (localStorage)
+        updateGuestCartQuantity(String(itemId), newQuantity.toString());
         setCartItems(prev =>
           prev.map(item =>
             item.id === itemId ? { ...item, quantity: newQuantity.toString() } : item
           )
         );
-        // refreshCart() yerine sadece count'u güncelle
-        await refreshCart();
+      } else {
+        // For authenticated users, update via API
+        const userId = (session?.user as any)?.id || session?.user?.email;
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_cart_item/${userId}/${itemId}/`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quantity: newQuantity.toString() }),
+          }
+        );
+
+        if (response.ok) {
+          setCartItems(prev =>
+            prev.map(item =>
+              item.id === itemId ? { ...item, quantity: newQuantity.toString() } : item
+            )
+          );
+          await refreshCart();
+        }
       }
     } catch (error) {
       console.error('Error updating quantity:', error);
@@ -237,20 +305,26 @@ export default function CartPage() {
     }
   };
 
-  const removeItem = async (itemId: number) => {
+  const removeItem = async (itemId: number | string) => {
     setUpdatingItems(prev => new Set(prev).add(itemId));
 
     try {
-      const userId = (session?.user as any)?.id || session?.user?.email;
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/remove_from_cart/${userId}/${itemId}/`,
-        { method: 'DELETE' }
-      );
-
-      if (response.ok) {
+      if (isGuest) {
+        // For guests, remove from context (localStorage)
+        removeFromGuestCart(String(itemId));
         setCartItems(prev => prev.filter(item => item.id !== itemId));
-        // Cart count'u güncelle
-        await refreshCart();
+      } else {
+        // For authenticated users, remove via API
+        const userId = (session?.user as any)?.id || session?.user?.email;
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/remove_from_cart/${userId}/${itemId}/`,
+          { method: 'DELETE' }
+        );
+
+        if (response.ok) {
+          setCartItems(prev => prev.filter(item => item.id !== itemId));
+          await refreshCart();
+        }
       }
     } catch (error) {
       console.error('Error removing item:', error);
@@ -260,6 +334,17 @@ export default function CartPage() {
         newSet.delete(itemId);
         return newSet;
       });
+    }
+  };
+
+  // Handle checkout button click
+  const handleCheckout = () => {
+    if (isGuest) {
+      // Show guest checkout modal
+      setShowGuestModal(true);
+    } else {
+      // For authenticated users, go directly to checkout
+      router.push(`/${locale}/checkout`);
     }
   };
 
@@ -537,10 +622,10 @@ export default function CartPage() {
               </span>
             </div>
 
-            <Link href={`/${locale}/checkout`} className={classes.checkoutBtn}>
+            <button onClick={handleCheckout} className={classes.checkoutBtn}>
               {t('checkout')}
               <FaArrowRight />
-            </Link>
+            </button>
 
             <Link href={`/${locale}/product/fabric`} className={classes.continueBtn}>
               {t('continueShopping')}
@@ -548,6 +633,12 @@ export default function CartPage() {
           </div>
         </div>
       )}
+
+      {/* Guest Checkout Modal */}
+      <GuestCheckoutModal
+        isOpen={showGuestModal}
+        onClose={() => setShowGuestModal(false)}
+      />
     </div>
   );
 }

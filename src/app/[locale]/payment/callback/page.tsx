@@ -18,18 +18,18 @@ export default function PaymentCallbackPage() {
     const paymentId = searchParams.get('paymentId');
     const conversationData = searchParams.get('conversationData');
     const conversationId = searchParams.get('conversationId');
-    
+
     console.log('Callback params:', { mdStatus, status, paymentId, conversationData, conversationId });
-    
+
     // Check if 3D Secure was successful
     if (mdStatus && mdStatus !== '1') {
       setStatus('error');
-      setMessage(locale === 'tr' 
-        ? '3D Secure doğrulama başarısız. Lütfen tekrar deneyin.' 
+      setMessage(locale === 'tr'
+        ? '3D Secure doğrulama başarısız. Lütfen tekrar deneyin.'
         : '3D Secure verification failed. Please try again.');
       return;
     }
-    
+
     if (!paymentId) {
       setStatus('error');
       setMessage(locale === 'tr' ? 'Ödeme bilgisi bulunamadı' : 'Payment information not found');
@@ -54,17 +54,17 @@ export default function PaymentCallbackPage() {
       if (data.success) {
         setStatus('success');
         setMessage(locale === 'tr' ? 'Ödeme başarılı!' : 'Payment successful!');
-        
+
         // Get checkout data from localStorage
         let userId = null;
         const checkoutData = localStorage.getItem('checkoutData');
-        
+
         // Create order in Django backend with payment data
         try {
           if (checkoutData) {
             const parsed = JSON.parse(checkoutData);
             userId = parsed.userId;
-            
+
             // Enrich cart items with product info for ERP visibility
             const enrichedCartItems = parsed.cartItems.map((item: any) => ({
               ...item,
@@ -78,6 +78,8 @@ export default function PaymentCallbackPage() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 userId: parsed.userId,
+                isGuestCheckout: parsed.isGuestCheckout || false,
+                guestInfo: parsed.guestInfo || null,
                 paymentData: data.payment,
                 cartItems: enrichedCartItems,
                 deliveryAddress: parsed.deliveryAddress,
@@ -87,10 +89,10 @@ export default function PaymentCallbackPage() {
                 originalPrice: parsed.originalPrice
               })
             });
-            
+
             const orderResult = await orderResponse.json();
             console.log('Order created:', orderResult);
-            
+
             // Store order result for confirmation page
             if (orderResult.success) {
               localStorage.setItem('lastOrder', JSON.stringify({
@@ -104,7 +106,7 @@ export default function PaymentCallbackPage() {
                 orderDate: new Date().toISOString()
               }));
             }
-            
+
             // Clear checkout data after order created
             localStorage.removeItem('checkoutData');
             localStorage.removeItem('cart');
@@ -115,7 +117,7 @@ export default function PaymentCallbackPage() {
             } catch (e) {
               console.error('Failed to clear backend cart:', e);
             }
-            
+
             // Dispatch events for CartContext listeners
             // If in popup, also notify parent window
             const isPopup = window.opener && window.opener !== window;
@@ -136,10 +138,10 @@ export default function PaymentCallbackPage() {
           console.error('Failed to create order:', orderError);
           // Don't fail the whole flow if order creation fails
         }
-        
+
         // Check if we're in a popup (opened from 3DS)
         const isPopup = window.opener && window.opener !== window;
-        
+
         if (isPopup) {
           // We're in a popup - redirect parent and close popup
           try {
@@ -148,7 +150,7 @@ export default function PaymentCallbackPage() {
               paymentId: paymentId,
               userId: userId
             }, window.location.origin);
-            
+
             // Close popup after message sent
             setTimeout(() => {
               window.close();

@@ -1,0 +1,224 @@
+/* Floating Button */
+.floatingButton {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.floatingButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.35);
+}
+
+.floatingButton.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+.buttonIcon {
+    font-size: 1.1rem;
+    color: #c9a961;
+}
+
+.buttonText {
+    white-space: nowrap;
+}
+
+/* Popup Window */
+.popup {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 340px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 10000;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Popup Header */
+.popupHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+    color: #fff;
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.headerIcon {
+    color: #c9a961;
+    font-size: 1.25rem;
+}
+
+.closeButton {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.closeButton:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Popup Form */
+.popupForm {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.formInput,
+.formTextarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+    outline: none;
+    border-color: #c9a961;
+}
+
+.formTextarea {
+    resize: none;
+    min-height: 80px;
+}
+
+.formInput::placeholder,
+.formTextarea::placeholder {
+    color: #999;
+}
+
+.formMessage {
+    padding: 0.625rem 0.875rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.formMessage.success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.formMessage.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    background: #c9a961;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+    background: #b8984f;
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.sendIcon {
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .floatingButton {
+        bottom: 16px;
+        right: 16px;
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .buttonText {
+        display: none;
+    }
+
+    .floatingButton {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .buttonIcon {
+        font-size: 1.25rem;
+    }
+
+    .popup {
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 80vh;
+    }
+}

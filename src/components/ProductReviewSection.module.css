@@ -1,0 +1,292 @@
+.container {
+    margin-top: 2.5rem;
+    padding: 0 1rem;
+}
+
+.title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #eee;
+}
+
+.loading {
+    text-align: center;
+    padding: 1.5rem;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+/* Rating Summary - Minimal */
+.ratingSummary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.averageRating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.averageNumber {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111;
+}
+
+.starsContainer {
+    display: flex;
+    gap: 2px;
+}
+
+.ratingCount {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+/* Stars */
+.filledStar {
+    color: #111 !important;
+    font-size: 1rem !important;
+}
+
+.emptyStar {
+    color: #ddd !important;
+    font-size: 1rem !important;
+}
+
+.interactiveStar {
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    display: inline-flex;
+}
+
+.interactiveStar:hover {
+    transform: scale(1.1);
+}
+
+/* Review Form - Inline compact */
+.reviewFormContainer {
+    margin-bottom: 1.5rem;
+}
+
+.infoMessage,
+.successMessage {
+    padding: 0.625rem 0.875rem;
+    background: #f5f5f5;
+    border-radius: 4px;
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.successMessage {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.reviewForm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reviewForm h4 {
+    display: none;
+}
+
+.ratingInput {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    align-self: center;
+}
+
+.ratingInput label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.starsInput {
+    display: flex;
+    gap: 4px;
+}
+
+.starsInput .filledStar,
+.starsInput .emptyStar {
+    font-size: 1.5rem !important;
+}
+
+.commentInput {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.commentInput label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.commentInput textarea {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    resize: none;
+    min-height: 40px;
+    max-height: 80px;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+}
+
+.commentInput textarea:focus {
+    outline: none;
+    border-color: #111;
+}
+
+.message {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.message.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.message.error {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* Submit button - Modern minimal */
+.submitButton {
+    padding: 0.625rem 1.25rem;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.submitButton:hover:not(:disabled) {
+    background: #333;
+}
+
+.submitButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Reviews List */
+.reviewsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.noReviews {
+    padding: 2rem 0;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+.reviewCard {
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.reviewCard:last-child {
+    border-bottom: none;
+}
+
+.reviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.reviewUser {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #111;
+    font-size: 0.875rem;
+}
+
+.userIcon {
+    color: #999;
+    font-size: 0.875rem;
+}
+
+.reviewStars {
+    display: flex;
+    gap: 1px;
+}
+
+.reviewStars .filledStar,
+.reviewStars .emptyStar {
+    font-size: 0.75rem !important;
+}
+
+.reviewComment {
+    color: #444;
+    line-height: 1.5;
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+}
+
+.reviewDate {
+    font-size: 0.7rem;
+    color: #999;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+
+    .reviewForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .commentInput {
+        min-width: 100%;
+    }
+
+    .submitButton {
+        width: 100%;
+    }
+
+    .reviewHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

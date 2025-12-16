@@ -9,6 +9,14 @@ const iyzipay = new Iyzipay({
 
 export async function POST(request: NextRequest) {
   try {
+    // Debug API key configuration
+    console.log('===== IYZICO CONFIG CHECK =====');
+    console.log('API Key exists:', !!process.env.IYZICO_API_KEY);
+    console.log('API Key length:', process.env.IYZICO_API_KEY?.length || 0);
+    console.log('Secret Key exists:', !!process.env.IYZICO_SECRET_KEY);
+    console.log('Secret Key length:', process.env.IYZICO_SECRET_KEY?.length || 0);
+    console.log('Base URL:', process.env.IYZICO_BASE_URL || 'https://sandbox-api.iyzipay.com');
+    
     const body = await request.json();
     console.log('===== PAYMENT REQUEST RECEIVED =====');
     console.log('Body keys:', Object.keys(body));

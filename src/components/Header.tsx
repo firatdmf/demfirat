@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
-import { FaUser, FaHeart, FaShoppingCart, FaSearch, FaTimes } from "react-icons/fa";
+import { FaUser, FaHeart, FaShoppingCart, FaSearch, FaTimes, FaBox, FaBook, FaHeadset } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { useSession } from "next-auth/react";
@@ -30,12 +30,18 @@ interface Product {
 }
 
 function Header({ menuTArray }: HeaderProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const locale = useLocale();
   const { cartCount } = useCart();
   const { convertPrice } = useCurrency();
   const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Prevent hydration mismatch - always render logged-out state on server
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,6 +59,10 @@ function Header({ menuTArray }: HeaderProps) {
       solidFabric: { en: 'Solid Fabric', tr: 'Düz Kumaş', ru: 'Гладкая ткань', pl: 'Gładka tkanina' },
       embroideredFabric: { en: 'Embroidered Fabric', tr: 'Nakışlı Kumaş', ru: 'Вышитая ткань', pl: 'Haftowana tkanina' },
       followUs: { en: 'Follow Us', tr: 'Takip Edin', ru: 'Подписаться', pl: 'Obserwuj' },
+      trackOrder: { en: 'Order Tracking', tr: 'Sipariş Takibi', ru: 'Отслеживание', pl: 'Śledzenie' },
+      blog: { en: 'Blog', tr: 'Blog', ru: 'Блог', pl: 'Blog' },
+      helpSupport: { en: 'Help & Support', tr: 'Yardım & Destek', ru: 'Помощь', pl: 'Pomoc' },
+      freeShipping: { en: 'Free Shipping on Domestic Orders Over 1000 TL', tr: 'Türkiye İçi 1000 TL ve Üzeri Siparişlerde Kargo Bedava', ru: 'Бесплатная доставка при заказе от 1000 TL (по Турции)', pl: 'Darmowa wysyłka przy zamówieniach powyżej 1000 TL (w Turcji)' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -147,6 +157,21 @@ function Header({ menuTArray }: HeaderProps) {
 
   return (
     <header className={classes.header}>
+      {/* Utility Bar - Top strip */}
+      <div className={classes.utilityBar}>
+        <div className={classes.utilityContent}>
+          <span className={classes.utilityPromo}>{t('freeShipping')}</span>
+          <div className={classes.utilityLinks}>
+            <Link href={`/${locale}/blog`} className={classes.utilityLink}>{t('blog')}</Link>
+            <Link href={`/${locale}/order-tracking`} className={classes.utilityLink}>
+              <FaBox className={classes.utilityIcon} />
+              {t('trackOrder')}
+            </Link>
+            <Link href={`/${locale}/help`} className={classes.utilityLink}>{t('helpSupport')}</Link>
+          </div>
+        </div>
+      </div>
+
       {/* Top Bar */}
       <div className={classes.topBar}>
         {/* Logo */}
@@ -253,11 +278,14 @@ function Header({ menuTArray }: HeaderProps) {
 
         {/* Action Icons */}
         <div className={classes.actionIcons}>
+          <Link href={`/${locale}/order-tracking`} className={classes.iconButton} title="Sipariş Takip">
+            <FaBox />
+          </Link>
           <Link href={`/${locale}/favorites`} className={classes.iconButton} title="Favorites">
             <FaHeart />
           </Link>
 
-          {session?.user ? (
+          {hasMounted && session?.user ? (
             <div className={classes.userDropdown}>
               <button className={classes.iconButton} title="Account">
                 <FaUser />
@@ -282,7 +310,7 @@ function Header({ menuTArray }: HeaderProps) {
 
           <Link href={`/${locale}/cart`} className={classes.cartButton} title="Cart">
             <FaShoppingCart />
-            {cartCount > 0 && (
+            {hasMounted && cartCount > 0 && (
               <span className={classes.cartBadge}>{cartCount}</span>
             )}
           </Link>
@@ -389,6 +417,22 @@ function Header({ menuTArray }: HeaderProps) {
           </Link>
           <Link href={`/${locale}/follow-us`} className={`${classes.mobileNavLink} ${classes.instagramLink}`} onClick={() => setMobileMenuOpen(false)}>
             {t('followUs')}
+          </Link>
+
+          <hr className={classes.mobileDivider} />
+
+          <div className={classes.mobileSectionTitle}>
+            {locale === 'tr' ? 'Yardımcı Sayfalar' : locale === 'ru' ? 'Полезные страницы' : locale === 'pl' ? 'Pomocne strony' : 'Helper Pages'}
+          </div>
+
+          <Link href={`/${locale}/order-tracking`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+            <FaBox className={classes.mobileIcon} /> {t('trackOrder')}
+          </Link>
+          <Link href={`/${locale}/blog`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+            <FaBook className={classes.mobileIcon} /> {t('blog')}
+          </Link>
+          <Link href={`/${locale}/help`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+            <FaHeadset className={classes.mobileIcon} /> {t('helpSupport')}
           </Link>
 
           <hr className={classes.mobileDivider} />

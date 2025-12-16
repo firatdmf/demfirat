@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaCreditCard, FaMapMarkerAlt, FaUser, FaCheck, FaPhone, FaEnvelope } from 'react-icons/fa';
@@ -53,12 +53,18 @@ interface Address {
   isDefault: boolean;
 }
 
+
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = useLocale();
-  const { refreshCart } = useCart();
+  const { refreshCart, guestCart, clearGuestCart, isGuest } = useCart();
   const { convertPrice } = useCurrency();
+
+  // Guest checkout mode
+  const isGuestCheckout = searchParams.get('guest') === 'true';
+
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedDeliveryAddressId, setSelectedDeliveryAddressId] = useState<string | null>(null);
@@ -101,6 +107,7 @@ export default function CheckoutPage() {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
+
   const [userPhone, setUserPhone] = useState('');
 
   // Legal documents state
@@ -174,23 +181,83 @@ export default function CheckoutPage() {
     return translations[key]?.[lang] || key;
   };
 
+  // Redirect only if not guest checkout and not authenticated
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push(`/${locale}/login`);
+    if (status === 'loading') return;
+    if (status === 'unauthenticated' && !isGuestCheckout) {
+      router.push(`/${locale}/cart`);
     }
-  }, [status, router, locale]);
+  }, [status, router, locale, isGuestCheckout]);
 
+  // Load checkout data based on auth status
   useEffect(() => {
-    if (session?.user?.email && isInitialLoad) {
+    if (status === 'loading') return;
+
+    if (isGuestCheckout && isGuest) {
+      // For guest checkout, load from localStorage
+      loadGuestCheckoutData();
+    } else if (session?.user?.email && isInitialLoad) {
       loadCheckoutData();
       setIsInitialLoad(false);
-      // Set user email from session
       setUserInfo(prev => ({
         ...prev,
         email: session.user?.email || ''
       }));
     }
-  }, [session, isInitialLoad]);
+  }, [session, isInitialLoad, status, isGuestCheckout, isGuest, guestCart]);
+
+  // Load guest checkout data from localStorage
+  const loadGuestCheckoutData = async () => {
+    if (guestCart.length === 0) {
+      setCartItems([]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const itemsWithDetails = await Promise.all(
+        guestCart.map(async (item) => {
+          try {
+            const productResponse = await fetch(
+              `/api/cart/get-product?product_sku=${item.product_sku}`
+            );
+            if (productResponse.ok) {
+              const productData = await productResponse.json();
+              const product = productData.product;
+              return {
+                ...item,
+                id: item.id as any,
+                product_category: productData.product_category || item.product_category,
+                product: {
+                  title: product?.title || item.product_sku,
+                  price: item.custom_price || product?.price || null,
+                  primary_image: product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                  category: productData.product_category,
+                },
+              };
+            }
+          } catch (error) {
+            console.error(`Error fetching product ${item.product_sku}:`, error);
+          }
+          return {
+            ...item,
+            id: item.id as any,
+            product: {
+              title: item.product_sku,
+              price: null,
+              primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+            },
+          };
+        })
+      );
+      setCartItems(itemsWithDetails as CartItem[]);
+    } catch (error) {
+      console.error('Error loading guest checkout:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Load countries on mount
   useEffect(() => {
@@ -453,6 +520,12 @@ export default function CheckoutPage() {
       return;
     }
 
+    // Validate email for guest checkout
+    if (isGuestCheckout && !userInfo.email.trim()) {
+      alert(locale === 'tr' ? 'Lütfen e-posta adresinizi girin' : 'Please enter your email address');
+      return;
+    }
+
     // Validate legal document agreements
     if (!agreedToPreInfo) {
       alert(t('pleaseAgreeToPreInfo'));
@@ -463,14 +536,21 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Validate addresses
-    if (!selectedDeliveryAddressId) {
-      alert(t('pleaseSelectAddress'));
-      return;
-    }
-    if (!sameAsDelivery && !selectedBillingAddressId) {
-      alert(t('pleaseSelectAddress'));
-      return;
+    // Validate address - for guests, check inline form; for users, check selected address
+    if (isGuestCheckout) {
+      if (!newAddress.address_line.trim() || !newAddress.city.trim() || !newAddress.country.trim()) {
+        alert(locale === 'tr' ? 'Lütfen teslimat adresini girin' : 'Please enter delivery address');
+        return;
+      }
+    } else {
+      if (!selectedDeliveryAddressId) {
+        alert(t('pleaseSelectAddress'));
+        return;
+      }
+      if (!sameAsDelivery && !selectedBillingAddressId) {
+        alert(t('pleaseSelectAddress'));
+        return;
+      }
     }
 
     // Validate card information if payment method is card
@@ -495,17 +575,37 @@ export default function CheckoutPage() {
 
     setProcessingOrder(true);
     try {
-      const userId = (session?.user as any)?.id || session?.user?.email;
+      const userId = isGuestCheckout ? `guest_${Date.now()}` : ((session?.user as any)?.id || session?.user?.email);
 
-      // Get selected addresses
-      const deliveryAddress = addresses.find(addr => addr.id === selectedDeliveryAddressId);
-      const billingAddress = sameAsDelivery
-        ? deliveryAddress
-        : addresses.find(addr => addr.id === selectedBillingAddressId);
+      // Get addresses - for guests use inline form, for users use selected
+      let deliveryAddress: Address;
+      let billingAddress: Address;
 
-      if (!deliveryAddress || !billingAddress) {
-        alert(locale === 'tr' ? 'Adres bilgisi eksik' : 'Address information missing');
-        return;
+      if (isGuestCheckout) {
+        // Create address object from inline form for guest
+        deliveryAddress = {
+          id: 'guest-delivery',
+          title: 'Teslimat Adresi',
+          first_name: userInfo.firstName,
+          last_name: userInfo.lastName,
+          phone: userInfo.phone,
+          address: newAddress.address_line,
+          city: newAddress.city,
+          postal_code: newAddress.postal_code,
+          country: newAddress.country,
+          isDefault: true
+        };
+        billingAddress = deliveryAddress;
+      } else {
+        deliveryAddress = addresses.find(addr => addr.id === selectedDeliveryAddressId)!;
+        billingAddress = sameAsDelivery
+          ? deliveryAddress
+          : addresses.find(addr => addr.id === selectedBillingAddressId)!;
+
+        if (!deliveryAddress || !billingAddress) {
+          alert(locale === 'tr' ? 'Adres bilgisi eksik' : 'Address information missing');
+          return;
+        }
       }
 
       // For bank transfer, create order directly
@@ -569,15 +669,15 @@ export default function CheckoutPage() {
         // Buyer information
         buyer: {
           id: userId,
-          name: cardHolderName.split(' ')[0] || 'Customer',
-          surname: cardHolderName.split(' ').slice(1).join(' ') || 'User',
-          email: session?.user?.email || '',
+          name: userInfo.firstName || cardHolderName.split(' ')[0] || 'Customer',
+          surname: userInfo.lastName || cardHolderName.split(' ').slice(1).join(' ') || 'User',
+          email: isGuestCheckout ? userInfo.email : (session?.user?.email || ''),
           identityNumber: '11111111111', // Test identity number for sandbox
           registrationAddress: deliveryAddress.address,
           city: deliveryAddress.city,
           country: deliveryAddress.country,
           ip: buyerIp,
-          gsmNumber: userPhone || deliveryAddress.phone || '+905555555555'
+          gsmNumber: userInfo.phone || userPhone || deliveryAddress.phone || '+905555555555'
         },
 
         // Shipping address
@@ -658,12 +758,19 @@ export default function CheckoutPage() {
       if (result.success && result.threeDSHtmlContent) {
         // Decode base64 HTML content
         let decodedHtml = result.threeDSHtmlContent;
+        console.log('Raw threeDSHtmlContent:', result.threeDSHtmlContent);
+        console.log('Raw content type:', typeof result.threeDSHtmlContent);
+        console.log('Raw content length:', result.threeDSHtmlContent.length);
+
         try {
           // Check if it's base64 encoded
           decodedHtml = atob(result.threeDSHtmlContent);
-          console.log('Decoded HTML preview:', decodedHtml.substring(0, 200));
+          console.log('Successfully decoded from base64');
+          console.log('Decoded HTML preview:', decodedHtml.substring(0, 500));
+          console.log('Decoded HTML full length:', decodedHtml.length);
         } catch (e) {
           console.log('Content is not base64, using as-is');
+          console.log('Error:', e);
         }
 
         // Store 3D Secure HTML in localStorage
@@ -672,6 +779,13 @@ export default function CheckoutPage() {
         // Store checkout data for order creation after payment
         localStorage.setItem('checkoutData', JSON.stringify({
           userId: userId,
+          isGuestCheckout: isGuestCheckout,
+          guestInfo: isGuestCheckout ? {
+            email: userInfo.email,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            phone: userInfo.phone
+          } : null,
           cartItems: cartItems,
           deliveryAddress: deliveryAddress,
           billingAddress: billingAddress,
@@ -680,14 +794,29 @@ export default function CheckoutPage() {
           originalPrice: subtotal.toFixed(2)
         }));
 
-        // Open 3D Secure page in new tab
-        const threeDSUrl = `/${locale}/payment/3ds`;
-        window.open(threeDSUrl, '_blank', 'width=600,height=800,scrollbars=yes');
-
-        // Show info message
-        alert(locale === 'tr'
-          ? '3D Secure do\u011frulama sayfas\u0131 a\u00e7\u0131ld\u0131. L\u00fctfen yeni sekmede i\u015flemi tamamlay\u0131n.'
-          : '3D Secure page opened. Please complete authentication in the new tab.');
+        // Open 3DS in a centered popup window and write HTML into it
+        try {
+          const w = 480;
+          const h = 720;
+          const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : (window as any).screenX;
+          const dualScreenTop = window.screenTop !== undefined ? window.screenTop : (window as any).screenY;
+          const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+          const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+          const left = ((width - w) / 2) + dualScreenLeft;
+          const top = ((height - h) / 2) + dualScreenTop;
+          const features = `scrollbars=yes,resizable=yes,width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no,location=no,status=no`;
+          const popup = window.open('', 'iyzico_3ds_popup', features);
+          if (!popup) {
+            alert(locale === 'tr' ? 'Lütfen açılır pencereyi (popup) engellemeyi kapatın.' : 'Please allow popups to continue.');
+          } else {
+            popup.document.open();
+            popup.document.write(decodedHtml);
+            popup.document.close();
+            popup.focus();
+          }
+        } catch (e) {
+          console.error('Could not open 3DS popup:', e);
+        }
       } else {
         throw new Error('3D Secure initialization failed');
       }
@@ -1010,10 +1139,12 @@ export default function CheckoutPage() {
               />
               <input
                 type="email"
-                placeholder={t('email')}
+                placeholder={t('email') + (isGuestCheckout ? ' *' : '')}
                 value={userInfo.email}
-                className={`${classes.input} ${classes.readOnly}`}
-                readOnly
+                onChange={(e) => isGuestCheckout && setUserInfo({ ...userInfo, email: e.target.value })}
+                className={`${classes.input} ${!isGuestCheckout ? classes.readOnly : ''}`}
+                readOnly={!isGuestCheckout}
+                required={isGuestCheckout}
               />
             </div>
           </div>
@@ -1026,7 +1157,50 @@ export default function CheckoutPage() {
             </div>
 
             <div className={classes.addressList}>
-              {addresses.length === 0 ? (
+              {isGuestCheckout ? (
+                /* Guest checkout - simple inline address form, no saving */
+                <div className={classes.guestAddressForm}>
+                  <p className={classes.guestAddressNote}>
+                    {locale === 'tr' ? 'Teslimat adresinizi girin (kayıt yapılmayacak)' :
+                      locale === 'ru' ? 'Введите адрес доставки (не сохраняется)' :
+                        locale === 'pl' ? 'Wprowadź adres dostawy (nie zostanie zapisany)' :
+                          'Enter your delivery address (will not be saved)'}
+                  </p>
+                  <div className={classes.formGrid}>
+                    <input
+                      type="text"
+                      placeholder={t('addressLine') + ' *'}
+                      value={newAddress.address_line}
+                      onChange={(e) => setNewAddress({ ...newAddress, address_line: e.target.value })}
+                      className={classes.input}
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder={t('city') + ' *'}
+                      value={newAddress.city}
+                      onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
+                      className={classes.input}
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder={t('country') + ' *'}
+                      value={newAddress.country}
+                      onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })}
+                      className={classes.input}
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder={t('postalCode')}
+                      value={newAddress.postal_code}
+                      onChange={(e) => setNewAddress({ ...newAddress, postal_code: e.target.value })}
+                      className={classes.input}
+                    />
+                  </div>
+                </div>
+              ) : addresses.length === 0 ? (
                 <div className={classes.noAddresses}>
                   <p>
                     {locale === 'tr' ? 'Henüz kayıtlı adresiniz yok' :
@@ -1539,7 +1713,13 @@ export default function CheckoutPage() {
             {/* Complete Order Button */}
             <button
               onClick={handleCompleteOrder}
-              disabled={processingOrder || !selectedDeliveryAddressId || (!sameAsDelivery && !selectedBillingAddressId)}
+              disabled={
+                processingOrder ||
+                (isGuestCheckout
+                  ? (!newAddress.address_line.trim() || !newAddress.city.trim() || !newAddress.country.trim() || !userInfo.email.trim())
+                  : (!selectedDeliveryAddressId || (!sameAsDelivery && !selectedBillingAddressId))
+                )
+              }
               className={classes.completeOrderBtn}
             >
               {processingOrder ? (
@@ -1571,6 +1751,7 @@ export default function CheckoutPage() {
         deliveryAddress={addresses.find(addr => addr.id === selectedDeliveryAddressId)}
         cartItems={cartItems}
       />
+
     </div>
   );
 }
