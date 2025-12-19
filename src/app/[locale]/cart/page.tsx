@@ -110,6 +110,34 @@ export default function CartPage() {
       const itemsWithDetails = await Promise.all(
         guestCart.map(async (item) => {
           try {
+            // If variant_sku exists, fetch variant details for correct price
+            if (item.variant_sku) {
+              const variantResponse = await fetch(
+                `/api/cart/get-variant?variant_sku=${item.variant_sku}&product_sku=${item.product_sku}`
+              );
+
+              if (variantResponse.ok) {
+                const variantData = await variantResponse.json();
+                const variant = variantData.variant;
+                const variantImage = variantData.primary_image;
+                const product = variantData.product;
+
+                return {
+                  ...item,
+                  id: item.id as any,
+                  product_category: item.product_category,
+                  variant_attributes: variantData.variant_attributes || {},
+                  product: {
+                    title: product?.title || item.product_sku,
+                    price: item.custom_price || variant?.variant_price || product?.price || null,
+                    primary_image: variantImage || product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                    category: item.product_category,
+                  },
+                };
+              }
+            }
+
+            // No variant or variant fetch failed, get product only
             const productResponse = await fetch(
               `/api/cart/get-product?product_sku=${item.product_sku}`
             );
@@ -118,7 +146,7 @@ export default function CartPage() {
               const product = productData.product;
               return {
                 ...item,
-                id: item.id as any, // Keep string ID for guests
+                id: item.id as any,
                 product_category: productData.product_category || item.product_category,
                 product: {
                   title: product?.title || item.product_sku,

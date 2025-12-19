@@ -56,6 +56,7 @@ export async function POST(request: Request) {
             user.email,
             'Reset Your Password',
             `
+        <p>Hello <strong>${user.name || user.email.split('@')[0]}</strong>,</p>
         <p>You requested a password reset.</p>
         <p>Click the link below to reset your password:</p>
         <a href="${resetUrl}">${resetUrl}</a>
