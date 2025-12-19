@@ -68,11 +68,44 @@ export default async function Page(props: PageProps<'/[locale]/order/[order_id]'
                         <tbody>
                             {order.items.map((item: OrderItem) => (
                                 <tr key={item.id} className="even:bg-gray-50 text-sm text-center">
-
-                                    <td className="px-4 py-2 border-b"><Link href={`/product/${item.product_category}/${item.product_sku}`} className="block bg-teal-50 hover:bg-teal-100 text-blue-900 font-semibold rounded px-3 py-2 transition-colors duration-150 no-underline" >{item.product_title}</Link></td>
+                                    <td className="px-4 py-2 border-b">
+                                        <div className="flex flex-col items-start gap-1">
+                                            <Link href={`/product/${item.product_category}/${item.product_sku}`} className="block bg-teal-50 hover:bg-teal-100 text-blue-900 font-semibold rounded px-3 py-2 transition-colors duration-150 no-underline">
+                                                {item.product_title}
+                                            </Link>
+                                            {item.is_custom_curtain && (
+                                                <div className="flex flex-col items-start gap-1 mt-1">
+                                                    <span className="inline-block px-2 py-0.5 bg-purple-600 text-white text-xs font-bold rounded-full">
+                                                        ✂️ ÖZEL PERDE
+                                                    </span>
+                                                    {item.custom_attributes && (
+                                                        <div className="text-xs text-gray-600 text-left mt-1 bg-purple-50 p-2 rounded">
+                                                            {item.custom_attributes.width && item.custom_attributes.height && (
+                                                                <p className="mb-0.5">📏 Boyut: {item.custom_attributes.width}cm x {item.custom_attributes.height}cm</p>
+                                                            )}
+                                                            {item.custom_attributes.pleat_type && (
+                                                                <p className="mb-0.5">🧵 Pile: {item.custom_attributes.pleat_type}</p>
+                                                            )}
+                                                            {item.custom_attributes.pleat_density && (
+                                                                <p className="mb-0.5">📊 Pile Sıklığı: {item.custom_attributes.pleat_density}</p>
+                                                            )}
+                                                            {item.custom_attributes.mounting_type && (
+                                                                <p className="mb-0.5">🔧 Montaj: {item.custom_attributes.mounting_type === 'cornice' ? 'Korniş' : 'Rustik'}</p>
+                                                            )}
+                                                            {item.custom_attributes.wing_type && (
+                                                                <p>🪟 Kanat: {item.custom_attributes.wing_type === 'single' ? 'Tek' : 'Çift'}</p>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                    {item.custom_fabric_used_meters && (
+                                                        <p className="text-xs text-purple-700 font-medium">🧶 Kumaş: {item.custom_fabric_used_meters} metre</p>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </td>
 
                                     <td className="px-4 py-2 border-b">{Number(item.quantity)} {item.unit_of_measurement}</td>
-                                    {/* <td className="px-4 py-2 border-b">{item.status}</td> */}
                                     <td className={`px-4 py-2 border-b`}>
                                         <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${getStatusClass(item.status)}`}>
                                             {item.status

@@ -19,6 +19,17 @@ interface OrderItem {
   price: string | null;
   subtotal: string | null;
   status: string;
+  // Custom Curtain Fields
+  is_custom_curtain?: boolean;
+  custom_fabric_used_meters?: string | null;
+  custom_attributes?: {
+    mounting_type?: string | null;
+    pleat_type?: string | null;
+    pleat_density?: string | null;
+    width?: string | null;
+    height?: string | null;
+    wing_type?: string | null;
+  } | null;
 }
 
 interface Order {
@@ -1791,6 +1802,49 @@ export default function ProfilePage() {
                               </span>
                               {item.variant_sku && (
                                 <span className={classes.variantSku}>SKU: {item.variant_sku}</span>
+                              )}
+                              {/* Custom Curtain Badge & Details */}
+                              {item.is_custom_curtain && (
+                                <div style={{ marginTop: '0.5rem' }}>
+                                  <span style={{
+                                    display: 'inline-block',
+                                    padding: '0.2rem 0.6rem',
+                                    background: '#7c3aed',
+                                    color: 'white',
+                                    fontSize: '0.7rem',
+                                    fontWeight: 700,
+                                    borderRadius: '9999px',
+                                    marginBottom: '0.4rem'
+                                  }}>
+                                    ✂️ ÖZEL PERDE
+                                  </span>
+                                  {item.custom_attributes && (
+                                    <div style={{
+                                      background: '#f5f3ff',
+                                      padding: '0.4rem',
+                                      borderRadius: '6px',
+                                      fontSize: '0.75rem',
+                                      color: '#5b21b6',
+                                      lineHeight: '1.4'
+                                    }}>
+                                      {item.custom_attributes.width && item.custom_attributes.height && (
+                                        <div>📏 {item.custom_attributes.width}cm x {item.custom_attributes.height}cm</div>
+                                      )}
+                                      {item.custom_attributes.pleat_type && (
+                                        <div>🧵 Pile: {item.custom_attributes.pleat_type}</div>
+                                      )}
+                                      {item.custom_attributes.pleat_density && (
+                                        <div>📊 Pile Sıklığı: {item.custom_attributes.pleat_density}</div>
+                                      )}
+                                      {item.custom_attributes.mounting_type && (
+                                        <div>🔧 {item.custom_attributes.mounting_type === 'cornice' ? 'Korniş' : 'Rustik'}</div>
+                                      )}
+                                      {item.custom_fabric_used_meters && (
+                                        <div style={{ fontWeight: 600, color: '#7c3aed' }}>🧶 {item.custom_fabric_used_meters}m</div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                               )}
                             </div>
                             <div className={classes.productQty}>

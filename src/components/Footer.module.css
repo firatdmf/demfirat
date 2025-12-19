@@ -176,23 +176,55 @@
 .bottomContent {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1.25rem 2rem;
-  display: flex;
-  justify-content: space-between;
+  padding: 1rem 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 2rem;
+}
+
+.etbiseImage {
+  height: 80px !important;
+  width: auto !important;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+}
+
+.leftContent {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .copyright {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.5);
   margin: 0;
+  text-align: center;
+}
+
+.etbiseRegistered {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.etbiseImage {
+  height: 40px;
+  width: auto;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.etbiseImage:hover {
+  opacity: 1;
 }
 
 .paymentBadge {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .iyzicoLogo {
@@ -203,6 +235,10 @@
 }
 
 .iyzicoLogo:hover {
+  opacity: 1;
+}
+
+.etbiseImage:hover {
   opacity: 1;
 }
 
@@ -271,8 +307,7 @@
   }
 
   .bottomContent {
-    flex-direction: column;
-    text-align: center;
+    grid-template-columns: 1fr;
     padding: 1rem 1.5rem;
   }
 
@@ -281,6 +316,11 @@
   }
 
   .paymentBadge {
+    order: 3;
+    justify-content: center;
+  }
+
+  .etbiseImage {
     order: 1;
   }
 }
@@ -307,5 +347,13 @@
 
   .iyzicoLogo {
     height: 24px;
+  }
+
+  .bottomContent {
+    grid-template-columns: 1fr;
+  }
+
+  .etbiseImage {
+    height: 60px !important;
   }
 }

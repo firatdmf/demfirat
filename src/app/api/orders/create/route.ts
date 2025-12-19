@@ -86,8 +86,11 @@ export async function POST(request: NextRequest) {
             }
           }
           const widthMeters = width / 100;
-          fabricMeters = widthMeters * densityMultiplier * (wingType === 'double' ? 2 : 1);
-          quantity = fabricMeters; // reflect meters as quantity for custom curtain
+          // Calculate fabric for 1 curtain
+          let fabricPerCurtain = widthMeters * densityMultiplier * (wingType === 'double' ? 2 : 1);
+          // Total fabric = fabric per curtain * quantity (number of curtains)
+          fabricMeters = fabricPerCurtain * quantity;
+          // Keep the actual quantity from cart (number of curtains ordered)
           price = item.custom_price ?? price;
         }
 

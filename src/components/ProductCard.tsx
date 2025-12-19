@@ -2,7 +2,7 @@
 import classes from "@/components/ProductCard.module.css";
 import Link from "next/link";
 import { usePathname, useRouter } from 'next/navigation'
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import { useSession } from 'next-auth/react';
 import { useFavorites } from '@/contexts/FavoriteContext';
 
@@ -31,6 +31,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
   const { data: session } = useSession();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
 
   // Renk ve kumaş attribute'larını al
   const colorAttribute = useMemo(() => 
@@ -180,6 +182,28 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     }
   }, [product.primary_image, product.sku]);
 
+  // Fetch review stats for product
+  useEffect(() => {
+    const fetchReviewStats = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_product_reviews/${product.sku}/`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setAverageRating(data.average_rating || 0);
+          setReviewCount(data.total_count || 0);
+        }
+      } catch (error) {
+        console.error('Error fetching review stats:', error);
+      }
+    };
+
+    if (product.sku) {
+      fetchReviewStats();
+    }
+  }, [product.sku]);
+
   const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);
 
@@ -319,6 +343,31 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 </span>
               )}
             </div>
+
+            {/* Review Stars and Count */}
+            {reviewCount > 0 && (
+              <div className={classes.reviewStats}>
+                <div className={classes.starsContainer}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    i < Math.floor(averageRating) ? (
+                      <span key={i} className={classes.filledStar}>★</span>
+                    ) : (
+                      <span key={i} className={classes.emptyStar}>☆</span>
+                    )
+                  ))}
+                </div>
+                <span className={classes.ratingText}>
+                  {averageRating.toFixed(1)} ({reviewCount} {(() => {
+                    switch(locale) {
+                      case 'tr': return 'yorum';
+                      case 'ru': return 'отзывов';
+                      case 'pl': return 'opinii';
+                      default: return 'reviews';
+                    }
+                  })()})
+                </span>
+              </div>
+            )}
 
             {/* Price Section */}
             <div className={classes.priceSection}>
@@ -472,4 +521,4 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

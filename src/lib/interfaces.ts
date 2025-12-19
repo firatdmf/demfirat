@@ -105,10 +105,22 @@ export type OrderItem = {
   product_category: string;
   product_sku: string;
   product_title: string;
+  product_image?: string | null;
   description: string | null;
   quantity: Decimal;
   status: string;
   unit_of_measurement: string;
+  // Custom Curtain Fields
+  is_custom_curtain?: boolean;
+  custom_fabric_used_meters?: string | null;
+  custom_attributes?: {
+    mounting_type?: string | null;
+    pleat_type?: string | null;
+    pleat_density?: string | null;
+    width?: string | null;
+    height?: string | null;
+    wing_type?: string | null;
+  } | null;
 }
 
 // ----------------------------------------------------------------------

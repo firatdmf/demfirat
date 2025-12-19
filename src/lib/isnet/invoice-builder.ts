@@ -72,29 +72,34 @@ export class InvoiceBuilder {
     // Toplamları hesapla
     const totals = this.calculateTotals(invoiceDetails);
 
-    // Alıcı bilgilerini oluştur - ALFABETIK SIRA ÖNEMLİ!
+    // CRITICAL: İşNet SOAP API - SADECE değeri olan alanları gönder!
+    // Boş string ('') gönderilirse NullReferenceException alınır
+    // Dokümantasyon: "tagların alfabetik sıralamaya göre uygun şekilde gönderilmesi gerekmektedir"
+
+    // Address - SADECE zorunlu ve dolu olan alanlar
+    const address: Address = {
+      BoulevardAveneuStreetName: this.sanitizeText(orderData.customer.address),
+      // BuildingName ve BuildingNumber opsiyonel, boş gönderme
+      CityCode: this.getCityCode(orderData.customer.city),
+      CityName: this.sanitizeText(orderData.customer.city),
+      // CountryName opsiyonel, dokümanda yok
+      Email: orderData.customer.email,
+      // FaxNumber opsiyonel, boş gönderme
+      PostalCode: parseInt(orderData.customer.postalCode || '34000', 10),  // decimal/number olmalı
+      // TaxOfficeCode ve TaxOfficeName opsiyonel
+      TelephoneNumber: orderData.customer.phone,
+      TownCode: this.getTownCode(orderData.customer.city, orderData.customer.district),
+      TownName: orderData.customer.district ? this.sanitizeText(orderData.customer.district) : 'Merkez'
+      // WebSite opsiyonel, boş gönderme
+    };
+
+    // AddressBookEntry - Alfabetik sırada (A-Z)
     const receiver: AddressBookEntry = {
-      Address: {
-        BoulevardAveneuStreetName: this.sanitizeText(orderData.customer.address),
-        // BuildingName: undefined, // Opsiyonel
-        // BuildingNumber: undefined, // Opsiyonel
-        CityCode: this.getCityCode(orderData.customer.city),  // ZORUNLU - İl kodu
-        CityName: this.sanitizeText(orderData.customer.city),
-        CountryName: 'Turkiye',
-        Email: orderData.customer.email,
-        // FaxNumber: undefined, // Opsiyonel
-        PostalCode: orderData.customer.postalCode || '34000',
-        // TaxOfficeCode: undefined, // Opsiyonel
-        // TaxOfficeName: undefined, // Opsiyonel
-        TelephoneNumber: orderData.customer.phone,
-        TownCode: this.getTownCode(orderData.customer.city, orderData.customer.district),  // ZORUNLU - İlçe kodu
-        TownName: orderData.customer.district ? this.sanitizeText(orderData.customer.district) : 'Merkez'
-        // WebSite: undefined // Opsiyonel
-      },
+      Address: address,
       ReceiverName: this.sanitizeText(orderData.customer.name),
       ReceiverTaxCode: orderData.customer.taxNumber,
-      RecipientType: RecipientType.Earsiv,  // E-Arşiv fatura
-      SendingType: SendingType.Elektronik   // Elektronik gönderim
+      RecipientType: RecipientType.Earsiv,
+      SendingType: SendingType.Elektronik
     };
 
     // İnternet satış bilgileri (e-Arşiv için zorunlu)

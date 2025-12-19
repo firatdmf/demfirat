@@ -491,13 +491,16 @@ export default function CheckoutPage() {
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) => {
       let price = 0;
-      // Özel perde ise custom_price kullan
+      const quantity = parseFloat(item.quantity);
+
+      // Özel perde ise custom_price kullan (1 adet perde fiyatı)
       if (item.is_custom_curtain && item.custom_price) {
         price = parseFloat(String(item.custom_price));
       } else if (item.product?.price) {
         price = parseFloat(String(item.product.price));
       }
-      const quantity = parseFloat(item.quantity);
+
+      // Her iki durumda da: fiyat * adet
       return sum + (price * quantity);
     }, 0);
   };
@@ -699,20 +702,20 @@ export default function CheckoutPage() {
         // Basket items (convert to TRY)
         basketItems: cartItems.map((item, index) => {
           let itemTotalUSD = 0;
+          const quantity = parseFloat(item.quantity);
 
           if (item.is_custom_curtain) {
-            // Custom curtain: use custom_price if available
+            // Custom curtain: custom_price is price for 1 curtain, multiply by quantity
             if (!item.custom_price) {
               console.warn(`Custom curtain item ${index} has no custom_price!`);
               // Fallback: use product price as minimum
-              itemTotalUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
+              itemTotalUSD = item.product?.price ? parseFloat(String(item.product.price)) * quantity : 0;
             } else {
-              itemTotalUSD = parseFloat(String(item.custom_price));
+              itemTotalUSD = parseFloat(String(item.custom_price)) * quantity;
             }
           } else {
             // Regular product: calculate from product price and quantity
             const priceUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
-            const quantity = parseFloat(item.quantity);
             itemTotalUSD = priceUSD * quantity;
           }
 

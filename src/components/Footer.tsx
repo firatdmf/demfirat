@@ -149,6 +149,11 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       {/* Bottom Bar */}
       <div className={classes.bottomBar}>
         <div className={classes.bottomContent}>
+          <img
+            src="/image/etbis.jpg"
+            alt="Etbise Kayıtlıdır"
+            className={classes.etbiseImage}
+          />
           <p className={classes.copyright}>
             © {currentYear} Dem Fırat Karven Tekstil San. Tic. Ltd. Şti. | {AllRightsReserved}
           </p>

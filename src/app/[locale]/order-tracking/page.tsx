@@ -7,10 +7,22 @@ import styles from './page.module.css';
 interface OrderItem {
     product_sku: string;
     product_title: string;
+    product_image?: string | null;
     variant_sku: string | null;
     quantity: string;
     price: string;
     status: string;
+    // Custom Curtain Fields
+    is_custom_curtain?: boolean;
+    custom_fabric_used_meters?: string | null;
+    custom_attributes?: {
+        mounting_type?: string | null;
+        pleat_type?: string | null;
+        pleat_density?: string | null;
+        width?: string | null;
+        height?: string | null;
+        wing_type?: string | null;
+    } | null;
 }
 
 interface OrderData {
@@ -223,6 +235,49 @@ export default function OrderTrackingPage() {
                                         <p className={styles.itemSku}>
                                             SKU: {item.variant_sku || item.product_sku}
                                         </p>
+                                        {/* Custom Curtain Badge & Details */}
+                                        {item.is_custom_curtain && (
+                                            <div style={{ marginTop: '0.5rem' }}>
+                                                <span style={{
+                                                    display: 'inline-block',
+                                                    padding: '0.25rem 0.75rem',
+                                                    background: '#7c3aed',
+                                                    color: 'white',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: 700,
+                                                    borderRadius: '9999px',
+                                                    marginBottom: '0.5rem'
+                                                }}>
+                                                    ✂️ ÖZEL PERDE
+                                                </span>
+                                                {item.custom_attributes && (
+                                                    <div style={{
+                                                        background: '#f5f3ff',
+                                                        padding: '0.5rem',
+                                                        borderRadius: '6px',
+                                                        fontSize: '0.8rem',
+                                                        color: '#5b21b6',
+                                                        lineHeight: '1.5'
+                                                    }}>
+                                                        {item.custom_attributes.width && item.custom_attributes.height && (
+                                                            <div>📏 Boyut: {item.custom_attributes.width}cm x {item.custom_attributes.height}cm</div>
+                                                        )}
+                                                        {item.custom_attributes.pleat_type && (
+                                                            <div>🧵 Pile: {item.custom_attributes.pleat_type}</div>
+                                                        )}
+                                                        {item.custom_attributes.pleat_density && (
+                                                            <div>📊 Pile Sıklığı: {item.custom_attributes.pleat_density}</div>
+                                                        )}
+                                                        {item.custom_attributes.mounting_type && (
+                                                            <div>🔧 Montaj: {item.custom_attributes.mounting_type === 'cornice' ? 'Korniş' : 'Rustik'}</div>
+                                                        )}
+                                                        {item.custom_fabric_used_meters && (
+                                                            <div style={{ fontWeight: 600, color: '#7c3aed' }}>🧶 Kumaş: {item.custom_fabric_used_meters} metre</div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                     <div className={styles.itemDetails}>
                                         <span>{t('quantity')}: {item.quantity}</span>
