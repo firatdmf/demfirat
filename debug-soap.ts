@@ -36,7 +36,8 @@ console.log('=== GENERATED INVOICE ===');
 console.log(JSON.stringify(invoice, null, 2));
 
 // Check for null/undefined values
-function checkNulls(obj, path = '') {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function checkNulls(obj: any, path = ''): void {
     for (const [key, value] of Object.entries(obj)) {
         const currentPath = path ? `${path}.${key}` : key;
         if (value === null || value === undefined) {
