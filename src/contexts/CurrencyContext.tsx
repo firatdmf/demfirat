@@ -35,7 +35,7 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         PLN: 'zł',
     };
 
-    // Fetch rates with retry and fallback
+    // Fetch rates with retry and fallback to localStorage
     const fetchRates = async (retryCount = 0) => {
         try {
             // Add timestamp to prevent caching
@@ -46,6 +46,13 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 const data = await response.json();
                 if (data.success && data.rates && data.rates.length > 0) {
                     setRates(data.rates);
+                    // Save to localStorage for fallback
+                    try {
+                        localStorage.setItem('lastExchangeRates', JSON.stringify(data.rates));
+                        localStorage.setItem('lastExchangeRatesTime', Date.now().toString());
+                    } catch (e) {
+                        console.warn('Could not save rates to localStorage:', e);
+                    }
                     console.log('Exchange rates loaded successfully');
                 } else {
                     throw new Error('Invalid rate data received');
@@ -61,6 +68,19 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 console.log('Retrying rate fetch in 2 seconds...');
                 setTimeout(() => fetchRates(1), 2000);
             } else {
+                // Try to load from localStorage as fallback
+                try {
+                    const savedRates = localStorage.getItem('lastExchangeRates');
+                    if (savedRates) {
+                        const parsedRates = JSON.parse(savedRates);
+                        setRates(parsedRates);
+                        console.log('Loaded exchange rates from localStorage fallback');
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('Could not load rates from localStorage:', e);
+                }
+
                 console.warn('Failed to fetch rates after retry. Switching to USD.');
                 // Force currency to USD on failure
                 setCurrency('USD');

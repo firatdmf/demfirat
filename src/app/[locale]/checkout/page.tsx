@@ -60,7 +60,7 @@ export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const locale = useLocale();
   const { refreshCart, guestCart, clearGuestCart, isGuest } = useCart();
-  const { convertPrice } = useCurrency();
+  const { convertPrice, rates } = useCurrency();
 
   // Guest checkout mode
   const isGuestCheckout = searchParams.get('guest') === 'true';
@@ -1013,7 +1013,26 @@ export default function CheckoutPage() {
   }
 
   const subtotal = calculateSubtotal();
-  const shipping = 0; // Free shipping
+
+  // Shipping calculation with live exchange rate
+  // FREE_SHIPPING_THRESHOLD_TL = 2000 TL
+  // SHIPPING_COST_TL = 70 TL
+  const FREE_SHIPPING_THRESHOLD_TL = 2000;
+  const SHIPPING_COST_TL = 70;
+
+  // Get TRY exchange rate from rates array
+  const tryRate = rates.find(r => r.currency_code === 'TRY');
+  const exchangeRate = tryRate?.rate || 35; // Fallback to ~35 if rate not available
+
+  // Convert subtotal USD to TL
+  const subtotalInTL = subtotal * exchangeRate;
+
+  // Calculate shipping: Free if >= 2000 TL, otherwise 70 TL (converted back to USD)
+  let shipping = 0;
+  if (subtotalInTL < FREE_SHIPPING_THRESHOLD_TL) {
+    shipping = SHIPPING_COST_TL / exchangeRate; // Convert 70 TL to USD
+  }
+
   const total = subtotal + shipping;
 
   return (
@@ -1661,7 +1680,9 @@ export default function CheckoutPage() {
               </div>
               <div className={classes.summaryRow}>
                 <span>{t('shipping')}</span>
-                <span className={classes.freeShipping}>{t('free')}</span>
+                <span className={shipping === 0 ? classes.freeShipping : ''}>
+                  {shipping === 0 ? t('free') : formatPrice(shipping)}
+                </span>
               </div>
               <div className={classes.summaryDivider}></div>
               <div className={`${classes.summaryRow} ${classes.summaryTotal}`}>

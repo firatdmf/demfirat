@@ -24,9 +24,10 @@ interface ProductCardProps {
   variantAttributes?: any[];  // product_variant_attributes
   variantAttributeValues?: any[];  // product_variant_attribute_values
   productVariants?: any[];  // product_variants
+  fabricType?: 'solid' | 'embroidery' | string; // For discount display
 }
 
-function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], productVariants = [] }: ProductCardProps) {
+function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], productVariants = [], fabricType }: ProductCardProps) {
   const { convertPrice } = useCurrency();
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
   const { data: session } = useSession();
@@ -35,18 +36,18 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const [reviewCount, setReviewCount] = useState(0);
 
   // Renk ve kumaş attribute'larını al
-  const colorAttribute = useMemo(() => 
+  const colorAttribute = useMemo(() =>
     variantAttributes.find(attr => attr.name?.toLowerCase() === 'color'),
     [variantAttributes]
   );
-  
-  const fabricAttribute = useMemo(() => 
+
+  const fabricAttribute = useMemo(() =>
     variantAttributes.find(attr => attr.name?.toLowerCase() === 'fabric' || attr.name?.toLowerCase() === 'kumaş'),
     [variantAttributes]
   );
 
   // Genişlik (width) attribute'ını al
-  const widthAttribute = useMemo(() => 
+  const widthAttribute = useMemo(() =>
     variantAttributes.find(attr => attr.name?.toLowerCase() === 'width' || attr.name?.toLowerCase() === 'genişlik'),
     [variantAttributes]
   );
@@ -54,11 +55,11 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   // Renk değerlerini al - SADECE bu ürünün varyantlarında kullanılan renkleri
   const colorValues = useMemo(() => {
     if (!colorAttribute || !productVariants.length) return [];
-    
+
     // Bu ürünün varyantlarını filtrele
     const productSpecificVariants = productVariants.filter(v => v.product_id === product.id);
     if (!productSpecificVariants.length) return [];
-    
+
     // Bu varyantlarda kullanılan attribute value ID'lerini topla
     const usedValueIds = new Set<number>();
     productSpecificVariants.forEach(variant => {
@@ -68,15 +69,15 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         });
       }
     });
-    
+
     // Sadece kullanılan value ID'leri filtrele ve renk attribute'\u0131naait olanları al
     const colorValuesForAttr = variantAttributeValues
-      .filter(val => 
-        val.product_variant_attribute_id === colorAttribute.id && 
+      .filter(val =>
+        val.product_variant_attribute_id === colorAttribute.id &&
         usedValueIds.has(val.id)
       )
       .map(val => val.product_variant_attribute_value?.trim() || '');
-    
+
     // Unique values
     return Array.from(new Set(colorValuesForAttr)).filter(v => v.length > 0);
   }, [colorAttribute, variantAttributeValues, productVariants, product.id]);
@@ -84,11 +85,11 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   // Kumaş değerlerini al - SADECE bu ürünün varyantlarında kullanılan kumaşları
   const fabricValues = useMemo(() => {
     if (!fabricAttribute || !productVariants.length) return [];
-    
+
     // Bu ürünün varyantlarını filtrele
     const productSpecificVariants = productVariants.filter(v => v.product_id === product.id);
     if (!productSpecificVariants.length) return [];
-    
+
     // Bu varyantlarda kullanılan attribute value ID'lerini topla
     const usedValueIds = new Set<number>();
     productSpecificVariants.forEach(variant => {
@@ -98,15 +99,15 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         });
       }
     });
-    
+
     // Sadece kullanılan value ID'leri filtrele ve kumaş attribute'\u0131na ait olanları al
     const fabricValuesForAttr = variantAttributeValues
-      .filter(val => 
-        val.product_variant_attribute_id === fabricAttribute.id && 
+      .filter(val =>
+        val.product_variant_attribute_id === fabricAttribute.id &&
         usedValueIds.has(val.id)
       )
       .map(val => val.product_variant_attribute_value?.trim() || '');
-    
+
     // Unique values
     return Array.from(new Set(fabricValuesForAttr)).filter(v => v.length > 0);
   }, [fabricAttribute, variantAttributeValues, productVariants, product.id]);
@@ -114,11 +115,11 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   // Genişlik değerlerini al - SADECE bu ürünün varyantlarında kullanılanları
   const widthValues = useMemo(() => {
     if (!widthAttribute || !productVariants.length) return [];
-    
+
     // Bu ürünün varyantlarını filtrele
     const productSpecificVariants = productVariants.filter(v => v.product_id === product.id);
     if (!productSpecificVariants.length) return [];
-    
+
     // Bu varyantlarda kullanılan attribute value ID'lerini topla
     const usedValueIds = new Set<number>();
     productSpecificVariants.forEach(variant => {
@@ -128,22 +129,22 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         });
       }
     });
-    
+
     // Sadece kullanılan value ID'leri filtrele ve genişlik attribute'\u0131na ait olanları al
     const widthValuesForAttr = variantAttributeValues
-      .filter(val => 
-        val.product_variant_attribute_id === widthAttribute.id && 
+      .filter(val =>
+        val.product_variant_attribute_id === widthAttribute.id &&
         usedValueIds.has(val.id)
       )
       .map(val => val.product_variant_attribute_value?.trim() || '');
-    
+
     // Unique values ve sayıya dönüştür
     const uniqueWidths = Array.from(new Set(widthValuesForAttr)).filter(v => v.length > 0);
     const numericWidths = uniqueWidths
       .map(w => parseFloat(w))
       .filter(n => !isNaN(n))
       .sort((a, b) => a - b);
-    
+
     return numericWidths;
   }, [widthAttribute, variantAttributeValues, productVariants, product.id]);
 
@@ -211,6 +212,24 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const formatPrice = (price: string | number) => {
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
     return convertPrice(numPrice);
+  };
+
+  // Discount calculation based on fabric type
+  // Solid fabrics: 50% off (original = current * 2)
+  // Embroidery: 37% off (original = current / 0.63)
+  const getDiscountInfo = (currentPrice: number) => {
+    if (fabricType === 'solid') {
+      return {
+        discountPercent: 50,
+        originalPrice: currentPrice * 2
+      };
+    } else if (fabricType === 'embroidery') {
+      return {
+        discountPercent: 37,
+        originalPrice: currentPrice / 0.63
+      };
+    }
+    return null;
   };
 
   const handleWishlistClick = async (e: React.MouseEvent) => {
@@ -333,7 +352,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
           >
             <div className={classes.productTitle}>{product.title}</div>
             <div className={classes.productSku}>SKU: {product.sku}</div>
-            
+
             {/* Attributes: Width and Fabric Type */}
             <div className={classes.productAttributes}>
               {widthDisplayText && <span className={classes.attributeTag}>{widthDisplayText}</span>}
@@ -358,7 +377,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 </div>
                 <span className={classes.ratingText}>
                   {averageRating.toFixed(1)} ({reviewCount} {(() => {
-                    switch(locale) {
+                    switch (locale) {
                       case 'tr': return 'yorum';
                       case 'ru': return 'отзывов';
                       case 'pl': return 'opinii';
@@ -369,9 +388,24 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
               </div>
             )}
 
-            {/* Price Section */}
+            {/* Price Section with Discount Display */}
             <div className={classes.priceSection}>
               {(() => {
+                // Helper to render price with discount
+                const renderPriceWithDiscount = (price: number) => {
+                  const discountInfo = getDiscountInfo(price);
+                  if (discountInfo) {
+                    return (
+                      <>
+                        <span className={classes.discountBadge}>%{discountInfo.discountPercent}</span>
+                        <span className={classes.originalPrice}>{formatPrice(discountInfo.originalPrice)}</span>
+                        <span className={classes.currentPrice}>{formatPrice(price)}</span>
+                      </>
+                    );
+                  }
+                  return <span className={classes.currentPrice}>{formatPrice(price)}</span>;
+                };
+
                 // If multiple variant prices provided, check if they're all the same
                 if (allVariantPrices && allVariantPrices.length > 0) {
                   const validPrices = allVariantPrices.filter(p => p && Number(p) > 0);
@@ -391,38 +425,20 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                   // Check if all prices are the same
                   const allSame = validPrices.every(p => p === validPrices[0]);
                   if (allSame) {
-                    // All prices are the same - show single price
-                    return (
-                      <span className={classes.currentPrice}>
-                        {formatPrice(validPrices[0])}
-                      </span>
-                    );
+                    return renderPriceWithDiscount(validPrices[0]);
                   } else {
-                    // Prices differ - show min-max range
+                    // Prices differ - show min price with discount
                     const minPrice = Math.min(...validPrices);
-                    const maxPrice = Math.max(...validPrices);
-                    return (
-                      <span className={classes.currentPrice}>
-                        {formatPrice(minPrice)} - {formatPrice(maxPrice)}
-                      </span>
-                    );
+                    return renderPriceWithDiscount(minPrice);
                   }
                 }
 
                 // Fallback to variant_price or product.price
                 if (variant_price && Number(variant_price) > 0) {
-                  return (
-                    <span className={classes.currentPrice}>
-                      {formatPrice(variant_price)}
-                    </span>
-                  );
+                  return renderPriceWithDiscount(Number(variant_price));
                 }
                 if (product.price && Number(product.price) > 0) {
-                  return (
-                    <span className={classes.currentPrice}>
-                      {formatPrice(product.price)}
-                    </span>
-                  );
+                  return renderPriceWithDiscount(Number(product.price));
                 }
 
                 // No price available
@@ -437,14 +453,14 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 );
               })()}
             </div>
-            
+
             {/* Color/Fabric Swatches - Below Price */}
             {colorValues.length > 0 && (
               <div className={classes.colorSwatchesContainer}>
                 <div className={classes.colorSwatchesRow}>
                   {colorValues.slice(0, 4).map((color: string, index: number) => {
                     const isTwoTone = isTwoToneColor(color);
-                    
+
                     return (
                       <div
                         key={`${color}-${index}`}
@@ -488,14 +504,14 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 </div>
               </div>
             )}
-            
+
             {/* Fabric Swatches - Below Price */}
             {fabricValues.length > 0 && (
               <div className={classes.colorSwatchesContainer}>
                 <div className={classes.colorSwatchesRow}>
                   {fabricValues.slice(0, 4).map((fabric: string, index: number) => {
                     const bgImage = `/media/fabrics/${fabric.toLowerCase()}.avif`;
-                    
+
                     return (
                       <div
                         key={`${fabric}-${index}`}

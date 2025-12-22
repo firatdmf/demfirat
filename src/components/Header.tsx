@@ -62,7 +62,7 @@ function Header({ menuTArray }: HeaderProps) {
       trackOrder: { en: 'Order Tracking', tr: 'Sipariş Takibi', ru: 'Отслеживание', pl: 'Śledzenie' },
       blog: { en: 'Blog', tr: 'Blog', ru: 'Блог', pl: 'Blog' },
       helpSupport: { en: 'Help & Support', tr: 'Yardım & Destek', ru: 'Помощь', pl: 'Pomoc' },
-      freeShipping: { en: 'Free Shipping on Domestic Orders Over 1000 TL', tr: 'Türkiye İçi 1000 TL ve Üzeri Siparişlerde Kargo Bedava', ru: 'Бесплатная доставка при заказе от 1000 TL (по Турции)', pl: 'Darmowa wysyłka przy zamówieniach powyżej 1000 TL (w Turcji)' },
+      freeShipping: { en: 'Free Shipping on Domestic Orders Over 2000 TL', tr: 'Türkiye İçi 2000 TL ve Üzeri Siparişlerde Kargo Bedava', ru: 'Бесплатная доставка при заказе от 2000 TL (по Турции)', pl: 'Darmowa wysyłka przy zamówieniach powyżej 2000 TL (w Turcji)' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;

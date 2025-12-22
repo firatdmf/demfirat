@@ -66,11 +66,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.1) 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -103,8 +101,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Wishlist Button */
@@ -494,6 +497,34 @@
   line-height: 1;
 }
 
+/* Discount Badge */
+.discountBadge {
+  display: inline-block;
+  background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+  color: white;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-right: 8px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(229, 57, 53, 0.3);
+}
+
+/* Original Price (Crossed Out) */
+.originalPrice {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #999;
+  text-decoration: line-through;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
 .contactPrice {
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 0.9rem;
@@ -526,20 +557,20 @@
   .productInfo {
     padding: 0.875rem;
   }
-  
+
   .productTitle {
     font-size: 1rem;
   }
-  
+
   .productSku {
     font-size: 0.75rem;
     margin-bottom: 0.5rem;
   }
-  
+
   .currentPrice {
     font-size: 1.125rem;
   }
-  
+
   .contactPrice {
     font-size: 0.85rem;
   }
@@ -552,61 +583,61 @@
     padding: 6px 8px;
     gap: 4px;
   }
-  
+
   .colorSwatch,
   .fabricSwatch,
   .moreSwatches {
     width: 24px;
     height: 24px;
   }
-  
+
   .swatchesLabel {
     font-size: 10px;
   }
-  
+
   .productInfo {
     padding: 0.75rem;
   }
-  
+
   .productTitle {
     font-size: 0.95rem;
     -webkit-line-clamp: 2;
   }
-  
+
   .productSku {
     font-size: 0.7rem;
     margin-bottom: 0.5rem;
   }
-  
+
   .currentPrice {
     font-size: 1rem;
   }
-  
+
   .contactPrice {
     font-size: 0.8rem;
   }
-  
+
   .wishlistBtn,
   .pdfBtn {
     width: 32px;
     height: 32px;
     font-size: 14px;
   }
-  
+
   .wishlistBtn {
     top: 8px;
     right: 8px;
   }
-  
+
   .pdfBtn {
     bottom: 8px;
     left: 8px;
   }
-  
+
   .cardContainer:hover {
     transform: translateY(-3px);
   }
-  
+
   .quickActions {
     opacity: 1;
     transform: translateY(0);
@@ -620,62 +651,62 @@
     padding: 5px 6px;
     gap: 3px;
   }
-  
+
   .colorSwatch,
   .fabricSwatch,
   .moreSwatches {
     width: 20px;
     height: 20px;
   }
-  
+
   .swatchesLabel {
     font-size: 9px;
     margin-right: 2px;
   }
-  
+
   .productInfo {
     padding: 0.625rem;
   }
-  
+
   .productTitle {
     font-size: 0.875rem;
     margin-bottom: 0.25rem;
   }
-  
+
   .productSku {
     font-size: 0.65rem;
     margin-bottom: 0.375rem;
   }
-  
+
   .currentPrice {
     font-size: 0.95rem;
   }
-  
+
   .contactPrice {
     font-size: 0.75rem;
   }
-  
+
   .wishlistBtn,
   .pdfBtn {
     width: 28px;
     height: 28px;
     font-size: 12px;
   }
-  
+
   .wishlistBtn {
     top: 6px;
     right: 6px;
   }
-  
+
   .pdfBtn {
     bottom: 6px;
     left: 6px;
   }
-  
+
   .cardContainer {
     border-radius: 10px;
   }
-  
+
   .cardContainer:hover {
     transform: translateY(-2px);
   }

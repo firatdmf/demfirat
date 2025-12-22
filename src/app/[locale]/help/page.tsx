@@ -145,7 +145,7 @@ export default function HelpPage() {
             icon: <FaTruck />,
             title: t('shippingDelivery'),
             faqs: locale === 'tr' ? [
-                { question: 'Kargo ücreti ne kadar?', answer: 'Türkiye içi siparişlerde 1000 TL ve üzeri alışverişlerde kargo ücretsizdir. 1000 TL altı siparişlerde kargo ücreti 50 TL\'dir.' },
+                { question: 'Kargo ücreti ne kadar?', answer: 'Türkiye içi siparişlerde 2000 TL ve üzeri alışverişlerde kargo ücretsizdir. 2000 TL altı siparişlerde kargo ücreti 70 TL\'dir.' },
                 { question: 'Siparişim ne zaman kargolanır?', answer: 'Siparişiniz ödeme onayından sonra 1-3 iş günü içinde kargoya verilir. Özel üretim ürünlerde bu süre 5-7 iş gününe kadar uzayabilir.' },
                 { question: 'Kargo takibi nasıl yapılır?', answer: 'Siparişiniz kargoya verildiğinde size SMS ve e-posta ile kargo takip numarası gönderilir. Ayrıca web sitemizdeki sipariş takip kısmından sipariş numaranızı girerek hem sipariş detayını hem de kargo durumunu görebilirsiniz.' },
                 { question: 'Hangi kargo firması ile çalışıyorsunuz?', answer: 'Yurtiçi Kargo, MNG Kargo ve Aras Kargo ile çalışmaktayız. Siparişiniz bölgenize en uygun kargo firması ile gönderilir.' },

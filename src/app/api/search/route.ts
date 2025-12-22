@@ -13,24 +13,39 @@ async function getProductsWithDetails(): Promise<any[]> {
         return cachedProducts;
     }
 
-    // Fetch fresh products
+    // Fetch fresh products from both categories
     const baseUrl = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
-    const apiUrl = `${baseUrl}/marketing/api/get_products?product_category=fabric`;
 
-    const response = await fetch(apiUrl, { cache: 'no-store' });
+    // Fetch both fabric and ready_made_curtain products
+    const categories = ['fabric', 'ready_made_curtain'];
+    const allProducts: any[] = [];
+    const allVariants: any[] = [];
+    const allVariantAttributes: any[] = [];
+    const allVariantAttributeValues: any[] = [];
 
-    if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+    for (const category of categories) {
+        try {
+            const apiUrl = `${baseUrl}/marketing/api/get_products?product_category=${category}`;
+            const response = await fetch(apiUrl, { cache: 'no-store' });
+
+            if (response.ok) {
+                const data = await response.json();
+                const products = (data.products || []).map((p: any) => ({
+                    ...p,
+                    product_category: category
+                }));
+                allProducts.push(...products);
+                allVariants.push(...(data.product_variants || []));
+                allVariantAttributes.push(...(data.product_variant_attributes || []));
+                allVariantAttributeValues.push(...(data.product_variant_attribute_values || []));
+            }
+        } catch (error) {
+            console.error(`[SEARCH API] Error fetching ${category}:`, error);
+        }
     }
 
-    const data = await response.json();
-    const products = data.products || [];
-    const variants = data.product_variants || [];
-    const variantAttributes = data.product_variant_attributes || [];
-    const variantAttributeValues = data.product_variant_attribute_values || [];
-
     // Find the color attribute
-    const colorAttribute = variantAttributes.find((attr: any) =>
+    const colorAttribute = allVariantAttributes.find((attr: any) =>
         attr.name?.toLowerCase() === 'color'
     );
 
@@ -39,7 +54,7 @@ async function getProductsWithDetails(): Promise<any[]> {
     const colorMap: Record<number, string[]> = {};
 
     // Build price map: product_id -> [all variant prices]
-    variants.forEach((v: any) => {
+    allVariants.forEach((v: any) => {
         if (v.product_id && v.variant_price && Number(v.variant_price) > 0) {
             if (!priceMap[v.product_id]) priceMap[v.product_id] = [];
             priceMap[v.product_id].push(Number(v.variant_price));
@@ -49,10 +64,10 @@ async function getProductsWithDetails(): Promise<any[]> {
     // Build color map: product_id -> [color names]
     if (colorAttribute) {
         // Get color values for each variant
-        variants.forEach((v: any) => {
+        allVariants.forEach((v: any) => {
             if (v.product_id && v.product_variant_attribute_values) {
                 v.product_variant_attribute_values.forEach((valueId: number) => {
-                    const attrValue = variantAttributeValues.find((av: any) =>
+                    const attrValue = allVariantAttributeValues.find((av: any) =>
                         av.id === valueId && av.product_variant_attribute_id === colorAttribute.id
                     );
                     if (attrValue && attrValue.product_variant_attribute_value) {
@@ -68,7 +83,7 @@ async function getProductsWithDetails(): Promise<any[]> {
     }
 
     // Enrich products with price range and colors
-    cachedProducts = products.map((p: any) => {
+    cachedProducts = allProducts.map((p: any) => {
         const productId = p.id || p.pk;
         const prices = priceMap[productId] || [];
         const colors = colorMap[productId] || [];
@@ -90,7 +105,7 @@ async function getProductsWithDetails(): Promise<any[]> {
     });
 
     cacheTimestamp = now;
-    console.log('[SEARCH API] Cached', cachedProducts.length, 'products with prices and colors');
+    console.log('[SEARCH API] Cached', cachedProducts.length, 'products (fabric + ready_made_curtain)');
     return cachedProducts;
 }
 
