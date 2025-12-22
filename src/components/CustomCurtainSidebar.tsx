@@ -84,15 +84,16 @@ export default function CustomCurtainSidebar({
   }, [pleatType, availableDensities, pleatDensity]);
 
   // Calculate Price with labor costs
-  // Formula:
-  // 1. Kumaş maliyeti = kumaş_fiyatı × perde_eni(m) × pile_yoğunluğu
-  // 2. Pile dikimi maliyeti (perde eni başına):
-  //    - Amerikan: $2.5/m, Su dalgası: $2.5/m
-  //    - Standart yatık: $1.25/m (pilesiz ise $0)
-  //    - Kanun: $1.25/m, Boru: $1.25/m
-  // 3. Montaj maliyeti (perde eni başına):
-  //    - Rustik: $5/m
-  //    - Korniş: $1.25/m
+  // FORMULA FOR CORNICE:
+  // Toplam = (Perde Metresi + Pile Sıklığı) × (Kumaş Fiyatı + Pile İşçilik)
+  // 
+  // FORMULA FOR RUSTIK (ESKİ HALİ):
+  // Toplam = (Kumaş Miktarı × Kumaş Fiyatı) + (Perde Eni × $5/m Montaj)
+  //
+  // Pile İşçilik Fiyatları:
+  //    - Kanun: $1.25, Yatık (flat): $1.25, Boru (pipe): $1.25
+  //    - Amerikan: $2.50, Su Dalgası: $2.50
+  //    - Pilesiz: $0
   useEffect(() => {
     if (!width || !height) {
       setTotalPrice(0);
@@ -102,74 +103,83 @@ export default function CustomCurtainSidebar({
     // Perde eni (width) metreler cinsinden
     const curtainWidthMeters = parseFloat(width) / 100;
 
-    // Pile yoğunluğu çarpanı
-    let densityMultiplier = 1;
-    if (pleatDensity !== '0') {
-      // Extract multiplier from string like "1x2.5" -> 2.5
-      const parts = pleatDensity.split('x');
-      if (parts.length === 2) {
-        densityMultiplier = parseFloat(parts[1]);
+    let calculatedTotalPrice = 0;
+    let fabricNeeded = 0;
+
+    if (mountingType === 'rustic') {
+      // RUSTİK: ESKİ FORMÜL
+      // Kumaş miktarı = Perde Eni (pile yok)
+      fabricNeeded = curtainWidthMeters;
+
+      // Çift kanat ise 2 ile çarp
+      if (wingType === 'double') {
+        fabricNeeded *= 2;
+      }
+
+      // Kumaş Maliyeti
+      const fabricCost = fabricNeeded * unitPrice;
+
+      // Montaj Maliyeti = Perde Eni × $5/m
+      let mountingCost = curtainWidthMeters * 5;
+      if (wingType === 'double') {
+        mountingCost *= 2;
+      }
+
+      calculatedTotalPrice = fabricCost + mountingCost;
+    } else {
+      // KORNİŞ: YENİ FORMÜL
+      // (Perde Metresi × Pile Sıklığı) × (Kumaş Fiyatı + İşçilik)
+
+      // Pile yoğunluğu çarpanı
+      let densityMultiplier = 1;
+      if (pleatDensity !== '0') {
+        const parts = pleatDensity.split('x');
+        if (parts.length === 2) {
+          densityMultiplier = parseFloat(parts[1]);
+        }
+      }
+
+      // Pile İşçilik Fiyatı
+      let pleatLaborPerMeter = 0;
+      switch (pleatType) {
+        case 'flat':
+          if (pleatDensity === '0') {
+            pleatLaborPerMeter = 0;
+          } else {
+            pleatLaborPerMeter = 1.25;
+          }
+          break;
+        case 'kanun':
+          pleatLaborPerMeter = 1.25;
+          break;
+        case 'pipe':
+          pleatLaborPerMeter = 1.25;
+          break;
+        case 'american':
+          pleatLaborPerMeter = 2.50;
+          break;
+        case 'water_wave':
+          pleatLaborPerMeter = 2.50;
+          break;
+        default:
+          pleatLaborPerMeter = 1.25;
+      }
+
+      // FORMÜL: (Perde Metresi × Pile Sıklığı) × (Kumaş Fiyatı + İşçilik)
+      const baseAmount = curtainWidthMeters * densityMultiplier;
+      calculatedTotalPrice = baseAmount * (unitPrice + pleatLaborPerMeter);
+
+      // Çift kanat ise 2 ile çarp
+      if (wingType === 'double') {
+        calculatedTotalPrice *= 2;
+      }
+
+      // Kumaş miktarı hesabı (stok kontrolü için)
+      fabricNeeded = curtainWidthMeters * (densityMultiplier > 0 ? densityMultiplier : 1);
+      if (wingType === 'double') {
+        fabricNeeded *= 2;
       }
     }
-
-    // Kumaş miktarı = Perde Eni × Pile Yoğunluğu
-    let fabricNeeded = curtainWidthMeters * densityMultiplier;
-
-    // Çift kanat ise 2 ile çarp
-    if (wingType === 'double') {
-      fabricNeeded *= 2;
-    }
-
-    // 1. KUMAŞ MALİYETİ = Kumaş Miktarı × Kumaş Fiyatı
-    const fabricCost = fabricNeeded * unitPrice;
-
-    // 2. PİLE DİKİMİ MALİYETİ = Perde Eni × Pile Fiyatı × Pile Yoğunluğu
-    let pleatSewingCost = 0;
-    switch (pleatType) {
-      case 'flat': // Yatık Pile
-        if (pleatDensity === '0') {
-          // Pilesiz seçerse - maliyet yok
-          pleatSewingCost = 0;
-        } else {
-          pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier; // $1.25/m × pile
-        }
-        break;
-      case 'american': // Amerikan Pile
-        pleatSewingCost = curtainWidthMeters * 2.5 * densityMultiplier; // $2.5/m × pile
-        break;
-      case 'water_wave': // Su Dalgası
-        pleatSewingCost = curtainWidthMeters * 2.5 * densityMultiplier; // $2.5/m × pile
-        break;
-      case 'kanun': // Kanun Pile
-        pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier; // $1.25/m × pile
-        break;
-      case 'pipe': // Boru Pile
-        pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier; // $1.25/m × pile
-        break;
-      default:
-        pleatSewingCost = curtainWidthMeters * 1.25 * densityMultiplier;
-    }
-
-    // Çift kanat ise pile maliyeti de 2 katı
-    if (wingType === 'double') {
-      pleatSewingCost *= 2;
-    }
-
-    // 3. MONTAJ MALİYETİ = Perde Eni × Montaj Fiyatı
-    let mountingCost = 0;
-    if (mountingType === 'rustic') {
-      mountingCost = curtainWidthMeters * 5; // Rustik: $5/m
-    } else if (mountingType === 'cornice') {
-      mountingCost = curtainWidthMeters * 1.25; // Korniş: $1.25/m
-    }
-
-    // Çift kanat ise montaj maliyeti de 2 katı
-    if (wingType === 'double') {
-      mountingCost *= 2;
-    }
-
-    // TOPLAM = Kumaş Maliyeti + Pile Dikimi Maliyeti + Montaj Maliyeti
-    const calculatedTotalPrice = fabricCost + pleatSewingCost + mountingCost;
 
     setTotalPrice(calculatedTotalPrice);
     setRequiredFabric(fabricNeeded);
