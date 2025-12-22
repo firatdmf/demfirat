@@ -135,31 +135,9 @@ export default function LoginPage() {
     await signIn('google', { callbackUrl: '/' });
   };
 
-  // Handle close - redirect to home page
-  const handleClose = () => {
-    router.push(`/${locale}`);
-  };
-
-  // Handle overlay click (outside the card)
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Only close if clicking directly on the overlay, not the card
-    if (e.target === e.currentTarget) {
-      handleClose();
-    }
-  };
-
   return (
-    <div className={classes.loginContainer} onClick={handleOverlayClick}>
+    <div className={classes.loginContainer}>
       <div className={classes.loginCard}>
-        {/* Close Button */}
-        <button
-          onClick={handleClose}
-          className={classes.closeButton}
-          aria-label="Close"
-        >
-          ✕
-        </button>
-
         {/* Logo Section */}
         <div className={classes.logoSection}>
           <img
