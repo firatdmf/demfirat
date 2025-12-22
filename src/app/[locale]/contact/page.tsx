@@ -112,10 +112,10 @@ export default function Contact() {
           <h2>{t('FabricShowroom')} (İstanbul, Türkiye)</h2>
           <h4>{t('Representative')}:</h4>
           <p>Özcan Öztürk</p>
-          <p>Ercan Öztürk</p>
+          <p>Devrim Eraslan</p>
           <h4>{t('Phone')}:</h4>
           <p>+90 (555) 087-5555 (Özcan)</p>
-          <p>+90 (542) 341-4845 (Ercan)</p>
+          <p>+90 (543) 440-2157 (Devrim)</p>
           <h4>{t('Email')}:</h4>
           <p>krvn.dmf@gmail.com</p>
           <p>info@demfirat.com</p>
