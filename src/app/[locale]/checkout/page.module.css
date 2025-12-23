@@ -446,6 +446,8 @@ select.input:disabled {
   align-items: center;
   gap: 1rem;
   position: relative;
+  overflow: hidden;
+  flex-wrap: wrap;
 }
 
 .paymentCard:hover {
@@ -1041,10 +1043,13 @@ select.input:disabled {
     max-width: 100px;
   }
 
-  .iyzicoCardBadge {}
+  .iyzicoCardBadge {
+    display: none;
+  }
 
   .iyzicoPaymentLogo {
-    max-width: 120px;
+    max-width: 100%;
+    width: auto;
   }
 }
 
@@ -1052,11 +1057,15 @@ select.input:disabled {
   .payWithIyzicoBadge {}
 
   .payWithIyzicoLogo {
-    max-width: 140px;
+    max-width: 120px;
+  }
+
+  .iyzicoCardBadge {
+    display: none;
   }
 
   .iyzicoPaymentLogo {
-    max-width: 140px;
+    max-width: 100%;
   }
 }
 
