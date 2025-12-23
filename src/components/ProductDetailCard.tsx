@@ -654,28 +654,17 @@ function ProductDetailCard({
           <div className={classes.gallery}>
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
             <div className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
-              <Link href={(imageFiles[selectedThumbIndex]
-                || placeholder_image_link)} target="_blank"
-                onClick={e => {
-                  e.preventDefault();
-                  window.open(
-                    ((imageFiles[selectedThumbIndex] || placeholder_image_link)),
-                    'targetWindow',
-                    'width=500,height=500'
-                  );
-                }}>
-
-                <img
-                  key={imageFiles[selectedThumbIndex]}
-                  src={(imageFiles[selectedThumbIndex]
-                    || placeholder_image_link)}
-                  alt="Product image"
-                  loading="eager"
-                  onMouseMove={handleMouseMove}
-                  onMouseLeave={handleMouseLeave}
-                  onLoad={() => setImageLoaded(true)}
-                />
-              </Link>
+              <img
+                key={imageFiles[selectedThumbIndex]}
+                src={(imageFiles[selectedThumbIndex]
+                  || placeholder_image_link)}
+                alt="Product image"
+                loading="eager"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                onLoad={() => setImageLoaded(true)}
+                style={{ cursor: 'default' }}
+              />
               {zoomPosition && zoomBoxPosition && (
                 <div
                   className={classes.zoom}

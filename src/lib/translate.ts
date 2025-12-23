@@ -68,6 +68,8 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'pink-white': { 'tr': 'Pembe-Beyaz', 'ru': 'Розово-белый', 'pl': 'Różowo-biały', 'en': 'Pink-White' },
     'pink-ecru': { 'tr': 'Pembe-Ekru', 'ru': 'Розово-экрю', 'pl': 'Różowo-ecru', 'en': 'Pink-Ecru' },
     'navy-gold': { 'tr': 'Lacivert-Altın', 'ru': 'Темно-сине-золотой', 'pl': 'Granatowo-złoty', 'en': 'Navy-Gold' },
+    'gold-white': { 'tr': 'Altın-Beyaz', 'ru': 'Золотисто-белый', 'pl': 'Złoto-biały', 'en': 'Gold-White' },
+    'gold-ecru': { 'tr': 'Altın-Ekru', 'ru': 'Золотисто-экрю', 'pl': 'Złoto-ecru', 'en': 'Gold-Ecru' },
     'teal': { 'tr': 'Çam Yeşili', 'ru': 'Бирюзовый', 'pl': 'Morski', 'en': 'Teal' },
     'off-white': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },
     'offwhite': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },

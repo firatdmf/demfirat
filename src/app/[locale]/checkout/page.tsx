@@ -1276,7 +1276,8 @@ export default function CheckoutPage() {
                 ))
               )}
 
-              {!showNewAddressForm && (
+              {/* Hide add address button for guest checkout */}
+              {!showNewAddressForm && !isGuestCheckout && (
                 <button
                   onClick={() => setShowNewAddressForm(true)}
                   className={classes.addAddressBtn}

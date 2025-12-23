@@ -160,6 +160,21 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+/* Hide zoom magnifier on mobile/tablet - touch devices don't have hover */
+@media (max-width: 1024px) {
+  .zoom {
+    display: none !important;
+  }
+
+  .gallery .img img {
+    cursor: default;
+  }
+
+  .gallery .img img:hover {
+    transform: none;
+  }
+}
+
 /* ===== REDESIGNED RIGHT SIDE (PRODUCT INFO) ===== */
 
 .productHero {

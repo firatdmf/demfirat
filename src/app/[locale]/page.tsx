@@ -4,6 +4,7 @@ import HeroVideo from "@/components/HeroVideo";
 import ProductShowcase from "@/components/ProductShowcase";
 import AutoSlider from "@/components/AutoSlider";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
+import CustomCurtainPromo from "@/components/CustomCurtainPromo";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
 // import { useTranslations } from "next-intl";
@@ -84,7 +85,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
       image: "/media/client-images/mary.webp",
       name: "Mary",
       review:
-        "Love them! Exactly as pictured; so elegant looking! I’ll happily order from this shop again.",
+        "Love them! Exactly as pictured; so elegant looking! I'll happily order from this shop again.",
     },
     {
       image: "/media/client-images/meredith.webp",
@@ -127,6 +128,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
           locale={locale}
           showCatalogButton={false}
         />
+        <CustomCurtainPromo locale={locale} />
         <ProductShowcase
           title={productsLocale("Headline")}
           locale={locale}
