@@ -364,6 +364,20 @@ function Header({ menuTArray }: HeaderProps) {
                       {locale === 'tr' ? 'Tüm Kumaşlar' : locale === 'ru' ? 'Все ткани' : locale === 'pl' ? 'Wszystkie tkaniny' : 'All Fabrics'}
                     </Link>
                   </div>
+                  <div className={classes.megaMenuColumn}>
+                    <h4 className={classes.megaMenuTitle}>
+                      {locale === 'tr' ? 'Özel Dikim Perde' : locale === 'ru' ? 'Пошив штор' : locale === 'pl' ? 'Szycie na miarę' : 'Custom Curtains'}
+                    </h4>
+                    <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.megaMenuItem}>
+                      {locale === 'tr' ? 'Perde Diktir' : locale === 'ru' ? 'Заказать пошив' : locale === 'pl' ? 'Zamów szycie' : 'Order Custom Curtain'}
+                    </Link>
+                    <Link href={`/${locale}/blog/ozel-dikim-perde-siparisi`} className={classes.megaMenuItem}>
+                      {locale === 'tr' ? 'Sipariş Nasıl Yapılır?' : locale === 'ru' ? 'Как заказать?' : locale === 'pl' ? 'Jak zamówić?' : 'How to Order?'}
+                    </Link>
+                    <Link href={`/${locale}/blog/dogru-olcu-nasil-alinir`} className={classes.megaMenuItem}>
+                      {locale === 'tr' ? 'Ölçü Nasıl Alınır?' : locale === 'ru' ? 'Как измерить?' : locale === 'pl' ? 'Jak mierzyć?' : 'How to Measure?'}
+                    </Link>
+                  </div>
                 </div>
                 <Link href={`/${locale}/product/fabric`} className={classes.megaMenuImage}>
                   <img src="/media/hero/fabric-hero.png" alt="Kumaş Koleksiyonu" />

@@ -25,6 +25,29 @@ const blogPosts = [
             ru: 'Руководство',
             pl: 'Przewodnik'
         }
+    },
+    {
+        slug: 'ozel-dikim-perde-siparisi',
+        title: {
+            tr: 'Özel Dikim Perde Siparişi Nasıl Yapılır?',
+            en: 'How to Order Custom Curtains?',
+            ru: 'Как заказать пошив штор?',
+            pl: 'Jak zamówić szycie zasłon na miarę?'
+        },
+        excerpt: {
+            tr: 'Kumaş seçimi, ölçü girişi ve pile tipi belirleme. Özel dikim perde sipariş sürecini adım adım öğrenin.',
+            en: 'Fabric selection, measurement entry and pleat type. Learn the custom curtain ordering process step by step.',
+            ru: 'Выбор ткани, ввод размеров и тип складки. Узнайте процесс заказа штор на заказ шаг за шагом.',
+            pl: 'Wybór tkaniny, wprowadzanie wymiarów i typ zakładki. Poznaj proces zamawiania zasłon na miarę krok po kroku.'
+        },
+        image: '/media/blog/ozel-dikim.jpg',
+        date: '2025-12-23',
+        category: {
+            tr: 'Rehber',
+            en: 'Guide',
+            ru: 'Руководство',
+            pl: 'Przewodnik'
+        }
     }
 ];
 

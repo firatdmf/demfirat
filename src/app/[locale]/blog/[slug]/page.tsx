@@ -220,6 +220,185 @@ Zmierz od karnisza do pożądanego punktu: podłogi, parapetu lub z opadaniem.
 Prawidłowe pomiary gwarantują piękne zasłony w Twoim domu.
             `
         }
+    },
+    'ozel-dikim-perde-siparisi': {
+        title: {
+            tr: 'Özel Dikim Perde Siparişi Nasıl Yapılır?',
+            en: 'How to Order Custom Curtains?',
+            ru: 'Как заказать пошив штор?',
+            pl: 'Jak zamówić szycie zasłon na miarę?'
+        },
+        heroImage: '/media/blog/ozel-dikim-hero.jpg',
+        date: '2025-12-23',
+        author: 'Karven Home Collection',
+        content: {
+            tr: `
+## Giriş
+
+Özel dikim perde siparişi vermek, hazır perdelere kıyasla çok daha kişiselleştirilmiş ve mükemmel uyumlu sonuçlar elde etmenizi sağlar. Bu rehberde, Karven Home Collection'dan özel dikim perde siparişi verme sürecini adım adım açıklıyoruz.
+
+## Neden Özel Dikim Perde?
+
+- **Mükemmel Uyum:** Pencerenize özel ölçülerde dikilir
+- **Kumaş Seçimi:** Yüzlerce kumaş arasından seçim yapabilirsiniz
+- **Pile Tipi:** İstediğiniz pile yoğunluğunu belirleyebilirsiniz
+- **Kalite:** Profesyonel dikişle uzun ömürlü kullanım
+
+## Adım 1: Kumaş Seçimi
+
+Web sitemizde **Kumaşlar** bölümüne giderek kumaş koleksiyonumuzu inceleyebilirsiniz.
+
+**Düz Kumaşlar:** Modern ve sade görünüm için ideal
+**Nakışlı Kumaşlar:** Klasik ve şık mekanlar için mükemmel
+
+Beğendiğiniz kumaşın ürün sayfasına gidin.
+
+## Adım 2: Ölçülerinizi Girin
+
+Ürün sayfasında **"Özel Dikim Perde"** seçeneğini göreceksiniz. Buradan:
+
+**Genişlik (cm):** Perdenizin toplam genişliğini girin
+**Yükseklik (cm):** Perdenizin boyunu girin
+
+**İpucu:** Ölçü almayı bilmiyorsanız, [Doğru Ölçü Nasıl Alınır?](/tr/blog/dogru-olcu-nasil-alinir) rehberimizi okuyun.
+
+## Adım 3: Pile Tipini Seçin
+
+Pile yoğunluğu, perdenizin görünümünü belirler:
+
+**1x2 Pile:** Seyrek pile, modern görünüm
+**1x2.5 Pile:** Orta yoğunluk, en çok tercih edilen
+**1x3 Pile:** Sık pile, klasik ve zengin görünüm
+
+Sistem otomatik olarak gereken kumaş miktarını hesaplar.
+
+## Adım 4: Kanat Seçimi
+
+**Tek Kanat:** Pencereyi tek parça perde ile kapatmak için
+**Çift Kanat:** Ortadan açılır tarz için (ölçü ikiye bölünür)
+
+## Adım 5: Sepete Ekle ve Sipariş Ver
+
+Tüm seçimlerinizi yaptıktan sonra:
+
+1. **Sepete Ekle** butonuna tıklayın
+2. Sepetinizi kontrol edin
+3. Ödeme sayfasına ilerleyin
+4. Teslimat bilgilerinizi girin
+5. Ödemenizi tamamlayın
+
+## Üretim ve Teslimat Süreci
+
+**Üretim Süresi:** 5-7 iş günü
+**Kargo:** Türkiye geneli ücretsiz kargo (2000 TL üzeri)
+**Paketleme:** Özel koruyucu ambalaj ile gönderim
+
+## Sık Sorulan Sorular
+
+**Siparişimi iptal edebilir miyim?**
+Özel dikim ürünler size özel üretildiği için üretime başlandıktan sonra iptal yapılamamaktadır.
+
+**İade yapabilir miyim?**
+Özel dikim ürünlerde üretim hatası dışında iade kabul edilmemektedir.
+
+**Numune kumaş alabilir miyim?**
+Evet, kumaş numunesi talep edebilirsiniz. Bizimle iletişime geçin.
+
+## Sonuç
+
+Özel dikim perde siparişi vermek sandığınız kadar zor değil! Doğru ölçüyü alın, kumaşınızı seçin ve siparişinizi verin. Biz gerisini halledelim!
+
+**Sorularınız için:** info@demfirat.com veya WhatsApp: +90 501 057 1884
+            `,
+            en: `
+## Introduction
+
+Ordering custom curtains allows you to get much more personalized and perfectly fitting results compared to ready-made curtains. In this guide, we explain step by step how to order custom curtains from Karven Home Collection.
+
+## Why Custom Curtains?
+
+- **Perfect Fit:** Tailored to your window measurements
+- **Fabric Choice:** Choose from hundreds of fabrics
+- **Pleat Type:** Determine your preferred pleat density
+- **Quality:** Professional stitching for long-lasting use
+
+## Step 1: Choose Your Fabric
+
+Browse our fabric collection in the **Fabrics** section on our website.
+
+**Solid Fabrics:** Ideal for modern and simple looks
+**Embroidered Fabrics:** Perfect for classic and elegant spaces
+
+## Step 2: Enter Your Measurements
+
+On the product page, you'll see the **"Custom Curtain"** option:
+
+**Width (cm):** Enter the total width of your curtain
+**Height (cm):** Enter the height of your curtain
+
+## Step 3: Select Pleat Type
+
+**1x2 Pleat:** Light pleat, modern look
+**1x2.5 Pleat:** Medium density, most preferred
+**1x3 Pleat:** Dense pleat, classic and rich look
+
+## Step 4: Add to Cart and Order
+
+1. Click **Add to Cart**
+2. Review your cart
+3. Proceed to checkout
+4. Enter delivery information
+5. Complete payment
+
+## Conclusion
+
+Ordering custom curtains is not as difficult as you think! Take the right measurements, choose your fabric, and place your order.
+            `,
+            ru: `
+## Введение
+
+Заказ штор на заказ позволяет получить гораздо более персонализированные и идеально подходящие результаты.
+
+## Почему шторы на заказ?
+
+- Идеальная посадка
+- Выбор ткани
+- Тип складки
+- Качество
+
+## Шаг 1: Выберите ткань
+
+## Шаг 2: Введите размеры
+
+## Шаг 3: Выберите тип складки
+
+## Заключение
+
+Заказать шторы на заказ не так сложно, как вы думаете!
+            `,
+            pl: `
+## Wstęp
+
+Zamawianie zasłon na miarę pozwala uzyskać znacznie bardziej spersonalizowane i idealnie dopasowane rezultaty.
+
+## Dlaczego zasłony na miarę?
+
+- Idealne dopasowanie
+- Wybór tkaniny
+- Typ zakładki
+- Jakość
+
+## Krok 1: Wybierz tkaninę
+
+## Krok 2: Wprowadź wymiary
+
+## Krok 3: Wybierz typ zakładki
+
+## Podsumowanie
+
+Zamawianie zasłon na miarę nie jest tak trudne, jak myślisz!
+            `
+        }
     }
 };
 
@@ -301,6 +480,7 @@ function formatMarkdown(markdown: string): string {
         .replace(/^### (.+)$/gm, '<h3>$1</h3>')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/!\[(.+?)\]\((.+?)\)/g, '<img src="$2" alt="$1" />')
+        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
         .replace(/^- (.+)$/gm, '<li>$1</li>')
         .replace(/✅/g, '<span class="success">✅</span>')
         .replace(/❌/g, '<span class="error">❌</span>')
