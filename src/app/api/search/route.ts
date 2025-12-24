@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // In-memory cache
 let cachedProducts: any[] = [];
 let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 0; // Disable cache for debugging
 
 async function getProductsWithDetails(): Promise<any[]> {
     const now = Date.now();
@@ -17,7 +17,7 @@ async function getProductsWithDetails(): Promise<any[]> {
     const baseUrl = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
 
     // Fetch both fabric and ready_made_curtain products
-    const categories = ['fabric', 'ready_made_curtain'];
+    const categories = ['fabric', 'ready-made_curtain'];
     const allProducts: any[] = [];
     const allVariants: any[] = [];
     const allVariantAttributes: any[] = [];
@@ -34,10 +34,13 @@ async function getProductsWithDetails(): Promise<any[]> {
                     ...p,
                     product_category: category
                 }));
+                console.log(`[SEARCH API] Fetched ${products.length} products for ${category}`);
                 allProducts.push(...products);
                 allVariants.push(...(data.product_variants || []));
                 allVariantAttributes.push(...(data.product_variant_attributes || []));
                 allVariantAttributeValues.push(...(data.product_variant_attribute_values || []));
+            } else {
+                console.error(`[SEARCH API] Failed to fetch ${category}: ${response.status}`);
             }
         } catch (error) {
             console.error(`[SEARCH API] Error fetching ${category}:`, error);

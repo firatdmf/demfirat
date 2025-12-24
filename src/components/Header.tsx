@@ -22,6 +22,7 @@ interface Product {
   title: string;
   sku?: string;
   category_name?: string;
+  product_category?: string; // Added field
   primary_image?: string;
   price?: number;
   minPrice?: number;
@@ -141,7 +142,8 @@ function Header({ menuTArray }: HeaderProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/${locale}/product/fabric?search=${encodeURIComponent(searchQuery)}`);
+      // Changed to 'search' to trigger the multi-category search
+      router.push(`/${locale}/product/search?search=${encodeURIComponent(searchQuery)}`);
       setShowResults(false);
       setSearchQuery("");
     }
@@ -150,7 +152,9 @@ function Header({ menuTArray }: HeaderProps) {
   const handleProductClick = (product: Product) => {
     // Use SKU for URL, fallback to ID if SKU not available
     const productIdentifier = product.sku || product.id;
-    router.push(`/${locale}/product/fabric/${productIdentifier}`);
+    // Determine the category path part
+    const categoryPath = product.product_category === 'ready-made_curtain' ? 'ready-made_curtain' : 'fabric';
+    router.push(`/${locale}/product/${categoryPath}/${productIdentifier}`);
     setShowResults(false);
     setSearchQuery("");
   };
@@ -420,6 +424,20 @@ function Header({ menuTArray }: HeaderProps) {
           <Link href={`/${locale}/product/fabric?fabric_type=embroidery`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
             {t('embroideredFabric')}
           </Link>
+
+          <div className={classes.mobileSectionTitle} style={{ paddingLeft: '1.5rem', marginTop: '0.5rem', fontSize: '0.85rem' }}>
+            {locale === 'tr' ? 'Özel Dikim Perde' : locale === 'ru' ? 'Пошив штор' : locale === 'pl' ? 'Szycie na miarę' : 'Custom Curtains'}
+          </div>
+          <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {locale === 'tr' ? 'Perde Diktir' : locale === 'ru' ? 'Заказать пошив' : locale === 'pl' ? 'Zamów szycie' : 'Order Custom Curtain'}
+          </Link>
+          <Link href={`/${locale}/blog/ozel-dikim-perde-siparisi`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {locale === 'tr' ? 'Sipariş Nasıl Yapılır?' : locale === 'ru' ? 'Как заказать?' : locale === 'pl' ? 'Jak zamówić?' : 'How to Order?'}
+          </Link>
+          <Link href={`/${locale}/blog/dogru-olcu-nasil-alinir`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {locale === 'tr' ? 'Ölçü Nasıl Alınır?' : locale === 'ru' ? 'Как измерить?' : locale === 'pl' ? 'Jak mierzyć?' : 'How to Measure?'}
+          </Link>
+
           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[2]}
           </Link>
@@ -432,6 +450,10 @@ function Header({ menuTArray }: HeaderProps) {
           <Link href={`/${locale}/follow-us`} className={`${classes.mobileNavLink} ${classes.instagramLink}`} onClick={() => setMobileMenuOpen(false)}>
             {t('followUs')}
           </Link>
+
+          <div className={classes.mobileLocale} style={{ paddingBottom: 0 }}>
+            <LocaleSwitcher />
+          </div>
 
           <hr className={classes.mobileDivider} />
 
@@ -470,9 +492,6 @@ function Header({ menuTArray }: HeaderProps) {
           )}
 
           <hr className={classes.mobileDivider} />
-          <div className={classes.mobileLocale}>
-            <LocaleSwitcher />
-          </div>
         </div>
       )}
     </header>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useLocale } from 'next-intl';
-import { FaSearch, FaPhone, FaTruck, FaUndo, FaBox, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaSearch, FaPhone, FaTruck, FaUndo, FaBox, FaChevronDown, FaChevronUp, FaWhatsapp } from 'react-icons/fa';
 import styles from './page.module.css';
 
 interface FAQItem {
@@ -133,6 +133,12 @@ export default function HelpPage() {
                 ru: 'Не удалось отправить сообщение.',
                 pl: 'Nie udało się wysłać wiadomości.'
             },
+            writeToUs: {
+                en: 'WRITE TO US',
+                tr: 'BİZE YAZIN',
+                ru: 'НАПИШИТЕ НАМ',
+                pl: 'NAPISZ DO NAS'
+            },
         };
         const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
         return translations[key]?.[lang] || key;
@@ -239,6 +245,15 @@ export default function HelpPage() {
 
     return (
         <div className={styles.container}>
+            {/* WhatsApp Contact Section */}
+            <div className={styles.whatsappSection}>
+                <a href="https://wa.me/905010571884" target="_blank" rel="noopener noreferrer" className={styles.whatsappLink}>
+                    <FaWhatsapp className={styles.whatsappIcon} />
+                    <span className={styles.whatsappTitle}>{t('writeToUs')}</span>
+                    <span className={styles.whatsappNumber}>+90 501 057 18 84</span>
+                </a>
+            </div>
+
             {/* Categories Section */}
             <section className={styles.categoriesSection}>
                 <h2 className={styles.sectionTitle}>{t('helpQuestion')}</h2>
