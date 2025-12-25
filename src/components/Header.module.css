@@ -539,6 +539,7 @@
   flex: 1;
   display: flex;
   gap: 3rem;
+  justify-content: space-evenly;
 }
 
 .megaMenuColumn {
