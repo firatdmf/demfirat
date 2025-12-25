@@ -372,7 +372,7 @@ function Header({ menuTArray }: HeaderProps) {
                     <h4 className={classes.megaMenuTitle}>
                       {locale === 'tr' ? 'Özel Dikim Perde' : locale === 'ru' ? 'Пошив штор' : locale === 'pl' ? 'Szycie na miarę' : 'Custom Curtains'}
                     </h4>
-                    <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.megaMenuItem}>
+                    <Link href={`/${locale}/product/fabric`} className={classes.megaMenuItem}>
                       {locale === 'tr' ? 'Perde Diktir' : locale === 'ru' ? 'Заказать пошив' : locale === 'pl' ? 'Zamów szycie' : 'Order Custom Curtain'}
                     </Link>
                     <Link href={`/${locale}/blog/ozel-dikim-perde-siparisi`} className={classes.megaMenuItem}>
