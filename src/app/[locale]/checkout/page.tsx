@@ -206,6 +206,28 @@ export default function CheckoutPage() {
     }
   }, [session, isInitialLoad, status, isGuestCheckout, isGuest, guestCart]);
 
+  // Meta Pixel: Fire InitiateCheckout event when checkout loads with cart data
+  useEffect(() => {
+    if (cartItems.length > 0 && typeof window !== 'undefined' && (window as any).fbq) {
+      const totalValue = cartItems.reduce((sum, item) => {
+        const price = item.is_custom_curtain && item.custom_price
+          ? Number(item.custom_price)
+          : Number(item.product?.price || 0);
+        return sum + (price * parseInt(item.quantity || '1'));
+      }, 0);
+
+      (window as any).fbq('track', 'InitiateCheckout', {
+        content_ids: cartItems.map(item => item.product_sku || item.variant_sku),
+        content_type: 'product',
+        num_items: cartItems.length,
+        value: totalValue,
+        currency: 'TRY'
+      });
+
+      console.log('[Meta Pixel] InitiateCheckout event fired', { value: totalValue, items: cartItems.length });
+    }
+  }, [cartItems]);
+
   // Load guest checkout data from localStorage
   const loadGuestCheckoutData = async () => {
     if (guestCart.length === 0) {
