@@ -42,7 +42,14 @@ export default async function Page(props: Props) {
     nejum_api_link.searchParams.append("product_category", category);
 
     if (searchParams) {
+      // Ignore tracking parameters from ads (Facebook, Google, UTM etc.)
+      const ignoredParams = ['fbclid', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'ref', 'mc_cid', 'mc_eid'];
+
       Object.entries(searchParams).forEach(([key, value]) => {
+        // Skip ignored tracking parameters
+        if (ignoredParams.includes(key.toLowerCase())) {
+          return;
+        }
         if (value) {
           if (Array.isArray(value)) {
             value.forEach((v) => nejum_api_link.searchParams.append(key, v));
