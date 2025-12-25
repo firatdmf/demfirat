@@ -56,7 +56,6 @@ Dümdüz duran bir perde, çarşaf asmışsınız gibi görünür. Perdenin dök
 
 **Normal/Sık Pile (Klasik/Zengin Görünüm):** Korniş ölçüsü x 2.5 veya x 3 (Örn: 200 cm x 3 = 600 cm kumaş eni gerekir)
 
-**Not:** Hazır perde alıyorsanız, paketin üzerindeki ölçü genellikle perdenin dümdüz, pilesiz halidir. Bu yüzden pencereniz için genellikle iki kanat almanız gerekir.
 
 ## Adım 3: Yükseklik Ölçüsü (Boy) Nasıl Alınır?
 
