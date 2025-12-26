@@ -217,19 +217,19 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   // Discount calculation based on fabric type
   // Solid fabrics: 50% off (original = current * 2)
   // Embroidery: 37% off (original = current / 0.63)
+  // All fabrics (no filter): 50% off by default
   const getDiscountInfo = (currentPrice: number) => {
-    if (fabricType === 'solid') {
+    if (fabricType === 'embroidery') {
       return {
         discountPercent: 50,
         originalPrice: currentPrice * 2
       };
-    } else if (fabricType === 'embroidery') {
-      return {
-        discountPercent: 37,
-        originalPrice: currentPrice / 0.63
-      };
     }
-    return null;
+    // Default: 50% discount for solid fabrics or when no filter is applied
+    return {
+      discountPercent: 50,
+      originalPrice: currentPrice * 2
+    };
   };
 
   const handleWishlistClick = async (e: React.MouseEvent) => {
