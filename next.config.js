@@ -50,10 +50,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
   },
-  // Experimental features for better performance
-  experimental: {
-    optimizeCss: true,
-  },
 };
 
 // module.exports = nextConfig
