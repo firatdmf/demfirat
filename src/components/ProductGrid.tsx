@@ -24,6 +24,7 @@ type ProductGridProps = {
   HeadlineT?: string;
   SearchBarT?: string;
   initialDisplayCount?: number;
+  productVideoSKUs?: string[]; // SKUs of products that have local videos
 }
 
 // Import centralized translation utility
@@ -35,7 +36,9 @@ const translateAttributeName = (name: string, locale: string): string => {
 };
 
 // Below variables are passed down
-function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT, initialDisplayCount = 30 }: ProductGridProps) {
+function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT, initialDisplayCount = 30, productVideoSKUs = [] }: ProductGridProps) {
+  // Create a Set for O(1) lookup of video SKUs
+  const videoSKUsSet = new Set(productVideoSKUs);
   // Pagination state
   const [displayCount, setDisplayCount] = useState(initialDisplayCount);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -426,7 +429,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               // Get fabric_type from searchParams for discount display
               const fabricType = searchParams?.fabric_type as string | undefined;
 
-              return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} productVariants={productVariants} fabricType={fabricType} />;
+              return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} productVariants={productVariants} fabricType={fabricType} hasVideo={videoSKUsSet.has(product.sku)} />;
             })}
           </div>
         </div>

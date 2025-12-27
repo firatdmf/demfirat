@@ -1,5 +1,6 @@
 import ProductDetailCard from "@/components/ProductDetailCard"
 import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAttribute, ProductFile, ProductAttribute } from "@/lib/interfaces";
+import { getProductVideoUrl } from "@/lib/getProductVideo";
 import classes from "./page.module.css";
 
 export default async function Page(props: PageProps<'/[locale]/product/[product_category]/[product_sku]'>) {
@@ -16,12 +17,8 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   let image_api_link: URL | null = null;
   // api call to get the product from database
   const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
-  const startTime = performance.now();
   // Disable caching to always fetch fresh product data (including current stock)
   const nejum_response = await fetch(nejum_api_link, { next: { revalidate: 0 } })
-  const endTime = performance.now();
-  const responseTime = (endTime - startTime).toFixed(2);
-  console.log(`API Response Time: ${responseTime}ms for ${product_sku}`);
   if (nejum_response.ok && (nejum_response.headers.get('content-type') || '').includes('application/json')) {
     const data = await nejum_response.json()
     product = data.product;
@@ -45,6 +42,9 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   // console.log("your product files in next js are: ", product_files);
   // console.log("its length is", product_files.length)
 
+  // Check for local product video
+  const videoUrl = product?.sku ? getProductVideoUrl(product.sku) : null;
+
   return (
     <>      {product ?
       <div>
@@ -59,6 +59,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
           product_attributes={product_attributes}
           variant_attributes={variant_attributes}
           locale={locale}
+          videoUrl={videoUrl}
         />
       </div> : `No product found with sku: ${product_sku}`}
 

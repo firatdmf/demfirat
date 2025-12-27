@@ -1,6 +1,7 @@
 // This file brings the products inside the specified product category url param, and provides it to the product grid component.
 // This is a server component, so we can do async and database calls.
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile } from "@/lib/interfaces";
+import { getProductVideoUrl } from "@/lib/getProductVideo";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
 import { Suspense } from 'react';
@@ -108,6 +109,12 @@ export default async function Page(props: Props) {
 
   const endTime = Date.now();
   console.log(`[PERFORMANCE] API call for ${product_category} took ${endTime - startTime}ms`);
+
+  // Check for product videos (server-side file check)
+  const productVideoSKUs = data.products
+    .filter((p: Product) => p.sku && getProductVideoUrl(p.sku))
+    .map((p: Product) => p.sku);
+
   return (
     <div>
       {errorMessage ? (<div style={{ color: "red" }}>
@@ -125,6 +132,7 @@ export default async function Page(props: Props) {
           product_category_description={data.product_category_description}
           searchParams={searchParams}
           locale={locale}
+          productVideoSKUs={productVideoSKUs}
         />
       </>)
       }

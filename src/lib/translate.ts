@@ -73,6 +73,9 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'teal': { 'tr': 'Çam Yeşili', 'ru': 'Бирюзовый', 'pl': 'Morski', 'en': 'Teal' },
     'off-white': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },
     'offwhite': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },
+    'ecru-gold': { 'tr': 'Ekru-Altın', 'ru': 'Экрю-золотой', 'pl': 'Ecru-złoty', 'en': 'Ecru-Gold' },
+    'silver-gold': { 'tr': 'Gümüş-Altın', 'ru': 'Серебристо-золотой', 'pl': 'Srebrno-złoty', 'en': 'Silver-Gold' },
+    'cream-gold': { 'tr': 'Krem-Altın', 'ru': 'Кремово-золотой', 'pl': 'Kremowo-złoty', 'en': 'Cream-Gold' },
 
     // Curtain Styles
     'header': { 'tr': 'Başlık', 'ru': 'Верхняя часть', 'pl': 'Główka', 'en': 'Header' },
@@ -86,12 +89,10 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
 };
 
 /**
- * Synchronous translation - checks manual translations first, then triggers API
+ * Synchronous translation - checks manual translations only (API disabled)
  */
 export function translateTextSync(text: string, targetLang: string): string {
     if (!text) return '';
-
-    console.log('[Translate] Input:', text, 'Target:', targetLang);
 
     // If target is English, just format and return
     if (targetLang.toLowerCase() === 'en') {
@@ -102,7 +103,6 @@ export function translateTextSync(text: string, targetLang: string): string {
 
     // Check local cache first
     if (localCache.has(cacheKey)) {
-        console.log('[Translate] From cache:', localCache.get(cacheKey));
         return localCache.get(cacheKey)!;
     }
 
@@ -110,37 +110,18 @@ export function translateTextSync(text: string, targetLang: string): string {
     const lowerText = text.toLowerCase();
     if (manualTranslations[lowerText]?.[targetLang]) {
         const translated = manualTranslations[lowerText][targetLang];
-        console.log('[Translate] Manual found:', translated);
         localCache.set(cacheKey, translated);
         return translated;
     }
 
-    // Fallback text
+    // Fallback text (no API call - it's blocked and causes lag)
     const fallback = text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
-    console.log('[Translate] Not in manual, calling API for:', text);
-
-    // Trigger async translation in background
-    if (typeof window !== 'undefined') {
-        fetch('/api/translate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, targetLang, sourceLang: 'EN' }),
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log('[Translate] API response:', data);
-                if (data.translatedText && data.translatedText !== text) {
-                    localCache.set(cacheKey, data.translatedText);
-                }
-            })
-            .catch(err => console.error('[Translate] API error:', err));
-    }
-
+    localCache.set(cacheKey, fallback);
     return fallback;
 }
 
 /**
- * Async translation - waits for API response
+ * Async translation - uses manual translations only (API disabled)
  */
 export async function translateText(text: string, targetLang: string): Promise<string> {
     if (!text) return '';
@@ -162,23 +143,7 @@ export async function translateText(text: string, targetLang: string): Promise<s
         return result;
     }
 
-    try {
-        const response = await fetch('/api/translate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, targetLang, sourceLang: 'EN' }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const translated = data.translatedText || text;
-            localCache.set(cacheKey, translated);
-            return translated;
-        }
-    } catch (error) {
-        console.error('Translation API error:', error);
-    }
-
+    // Fallback text (no API call - it's blocked and causes lag)
     const fallback = text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
     localCache.set(cacheKey, fallback);
     return fallback;

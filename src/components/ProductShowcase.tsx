@@ -10,9 +10,9 @@ interface ProductShowcaseProps {
 
 export default function ProductShowcase({ title, locale }: ProductShowcaseProps) {
   const slogan = locale === 'en' ? 'Elegance in every detail, comfort in every touch' :
-                 locale === 'ru' ? 'Изящество в каждой детали, комфорт в каждом прикосновении' :
-                 locale === 'pl' ? 'Elegancja w każdym detalu, komfort w każdym dotyku' :
-                 'Her detayda incelik, her dokunuşta konfor';
+    locale === 'ru' ? 'Изящество в каждой детали, комфорт в каждом прикосновении' :
+      locale === 'pl' ? 'Elegancja w każdym detalu, komfort w każdym dotyku' :
+        'Her detayda incelik, her dokunuşta konfor';
 
   return (
     <section className={classes.showcaseSection}>
@@ -22,51 +22,51 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
             <div className={classes.brand}>Karven</div>
             <div className={classes.slogan}>{slogan}</div>
           </div>
-          
+
           <div className={classes.gallery}>
             {/* Sol büyük resim */}
             <div className={`${classes.galleryItem} ${classes.large}`}>
-              <img 
-                src="/media/showcase/showcase-1.avif" 
+              <img
+                src="/media/showcase/showcase-1.avif"
                 alt="Luxury curtain showcase"
                 className={classes.image}
               />
             </div>
-            
+
             {/* Sağ üst sol */}
             <div className={classes.galleryItem}>
-              <img 
-                src="/media/showcase/showcase-2.avif" 
+              <img
+                src="/media/showcase/showcase-2.avif"
                 alt="Elegant fabric showcase"
                 className={classes.image}
               />
             </div>
-            
+
             {/* Sağ üst sağ */}
             <div className={classes.galleryItem}>
-              <img 
-                src="/media/showcase/showcase-3.avif" 
+              <img
+                src="/media/showcase/showcase-3.avif"
                 alt="Interior design showcase"
                 className={classes.image}
               />
             </div>
-            
+
             {/* Sağ alt geniş */}
             <div className={`${classes.galleryItem} ${classes.wide}`}>
-              <img 
-                src="/media/showcase/showcase-4.avif" 
+              <img
+                src="/media/showcase/showcase-4.avif"
                 alt="Living room showcase"
                 className={classes.image}
               />
             </div>
           </div>
-          
+
           <div className={classes.ctaContainer}>
-            <Link href={`/${locale}/product`} className={classes.ctaButton}>
-              {locale === 'en' ? 'Explore Collection' : 
-               locale === 'ru' ? 'Изучить коллекцию' :
-               locale === 'pl' ? 'Odkryj kolekcję' :
-               'Ürünlerimizi Keşfedin'}
+            <Link href={`/${locale}/product/fabric`} className={classes.ctaButton}>
+              {locale === 'en' ? 'Explore Collection' :
+                locale === 'ru' ? 'Изучить коллекцию' :
+                  locale === 'pl' ? 'Odkryj kolekcję' :
+                    'Ürünlerimizi Keşfedin'}
             </Link>
           </div>
         </div>

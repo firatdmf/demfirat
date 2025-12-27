@@ -27,6 +27,7 @@ type ProductDetailCardPageProps = {
   product_attributes?: ProductAttribute[] | null;
   variant_attributes?: ProductAttribute[] | null;
   locale?: string;
+  videoUrl?: string | null; // Local video URL for this product
 };
 
 function ProductDetailCard({
@@ -39,7 +40,8 @@ function ProductDetailCard({
   product_files,
   product_attributes = [],
   variant_attributes = [],
-  locale = 'en'
+  locale = 'en',
+  videoUrl = null
 }: ProductDetailCardPageProps) {
 
   const t = useTranslations('ProductDetailCard');
@@ -110,7 +112,6 @@ function ProductDetailCard({
 
     // Önce URL parametrelerini kontrol et
     const hasUrlParams = Object.keys(searchParams).length > 0;
-    console.log('[ProductDetailCard] searchParams:', searchParams);
 
     if (hasUrlParams) {
       // URL'den parametreleri al
@@ -149,7 +150,6 @@ function ProductDetailCard({
       }
     });
 
-    console.log('[ProductDetailCard] Final initialAttributes:', initialAttributes);
     return initialAttributes;
   };
 
@@ -176,8 +176,7 @@ function ProductDetailCard({
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      // handle unauthenticated
-      console.log("Not logged in!: " + status);
+      // handle unauthenticated - silent fail for guests
     },
   });
 
@@ -626,6 +625,21 @@ function ProductDetailCard({
       ? filteredImages.map(img => img.file)
       : [(placeholder_image_link)];
 
+  // Prepare media items: video first (if available), then images
+  type MediaItem = { type: 'video' | 'image'; url: string };
+  const mediaItems: MediaItem[] = [];
+
+  if (videoUrl) {
+    mediaItems.push({ type: 'video', url: videoUrl });
+  }
+  imageFiles.forEach(img => {
+    mediaItems.push({ type: 'image', url: img });
+  });
+
+  // Check if current selection is a video
+  const currentMedia = mediaItems[selectedThumbIndex];
+  const isVideoSelected = currentMedia?.type === 'video';
+
   if (!product) {
     return <div>{translateAttributeName('loading...')}</div>;
   }
@@ -635,46 +649,80 @@ function ProductDetailCard({
       <div className={classes.detailCardContainer}>
         <div className={classes.productMedia}>
           <div className={classes.thumbs}>
-            {imageFiles.map((image, index) => (
+            {mediaItems.map((media, index) => (
               <div
-                className={`${classes.thumb} ${selectedThumbIndex === index ? classes.thumb_selected : ''}`}
+                className={`${classes.thumb} ${selectedThumbIndex === index ? classes.thumb_selected : ''} ${media.type === 'video' ? classes.videoThumb : ''}`}
                 key={index}
                 onClick={() => selectThumb(index)}
               >
                 <div className={classes.img}>
-                  <img
-                    src={image || placeholder_image_link}
-                    alt="product image"
-                    loading="eager"
-                  />
+                  {media.type === 'video' ? (
+                    <>
+                      {/* Don't load video for thumbnail - use static placeholder */}
+                      <div
+                        className={classes.videoThumbnailPlaceholder}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <span style={{ fontSize: '1.5rem', color: 'white' }}>🎬</span>
+                      </div>
+                      <div className={classes.videoPlayOverlay}>
+                        <span className={classes.playIcon}>▶</span>
+                      </div>
+                    </>
+                  ) : (
+                    <img
+                      src={media.url || placeholder_image_link}
+                      alt="product image"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
               </div>
             ))}
           </div>
           <div className={classes.gallery}>
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
-            <div className={imageLoaded ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
-              <img
-                key={imageFiles[selectedThumbIndex]}
-                src={(imageFiles[selectedThumbIndex]
-                  || placeholder_image_link)}
-                alt="Product image"
-                loading="eager"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onLoad={() => setImageLoaded(true)}
-                style={{ cursor: 'default' }}
-              />
-              {zoomPosition && zoomBoxPosition && (
-                <div
-                  className={classes.zoom}
-                  style={{
-                    backgroundImage: `url(${imageFiles[selectedThumbIndex]})`,
-                    backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                    top: `${zoomBoxPosition.y}px`,
-                    left: `${zoomBoxPosition.x}px`,
-                  }}
+            <div className={imageLoaded || isVideoSelected ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
+              {isVideoSelected && currentMedia ? (
+                <video
+                  key={`${currentMedia.url}-${selectedVariant?.id || 'default'}`}
+                  src={currentMedia.url}
+                  controls
+                  autoPlay
+                  preload="auto"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000' }}
                 />
+              ) : (
+                <>
+                  <img
+                    key={currentMedia?.url || imageFiles[selectedThumbIndex]}
+                    src={currentMedia?.url || imageFiles[selectedThumbIndex] || placeholder_image_link}
+                    alt="Product image"
+                    loading="eager"
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    onLoad={() => setImageLoaded(true)}
+                    style={{ cursor: 'default' }}
+                  />
+                  {zoomPosition && zoomBoxPosition && (
+                    <div
+                      className={classes.zoom}
+                      style={{
+                        backgroundImage: `url(${currentMedia?.url || imageFiles[selectedThumbIndex]})`,
+                        backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                        top: `${zoomBoxPosition.y}px`,
+                        left: `${zoomBoxPosition.x}px`,
+                      }}
+                    />
+                  )}
+                </>
               )}
             </div>
             <button className={classes.nextButton} onClick={handleNextImage}>{">"}</button>

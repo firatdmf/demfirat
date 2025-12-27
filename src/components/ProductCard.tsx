@@ -25,9 +25,10 @@ interface ProductCardProps {
   variantAttributeValues?: any[];  // product_variant_attribute_values
   productVariants?: any[];  // product_variants
   fabricType?: 'solid' | 'embroidery' | string; // For discount display
+  hasVideo?: boolean; // Whether product has a local video
 }
 
-function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], productVariants = [], fabricType }: ProductCardProps) {
+function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], productVariants = [], fabricType, hasVideo = false }: ProductCardProps) {
   const { convertPrice } = useCurrency();
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
   const { data: session } = useSession();
@@ -296,7 +297,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 src={imageSrc}
                 alt={`${product.title} - ${product.sku}`}
                 className={classes.productImage}
-                fetchPriority="high"
+                loading="lazy"
                 decoding="async"
                 onLoad={(e) => {
                   if (e.currentTarget.complete) {
@@ -341,6 +342,11 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
             */
 
           }
+
+          {/* Video Badge */}
+          {hasVideo && (
+            <div className={classes.videoBadge} title="Video available" />
+          )}
 
         </div>
 

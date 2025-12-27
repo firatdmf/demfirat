@@ -179,7 +179,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
 
                     <div className={classes.buttonRow}>
                         <Link
-                            href={`/${locale}/product/fabric?fabric_type=solid`}
+                            href={`/${locale}/product/fabric`}
                             className={classes.ctaButton}
                         >
                             {t.cta[lang]}

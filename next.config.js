@@ -10,6 +10,10 @@ const nextConfig = {
   reactStrictMode: true,
   // -----
 
+  // Performance optimizations
+  poweredByHeader: false,
+  compress: true,
+
   // I added these below myself. These prisma and bcrpyt are two libraries that we do not want to add
   // to our client bundle at all. Do not show them on the browser (no client side, only server side)
   serverExternalPackages: ["@prisma/client", "bcrypt", "iyzipay"],
@@ -40,7 +44,16 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-  }
+    // Image optimization settings
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
+  },
+  // Experimental features for better performance
+  experimental: {
+    optimizeCss: true,
+  },
 };
 
 // module.exports = nextConfig
