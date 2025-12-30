@@ -129,6 +129,13 @@ export default function CheckoutPage() {
   const [cities, setCities] = useState<Array<{ id: number; name: string }>>([]);
   const [districts, setDistricts] = useState<Array<{ name: string }>>([]);
 
+  // Discount code state
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
+  const [appliedDiscountCode, setAppliedDiscountCode] = useState('');
+  const [discountLoading, setDiscountLoading] = useState(false);
+  const [discountError, setDiscountError] = useState('');
+
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
       checkout: { en: 'Checkout', tr: 'Ödeme', ru: 'Оформление заказа', pl: 'Zamówienie' },
@@ -176,6 +183,11 @@ export default function CheckoutPage() {
       pleaseAgreeToTerms: { en: 'Please accept the Distance Sales Agreement', tr: 'Lütfen Mesafeli Satış Sözleşmesini kabul edin', ru: 'Пожалуйста, примите договор дистанционной продажи', pl: 'Proszę zaakceptować umowę sprzedaży na odległość' },
       legalDocuments: { en: 'Legal Documents', tr: 'Yasal Belgeler', ru: 'Юридические документы', pl: 'Dokumenty prawne' },
       securePayment: { en: 'Secure Payment', tr: 'Güvenli Ödeme', ru: 'Безопасная оплата', pl: 'Bezpieczna płatność' },
+      discountCode: { en: 'Discount Code', tr: 'İndirim Kodu', ru: 'Код скидки', pl: 'Kod rabatowy' },
+      apply: { en: 'Apply', tr: 'Uygula', ru: 'Применить', pl: 'Zastosuj' },
+      discount: { en: 'Discount', tr: 'İndirim', ru: 'Скидка', pl: 'Rabat' },
+      invalidDiscountCode: { en: 'Invalid discount code', tr: 'Geçersiz indirim kodu', ru: 'Неверный код скидки', pl: 'Nieprawidłowy kod rabatowy' },
+      discountApplied: { en: 'Discount applied!', tr: 'İndirim uygulandı!', ru: 'Скидка применена!', pl: 'Rabat zastosowany!' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -532,6 +544,52 @@ export default function CheckoutPage() {
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
     if (isNaN(numPrice) || numPrice === 0) return null;
     return convertPrice(numPrice);
+  };
+
+  // Discount code handler
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) return;
+
+    setDiscountLoading(true);
+    setDiscountError('');
+
+    try {
+      const response = await fetch('/api/discount/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: discountCode.trim() }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.discount_percentage) {
+        setDiscountPercentage(data.discount_percentage);
+        setAppliedDiscountCode(data.code);
+        setDiscountError('');
+      } else {
+        setDiscountError(t('invalidDiscountCode'));
+        setDiscountPercentage(null);
+        setAppliedDiscountCode('');
+      }
+    } catch (error) {
+      setDiscountError(t('invalidDiscountCode'));
+      setDiscountPercentage(null);
+      setAppliedDiscountCode('');
+    } finally {
+      setDiscountLoading(false);
+    }
+  };
+
+  // Calculate discount amount
+  const calculateDiscountAmount = () => {
+    if (!discountPercentage) return 0;
+    return subtotal * (discountPercentage / 100);
+  };
+
+  // Calculate total with discount
+  const calculateTotal = () => {
+    const discountAmount = calculateDiscountAmount();
+    return subtotal - discountAmount;
   };
 
   const handleCompleteOrder = async () => {
@@ -1690,10 +1748,37 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        {/* Right Column - Order Summary (Sticky) */}
         <div className={classes.rightColumn}>
           <div className={classes.orderSummary}>
             <h2>{t('orderSummary')}</h2>
+
+            {/* Discount Code Input */}
+            <div className={classes.discountCodeSection}>
+              <label className={classes.discountLabel}>{t('discountCode')}</label>
+              <div className={classes.discountInputRow}>
+                <input
+                  type="text"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                  placeholder={locale === 'tr' ? 'Kodu girin' : 'Enter code'}
+                  className={classes.discountInput}
+                  disabled={!!appliedDiscountCode}
+                />
+                <button
+                  onClick={handleApplyDiscount}
+                  disabled={discountLoading || !discountCode.trim() || !!appliedDiscountCode}
+                  className={classes.applyBtn}
+                >
+                  {discountLoading ? '...' : t('apply')}
+                </button>
+              </div>
+              {discountError && <p className={classes.discountError}>{discountError}</p>}
+              {appliedDiscountCode && (
+                <p className={classes.discountSuccess}>
+                  ✓ {appliedDiscountCode} ({discountPercentage}% {t('discount')})
+                </p>
+              )}
+            </div>
 
             {/* Summary */}
             <div className={classes.summaryRows}>
@@ -1701,6 +1786,12 @@ export default function CheckoutPage() {
                 <span>{t('subtotal')}</span>
                 <span>{formatPrice(subtotal) || '$0.00'}</span>
               </div>
+              {discountPercentage && (
+                <div className={`${classes.summaryRow} ${classes.discountRow}`}>
+                  <span>{t('discount')} ({discountPercentage}%)</span>
+                  <span className={classes.discountAmount}>-{formatPrice(calculateDiscountAmount()) || '$0.00'}</span>
+                </div>
+              )}
               <div className={classes.summaryRow}>
                 <span>{t('shipping')}</span>
                 <span className={shipping === 0 ? classes.freeShipping : ''}>
@@ -1710,7 +1801,7 @@ export default function CheckoutPage() {
               <div className={classes.summaryDivider}></div>
               <div className={`${classes.summaryRow} ${classes.summaryTotal}`}>
                 <span>{t('total')}</span>
-                <span>{formatPrice(total) || '$0.00'}</span>
+                <span>{formatPrice(calculateTotal()) || '$0.00'}</span>
               </div>
             </div>
 

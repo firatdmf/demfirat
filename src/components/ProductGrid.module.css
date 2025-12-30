@@ -74,6 +74,62 @@
   box-shadow: 0 4px 12px rgba(201, 169, 97, 0.4);
 }
 
+/* Filter Actions Container */
+.ProductGrid .filterActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Catalog Button Wrapper - Desktop */
+.ProductGrid .catalogButtonWrapper {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--light-gray, #e0dcd2);
+  background: linear-gradient(135deg, rgba(44, 44, 44, 0.02) 0%, rgba(44, 44, 44, 0.05) 100%);
+}
+
+/* Desktop Catalog Download Button */
+.ProductGrid .catalogDownloadButtonDesktop {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #2c2c2c 0%, #444444 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(44, 44, 44, 0.2);
+}
+
+.ProductGrid .catalogDownloadButtonDesktop:hover:not(:disabled) {
+  background: linear-gradient(135deg, #444444 0%, #555555 100%);
+  box-shadow: 0 4px 12px rgba(44, 44, 44, 0.3);
+  transform: translateY(-1px);
+}
+
+.ProductGrid .catalogDownloadButtonDesktop:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ProductGrid .catalogDownloadButtonDesktop svg {
+  flex-shrink: 0;
+}
+
+.ProductGrid .productCount {
+  opacity: 0.7;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+
 /* Scrollable Filter Content */
 .ProductGrid .filterContent {
   flex: 1;
@@ -417,6 +473,57 @@
   flex-shrink: 0;
 }
 
+/* Catalog Download Button */
+.ProductGrid .catalogDownloadButton {
+  display: inline-flex;
+  background: linear-gradient(135deg, #2c2c2c 0%, #444444 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(44, 44, 44, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.ProductGrid .catalogDownloadButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(44, 44, 44, 0.4);
+  background: linear-gradient(135deg, #444444 0%, #555555 100%);
+}
+
+.ProductGrid .catalogDownloadButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ProductGrid .catalogDownloadButton svg {
+  flex-shrink: 0;
+}
+
+/* Spinner animation for loading state */
+.ProductGrid .spinnerIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
 /* Filter Drawer Overlay */
 .ProductGrid .filterDrawerOverlay {
   position: fixed;
@@ -632,7 +739,9 @@
 
   /* Mobilde filter button göster */
   .ProductGrid .filterButtonContainer {
-    display: block;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
   }
 
   /* Desktop sidebar gizle */
@@ -668,12 +777,14 @@
     margin: 0 0 1.25rem 0.75rem;
   }
 
-  .ProductGrid .mobileFilterButton {
+  .ProductGrid .mobileFilterButton,
+  .ProductGrid .catalogDownloadButton {
     padding: 0.625rem 1rem;
     font-size: 0.875rem;
   }
 
-  .ProductGrid .mobileFilterButton svg {
+  .ProductGrid .mobileFilterButton svg,
+  .ProductGrid .catalogDownloadButton svg {
     width: 18px;
     height: 18px;
   }

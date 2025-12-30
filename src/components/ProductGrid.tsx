@@ -42,6 +42,8 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   // Pagination state
   const [displayCount, setDisplayCount] = useState(initialDisplayCount);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // Catalog download state
+  const [isGeneratingCatalog, setIsGeneratingCatalog] = useState(false);
 
   // This is manipulated with (search params) but we need to initialize it first.
   let filteredProducts: Product[] | null = products ?? []; // Initialize as an empty array if products is null
@@ -56,6 +58,89 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       newExpanded.add(index);
     }
     setExpandedSections(newExpanded);
+  };
+
+  // Catalog download handler
+  const handleDownloadCatalog = async () => {
+    if (!filteredProducts || filteredProducts.length === 0) return;
+
+    setIsGeneratingCatalog(true);
+    try {
+      // Prepare products for PDF
+      const catalogProducts = filteredProducts.map(product => {
+        // Get variants for this product
+        const productVars = product_variants.filter(v => v.product_id === product.id);
+
+        // Get colors from variants
+        const colors = new Set<string>();
+        const attributes = new Map<string, Set<string>>();
+
+        productVars.forEach(variant => {
+          variant.product_variant_attribute_values.forEach(avId => {
+            const av = product_variant_attribute_values.find(v => v.id === avId);
+            if (av) {
+              const attr = product_variant_attributes.find(a => a.id === av.product_variant_attribute_id);
+              if (attr?.name) {
+                const attrName = attr.name.toLowerCase();
+                if (attrName === 'color') {
+                  colors.add(av.product_variant_attribute_value);
+                } else {
+                  // Collect other attributes
+                  if (!attributes.has(attr.name)) {
+                    attributes.set(attr.name, new Set());
+                  }
+                  attributes.get(attr.name)?.add(av.product_variant_attribute_value);
+                }
+              }
+            }
+          });
+        });
+
+        // Convert attributes map to array
+        const attributesArray = Array.from(attributes.entries()).map(([name, values]) => ({
+          name,
+          values: Array.from(values).slice(0, 5)
+        }));
+
+        return {
+          sku: product.sku || '',
+          title: product.title || '',
+          price: product.price ? Number(product.price) : null,
+          description: product.description ? String(product.description) : '',
+          primary_image: product.primary_image || '',
+          colors: Array.from(colors),
+          attributes: attributesArray,
+          variants: productVars.slice(0, 8).map(v => ({
+            sku: v.variant_sku,
+            price: v.variant_price ? Number(v.variant_price) : null
+          }))
+        };
+      });
+
+      const response = await fetch('/api/catalog/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: catalogProducts, locale })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `catalog-${product_category || 'all'}-${Date.now()}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        console.error('Failed to generate catalog');
+      }
+    } catch (error) {
+      console.error('Catalog download error:', error);
+    } finally {
+      setIsGeneratingCatalog(false);
+    }
   };
 
   // Infinite scroll handler
@@ -206,7 +291,34 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                     'Filters'}
             </span>
           </button>
+
+          {/* Download Catalog Button */}
+          <button
+            className={classes.catalogDownloadButton}
+            onClick={handleDownloadCatalog}
+            disabled={isGeneratingCatalog || !filteredProducts || filteredProducts.length === 0}
+            aria-label="Download catalog"
+          >
+            {isGeneratingCatalog ? (
+              <svg className={classes.spinnerIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" strokeDasharray="40" strokeDashoffset="10"></circle>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7,10 12,15 17,10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            )}
+            <span>
+              {locale === 'tr' ? 'Katalog İndir' :
+                locale === 'ru' ? 'Скачать каталог' :
+                  locale === 'pl' ? 'Pobierz katalog' :
+                    'Download Catalog'}
+            </span>
+          </button>
         </div>
+
 
         {/* Mobile Filter Drawer Overlay */}
         {FilterDrawerOpen && (
@@ -337,14 +449,18 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                     locale === 'pl' ? 'Filtry' :
                       'Filters'}
               </h3>
-              <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
-                {locale === 'tr' ? 'Temizle' :
-                  locale === 'ru' ? 'Очистить' :
-                    locale === 'pl' ? 'Wyczyść' :
-                      locale === 'de' ? 'Zurücksetzen' :
-                        'Reset'}
-              </Link>
+              <div className={classes.filterActions}>
+                <Link href="?" scroll={false} className={classes.clearFiltersButton} replace={true}>
+                  {locale === 'tr' ? 'Temizle' :
+                    locale === 'ru' ? 'Очистить' :
+                      locale === 'pl' ? 'Wyczyść' :
+                        locale === 'de' ? 'Zurücksetzen' :
+                          'Reset'}
+                </Link>
+              </div>
             </div>
+
+
 
             {/* Scrollable Filter Content */}
             <div className={classes.filterContent}>
@@ -416,6 +532,33 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                 );
               })}
             </div>
+            {/* Catalog Download Button - Desktop */}
+            <div className={classes.catalogButtonWrapper}>
+              <button
+                className={classes.catalogDownloadButtonDesktop}
+                onClick={handleDownloadCatalog}
+                disabled={isGeneratingCatalog || !filteredProducts || filteredProducts.length === 0}
+              >
+                {isGeneratingCatalog ? (
+                  <svg className={classes.spinnerIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" strokeDasharray="40" strokeDashoffset="10"></circle>
+                  </svg>
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7,10 12,15 17,10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                )}
+                <span>
+                  {locale === 'tr' ? 'Katalog İndir' :
+                    locale === 'ru' ? 'Скачать каталог' :
+                      locale === 'pl' ? 'Pobierz katalog' :
+                        'Download Catalog'}
+                </span>
+                <span className={classes.productCount}>({filteredProducts?.length || 0})</span>
+              </button>
+            </div>
           </div>
           <div className={classes.products}>
             {(Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
@@ -435,45 +578,49 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
         </div>
 
         {/* Loading indicator for infinite scroll */}
-        {isLoadingMore && (
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            padding: '40px',
-            width: '100%'
-          }}>
+        {
+          isLoadingMore && (
             <div style={{
-              border: '4px solid #f3f3f3',
-              borderTop: '4px solid #c9a961',
-              borderRadius: '50%',
-              width: '40px',
-              height: '40px',
-              animation: 'spin 1s linear infinite'
-            }}></div>
-            <style>{`
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '40px',
+              width: '100%'
+            }}>
+              <div style={{
+                border: '4px solid #f3f3f3',
+                borderTop: '4px solid #c9a961',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                animation: 'spin 1s linear infinite'
+              }}></div>
+              <style>{`
               @keyframes spin {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
               }
             `}</style>
-          </div>
-        )}
+            </div>
+          )
+        }
 
         {/* End message */}
-        {filteredProducts && displayCount >= filteredProducts.length && filteredProducts.length > initialDisplayCount && (
-          <div style={{
-            textAlign: 'center',
-            padding: '40px',
-            color: '#666',
-            fontSize: '16px'
-          }}>
-            {locale === 'tr' ? 'Tüm ürünler yüklendi' :
-              locale === 'ru' ? 'Все товары загружены' :
-                locale === 'pl' ? 'Wszystkie produkty załadowane' :
-                  'All products loaded'}
-          </div>
-        )}
-      </div>
+        {
+          filteredProducts && displayCount >= filteredProducts.length && filteredProducts.length > initialDisplayCount && (
+            <div style={{
+              textAlign: 'center',
+              padding: '40px',
+              color: '#666',
+              fontSize: '16px'
+            }}>
+              {locale === 'tr' ? 'Tüm ürünler yüklendi' :
+                locale === 'ru' ? 'Все товары загружены' :
+                  locale === 'pl' ? 'Wszystkie produkty załadowane' :
+                    'All products loaded'}
+            </div>
+          )
+        }
+      </div >
     );
   }
 }
