@@ -27,6 +27,7 @@ export type Product = {
   datasheet_url: string | null;
   minimum_inventory_level: Decimal | null;
   primary_image?: string;
+  product_attributes?: ProductAttribute[] | null;  // Product-level attributes including discount_rate
 
 }
 

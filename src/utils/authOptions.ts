@@ -105,6 +105,15 @@ export const authOptions: NextAuthOptions = {
                         console.error('Error creating Google user');
                         return false;
                     }
+
+                    // Get the Django user data and store it on the user object
+                    const data = await response.json();
+                    if (data.user) {
+                        // Store Django user ID on the NextAuth user object
+                        (user as any).djangoId = data.user.id;
+                        (user as any).djangoUsername = data.user.username;
+                        console.log('[GOOGLE LOGIN] Django user ID:', data.user.id);
+                    }
                 } catch (error) {
                     console.error('Error creating Google user:', error);
                     return false;
@@ -118,18 +127,25 @@ export const authOptions: NextAuthOptions = {
                 user: {
                     ...session.user,
                     id: token.id,
+                    name: token.name,
+                    email: token.email,
+                    image: token.picture,
                     randomKey: token.randomKey
                 }
             };
         },
-        jwt: ({ token, user }) => {
+        jwt: ({ token, user, account, profile }) => {
             if (user) {
                 const u = user as unknown as any;
-                return {
-                    ...token,
-                    id: u.id,
-                    randomKey: u.randomKey
-                };
+                // For Google OAuth, use djangoId, for credentials use id
+                token.id = u.djangoId || u.id;
+                token.randomKey = u.randomKey;
+            }
+            // For Google OAuth, profile contains user info
+            if (account?.provider === 'google' && profile) {
+                token.name = profile.name;
+                token.email = profile.email;
+                token.picture = (profile as any).picture;
             }
             return token;
         }

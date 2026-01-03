@@ -11,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useRouter } from "next/navigation";
 import { getColorCode } from "@/lib/colorMap";
+import LoginModal from "./LoginModal";
 
 interface HeaderProps {
   menuTArray: string[];
@@ -48,6 +49,7 @@ function Header({ menuTArray }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
   // Çeviriler
@@ -307,9 +309,13 @@ function Header({ menuTArray }: HeaderProps) {
               </div>
             </div>
           ) : (
-            <Link href={`/${locale}/login`} className={classes.iconButton} title={t('login')}>
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className={classes.iconButton}
+              title={t('login')}
+            >
               <FaUser />
-            </Link>
+            </button>
           )}
 
           <Link href={`/${locale}/cart`} className={classes.cartButton} title="Cart">
@@ -494,6 +500,12 @@ function Header({ menuTArray }: HeaderProps) {
           <hr className={classes.mobileDivider} />
         </div>
       )}
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </header>
   );
 }

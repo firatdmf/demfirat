@@ -215,21 +215,30 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     return convertPrice(numPrice);
   };
 
-  // Discount calculation based on fabric type
-  // Solid fabrics: 50% off (original = current * 2)
-  // Embroidery: 37% off (original = current / 0.63)
-  // All fabrics (no filter): 50% off by default
+  // Discount calculation based on backend discount_rate attribute
+  // Returns null if no discount_rate attribute exists
   const getDiscountInfo = (currentPrice: number) => {
-    if (fabricType === 'embroidery') {
-      return {
-        discountPercent: 50,
-        originalPrice: currentPrice * 2
-      };
+    // Find discount_rate from product attributes
+    const discountAttr = product.product_attributes?.find(
+      attr => attr.name?.toLowerCase() === 'discount_rate'
+    );
+
+    if (!discountAttr || !discountAttr.value) {
+      return null; // No discount for this product
     }
-    // Default: 50% discount for solid fabrics or when no filter is applied
+
+    const discountRate = parseFloat(discountAttr.value);
+    if (isNaN(discountRate) || discountRate <= 0) {
+      return null; // Invalid discount rate
+    }
+
+    // Calculate original price: currentPrice = originalPrice * (1 - discountRate/100)
+    // So: originalPrice = currentPrice / (1 - discountRate/100)
+    const originalPrice = currentPrice / (1 - discountRate / 100);
+
     return {
-      discountPercent: 50,
-      originalPrice: currentPrice * 2
+      discountPercent: Math.round(discountRate),
+      originalPrice: originalPrice
     };
   };
 

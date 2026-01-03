@@ -1,5 +1,6 @@
 import { Order, OrderItem } from "@/lib/interfaces";
 import Link from "next/link";
+import RateProductButton from "@/components/RateProductButton";
 
 function getStatusClass(status: string) {
     const normalized = status.toLowerCase().replace(/ /g, "_");
@@ -105,13 +106,23 @@ export default async function Page(props: PageProps<'/[locale]/order/[order_id]'
                                         </div>
                                     </td>
 
-                                    <td className="px-4 py-2 border-b">{Number(item.quantity)} {item.unit_of_measurement}</td>
-                                    <td className={`px-4 py-2 border-b`}>
-                                        <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${getStatusClass(item.status)}`}>
-                                            {item.status
-                                                .replace(/_/g, " ")
-                                                .replace(/\b\w/g, (l) => l.toUpperCase())}
-                                        </span>
+                                    <td className="px-4 py-2 border-b text-center">
+                                        <div className="flex flex-col items-center gap-2">
+                                            <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${getStatusClass(item.status)}`}>
+                                                {item.status
+                                                    .replace(/_/g, " ")
+                                                    .replace(/\b\w/g, (l) => l.toUpperCase())}
+                                            </span>
+                                            {/* Rate Button for items */}
+                                            <div className="mt-1">
+                                                <RateProductButton
+                                                    productSku={item.product_sku || ''}
+                                                    productTitle={item.product_title || ''}
+                                                    productImage={item.product_image}
+                                                    variant="button"
+                                                />
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

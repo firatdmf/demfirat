@@ -44,19 +44,19 @@ export async function GET(request: NextRequest) {
     // Yeni PDF dokümanı oluştur
     const pdfDoc = await PDFDocument.create();
     let page = pdfDoc.addPage([595, 842]); // A4 boyutu
-    
+
     // Fontları yükle
     const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
     const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    
+
     // Renkler
     const goldColor = rgb(0.788, 0.663, 0.38); // #c9a961
     const darkColor = rgb(0.172, 0.172, 0.172); // #2c2c2c
     const grayColor = rgb(0.4, 0.4, 0.4); // #666666
-    
+
     const { width, height } = page.getSize();
     let yPosition = height - 80;
-    
+
     // Header - Logo
     page.drawText('KARVEN', {
       x: width / 2 - 70,
@@ -65,9 +65,9 @@ export async function GET(request: NextRequest) {
       font: helveticaBold,
       color: goldColor,
     });
-    
+
     yPosition -= 40;
-    
+
     // Başlık
     page.drawText('Product Information', {
       x: width / 2 - 80,
@@ -76,9 +76,9 @@ export async function GET(request: NextRequest) {
       font: helvetica,
       color: darkColor,
     });
-    
+
     yPosition -= 25;
-    
+
     // Alt başlık
     page.drawText('Premium Textile Collection', {
       x: width / 2 - 85,
@@ -87,9 +87,9 @@ export async function GET(request: NextRequest) {
       font: helvetica,
       color: goldColor,
     });
-    
+
     yPosition -= 30;
-    
+
     // Alt çizgi
     page.drawLine({
       start: { x: 50, y: yPosition },
@@ -97,56 +97,55 @@ export async function GET(request: NextRequest) {
       thickness: 2,
       color: goldColor,
     });
-    
+
     yPosition -= 40;
-    
-    // Resim varsa ekle
+
+    // Resim varsa ekle - büyük ve ortalanmış
     if (image) {
       try {
         const imageResponse = await fetch(image);
         if (imageResponse.ok) {
           const imageBytes = await imageResponse.arrayBuffer();
           let embeddedImage;
-          
+
           if (image.toLowerCase().includes('.png')) {
             embeddedImage = await pdfDoc.embedPng(imageBytes);
           } else {
             embeddedImage = await pdfDoc.embedJpg(imageBytes);
           }
-          
-          // Resmi daha küçük yap - maksimum 200x200
+
+          // Resmi sayfa genişliğine göre maksimum boyutta göster
           const imgWidth = embeddedImage.width;
           const imgHeight = embeddedImage.height;
-          const maxSize = 200;
-          
-          let scaledWidth = imgWidth;
-          let scaledHeight = imgHeight;
-          
-          if (imgWidth > imgHeight) {
-            scaledWidth = maxSize;
-            scaledHeight = (imgHeight / imgWidth) * maxSize;
-          } else {
-            scaledHeight = maxSize;
-            scaledWidth = (imgWidth / imgHeight) * maxSize;
-          }
-          
+          const maxWidth = width - 60; // Sayfa genişliği - minimal kenar boşlukları (30+30)
+          const maxHeight = 450; // Maksimum yükseklik
+
+          // En-boy oranını koruyarak ölçekle - resmi büyüt/küçült
+          const widthRatio = maxWidth / imgWidth;
+          const heightRatio = maxHeight / imgHeight;
+          const ratio = Math.min(widthRatio, heightRatio); // Resmi büyütmeye de izin ver
+
+          const scaledWidth = imgWidth * ratio;
+          const scaledHeight = imgHeight * ratio;
+
+          // Resmi ortala
           const imageX = (width - scaledWidth) / 2;
-          
+
           page.drawImage(embeddedImage, {
             x: imageX,
             y: yPosition - scaledHeight,
             width: scaledWidth,
             height: scaledHeight,
           });
-          
-          yPosition -= scaledHeight + 30;
+
+          yPosition -= scaledHeight + 40;
         }
       } catch (error) {
         console.log('Resim yüklenemedi:', error);
         yPosition -= 20;
       }
     }
-    
+
     // Ürün bilgileri - basit tablo formatı
     const addInfoRow = (label: string, value: string) => {
       // Sayfa kontrolü
@@ -155,7 +154,7 @@ export async function GET(request: NextRequest) {
         page = newPage as any;
         yPosition = height - 80;
       }
-      
+
       page.drawText(label + ':', {
         x: 70,
         y: yPosition,
@@ -163,7 +162,7 @@ export async function GET(request: NextRequest) {
         font: helveticaBold,
         color: goldColor,
       });
-      
+
       page.drawText(value, {
         x: 200,
         y: yPosition,
@@ -171,10 +170,10 @@ export async function GET(request: NextRequest) {
         font: helvetica,
         color: darkColor,
       });
-      
+
       yPosition -= 25;
     };
-    
+
     // Ürün bilgileri - API'den gelen data varsa onu kullan
     const product = productData?.product;
     const productTitle = product?.title || title || 'N/A';
@@ -183,14 +182,30 @@ export async function GET(request: NextRequest) {
     const productVariants = productData?.product_variants || [];
     const productVariantAttributes = productData?.product_variant_attributes || [];
     const productVariantAttributeValues = productData?.product_variant_attribute_values || [];
-    
+    const productAttributes = productData?.product_attributes || [];
+
     // Temel bilgiler
     addInfoRow('Product Title', replaceTurkishChars(productTitle));
     addInfoRow('SKU', sku);
     addInfoRow('Category', replaceTurkishChars(productCategory));
-    
+
+    // Boyut bilgilerini product attributes'tan al
+    const widthAttr = productAttributes.find((attr: any) =>
+      attr.name?.toLowerCase() === 'width' || attr.name?.toLowerCase() === 'genişlik'
+    );
+    const heightAttr = productAttributes.find((attr: any) =>
+      attr.name?.toLowerCase() === 'height' || attr.name?.toLowerCase() === 'uzunluk' || attr.name?.toLowerCase() === 'boy'
+    );
+
+    if (widthAttr?.value) {
+      addInfoRow('Width', replaceTurkishChars(widthAttr.value));
+    }
+    if (heightAttr?.value) {
+      addInfoRow('Height', replaceTurkishChars(heightAttr.value));
+    }
+
     yPosition -= 20;
-    
+
     // Açıklama - metnin uzunluğuna göre satırlara böl
     page.drawText('Description:', {
       x: 70,
@@ -199,25 +214,25 @@ export async function GET(request: NextRequest) {
       font: helveticaBold,
       color: goldColor,
     });
-    
+
     yPosition -= 30;
-    
+
     // Açıklamayı satırlara böl - newline karakterlerini de işle
     const descText = replaceTurkishChars(productDescription);
     const maxCharsPerLine = 70;
     const paragraphs = descText.split('\n'); // Paragrafları ayır
     const lines: string[] = [];
-    
+
     // Her paragrafı işle
     for (const paragraph of paragraphs) {
       if (!paragraph.trim()) {
         lines.push(''); // Boş satır ekle
         continue;
       }
-      
+
       const words = paragraph.trim().split(' ');
       let currentLine = '';
-      
+
       for (const word of words) {
         const testLine = currentLine ? currentLine + ' ' + word : word;
         if (testLine.length <= maxCharsPerLine) {
@@ -229,10 +244,10 @@ export async function GET(request: NextRequest) {
       }
       if (currentLine) lines.push(currentLine);
     }
-    
+
     // Tüm satırları çiz - sayfa biterse yeni sayfa ekle
     const lineHeight = 20; // Satır yüksekliği
-    
+
     for (let i = 0; i < lines.length; i++) {
       // Eğer sayfa bitti ise yeni sayfa ekle
       if (yPosition < 100) {
@@ -240,7 +255,7 @@ export async function GET(request: NextRequest) {
         page = newPage as any;
         yPosition = height - 80;
       }
-      
+
       // Boş satırlar için sadece boşluk bırak
       if (lines[i].trim() === '') {
         yPosition -= lineHeight / 2;
@@ -255,15 +270,15 @@ export async function GET(request: NextRequest) {
         yPosition -= lineHeight;
       }
     }
-    
+
     yPosition -= 30;
-    
+
     // Footer - Son sayfanın altına ekle
     const pages = pdfDoc.getPages();
     const lastPage = pages[pages.length - 1];
     const { width: lastWidth } = lastPage.getSize();
     const footerY = 100;
-    
+
     lastPage.drawText('Karven Tekstil', {
       x: lastWidth / 2 - 50,
       y: footerY,
@@ -271,7 +286,7 @@ export async function GET(request: NextRequest) {
       font: helveticaBold,
       color: darkColor,
     });
-    
+
     lastPage.drawText('Vakiflar OSB Mah D100 Cad No 38, Ergene, Tekirdag 59930, Turkiye', {
       x: lastWidth / 2 - 180,
       y: footerY - 15,
@@ -279,7 +294,7 @@ export async function GET(request: NextRequest) {
       font: helvetica,
       color: grayColor,
     });
-    
+
     lastPage.drawText('Email: info@demfirat.com | Phone: +90 (282) 675-1552', {
       x: lastWidth / 2 - 150,
       y: footerY - 30,
@@ -287,7 +302,7 @@ export async function GET(request: NextRequest) {
       font: helvetica,
       color: grayColor,
     });
-    
+
     lastPage.drawText('www.karvenhome.com', {
       x: lastWidth / 2 - 60,
       y: footerY - 50,
@@ -295,10 +310,10 @@ export async function GET(request: NextRequest) {
       font: helvetica,
       color: goldColor,
     });
-    
+
     // PDF'i kaydet
     const pdfBytes = await pdfDoc.save();
-    
+
     // PDF dosyası olarak döndür
     return new NextResponse(Buffer.from(pdfBytes), {
       headers: {

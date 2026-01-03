@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import CustomCurtainSidebar from './CustomCurtainSidebar';
-import ProductReviewSection from './ProductReviewSection';
+
 import { FaCut } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,6 +13,7 @@ import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap'
 import { useFavorites } from '@/contexts/FavoriteContext';
 import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import ProductReviewsList from './ProductReviewsList';
 import { translateTextSync } from '@/lib/translate';
 
 
@@ -778,7 +779,8 @@ function ProductDetailCard({
               const variantAttrs = selectedVariant && variant_attributes
                 ? variant_attributes.filter(attr => attr.variant_id === selectedVariant.id)
                 : [];
-              const attributesToShow = variantAttrs.length > 0 ? variantAttrs : (product_attributes || []);
+              const attributesToShow = (variantAttrs.length > 0 ? variantAttrs : (product_attributes || []))
+                .filter(attr => attr.name?.toLowerCase() !== 'discount_rate');
 
               return attributesToShow.map((attr, index) => (
                 <span key={`attr-${attr.name}-${index}`} className={classes.attributeBadge}>
@@ -911,11 +913,37 @@ function ProductDetailCard({
           <div className={classes.cartActions}>
             {/* Price and Stock Display */}
             <div className={classes.priceAndStock}>
-              {(selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0) ? (
-                <span className={classes.priceDisplay}>{formatPrice(selectedVariant.variant_price)}</span>
-              ) : (product.price && Number(product.price) > 0) ? (
-                <span className={classes.priceDisplay}>{formatPrice(product.price)}</span>
-              ) : null}
+              {(() => {
+                // Get current price
+                const currentPrice = (selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0)
+                  ? Number(selectedVariant.variant_price)
+                  : (product.price && Number(product.price) > 0)
+                    ? Number(product.price)
+                    : null;
+
+                // Find discount_rate from product attributes
+                const discountAttr = product_attributes?.find(
+                  attr => attr.name?.toLowerCase() === 'discount_rate'
+                );
+                const discountRate = discountAttr?.value ? parseFloat(discountAttr.value) : 0;
+
+                if (currentPrice) {
+                  if (discountRate > 0) {
+                    // Calculate original price
+                    const originalPrice = currentPrice / (1 - discountRate / 100);
+                    return (
+                      <div className={classes.priceWithDiscount}>
+                        <span className={classes.discountBadge}>%{Math.round(discountRate)}</span>
+                        <span className={classes.originalPrice}>{formatPrice(originalPrice)}</span>
+                        <span className={classes.priceDisplay}>{formatPrice(currentPrice)}</span>
+                      </div>
+                    );
+                  } else {
+                    return <span className={classes.priceDisplay}>{formatPrice(currentPrice)}</span>;
+                  }
+                }
+                return null;
+              })()}
 
               {(selectedVariant?.variant_quantity && Number(selectedVariant.variant_quantity) > 0) ? (
                 <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {Number(selectedVariant.variant_quantity)}</span>
@@ -1095,13 +1123,15 @@ function ProductDetailCard({
                     </tr>
                   ))}
 
-                  {/* Product Attributes */}
-                  {product_attributes && product_attributes.length > 0 && product_attributes.map((attr, index) => (
-                    <tr key={`product-attr-${index}`}>
-                      <td className={classes.detailTableLabel}>{translateAttributeName(attr.name || '')}</td>
-                      <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
-                    </tr>
-                  ))}
+                  {/* Product Attributes (hide discount_rate) */}
+                  {product_attributes && product_attributes.length > 0 && product_attributes
+                    .filter(attr => attr.name?.toLowerCase() !== 'discount_rate')
+                    .map((attr, index) => (
+                      <tr key={`product-attr-${index}`}>
+                        <td className={classes.detailTableLabel}>{translateAttributeName(attr.name || '')}</td>
+                        <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -1121,11 +1151,9 @@ function ProductDetailCard({
         onAddToCart={handleCustomCurtainAddToCart}
       />
 
-      {/* Product Reviews */}
-      <ProductReviewSection
-        productSku={product.sku}
-        productTitle={product.title}
-      />
+      <ProductReviewsList productSku={product.sku} />
+
+
     </div>
   );
 }

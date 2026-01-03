@@ -11,8 +11,9 @@ const FONT_URL_BOLD = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fon
 
 function transformCloudinaryUrl(url: string): string {
     if (!url) return '';
+    // AVIF desteklenmiyor, JPEG'e çevir ama kaliteyi yüksek tut
     if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
-        return url.replace('/upload/', '/upload/f_jpg,q_auto,w_400/');
+        return url.replace('/upload/', '/upload/f_jpg,q_90/');
     }
     return url;
 }
@@ -46,14 +47,41 @@ async function loadImageAsBase64(url: string): Promise<string | null> {
     }
 }
 
-// Fetch full product details (description + attributes) from backend API
-async function fetchProductDetails(sku: string, locale: string): Promise<{ description: string | null; attributes: any[] }> {
-    if (!sku || !NEJUM_API_URL) return { description: null, attributes: [] };
+// Fetch exchange rate from API
+async function fetchExchangeRate(): Promise<number> {
+    try {
+        const response = await fetch(
+            `${NEJUM_API_URL}/authentication/api/get_exchange_rates/?t=${Date.now()}`
+        );
+        if (response.ok) {
+            const data = await response.json();
+            // API returns {success: true, rates: [{currency_code: 'TRY', rate: X}, ...]}
+            if (data.success && data.rates && Array.isArray(data.rates)) {
+                // USD to TRY rate - find TRY rate
+                const tryRate = data.rates.find((r: any) => r.currency_code === 'TRY');
+                if (tryRate?.rate) {
+                    return parseFloat(tryRate.rate);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Failed to fetch exchange rate:', error);
+    }
+    return 35.0; // Fallback
+}
+
+// Fetch full product details including variants with images
+async function fetchProductDetails(sku: string, locale: string): Promise<{
+    description: string | null;
+    attributes: any[];
+    variants: { sku: string; color: string; price: number | null; image: string | null }[];
+}> {
+    if (!sku || !NEJUM_API_URL) return { description: null, attributes: [], variants: [] };
     try {
         const response = await fetch(`${NEJUM_API_URL}/marketing/api/get_product?product_sku=${encodeURIComponent(sku)}`, {
             next: { revalidate: 300 }
         });
-        if (!response.ok) return { description: null, attributes: [] };
+        if (!response.ok) return { description: null, attributes: [], variants: [] };
 
         const data = await response.json();
 
@@ -64,7 +92,6 @@ async function fetchProductDetails(sku: string, locale: string): Promise<{ descr
         }
 
         // 2. Attributes (Product Level)
-        // Ensure we get "Features" like Fabric Type, Pattern, etc.
         let attributes: any[] = [];
         if (data.product_attributes && Array.isArray(data.product_attributes)) {
             attributes = data.product_attributes.map((attr: any) => ({
@@ -73,10 +100,51 @@ async function fetchProductDetails(sku: string, locale: string): Promise<{ descr
             })).filter((a: any) => a.value);
         }
 
-        return { description, attributes };
+        // 3. Variants with images
+        let variants: { sku: string; color: string; price: number | null; image: string | null }[] = [];
+        if (data.product_variants && Array.isArray(data.product_variants)) {
+            const productFiles = data.product_files || [];
+            const variantAttrValues = data.product_variant_attribute_values || [];
+
+            for (const variant of data.product_variants) {
+                // Find color attribute for this variant
+                let colorName = '';
+                if (variant.product_variant_attribute_values) {
+                    for (const valId of variant.product_variant_attribute_values) {
+                        const attrVal = variantAttrValues.find((v: any) => v.id === valId);
+                        if (attrVal) {
+                            const attrName = data.product_variant_attributes?.find(
+                                (a: any) => a.id === attrVal.product_variant_attribute_id
+                            )?.name?.toLowerCase();
+                            if (attrName === 'color' || attrName === 'renk') {
+                                colorName = attrVal.product_variant_attribute_value || '';
+                            }
+                        }
+                    }
+                }
+
+                // Find image for this variant
+                let variantImage = null;
+                const variantFile = productFiles.find((f: any) => f.product_variant_id === variant.id);
+                if (variantFile?.file_url) {
+                    variantImage = variantFile.file_url;
+                }
+
+                if (colorName) {
+                    variants.push({
+                        sku: variant.variant_sku || '',
+                        color: colorName,
+                        price: variant.variant_price ? parseFloat(variant.variant_price) : null,
+                        image: variantImage
+                    });
+                }
+            }
+        }
+
+        return { description, attributes, variants };
     } catch (error) {
         console.error('Failed to fetch product details:', error);
-        return { description: null, attributes: [] };
+        return { description: null, attributes: [], variants: [] };
     }
 }
 
@@ -152,19 +220,24 @@ export async function POST(request: NextRequest) {
         const margin = 15;
         const contentWidth = pageWidth - (margin * 2);
 
+        // Fetch real exchange rate from API
+        const exchangeRate = await fetchExchangeRate();
+
         for (let i = 0; i < products.length; i++) {
             const product = products[i] as CatalogProduct;
 
             if (i > 0) doc.addPage();
             let yPos = margin;
 
-            // Fetch deep details (Description + Attributes)
+            // Fetch deep details (Description + Attributes + Variants)
             let productDescription = product.description || '';
             let productAttributes = product.attributes || [];
+            let productVariants: { sku: string; color: string; price: number | null; image: string | null }[] = [];
 
             if (product.sku) {
                 const details = await fetchProductDetails(product.sku, locale);
                 if (details.description) productDescription = details.description;
+                productVariants = details.variants || [];
 
                 if (details.attributes && details.attributes.length > 0) {
                     const extraAttrs = details.attributes.map(a => ({
@@ -193,23 +266,49 @@ export async function POST(request: NextRequest) {
             doc.text('Premium Home Textile', pageWidth - margin, 13, { align: 'right' });
             yPos = 28;
 
-            // ===== PRODUCT IMAGE =====
-            const maxImageHeight = 70;
-            doc.setFillColor(252, 251, 249);
-            doc.roundedRect(margin, yPos, contentWidth, maxImageHeight + 8, 3, 3, 'F');
+            // ===== PRODUCT IMAGE - Orijinal oran korunarak büyük göster =====
+            const maxImageWidth = contentWidth * 0.95; // %95 genişlik
+            const maxImageHeight = 140; // mm - maksimum yükseklik
+
+            let actualImageHeight = maxImageHeight; // Varsayılan
 
             if (product.primary_image) {
                 const imageData = await loadImageAsBase64(product.primary_image);
                 if (imageData) {
                     try {
-                        const imgWidth = contentWidth * 0.5;
-                        const imgHeight = maxImageHeight - 5;
+                        // jsPDF ile resim eklerken orijinal oranı koru
+                        // Resmi mümkün olduğunca büyük göster
+                        const imgProps = doc.getImageProperties(imageData);
+                        const imgRatio = imgProps.width / imgProps.height;
+
+                        let imgWidth = maxImageWidth;
+                        let imgHeight = imgWidth / imgRatio;
+
+                        // Eğer yükseklik maksimumu aşıyorsa, yükseklikten ölçekle
+                        if (imgHeight > maxImageHeight) {
+                            imgHeight = maxImageHeight;
+                            imgWidth = imgHeight * imgRatio;
+                        }
+
+                        actualImageHeight = imgHeight;
                         const imgX = margin + (contentWidth - imgWidth) / 2;
+
+                        // Arka plan kutusu
+                        doc.setFillColor(252, 251, 249);
+                        doc.roundedRect(margin, yPos, contentWidth, imgHeight + 8, 3, 3, 'F');
+
                         doc.addImage(imageData, 'JPEG', imgX, yPos + 4, imgWidth, imgHeight, undefined, 'FAST');
-                    } catch (e) { }
+                    } catch (e) {
+                        doc.setFillColor(252, 251, 249);
+                        doc.roundedRect(margin, yPos, contentWidth, maxImageHeight + 8, 3, 3, 'F');
+                    }
                 }
+            } else {
+                doc.setFillColor(252, 251, 249);
+                doc.roundedRect(margin, yPos, contentWidth, 50, 3, 3, 'F');
+                actualImageHeight = 42;
             }
-            yPos += maxImageHeight + 12;
+            yPos += actualImageHeight + 16;
 
             // ===== SKU =====
             doc.setFontSize(9);
@@ -218,10 +317,14 @@ export async function POST(request: NextRequest) {
             const skuText = product.sku ? product.sku.replace(/ı/g, 'i').replace(/İ/g, 'I') : '-';
             doc.text(`SKU: ${product.sku || '-'}`, margin, yPos);
 
-            // ===== PRICE =====
-            if (product.price && product.price > 0) {
-                const usdPrice = product.price;
-                const tlPrice = usdPrice * USD_TO_TRY;
+            // ===== PRICE (Varyant fiyatından al) =====
+            const firstVariantPrice = productVariants.length > 0 && productVariants[0].price
+                ? productVariants[0].price
+                : product.price;
+
+            if (firstVariantPrice && firstVariantPrice > 0) {
+                const usdPrice = firstVariantPrice;
+                const tlPrice = usdPrice * exchangeRate;
                 doc.setFontSize(14);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(201, 169, 97);
@@ -242,36 +345,36 @@ export async function POST(request: NextRequest) {
 
             // ===== DESCRIPTION =====
             if (productDescription && productDescription.length > 0) {
+                yPos += 2; // Azaltılmış üst boşluk
                 doc.setFillColor(201, 169, 97);
-                doc.rect(margin, yPos, 2, 6, 'F');
+                doc.rect(margin, yPos, 3, 5, 'F');
                 doc.setFontSize(9);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(44, 44, 44);
-                // Increased spacing quite a bit: margin + 15
-                doc.text(t('description'), margin + 15, yPos + 4.5);
+                doc.text(t('description'), margin + 6, yPos + 4);
                 yPos += 8;
 
                 doc.setFontSize(8);
                 doc.setFont('Roboto', 'normal');
                 doc.setTextColor(70, 70, 70);
                 const descLines = doc.splitTextToSize(productDescription, contentWidth);
-                doc.text(descLines.slice(0, 5), margin, yPos);
-                yPos += Math.min(descLines.length, 5) * 3.5 + 5;
+                doc.text(descLines.slice(0, 8), margin, yPos); // Max 8 satır - tam açıklama
+                yPos += Math.min(descLines.length, 8) * 3.5 + 4;
             }
 
             // ===== ATTRIBUTES (Includes fetch details) =====
             if (productAttributes && productAttributes.length > 0) {
+                yPos += 2; // Azaltılmış üst boşluk
                 doc.setFillColor(201, 169, 97);
-                doc.rect(margin, yPos, 2, 6, 'F');
+                doc.rect(margin, yPos, 3, 5, 'F');
                 doc.setFontSize(9);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(44, 44, 44);
-                // Increased spacing
-                doc.text(t('attributes'), margin + 15, yPos + 4.5);
+                doc.text(t('attributes'), margin + 6, yPos + 4);
                 yPos += 8;
 
-                // Display up to 6 attributes
-                for (const attr of productAttributes.slice(0, 6)) {
+                // Display up to 4 attributes (reduced)
+                for (const attr of productAttributes.slice(0, 4)) {
                     doc.setFontSize(8);
                     doc.setFont('Roboto', 'bold');
                     doc.setTextColor(80, 80, 80);
@@ -284,7 +387,7 @@ export async function POST(request: NextRequest) {
                     doc.text(valStr, margin + 35, yPos);
                     yPos += 4;
                 }
-                yPos += 3;
+                yPos += 2;
             }
 
             // ===== COLORS (unchanged logic) =====
@@ -377,7 +480,7 @@ export async function POST(request: NextRequest) {
                     doc.text(variant.sku || '-', margin + 2, yPos + 5);
 
                     if (variant.price && variant.price > 0) {
-                        const vTL = (variant.price * USD_TO_TRY).toFixed(2);
+                        const vTL = (variant.price * exchangeRate).toFixed(2);
                         doc.setFont('Roboto', 'bold');
                         doc.setTextColor(201, 169, 97);
                         doc.text(`${vTL} TL ($${variant.price.toFixed(2)})`, pageWidth - margin - 2, yPos + 5, { align: 'right' });
@@ -386,7 +489,7 @@ export async function POST(request: NextRequest) {
                 }
             }
 
-            // ... footer ...
+            // ... footer for main product page ...
             const footerY = pageHeight - 8;
             doc.setFillColor(44, 44, 44);
             doc.rect(0, footerY - 3, pageWidth, 12, 'F');
@@ -397,6 +500,97 @@ export async function POST(request: NextRequest) {
             doc.setFontSize(8);
             doc.setFont('Roboto', 'bold');
             doc.text(`${i + 1} / ${products.length}`, pageWidth - margin, footerY + 2, { align: 'right' });
+
+            // ===== VARIANT PAGES - Her varyant için ayrı sayfa =====
+            if (productVariants && productVariants.length > 0) {
+                for (const variant of productVariants) {
+                    if (!variant.image) continue; // Resmi olmayan varyantları atla
+
+                    doc.addPage();
+                    let vYPos = margin;
+
+                    // Header
+                    doc.setFillColor(201, 169, 97);
+                    doc.rect(0, 0, pageWidth, 20, 'F');
+                    doc.setFontSize(18);
+                    doc.setFont('Roboto', 'bold');
+                    doc.setTextColor(255, 255, 255);
+                    doc.text('DEMFIRAT', margin, 13);
+                    doc.setFontSize(8);
+                    doc.setFont('Roboto', 'normal');
+                    doc.text('Premium Home Textile', pageWidth - margin, 13, { align: 'right' });
+                    vYPos = 28;
+
+                    // Variant image - büyük göster
+                    const variantImageData = await loadImageAsBase64(variant.image);
+                    if (variantImageData) {
+                        try {
+                            const imgProps = doc.getImageProperties(variantImageData);
+                            const imgRatio = imgProps.width / imgProps.height;
+
+                            const vMaxWidth = contentWidth * 0.95;
+                            const vMaxHeight = 140;
+
+                            let vImgWidth = vMaxWidth;
+                            let vImgHeight = vImgWidth / imgRatio;
+
+                            if (vImgHeight > vMaxHeight) {
+                                vImgHeight = vMaxHeight;
+                                vImgWidth = vImgHeight * imgRatio;
+                            }
+
+                            const imgX = margin + (contentWidth - vImgWidth) / 2;
+
+                            doc.setFillColor(252, 251, 249);
+                            doc.roundedRect(margin, vYPos, contentWidth, vImgHeight + 8, 3, 3, 'F');
+                            doc.addImage(variantImageData, 'JPEG', imgX, vYPos + 4, vImgWidth, vImgHeight, undefined, 'FAST');
+
+                            vYPos += vImgHeight + 20;
+                        } catch (e) {
+                            vYPos += 50;
+                        }
+                    }
+
+                    // Variant info
+                    doc.setFontSize(9);
+                    doc.setFont('Roboto', 'normal');
+                    doc.setTextColor(130, 130, 130);
+                    doc.text(`SKU: ${variant.sku || product.sku || '-'}`, margin, vYPos);
+                    vYPos += 6;
+
+                    // Color name as title
+                    doc.setFontSize(16);
+                    doc.setFont('Roboto', 'bold');
+                    doc.setTextColor(44, 44, 44);
+                    doc.text(`${product.title || 'Ürün'} - ${variant.color}`, margin, vYPos);
+                    vYPos += 10;
+
+                    // Price
+                    const variantPrice = variant.price || product.price;
+                    if (variantPrice && variantPrice > 0) {
+                        const tlPrice = variantPrice * exchangeRate;
+                        doc.setFontSize(18);
+                        doc.setFont('Roboto', 'bold');
+                        doc.setTextColor(201, 169, 97);
+                        doc.text(`${tlPrice.toFixed(2)} TL/m`, margin, vYPos);
+                        doc.setFontSize(10);
+                        doc.setFont('Roboto', 'normal');
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(`($${variantPrice.toFixed(2)}/m)`, margin + 70, vYPos);
+                    }
+
+                    // Variant footer
+                    doc.setFillColor(44, 44, 44);
+                    doc.rect(0, footerY - 3, pageWidth, 12, 'F');
+                    doc.setFontSize(7);
+                    doc.setFont('Roboto', 'normal');
+                    doc.setTextColor(255, 255, 255);
+                    doc.text('www.demfirat.com | info@demfirat.com', margin, footerY + 2);
+                    doc.setFontSize(8);
+                    doc.setFont('Roboto', 'bold');
+                    doc.text(variant.color, pageWidth - margin, footerY + 2, { align: 'right' });
+                }
+            }
         }
 
         const pdfBuffer = Buffer.from(doc.output('arraybuffer'));

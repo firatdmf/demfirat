@@ -46,6 +46,7 @@ interface Order {
   delivered_at: string | null;
   created_at: string;
   updated_at: string;
+  items?: OrderItem[];
 }
 
 interface OrderDetail extends Order {
@@ -61,6 +62,9 @@ interface OrderDetail extends Order {
   total_value: string;
 }
 
+import Link from 'next/link';
+import RateProductButton from '@/components/RateProductButton';
+
 // Reviews Tab Content Component
 interface UserReview {
   id: number;
@@ -75,26 +79,54 @@ interface UserReview {
 
 function ReviewsTabContent({ userId, locale, onShowToast }: { userId: number; locale: string; onShowToast: (type: 'success' | 'error', text: string) => void }) {
   const [reviews, setReviews] = useState<UserReview[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSubTab, setActiveSubTab] = useState<'pending' | 'history'>('pending');
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchData = async () => {
       if (!userId) return;
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_reviews/${userId}/`
-        );
-        if (response.ok) {
-          const data = await response.json();
+        const [reviewsRes, ordersRes] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_reviews/${userId}/`),
+          fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_orders/${userId}/`)
+        ]);
+
+        if (reviewsRes.ok) {
+          const data = await reviewsRes.json();
           setReviews(data.reviews || []);
         }
+
+        if (ordersRes.ok) {
+          const data = await ordersRes.json();
+          const initialOrders = data.orders || [];
+
+          // Fetch deep details for every order to get "items"
+          // We need items to know what can be reviewed.
+          const details = await Promise.all(
+            initialOrders.map(async (order: any) => {
+              if (order.status === 'cancelled') return null; // Skip cancelled early or keep? User said include all even pending. Cancelled usually implies no purchase.
+              try {
+                const detailRes = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_order_detail/${userId}/${order.id}/`);
+                if (detailRes.ok) {
+                  return await detailRes.json();
+                }
+              } catch (e) {
+                console.error('Error fetching order detail', e);
+              }
+              return order; // Fallback to shallow order if detail fails
+            })
+          );
+
+          setOrders(details.filter(Boolean)); // Filter out nulls
+        }
       } catch (error) {
-        console.error('Error fetching reviews:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
-    fetchReviews();
+    fetchData();
   }, [userId]);
 
   const handleDeleteReview = async (reviewId: number) => {
@@ -128,60 +160,169 @@ function ReviewsTabContent({ userId, locale, onShowToast }: { userId: number; lo
     });
   };
 
+  // Determine pending reviews
+  const getPendingItems = () => {
+    const reviewedSkus = new Set(reviews.map(r => r.product_sku));
+    const pendingItems: any[] = [];
+    const seenSkus = new Set(); // Avoid showing same product multiple times if bought multiple times (logic choice)
+
+    orders.forEach(order => {
+      // Only include delivered orders? User said "purchased", so standard flow implies at least shipped/delivered for review ideally.
+      // But we will allow all valid orders for now as requested "purchased".
+      if (order.status === 'cancelled') return;
+
+      order.items?.forEach((item: any) => {
+        if (!reviewedSkus.has(item.product_sku) && !seenSkus.has(item.product_sku)) {
+          pendingItems.push({ ...item, order_date: order.created_at });
+          seenSkus.add(item.product_sku);
+        }
+      });
+    });
+
+    return pendingItems;
+  };
+
+  const pendingItems = getPendingItems();
+
   if (loading) return <div style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>{locale === 'tr' ? 'Yükleniyor...' : 'Loading...'}</div>;
 
-  if (reviews.length === 0) {
-    return (
-      <div style={{ padding: '3rem 2rem', textAlign: 'center', color: '#9ca3af' }}>
-        <p>{locale === 'tr' ? 'Henüz değerlendirme yapmadınız.' : locale === 'ru' ? 'У вас пока нет отзывов.' : locale === 'pl' ? 'Nie masz jeszcze opinii.' : 'You have not written any reviews yet.'}</p>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {reviews.map((review) => (
-        <div key={review.id} style={{
-          display: 'flex',
-          gap: '1rem',
-          padding: '1rem',
-          background: '#f9fafb',
-          borderRadius: '12px',
-          border: '1px solid #e5e7eb'
-        }}>
-          {review.product_image && (
-            <img
-              src={review.product_image}
-              alt={review.product_title}
-              style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
-            />
-          )}
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div>
-                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, color: '#1f2937' }}>{review.product_title}</h4>
-                <div style={{ marginTop: '0.25rem' }}>{renderStars(review.rating)}</div>
-              </div>
-              <button
-                onClick={() => handleDeleteReview(review.id)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#ef4444',
-                  cursor: 'pointer',
-                  fontSize: '0.8rem'
-                }}
-              >
-                {locale === 'tr' ? 'Sil' : 'Delete'}
-              </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+      {/* Sub-tabs for Reviews Section */}
+      <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid #e5e7eb', paddingBottom: '0.5rem' }}>
+        <button
+          onClick={() => setActiveSubTab('pending')}
+          style={{
+            padding: '0.5rem 1rem',
+            border: 'none',
+            background: 'none',
+            borderBottom: activeSubTab === 'pending' ? '2px solid #000' : '2px solid transparent',
+            fontWeight: activeSubTab === 'pending' ? 600 : 400,
+            cursor: 'pointer',
+            color: activeSubTab === 'pending' ? '#000' : '#6b7280'
+          }}
+        >
+          {locale === 'tr' ? `Bekleyen Değerlendirmeler (${pendingItems.length})` : `Pending Reviews (${pendingItems.length})`}
+        </button>
+        <button
+          onClick={() => setActiveSubTab('history')}
+          style={{
+            padding: '0.5rem 1rem',
+            border: 'none',
+            background: 'none',
+            borderBottom: activeSubTab === 'history' ? '2px solid #000' : '2px solid transparent',
+            fontWeight: activeSubTab === 'history' ? 600 : 400,
+            cursor: 'pointer',
+            color: activeSubTab === 'history' ? '#000' : '#6b7280'
+          }}
+        >
+          {locale === 'tr' ? `Değerlendirmelerim (${reviews.length})` : `My Reviews (${reviews.length})`}
+        </button>
+      </div>
+
+      {/* Content based on sub-tab */}
+      {activeSubTab === 'pending' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {pendingItems.length === 0 ? (
+            <div style={{ padding: '2rem', textAlign: 'center', color: '#9ca3af', background: '#f9fafb', borderRadius: '12px' }}>
+              <p>{locale === 'tr' ? 'Değerlendirilecek ürün bulunmuyor.' : 'No items to review.'}</p>
+              <Link href={`/${locale}/`} style={{ color: '#2563eb', fontSize: '0.9rem', marginTop: '0.5rem', display: 'inline-block' }}>
+                {locale === 'tr' ? 'Alışverişe Başla' : 'Start Shopping'}
+              </Link>
             </div>
-            {review.comment && (
-              <p style={{ margin: '0.5rem 0', color: '#4b5563', fontSize: '0.9rem', lineHeight: 1.5 }}>{review.comment}</p>
-            )}
-            <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{formatDate(review.created_at)}</span>
-          </div>
+          ) : (
+            pendingItems.map((item, index) => (
+              <div key={`${item.product_sku}-${index}`} style={{
+                display: 'flex',
+                gap: '1rem',
+                padding: '1rem',
+                background: '#fff',
+                borderRadius: '12px',
+                border: '1px solid #e5e7eb',
+                alignItems: 'center'
+              }}>
+                {item.product_image && (
+                  <img
+                    src={item.product_image}
+                    alt={item.product_title}
+                    style={{ width: '64px', height: '64px', objectFit: 'cover', borderRadius: '8px' }}
+                  />
+                )}
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem', fontWeight: 600, color: '#1f2937' }}>{item.product_title}</h4>
+                  <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: '#6b7280' }}>
+                    <span>{locale === 'tr' ? 'Sipariş Tarihi:' : 'Order Date:'} {formatDate(item.order_date)}</span>
+                  </div>
+                </div>
+                <RateProductButton
+                  productSku={item.product_sku}
+                  productTitle={item.product_title}
+                  productImage={item.product_image}
+                  onSuccess={() => {
+                    // Refresh data after review
+                    window.location.reload();
+                  }}
+                  variant="button"
+                />
+              </div>
+            ))
+          )}
         </div>
-      ))}
+      )}
+
+      {activeSubTab === 'history' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {reviews.length === 0 ? (
+            <div style={{ padding: '3rem 2rem', textAlign: 'center', color: '#9ca3af' }}>
+              <p>{locale === 'tr' ? 'Henüz değerlendirme yapmadınız.' : 'You have not written any reviews yet.'}</p>
+            </div>
+          ) : (
+            reviews.map((review) => (
+              <div key={review.id} style={{
+                display: 'flex',
+                gap: '1rem',
+                padding: '1rem',
+                background: '#f9fafb',
+                borderRadius: '12px',
+                border: '1px solid #e5e7eb'
+              }}>
+                {review.product_image && (
+                  <img
+                    src={review.product_image}
+                    alt={review.product_title}
+                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
+                  />
+                )}
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, color: '#1f2937' }}>{review.product_title}</h4>
+                      <div style={{ marginTop: '0.25rem' }}>{renderStars(review.rating)}</div>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteReview(review.id)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#ef4444',
+                        cursor: 'pointer',
+                        fontSize: '0.8rem'
+                      }}
+                    >
+                      {locale === 'tr' ? 'Sil' : 'Delete'}
+                    </button>
+                  </div>
+                  {review.comment && (
+                    <p style={{ margin: '0.5rem 0', color: '#4b5563', fontSize: '0.9rem', lineHeight: 1.5 }}>{review.comment}</p>
+                  )}
+                  <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{formatDate(review.created_at)}</span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }
