@@ -129,7 +129,8 @@
             "companyName": "Nazwa firmy",
             "address": "Adres",
             "email": "E-mail",
-            "phone": "Telefon"
+            "phone": "Telefon",
+            "returned": "Zwrócone"
         },
         "section2": {
             "title": "2. Zbierane dane",
@@ -336,5 +337,14 @@
             ]
         },
         "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade."
+    },
+    "HomeReviews": {
+        "review_1_text": "Bardzo ładne zasłony o świetnej jakości. Problemy z wysyłką zostały szybko rozwiązane, obsługa klienta była zawsze dostępna i odpowiadała bardzo szybko! Dzięki! Zawsze z przyjemnością!",
+        "review_2_text": "Piękne zasłony. Wyjątkowa obsługa.",
+        "review_3_text": "Uwielbiam je! Dokładnie takie jak na zdjęciu; wyglądają tak elegancko! Z przyjemnością zamówię w tym sklepie ponownie.",
+        "review_4_text": "Takie ładne i dotarły naprawdę szybko!",
+        "review_5_text": "Wspaniała jakość. Przyjazny sprzedawca, zawsze dostępny. Odpowiada na wiadomości w odpowiednim czasie. Jeszcze raz i jeszcze raz!",
+        "review_6_text": "Do mojego pierwszego zamówienia dołączono prośbę o informację, czy jestem zadowolona z zakupu. Zamiast odpowiadać na pytanie, powtórzyłam moje pierwsze zamówienie. Uważam, że to mówi samo za siebie. Gdybym miała więcej okien potrzebujących firanek, kupowałabym je w kółko. Nigdy nie widziałam tak pięknych!!! Nawet moi dorośli synowie, którzy niczego nie zauważają, powiedzieli 'Wow! Są piękne, mamo'. Dziękuję, dziękuję!",
+        "review_7_text": "Uwielbiam moje zasłony, ale jeszcze bardziej uwielbiam obsługę klienta, zrobili wszystko, co w ich mocy, aby upewnić się, że otrzymam moje piękne zasłony"
     }
 }

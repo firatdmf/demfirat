@@ -69,46 +69,43 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     },
   ];
 
+  const homeReviewsLocale = await getTranslations({ locale, namespace: "HomeReviews" });
+
   const reviews = [
     {
       image: "/media/client-images/iris.webp",
       name: "Iris",
-      review:
-        "Very nice curtains with great quality. Shipping issues were resolved quickly, customer service was always available and responded very quickly! Thanks! Always my pleasure!",
+      review: homeReviewsLocale("review_1_text"),
     },
     {
       image: "/media/client-images/jeanmarie.webp",
       name: "Jeanmarie",
-      review: "Beautiful curtains/drapes. Outstanding service.",
+      review: homeReviewsLocale("review_2_text"),
     },
     {
       image: "/media/client-images/mary.webp",
       name: "Mary",
-      review:
-        "Love them! Exactly as pictured; so elegant looking! I'll happily order from this shop again.",
+      review: homeReviewsLocale("review_3_text"),
     },
     {
       image: "/media/client-images/meredith.webp",
       name: "Meredith",
-      review: "So pretty, and it arrived really fast!",
+      review: homeReviewsLocale("review_4_text"),
     },
     {
       image: "/media/client-images/maria.jpg",
       name: "Maria",
-      review:
-        "Wonderful quality. Friendly salesman, always available. Responds to messages in a timely manner. Again and again!",
+      review: homeReviewsLocale("review_5_text"),
     },
     {
       image: "/media/client-images/jane.webp",
       name: "Jane",
-      review:
-        "My first order came with a request to know if I was pleased with my purchase. Instead of answering the question I reordered my first purchase. I believe that's speaks more loudly. If I had more windows that needed sheers I would buy these all o we again and again. I have never seen any as beautiful!!! Even my adult sons who don't notice said 'Wow!' Those are beautiful Mom. Thank you thank you!",
+      review: homeReviewsLocale("review_6_text"),
     },
     {
       image: "/media/client-images/ava.webp",
       name: "Ava",
-      review:
-        "I love my curtains but I love the customer service even better they went beyond to make sure I received my beautiful curtains",
+      review: homeReviewsLocale("review_7_text"),
     },
   ];
 

@@ -399,5 +399,14 @@
             "cancelled": "İptal Edildi",
             "returned": "İade Edildi"
         }
+    },
+    "HomeReviews": {
+        "review_1_text": "Çok güzel ve kaliteli perdeler. Kargo sorunları hızlıca çözüldü, müşteri hizmetleri her zaman ulaşılabilirdi ve çok hızlı yanıt verdi! Teşekkürler! Her zaman memnuniyetle!",
+        "review_2_text": "Güzel perdeler. Mükemmel hizmet.",
+        "review_3_text": "Bayıldım! Tam resimdeki gibi; çok şık görünüyor! Bu mağazadan memnuniyetle tekrar sipariş vereceğim.",
+        "review_4_text": "Çok güzel ve gerçekten hızlı geldi!",
+        "review_5_text": "Harika kalite. İlgili satıcı, her zaman ulaşılabilir. Mesajlara zamanında yanıt veriyor. Tekrar tekrar!",
+        "review_6_text": "İlk siparişimde alışverişimden memnun kalıp kalmadığımı soran bir istek geldi. Soruyu cevaplamak yerine ilk siparişimi tekrarladım. Bence bu çok daha anlamlı. Tüllere ihtiyaç duyan daha fazla pencerem olsaydı, bunları tekrar tekrar alırdım. Hiç bu kadar güzelini görmemiştim!!! Hiçbir şeyi fark etmeyen yetişkin oğullarım bile 'Vay canına! Bunlar çok güzel Anne' dediler. Teşekkür ederim teşekkür ederim!",
+        "review_7_text": "Perdelerimi seviyorum ama müşteri hizmetlerini daha çok seviyorum, güzel perdelerimi teslim aldığımdan emin olmak için ellerinden geleni yaptılar"
     }
 }
