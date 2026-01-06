@@ -136,3 +136,28 @@ export type PageParamProps = {
   }
   searchParams: { [key: string]: string | string[] | undefined };
 }
+
+// Blog Post interface for dynamic blog system
+export type BlogPost = {
+  slug: string;
+  title_tr: string;
+  title_en: string;
+  title_ru: string;
+  title_pl: string;
+  excerpt_tr: string;
+  excerpt_en: string;
+  excerpt_ru: string;
+  excerpt_pl: string;
+  content_tr?: string;
+  content_en?: string;
+  content_ru?: string;
+  content_pl?: string;
+  category_tr: string;
+  category_en: string;
+  category_ru: string;
+  category_pl: string;
+  cover_image: string;
+  hero_image?: string;
+  author: string;
+  published_at: string;
+}
