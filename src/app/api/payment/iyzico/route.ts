@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     console.log('Secret Key exists:', !!process.env.IYZICO_SECRET_KEY);
     console.log('Secret Key length:', process.env.IYZICO_SECRET_KEY?.length || 0);
     console.log('Base URL:', process.env.IYZICO_BASE_URL || 'https://sandbox-api.iyzipay.com');
-    
+
     const body = await request.json();
     console.log('===== PAYMENT REQUEST RECEIVED =====');
     console.log('Body keys:', Object.keys(body));
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     console.log('Price:', body.price);
     console.log('ShippingAddress:', body.shippingAddress);
     console.log('BillingAddress:', body.billingAddress);
-    
+
     const {
       // Card info
       cardHolderName,
@@ -32,24 +32,27 @@ export async function POST(request: NextRequest) {
       expireMonth,
       expireYear,
       cvc,
-      
+
       // Order info
       price,
       paidPrice,
       currency = 'TRY',
       basketId,
       paymentGroup,
-      
+
       // Buyer object (from frontend)
       buyer,
-      
+
       // Addresses
       shippingAddress,
       billingAddress,
-      
+
       // Basket items
       basketItems,
-      
+
+      // Installment (taksit)
+      installment = 1,
+
       // Callback URL
       callbackUrl
     } = body;
@@ -80,8 +83,8 @@ export async function POST(request: NextRequest) {
       basketId: basketId || `basket-${Date.now()}`,
       paymentGroup: 'PRODUCT',
       callbackUrl: callbackUrl || 'http://localhost:3000/api/payment/callback',
-      enabledInstallments: [1], // Tek çekim, taksit için [2, 3, 6, 9, 12]
-      
+      enabledInstallments: [installment], // Seçilen taksit
+
       buyer: {
         id: buyer.id || 'BY' + Date.now(),
         name: buyer.name || cardHolderName.split(' ')[0],
@@ -97,7 +100,7 @@ export async function POST(request: NextRequest) {
         country: buyer.country || shippingAddress.country,
         zipCode: '34732'
       },
-      
+
       shippingAddress: {
         contactName: shippingAddress.contactName || cardHolderName,
         city: shippingAddress.city,
@@ -105,7 +108,7 @@ export async function POST(request: NextRequest) {
         address: shippingAddress.address,
         zipCode: '34732'
       },
-      
+
       billingAddress: {
         contactName: billingAddress.contactName || cardHolderName,
         city: billingAddress.city,
@@ -113,7 +116,7 @@ export async function POST(request: NextRequest) {
         address: billingAddress.address,
         zipCode: '34732'
       },
-      
+
       basketItems: basketItems || [{
         id: 'BI' + Date.now(),
         name: 'Product',
@@ -121,7 +124,7 @@ export async function POST(request: NextRequest) {
         itemType: 'PHYSICAL',
         price: price.toString()
       }],
-      
+
       paymentCard: {
         cardHolderName: cardHolderName,
         cardNumber: cardNumber.replace(/\s/g, ''),
@@ -134,7 +137,7 @@ export async function POST(request: NextRequest) {
 
     console.log('===== PAYMENT REQUEST TO IYZICO =====');
     console.log('Request:', JSON.stringify(paymentRequest, null, 2));
-    
+
     // Initialize 3D Secure payment
     return new Promise<NextResponse>((resolve) => {
       iyzipay.threedsInitialize.create(paymentRequest, function (err: any, result: any) {

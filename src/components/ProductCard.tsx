@@ -184,27 +184,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     }
   }, [product.primary_image, product.sku]);
 
-  // Fetch review stats for product
-  useEffect(() => {
-    const fetchReviewStats = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_product_reviews/${product.sku}/`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setAverageRating(data.average_rating || 0);
-          setReviewCount(data.total_count || 0);
-        }
-      } catch (error) {
-        console.error('Error fetching review stats:', error);
-      }
-    };
-
-    if (product.sku) {
-      fetchReviewStats();
-    }
-  }, [product.sku]);
+  // Review stats removed for performance - was causing N+1 API calls
+  // If needed, these should be included in the main product API response
 
   const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);

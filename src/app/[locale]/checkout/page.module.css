@@ -1378,3 +1378,115 @@ select.input:disabled {
     padding: 1.5rem;
   }
 }
+
+/* Installment Selection */
+.installmentSection {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--light-gray, #e0dcd2);
+}
+
+.installmentSection h4 {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark, #2c2c2c);
+  margin: 0 0 1rem;
+}
+
+.installmentOptions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.installmentBtn {
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--light-gray, #e0dcd2);
+  background: white;
+  border-radius: 10px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-dark, #2c2c2c);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.installmentBtn:hover {
+  border-color: var(--gold, #c9a961);
+  background: rgba(201, 169, 97, 0.05);
+}
+
+.selectedInstallment {
+  border-color: var(--gold, #c9a961) !important;
+  background: rgba(201, 169, 97, 0.1) !important;
+  color: var(--gold, #c9a961) !important;
+  font-weight: 600;
+}
+
+.installmentNote {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(201, 169, 97, 0.08);
+  border-radius: 8px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .installmentOptions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .installmentBtn {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* iyzico Checkout Form Container */
+.iyzicoFormInfo {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+  padding: 1rem;
+  background: rgba(201, 169, 97, 0.08);
+  border-radius: 8px;
+  border-left: 3px solid var(--gold, #c9a961);
+  margin-bottom: 1rem;
+}
+
+.iyzicoFormContainer {
+  min-height: 400px;
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--light-gray, #e0dcd2);
+}
+
+.iyzicoFormContainer iframe {
+  width: 100%;
+  min-height: 500px;
+  border: none;
+  border-radius: 8px;
+}
+
+.loadingSpinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.loadingSpinner p {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  color: #666;
+}
