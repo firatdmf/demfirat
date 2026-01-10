@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import styles from './page.module.css';
 
 interface OrderItem {
@@ -65,6 +65,7 @@ const ORDER_STATUSES = [
 
 export default function OrderTrackingPage() {
     const t = useTranslations('OrderTracking');
+    const locale = useLocale();
     const [orderNumber, setOrderNumber] = useState('');
     const [order, setOrder] = useState<OrderData | null>(null);
     const [loading, setLoading] = useState(false);
@@ -106,7 +107,13 @@ export default function OrderTrackingPage() {
 
     const formatDate = (dateStr: string | null) => {
         if (!dateStr) return '-';
-        return new Date(dateStr).toLocaleDateString('tr-TR', {
+        const localeMap: Record<string, string> = {
+            tr: 'tr-TR',
+            en: 'en-US',
+            ru: 'ru-RU',
+            pl: 'pl-PL'
+        };
+        return new Date(dateStr).toLocaleDateString(localeMap[locale] || 'en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -164,7 +171,7 @@ export default function OrderTrackingPage() {
                             </p>
                         </div>
                         <div className={styles.statusBadge} data-status={order.order_status}>
-                            {order.order_status_display || order.order_status}
+                            {t(`status.${order.order_status}`)}
                         </div>
                     </div>
 
@@ -248,7 +255,7 @@ export default function OrderTrackingPage() {
                                                     borderRadius: '9999px',
                                                     marginBottom: '0.5rem'
                                                 }}>
-                                                    ✂️ ÖZEL PERDE
+                                                    ✂️ {t('customCurtain')}
                                                 </span>
                                                 {item.custom_attributes && (
                                                     <div style={{
@@ -260,19 +267,19 @@ export default function OrderTrackingPage() {
                                                         lineHeight: '1.5'
                                                     }}>
                                                         {item.custom_attributes.width && item.custom_attributes.height && (
-                                                            <div>📏 Boyut: {item.custom_attributes.width}cm x {item.custom_attributes.height}cm</div>
+                                                            <div>📏 {t('dimensions')}: {item.custom_attributes.width}cm x {item.custom_attributes.height}cm</div>
                                                         )}
                                                         {item.custom_attributes.pleat_type && (
-                                                            <div>🧵 Pile: {item.custom_attributes.pleat_type}</div>
+                                                            <div>🧵 {t('pleatType')}: {t(`pleatTypes.${item.custom_attributes.pleat_type}`)}</div>
                                                         )}
                                                         {item.custom_attributes.pleat_density && (
-                                                            <div>📊 Pile Sıklığı: {item.custom_attributes.pleat_density}</div>
+                                                            <div>📊 {t('pleatDensity')}: {item.custom_attributes.pleat_density}</div>
                                                         )}
                                                         {item.custom_attributes.mounting_type && (
-                                                            <div>🔧 Montaj: {item.custom_attributes.mounting_type === 'cornice' ? 'Korniş' : 'Rustik'}</div>
+                                                            <div>🔧 {t('mountingType')}: {t(`mountingTypes.${item.custom_attributes.mounting_type}`)}</div>
                                                         )}
                                                         {item.custom_fabric_used_meters && (
-                                                            <div style={{ fontWeight: 600, color: '#7c3aed' }}>🧶 Kumaş: {item.custom_fabric_used_meters} metre</div>
+                                                            <div style={{ fontWeight: 600, color: '#7c3aed' }}>🧶 {t('fabric')}: {item.custom_fabric_used_meters} {t('meter')}</div>
                                                         )}
                                                     </div>
                                                 )}
@@ -293,7 +300,6 @@ export default function OrderTrackingPage() {
                         <div className={styles.addressSection}>
                             <h3>{t('deliveryAddress')}</h3>
                             <div className={styles.addressCard}>
-                                <p><strong>{order.delivery_address.title}</strong></p>
                                 <p>{order.delivery_address.address}</p>
                                 <p>{order.delivery_address.city}, {order.delivery_address.country}</p>
                                 {order.delivery_address.phone && (

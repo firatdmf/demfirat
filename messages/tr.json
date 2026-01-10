@@ -388,6 +388,25 @@
         "deliveryAddress": "Teslimat Adresi",
         "phone": "Telefon",
         "total": "Toplam",
+        "customCurtain": "ÖZEL PERDE",
+        "dimensions": "Boyut",
+        "pleatType": "Pile Tipi",
+        "pleatDensity": "Pile Sıklığı",
+        "mountingType": "Montaj Tipi",
+        "fabric": "Kumaş",
+        "meter": "metre",
+        "pleatTypes": {
+            "flat": "Yatık Pile",
+            "kanun": "Kanun Pile",
+            "pipe": "Boru Pile",
+            "water_wave": "Su Dalgası",
+            "american": "Amerikan Pile",
+            "extrafor": "Ekstrafor"
+        },
+        "mountingTypes": {
+            "cornice": "Korniş",
+            "rustic": "Rustik"
+        },
         "status": {
             "pending": "Beklemede",
             "confirmed": "Onaylandı",

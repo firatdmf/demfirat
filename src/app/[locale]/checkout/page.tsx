@@ -593,7 +593,7 @@ export default function CheckoutPage() {
 
   // Shipping calculation with live exchange rate
   const FREE_SHIPPING_THRESHOLD_TL = 2000;
-  const SHIPPING_COST_TL = 70;
+  const SHIPPING_COST_TL = 180;
 
   // Get TRY exchange rate from rates array
   const tryRate = rates.find(r => r.currency_code === 'TRY');

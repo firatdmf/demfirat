@@ -53,6 +53,7 @@ function ProductDetailCard({
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
   const [isCustomCurtainSidebarOpen, setIsCustomCurtainSidebarOpen] = useState(false);
+  const touchStartX = React.useRef<number | null>(null);
 
   // Format price with currency
   const formatPrice = (price: any) => {
@@ -421,6 +422,27 @@ function ProductDetailCard({
     setZoomBoxPosition(null);
   };
 
+  // Touch swipe handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    const threshold = 50; // minimum swipe distance in pixels
+
+    if (diff > threshold) {
+      // Swiped left → next image
+      handleNextImage();
+    } else if (diff < -threshold) {
+      // Swiped right → previous image
+      handlePrevImage();
+    }
+    touchStartX.current = null;
+  };
+
   const handleAttributeChange = (attributeName: string, value: string) => {
     setSelectedThumbIndex(0);
     setUserHasSelectedVariant(true); // Kullanıcı varyant seçti
@@ -688,7 +710,11 @@ function ProductDetailCard({
               </div>
             ))}
           </div>
-          <div className={classes.gallery}>
+          <div
+            className={classes.gallery}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
             <div className={imageLoaded || isVideoSelected ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
               {isVideoSelected && currentMedia ? (

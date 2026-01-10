@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // In-memory cache
 let cachedProducts: any[] = [];
 let cacheTimestamp: number = 0;
-const CACHE_DURATION = 0; // Disable cache for debugging
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
 
 async function getProductsWithDetails(): Promise<any[]> {
     const now = Date.now();

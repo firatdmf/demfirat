@@ -102,6 +102,14 @@ function Header({ menuTArray }: HeaderProps) {
     }
   }, [productsLoaded, allProducts.length]);
 
+  // Preload products automatically on mount (with delay to not block initial render)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadProductsForSearch();
+    }, 1000); // 1 second delay to allow page to fully render first
+    return () => clearTimeout(timer);
+  }, [loadProductsForSearch]);
+
   // Instant client-side search (no API calls after initial load)
   useEffect(() => {
     if (searchQuery.length < 2) {

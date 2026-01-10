@@ -512,18 +512,36 @@ export default function CartPage() {
                   {/* Variant Attributes */}
                   {item.variant_attributes && Object.keys(item.variant_attributes).length > 0 && (
                     <div className={classes.variantAttributes}>
-                      {Object.entries(item.variant_attributes).map(([key, value]) => (
-                        <span key={key} className={classes.variantAttr}>
-                          <strong>{key}:</strong> {value.replace(/_/g, ' ')}
-                        </span>
-                      ))}
+                      {Object.entries(item.variant_attributes).map(([key, value]) => {
+                        // Translate common attribute names
+                        const attrTranslations: Record<string, Record<string, string>> = {
+                          color: { tr: 'Renk', en: 'Color', ru: 'Цвет', pl: 'Kolor' },
+                          height: { tr: 'Boy', en: 'Height', ru: 'Высота', pl: 'Wysokość' },
+                          size: { tr: 'Boyut', en: 'Size', ru: 'Размер', pl: 'Rozmiar' },
+                          width: { tr: 'En', en: 'Width', ru: 'Ширина', pl: 'Szerokość' },
+                        };
+                        const translatedKey = attrTranslations[key.toLowerCase()]?.[locale] || key;
+                        return (
+                          <span key={key} className={classes.variantAttr}>
+                            <strong>{translatedKey}:</strong> {value.replace(/_/g, ' ')}
+                          </span>
+                        );
+                      })}
                     </div>
                   )}
 
                   <p className={classes.itemSku}>SKU: {item.product_sku}</p>
                   {item.product?.category && (
                     <p className={classes.itemCategory}>
-                      {item.product.category}
+                      {(() => {
+                        const cat = item.product.category.toLowerCase();
+                        const categoryTranslations: Record<string, Record<string, string>> = {
+                          fabric: { tr: 'KUMAŞ', en: 'FABRIC', ru: 'ТКАНЬ', pl: 'TKANINA' },
+                          'ready-made_curtain': { tr: 'HAZIR PERDE', en: 'READY CURTAIN', ru: 'ГОТОВАЯ ШТОРА', pl: 'GOTOWA ZASŁONA' },
+                          ready_made_curtain: { tr: 'HAZIR PERDE', en: 'READY CURTAIN', ru: 'ГОТОВАЯ ШТОРА', pl: 'GOTOWA ZASŁONA' },
+                        };
+                        return categoryTranslations[cat]?.[locale] || item.product.category.toUpperCase();
+                      })()}
                     </p>
                   )}
                 </div>
