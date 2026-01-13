@@ -15,6 +15,8 @@ interface OrderData {
   totalAmount: string;
   currency: string;
   orderDate: string;
+  shippingCost?: string;
+  couponCode?: string;
 }
 
 export default function OrderConfirmationPage() {
@@ -27,12 +29,69 @@ export default function OrderConfirmationPage() {
   useEffect(() => {
     // Get order data from localStorage
     const lastOrder = localStorage.getItem('lastOrder');
+    let parsedOrderData: OrderData | null = null;
+
     if (lastOrder) {
-      setOrderData(JSON.parse(lastOrder));
+      parsedOrderData = JSON.parse(lastOrder);
+      setOrderData(parsedOrderData);
       // Clear after reading
       localStorage.removeItem('lastOrder');
+
+      // Meta Pixel Purchase Event
+      if (typeof window !== 'undefined' && (window as any).fbq && parsedOrderData) {
+        const contentIds = parsedOrderData.cartItems?.map((item: any) => item.sku || item.id) || [];
+        const contents = parsedOrderData.cartItems?.map((item: any) => ({
+          id: item.sku || item.id,
+          quantity: item.quantity || 1,
+          item_price: parseFloat(item.price) || 0
+        })) || [];
+
+        (window as any).fbq('track', 'Purchase', {
+          value: parseFloat(parsedOrderData.totalAmount) || 0,
+          currency: parsedOrderData.currency || 'TRY',
+          content_ids: contentIds,
+          contents: contents,
+          content_type: 'product',
+          num_items: parsedOrderData.cartItems?.length || 0,
+          order_id: parsedOrderData.orderId
+        });
+
+        console.log('Meta Pixel: Purchase event sent', {
+          value: parsedOrderData.totalAmount,
+          currency: parsedOrderData.currency,
+          order_id: parsedOrderData.orderId
+        });
+      }
+
+      // Google Tag Manager / GA4 Purchase Event
+      if (typeof window !== 'undefined' && parsedOrderData) {
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        (window as any).dataLayer.push({
+          'event': 'purchase',
+          'ecommerce': {
+            'transaction_id': parsedOrderData.orderId || '',
+            'value': parseFloat(parsedOrderData.totalAmount) || 0,
+            'tax': 0,
+            'shipping': parseFloat(parsedOrderData.shippingCost || '0'),
+            'currency': parsedOrderData.currency || 'USD',
+            'coupon': parsedOrderData.couponCode || '',
+            'items': parsedOrderData.cartItems?.map((item: any) => ({
+              'item_id': item.sku || item.id,
+              'item_name': item.title || item.name || 'Ürün',
+              'price': parseFloat(item.price) || 0,
+              'quantity': parseInt(item.quantity) || 1
+            })) || []
+          }
+        });
+
+        console.log('GTM: Purchase event pushed to dataLayer', {
+          transaction_id: parsedOrderData.orderId,
+          value: parsedOrderData.totalAmount,
+          currency: parsedOrderData.currency
+        });
+      }
     }
-    
+
     // Clear cart from backend
     const userId = searchParams.get('userId');
     if (userId) {
@@ -42,11 +101,11 @@ export default function OrderConfirmationPage() {
         console.error('Failed to clear cart:', error);
       });
     }
-    
+
     // Clear local cart
     localStorage.removeItem('cart');
     localStorage.removeItem('checkoutData');
-    
+
     setLoading(false);
   }, [searchParams]);
 
@@ -69,7 +128,7 @@ export default function OrderConfirmationPage() {
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
   };
-  
+
   const formatPrice = (price: any) => {
     if (!price) return 'N/A';
     return `${parseFloat(price).toFixed(2)} ${orderData?.currency || 'TRY'}`;
@@ -196,7 +255,7 @@ export default function OrderConfirmationPage() {
             <FaHome />
             {t('backToHome')}
           </Link>
-          
+
           <Link
             href={`/${locale}/product/fabric`}
             style={{

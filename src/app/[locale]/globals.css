@@ -133,6 +133,11 @@ h6 {
     padding: 0.875rem 2rem;
     font-size: 0.9rem;
   }
+
+  /* Add bottom padding for mobile bottom nav */
+  body {
+    padding-bottom: 75px;
+  }
 }
 
 @media (max-width: 480px) {

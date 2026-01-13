@@ -152,6 +152,15 @@ function Header({ menuTArray }: HeaderProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      // Meta Pixel: Search Event
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Search', {
+          search_string: searchQuery.trim(),
+          content_category: 'products'
+        });
+        console.log('[Meta Pixel] Search event fired', { query: searchQuery.trim() });
+      }
+
       // Changed to 'search' to trigger the multi-category search
       router.push(`/${locale}/product/search?search=${encodeURIComponent(searchQuery)}`);
       setShowResults(false);
@@ -442,7 +451,7 @@ function Header({ menuTArray }: HeaderProps) {
           <div className={classes.mobileSectionTitle} style={{ paddingLeft: '1.5rem', marginTop: '0.5rem', fontSize: '0.85rem' }}>
             {locale === 'tr' ? 'Özel Dikim Perde' : locale === 'ru' ? 'Пошив штор' : locale === 'pl' ? 'Szycie na miarę' : 'Custom Curtains'}
           </div>
-          <Link href={`/${locale}/product/fabric?fabric_type=solid`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+          <Link href={`/${locale}/product/fabric`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
             {locale === 'tr' ? 'Perde Diktir' : locale === 'ru' ? 'Заказать пошив' : locale === 'pl' ? 'Zamów szycie' : 'Order Custom Curtain'}
           </Link>
           <Link href={`/${locale}/blog/ozel-dikim-perde-siparisi`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>

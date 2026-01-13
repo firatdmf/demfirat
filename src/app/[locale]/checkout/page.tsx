@@ -219,7 +219,7 @@ export default function CheckoutPage() {
     }
   }, [session, isInitialLoad, status, isGuestCheckout, isGuest, guestCart]);
 
-  // Meta Pixel: Fire InitiateCheckout event when checkout loads with cart data
+  // Meta Pixel: Fire InitiateCheckout event when checkout loads with cart data (USD - prices are stored in USD)
   useEffect(() => {
     if (cartItems.length > 0 && typeof window !== 'undefined' && (window as any).fbq) {
       const totalValue = cartItems.reduce((sum, item) => {
@@ -234,10 +234,10 @@ export default function CheckoutPage() {
         content_type: 'product',
         num_items: cartItems.length,
         value: totalValue,
-        currency: 'TRY'
+        currency: 'USD'
       });
 
-      console.log('[Meta Pixel] InitiateCheckout event fired', { value: totalValue, items: cartItems.length });
+      console.log('[Meta Pixel] InitiateCheckout event fired', { value: totalValue, items: cartItems.length, currency: 'USD' });
     }
   }, [cartItems]);
 
@@ -793,6 +793,17 @@ export default function CheckoutPage() {
         setIyzicoPaymentUrl(result.paymentPageUrl + '&iframe=true');
         setIyzicoFormContent(result.checkoutFormContent || '');
         setIyzicoFormReady(true);
+
+        // Meta Pixel: AddPaymentInfo Event (USD - prices are stored in USD)
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('track', 'AddPaymentInfo', {
+            content_ids: cartItems.map(item => item.product_sku),
+            content_type: 'product',
+            value: total,
+            currency: 'USD'
+          });
+          console.log('[Meta Pixel] AddPaymentInfo event fired', { value: total, currency: 'USD' });
+        }
       } else {
         throw new Error('Checkout form initialization failed');
       }

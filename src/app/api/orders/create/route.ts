@@ -251,6 +251,54 @@ export async function POST(request: NextRequest) {
       // Fatura oluşturulamazsa sipariş yine de geçerli
     }
 
+    // ===== FACEBOOK CONVERSIONS API - PURCHASE EVENT =====
+    console.log('===== FACEBOOK CONVERSIONS API =====');
+    try {
+      const totalAmount = parseFloat(paymentData?.paidPrice) || 0;
+
+      const conversionResponse = await fetch(`${request.nextUrl.origin}/api/meta-conversions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventName: 'Purchase',
+          eventId: `purchase_${result.order_id || result.id}_${Date.now()}`,
+          eventSourceUrl: `${request.nextUrl.origin}/order/confirmation`,
+          userData: {
+            email: guestInfo?.email || paymentData?.email,
+            phone: guestInfo?.phone || deliveryAddress?.phone,
+            firstName: guestInfo?.firstName || deliveryAddress?.first_name,
+            lastName: guestInfo?.lastName || deliveryAddress?.last_name,
+            city: deliveryAddress?.city,
+            country: deliveryAddress?.country,
+            ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
+          },
+          customData: {
+            value: totalAmount,
+            currency: paymentData?.currency || 'TRY',
+            content_ids: cartItems?.map((item: any) => item.product_sku),
+            content_type: 'product',
+            contents: cartItems?.map((item: any) => ({
+              id: item.product_sku,
+              quantity: parseFloat(item.quantity) || 1,
+              item_price: parseFloat(item.product?.price || item.custom_price || 0)
+            })),
+            num_items: cartItems?.length || 0,
+            order_id: result.order_id || result.id
+          }
+        })
+      });
+
+      if (conversionResponse.ok) {
+        const conversionResult = await conversionResponse.json();
+        console.log('✅ Facebook Conversions API - Purchase event sent:', conversionResult);
+      } else {
+        console.warn('⚠️ Facebook Conversions API error:', await conversionResponse.text());
+      }
+    } catch (conversionError: any) {
+      console.error('⚠️ Facebook Conversions API error:', conversionError.message);
+      // Sipariş yine de başarılı
+    }
+
     return NextResponse.json({
       success: true,
       order: result,

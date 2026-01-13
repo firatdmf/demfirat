@@ -241,6 +241,24 @@ function ProductDetailCard({
     window.scrollTo(0, 0);
   }, []);
 
+  // Meta Pixel: ViewContent Event (USD - prices are stored in USD)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).fbq && product) {
+      const price = Number(selectedVariant?.variant_price || product.price || 0);
+
+      (window as any).fbq('track', 'ViewContent', {
+        content_ids: [product.sku],
+        content_name: product.title,
+        content_type: 'product',
+        content_category: product_category || 'fabric',
+        value: price,
+        currency: 'USD'
+      });
+
+      console.log('[Meta Pixel] ViewContent event fired', { sku: product.sku, title: product.title, currency: 'USD' });
+    }
+  }, [product.sku]); // Only fire once per product
+
   // URL parametrelerini güncelle
   useEffect(() => {
     const newParams = new URLSearchParams();
@@ -496,6 +514,9 @@ function ProductDetailCard({
       return;
     }
 
+    // Get price for Meta Pixel
+    const itemPrice = Number(selectedVariant?.variant_price || product.price || 0);
+
     try {
       if (isGuest) {
         // For guests, add to localStorage cart
@@ -514,6 +535,23 @@ function ProductDetailCard({
         setSuccessMessage(t('productAddedToCart'));
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 3000);
+
+        // Meta Pixel: AddToCart Event (USD - prices are stored in USD)
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('track', 'AddToCart', {
+            content_ids: [product.sku],
+            content_name: product.title,
+            content_type: 'product',
+            value: itemPrice * qty,
+            currency: 'USD',
+            contents: [{
+              id: product.sku,
+              quantity: qty,
+              item_price: itemPrice
+            }]
+          });
+          console.log('[Meta Pixel] AddToCart event fired', { sku: product.sku, value: itemPrice * qty, currency: 'USD' });
+        }
       } else {
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
@@ -536,6 +574,23 @@ function ProductDetailCard({
           setTimeout(() => setShowSuccessMessage(false), 3000);
           // Refresh cart count
           await refreshCart();
+
+          // Meta Pixel: AddToCart Event (USD - prices are stored in USD)
+          if (typeof window !== 'undefined' && (window as any).fbq) {
+            (window as any).fbq('track', 'AddToCart', {
+              content_ids: [product.sku],
+              content_name: product.title,
+              content_type: 'product',
+              value: itemPrice * qty,
+              currency: 'USD',
+              contents: [{
+                id: product.sku,
+                quantity: qty,
+                item_price: itemPrice
+              }]
+            });
+            console.log('[Meta Pixel] AddToCart event fired', { sku: product.sku, value: itemPrice * qty, currency: 'USD' });
+          }
         } else {
           alert(t('errorAddingToCart'));
         }
@@ -796,7 +851,12 @@ function ProductDetailCard({
               </button>
             </div>
           </div>
-          {/* SKU removed from here */}
+          {/* SKU under product name */}
+          <div className={classes.skuCode}>
+            {locale === 'tr' ? 'Ürün Kodu' :
+              locale === 'ru' ? 'Артикул' :
+                locale === 'pl' ? 'Kod produktu' : 'Product Code'}: {selectedVariant?.variant_sku || product.sku}
+          </div>
 
           {/* Category + Attributes in one row */}
           <div className={classes.categoryAndAttributes}>
@@ -976,6 +1036,54 @@ function ProductDetailCard({
               ) : (product.quantity && Number(product.quantity) > 0) ? (
                 <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {Number(product.quantity)}</span>
               ) : null}
+
+              {/* Shipping Info */}
+              <div className={classes.shippingInfo}>
+                <span className={classes.shippingBadge}>
+                  {locale === 'tr' ? '🚚 1-3 iş gününde kargoda' :
+                    locale === 'ru' ? '🚚 Отправка в течение 1-3 дней' :
+                      locale === 'pl' ? '🚚 Wysyłka w ciągu 1-3 dni' :
+                        '🚚 Ships in 1-3 business days'}
+                </span>
+                <span className={classes.estimatedDate}>
+                  {(() => {
+                    const today = new Date();
+                    let daysToAdd = 3;
+                    let shippingDate = new Date(today);
+                    while (daysToAdd > 0) {
+                      shippingDate.setDate(shippingDate.getDate() + 1);
+                      const dayOfWeek = shippingDate.getDay();
+                      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                        daysToAdd--;
+                      }
+                    }
+                    const dayNames = locale === 'tr'
+                      ? ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi']
+                      : locale === 'ru'
+                        ? ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+                        : locale === 'pl'
+                          ? ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota']
+                          : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    const monthNames = locale === 'tr'
+                      ? ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+                      : locale === 'ru'
+                        ? ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+                        : locale === 'pl'
+                          ? ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia']
+                          : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    const day = shippingDate.getDate();
+                    const month = monthNames[shippingDate.getMonth()];
+                    const dayName = dayNames[shippingDate.getDay()];
+                    const prefix = locale === 'tr' ? 'En geç' :
+                      locale === 'ru' ? 'Не позднее' :
+                        locale === 'pl' ? 'Najpóźniej' : 'By';
+                    const suffix = locale === 'tr' ? 'günü kargoda' :
+                      locale === 'ru' ? 'будет отправлен' :
+                        locale === 'pl' ? 'zostanie wysłany' : 'will be shipped';
+                    return `${prefix} ${day} ${month} ${dayName} ${suffix}`;
+                  })()}
+                </span>
+              </div>
             </div>
 
             <div className={classes.quantityWrapper}>
@@ -1019,10 +1127,22 @@ function ProductDetailCard({
               <button onClick={handleBuyNow} className={classes.buyNowBtn}>
                 {t('buyNow')}
               </button>
+
+              {/* "veya" divider + Perde Diktir button for fabric products */}
+              {isFabricProduct && (
+                <>
+                  <div className={classes.orDivider}>
+                    <span>{locale === 'tr' ? 'veya' : locale === 'ru' ? 'или' : locale === 'pl' ? 'lub' : 'or'}</span>
+                  </div>
+                  <button onClick={() => setIsCustomCurtainSidebarOpen(true)} className={classes.customCurtainBtn}>
+                    <FaCut /> {t('customCurtain')}
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Custom Curtain CTA - Below Button Group */}
-            {isFabricProduct && (
+            {isFabricProduct && false && (
               <div className={classes.customCurtainCTA}>
                 <div className={classes.ctaContent}>
                   <FaCut className={classes.ctaIcon} />

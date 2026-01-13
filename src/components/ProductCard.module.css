@@ -27,7 +27,7 @@
 .imageContainer {
   position: relative;
   width: 100%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 3/4;
   overflow: hidden;
   background: var(--ivory, #faf8f3);
 }

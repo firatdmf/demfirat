@@ -396,5 +396,15 @@
         "review_5_text": "Wonderful quality. Friendly salesman, always available. Responds to messages in a timely manner. Again and again!",
         "review_6_text": "My first order came with a request to know if I was pleased with my purchase. Instead of answering the question I reordered my first purchase. I believe that's speaks more loudly. If I had more windows that needed sheers I would buy these all o we again and again. I have never seen any as beautiful!!! Even my adult sons who don't notice said 'Wow!' Those are beautiful Mom. Thank you thank you!",
         "review_7_text": "I love my curtains but I love the customer service even better they went beyond to make sure I received my beautiful curtains"
+    },
+    "MobileNav": {
+        "Home": "Home",
+        "Products": "Products",
+        "Cart": "Cart",
+        "Favorites": "Favorites",
+        "Account": "Account",
+        "Fabrics": "Fabrics",
+        "ReadyCurtains": "Ready Curtains",
+        "CustomCurtains": "Custom Curtains"
     }
 }

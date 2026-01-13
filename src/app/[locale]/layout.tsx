@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import MobileBottomNav from "@/components/MobileBottomNav";
 // import HelpWidget from "@/components/HelpWidget";
 import { Providers } from "./providers";
 import { getTranslations, getMessages } from "next-intl/server";
@@ -50,6 +51,18 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
   return (
     <html lang={locale}>
       <head>
+        {/* Google Tag Manager */}
+        <Script id="gtm" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-T3VG89L5');
+          `}
+        </Script>
+        {/* End Google Tag Manager */}
+
         {/* Meta Pixel Code */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
@@ -74,6 +87,17 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         {/* End Meta Pixel Code */}
       </head>
       <body className={inter.className}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-T3VG89L5"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+
         <GoogleAnalytics />
         {/* Provider component wraps the application and passes the props of session information (from the user) */}
         <Providers messages={messages} locale={locale}>
@@ -93,6 +117,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
             AllRightsReserved={footerT("AllRightsReserved")}
             locale={locale}
           ></Footer>
+          <MobileBottomNav />
           {/* <HelpWidget /> */}
         </Providers>
       </body>

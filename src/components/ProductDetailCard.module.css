@@ -633,6 +633,78 @@
   font-weight: 500;
 }
 
+/* SKU Code Display */
+.skuCode {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+/* Shipping Info */
+.shippingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.12) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+}
+
+.shippingBadge {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #059669;
+}
+
+.estimatedDate {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  color: #10b981;
+  font-weight: 500;
+}
+
+/* "veya" / "or" Divider */
+.orDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.orDivider span {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 500;
+  text-transform: lowercase;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.orDivider span::before,
+.orDivider span::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 1px;
+  background: #ddd;
+}
+
+.orDivider span::before {
+  right: 100%;
+}
+
+.orDivider span::after {
+  left: 100%;
+}
+
 /* Fabric Swatches */
 .fabric_swatches {
   display: flex;
