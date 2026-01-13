@@ -392,6 +392,11 @@
     max-width: 100%;
   }
 
+  /* Add bottom padding to account for mobile navigation bar */
+  .content {
+    padding-bottom: 100px;
+  }
+
   /* Pleat types: 2 columns on mobile */
   .pleatTypeGrid {
     grid-template-columns: repeat(2, 1fr) !important;

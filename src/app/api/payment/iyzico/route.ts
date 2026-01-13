@@ -50,9 +50,6 @@ export async function POST(request: NextRequest) {
       // Basket items
       basketItems,
 
-      // Installment (taksit)
-      installment = 1,
-
       // Callback URL
       callbackUrl
     } = body;
@@ -83,7 +80,7 @@ export async function POST(request: NextRequest) {
       basketId: basketId || `basket-${Date.now()}`,
       paymentGroup: 'PRODUCT',
       callbackUrl: callbackUrl || 'http://localhost:3000/api/payment/callback',
-      enabledInstallments: [installment], // Seçilen taksit
+      enabledInstallments: [1], // Tek çekim, taksit için [2, 3, 6, 9, 12]
 
       buyer: {
         id: buyer.id || 'BY' + Date.now(),
