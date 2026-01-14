@@ -1022,10 +1022,26 @@ function ProductDetailCard({
                         <span className={classes.discountBadge}>%{Math.round(discountRate)}</span>
                         <span className={classes.originalPrice}>{formatPrice(originalPrice)}</span>
                         <span className={classes.priceDisplay}>{formatPrice(currentPrice)}</span>
+                        <span className={classes.pricePerMeterNote}>
+                          {locale === 'tr' ? 'Belirtilen fiyat metre fiyatıdır.' :
+                            locale === 'ru' ? 'Указанная цена за метр.' :
+                              locale === 'pl' ? 'Podana cena jest ceną za metr.' :
+                                'Price shown is per meter.'}
+                        </span>
                       </div>
                     );
                   } else {
-                    return <span className={classes.priceDisplay}>{formatPrice(currentPrice)}</span>;
+                    return (
+                      <div className={classes.priceWrapper}>
+                        <span className={classes.priceDisplay}>{formatPrice(currentPrice)}</span>
+                        <span className={classes.pricePerMeterNote}>
+                          {locale === 'tr' ? 'Belirtilen fiyat metre fiyatıdır.' :
+                            locale === 'ru' ? 'Указанная цена за метр.' :
+                              locale === 'pl' ? 'Podana cena jest ceną za metr.' :
+                                'Price shown is per meter.'}
+                        </span>
+                      </div>
+                    );
                   }
                 }
                 return null;
@@ -1053,7 +1069,8 @@ function ProductDetailCard({
                     while (daysToAdd > 0) {
                       shippingDate.setDate(shippingDate.getDate() + 1);
                       const dayOfWeek = shippingDate.getDay();
-                      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                      // Only skip Sundays (0), include Saturdays (6)
+                      if (dayOfWeek !== 0) {
                         daysToAdd--;
                       }
                     }
