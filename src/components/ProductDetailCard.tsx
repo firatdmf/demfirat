@@ -28,7 +28,6 @@ type ProductDetailCardPageProps = {
   product_attributes?: ProductAttribute[] | null;
   variant_attributes?: ProductAttribute[] | null;
   locale?: string;
-  videoUrl?: string | null; // Local video URL for this product
 };
 
 function ProductDetailCard({
@@ -41,8 +40,7 @@ function ProductDetailCard({
   product_files,
   product_attributes = [],
   variant_attributes = [],
-  locale = 'en',
-  videoUrl = null
+  locale = 'en'
 }: ProductDetailCardPageProps) {
 
   const t = useTranslations('ProductDetailCard');
@@ -284,6 +282,13 @@ function ProductDetailCard({
       const mainProductImages = product_files.filter(img => !img.product_variant_id);
       images = mainProductImages.length > 0 ? mainProductImages : [...product_files];
     }
+
+    // Filter out video files - they will be handled separately
+    images = images.filter(file => {
+      const isVideo = file.file_type === 'video' ||
+        file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
+      return !isVideo;
+    });
 
     // Sequence'e göre sırala
     images.sort((a, b) => {
@@ -703,14 +708,39 @@ function ProductDetailCard({
       ? filteredImages.map(img => img.file)
       : [(placeholder_image_link)];
 
-  // Prepare media items: video first (if available), then images
+  // Prepare media items: images first, then video at 3rd position (if available)
   type MediaItem = { type: 'video' | 'image'; url: string };
   const mediaItems: MediaItem[] = [];
 
-  if (videoUrl) {
-    mediaItems.push({ type: 'video', url: videoUrl });
-  }
-  imageFiles.forEach(img => {
+  // Get videos from product_files - filter by variant if selected
+  // Only show videos that belong to the selected variant or are product-level (no variant_id)
+  const videoFiles = product_files?.filter(file => {
+    const isVideo = file.file_type === 'video' ||
+      file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
+
+    if (!isVideo) return false;
+
+    // If a variant is selected, only show videos for that variant or product-level videos
+    if (selectedVariant) {
+      return String(file.product_variant_id) === String(selectedVariant.id) || !file.product_variant_id;
+    }
+
+    // If no variant selected, only show product-level videos (no variant_id)
+    return !file.product_variant_id;
+  }) || [];
+
+  // Add first 2 images
+  imageFiles.slice(0, 2).forEach(img => {
+    mediaItems.push({ type: 'image', url: img });
+  });
+
+  // Add videos at 3rd position
+  videoFiles.forEach(video => {
+    mediaItems.push({ type: 'video', url: video.file });
+  });
+
+  // Add remaining images after videos
+  imageFiles.slice(2).forEach(img => {
     mediaItems.push({ type: 'image', url: img });
   });
 

@@ -78,6 +78,7 @@ export type ProductAttribute = {
 export type ProductFile = {
   id: bigint;
   file: string;
+  file_type?: 'image' | 'video' | string | null; // 'image' or 'video'
   product_id: bigint | null;
   product_variant_id?: bigint | null;
   sequence?: number | null;

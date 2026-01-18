@@ -95,21 +95,58 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     );
 }
 
-// Simple markdown to HTML converter
+// Simple markdown to HTML converter - preserves raw HTML
 function formatMarkdown(markdown: string): string {
-    return markdown
+    if (!markdown) return '';
+
+    // First, protect existing HTML tags by temporarily replacing them
+    // Match opening+closing tags, self-closing tags, and standalone tags
+    const htmlTagPattern = /<[^>]+>/g;
+    const htmlParts: string[] = [];
+
+    let protectedMarkdown = markdown.replace(htmlTagPattern, (match) => {
+        htmlParts.push(match);
+        return `HTMLBLOCK${htmlParts.length - 1}HTMLBLOCK`;
+    });
+
+    // Convert markdown to HTML
+    protectedMarkdown = protectedMarkdown
+        // Headings
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
         .replace(/^## (.+)$/gm, '<h2>$1</h2>')
         .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+        // Bold and italic (order matters)
+        .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/!\[(.+?)\]\((.+?)\)/g, '<img src="$2" alt="$1" />')
-        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
+        .replace(/(?<![a-zA-Z])\*([^*]+)\*(?![a-zA-Z])/g, '<em>$1</em>')
+        // Images
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;" />')
+        // Links
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+        // Lists
         .replace(/^- (.+)$/gm, '<li>$1</li>')
-        .replace(/✅/g, '<span class="success">✅</span>')
-        .replace(/❌/g, '<span class="error">❌</span>')
-        .replace(/\|(.+)\|/g, (match) => {
-            const cells = match.split('|').filter(c => c.trim());
-            if (cells.some(c => c.includes('---'))) return '';
-            return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
-        })
+        .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+        // Blockquotes
+        .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+        // Horizontal rule
+        .replace(/^---$/gm, '<hr />')
+        // Code blocks
+        .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        // Paragraphs
         .replace(/\n\n/g, '</p><p>');
+
+    // Restore protected HTML tags
+    for (let i = 0; i < htmlParts.length; i++) {
+        protectedMarkdown = protectedMarkdown.split(`HTMLBLOCK${i}HTMLBLOCK`).join(htmlParts[i]);
+    }
+
+    // Wrap in paragraph if not starting with a block element
+    if (protectedMarkdown && !protectedMarkdown.trim().startsWith('<')) {
+        protectedMarkdown = '<p>' + protectedMarkdown + '</p>';
+    }
+
+    return protectedMarkdown;
 }
+

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
+
 .blogPost {
     min-height: 100vh;
     background: var(--ivory, #faf8f3);
@@ -167,6 +169,94 @@
 .content .error {
     color: #e53935;
 }
+
+/* Custom Blog Styling - Comfortaa font with orange accents */
+.content h1 {
+    font-family: 'Comfortaa', var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 2rem;
+    font-weight: 400;
+    color: #b45f06;
+    margin: 2rem 0 1rem;
+}
+
+.content h3 {
+    font-family: 'Comfortaa', var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #b45f06;
+    margin: 1.5rem 0 1rem;
+    border-bottom: none;
+}
+
+.content li strong {
+    color: #b45f06;
+}
+
+.content .image-source {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+}
+
+.content .highlight {
+    font-style: italic;
+}
+
+.content .brand {
+    color: #b45f06;
+    font-weight: 700;
+}
+
+.content a {
+    color: #1155cc;
+    text-decoration: underline;
+}
+
+.content a:hover {
+    color: #0a3d91;
+}
+
+.content blockquote {
+    border-left: 4px solid #b45f06;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #555;
+}
+
+.content figure {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.content figcaption {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.content code {
+    background: #f5f5f5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.content pre {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.content hr {
+    border: none;
+    border-top: 2px solid #b45f06;
+    margin: 2rem 0;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
