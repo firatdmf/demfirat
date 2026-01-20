@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { FaHome, FaTh, FaShoppingCart, FaHeart, FaUser, FaTimes } from 'react-icons/fa';
+import { FaHome, FaTh, FaShoppingCart, FaBox, FaHeart, FaUser, FaTimes } from 'react-icons/fa';
 import { useCart } from '@/contexts/CartContext';
 import styles from './MobileBottomNav.module.css';
 
@@ -52,6 +52,13 @@ const MobileBottomNav = () => {
             label: t('Cart'),
             isActiveCheck: () => isActive('/cart') || isActive('/checkout'),
             badge: totalCartCount > 0 ? totalCartCount : undefined,
+        },
+        {
+            key: 'tracking',
+            href: `/${locale}/order-tracking`,
+            icon: FaBox,
+            label: t('Tracking'),
+            isActiveCheck: () => isActive('/order-tracking'),
         },
         {
             key: 'favorites',

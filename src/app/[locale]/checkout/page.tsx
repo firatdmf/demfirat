@@ -22,6 +22,7 @@ interface CartItem {
   product_category?: string;
   variant_attributes?: { [key: string]: string };
   is_custom_curtain?: boolean;
+  is_sample?: boolean;
   custom_attributes?: {
     mountingType?: string;
     pleatType?: string;
@@ -222,6 +223,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (cartItems.length > 0 && typeof window !== 'undefined' && (window as any).fbq) {
       const totalValue = cartItems.reduce((sum, item) => {
+        if (item.is_sample) return sum; // Samples are free
         const price = item.is_custom_curtain && item.custom_price
           ? Number(item.custom_price)
           : Number(item.product?.price || 0);
@@ -524,6 +526,9 @@ export default function CheckoutPage() {
 
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) => {
+      // Sample check - always 0
+      if (item.is_sample) return sum;
+
       let price = 0;
       const quantity = parseFloat(item.quantity);
 
@@ -589,7 +594,7 @@ export default function CheckoutPage() {
   // Calculate total with discount
   const calculateTotal = () => {
     const discountAmount = calculateDiscountAmount();
-    return subtotal - discountAmount;
+    return subtotal + shipping - discountAmount;
   };
 
   const handleCompleteOrder = async () => {
@@ -784,7 +789,9 @@ export default function CheckoutPage() {
           let itemTotalUSD = 0;
           const quantity = parseFloat(item.quantity);
 
-          if (item.is_custom_curtain) {
+          if (item.is_sample) {
+            itemTotalUSD = 0;
+          } else if (item.is_custom_curtain) {
             // Custom curtain: custom_price is price for 1 curtain, multiply by quantity
             if (!item.custom_price) {
               console.warn(`Custom curtain item ${index} has no custom_price!`);
@@ -1190,7 +1197,11 @@ export default function CheckoutPage() {
                         )}
                       </div>
                       <div className={classes.horizontalItemPrice}>
-                        {item.is_custom_curtain && item.custom_price ? (
+                        {item.is_sample ? (
+                          <span className={classes.freePrice}>
+                            {locale === 'tr' ? 'Ücretsiz' : 'Free'}
+                          </span>
+                        ) : item.is_custom_curtain && item.custom_price ? (
                           formatPrice(item.custom_price)
                         ) : formatPrice(item.product?.price) ? (
                           formatPrice(item.product?.price)
@@ -1784,12 +1795,12 @@ export default function CheckoutPage() {
             <div className={classes.summaryRows}>
               <div className={classes.summaryRow}>
                 <span>{t('subtotal')}</span>
-                <span>{formatPrice(subtotal) || '$0.00'}</span>
+                <span>{formatPrice(subtotal) || convertPrice(0)}</span>
               </div>
               {discountPercentage && (
                 <div className={`${classes.summaryRow} ${classes.discountRow}`}>
                   <span>{t('discount')} ({discountPercentage}%)</span>
-                  <span className={classes.discountAmount}>-{formatPrice(calculateDiscountAmount()) || '$0.00'}</span>
+                  <span className={classes.discountAmount}>-{formatPrice(calculateDiscountAmount()) || convertPrice(0)}</span>
                 </div>
               )}
               <div className={classes.summaryRow}>
@@ -1801,7 +1812,7 @@ export default function CheckoutPage() {
               <div className={classes.summaryDivider}></div>
               <div className={`${classes.summaryRow} ${classes.summaryTotal}`}>
                 <span>{t('total')}</span>
-                <span>{formatPrice(calculateTotal()) || '$0.00'}</span>
+                <span>{formatPrice(calculateTotal()) || convertPrice(0)}</span>
               </div>
             </div>
 

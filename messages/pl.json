@@ -84,6 +84,8 @@
         "quantityMeters": "Ilość (m)",
         "quantityPieces": "Ilość",
         "addToCart": "Dodaj do koszyka",
+        "requestSample": "Zamów próbkę",
+        "sampleAdded": "Próbka dodana do koszyka",
         "buyNow": "Kup teraz",
         "addToFavorites": "Dodaj do ulubionych",
         "removeFromFavorites": "Usuń z ulubionych",
@@ -407,6 +409,7 @@
         "Cart": "Koszyk",
         "Favorites": "Ulubione",
         "Account": "Konto",
+        "Tracking": "Śledzenie",
         "Fabrics": "Tkaniny",
         "ReadyCurtains": "Gotowe zasłony",
         "CustomCurtains": "Szycie zasłon"

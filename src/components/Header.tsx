@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useLocale } from "next-intl";
 import { useCart } from "@/contexts/CartContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { getColorCode } from "@/lib/colorMap";
 import LoginModal from "./LoginModal";
 
@@ -37,7 +37,11 @@ function Header({ menuTArray }: HeaderProps) {
   const { cartCount } = useCart();
   const { convertPrice } = useCurrency();
   const router = useRouter();
+  const pathname = usePathname();
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Check if on product detail page
+  const isProductDetail = /\/product\/[^/]+\/[^/]+/.test(pathname);
 
   // Prevent hydration mismatch - always render logged-out state on server
   const [hasMounted, setHasMounted] = useState(false);
@@ -179,7 +183,7 @@ function Header({ menuTArray }: HeaderProps) {
   };
 
   return (
-    <header className={classes.header}>
+    <header className={`${classes.header} ${isProductDetail ? classes.headerNotSticky : ''}`}>
       {/* Utility Bar - Top strip */}
       <div className={classes.utilityBar}>
         <div className={classes.utilityContent}>
@@ -301,9 +305,6 @@ function Header({ menuTArray }: HeaderProps) {
 
         {/* Action Icons */}
         <div className={classes.actionIcons}>
-          <Link href={`/${locale}/order-tracking`} className={classes.iconButton} title="Sipariş Takip">
-            <FaBox />
-          </Link>
           <Link href={`/${locale}/favorites`} className={classes.iconButton} title="Favorites">
             <FaHeart />
           </Link>

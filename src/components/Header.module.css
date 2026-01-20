@@ -7,6 +7,11 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
+/* Not sticky on product detail pages */
+.headerNotSticky {
+  position: relative;
+}
+
 /* Utility Bar - Top Strip */
 .utilityBar {
   background: #2c2c2c;
@@ -808,8 +813,7 @@
   }
 
   .actionIcons {
-    order: 2;
-    gap: 0.25rem;
+    display: none;
   }
 
   .iconButton,

@@ -12,6 +12,7 @@ interface GuestCartItem {
   product_category?: string;
   variant_attributes?: { [key: string]: string };
   is_custom_curtain?: boolean;
+  is_sample?: boolean;
   custom_attributes?: {
     mountingType?: string;
     pleatType?: string;
@@ -19,6 +20,7 @@ interface GuestCartItem {
     width?: string;
     height?: string;
     wingType?: string;
+    [key: string]: any;
   };
   custom_price?: string | number;
   product?: {
@@ -81,8 +83,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Update cart count based on auth status
   useEffect(() => {
     if (isGuest) {
-      // For guests, count from localStorage
-      setCartCount(guestCart.length);
+      // For guests, sum quantities from localStorage
+      const totalQty = guestCart.reduce((sum, item) => {
+        const qty = parseFloat(item.quantity) || 0;
+        return sum + Math.ceil(qty);
+      }, 0);
+      setCartCount(totalQty);
     } else if (session?.user?.email) {
       // For authenticated users, load from API
       loadCartCount();
@@ -101,7 +107,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const handleCartUpdated = () => {
       if (isGuest) {
-        setCartCount(guestCart.length);
+        const totalQty = guestCart.reduce((sum, item) => {
+          const qty = parseFloat(item.quantity) || 0;
+          return sum + Math.ceil(qty);
+        }, 0);
+        setCartCount(totalQty);
       } else {
         loadCartCount();
       }
@@ -134,8 +144,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         const data = await response.json();
-        const count = data.cart_items?.length || 0;
-        setCartCount(count);
+        const items = data.cart_items || [];
+        // Sum up all quantities to get total item count
+        const totalQuantity = items.reduce((sum: number, item: any) => {
+          if (!item || !item.id) return sum;
+          const qty = parseFloat(item.quantity) || 0;
+          return sum + Math.ceil(qty); // Round up for fractional quantities (e.g., 1.5m fabric = 2)
+        }, 0);
+        setCartCount(totalQuantity);
       }
     } catch (error) {
       console.error('[CART] Error loading cart count:', error);
@@ -144,7 +160,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const refreshCart = async () => {
     if (isGuest) {
-      setCartCount(guestCart.length);
+      const totalQty = guestCart.reduce((sum, item) => {
+        const qty = parseFloat(item.quantity) || 0;
+        return sum + Math.ceil(qty);
+      }, 0);
+      setCartCount(totalQty);
     } else {
       await loadCartCount();
     }
@@ -164,7 +184,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setGuestCart(prev => {
       // Check if item already exists (same SKU and variant)
       const existingIndex = prev.findIndex(
-        i => i.product_sku === item.product_sku && i.variant_sku === item.variant_sku
+        i => i.product_sku === item.product_sku &&
+          i.variant_sku === item.variant_sku &&
+          (i.is_sample === item.is_sample || (!i.is_sample && !item.is_sample)) &&
+          (i.is_custom_curtain === item.is_custom_curtain || (!i.is_custom_curtain && !item.is_custom_curtain))
       );
 
       if (existingIndex >= 0) {
@@ -233,6 +256,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               variant_sku: item.variant_sku,
               quantity: item.quantity,
               is_custom_curtain: item.is_custom_curtain || false,
+              is_sample: item.is_sample || false,
               custom_attributes: item.custom_attributes || {},
               custom_price: item.custom_price || null,
             }),

@@ -1490,3 +1490,11 @@ select.input:disabled {
   font-size: 0.9rem;
   color: #666;
 }
+
+.freePrice {
+  color: #27ae60;
+  font-weight: 700;
+  background: rgba(39, 174, 96, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}

@@ -84,6 +84,8 @@
         "quantityMeters": "Quantity (m)",
         "quantityPieces": "Quantity",
         "addToCart": "Add to Cart",
+        "requestSample": "Request Sample",
+        "sampleAdded": "Sample added to cart",
         "buyNow": "Buy Now",
         "addToFavorites": "Add to favorites",
         "removeFromFavorites": "Remove from favorites",
@@ -403,6 +405,7 @@
         "Cart": "Cart",
         "Favorites": "Favorites",
         "Account": "Account",
+        "Tracking": "Order Tracking",
         "Fabrics": "Fabrics",
         "ReadyCurtains": "Ready Curtains",
         "CustomCurtains": "Custom Curtains"

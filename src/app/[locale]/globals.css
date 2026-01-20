@@ -33,6 +33,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Reduce scroll sensitivity on desktop */
+@media (min-width: 769px) {
+  html {
+    scroll-padding-top: 80px;
+  }
+
+  /* Smoother scrolling with reduced sensitivity */
+  body {
+    overscroll-behavior-y: contain;
+  }
+}
+
 body {
   font-family: var(--font-body);
   color: var(--text-dark);

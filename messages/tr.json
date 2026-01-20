@@ -84,6 +84,8 @@
         "quantityMeters": "Miktar (m)",
         "quantityPieces": "Adet",
         "addToCart": "Sepete Ekle",
+        "requestSample": "Numune İste",
+        "sampleAdded": "Numune sepete eklendi",
         "buyNow": "Şimdi Al",
         "addToFavorites": "Favorilere ekle",
         "removeFromFavorites": "Favorilerden çıkar",
@@ -434,6 +436,7 @@
         "Cart": "Sepetim",
         "Favorites": "Favorilerim",
         "Account": "Hesabım",
+        "Tracking": "Kargo Takip",
         "Fabrics": "Kumaşlar",
         "ReadyCurtains": "Hazır Perdeler",
         "CustomCurtains": "Perde Diktir"

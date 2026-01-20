@@ -162,6 +162,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const [imageSrc, setImageSrc] = useState(product.primary_image || placeholder_image_link);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [isTouching, setIsTouching] = useState(false);
 
   const isWishlisted = isFavorite(product.sku);
 
@@ -250,12 +251,68 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
 
   const router = useRouter();
 
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
+
+  // Initialize selectedVariantId from initial primary_image if possible
+  useEffect(() => {
+    if (product.primary_image && productVariants.length > 0) {
+      const initialVariant = productVariants.find(v => v.primary_image === product.primary_image);
+      if (initialVariant) {
+        setSelectedVariantId(String(initialVariant.id));
+      }
+    }
+  }, [product.primary_image, productVariants]);
+
   const handleColorSwatchClick = (e: React.MouseEvent, color: string) => {
     e.preventDefault();
     e.stopPropagation();
-    const baseHref = `${product_category_name}/${product.sku}`;
-    const url = `${baseHref}?color=${encodeURIComponent(color)}#ProductDetailCard`;
-    router.push(url);
+
+    // DEBUG: Start Click
+    // console.log(`[ColorClick] Start for color: '${color}', ProductID: ${product.id}`);
+
+    // Find the variant that matches this color
+    if (!colorAttribute) {
+      // console.warn("[ColorClick] No color attribute found");
+      return;
+    }
+
+    try {
+      const selectedVariant = productVariants
+        .filter(v => String(v.product_id) === String(product.id)) // Robust ID comparison
+        .find(variant => {
+          if (!variant.product_variant_attribute_values) return false;
+
+          // Check if any of this variant's attributes match the selected color
+          const hasMatch = variant.product_variant_attribute_values.some((valId: any) => {
+            // valId might be the ID directly or an object? API usually returns IDs in array
+            const valIdStr = String(valId);
+
+            const attrValue = variantAttributeValues.find(av => String(av.id) === valIdStr);
+
+            if (!attrValue) return false;
+
+            const isColorAttr = String(attrValue.product_variant_attribute_id) === String(colorAttribute.id);
+            const isValueMatch = attrValue.product_variant_attribute_value?.trim() === color;
+
+            return isColorAttr && isValueMatch;
+          });
+
+          return hasMatch;
+        });
+
+      // console.log("[ColorClick] Selected Variant:", selectedVariant);
+
+      if (selectedVariant) {
+        if (selectedVariant.primary_image) {
+          setImageSrc(selectedVariant.primary_image);
+        }
+        setSelectedVariantId(String(selectedVariant.id));
+      } else {
+        // console.log("[ColorClick] No matching variant found");
+      }
+    } catch (err) {
+      console.error("Error switching variant image:", err);
+    }
   };
 
   const handleFabricSwatchClick = (e: React.MouseEvent, fabric: string) => {
@@ -268,6 +325,53 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
 
 
 
+  const secondImage = useMemo(() => {
+    if (!product.product_files || product.product_files.length === 0) return null;
+
+    // Filter for valid images
+    const images = product.product_files.filter(f => !f.file_type || f.file_type === 'image');
+    if (images.length === 0) return null;
+
+    const currentSrc = (imageSrc || product.primary_image || '').trim();
+
+    // Strategy 1: Use explicitly selected variant ID
+    let targetVariantId = selectedVariantId;
+
+    // Strategy 2: If no explicit selection, try to infer from current image
+    if (!targetVariantId) {
+      const activeVariant = productVariants.find(v => v.primary_image === currentSrc);
+      const activeFile = images.find(f => f.file === currentSrc && f.product_variant_id);
+
+      if (activeVariant) {
+        targetVariantId = String(activeVariant.id);
+      } else if (activeFile) {
+        targetVariantId = String(activeFile.product_variant_id);
+      }
+    }
+
+    if (targetVariantId) {
+      // Look for a secondary image SPECIFIC to this variant
+      const variantImages = images.filter(f =>
+        f.product_variant_id &&
+        String(f.product_variant_id) === String(targetVariantId) &&
+        f.file !== currentSrc
+      );
+
+      if (variantImages.length > 0) {
+        return variantImages[0].file;
+      }
+
+      // CRITICAL: If a variant IS identified/selected, but has no other images,
+      // Do NOT fallback to generic product images (which might be other variants).
+      // Return null to show no hover effect (or handle as desired).
+      return null;
+    }
+
+    // 3. Fallback: Only if no variant could be identified at all (generic product)
+    const secondary = images.find(f => f.file !== currentSrc);
+    return secondary ? secondary.file : null;
+  }, [product.product_files, imageSrc, product.primary_image, productVariants, selectedVariantId]);
+
   return (
     <div className={classes.productCard}>
       <div className={classes.cardContainer}>
@@ -277,7 +381,12 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
             href={product_category_name + "/" + product.sku + "#ProductDetailCard"}
             className={classes.imageLink}
           >
-            <div className={classes.imageWrapper}>
+            <div
+              className={`${classes.imageWrapper} ${isTouching ? classes.imageWrapperTouching : ''}`}
+              onTouchStart={() => setIsTouching(true)}
+              onTouchEnd={() => setIsTouching(false)}
+              onTouchCancel={() => setIsTouching(false)}
+            >
               {imageLoading && (
                 <div className={classes.imageLoader}>
                   <div className={classes.spinner}></div>
@@ -296,18 +405,30 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 }}
                 onError={(e) => {
                   setImageLoading(false);
-                  // First try removing /thumbnails from path (fallback to original image)
                   const currentSrc = e.currentTarget.src;
                   if (!hasTriedFallback && currentSrc.includes('/thumbnails/')) {
                     setHasTriedFallback(true);
                     setImageSrc(currentSrc.replace('/thumbnails/', '/'));
                   } else if (!imageError) {
-                    // If that also fails, use placeholder
                     setImageError(true);
                     setImageSrc(placeholder_image_link);
                   }
                 }}
               />
+
+              {/* Secondary Image for Hover */}
+              {secondImage && (
+                <img
+                  src={secondImage}
+                  alt={`${product.title} - Secondary`}
+                  className={classes.productImageHover}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
+
               <div className={classes.imageOverlay}></div>
             </div>
           </Link>

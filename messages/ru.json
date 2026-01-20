@@ -84,6 +84,8 @@
         "quantityMeters": "Количество (м)",
         "quantityPieces": "Количество",
         "addToCart": "Добавить в корзину",
+        "requestSample": "Запросить образец",
+        "sampleAdded": "Образец добавлен в корзину",
         "buyNow": "Купить сейчас",
         "addToFavorites": "Добавить в избранное",
         "removeFromFavorites": "Удалить из избранного",
@@ -406,6 +408,7 @@
         "Cart": "Корзина",
         "Favorites": "Избранное",
         "Account": "Профиль",
+        "Tracking": "Отслеживание",
         "Fabrics": "Ткани",
         "ReadyCurtains": "Готовые шторы",
         "CustomCurtains": "Пошив штор"

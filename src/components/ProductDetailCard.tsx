@@ -2,8 +2,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import CustomCurtainSidebar from './CustomCurtainSidebar';
+import TryAtHomeSidebar from './TryAtHomeSidebar';
+import ImageZoom from './ImageZoom';
 
-import { FaCut } from 'react-icons/fa';
+import { FaCut, FaCamera, FaSwatchbook } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import classes from "./ProductDetailCard.module.css";
@@ -51,6 +53,7 @@ function ProductDetailCard({
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
   const [isCustomCurtainSidebarOpen, setIsCustomCurtainSidebarOpen] = useState(false);
+  const [isTryAtHomeSidebarOpen, setIsTryAtHomeSidebarOpen] = useState(false);
   const touchStartX = React.useRef<number | null>(null);
 
   // Format price with currency
@@ -498,6 +501,75 @@ function ProductDetailCard({
     }
   };
 
+
+  const handleRequestSample = async () => {
+    // Check if user is logged in
+    if (!session?.user && !isGuest) {
+      // Should not happen as we check isGuest but for safety
+      alert(t('pleaseLogin'));
+      return;
+    }
+
+    try {
+      if (isGuest) {
+        // For guests, add to localStorage cart with 0 price and sample flag
+        addToGuestCart({
+          product_sku: product.sku,
+          variant_sku: selectedVariant?.variant_sku || null,
+          quantity: "1",
+          product_category: product_category || undefined,
+          product: {
+            title: `${product.title} (${t('requestSample')})`,
+            price: 0,
+            primary_image: product.primary_image || placeholder_image_link,
+            category: product_category || undefined,
+          },
+          // Sample specific flags
+          is_sample: true,
+          custom_price: 0,
+          custom_attributes: {
+            type: 'sample'
+          }
+        });
+        setSuccessMessage(t('sampleAdded'));
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 3000);
+      } else {
+        // For authenticated users, add via API
+        const userId = (session?.user as any)?.id || session?.user?.email;
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              product_sku: product.sku,
+              variant_sku: selectedVariant?.variant_sku || null,
+              quantity: 1,
+              is_sample: true,
+              custom_price: 0,
+              custom_attributes: {
+                type: 'sample'
+              }
+            }),
+          }
+        );
+
+        if (response.ok) {
+          setSuccessMessage(t('sampleAdded'));
+          setShowSuccessMessage(true);
+          setTimeout(() => setShowSuccessMessage(false), 3000);
+          await refreshCart();
+        } else {
+          alert(t('errorAddingToCart'));
+        }
+      }
+    } catch (error) {
+      console.error('Error adding sample:', error);
+      alert(t('errorAddingToCart'));
+    }
+  };
+
   const handleAddToCart = async () => {
     const qty = parseFloat(quantity);
     if (isNaN(qty) || qty <= 0) {
@@ -813,27 +885,11 @@ function ProductDetailCard({
                 />
               ) : (
                 <>
-                  <img
-                    key={currentMedia?.url || imageFiles[selectedThumbIndex]}
+                  <ImageZoom
                     src={currentMedia?.url || imageFiles[selectedThumbIndex] || placeholder_image_link}
                     alt="Product image"
-                    loading="eager"
-                    onMouseMove={handleMouseMove}
-                    onMouseLeave={handleMouseLeave}
                     onLoad={() => setImageLoaded(true)}
-                    style={{ cursor: 'default' }}
                   />
-                  {zoomPosition && zoomBoxPosition && (
-                    <div
-                      className={classes.zoom}
-                      style={{
-                        backgroundImage: `url(${currentMedia?.url || imageFiles[selectedThumbIndex]})`,
-                        backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                        top: `${zoomBoxPosition.y}px`,
-                        left: `${zoomBoxPosition.x}px`,
-                      }}
-                    />
-                  )}
                 </>
               )}
             </div>
@@ -1184,7 +1240,17 @@ function ProductDetailCard({
                   <button onClick={() => setIsCustomCurtainSidebarOpen(true)} className={classes.customCurtainBtn}>
                     <FaCut /> {t('customCurtain')}
                   </button>
+                  <button onClick={() => setIsTryAtHomeSidebarOpen(true)} className={classes.tryAtHomeBtn}>
+                    <FaCamera /> {locale === 'tr' ? 'Odanda Görüntüle' : locale === 'ru' ? 'Посмотреть в комнате' : locale === 'pl' ? 'Zobacz w pokoju' : 'View in Your Room'}
+                  </button>
                 </>
+              )}
+
+              {/* Request Sample Button - Only for fabric products */}
+              {isFabricProduct && (
+                <button onClick={handleRequestSample} className={classes.sampleBtn}>
+                  <FaSwatchbook /> {t('requestSample')}
+                </button>
               )}
             </div>
 
@@ -1344,10 +1410,20 @@ function ProductDetailCard({
         onAddToCart={handleCustomCurtainAddToCart}
       />
 
+      {/* Try at Home Sidebar */}
+      <TryAtHomeSidebar
+        isOpen={isTryAtHomeSidebarOpen}
+        onClose={() => setIsTryAtHomeSidebarOpen(false)}
+        productImages={imageFiles.length > 0 ? imageFiles : [placeholder_image_link]}
+        productVideos={videoFiles.map(v => v.file).filter(Boolean) as string[]}
+        productTitle={product.title || 'Curtain'}
+        locale={locale}
+      />
+
       <ProductReviewsList productSku={product.sku} />
 
 
-    </div>
+    </div >
   );
 }
 

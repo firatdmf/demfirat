@@ -11,6 +11,7 @@ import { Providers } from "./providers";
 import { getTranslations, getMessages } from "next-intl/server";
 import GoogleAnalytics from "@/lib/googleAnalytics";
 import ScrollToTop from "@/components/ScrollToTop";
+import ScrollSmoother from "@/components/ScrollSmoother";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -102,6 +103,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         {/* Provider component wraps the application and passes the props of session information (from the user) */}
         <Providers messages={messages} locale={locale}>
           <ScrollToTop />
+          <ScrollSmoother />
           <Header menuTArray={menuTArray} />
           {children}
           {/* above {children} now changed to ------- */}

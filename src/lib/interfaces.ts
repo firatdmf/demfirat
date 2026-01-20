@@ -27,6 +27,7 @@ export type Product = {
   datasheet_url: string | null;
   minimum_inventory_level: Decimal | null;
   primary_image?: string;
+  product_files?: ProductFile[] | null;
   product_attributes?: ProductAttribute[] | null;  // Product-level attributes including discount_rate
 
 }
@@ -114,6 +115,7 @@ export type OrderItem = {
   unit_of_measurement: string;
   // Custom Curtain Fields
   is_custom_curtain?: boolean;
+  is_sample?: boolean;
   custom_fabric_used_meters?: string | null;
   custom_attributes?: {
     mounting_type?: string | null;
