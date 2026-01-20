@@ -418,9 +418,11 @@ function Header({ menuTArray }: HeaderProps) {
             </div>
           </div>
 
+          {/* TEMPORARILY HIDDEN - Ready-made curtains
           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
             {menuTArray[2]}
           </Link>
+          */}
           <Link href={`/${locale}/about`} className={classes.navLink}>
             {menuTArray[3]}
           </Link>
@@ -462,9 +464,11 @@ function Header({ menuTArray }: HeaderProps) {
             {locale === 'tr' ? 'Ölçü Nasıl Alınır?' : locale === 'ru' ? 'Как измерить?' : locale === 'pl' ? 'Jak mierzyć?' : 'How to Measure?'}
           </Link>
 
+          {/* TEMPORARILY HIDDEN - Ready-made curtains
           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[2]}
           </Link>
+          */}
           <Link href={`/${locale}/about`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[3]}
           </Link>
