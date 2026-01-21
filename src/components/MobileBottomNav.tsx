@@ -21,8 +21,8 @@ const MobileBottomNav = () => {
         setMounted(true);
     }, []);
 
-    // Calculate total cart count (authenticated + guest)
-    const totalCartCount = mounted ? cartCount + guestCart.length : 0;
+    // cartCount from context already includes proper quantity sum for both guests and authenticated users
+    const totalCartCount = mounted ? cartCount : 0;
 
     const isActive = (path: string) => {
         const currentPath = pathname.replace(`/${locale}`, '') || '/';

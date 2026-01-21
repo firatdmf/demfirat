@@ -51,11 +51,13 @@ const GUEST_CART_KEY = 'karven_guest_cart';
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
-  const [cartCount, setCartCount] = useState<number>(0);
+  const [authenticatedCartCount, setAuthenticatedCartCount] = useState<number>(0);
   const [guestCart, setGuestCart] = useState<GuestCartItem[]>([]);
   const [hasMerged, setHasMerged] = useState(false);
 
-  const isGuest = status === 'unauthenticated';
+  // Derive isGuest and cartCount
+  const isGuest = status === 'unauthenticated' || (status !== 'loading' && !session);
+  const cartCount = isGuest ? guestCart.length : authenticatedCartCount;
 
   // Load guest cart from localStorage on mount
   useEffect(() => {
@@ -75,25 +77,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Save guest cart to localStorage when it changes
   useEffect(() => {
-    if (typeof window !== 'undefined' && guestCart.length > 0) {
+    if (typeof window !== 'undefined') {
       localStorage.setItem(GUEST_CART_KEY, JSON.stringify(guestCart));
     }
   }, [guestCart]);
 
-  // Update cart count based on auth status
+  // Update authenticated cart count
   useEffect(() => {
-    if (isGuest) {
-      // For guests, sum quantities from localStorage
-      const totalQty = guestCart.reduce((sum, item) => {
-        const qty = parseFloat(item.quantity) || 0;
-        return sum + Math.ceil(qty);
-      }, 0);
-      setCartCount(totalQty);
-    } else if (session?.user?.email) {
-      // For authenticated users, load from API
+    if (!isGuest && session?.user?.email) {
       loadCartCount();
     }
-  }, [session?.user?.email, isGuest, guestCart.length]);
+  }, [session?.user?.email, isGuest]);
 
   // Merge guest cart when user logs in
   useEffect(() => {
@@ -106,18 +100,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Listen cart events to update badge without full reload
   useEffect(() => {
     const handleCartUpdated = () => {
-      if (isGuest) {
-        const totalQty = guestCart.reduce((sum, item) => {
-          const qty = parseFloat(item.quantity) || 0;
-          return sum + Math.ceil(qty);
-        }, 0);
-        setCartCount(totalQty);
-      } else {
+      if (!isGuest) {
         loadCartCount();
       }
     };
     const handleCartCleared = () => {
-      setCartCount(0);
+      setAuthenticatedCartCount(0);
+      setGuestCart([]);
     };
     if (typeof window !== 'undefined') {
       window.addEventListener('cartUpdated', handleCartUpdated as EventListener);
@@ -129,12 +118,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         window.removeEventListener('cartCleared', handleCartCleared as EventListener);
       }
     };
-  }, [isGuest, guestCart.length]);
+  }, [isGuest, guestCart]);
 
   const loadCartCount = async () => {
-    if (!session?.user?.email) {
-      return;
-    }
+    if (!session?.user?.email) return;
 
     try {
       const userId = (session.user as any)?.id || session.user.email;
@@ -145,13 +132,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         const items = data.cart_items || [];
-        // Sum up all quantities to get total item count
-        const totalQuantity = items.reduce((sum: number, item: any) => {
-          if (!item || !item.id) return sum;
-          const qty = parseFloat(item.quantity) || 0;
-          return sum + Math.ceil(qty); // Round up for fractional quantities (e.g., 1.5m fabric = 2)
-        }, 0);
-        setCartCount(totalQuantity);
+        const validItems = items.filter((i: any) => i && i.id);
+        setAuthenticatedCartCount(validItems.length);
       }
     } catch (error) {
       console.error('[CART] Error loading cart count:', error);
@@ -159,19 +141,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshCart = async () => {
-    if (isGuest) {
-      const totalQty = guestCart.reduce((sum, item) => {
-        const qty = parseFloat(item.quantity) || 0;
-        return sum + Math.ceil(qty);
-      }, 0);
-      setCartCount(totalQty);
-    } else {
+    if (!isGuest) {
       await loadCartCount();
     }
   };
 
   const addToCartCount = (quantity: number) => {
-    setCartCount(prev => prev + 1);
+    if (!isGuest) {
+      setAuthenticatedCartCount(prev => prev + 1);
+    }
   };
 
   // Guest cart methods
@@ -184,18 +162,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setGuestCart(prev => {
       // Check if item already exists (same SKU and variant)
       const existingIndex = prev.findIndex(
-        i => i.product_sku === item.product_sku &&
-          i.variant_sku === item.variant_sku &&
-          (i.is_sample === item.is_sample || (!i.is_sample && !item.is_sample)) &&
-          (i.is_custom_curtain === item.is_custom_curtain || (!i.is_custom_curtain && !item.is_custom_curtain))
+        i => i.product_sku?.toLowerCase().trim() === item.product_sku?.toLowerCase().trim() &&
+          (i.variant_sku?.toLowerCase().trim() || null) === (item.variant_sku?.toLowerCase().trim() || null) &&
+          (!!i.is_sample === !!item.is_sample) &&
+          (!!i.is_custom_curtain === !!item.is_custom_curtain)
       );
 
       if (existingIndex >= 0) {
-        // Update quantity
+        // Update quantity (with deep copy to prevent mutation issues)
         const updated = [...prev];
-        const existingQty = parseFloat(updated[existingIndex].quantity);
-        const newQty = parseFloat(item.quantity);
-        updated[existingIndex].quantity = (existingQty + newQty).toString();
+        const existingItem = updated[existingIndex];
+        const newTotalQty = (parseFloat(existingItem.quantity) + parseFloat(item.quantity)).toString();
+
+        updated[existingIndex] = {
+          ...existingItem,
+          quantity: newTotalQty
+        };
         return updated;
       }
 

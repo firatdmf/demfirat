@@ -103,7 +103,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         {/* Provider component wraps the application and passes the props of session information (from the user) */}
         <Providers messages={messages} locale={locale}>
           <ScrollToTop />
-          <ScrollSmoother />
+          {/* <ScrollSmoother /> - Temporarily disabled */}
           <Header menuTArray={menuTArray} />
           {children}
           {/* above {children} now changed to ------- */}

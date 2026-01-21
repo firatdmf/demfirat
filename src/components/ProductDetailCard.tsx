@@ -189,6 +189,7 @@ function ProductDetailCard({
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'description' | 'details'>('description');
+  const [isAdding, setIsAdding] = useState(false);
 
   const findSelectedVariant = () => {
     if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return undefined;
@@ -571,6 +572,9 @@ function ProductDetailCard({
   };
 
   const handleAddToCart = async () => {
+    if (isAdding) return;
+    setIsAdding(true);
+
     const qty = parseFloat(quantity);
     if (isNaN(qty) || qty <= 0) {
       alert(t('enterValidQuantity'));
@@ -675,6 +679,8 @@ function ProductDetailCard({
     } catch (error) {
       console.error('Cart error:', error);
       alert(t('errorAddingToCart'));
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -1223,8 +1229,12 @@ function ProductDetailCard({
               </div>
             </div>
             <div className={classes.buttonGroup}>
-              <button onClick={handleAddToCart} className={classes.addToCartBtn}>
-                {t('addToCart')}
+              <button
+                onClick={handleAddToCart}
+                className={classes.addToCartBtn}
+                disabled={isAdding}
+              >
+                {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t('addToCart')}
               </button>
 
               <button onClick={handleBuyNow} className={classes.buyNowBtn}>
@@ -1240,9 +1250,11 @@ function ProductDetailCard({
                   <button onClick={() => setIsCustomCurtainSidebarOpen(true)} className={classes.customCurtainBtn}>
                     <FaCut /> {t('customCurtain')}
                   </button>
+                  {/* 
                   <button onClick={() => setIsTryAtHomeSidebarOpen(true)} className={classes.tryAtHomeBtn}>
                     <FaCamera /> {locale === 'tr' ? 'Odanda Görüntüle' : locale === 'ru' ? 'Посмотреть в комнате' : locale === 'pl' ? 'Zobacz w pokoju' : 'View in Your Room'}
                   </button>
+                  */}
                 </>
               )}
 
