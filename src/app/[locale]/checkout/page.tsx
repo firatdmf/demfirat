@@ -261,13 +261,24 @@ export default function CheckoutPage() {
             if (productResponse.ok) {
               const productData = await productResponse.json();
               const product = productData.product;
+
+              // CRITICAL: Preserve embedded price from guest cart (contains correct variant_price)
+              // Only use API product.price as fallback if embedded price is not valid
+              const embeddedPrice = item.product?.price;
+              const fetchedPrice = product?.price;
+              const finalPrice = item.custom_price
+                ? item.custom_price
+                : (embeddedPrice && Number(embeddedPrice) > 0)
+                  ? embeddedPrice
+                  : fetchedPrice || null;
+
               return {
                 ...item,
                 id: item.id as any,
                 product_category: productData.product_category || item.product_category,
                 product: {
-                  title: product?.title || item.product_sku,
-                  price: item.custom_price || product?.price || null,
+                  title: product?.title || item.product?.title || item.product_sku,
+                  price: finalPrice,
                   primary_image: product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                   category: productData.product_category,
                 },
@@ -422,14 +433,27 @@ export default function CheckoutPage() {
                     const productData = await productResponse.json();
                     const product = productData.product;
 
+                    // CRITICAL: Prioritize embedded price from cart (set at add-time with correct variant_price)
+                    // then fall back to API variant_price, then product.price as last resort
+                    const embeddedPrice = item.product?.price;
+                    const fetchedVariantPrice = variant?.variant_price;
+                    const fetchedProductPrice = product?.price;
+
+                    // Use embedded price if valid (not null/0), otherwise try fetched prices
+                    const finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
+                      ? embeddedPrice
+                      : (fetchedVariantPrice && Number(fetchedVariantPrice) > 0)
+                        ? fetchedVariantPrice
+                        : fetchedProductPrice || null;
+
                     return {
                       ...item,
                       product_category: productData.product_category || item.product_category,
                       variant_attributes: variantAttributes,
                       product: {
-                        title: product?.title || item.product_sku,
-                        price: variant?.variant_price || product?.price || null,
-                        primary_image: variantImage || product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                        title: product?.title || item.product?.title || item.product_sku,
+                        price: finalPrice,
+                        primary_image: variantImage || product?.primary_image || item.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                         category: productData.product_category,
                       },
                     };
@@ -446,13 +470,20 @@ export default function CheckoutPage() {
                 const productData = await productResponse.json();
                 const product = productData.product;
                 if (product) {
+                  // Prioritize embedded price from cart over fetched price
+                  const embeddedPrice = item.product?.price;
+                  const fetchedPrice = product.price;
+                  const finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
+                    ? embeddedPrice
+                    : fetchedPrice || null;
+
                   return {
                     ...item,
                     product_category: productData.product_category || item.product_category,
                     product: {
-                      title: product.title || item.product_sku,
-                      price: product.price || null,
-                      primary_image: product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                      title: product.title || item.product?.title || item.product_sku,
+                      price: finalPrice,
+                      primary_image: product.primary_image || item.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                       category: productData.product_category,
                     },
                   };
@@ -460,7 +491,7 @@ export default function CheckoutPage() {
               }
               return {
                 ...item,
-                product: {
+                product: item.product || {
                   title: item.product_sku,
                   price: null,
                   primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
@@ -469,7 +500,7 @@ export default function CheckoutPage() {
             } catch (error) {
               return {
                 ...item,
-                product: {
+                product: item.product || {
                   title: item.product_sku,
                   price: null,
                   primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
