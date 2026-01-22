@@ -2,6 +2,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, SearchParams } from "@/lib/interfaces";
+import { FaSearch, FaTimes } from 'react-icons/fa';
+import classes from './page.module.css';
 
 // Dynamically import ProductGrid for code splitting
 const ProductGrid = dynamic(() => import("@/components/ProductGrid"), {
@@ -62,6 +64,7 @@ const transformFabricToProduct = (fabric: any, index: number): Product => {
 export default function EmbroideryClient({ locale, searchParams }: EmbroideryClientProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [fabricData, setFabricData] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Load JSON data asynchronously
   useEffect(() => {
@@ -79,20 +82,30 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
     loadData();
   }, []);
 
-  // Process all products only when data is loaded
+  // Process all products with search filtering
   const allProducts = useMemo(() => {
     if (fabricData.length === 0) return [];
 
-    const products: Product[] = fabricData.map(transformFabricToProduct);
+    let dataToProcess = fabricData;
+    if (searchTerm.trim()) {
+      const query = searchTerm.toLowerCase().trim();
+      dataToProcess = fabricData.filter(fabric =>
+        fabric.design?.toString().toLowerCase().includes(query) ||
+        (fabric.prefix && fabric.prefix.toLowerCase().includes(query)) ||
+        fabric.files?.some((f: any) => f.variant && f.variant.toLowerCase().includes(query))
+      );
+    }
+
+    const products: Product[] = dataToProcess.map(transformFabricToProduct);
 
     // Remove duplicate products by SKU (keep first occurrence)
     const uniqueProducts: Product[] = Array.from(
       new Map(products.map(product => [product.sku, product])).values()
     );
 
-    console.log(`[EMBROIDERY] Total: ${products.length}, Unique: ${uniqueProducts.length}`);
+    console.log(`[EMBROIDERY] Search: "${searchTerm}", Found: ${uniqueProducts.length}`);
     return uniqueProducts;
-  }, [fabricData]);
+  }, [fabricData, searchTerm]);
 
   const product_variants: ProductVariant[] = [];
   const product_variant_attributes: ProductVariantAttribute[] = [];
@@ -133,22 +146,51 @@ export default function EmbroideryClient({ locale, searchParams }: EmbroideryCli
   }
 
   return (
-    <ProductGrid
-      products={allProducts}
-      product_variants={product_variants}
-      product_variant_attributes={product_variant_attributes}
-      product_variant_attribute_values={product_variant_attribute_values}
-      product_category="embroidery"
-      product_category_description={
-        locale === 'tr' ? 'Nakışlı şeffaf perde kumaşları - Lüks ev tekstili koleksiyonu' :
-          locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
-            locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
-              locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
-                'Embroidered sheer curtain fabrics - Luxury home textile collection'
-      }
-      searchParams={searchParams}
-      locale={locale}
-      initialDisplayCount={30}
-    />
+    <>
+      <div className={classes.searchContainer}>
+        <div className={classes.searchWrapper}>
+          <FaSearch className={classes.searchIcon} />
+          <input
+            type="text"
+            className={classes.searchInput}
+            placeholder={
+              locale === 'tr' ? 'Desen no veya varyant ara...' :
+                locale === 'ru' ? 'Поиск по номеру дизайна или варианту...' :
+                  locale === 'pl' ? 'Szukaj według numeru wzoru lub wariantu...' :
+                    'Search by design number or variant...'
+            }
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button
+              className={classes.clearButton}
+              onClick={() => setSearchTerm("")}
+              aria-label="Clear search"
+            >
+              <FaTimes />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <ProductGrid
+        products={allProducts}
+        product_variants={product_variants}
+        product_variant_attributes={product_variant_attributes}
+        product_variant_attribute_values={product_variant_attribute_values}
+        product_category="embroidery"
+        product_category_description={
+          locale === 'tr' ? 'Nakışlı şeffaf perde kumaşları - Lüks ev tekstili koleksiyonu' :
+            locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
+              locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
+                locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
+                  'Embroidered sheer curtain fabrics - Luxury home textile collection'
+        }
+        searchParams={searchParams}
+        locale={locale}
+        initialDisplayCount={30}
+      />
+    </>
   );
 }

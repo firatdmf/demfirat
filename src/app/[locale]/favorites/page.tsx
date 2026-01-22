@@ -80,45 +80,38 @@ export default function FavoritesPage() {
 
   const fetchProductDetails = async (skus: string[]) => {
     try {
-      // Fetch from different product categories and filter by SKUs
-      const categories = ['fabric', 'ready-made_curtain'];
-      let allProducts: Product[] = [];
+      console.log('[FAVORITES] Fetching details for:', skus.length, 'items');
 
-      for (const category of categories) {
+      // Use Promise.all to fetch all favorites in parallel for maximum speed
+      // limiting to reasonable concurrency if needed, but for <50 items Promise.all is fine
+      const promises = skus.map(async (sku) => {
         try {
-          const url = `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products?product_category=${category}`;
-          console.log('[FAVORITES] Fetching from:', url);
-
+          // Use the single product endpoint
+          const url = `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${sku}`;
           const response = await fetch(url, {
             method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            cache: 'no-store'
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store' // Ensure fresh data
           });
 
           if (response.ok) {
             const data = await response.json();
-            if (data.products && Array.isArray(data.products)) {
-              allProducts = [...allProducts, ...data.products];
-            }
-          } else {
-            console.error(`Failed to fetch ${category}: ${response.status} ${response.statusText}`);
+            return data.product || null;
           }
+          return null;
         } catch (err) {
-          console.error(`Error fetching products from ${category}:`, err);
+          console.error(`Error fetching SKU ${sku}:`, err);
+          return null;
         }
-      }
+      });
 
-      // Filter products by favorite SKUs
-      console.log('[FAVORITES] Total products fetched:', allProducts.length);
-      const favoriteProducts = allProducts.filter(product =>
-        skus.includes(product.sku)
-      );
+      const results = await Promise.all(promises);
 
-      console.log('[FAVORITES] Filtered favorite products:', favoriteProducts.length);
-      console.log('[FAVORITES] Products:', favoriteProducts);
-      setProducts(favoriteProducts);
+      // Filter out any failed requests or null products
+      const validProducts = results.filter((p): p is Product => p !== null && !!p.sku);
+
+      console.log('[FAVORITES] Successfully loaded:', validProducts.length, 'products');
+      setProducts(validProducts);
     } catch (error) {
       console.error('Error fetching product details:', error);
     }

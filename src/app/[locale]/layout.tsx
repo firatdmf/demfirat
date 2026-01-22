@@ -12,6 +12,7 @@ import { getTranslations, getMessages } from "next-intl/server";
 import GoogleAnalytics from "@/lib/googleAnalytics";
 import ScrollToTop from "@/components/ScrollToTop";
 import ScrollSmoother from "@/components/ScrollSmoother";
+import NewsletterPopup from "@/components/NewsletterPopup";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -120,6 +121,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
             locale={locale}
           ></Footer>
           <MobileBottomNav />
+          <NewsletterPopup locale={locale} />
           {/* <HelpWidget /> */}
         </Providers>
       </body>

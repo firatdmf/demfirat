@@ -1,0 +1,268 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.popup {
+    background: #faf8f5;
+    /* Light Beige / Cream */
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.5s ease;
+    position: relative;
+    border: 1px solid rgba(201, 169, 97, 0.1);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: #1a1a1a;
+    transform: rotate(90deg);
+}
+
+.header {
+    text-align: center;
+    padding: 50px 40px 30px;
+}
+
+.header h2 {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0 0 15px 0;
+    letter-spacing: 0.5px;
+}
+
+.subtitle {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.content {
+    padding: 0 50px 50px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inputGroup label {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #c9a961;
+    /* Gold accent for labels */
+}
+
+.inputGroup input {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-bottom: 1px solid #e0dcd2;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    color: #1a1a1a;
+    outline: none;
+    background: transparent;
+    transition: all 0.3s ease;
+    border-radius: 0;
+}
+
+.inputGroup input:focus {
+    border-bottom-color: #c9a961;
+    padding-left: 5px;
+}
+
+.inputGroup input::placeholder {
+    color: #aaa;
+}
+
+/* Chrome autofill background fix */
+.inputGroup input:-webkit-autofill,
+.inputGroup input:-webkit-autofill:hover,
+.inputGroup input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #1a1a1a;
+    -webkit-box-shadow: 0 0 0px 1000px #faf8f5 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.submitButton {
+    background: #1a1a1a;
+    /* Dark button for contrast */
+    color: #ffffff;
+    border: none;
+    padding: 18px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.submitButton:hover:not(:disabled) {
+    background: #c9a961;
+    /* Gold on hover */
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(201, 169, 97, 0.2);
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #d32f2f;
+    font-size: 0.85rem;
+    text-align: center;
+    background: #ffebee;
+    padding: 10px;
+    border: 1px solid #ef5350;
+}
+
+.privacy {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 20px;
+}
+
+/* Success State */
+.successContent {
+    padding: 50px;
+    text-align: center;
+}
+
+.successIcon {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #c9a961;
+}
+
+.successContent h3 {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 2rem;
+    color: #1a1a1a;
+    margin: 0 0 15px 0;
+    font-weight: 500;
+}
+
+.successContent p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+}
+
+.successNote {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.9rem;
+    color: #c9a961;
+    font-weight: 500;
+}
+
+.continueButton {
+    background: transparent;
+    color: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    padding: 15px 30px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 30px;
+}
+
+.continueButton:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+@media (max-width: 480px) {
+
+    .content,
+    .header,
+    .successContent {
+        padding: 30px 25px;
+    }
+
+    .header h2 {
+        font-size: 1.8rem;
+    }
+
+    .submitButton {
+        padding: 16px;
+    }
+}

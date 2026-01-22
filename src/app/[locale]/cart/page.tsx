@@ -19,6 +19,7 @@ interface CartItem {
   product_category?: string;
   variant_attributes?: { [key: string]: string };
   is_custom_curtain?: boolean;
+  is_sample?: boolean;
   custom_attributes?: {
     mountingType?: string;
     pleatType?: string;
@@ -61,6 +62,7 @@ export default function CartPage() {
       loading: { en: 'Loading...', tr: 'Yükleniyor...', ru: 'Загрузка...', pl: 'Ładowanie...' },
       items: { en: 'items', tr: 'ürün', ru: 'товаров', pl: 'przedmiotów' },
       orderSummary: { en: 'Order Summary', tr: 'Sipariş Özeti', ru: 'Сводка заказа', pl: 'Podsumowanie zamówienia' },
+      sample: { en: 'Sample', tr: 'Numune', ru: 'Образец', pl: 'Próbka' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -97,6 +99,15 @@ export default function CartPage() {
     }
   }, [session, isInitialLoad, status, isGuest, guestCart]);
 
+  // Helper to determine the correct price for an item
+  const getItemPrice = (item: any, productPrice: any, variantPrice: any) => {
+    if (item.is_sample) return 0;
+    if (item.is_custom_curtain && item.custom_price !== undefined && item.custom_price !== null) {
+      return item.custom_price;
+    }
+    return variantPrice || productPrice || null;
+  };
+
   // Load guest cart items with product details
   const loadGuestCart = async () => {
     if (guestCart.length === 0) {
@@ -122,6 +133,8 @@ export default function CartPage() {
                 const variantImage = variantData.primary_image;
                 const product = variantData.product;
 
+                const price = getItemPrice(item, product?.price, variant?.variant_price);
+
                 return {
                   ...item,
                   id: item.id as any,
@@ -129,7 +142,7 @@ export default function CartPage() {
                   variant_attributes: variantData.variant_attributes || {},
                   product: {
                     title: product?.title || item.product_sku,
-                    price: item.custom_price || variant?.variant_price || product?.price || null,
+                    price: price,
                     primary_image: variantImage || product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                     category: item.product_category,
                   },
@@ -144,13 +157,16 @@ export default function CartPage() {
             if (productResponse.ok) {
               const productData = await productResponse.json();
               const product = productData.product;
+
+              const price = getItemPrice(item, product?.price, null);
+
               return {
                 ...item,
                 id: item.id as any,
                 product_category: productData.product_category || item.product_category,
                 product: {
                   title: product?.title || item.product_sku,
-                  price: item.custom_price || product?.price || null,
+                  price: price,
                   primary_image: product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                   category: productData.product_category,
                 },
@@ -164,7 +180,7 @@ export default function CartPage() {
             id: item.id as any,
             product: {
               title: item.product_sku,
-              price: null,
+              price: item.is_sample ? 0 : null,
               primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
             },
           };
@@ -220,13 +236,15 @@ export default function CartPage() {
                     const productData = await productResponse.json();
                     const product = productData.product;
 
+                    const price = getItemPrice(item, product?.price, variant?.variant_price);
+
                     return {
                       ...item,
                       product_category: productData.product_category || item.product_category,
                       variant_attributes: variantAttributes,
                       product: {
                         title: product?.title || item.product_sku,
-                        price: variant?.variant_price || product?.price || null,
+                        price: price,
                         primary_image: variantImage || product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                         category: productData.product_category,
                       },
@@ -244,12 +262,14 @@ export default function CartPage() {
                 const productData = await productResponse.json();
                 const product = productData.product;
                 if (product) {
+                  const price = getItemPrice(item, product.price, null);
+
                   return {
                     ...item,
                     product_category: productData.product_category || item.product_category,
                     product: {
                       title: product.title || item.product_sku,
-                      price: product.price || null,
+                      price: price,
                       primary_image: product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                       category: productData.product_category,
                     },
@@ -261,7 +281,7 @@ export default function CartPage() {
                 ...item,
                 product: {
                   title: item.product_sku,
-                  price: null,
+                  price: item.is_sample ? 0 : null,
                   primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                 },
               };
@@ -271,7 +291,7 @@ export default function CartPage() {
                 ...item,
                 product: {
                   title: item.product_sku,
-                  price: null,
+                  price: item.is_sample ? 0 : null,
                   primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
                 },
               };
@@ -379,7 +399,9 @@ export default function CartPage() {
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) => {
       let price = 0;
-      if (item.is_custom_curtain && item.custom_price) {
+      if (item.is_sample) {
+        price = 0;
+      } else if (item.is_custom_curtain && item.custom_price) {
         price = parseFloat(String(item.custom_price));
       } else if (item.product?.price) {
         price = parseFloat(String(item.product.price));
@@ -462,6 +484,14 @@ export default function CartPage() {
                         </span>
                       </div>
                     )}
+                    {/* Sample Badge on Image */}
+                    {item.is_sample && (
+                      <div className={classes.imageBadge} style={{ background: '#4CAF50' }}>
+                        <span className={classes.imageBadgeText}>
+                          {t('sample').toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </Link>
 
@@ -480,6 +510,14 @@ export default function CartPage() {
                         locale === 'ru' ? 'Индивидуальная штора' :
                           locale === 'pl' ? 'Niestandardowa засłона' :
                             'Custom Curtain'}
+                    </div>
+                  )}
+
+                  {/* Sample Badge */}
+                  {item.is_sample && (
+                    <div className={classes.customCurtainBadge} style={{ color: '#4CAF50', background: '#e8f5e9', border: '1px solid #c8e6c9' }}>
+                      <span>🧪 </span>
+                      {t('sample')}
                     </div>
                   )}
 
@@ -588,7 +626,11 @@ export default function CartPage() {
                         locale === 'pl' ? 'Cena' : 'Price'}
                   </div>
                   <div className={classes.priceValue}>
-                    {item.is_custom_curtain && item.custom_price ? (
+                    {item.is_sample ? (
+                      <span style={{ color: '#4CAF50', fontWeight: 'bold' }}>
+                        {t('sample')}
+                      </span>
+                    ) : item.is_custom_curtain && item.custom_price ? (
                       formatPrice(item.custom_price)
                     ) : formatPrice(item.product?.price) ? (
                       formatPrice(item.product?.price)
@@ -609,7 +651,11 @@ export default function CartPage() {
                         locale === 'pl' ? 'Suma' : 'Total'}
                   </div>
                   <div className={classes.priceValue}>
-                    {(() => {
+                    {item.is_sample ? (
+                      <span style={{ color: '#4CAF50', fontWeight: 'bold' }}>
+                        {t('sample')}
+                      </span>
+                    ) : (() => {
                       let price = 0;
                       if (item.is_custom_curtain && item.custom_price) {
                         price = parseFloat(String(item.custom_price));

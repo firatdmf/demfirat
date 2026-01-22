@@ -1,2 +1,77 @@
 /* Modern embroidery page - uses ProductGrid component */
 /* All styling handled by ProductGrid.module.css */
+
+.searchContainer {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid var(--light-gray, #e0dcd2);
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.searchWrapper:focus-within {
+    border-color: var(--gold, #c9a961);
+    box-shadow: 0 8px 30px rgba(201, 169, 97, 0.15);
+}
+
+.searchIcon {
+    color: var(--gold, #c9a961);
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0.75rem 0;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    color: var(--text-dark, #2c2c2c);
+    background: transparent;
+}
+
+.searchInput::placeholder {
+    color: #999;
+}
+
+.clearButton {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.clearButton:hover {
+    color: var(--text-dark, #2c2c2c);
+}
+
+@media (max-width: 768px) {
+    .searchContainer {
+        margin: 1.5rem auto;
+    }
+
+    .searchWrapper {
+        padding: 0.25rem 1rem;
+    }
+
+    .searchInput {
+        font-size: 0.9rem;
+    }
+}

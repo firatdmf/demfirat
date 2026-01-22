@@ -189,6 +189,7 @@ export default function CheckoutPage() {
       discount: { en: 'Discount', tr: 'İndirim', ru: 'Скидка', pl: 'Rabat' },
       invalidDiscountCode: { en: 'Invalid discount code', tr: 'Geçersiz indirim kodu', ru: 'Неверный код скидки', pl: 'Nieprawidłowy kod rabatowy' },
       discountApplied: { en: 'Discount applied!', tr: 'İndirim uygulandı!', ru: 'Скидка применена!', pl: 'Rabat zastosowany!' },
+      sample: { en: 'Sample', tr: 'Numune', ru: 'Образец', pl: 'Próbka' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -266,11 +267,18 @@ export default function CheckoutPage() {
               // Only use API product.price as fallback if embedded price is not valid
               const embeddedPrice = item.product?.price;
               const fetchedPrice = product?.price;
-              const finalPrice = item.custom_price
-                ? item.custom_price
-                : (embeddedPrice && Number(embeddedPrice) > 0)
-                  ? embeddedPrice
-                  : fetchedPrice || null;
+
+              let finalPrice: string | number | null = null;
+
+              if (item.is_sample) {
+                finalPrice = 0;
+              } else {
+                finalPrice = item.custom_price
+                  ? item.custom_price
+                  : (embeddedPrice && Number(embeddedPrice) > 0)
+                    ? embeddedPrice
+                    : fetchedPrice || null;
+              }
 
               return {
                 ...item,
@@ -440,11 +448,17 @@ export default function CheckoutPage() {
                     const fetchedProductPrice = product?.price;
 
                     // Use embedded price if valid (not null/0), otherwise try fetched prices
-                    const finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
-                      ? embeddedPrice
-                      : (fetchedVariantPrice && Number(fetchedVariantPrice) > 0)
-                        ? fetchedVariantPrice
-                        : fetchedProductPrice || null;
+                    let finalPrice: string | number | null = null;
+
+                    if (item.is_sample) {
+                      finalPrice = 0;
+                    } else {
+                      finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
+                        ? embeddedPrice
+                        : (fetchedVariantPrice && Number(fetchedVariantPrice) > 0)
+                          ? fetchedVariantPrice
+                          : fetchedProductPrice || null;
+                    }
 
                     return {
                       ...item,
@@ -473,9 +487,16 @@ export default function CheckoutPage() {
                   // Prioritize embedded price from cart over fetched price
                   const embeddedPrice = item.product?.price;
                   const fetchedPrice = product.price;
-                  const finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
-                    ? embeddedPrice
-                    : fetchedPrice || null;
+
+                  let finalPrice: string | number | null = null;
+
+                  if (item.is_sample) {
+                    finalPrice = 0;
+                  } else {
+                    finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
+                      ? embeddedPrice
+                      : fetchedPrice || null;
+                  }
 
                   return {
                     ...item,
@@ -1229,8 +1250,8 @@ export default function CheckoutPage() {
                       </div>
                       <div className={classes.horizontalItemPrice}>
                         {item.is_sample ? (
-                          <span className={classes.freePrice}>
-                            {locale === 'tr' ? 'Ücretsiz' : 'Free'}
+                          <span className={classes.freePrice} style={{ color: '#4CAF50', fontWeight: 'bold' }}>
+                            {t('sample')}
                           </span>
                         ) : item.is_custom_curtain && item.custom_price ? (
                           formatPrice(item.custom_price)

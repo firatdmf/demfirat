@@ -328,19 +328,43 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const secondImage = useMemo(() => {
     if (!product.product_files || product.product_files.length === 0) return null;
 
-    // Filter for valid images
-    const images = product.product_files.filter(f => !f.file_type || f.file_type === 'image');
+    // Filter for valid images - STRICTLY exclude videos by extension if type is missing
+    const images = product.product_files.filter(f => {
+      // 1. Check explicit type
+      if (f.file_type === 'video') return false;
+
+      // 2. Check file extension if type is loose
+      const isVideoFile = f.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
+      if (isVideoFile) return false;
+
+      return !f.file_type || f.file_type === 'image';
+    });
+
+    // We need at least one other image besides the current one to show a hover effect
     if (images.length === 0) return null;
 
     const currentSrc = (imageSrc || product.primary_image || '').trim();
 
-    // Strategy 1: Use explicitly selected variant ID
+    // Helper to check if two image URLs are effectively the same
+    const areImagesSame = (url1: string, url2: string) => {
+      if (!url1 || !url2) return false;
+      // 1. Remove domain (http/https)
+      const stripDomain = (u: string) => u.replace(/^https?:\/\/[^\/]+/, '');
+      // 2. Remove query params
+      const stripQuery = (u: string) => u.split('?')[0];
+      // 3. Remove leading slash
+      const normalize = (u: string) => stripQuery(stripDomain(u)).replace(/^\//, '');
+
+      return normalize(url1) === normalize(url2);
+    };
+
+    // 1. Identify Target Variant (if any)
     let targetVariantId = selectedVariantId;
 
-    // Strategy 2: If no explicit selection, try to infer from current image
     if (!targetVariantId) {
-      const activeVariant = productVariants.find(v => v.primary_image === currentSrc);
-      const activeFile = images.find(f => f.file === currentSrc && f.product_variant_id);
+      // Try to infer from current image
+      const activeVariant = productVariants.find(v => areImagesSame(v.primary_image || '', currentSrc));
+      const activeFile = images.find(f => areImagesSame(f.file, currentSrc) && f.product_variant_id);
 
       if (activeVariant) {
         targetVariantId = String(activeVariant.id);
@@ -349,27 +373,35 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
       }
     }
 
+    let candidate = null;
+
+    // Strategy A: Strict Variant Match (The Ideal Case)
+    // Look for a secondary image explicitly assigned to this variant
     if (targetVariantId) {
-      // Look for a secondary image SPECIFIC to this variant
-      const variantImages = images.filter(f =>
+      candidate = images.find(f =>
         f.product_variant_id &&
         String(f.product_variant_id) === String(targetVariantId) &&
-        f.file !== currentSrc
+        !areImagesSame(f.file, currentSrc)
       );
-
-      if (variantImages.length > 0) {
-        return variantImages[0].file;
-      }
-
-      // CRITICAL: If a variant IS identified/selected, but has no other images,
-      // Do NOT fallback to generic product images (which might be other variants).
-      // Return null to show no hover effect (or handle as desired).
-      return null;
     }
 
-    // 3. Fallback: Only if no variant could be identified at all (generic product)
-    const secondary = images.find(f => f.file !== currentSrc);
-    return secondary ? secondary.file : null;
+    // Strategy B: Generic Image Match (Good Fallback)
+    // If A failed (or no variant), look for an image that belongs to NO variant
+    if (!candidate) {
+      candidate = images.find(f =>
+        !f.product_variant_id &&
+        !areImagesSame(f.file, currentSrc)
+      );
+    }
+
+    // Strategy C: Ultimate Fallback (Any Image)
+    // If A and B failed, just grab ANY image that isn't the current one.
+    // This handles cases where data might be messy (e.g. all images have wrong variant IDs)
+    if (!candidate) {
+      candidate = images.find(f => !areImagesSame(f.file, currentSrc));
+    }
+
+    return candidate ? candidate.file : null;
   }, [product.product_files, imageSrc, product.primary_image, productVariants, selectedVariantId]);
 
   return (
