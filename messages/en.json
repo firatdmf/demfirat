@@ -81,7 +81,7 @@
         "AllRightsReserved": "All Rights Reserved"
     },
     "ProductDetailCard": {
-        "quantityMeters": "Quantity (m)",
+        "quantityMeters": "Meter",
         "quantityPieces": "Quantity",
         "addToCart": "Add to Cart",
         "requestSample": "Request Sample",

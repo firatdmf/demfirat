@@ -4,6 +4,8 @@
   padding: 2.5rem 0 0.5rem 0;
   overflow-x: hidden;
   width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 .detailCardContainer {
@@ -1043,7 +1045,7 @@
 
 @media (max-width: 1024px) {
   .detailCardContainer {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
     padding: 1.5rem;
   }
@@ -1096,11 +1098,13 @@
     flex-direction: column;
     gap: 0.75rem;
     width: 100%;
+    min-width: 0;
   }
 
   .thumbs {
     flex-direction: row;
     width: 100%;
+    max-width: 100%;
     justify-content: flex-start;
     order: 2;
     margin-top: 0.5rem;
@@ -1110,6 +1114,7 @@
     padding-bottom: 0.5rem;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
+    box-sizing: border-box;
   }
 
   .thumbs::-webkit-scrollbar {
@@ -1132,15 +1137,21 @@
     height: auto;
     order: 1;
     width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .productHero {
     width: 100%;
+    min-width: 0;
   }
 
   .productHero h2 {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin-bottom: 0.25rem;
+    max-width: 100%;
   }
 
   .buttonGroup {
@@ -1255,10 +1266,12 @@
   }
 
   .gallery {
-    min-height: 260px;
-    height: auto;
+    aspect-ratio: 4 / 5;
+    max-height: 60vh;
     border-radius: 10px;
     width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .gallery .img {
@@ -1294,13 +1307,14 @@
   }
 
   .productHero h2 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     line-height: 1.25;
     word-break: break-word;
+    margin-bottom: 0.2rem;
   }
 
   .productHero>p {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
 
   /* Category and attributes */
@@ -1458,8 +1472,9 @@
 /* Extra small devices */
 @media (max-width: 360px) {
   .detailCardContainer {
-    margin: 0 0.25rem;
-    padding: 0.75rem;
+    margin: 0 0.2rem;
+    padding: 0.5rem;
+    gap: 0.5rem;
   }
 
   .productHero h2 {
@@ -1467,7 +1482,10 @@
   }
 
   .gallery {
-    min-height: 240px;
+    aspect-ratio: 4 / 5;
+    max-height: 55vh;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .thumb {

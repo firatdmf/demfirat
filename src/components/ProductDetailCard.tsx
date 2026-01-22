@@ -16,6 +16,7 @@ import { useFavorites } from '@/contexts/FavoriteContext';
 import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import ProductReviewsList from './ProductReviewsList';
+import SimilarProducts from './SimilarProducts';
 import { translateTextSync } from '@/lib/translate';
 
 
@@ -1433,6 +1434,18 @@ function ProductDetailCard({
       />
 
       <ProductReviewsList productSku={product.sku} />
+
+      {/* Similar Products Section */}
+      {product_category === 'fabric' && (
+        <SimilarProducts
+          fabricType={
+            product_attributes?.find((attr) => attr.name?.toLowerCase() === 'fabric_type')?.value ||
+            (product.tags?.includes('embroidery') ? 'embroidery' : 'solid')
+          }
+          currentProductSku={product.sku}
+          locale={locale}
+        />
+      )}
 
 
     </div >

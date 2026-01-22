@@ -81,7 +81,7 @@
         "AllRightsReserved": "Wszelkie prawa zastrzeżone"
     },
     "ProductDetailCard": {
-        "quantityMeters": "Ilość (m)",
+        "quantityMeters": "Metr",
         "quantityPieces": "Ilość",
         "addToCart": "Dodaj do koszyka",
         "requestSample": "Zamów próbkę",

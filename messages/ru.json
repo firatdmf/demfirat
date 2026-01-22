@@ -81,7 +81,7 @@
         "AllRightsReserved": "Все права защищены"
     },
     "ProductDetailCard": {
-        "quantityMeters": "Количество (м)",
+        "quantityMeters": "Метр",
         "quantityPieces": "Количество",
         "addToCart": "Добавить в корзину",
         "requestSample": "Запросить образец",
