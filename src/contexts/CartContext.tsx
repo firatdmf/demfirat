@@ -162,10 +162,34 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setGuestCart(prev => {
       // Check if item already exists (same SKU and variant)
       const existingIndex = prev.findIndex(
-        i => i.product_sku?.toLowerCase().trim() === item.product_sku?.toLowerCase().trim() &&
-          (i.variant_sku?.toLowerCase().trim() || null) === (item.variant_sku?.toLowerCase().trim() || null) &&
-          (!!i.is_sample === !!item.is_sample) &&
-          (!!i.is_custom_curtain === !!item.is_custom_curtain)
+        i => {
+          const isSameSku = i.product_sku?.toLowerCase().trim() === item.product_sku?.toLowerCase().trim();
+          const isSameVariant = (i.variant_sku?.toLowerCase().trim() || null) === (item.variant_sku?.toLowerCase().trim() || null);
+          const isSameSample = (!!i.is_sample === !!item.is_sample);
+          const isSameCustomType = (!!i.is_custom_curtain === !!item.is_custom_curtain);
+
+          if (!isSameSku || !isSameVariant || !isSameSample || !isSameCustomType) {
+            return false;
+          }
+
+          // If it is a custom curtain, checking custom attributes equality
+          if (item.is_custom_curtain) {
+            // Function to sort object keys for consistent stringify
+            const sortObj = (obj: any) => {
+              if (typeof obj !== 'object' || obj === null) return obj;
+              return Object.keys(obj).sort().reduce((acc: any, key) => {
+                acc[key] = obj[key];
+                return acc;
+              }, {});
+            };
+
+            const attr1 = JSON.stringify(sortObj(i.custom_attributes || {}));
+            const attr2 = JSON.stringify(sortObj(item.custom_attributes || {}));
+            return attr1 === attr2;
+          }
+
+          return true;
+        }
       );
 
       if (existingIndex >= 0) {
