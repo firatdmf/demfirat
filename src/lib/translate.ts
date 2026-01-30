@@ -83,6 +83,19 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'rod pocket': { 'tr': 'Büzgülü', 'ru': 'Карман для карниза', 'pl': 'Tunelowy', 'en': 'Rod Pocket' },
     'grommet': { 'tr': 'Halkalı', 'ru': 'С люверсами', 'pl': 'Z oczkami', 'en': 'Grommet' },
 
+    // Additional Attributes
+    'high gsm': { 'tr': 'Ağır Gramajlı', 'ru': 'Высокая плотность', 'pl': 'Wysoka gramatura', 'en': 'High GSM' },
+    'high_gsm': { 'tr': 'Ağır Gramajlı', 'ru': 'Высокая плотность', 'pl': 'Wysoka gramatura', 'en': 'High GSM' },
+    'none iron': { 'tr': 'Ütü İstemez', 'ru': 'Не требует глажки', 'pl': 'Bez prasowania', 'en': 'None Iron' },
+    'none-iron': { 'tr': 'Ütü İstemez', 'ru': 'Не требует глажки', 'pl': 'Bez prasowania', 'en': 'None Iron' },
+    'texture': { 'tr': 'Doku', 'ru': 'Текстура', 'pl': 'Tekstura', 'en': 'Texture' },
+    'sheerness': { 'tr': 'Işık Geçirgenliği', 'ru': 'Прозрачность', 'pl': 'Przezroczystość', 'en': 'Sheerness' },
+    'sheerness level': { 'tr': 'Işık Geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
+    'sheerness_level': { 'tr': 'Işık Geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
+    'sherness level': { 'tr': 'Işık Geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' }, // fix typo in DB
+    'semi sheer': { 'tr': 'Yarı Geçirgen', 'ru': 'Полупрозрачный', 'pl': 'Półprzezroczysty', 'en': 'Semi Sheer' },
+    'care': { 'tr': 'Bakım', 'ru': 'Уход', 'pl': 'Pielęgnacja', 'en': 'Care' },
+
     // UI Text
     'loading': { 'tr': 'Yükleniyor', 'ru': 'Загрузка', 'pl': 'Ładowanie', 'en': 'Loading' },
     'loading...': { 'tr': 'Yükleniyor...', 'ru': 'Загрузка...', 'pl': 'Ładowanie...', 'en': 'Loading...' },
