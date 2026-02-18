@@ -158,9 +158,11 @@ export type BlogPost = {
   category_tr: string;
   category_en: string;
   category_ru: string;
-  category_pl: string;
+  category_pl?: string;
   cover_image: string;
   hero_image?: string;
-  author: string;
   published_at: string;
+  author: string;
+  header_content?: string;
+  footer_content?: string;
 }

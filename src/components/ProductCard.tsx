@@ -15,6 +15,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { HiDocumentText } from "react-icons/hi2";
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
+import { getLocalizedProductField } from '@/lib/productUtils';
 
 interface ProductCardProps {
   product: Product;
@@ -426,7 +427,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
               )}
               <img
                 src={imageSrc}
-                alt={`${product.title} - ${product.sku}`}
+                alt={`${getLocalizedProductField(product, 'title', locale)} - ${product.sku}`}
                 className={classes.productImage}
                 loading="lazy"
                 decoding="async"
@@ -452,7 +453,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
               {secondImage && (
                 <img
                   src={secondImage}
-                  alt={`${product.title} - Secondary`}
+                  alt={`${getLocalizedProductField(product, 'title', locale)} - Secondary`}
                   className={classes.productImageHover}
                   loading="lazy"
                   onError={(e) => {
@@ -499,7 +500,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
             href={product_category_name + "/" + product.sku + "#ProductDetailCard"}
             className={classes.productLink}
           >
-            <div className={classes.productTitle}>{product.title}</div>
+            <div className={classes.productTitle}>{getLocalizedProductField(product, 'title', locale)}</div>
             <div className={classes.productSku}>SKU: {product.sku}</div>
 
             {/* Attributes: Width and Fabric Type */}

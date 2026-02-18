@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import classes from './page.module.css';
 import { BlogPost } from '@/lib/interfaces';
+import ScriptInjector from '@/components/ScriptInjector';
 
 interface BlogPostPageProps {
     params: Promise<{ locale: string; slug: string }>;
@@ -55,6 +56,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     return (
         <main className={classes.blogPost}>
+            {/* Custom Header Content (Styles, etc) */}
+            {post.header_content && (
+                <div dangerouslySetInnerHTML={{ __html: post.header_content }} />
+            )}
+
             {/* Hero Image */}
             <div className={classes.heroImage}>
                 <img
@@ -91,6 +97,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     />
                 </div>
             </article>
+
+            {/* Custom Footer Content (Scripts) */}
+            {post.footer_content && <ScriptInjector html={post.footer_content} />}
         </main>
     );
 }

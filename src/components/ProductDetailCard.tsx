@@ -18,6 +18,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 import ProductReviewsList from './ProductReviewsList';
 import SimilarProducts from './SimilarProducts';
 import { translateTextSync } from '@/lib/translate';
+import { getLocalizedProductField } from '@/lib/productUtils';
 
 
 type ProductDetailCardPageProps = {
@@ -73,42 +74,12 @@ function ProductDetailCard({
     return translateTextSync(category, locale);
   };
 
-  // Helper to get localized description from JSON format
-  // Format: {"translations": {"tr": {"description": "..."}, "en": {"description": "..."}}}
-  const getLocalizedDescription = (description: string | null | undefined): string | null => {
-    if (!description) return null;
-
-    try {
-      // Check if it's JSON format
-      const parsed = JSON.parse(description);
-
-      // Check for translations object
-      if (parsed.translations && typeof parsed.translations === 'object') {
-        // Try to get the description for current locale
-        const localeData = parsed.translations[locale];
-        if (localeData && localeData.description) {
-          return localeData.description;
-        }
-
-        // Fallback to English if current locale not found
-        if (parsed.translations['en'] && parsed.translations['en'].description) {
-          return parsed.translations['en'].description;
-        }
-
-        // Fallback to first available translation
-        const firstLocale = Object.keys(parsed.translations)[0];
-        if (firstLocale && parsed.translations[firstLocale].description) {
-          return parsed.translations[firstLocale].description;
-        }
-      }
-
-      // If parsed but not in expected format, return original
-      return description;
-    } catch (e) {
-      // Not JSON format, return as-is
-      return description;
-    }
-  };
+  // Helper to get localized field (title or description) from JSON format
+  // Format: {"translations": {"tr": {"title": "...", "description": "..."}, "en": {...}}}
+  // const getLocalizedField = (field: 'title' | 'description'): string | null => {
+  //   /* Logic moved to @/lib/productUtils */
+  //   return getLocalizedProductField(product, field, locale);
+  // };
 
   // URL parametrelerinden veya ilk varyanttan initial attributes'ı hesapla
   const getInitialAttributes = () => {
@@ -920,7 +891,7 @@ function ProductDetailCard({
         </div>
         <div className={classes.productHero}>
           <div className={classes.titleRow}>
-            <h2>{product.title}</h2>
+            <h2>{getLocalizedProductField(product, 'title', locale)}</h2>
             <div className={classes.titleActions}>
               {/* PDF Download Button */}
               <button
@@ -976,12 +947,17 @@ function ProductDetailCard({
               const attributesToShow = (variantAttrs.length > 0 ? variantAttrs : (product_attributes || []))
                 .filter(attr => attr.name?.toLowerCase() !== 'discount_rate');
 
-              return attributesToShow.map((attr, index) => (
-                <span key={`attr-${attr.name}-${index}`} className={classes.attributeBadge}>
-                  <span className={classes.attrName}>{translateAttributeName(attr.name || '')}:</span>
-                  <span className={classes.attrValue}>{translateAttributeName(attr.value)}</span>
-                </span>
-              ));
+              return attributesToShow.map((attr, index) => {
+                const attrNameLower = (attr.name || '').toLowerCase();
+                const isProperty = attrNameLower === 'property';
+
+                return (
+                  <span key={`attr-${attr.name}-${index}`} className={classes.attributeBadge}>
+                    {!isProperty && <span className={classes.attrName}>{translateAttributeName(attrNameLower)}:</span>}
+                    <span className={classes.attrValue}>{translateAttributeName(attr.value)}</span>
+                  </span>
+                );
+              });
             })()}
           </div>
 
@@ -1345,9 +1321,9 @@ function ProductDetailCard({
           {/* Description Tab */}
           {activeTab === 'description' && (
             <div className={classes.descriptionSection}>
-              {getLocalizedDescription(product.description) ? (
+              {getLocalizedProductField(product, 'description', locale) ? (
                 <div className={classes.descriptionContent}>
-                  <p style={{ whiteSpace: "pre-line" }}>{getLocalizedDescription(product.description)}</p>
+                  <p style={{ whiteSpace: "pre-line" }}>{getLocalizedProductField(product, 'description', locale)}</p>
                 </div>
               ) : (
                 <p className={classes.noDescription}>
@@ -1413,12 +1389,19 @@ function ProductDetailCard({
                   {/* Product Attributes (hide discount_rate) */}
                   {product_attributes && product_attributes.length > 0 && product_attributes
                     .filter(attr => attr.name?.toLowerCase() !== 'discount_rate')
-                    .map((attr, index) => (
-                      <tr key={`product-attr-${index}`}>
-                        <td className={classes.detailTableLabel}>{translateAttributeName(attr.name || '')}</td>
-                        <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
-                      </tr>
-                    ))}
+                    .map((attr, index) => {
+                      const attrNameLower = (attr.name || '').toLowerCase();
+                      const isProperty = attrNameLower === 'property';
+
+                      return (
+                        <tr key={`product-attr-${index}`}>
+                          <td className={classes.detailTableLabel}>
+                            {!isProperty ? translateAttributeName(attrNameLower) : ''}
+                          </td>
+                          <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>

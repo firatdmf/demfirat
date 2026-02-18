@@ -1,5 +1,6 @@
 import ProductDetailCard from "@/components/ProductDetailCard"
 import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAttribute, ProductFile, ProductAttribute } from "@/lib/interfaces";
+import { getLocalizedProductField } from "@/lib/productUtils";
 import classes from "./page.module.css";
 import { Metadata } from "next";
 
@@ -15,17 +16,19 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
     const product = data.product;
     if (!product) return { title: "Product Not Found | Karven" };
 
-    const title = product.title;
-    const description = product.description || "";
+    // Localization Logic
+    const title = getLocalizedProductField(product, 'title', locale);
+    const description = getLocalizedProductField(product, 'description', locale) || "";
+
     const imageUrl = product.primary_image || "";
     const price = product.price;
 
     return {
       title: `${title} | Karven`,
-      description,
+      description: description.substring(0, 160), // Clamp for SEO
       openGraph: {
         title,
-        description,
+        description: description.substring(0, 100),
         images: [{ url: imageUrl }],
         url: `https://karven.com/${locale}/product/${data.product_category}/${product_sku}`,
         type: 'website',
@@ -73,13 +76,17 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     return <div className={classes.error}>Error fetching product details.</div>;
   }
 
+  // Get localized title/description for JSON-LD
+  const displayTitle = getLocalizedProductField(product as Product, 'title', locale);
+  const displayDescription = getLocalizedProductField(product as Product, 'description', locale) || "";
+
   // JSON-LD Product Schema for Meta Catalog auto-detection
   const jsonLd = product ? {
     "@context": "https://schema.org/",
     "@type": "Product",
-    "name": product.title,
+    "name": displayTitle,
     "image": [product.primary_image],
-    "description": product.description,
+    "description": displayDescription,
     "sku": product.sku,
     "brand": {
       "@type": "Brand",

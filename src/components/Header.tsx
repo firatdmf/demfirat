@@ -11,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useRouter, usePathname } from "next/navigation";
 import { getColorCode } from "@/lib/colorMap";
+import { getLocalizedProductField } from "@/lib/productUtils";
 import LoginModal from "./LoginModal";
 
 interface HeaderProps {
@@ -29,6 +30,7 @@ interface Product {
   minPrice?: number;
   maxPrice?: number;
   colors?: string[];
+  description?: string;
 }
 
 function Header({ menuTArray }: HeaderProps) {
@@ -127,7 +129,8 @@ function Header({ menuTArray }: HeaderProps) {
       const query = searchQuery.toLowerCase();
       const filtered = allProducts.filter(p =>
         p.title?.toLowerCase().includes(query) ||
-        p.sku?.toLowerCase().includes(query)
+        p.sku?.toLowerCase().includes(query) ||
+        p.description?.toLowerCase().includes(query)
       ).slice(0, 8);
 
       setSearchResults(filtered);
@@ -251,12 +254,12 @@ function Header({ menuTArray }: HeaderProps) {
                       {product.primary_image && (
                         <img
                           src={product.primary_image}
-                          alt={product.title}
+                          alt={getLocalizedProductField(product as any, 'title', locale)}
                           className={classes.resultImage}
                         />
                       )}
                       <div className={classes.resultInfo}>
-                        <span className={classes.resultTitle}>{product.title}</span>
+                        <span className={classes.resultTitle}>{getLocalizedProductField(product as any, 'title', locale)}</span>
                         {product.sku && (
                           <span className={classes.resultSku}>{product.sku}</span>
                         )}

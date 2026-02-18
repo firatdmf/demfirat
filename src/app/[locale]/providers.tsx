@@ -18,7 +18,7 @@ export const Providers = ({ children, messages, locale }: Props) => {
             <CurrencyProvider>
                 <FavoriteProvider>
                     <CartProvider>
-                        <NextIntlClientProvider messages={messages} locale={locale}>
+                        <NextIntlClientProvider messages={messages} locale={locale} timeZone="Europe/Istanbul">
                             {children}
                         </NextIntlClientProvider>
                     </CartProvider>

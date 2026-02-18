@@ -114,6 +114,7 @@ export default function CheckoutPage() {
   // Legal documents state
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [agreedToPreInfo, setAgreedToPreInfo] = useState(false);
+  const [agreedToMarketing, setAgreedToMarketing] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPreInfoModal, setShowPreInfoModal] = useState(false);
 
@@ -182,6 +183,7 @@ export default function CheckoutPage() {
       agreeToTerms: { en: 'I have read and accept the Distance Sales Agreement', tr: 'Mesafeli Satış Sözleşmesini okudum ve kabul ediyorum', ru: 'Я прочитал и принимаю договор дистанционной продажи', pl: 'Przeczytałem i akceptuję umowę sprzedaży na odległość' },
       pleaseAgreeToPreInfo: { en: 'Please accept the Preliminary Information Form', tr: 'Lütfen Ön Bilgilendirme Formunu kabul edin', ru: 'Пожалуйста, примите предварительную информационную форму', pl: 'Proszę zaakceptować wstępny formularz informacyjny' },
       pleaseAgreeToTerms: { en: 'Please accept the Distance Sales Agreement', tr: 'Lütfen Mesafeli Satış Sözleşmesini kabul edin', ru: 'Пожалуйста, примите договор дистанционной продажи', pl: 'Proszę zaakceptować umowę sprzedaży na odległość' },
+      agreeToMarketing: { en: 'I want to be informed about campaigns and news.', tr: 'Kampanyalardan ve haberlerden haberdar olmak istiyorum.', ru: 'Я хочу получать информацию об акциях и новостях.', pl: 'Chcę otrzymywać informacje o kampaniach i nowościach.' },
       legalDocuments: { en: 'Legal Documents', tr: 'Yasal Belgeler', ru: 'Юридические документы', pl: 'Dokumenty prawne' },
       securePayment: { en: 'Secure Payment', tr: 'Güvenli Ödeme', ru: 'Безопасная оплата', pl: 'Bezpieczna płatność' },
       discountCode: { en: 'Discount Code', tr: 'İndirim Kodu', ru: 'Код скидки', pl: 'Kod rabatowy' },
@@ -1866,6 +1868,24 @@ export default function CheckoutPage() {
                 <span>{t('total')}</span>
                 <span>{formatPrice(calculateTotal()) || convertPrice(0)}</span>
               </div>
+            </div>
+
+            {/* Marketing Checkbox */}
+            <div className={classes.legalDocumentsSection} style={{ marginBottom: '1rem', borderBottom: '1px solid var(--ivory, #faf8f3)', paddingBottom: '1rem' }}>
+              <label className={classes.combinedLegalCheckbox}>
+                <input
+                  type="checkbox"
+                  checked={agreedToMarketing}
+                  onChange={(e) => setAgreedToMarketing(e.target.checked)}
+                  className={classes.hiddenCheckbox}
+                />
+                <span className={classes.customCheckbox}>
+                  <FaCheck />
+                </span>
+                <span className={classes.legalText}>
+                  {t('agreeToMarketing')}
+                </span>
+              </label>
             </div>
 
             {/* Legal Documents Section */}

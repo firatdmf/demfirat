@@ -89,12 +89,16 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'none iron': { 'tr': 'Ütü İstemez', 'ru': 'Не требует глажки', 'pl': 'Bez prasowania', 'en': 'None Iron' },
     'none-iron': { 'tr': 'Ütü İstemez', 'ru': 'Не требует глажки', 'pl': 'Bez prasowania', 'en': 'None Iron' },
     'texture': { 'tr': 'Doku', 'ru': 'Текстура', 'pl': 'Tekstura', 'en': 'Texture' },
-    'sheerness': { 'tr': 'Işık Geçirgenliği', 'ru': 'Прозрачность', 'pl': 'Przezroczystość', 'en': 'Sheerness' },
-    'sheerness level': { 'tr': 'Işık Geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
-    'sheerness_level': { 'tr': 'Işık Geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
-    'sherness level': { 'tr': 'Işık Geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' }, // fix typo in DB
+    'sheerness': { 'tr': 'Işık geçirgenliği', 'ru': 'Прозрачность', 'pl': 'Przezroczystość', 'en': 'Sheerness' },
+    'sheerness level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
+    'sheerness_level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
+    'sherness level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' }, // fix typo in DB
+    'sherness_level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
     'semi sheer': { 'tr': 'Yarı Geçirgen', 'ru': 'Полупрозрачный', 'pl': 'Półprzezroczysty', 'en': 'Semi Sheer' },
     'care': { 'tr': 'Bakım', 'ru': 'Уход', 'pl': 'Pielęgnacja', 'en': 'Care' },
+    'property': { 'tr': 'Özellik', 'ru': 'Свойство', 'pl': 'Właściwość', 'en': 'Property' },
+    'gold glitter': { 'tr': 'Altın Simli', 'ru': 'Золотые блестки', 'pl': 'Złoty brokat', 'en': 'Gold Glitter' },
+    'gold_glitter': { 'tr': 'Altın Simli', 'ru': 'Золотые блестки', 'pl': 'Złoty brokat', 'en': 'Gold Glitter' },
 
     // UI Text
     'loading': { 'tr': 'Yükleniyor', 'ru': 'Загрузка', 'pl': 'Ładowanie', 'en': 'Loading' },

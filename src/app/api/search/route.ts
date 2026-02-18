@@ -135,7 +135,8 @@ export async function GET(request: NextRequest) {
         const filteredProducts = allProducts.filter((product: any) => {
             const title = (product.title || '').toLowerCase();
             const sku = (product.sku || '').toLowerCase();
-            return title.includes(searchLower) || sku.includes(searchLower);
+            const description = (product.description || '').toLowerCase();
+            return title.includes(searchLower) || sku.includes(searchLower) || description.includes(searchLower);
         });
 
         return NextResponse.json({
