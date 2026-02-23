@@ -40,7 +40,7 @@ export default function LocaleSwitcher() {
         <option value="tr">TR</option>
       </select>
       <svg className="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-        <path d="M6 9L1 4h10z"/>
+        <path d="M6 9L1 4h10z" />
       </svg>
       <style jsx>{`
         .locale-switcher {

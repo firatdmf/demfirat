@@ -1,0 +1,15 @@
+diff --git a/src/app/[locale]/product/[product_category]/page.tsx b/src/app/[locale]/product/[product_category]/page.tsx
+index dc7942f..7baa1f9 100644
+--- a/src/app/[locale]/product/[product_category]/page.tsx
++++ b/src/app/[locale]/product/[product_category]/page.tsx
+@@ -43,8 +43,8 @@ export default async function Page(props: Props) {
+     nejum_api_link.searchParams.append("product_category", category);
+ 
+     if (searchParams) {
+-      // Ignore tracking parameters from ads (Facebook, Google, UTM etc.)
+-      const ignoredParams = ['fbclid', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'ref', 'mc_cid', 'mc_eid'];
++      // Ignore tracking parameters from ads (Facebook, Google, UTM etc.) and UI-only intent parameters
++      const ignoredParams = ['fbclid', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'ref', 'mc_cid', 'mc_eid', 'intent'];
+ 
+       Object.entries(searchParams).forEach(([key, value]) => {
+         // Skip ignored tracking parameters

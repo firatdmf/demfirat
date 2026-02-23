@@ -16,7 +16,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'ivory': '#FFFFF0',
   'beyaz': '#FFFFFF',
   'white': '#FFFFFF',
-  
+
   // Bej tonları
   'bej': '#F5F5DC',
   'beige': '#F5F5DC',
@@ -28,7 +28,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'stone': '#E6E2D3',
   'kum': '#C2B280',
   'sand': '#C2B280',
-  
+
   // Gri tonları
   'gri': '#808080',
   'gray': '#808080',
@@ -44,7 +44,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'gümüş': '#C0C0C0',
   'silver': '#C0C0C0',
   'smoke': '#738276',
-  
+
   // Kahverengi tonları
   'kahverengi': '#A0522D',
   'brown': '#A0522D',
@@ -58,7 +58,11 @@ export const COLOR_MAP: { [key: string]: string } = {
   'mokka': '#967969',
   'cappuccino': '#A67B5B',
   'cappucino': '#A67B5B',
-  
+  'kapuçino': '#A67B5B',
+  'kapucino': '#A67B5B',
+  'vizon': '#8B7D6B',
+  'mink': '#8B7D6B',
+
   // Altın/Bronz tonları
   'altın': '#D4AF37',
   'gold': '#D4AF37',
@@ -68,7 +72,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'copper': '#B87333',
   'şampanya': '#F7E7CE',
   'champagne': '#F7E7CE',
-  
+
   // Mavi tonları
   'mavi': '#0000FF',
   'blue': '#0000FF',
@@ -85,7 +89,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'teal': '#008080',
   'indigo': '#4B0082',
   'baby_blue': '#89CFF0',
-  
+
   // Yeşil tonları
   'yeşil': '#008000',
   'green': '#008000',
@@ -101,7 +105,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'aqua': '#00FFFF',
   'çağla': '#A8D5BA',
   'sage': '#9DC183',
-  
+
   // Sarı tonları
   'sarı': '#FFFF00',
   'yellow': '#FFFF00',
@@ -113,7 +117,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'mustard': '#FFDB58',
   'limon': '#FFF44F',
   'lemon': '#FFF44F',
-  
+
   // Turuncu tonları
   'turuncu': '#FFA500',
   'orange': '#FFA500',
@@ -127,7 +131,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'salmon': '#FA8072',
   'kayısı': '#FBCEB1',
   'apricot': '#FBCEB1',
-  
+
   // Kırmızı/Pembe tonları
   'kırmızı': '#FF0000',
   'red': '#FF0000',
@@ -151,7 +155,7 @@ export const COLOR_MAP: { [key: string]: string } = {
   'rose': '#FF007F',
   'pudra': '#F3CFC6',
   'powder': '#F3CFC6',
-  
+
   // Mor tonları
   'mor': '#800080',
   'purple': '#800080',
@@ -164,12 +168,12 @@ export const COLOR_MAP: { [key: string]: string } = {
   'lavanta': '#E6E6FA',
   'lavender': '#E6E6FA',
   'violet': '#8F00FF',
-  
+
   // Siyah
   'siyah': '#000000',
   'black': '#000000',
   'jet_black': '#0A0A0A',
-  
+
   // Multi/Pattern (gösterim için nötr renk)
   'çok_renkli': '#D3D3D3',
   'multicolor': '#D3D3D3',
@@ -187,21 +191,21 @@ export const COLOR_MAP: { [key: string]: string } = {
  */
 export const getColorCode = (colorName: string): string => {
   if (!colorName) return '#E0E0E0'; // Default gray
-  
+
   const normalized = colorName.toLowerCase().trim();
-  
+
   // Eğer zaten hex kod ise direkt dön
   if (normalized.startsWith('#')) {
     return normalized;
   }
-  
+
   // Mapping'den bul
   const hexCode = COLOR_MAP[normalized];
-  
+
   if (hexCode) {
     return hexCode;
   }
-  
+
   // Eğer bulunamazsa, CSS standart renk ismi olabilir
   // Tarayıcı bunu tanıyabilir (ör: "red", "blue", "white")
   return normalized;
@@ -214,15 +218,15 @@ export const getColorCode = (colorName: string): string => {
  */
 export const isLightColor = (hexColor: string): boolean => {
   if (!hexColor.startsWith('#')) return true;
-  
+
   const hex = hexColor.replace('#', '');
   const r = parseInt(hex.substr(0, 2), 16);
   const g = parseInt(hex.substr(2, 2), 16);
   const b = parseInt(hex.substr(4, 2), 16);
-  
+
   // Luminance hesaplama
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  
+
   return luminance > 0.5;
 };
 
@@ -244,7 +248,7 @@ export const isTwoToneColor = (colorName: string): boolean => {
  */
 export const splitTwoToneColor = (colorName: string): { color1: string; color2: string } => {
   if (!colorName) return { color1: '#E0E0E0', color2: '#E0E0E0' };
-  
+
   // Ayıraç olarak '-' veya '_' kullanılabilir
   let colors: string[];
   if (colorName.includes('-')) {
@@ -256,11 +260,11 @@ export const splitTwoToneColor = (colorName: string): { color1: string; color2: 
     const singleColor = getColorCode(colorName);
     return { color1: singleColor, color2: singleColor };
   }
-  
+
   // İlk iki rengi al
   const color1Name = colors[0]?.trim() || '';
   const color2Name = colors[1]?.trim() || '';
-  
+
   return {
     color1: getColorCode(color1Name),
     color2: getColorCode(color2Name)

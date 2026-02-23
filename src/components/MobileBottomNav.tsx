@@ -78,8 +78,8 @@ const MobileBottomNav = () => {
 
     const productSubmenuItems = [
         { href: `/${locale}/product/fabric`, label: t('Fabrics') },
-        { href: `/${locale}/product/ready-made_curtain`, label: t('ReadyCurtains') },
-        { href: `/${locale}/product/fabric`, label: t('CustomCurtains') },
+        { href: `/${locale}/product/fabric?intent=custom_curtain`, label: t('TulleCurtains') },
+        { href: `/${locale}/product/fabric?intent=custom_curtain`, label: t('CustomCurtains') },
     ];
 
     const handleProductsClick = (e: React.MouseEvent) => {

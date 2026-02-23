@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { FaCheckCircle, FaShoppingBag, FaMapMarkerAlt, FaBox, FaCreditCard, FaHome } from 'react-icons/fa';
+import { trackPurchase } from '@/lib/tracking';
 
 interface OrderData {
   orderId: string;
@@ -37,54 +38,26 @@ export default function OrderConfirmationPage() {
       // Clear after reading
       localStorage.removeItem('lastOrder');
 
-      // Meta Pixel Purchase Event
-      if (typeof window !== 'undefined' && (window as any).fbq && parsedOrderData) {
-        const contentIds = parsedOrderData.cartItems?.map((item: any) => item.sku || item.id) || [];
-        const contents = parsedOrderData.cartItems?.map((item: any) => ({
+      // Tracking: Purchase Event
+      if (typeof window !== 'undefined' && parsedOrderData) {
+        const trackingItems = parsedOrderData.cartItems?.map((item: any) => ({
           id: item.sku || item.id,
-          quantity: item.quantity || 1,
-          item_price: parseFloat(item.price) || 0
+          name: item.title || item.name || 'Ürün',
+          category: 'product',
+          price: parseFloat(item.price) || 0,
+          quantity: parseInt(item.quantity) || 1
         })) || [];
 
-        (window as any).fbq('track', 'Purchase', {
-          value: parseFloat(parsedOrderData.totalAmount) || 0,
-          currency: parsedOrderData.currency || 'TRY',
-          content_ids: contentIds,
-          contents: contents,
-          content_type: 'product',
-          num_items: parsedOrderData.cartItems?.length || 0,
-          order_id: parsedOrderData.orderId
-        });
+        trackPurchase(
+          parsedOrderData.orderId,
+          parseFloat(parsedOrderData.totalAmount) || 0,
+          trackingItems,
+          parsedOrderData.currency || 'TRY',
+          0, // Tax
+          parseFloat(parsedOrderData.shippingCost || '0')
+        );
 
-        console.log('Meta Pixel: Purchase event sent', {
-          value: parsedOrderData.totalAmount,
-          currency: parsedOrderData.currency,
-          order_id: parsedOrderData.orderId
-        });
-      }
-
-      // Google Tag Manager / GA4 Purchase Event
-      if (typeof window !== 'undefined' && parsedOrderData) {
-        (window as any).dataLayer = (window as any).dataLayer || [];
-        (window as any).dataLayer.push({
-          'event': 'purchase',
-          'ecommerce': {
-            'transaction_id': parsedOrderData.orderId || '',
-            'value': parseFloat(parsedOrderData.totalAmount) || 0,
-            'tax': 0,
-            'shipping': parseFloat(parsedOrderData.shippingCost || '0'),
-            'currency': parsedOrderData.currency || 'USD',
-            'coupon': parsedOrderData.couponCode || '',
-            'items': parsedOrderData.cartItems?.map((item: any) => ({
-              'item_id': item.sku || item.id,
-              'item_name': item.title || item.name || 'Ürün',
-              'price': parseFloat(item.price) || 0,
-              'quantity': parseInt(item.quantity) || 1
-            })) || []
-          }
-        });
-
-        console.log('GTM: Purchase event pushed to dataLayer', {
+        console.log('[Tracking] purchase event fired', {
           transaction_id: parsedOrderData.orderId,
           value: parsedOrderData.totalAmount,
           currency: parsedOrderData.currency

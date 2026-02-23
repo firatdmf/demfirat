@@ -10,29 +10,29 @@ export default function Contact() {
   // Simplified translations - using direct text for now
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
-      ManufacturingPlant: { en: 'Manufacturing Plant', tr: 'Üretim Tesisi', ru: 'Производственный завод' },
-      FabricShowroom: { en: 'Fabric Showroom', tr: 'Kumaş Showroom', ru: 'Шоу-рум тканей' },
-      RetailStore: { en: 'Retail Store', tr: 'Perakende Mağaza', ru: 'Розничный магазин' },
-      WarehouseShowroom: { en: 'Warehouse & Showroom', tr: 'Depo ve Showroom', ru: 'Склад и Шоу-рум' },
-      Representative: { en: 'Representative', tr: 'Temsilci', ru: 'Представитель' },
-      Phone: { en: 'Phone', tr: 'Telefon', ru: 'Телефон' },
-      Email: { en: 'Email', tr: 'E-posta', ru: 'Эл. почта' },
-      Address: { en: 'Address', tr: 'Adres', ru: 'Адрес' },
-      WorkHours: { en: 'Work Hours', tr: 'Çalışma Saatleri', ru: 'Часы работы' },
-      ProductLines: { en: 'Product Lines', tr: 'Ürün Grupları', ru: 'Ассортимент' },
-      Website: { en: 'Website', tr: 'Website', ru: 'Веб-сайт' },
-      GeneralInquiries: { en: 'General Inquiries', tr: 'Genel Sorular', ru: 'Общие вопросы' },
-      AccountingInquiries: { en: 'Accounting Inquiries', tr: 'Muhasebe Soruları', ru: 'Бухгалтерские вопросы' },
-      WorkHour1: { en: 'Mon - Fri 08:30-18:30 (Istanbul Time)', tr: 'Pzt - Cum 08:30-18:30 (İstanbul Saati)', ru: 'Пн - Пт 08:30-18:30 (стамбульское время)' },
-      WorkHour2: { en: 'Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)', tr: 'Pzt - Cum 08:30-19:00, Cmt 08:30-14:00', ru: 'Пн - Пт 08:30-19:00, Сб 08:30-14:00' },
-      WorkHour3: { en: 'Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)', tr: 'Pzt - Cum 09:00-20:30, Cmt 09:00-16:00', ru: 'Пн - Пт 09:00-20:30, Сб 09:00-16:00' },
-      WorkHour4: { en: 'Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)', tr: 'Pzt - Cum 09:00-18:00, Cmt 09:00-16:00', ru: 'Пн - Пт 09:00-18:00, Сб 09:00-16:00' },
-      ProductLine1: { en: 'Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners', tr: 'Perde, Döşemelik ve Gelinlik Kumaşlar & Dantel Masa Örtüleri', ru: 'Ткани для штор, обивки и свадебных платьев' },
-      ProductLine2: { en: 'Interior Fabrics: Drapery & Upholstery', tr: 'İç Mekan Kumaşları: Perde ve Döşemelik', ru: 'Интерьерные ткани: портьеры и обивка' },
-      ProductLine3: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца' },
-      ProductLine4: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца' }
+      ManufacturingPlant: { en: 'Manufacturing Plant', tr: 'Üretim Tesisi', ru: 'Производственный завод', pl: 'Zakład Produkcyjny' },
+      FabricShowroom: { en: 'Fabric Showroom', tr: 'Kumaş Showroom', ru: 'Шоу-рум тканей', pl: 'Showroom Tkanin' },
+      RetailStore: { en: 'Retail Store', tr: 'Perakende Mağaza', ru: 'Розничный магазин', pl: 'Sklep Detaliczny' },
+      WarehouseShowroom: { en: 'Warehouse & Showroom', tr: 'Depo ve Showroom', ru: 'Склад и Шоу-рум', pl: 'Hurtownia i Showroom' },
+      Representative: { en: 'Representative', tr: 'Temsilci', ru: 'Представитель', pl: 'Przedstawiciel' },
+      Phone: { en: 'Phone', tr: 'Telefon', ru: 'Телефон', pl: 'Telefon' },
+      Email: { en: 'Email', tr: 'E-posta', ru: 'Эл. почта', pl: 'E-mail' },
+      Address: { en: 'Address', tr: 'Adres', ru: 'Адрес', pl: 'Adres' },
+      WorkHours: { en: 'Work Hours', tr: 'Çalışma Saatleri', ru: 'Часы работы', pl: 'Godziny Pracy' },
+      ProductLines: { en: 'Product Lines', tr: 'Ürün Grupları', ru: 'Ассортимент', pl: 'Asortyment' },
+      Website: { en: 'Website', tr: 'Website', ru: 'Веб-сайт', pl: 'Strona internetowa' },
+      GeneralInquiries: { en: 'General Inquiries', tr: 'Genel Sorular', ru: 'Общие вопросы', pl: 'Zapytania Ogólne' },
+      AccountingInquiries: { en: 'Accounting Inquiries', tr: 'Muhasebe Soruları', ru: 'Бухгалтерские вопросы', pl: 'Zapytania Księgowe' },
+      WorkHour1: { en: 'Mon - Fri 08:30-18:30 (Istanbul Time)', tr: 'Pzt - Cum 08:30-18:30 (İstanbul Saati)', ru: 'Пн - Пт 08:30-18:30 (стамбульское время)', pl: 'Pon - Pt 08:30-18:30 (Czasu Stambulskiego)' },
+      WorkHour2: { en: 'Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)', tr: 'Pzt - Cum 08:30-19:00, Cmt 08:30-14:00', ru: 'Пн - Пт 08:30-19:00, Сб 08:30-14:00', pl: 'Pon - Pt 08:30-19:00, Sob 08:30-14:00' },
+      WorkHour3: { en: 'Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)', tr: 'Pzt - Cum 09:00-20:30, Cmt 09:00-16:00', ru: 'Пн - Пт 09:00-20:30, Сб 09:00-16:00', pl: 'Pon - Pt 09:00-20:30, Sob 09:00-16:00' },
+      WorkHour4: { en: 'Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)', tr: 'Pzt - Cum 09:00-18:00, Cmt 09:00-16:00', ru: 'Пн - Пт 09:00-18:00, Сб 09:00-16:00', pl: 'Pon - Pt 09:00-18:00, Sob 09:00-16:00' },
+      ProductLine1: { en: 'Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners', tr: 'Perde, Döşemelik ve Gelinlik Kumaşlar & Dantel Masa Örtüleri', ru: 'Ткани для штор, обивки и свадебных платьев', pl: 'Tkaniny zasłonowe, tapicerskie i ślubne' },
+      ProductLine2: { en: 'Interior Fabrics: Drapery & Upholstery', tr: 'İç Mekan Kumaşları: Perde ve Döşemelik', ru: 'Интерьерные ткани: портьеры и обивка', pl: 'Tkaniny do Wnętrz: Zasłony i Tapicerka' },
+      ProductLine3: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца', pl: 'Pościel, narzuty, pokrowce na meble, ręczniki, obrusy' },
+      ProductLine4: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца', pl: 'Pościel, narzuty, pokrowce na meble, ręczniki, obrusy' }
     };
-    const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : 'en';
+    const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
   };
   const titleCase = (str: string) => {

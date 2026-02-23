@@ -108,7 +108,7 @@ export default function CartPage() {
     return variantPrice || productPrice || null;
   };
 
-  // Load guest cart items with product details
+  // Load guest cart items with product details (BATCH)
   const loadGuestCart = async () => {
     if (guestCart.length === 0) {
       setCartItems([]);
@@ -118,75 +118,51 @@ export default function CartPage() {
 
     try {
       setLoading(true);
-      const itemsWithDetails = await Promise.all(
-        guestCart.map(async (item) => {
-          try {
-            // If variant_sku exists, fetch variant details for correct price
-            if (item.variant_sku) {
-              const variantResponse = await fetch(
-                `/api/cart/get-variant?variant_sku=${item.variant_sku}&product_sku=${item.product_sku}`
-              );
+      // Single batch request instead of N individual fetches
+      const batchPayload = guestCart.map(item => ({
+        product_sku: item.product_sku,
+        variant_sku: item.variant_sku || null,
+      }));
 
-              if (variantResponse.ok) {
-                const variantData = await variantResponse.json();
-                const variant = variantData.variant;
-                const variantImage = variantData.primary_image;
-                const product = variantData.product;
+      const batchRes = await fetch('/api/cart/get-items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: batchPayload }),
+      });
 
-                const price = getItemPrice(item, product?.price, variant?.variant_price);
+      if (batchRes.ok) {
+        const batchData = await batchRes.json();
+        const batchItems = batchData.items || [];
 
-                return {
-                  ...item,
-                  id: item.id as any,
-                  product_category: item.product_category,
-                  variant_attributes: variantData.variant_attributes || {},
-                  product: {
-                    title: product?.title || item.product_sku,
-                    price: price,
-                    primary_image: variantImage || product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                    category: item.product_category,
-                  },
-                };
-              }
-            }
-
-            // No variant or variant fetch failed, get product only
-            const productResponse = await fetch(
-              `/api/cart/get-product?product_sku=${item.product_sku}`
-            );
-            if (productResponse.ok) {
-              const productData = await productResponse.json();
-              const product = productData.product;
-
-              const price = getItemPrice(item, product?.price, null);
-
-              return {
-                ...item,
-                id: item.id as any,
-                product_category: productData.product_category || item.product_category,
-                product: {
-                  title: product?.title || item.product_sku,
-                  price: price,
-                  primary_image: product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                  category: productData.product_category,
-                },
-              };
-            }
-          } catch (error) {
-            console.error(`Error fetching product ${item.product_sku}:`, error);
-          }
+        const itemsWithDetails = guestCart.map((item, idx) => {
+          const detail = batchItems[idx];
+          const price = getItemPrice(
+            item,
+            detail?.product?.price,
+            detail?.variant?.variant_price
+          );
           return {
             ...item,
             id: item.id as any,
+            product_category: detail?.product_category || item.product_category,
+            variant_attributes: detail?.variant_attributes || {},
             product: {
-              title: item.product_sku,
-              price: item.is_sample ? 0 : null,
-              primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+              title: detail?.product?.title || item.product_sku,
+              price,
+              primary_image: detail?.primary_image || detail?.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+              category: detail?.product_category,
             },
           };
-        })
-      );
-      setCartItems(itemsWithDetails as CartItem[]);
+        });
+        setCartItems(itemsWithDetails as CartItem[]);
+      } else {
+        // Fallback: show items with basic info
+        setCartItems(guestCart.map(item => ({
+          ...item,
+          id: item.id as any,
+          product: { title: item.product_sku, price: item.is_sample ? 0 : null, primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif' },
+        })) as CartItem[]);
+      }
     } catch (error) {
       console.error('Error loading guest cart:', error);
     } finally {
@@ -212,94 +188,49 @@ export default function CartPage() {
         const data = await response.json();
         const items = data.cart_items || [];
 
-        const itemsWithDetails = await Promise.all(
-          items.map(async (item: CartItem) => {
-            try {
-              // Eğer variant_sku varsa, varyant resmini çek
-              if (item.variant_sku) {
-                const variantResponse = await fetch(
-                  `/api/cart/get-variant?variant_sku=${item.variant_sku}&product_sku=${item.product_sku}`
-                );
+        // Single batch request instead of N individual fetches
+        const batchPayload = items.map((item: CartItem) => ({
+          product_sku: item.product_sku,
+          variant_sku: item.variant_sku || null,
+        }));
 
-                if (variantResponse.ok) {
-                  const variantData = await variantResponse.json();
-                  const variant = variantData.variant;
-                  const variantImage = variantData.primary_image;
-                  const variantAttributes = variantData.variant_attributes || {};
+        const batchRes = await fetch('/api/cart/get-items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: batchPayload }),
+        });
 
-                  // Product bilgisini de çek (fiyat ve başlık için)
-                  const productResponse = await fetch(
-                    `/api/cart/get-product?product_sku=${item.product_sku}`
-                  );
+        if (batchRes.ok) {
+          const batchData = await batchRes.json();
+          const batchItems = batchData.items || [];
 
-                  if (productResponse.ok) {
-                    const productData = await productResponse.json();
-                    const product = productData.product;
-
-                    const price = getItemPrice(item, product?.price, variant?.variant_price);
-
-                    return {
-                      ...item,
-                      product_category: productData.product_category || item.product_category,
-                      variant_attributes: variantAttributes,
-                      product: {
-                        title: product?.title || item.product_sku,
-                        price: price,
-                        primary_image: variantImage || product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                        category: productData.product_category,
-                      },
-                    };
-                  }
-                }
-              }
-
-              // Varyant yoksa veya hata olduysa, normal product fetch
-              const productResponse = await fetch(
-                `/api/cart/get-product?product_sku=${item.product_sku}`
-              );
-
-              if (productResponse.ok && (productResponse.headers.get('content-type') || '').includes('application/json')) {
-                const productData = await productResponse.json();
-                const product = productData.product;
-                if (product) {
-                  const price = getItemPrice(item, product.price, null);
-
-                  return {
-                    ...item,
-                    product_category: productData.product_category || item.product_category,
-                    product: {
-                      title: product.title || item.product_sku,
-                      price: price,
-                      primary_image: product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                      category: productData.product_category,
-                    },
-                  };
-                }
-              }
-              // Eğer API başarısız olursa, placeholder kullan
-              return {
-                ...item,
-                product: {
-                  title: item.product_sku,
-                  price: item.is_sample ? 0 : null,
-                  primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                },
-              };
-            } catch (error) {
-              console.error(`Error fetching product ${item.product_sku}:`, error);
-              return {
-                ...item,
-                product: {
-                  title: item.product_sku,
-                  price: item.is_sample ? 0 : null,
-                  primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                },
-              };
-            }
-          })
-        );
-
-        setCartItems(itemsWithDetails);
+          const itemsWithDetails = items.map((item: CartItem, idx: number) => {
+            const detail = batchItems[idx];
+            const price = getItemPrice(
+              item,
+              detail?.product?.price,
+              detail?.variant?.variant_price
+            );
+            return {
+              ...item,
+              product_category: detail?.product_category || item.product_category,
+              variant_attributes: detail?.variant_attributes || {},
+              product: {
+                title: detail?.product?.title || item.product_sku,
+                price,
+                primary_image: detail?.primary_image || detail?.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                category: detail?.product_category,
+              },
+            };
+          });
+          setCartItems(itemsWithDetails);
+        } else {
+          // Fallback
+          setCartItems(items.map((item: CartItem) => ({
+            ...item,
+            product: { title: item.product_sku, price: null, primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif' },
+          })));
+        }
       }
     } catch (error) {
       console.error('Error loading cart:', error);
@@ -421,10 +352,26 @@ export default function CartPage() {
   if (status === 'loading' || loading) {
     return (
       <div className={classes.container}>
-        <div className={classes.loadingContainer}>
-          <div className={classes.spinner}></div>
-          <p>{t('loading')}</p>
+        <div className={classes.header}>
+          <h1>
+            <FaShoppingCart className={classes.headerIcon} />
+            {t('myCart')}
+          </h1>
         </div>
+        <div className={classes.cartGrid}>
+          <div className={classes.cartItems}>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className={classes.cartItem} style={{ opacity: 0.5, animation: 'pulse 1.5s ease-in-out infinite' }}>
+                <div style={{ width: 100, height: 100, background: '#f0f0f0', borderRadius: 8 }} />
+                <div className={classes.itemDetails}>
+                  <div style={{ width: '60%', height: 16, background: '#f0f0f0', borderRadius: 4, marginBottom: 8 }} />
+                  <div style={{ width: '40%', height: 12, background: '#f0f0f0', borderRadius: 4 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <style>{`@keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.7; } }`}</style>
       </div>
     );
   }

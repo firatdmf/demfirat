@@ -1,11 +1,13 @@
 "use client";
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import CustomCurtainSidebar from './CustomCurtainSidebar';
+import CurtainWizard from './CurtainWizard';
 import TryAtHomeSidebar from './TryAtHomeSidebar';
 import ImageZoom from './ImageZoom';
+import IadeSartlari from './IadeSartlari';
+import Image from "next/image";
 
-import { FaCut, FaCamera, FaSwatchbook } from 'react-icons/fa';
+import { FaCut, FaCamera, FaSwatchbook, FaTruck, FaUndo, FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import classes from "./ProductDetailCard.module.css";
@@ -19,6 +21,8 @@ import ProductReviewsList from './ProductReviewsList';
 import SimilarProducts from './SimilarProducts';
 import { translateTextSync } from '@/lib/translate';
 import { getLocalizedProductField } from '@/lib/productUtils';
+import { trackViewItem, trackAddToCart, trackSelectFabric, trackRequestSample } from '@/lib/tracking';
+import { trackKlaviyoAddToCart } from '@/lib/klaviyo';
 
 
 type ProductDetailCardPageProps = {
@@ -48,18 +52,23 @@ function ProductDetailCard({
 }: ProductDetailCardPageProps) {
 
   const t = useTranslations('ProductDetailCard');
-  const { convertPrice } = useCurrency();
+  const { currency, convertPrice, formatPreconvertedPrice, rates, loading } = useCurrency();
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  const viewItemFiredRef = useRef<string | null>(null);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
-  const [isCustomCurtainSidebarOpen, setIsCustomCurtainSidebarOpen] = useState(false);
+  // sidebar state removed — wizard is now inline
   const [isTryAtHomeSidebarOpen, setIsTryAtHomeSidebarOpen] = useState(false);
   const touchStartX = React.useRef<number | null>(null);
 
-  // Format price with currency
-  const formatPrice = (price: any) => {
+  // Format price with currency - uses pre-converted prices dict from backend when available
+  const formatPrice = (
+    price: any,
+    pricesDict?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null
+  ) => {
+    if (pricesDict) return formatPreconvertedPrice(pricesDict, parseFloat(String(price)));
     const numPrice = parseFloat(String(price));
     return convertPrice(numPrice);
   };
@@ -134,6 +143,13 @@ function ProductDetailCard({
     searchParams
   ]);
 
+  // Determine context from category and intent param.
+  // The /perde route forces intent=custom_curtain server-side, so this is always reliable.
+  const isFabricProduct = product_category?.toLowerCase().includes('fabric') || product_category?.toLowerCase().includes('kumaş');
+  const isCustomCurtainIntent = searchParams?.intent === 'custom_curtain';
+  const hasStandardCartOptions = !isCustomCurtainIntent;
+  const [showWizard, setShowWizard] = useState(false);
+
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(
     !!(product_variant_attributes && product_variant_attributes.length > 0)
@@ -160,7 +176,7 @@ function ProductDetailCard({
   const [quantity, setQuantity] = useState<string>('1');
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'description' | 'details'>('description');
+  const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery'>('description');
   const [isAdding, setIsAdding] = useState(false);
 
   const findSelectedVariant = () => {
@@ -215,23 +231,26 @@ function ProductDetailCard({
     window.scrollTo(0, 0);
   }, []);
 
-  // Meta Pixel: ViewContent Event (USD - prices are stored in USD)
+  // Meta Pixel & GA4: ViewItem Event
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).fbq && product) {
-      const price = Number(selectedVariant?.variant_price || product.price || 0);
+    if (product && !loading) {
+      if (viewItemFiredRef.current === product.sku) return; // Only fire once per product view
 
-      (window as any).fbq('track', 'ViewContent', {
-        content_ids: [product.sku],
-        content_name: product.title,
-        content_type: 'product',
-        content_category: product_category || 'fabric',
-        value: price,
-        currency: 'USD'
-      });
+      const basePrice = Number(selectedVariant?.variant_price || product.price || 0);
+      const currentRate = rates.find(r => r.currency_code === currency)?.rate || 1;
+      const convertedPrice = basePrice * currentRate;
 
-      console.log('[Meta Pixel] ViewContent event fired', { sku: product.sku, title: product.title, currency: 'USD' });
+      trackViewItem(
+        product_category || 'fabric',
+        product.sku,
+        product.title,
+        convertedPrice,
+        currency
+      );
+      viewItemFiredRef.current = product.sku; // Mark as fired
+      console.log(`[Tracking] view_item event fired`, { sku: product.sku, title: product.title, currency: currency, value: convertedPrice });
     }
-  }, [product.sku]); // Only fire once per product
+  }, [product.sku, currency, rates, loading]); // Wait for currency data to load
 
   // URL parametrelerini güncelle
   useEffect(() => {
@@ -435,6 +454,12 @@ function ProductDetailCard({
       ...prev,
       [attributeName]: value
     }));
+
+    // Tracking: Select Fabric Event if in custom curtain flow AND changing the primary fabric attribute (usually color/fabric type)
+    if (isCustomCurtainIntent && (attributeName.toLowerCase() === 'color' || attributeName.toLowerCase() === 'fabric_type')) {
+      trackSelectFabric(attributeName, value);
+      console.log(`[Tracking] select_fabric event fired`, { fabric_type: attributeName, fabric_name: value });
+    }
   };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -460,22 +485,26 @@ function ProductDetailCard({
     }
   };
 
-
   const handleRequestSample = async () => {
     // Check if user is logged in
     if (!session?.user && !isGuest) {
-      // Should not happen as we check isGuest but for safety
       alert(t('pleaseLogin'));
       return;
     }
+    await handleBuySampleButtonClick();
+  };
 
+  const handleBuySampleButtonClick = async () => {
+    if (isAdding) return;
+    setIsAdding(true);
+
+    const price = 0; // Samples are usually free or predefined price
     try {
       if (isGuest) {
-        // For guests, add to localStorage cart with 0 price and sample flag
         addToGuestCart({
-          product_sku: product.sku,
-          variant_sku: selectedVariant?.variant_sku || null,
-          quantity: "1",
+          product_sku: product.sku + '-SAMPLE',
+          variant_sku: selectedVariant?.variant_sku ? selectedVariant.variant_sku + '-SAMPLE' : null,
+          quantity: '1',
           product_category: product_category || undefined,
           product: {
             title: `${product.title} (${t('requestSample')})`,
@@ -515,10 +544,14 @@ function ProductDetailCard({
         );
 
         if (response.ok) {
-          setSuccessMessage(t('sampleAdded'));
+          setSuccessMessage(t('sampleAddedToCart'));
           setShowSuccessMessage(true);
           setTimeout(() => setShowSuccessMessage(false), 3000);
           await refreshCart();
+
+          // Tracking: Request Sample Event
+          trackRequestSample(product.title, product.sku);
+          console.log('[Tracking] request_sample event fired (Auth)', { sample: product.title, id: product.sku });
         } else {
           alert(t('errorAddingToCart'));
         }
@@ -526,6 +559,8 @@ function ProductDetailCard({
     } catch (error) {
       console.error('Error adding sample:', error);
       alert(t('errorAddingToCart'));
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -573,24 +608,33 @@ function ProductDetailCard({
         });
         setSuccessMessage(t('productAddedToCart'));
         setShowSuccessMessage(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => setShowSuccessMessage(false), 3000);
 
-        // Meta Pixel: AddToCart Event (USD - prices are stored in USD)
-        if (typeof window !== 'undefined' && (window as any).fbq) {
-          (window as any).fbq('track', 'AddToCart', {
-            content_ids: [product.sku],
-            content_name: product.title,
-            content_type: 'product',
-            value: itemPrice * qty,
-            currency: 'USD',
-            contents: [{
-              id: product.sku,
-              quantity: qty,
-              item_price: itemPrice
-            }]
-          });
-          console.log('[Meta Pixel] AddToCart event fired', { sku: product.sku, value: itemPrice * qty, currency: 'USD' });
-        }
+        // Tracking: AddToCart Event
+        const currentRate = rates.find(r => r.currency_code === currency)?.rate || 1;
+        const convertedItemPrice = itemPrice * currentRate;
+
+        trackAddToCart(
+          product_category || 'fabric',
+          product.sku,
+          product.title,
+          convertedItemPrice,
+          qty,
+          currency,
+          searchParams?.intent as string | undefined
+        );
+        trackKlaviyoAddToCart({
+          ProductName: product.title,
+          ProductID: product.sku,
+          SKU: selectedVariant?.variant_sku || product.sku,
+          Categories: [product_category || 'product'],
+          ImageURL: product.primary_image || placeholder_image_link,
+          URL: window.location.href,
+          Price: convertedItemPrice,
+          Quantity: qty
+        });
+        console.log(`[Tracking] add_to_cart event fired (Guest)`, { sku: product.sku, value: convertedItemPrice * qty, currency: currency });
       } else {
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
@@ -610,26 +654,35 @@ function ProductDetailCard({
         if (response.ok) {
           setSuccessMessage(t('productAddedToCart'));
           setShowSuccessMessage(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           setTimeout(() => setShowSuccessMessage(false), 3000);
           // Refresh cart count
           await refreshCart();
 
-          // Meta Pixel: AddToCart Event (USD - prices are stored in USD)
-          if (typeof window !== 'undefined' && (window as any).fbq) {
-            (window as any).fbq('track', 'AddToCart', {
-              content_ids: [product.sku],
-              content_name: product.title,
-              content_type: 'product',
-              value: itemPrice * qty,
-              currency: 'USD',
-              contents: [{
-                id: product.sku,
-                quantity: qty,
-                item_price: itemPrice
-              }]
-            });
-            console.log('[Meta Pixel] AddToCart event fired', { sku: product.sku, value: itemPrice * qty, currency: 'USD' });
-          }
+          // Tracking: AddToCart Event
+          const currentRate = rates.find(r => r.currency_code === currency)?.rate || 1;
+          const convertedItemPrice = itemPrice * currentRate;
+
+          trackAddToCart(
+            product_category || 'fabric',
+            product.sku,
+            product.title,
+            convertedItemPrice,
+            qty,
+            currency,
+            searchParams?.intent as string | undefined
+          );
+          trackKlaviyoAddToCart({
+            ProductName: product.title,
+            ProductID: product.sku,
+            SKU: selectedVariant?.variant_sku || product.sku,
+            Categories: [product_category || 'product'],
+            ImageURL: product.primary_image || placeholder_image_link,
+            URL: window.location.href,
+            Price: convertedItemPrice,
+            Quantity: qty
+          });
+          console.log(`[Tracking] add_to_cart event fired (Auth)`, { sku: product.sku, value: convertedItemPrice * qty, currency: currency });
         } else {
           alert(t('errorAddingToCart'));
         }
@@ -683,10 +736,11 @@ function ProductDetailCard({
             category: product_category || undefined,
           }
         });
-        setSuccessMessage(t('productAddedToCart'));
+        setSuccessMessage(t('customCurtainAddedToCart'));
         setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 3000);
-        setIsCustomCurtainSidebarOpen(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => setShowSuccessMessage(false), 5000); // Keep custom message slightly longer
+        // sidebar closed by wizard internally
       } else {
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
@@ -708,10 +762,11 @@ function ProductDetailCard({
         );
 
         if (response.ok) {
-          setSuccessMessage(t('productAddedToCart'));
+          setSuccessMessage(t('customCurtainAddedToCart'));
           setShowSuccessMessage(true);
-          setTimeout(() => setShowSuccessMessage(false), 3000);
-          setIsCustomCurtainSidebarOpen(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => setShowSuccessMessage(false), 5000);
+          // sidebar closed by wizard internally
           await refreshCart();
         } else {
           const errorData = await response.json();
@@ -735,7 +790,7 @@ function ProductDetailCard({
   };
 
   // Determine if product is fabric (sold by meters) or ready-made curtain (sold by pieces)
-  const isFabricProduct = product_category?.toLowerCase().includes('fabric') || product_category?.toLowerCase().includes('kumaş');
+
   const quantityLabel = isFabricProduct ? t('quantityMeters') : t('quantityPieces');
 
   // Prepare image files for display (fallback to placeholder)
@@ -887,6 +942,49 @@ function ProductDetailCard({
               )}
             </div>
             <button className={classes.nextButton} onClick={handleNextImage}>{">"}</button>
+
+            {/* Mobile Sticky CTA (Only visible on mobile via CSS) */}
+            {isFabricProduct && (
+              <button
+                className={`${classes.mobileStickyCta} ${isCustomCurtainIntent ? classes.mobileStickyCtaCustom : classes.mobileStickyCtaStandard}`}
+                onClick={() => {
+                  if (isCustomCurtainIntent) {
+                    setShowWizard(true);
+                    setTimeout(() => {
+                      const wizardEl = document.getElementById('curtainWizardContainer');
+                      if (wizardEl) {
+                        const y = wizardEl.getBoundingClientRect().top + window.scrollY - 100;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                      }
+                    }, 50);
+                  } else {
+                    const cartEl = document.getElementById('cartActions');
+                    if (cartEl) {
+                      const y = cartEl.getBoundingClientRect().top + window.scrollY - 150;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                  }
+                }}
+              >
+                {isCustomCurtainIntent ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 14a8 8 0 0 1-8 8v-2a6 6 0 0 0 6-6h2Z" />
+                    <path d="M12 22v-2" />
+                    <path d="M18 10V6a6 6 0 0 0-12 0v8" />
+                    <path d="M9 14h-3" />
+                    <path d="M11 16H8a4 4 0 0 1-4-4V6A8 8 0 0 1 20 6v4" />
+                    <path d="M14 18l3.5 3.5 3.5-3.5" />
+                  </svg>
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
+                  </svg>
+                )}
+                {isCustomCurtainIntent
+                  ? (locale === 'tr' ? 'Ölçünü Gir Sipariş Ver' : locale === 'ru' ? 'Введите размеры' : locale === 'pl' ? 'Podaj wymiary i zamów' : 'Enter Dimensions & Order')
+                  : t('addToCart')}
+              </button>
+            )}
           </div>
         </div>
         <div className={classes.productHero}>
@@ -1080,7 +1178,7 @@ function ProductDetailCard({
           )}
 
           {/* Cart Actions */}
-          <div className={classes.cartActions}>
+          <div className={classes.cartActions} id="cartActions">
             {/* Price and Stock Display */}
             <div className={classes.priceAndStock}>
               {(() => {
@@ -1136,151 +1234,135 @@ function ProductDetailCard({
               ) : (product.quantity && Number(product.quantity) > 0) ? (
                 <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {Number(product.quantity)}</span>
               ) : null}
-
-              {/* Shipping Info */}
-              <div className={classes.shippingInfo}>
-                <span className={classes.shippingBadge}>
-                  {locale === 'tr' ? '🚚 1-3 iş gününde kargoda' :
-                    locale === 'ru' ? '🚚 Отправка в течение 1-3 дней' :
-                      locale === 'pl' ? '🚚 Wysyłka w ciągu 1-3 dni' :
-                        '🚚 Ships in 1-3 business days'}
-                </span>
-                <span className={classes.estimatedDate}>
-                  {(() => {
-                    const today = new Date();
-                    let daysToAdd = 3;
-                    let shippingDate = new Date(today);
-                    while (daysToAdd > 0) {
-                      shippingDate.setDate(shippingDate.getDate() + 1);
-                      const dayOfWeek = shippingDate.getDay();
-                      // Only skip Sundays (0), include Saturdays (6)
-                      if (dayOfWeek !== 0) {
-                        daysToAdd--;
-                      }
-                    }
-                    const dayNames = locale === 'tr'
-                      ? ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi']
-                      : locale === 'ru'
-                        ? ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
-                        : locale === 'pl'
-                          ? ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota']
-                          : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                    const monthNames = locale === 'tr'
-                      ? ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
-                      : locale === 'ru'
-                        ? ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-                        : locale === 'pl'
-                          ? ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia']
-                          : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                    const day = shippingDate.getDate();
-                    const month = monthNames[shippingDate.getMonth()];
-                    const dayName = dayNames[shippingDate.getDay()];
-                    const prefix = locale === 'tr' ? 'En geç' :
-                      locale === 'ru' ? 'Не позднее' :
-                        locale === 'pl' ? 'Najpóźniej' : 'By';
-                    const suffix = locale === 'tr' ? 'günü kargoda' :
-                      locale === 'ru' ? 'будет отправлен' :
-                        locale === 'pl' ? 'zostanie wysłany' : 'will be shipped';
-                    return `${prefix} ${day} ${month} ${dayName} ${suffix}`;
-                  })()}
-                </span>
-              </div>
             </div>
 
-            <div className={classes.quantityWrapper}>
-              <label htmlFor="quantity">{quantityLabel}:</label>
-              <div className={classes.quantitySelector}>
-                <button
-                  type="button"
-                  onClick={handleDecrement}
-                  className={classes.quantityBtn}
-                  aria-label="Decrease quantity"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </button>
-                <input
-                  id="quantity"
-                  type="text"
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                  className={classes.quantityInput}
-                  placeholder="1.0"
-                />
-                <button
-                  type="button"
-                  onClick={handleIncrement}
-                  className={classes.quantityBtn}
-                  aria-label="Increase quantity"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className={classes.buttonGroup}>
-              <button
-                onClick={handleAddToCart}
-                className={classes.addToCartBtn}
-                disabled={isAdding}
-              >
-                {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t('addToCart')}
-              </button>
-
-              <button onClick={handleBuyNow} className={classes.buyNowBtn}>
-                {t('buyNow')}
-              </button>
-
-              {/* "veya" divider + Perde Diktir button for fabric products */}
-              {isFabricProduct && (
-                <>
-                  <div className={classes.orDivider}>
-                    <span>{locale === 'tr' ? 'veya' : locale === 'ru' ? 'или' : locale === 'pl' ? 'lub' : 'or'}</span>
-                  </div>
-                  <button onClick={() => setIsCustomCurtainSidebarOpen(true)} className={classes.customCurtainBtn}>
-                    <FaCut /> {t('customCurtain')}
-                  </button>
-                  {/* 
-                  <button onClick={() => setIsTryAtHomeSidebarOpen(true)} className={classes.tryAtHomeBtn}>
-                    <FaCamera /> {locale === 'tr' ? 'Odanda Görüntüle' : locale === 'ru' ? 'Посмотреть в комнате' : locale === 'pl' ? 'Zobacz w pokoju' : 'View in Your Room'}
-                  </button>
-                  */}
-                </>
-              )}
-
-              {/* Request Sample Button - Only for fabric products */}
-              {isFabricProduct && (
-                <button onClick={handleRequestSample} className={classes.sampleBtn}>
-                  <FaSwatchbook /> {t('requestSample')}
-                </button>
-              )}
-            </div>
-
-            {/* Custom Curtain CTA - Below Button Group */}
-            {isFabricProduct && false && (
-              <div className={classes.customCurtainCTA}>
-                <div className={classes.ctaContent}>
-                  <FaCut className={classes.ctaIcon} />
-                  <div className={classes.ctaText}>
-                    <span className={classes.ctaTitle}>{t('customCurtain')}</span>
-                    <span className={classes.ctaSubtitle}>
-                      {locale === 'tr' ? 'Ölçülerinize göre perde dikimi' :
-                        locale === 'ru' ? 'Пошив штор по вашим размерам' :
-                          locale === 'pl' ? 'Szycie zasłon na wymiar' :
-                            'Curtain tailoring to your measurements'}
-                    </span>
+            {hasStandardCartOptions && (
+              <>
+                <div className={classes.quantityWrapper}>
+                  <label htmlFor="quantity">{quantityLabel}:</label>
+                  <div className={classes.quantitySelector}>
+                    <button
+                      type="button"
+                      onClick={handleDecrement}
+                      className={classes.quantityBtn}
+                      aria-label="Decrease quantity"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    </button>
+                    <input
+                      id="quantity"
+                      type="text"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                      className={classes.quantityInput}
+                      placeholder="1.0"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleIncrement}
+                      className={classes.quantityBtn}
+                      aria-label="Increase quantity"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
-                <button
-                  onClick={() => setIsCustomCurtainSidebarOpen(true)}
-                  className={classes.ctaButton}
-                >
-                  {locale === 'tr' ? 'Sipariş Ver' :
-                    locale === 'ru' ? 'Заказать' :
-                      locale === 'pl' ? 'Zamów' :
-                        'Order Now'}
+                {/* PRIMARY CTA: Simdi Al */}
+                <button onClick={handleBuyNow} className={classes.buyNowBtnPrimary}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                  {t('buyNow')}
+                </button>
+
+                {/* SECONDARY CTA: Sepete Ekle */}
+                <button onClick={handleAddToCart} className={classes.addToCartBtnSecondary} disabled={isAdding}>
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
+                  </svg>
+                  {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t('addToCart')}
+                </button>
+              </>
+            )}
+
+            {/* TRUST BAR */}
+            <div className={classes.trustBar}>
+              <div className={classes.trustItem}>
+                <span className={classes.trustIcon}>🚚</span>
+                <div className={classes.trustText}>
+                  <span className={classes.trustTitle}>
+                    {locale === 'tr' ? '1–3 İş Günü' : locale === 'ru' ? '1–3 дня' : locale === 'pl' ? '1–3 dni' : '1–3 Days'}
+                  </span>
+                  <span className={classes.trustSub}>
+                    {locale === 'tr' ? 'Hızlı kargo' : locale === 'ru' ? 'Быстрая доставка' : locale === 'pl' ? 'Szybka wysyłka' : 'Fast shipping'}
+                  </span>
+                </div>
+              </div>
+              <div className={classes.trustDivider} />
+              <div className={classes.trustItem}>
+                <span className={classes.trustIcon}>🔒</span>
+                <div className={classes.trustText}>
+                  <span className={classes.trustTitle}>
+                    {locale === 'tr' ? 'Güvenli Ödeme' : locale === 'ru' ? 'Безопасный платёж' : locale === 'pl' ? 'Bezpieczna płatność' : 'Secure Payment'}
+                  </span>
+                  <span className={classes.trustSub}>SSL</span>
+                </div>
+              </div>
+              <div className={classes.trustDivider} />
+              <div className={classes.trustItem}>
+                <span className={classes.trustIcon}>↩️</span>
+                <div className={classes.trustText}>
+                  <span className={classes.trustTitle}>
+                    {locale === 'tr' ? 'İade & Değişim' : locale === 'ru' ? 'Возврат и обмен' : locale === 'pl' ? 'Zwroty i wymiany' : 'Returns & Exchange'}
+                  </span>
+                  <span className={classes.trustSub}>
+                    {locale === 'tr' ? 'Kolay iade' : locale === 'ru' ? 'Простой возврат' : locale === 'pl' ? 'Łatwy zwrot' : 'Easy returns'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* PERDE DIKTIR — Wizard on demand (no button) */}
+            {isFabricProduct && isCustomCurtainIntent && (
+              <div id="curtainWizardContainer">
+                <CurtainWizard
+                  product={product}
+                  selectedVariant={selectedVariant}
+                  unitPrice={selectedVariant?.variant_price ? parseFloat(String(selectedVariant.variant_price)) : (product.price ? parseFloat(String(product.price)) : 0)}
+                  onAddToCart={handleCustomCurtainAddToCart}
+                  selectedAttributes={selectedAttributes}
+                  forceOpen={true}
+                  hideHeader={true}
+                />
+              </div>
+            )}
+
+            {/* Regular fabric wizard (no custom curtain intent) */}
+            {isFabricProduct && !isCustomCurtainIntent && (
+              <CurtainWizard
+                product={product}
+                selectedVariant={selectedVariant}
+                unitPrice={selectedVariant?.variant_price ? parseFloat(String(selectedVariant.variant_price)) : (product.price ? parseFloat(String(product.price)) : 0)}
+                onAddToCart={handleCustomCurtainAddToCart}
+                selectedAttributes={selectedAttributes}
+                forceOpen={false}
+                hideHeader={false}
+              />
+            )}
+
+            {/* SAMPLE HINT (fabric only, when not forcing custom curtain) */}
+            {isFabricProduct && !isCustomCurtainIntent && (
+              <div className={classes.sampleHint}>
+                <FaSwatchbook className={classes.sampleHintIcon} />
+                <span>
+                  {locale === 'tr' ? 'Kararsız mısınız?' : locale === 'ru' ? 'Не уверены?' : locale === 'pl' ? 'Niezdecydowany?' : 'Not decided yet?'}
+                </span>
+                <button onClick={handleRequestSample} className={classes.sampleHintBtn}>
+                  {locale === 'tr' ? 'Numune isteyin' : locale === 'ru' ? 'Запросите образец' : locale === 'pl' ? 'Zamów próbkę' : 'Request a sample'}
                 </button>
               </div>
             )}
@@ -1313,6 +1395,16 @@ function ProductDetailCard({
                 locale === 'pl' ? 'Szczegóły produktu' :
                   locale === 'de' ? 'Produktdetails' :
                     'Product Details'}
+          </button>
+          <button
+            className={`${classes.tabButton} ${activeTab === 'delivery' ? classes.tabButtonActive : ''}`}
+            onClick={() => setActiveTab('delivery')}
+          >
+            {locale === 'tr' ? 'İade ve Teslimat Koşulları' :
+              locale === 'ru' ? 'Условия возврата и доставки' :
+                locale === 'pl' ? 'Warunki zwrotu i dostawy' :
+                  locale === 'de' ? 'Rückgabe- und Lieferbedingungen' :
+                    'Delivery & Return Conditions'}
           </button>
         </div>
 
@@ -1406,20 +1498,17 @@ function ProductDetailCard({
               </table>
             </div>
           )}
+
+          {/* Delivery & Return Tab */}
+          {activeTab === 'delivery' && (
+            <div className={classes.deliverySection}>
+              <IadeSartlari embedded={true} />
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Custom Curtain Sidebar */}
-      <CustomCurtainSidebar
-        isOpen={isCustomCurtainSidebarOpen}
-        onClose={() => setIsCustomCurtainSidebarOpen(false)}
-        product={product}
-        selectedVariant={selectedVariant}
-        unitPrice={selectedVariant?.variant_price ? parseFloat(String(selectedVariant.variant_price)) : (product.price ? parseFloat(String(product.price)) : 0)}
-        currency="USD" // Default currency, should be dynamic
-        selectedAttributes={selectedAttributes}
-        onAddToCart={handleCustomCurtainAddToCart}
-      />
+      {/* CustomCurtainSidebar removed — wizard is now inline */}
 
       {/* Try at Home Sidebar */}
       <TryAtHomeSidebar

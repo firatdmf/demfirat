@@ -12,7 +12,16 @@ interface CurrencyContextType {
     currency: string;
     setCurrency: (currency: string) => void;
     rates: ExchangeRate[];
+    /** Convert a USD price to the currently selected currency and format it. */
     convertPrice: (priceInUsd: number) => string;
+    /**
+     * Format a value from a pre-converted prices dict (returned by the backend).
+     * Falls back to convertPrice if prices dict is missing or the key is absent.
+     */
+    formatPreconvertedPrice: (
+        prices: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null | undefined,
+        fallbackUsd?: number | null
+    ) => string;
     symbol: string;
     loading: boolean;
     refreshRates: () => Promise<void>;
@@ -182,12 +191,47 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }).format(priceInUsd);
     };
 
+    /**
+     * Format a value from a pre-converted prices dict returned by the backend.
+     * The backend already did the multiplication – we just pick the right value and format it.
+     */
+    const formatPreconvertedPrice = (
+        prices: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null | undefined,
+        fallbackUsd?: number | null
+    ): string => {
+        const curr = currency as keyof typeof prices;
+        const value = prices?.[curr];
+
+        if (value !== null && value !== undefined && !isNaN(Number(value))) {
+            const num = Number(value);
+            let locale = 'en-US';
+            if (currency === 'EUR') locale = 'de-DE';
+            if (currency === 'RUB') locale = 'ru-RU';
+            if (currency === 'PLN') locale = 'pl-PL';
+            if (currency === 'TRY') locale = 'tr-TR';
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currency,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(num);
+        }
+
+        // Fallback: convert from USD using rates
+        if (fallbackUsd != null) {
+            return convertPrice(Number(fallbackUsd));
+        }
+
+        return '';
+    };
+
     return (
         <CurrencyContext.Provider value={{
             currency,
             setCurrency,
             rates,
             convertPrice,
+            formatPreconvertedPrice,
             symbol: symbols[currency] || currency,
             loading,
             refreshRates: fetchRates

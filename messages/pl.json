@@ -1,417 +1,466 @@
 {
-    "Slider": {
-        "heading_1": "Zanurz się w doskonałości operacyjnej",
-        "desc_1": "Najwyższa jakość tkanin dzięki zaawansowanej technologii i wykwalifikowanemu kunsztowi.",
-        "heading_2": "Haft Schiffliego",
-        "desc_2": "Tworzenie każdego wzoru, koloru i tkaniny, jakie można sobie wyobrazić",
-        "heading_3": "Haft płaski",
-        "desc_3": "Nasz różnorodny park maszynowy umożliwia jednoczesne haftowanie włóczkami wielobarwnymi."
+  "AboutUsPage": {
+    "Section1Headline": "HISTORIA ZAŁOŻYCIELA",
+    "Section1Text": "Nasza spółka-matka, Dem Fąrat Karven Tekstil, została założona w 1991 roku w Stambule przez Cumę Ozturk. Cuma był najstarszym dzieckiem w rodzinie liczącej 21 dzieci. Dorastał w pobliżu granicy z Iranem, w wiejskiej części Turcji. Z powodu braku środków w dzieciństwie rzucił szkołę w wieku dziewięciu lat i rozpoczął pracę w lokalnych sklepach.",
+    "Section2Headline": "SZEROKIE RAMIONA",
+    "Section2Text1": "Zaniedbania rodziców Cumy i bycie najstarszym z rodzeństwa pozostawiły na nim ogromną odpowiedzialność za ciężką pracę i utrzymanie rodziny. Aby więc szybko zarobić pieniądze, jako dziecko zaczął przekraczać granicę z Iranem, aby kupić towary po tańszej cenie, a następnie przywiózł je i sprzedał w Turcji.",
+    "Section2Text2": "Jednak po licznych przyłapaniach i ukaraniach przez władze wiedział, że musi znaleźć długoterminową, mniej ryzykowną alternatywę. Dlatego w wieku 13 lat sam przeniósł się na zachód Turcji w poszukiwaniu lepszych możliwości zatrudnienia. Po dziesięciu latach ciężkiej i żmudnej pracy na budowach, w restauracjach i sklepach detalicznych w zachodniej części kraju, w 1991 roku, w wieku 23 lat, wraz z partnerem biznesowym otworzył swój pierwszy sklep tekstylny w Laleli w Stambule. Jednak w 1997 roku, kiedy urodziło się jego pierwsze dziecko (to ja!), między partnerami doszło do nieporozumień, które doprowadziły ich do rozstania.",
+    "Section3Headline": "Idę solo",
+    "Section3Text": "Chociaż jego dawni wspólnicy próbowali go zniechęcić i zmusić do zaprzestania działalności, to tylko skłoniło go do otwarcia własnego sklepu tekstylnego. Jego autentyczne podejście i doskonała jakość produktów sprawiły, że jego sklep stał się rozpoznawalny. Wraz z rosnącym zapotrzebowaniem zaczął sprowadzać swoje rodzeństwo pozostawione na wschodzie kraju i zatrudniać je jedno po drugim.",
+    "Section4Headline": "PIERWSZY KROK DO ZAGRANICY",
+    "Section4Text": "Cuma i jego rodzeństwo otworzyli swój pierwszy zagraniczny magazyn w Moskwie i zaczęli dostarczać tureckie tekstylia na rynek rosyjski, a później rozszerzyli swoją działalność na Ukrainę, Białoruś i Kazachstan.",
+    "Section5Headline": "PRODUKCJA",
+    "Section5Text": "Wkrótce partnerzy produkcyjni Cumy nie byli w stanie sprostać rosnącemu zapotrzebowaniu rynku. Nabył więc 60 000 SF pustej ziemi i zaledwie godzinę drogi od Stambułu zbudował swoją pierwszą fabrykę tekstyliów, aby w pełni nadzorować produkcję i ograniczać niepotrzebne koszty ponoszone przez swoich klientów.",
+    "Section6Headline": "WDZIĘCZNOŚĆ",
+    "Section6Text1": "Założenie odnoszącej sukcesy firmy i możliwość opieki nad rodzeństwem poprzez ich zatrudnienie spełniły marzenia Cumy.",
+    "Section6Text2": "Dem FĘ±rat Karven zaczynał jako mały rodzinny sklep tekstylny w Stambule w 1991 roku. Dziś rozwinęliśmy się w zakład produkcyjny, który co miesiąc produkuje ponad 20 milionów metrów tkanin i zaopatruje cały świat za pośrednictwem silnej sieci łańcucha dostaw.",
+    "Section6Text3": "Rozwój był ekscytującą i ciągle zmieniającą się podróżą. Jednak nasze podstawowe wartości zawsze pozostały takie same. Nasza powiększająca się rodzina zachęca nas do dalszego dostarczania wysokiej jakości produktów i wyjątkowej obsługi klienta."
+  },
+  "ContactPage": {
+    "AccountingInquiries": "Zapytania księgowe",
+    "Address": "Adres",
+    "Email": "E-mail",
+    "FabricShowroom": "Salon tkanin",
+    "GeneralInquiries": "Pytania ogólne",
+    "ManufacturingPlant": "Zakład produkcyjny",
+    "Phone": "Telefon",
+    "ProductLine1": "Draperie, tapicerki i tkaniny ślubne oraz koronkowe bieżniki",
+    "ProductLine2": "Tkaniny wewnętrzne: draperie i tapicerka",
+    "ProductLine3": "Pościel, narzuty, pokrowce na meble, ręczniki, ręczniki kuchenne, komplety ręczników, obrusy, koce, poduszki, pokrowce na materace, asortyment dziecięcy, szlafroki, ubrania domowe, prześcieradła, koce, fartuchy, zestawy do sauny, pokrowce na deskę do prasowania.",
+    "ProductLine4": "Tkaniny zasłonowe, pościel, narzuty, pokrowce na meble, ręczniki, ręczniki kuchenne, komplety ręczników, obrusy, koce, poduszki, pokrowce na materace, asortyment dziecięcy, szlafroki, ubrania domowe, prześcieradła, koce, fartuchy, zestawy do sauny, pokrowce na deskę do prasowania.",
+    "ProductLines": "Linie produktów",
+    "Representative": "Przedstawiciel",
+    "RetailStore": "Sklep detaliczny",
+    "WarehouseShowroom": "Magazyn i salon wystawowy",
+    "Website": "Strona internetowa",
+    "WorkHour1": "24 godziny, wszystkie dni",
+    "WorkHour2": "Poniedziałek - piątek 08:30-19:00, sobota 08:30-14:00 (czasu w Stambule)",
+    "WorkHour3": "Pon. - pt. 09:00-20:30, sob. 09:00-16:00 (czasu w Stambule)",
+    "WorkHour4": "Pon. - Pt. 09:00-18:00, Sob. 09:00-16:00 (czasu moskiewskiego)",
+    "WorkHours": "Godziny pracy"
+  },
+  "CustomCurtain": {
+    "addToCart": "Dodaj do koszyka",
+    "american": "Plisa amerykańska",
+    "buttonText": "Szycie zasłon",
+    "cornice": "Gzyms",
+    "dimensions": "Wymiary",
+    "doubleWing": "Podwójne skrzydło",
+    "extrafor": "Prosty ścieg",
+    "fabricUsage": "Zużycie tkaniny",
+    "flat": "Płaska plisa",
+    "height": "Wysokość (cm)",
+    "kanun": "Plisa Kanun",
+    "meter": "m",
+    "mountingType": "Typ montażu",
+    "noPleat": "Bez plisy",
+    "pipe": "Plisa rurkowa",
+    "pleatDensity": "Gęstość plisy",
+    "pleatType": "Typ plisy",
+    "rustic": "Rustykalny",
+    "singleWing": "Pojedyncze skrzydło",
+    "title": "Dostosuj zasłony",
+    "totalPrice": "Cena całkowita",
+    "water_wave": "Fala wodna",
+    "width": "Szerokość (cm)",
+    "widthInCm": "Szerokość (cm)",
+    "willMountToCeiling": "Zamontuję do sufitu",
+    "winged": "Ze skrzydłami",
+    "wingsHowMany": "Ile skrzydeł?",
+    "wizardIntroTitle": "Personalizuj swoje zasłony",
+    "wizardIntroText": "Starannie przygotowujemy tę elegancką tkaninę, aby idealnie pasowała do Twoich okien. Postępuj zgodnie z poniższymi instrukcjami, aby określić szczegóły szycia na miarę.",
+    "wingType": "Typ skrzydła",
+    "chooseInstallationType": "Wybierz typ instalacji",
+    "choosePleatStyle": "Wybierz styl plisowania",
+    "choosePleatDensity": "Wybierz gęstość plisowania",
+    "chooseWingType": "Wybierz typ skrzydła",
+    "enterDimensions": "Wprowadź swoje wymiary",
+    "dimensionHint": "Szerokość zasłony powinna być o 20% większa niż szerokość okna. Zostaw 10 cm od podłogi na wysokość.",
+    "mount": "Montaż",
+    "size": "Rozmiar",
+    "wing": "Skrzydło",
+    "density": "Gęstość plisy",
+    "pleat": "Typ plisy",
+    "maxHeightError": "Maksymalna wysokość wynosi {max} cm",
+    "insufficientStock": "Niewystarczające zapasy! Wymagane: {required}m, Dostępne: {available}m",
+    "iWantCustomCurtains": "Szycie zasłon na miarę"
+  },
+  "FooterPage": {
+    "AllRightsReserved": "Wszelkie prawa zastrzeżone",
+    "ContactUs": "Skontaktuj się z nami",
+    "OurStory": "Nasza historia",
+    "StayConnected": "Pozostawanie w kontakcie"
+  },
+  "Header": {
+    "ShippingText": "Wysyłka na całym świecie"
+  },
+  "HomeReviews": {
+    "review_1_text": "Bardzo ładne zasłony o świetnej jakości. Problemy z wysyłką zostały szybko rozwiązane, obsługa klienta była zawsze dostępna i odpowiadała bardzo szybko! Dzięki! Zawsze z przyjemnością!",
+    "review_2_text": "Piękne zasłony. Wyjątkowa obsługa.",
+    "review_3_text": "Uwielbiam je! Dokładnie takie jak na zdjęciu; wyglądają tak elegancko! Z przyjemnością zamówię w tym sklepie ponownie.",
+    "review_4_text": "Takie ładne i dotarły naprawdę szybko!",
+    "review_5_text": "Wspaniała jakość. Przyjazny sprzedawca, zawsze dostępny. Odpowiada na wiadomości w odpowiednim czasie. Jeszcze raz i jeszcze raz!",
+    "review_6_text": "Do mojego pierwszego zamówienia dołączono prośbę o informację, czy jestem zadowolona z zakupu. Zamiast odpowiadać na pytanie, powtórzyłam moje pierwsze zamówienie. Uważam, że to mówi samo za siebie. Gdybym miała więcej okien potrzebujących firanek, kupowałabym je w kółko. Nigdy nie widziałam tak pięknych!!! Nawet moi dorośli synowie, którzy niczego nie zauważają, powiedzieli 'Wow! Są piękne, mamo'. Dziękuję, dziękuję!",
+    "review_7_text": "Uwielbiam moje zasłony, ale jeszcze bardziej uwielbiam obsługę klienta, zrobili wszystko, co w ich mocy, aby upewnić się, że otrzymam moje piękne zasłony"
+  },
+  "KVKK": {
+    "disclaimer": "Uwaga: Niniejsza polityka może być okresowo aktualizowana w celu odzwierciedlenia zmian w naszych praktykach lub wymogach prawnych. Prosimy o regularne jej sprawdzanie.",
+    "lastUpdate": "Ostatnia aktualizacja: 10 grudnia 2024",
+    "section1": {
+      "address": "Adres",
+      "companyName": "Nazwa firmy",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "text": "W Karven Homedecor cenimy Twoją prywatność i zobowiązujemy się do ochrony Twoich danych osobowych. Niniejsza Polityka Ochrony Danych określa, w jaki sposób zbieramy, wykorzystujemy, przechowujemy i chronimy Twoje informacje podczas odwiedzania naszej strony internetowej lub dokonywania zakupów, zapewniając przejrzystość i zaufanie naszych międzynarodowych klientów.",
+      "title": "1. Wprowadzenie"
     },
-    "Header": {
-        "ShippingText": "Wysyłka na całym świecie"
+    "section10": {
+      "address": "Adres",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "text": "Jeśli masz pytania dotyczące tej polityki lub swoich danych osobowych, skontaktuj się z nami:",
+      "title": "10. Skontaktuj się z nami"
     },
-    "Menu": {
-        "Home": "Dom",
-        "Products": "Produkty",
-        "Fabrics": "Tkaniny",
-        "Curtains": "Gotowa zasłona",
-        "AboutUs": "O nas",
-        "Contact": "Kontakt",
-        "SideText": "Myśl holistycznie, myśl haftem"
+    "section2": {
+      "items": {
+        "0": "Dane identyfikacyjne: Imię, nazwisko",
+        "1": "Dane kontaktowe: Adres e-mail, numer telefonu, adres dostawy i rozliczeniowy",
+        "2": "Informacje o transakcjach: Historia zamówień, preferencje produktów, zawartość koszyka",
+        "3": "Informacje techniczne: Adres IP, informacje o urządzeniu, pliki cookie",
+        "4": "Informacje płatnicze: Zaszyfrowane dane płatnicze (przetwarzane bezpiecznie przez zewnętrznych dostawców)",
+        "5": "[TRANSLATE] Görsel/İşitsel Kayıtlar: Müşteri hizmetleri görüşme kayıtları (onay alınarak)"
+      },
+      "text": "Zbieramy następujące rodzaje danych osobowych w celu świadczenia naszych usług:",
+      "title": "2. Zbierane dane"
     },
-    "Products": {
-        "Headline": "Produkty",
-        "EmbroideredSheerCurtainFabrics": "Haftowane przezroczyste tkaniny zasłonowe"
+    "section3": {
+      "items": {
+        "0": "Przetwarzanie i realizacja zamówień",
+        "1": "Zarządzanie płatnościami i fakturowanie",
+        "2": "Zapewnienie obsługi klienta i rozwiązywanie zapytań",
+        "3": "Ulepszanie naszej strony internetowej i doświadczeń użytkowników",
+        "4": "Wysyłanie aktualizacji i powiadomień o zamówieniach",
+        "5": "Komunikacja marketingowa (tylko za Twoją wyraźną zgodą)",
+        "6": "Zapobieganie oszustwom i bezpieczeństwo",
+        "7": "[TRANSLATE] Hukuki uyuşmazlıkların çözümü ve hukuki taleplere cevap verilmesi",
+        "8": "[TRANSLATE] Dolandırıcılık önleme ve güvenlik tedbirleri"
+      },
+      "text": "Twoje dane osobowe są wykorzystywane w następujących celach:",
+      "title": "3. Jak wykorzystujemy Twoje dane"
     },
-    "ProductsGrid": {
-        "Headline": "Haft",
-        "SearchBar": "Wpisz tutaj numer projektu."
+    "section4": {
+      "items": {
+        "0": "Firmy kurierskie: W celu dostarczenia zamówień",
+        "1": "Podmioty przetwarzające płatności: W celu bezpiecznego przetwarzania transakcji (np. iyzico)",
+        "2": "Dostawcy usług: W celu hostingu i obsługi strony internetowej",
+        "3": "Organy prawne: Jeśli wymagane przez prawo",
+        "4": "[TRANSLATE] Hukuk Müşavirleri: Hukuki işlemlerin yürütülmesi için",
+        "5": "[TRANSLATE] Bulut Hizmet Sağlayıcıları: Veri depolama ve sistem altyapısı için"
+      },
+      "note": "Nie sprzedajemy Twoich danych osobowych stronom trzecim.",
+      "text": "Możemy udostępniać Twoje dane zaufanym stronom trzecim wyłącznie w celach operacyjnych:",
+      "title": "4. Udostępnianie danych"
     },
-    "ProductDetailCardPage": {
-        "Design": "Projekt",
-        "Width": "Szerokość",
-        "Origin": "Kraj pochodzenia",
-        "WantASample": "Chcesz próbkę?",
-        "SendEmail": "Wyślij e-mail na adres info@karvenhome.com, podając nazwę lub numer projektu."
+    "section5": {
+      "items": {
+        "0": "Szyfrowanie SSL dla bezpiecznej transmisji danych",
+        "1": "Przetwarzanie płatności zgodne ze standardem PCI-DSS",
+        "2": "Bezpieczne serwery i zapory ogniowe",
+        "3": "Regularne audyty bezpieczeństwa",
+        "4": "[TRANSLATE] Log Kayıtları: Bilgi güvenliği için 2 yıl"
+      },
+      "text": "Stosujemy solidne środki bezpieczeństwa w celu ochrony Twoich danych:",
+      "title": "5. Bezpieczeństwo danych"
     },
-    "AboutUsPage": {
-        "Section1Headline": "HISTORIA ZAŁOŻYCIELA",
-        "Section1Text": "Nasza spółka-matka, Dem Fąrat Karven Tekstil, została założona w 1991 roku w Stambule przez Cumę Ozturk. Cuma był najstarszym dzieckiem w rodzinie liczącej 21 dzieci. Dorastał w pobliżu granicy z Iranem, w wiejskiej części Turcji. Z powodu braku środków w dzieciństwie rzucił szkołę w wieku dziewięciu lat i rozpoczął pracę w lokalnych sklepach.",
-        "Section2Headline": "SZEROKIE RAMIONA",
-        "Section2Text1": "Zaniedbania rodziców Cumy i bycie najstarszym z rodzeństwa pozostawiły na nim ogromną odpowiedzialność za ciężką pracę i utrzymanie rodziny. Aby więc szybko zarobić pieniądze, jako dziecko zaczął przekraczać granicę z Iranem, aby kupić towary po tańszej cenie, a następnie przywiózł je i sprzedał w Turcji.",
-        "Section2Text2": "Jednak po licznych przyłapaniach i ukaraniach przez władze wiedział, że musi znaleźć długoterminową, mniej ryzykowną alternatywę. Dlatego w wieku 13 lat sam przeniósł się na zachód Turcji w poszukiwaniu lepszych możliwości zatrudnienia. Po dziesięciu latach ciężkiej i żmudnej pracy na budowach, w restauracjach i sklepach detalicznych w zachodniej części kraju, w 1991 roku, w wieku 23 lat, wraz z partnerem biznesowym otworzył swój pierwszy sklep tekstylny w Laleli w Stambule. Jednak w 1997 roku, kiedy urodziło się jego pierwsze dziecko (to ja!), między partnerami doszło do nieporozumień, które doprowadziły ich do rozstania.",
-        "Section3Headline": "Idę solo",
-        "Section3Text": "Chociaż jego dawni wspólnicy próbowali go zniechęcić i zmusić do zaprzestania działalności, to tylko skłoniło go do otwarcia własnego sklepu tekstylnego. Jego autentyczne podejście i doskonała jakość produktów sprawiły, że jego sklep stał się rozpoznawalny. Wraz z rosnącym zapotrzebowaniem zaczął sprowadzać swoje rodzeństwo pozostawione na wschodzie kraju i zatrudniać je jedno po drugim.",
-        "Section4Headline": "PIERWSZY KROK DO ZAGRANICY",
-        "Section4Text": "Cuma i jego rodzeństwo otworzyli swój pierwszy zagraniczny magazyn w Moskwie i zaczęli dostarczać tureckie tekstylia na rynek rosyjski, a później rozszerzyli swoją działalność na Ukrainę, Białoruś i Kazachstan.",
-        "Section5Headline": "PRODUKCJA",
-        "Section5Text": "Wkrótce partnerzy produkcyjni Cumy nie byli w stanie sprostać rosnącemu zapotrzebowaniu rynku. Nabył więc 60 000 SF pustej ziemi i zaledwie godzinę drogi od Stambułu zbudował swoją pierwszą fabrykę tekstyliów, aby w pełni nadzorować produkcję i ograniczać niepotrzebne koszty ponoszone przez swoich klientów.",
-        "Section6Headline": "WDZIĘCZNOŚĆ",
-        "Section6Text1": "Założenie odnoszącej sukcesy firmy i możliwość opieki nad rodzeństwem poprzez ich zatrudnienie spełniły marzenia Cumy.",
-        "Section6Text2": "Dem FĘ±rat Karven zaczynał jako mały rodzinny sklep tekstylny w Stambule w 1991 roku. Dziś rozwinęliśmy się w zakład produkcyjny, który co miesiąc produkuje ponad 20 milionów metrów tkanin i zaopatruje cały świat za pośrednictwem silnej sieci łańcucha dostaw.",
-        "Section6Text3": "Rozwój był ekscytującą i ciągle zmieniającą się podróżą. Jednak nasze podstawowe wartości zawsze pozostały takie same. Nasza powiększająca się rodzina zachęca nas do dalszego dostarczania wysokiej jakości produktów i wyjątkowej obsługi klienta."
+    "section6": {
+      "items": {
+        "0": "Dostępu do danych osobowych, które przechowujemy na Twój temat",
+        "1": "Żądania poprawienia nieścisłych danych",
+        "2": "Żądania usunięcia Twoich danych (z zastrzeżeniem wymogów prawnych dotyczących przechowywania)",
+        "3": "Wycofania zgody na komunikację marketingową",
+        "4": "Sprzeciwu wobec przetwarzania danych w określonych okolicznościach",
+        "5": "[TRANSLATE] KVKK'nın 7. maddesinde öngörülen şartlar çerçevesinde kişisel verilerinizin silinmesini veya yok edilmesini isteme,",
+        "6": "[TRANSLATE] Düzeltme, silme veya yok edilme işlemlerinin kişisel verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,",
+        "7": "[TRANSLATE] İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme,",
+        "8": "[TRANSLATE] Kişisel verilerin kanuna aykırı olarak işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme."
+      },
+      "text": "Szanujemy Twoje prawa dotyczące danych osobowych. Masz prawo do:",
+      "title": "6. Twoje prawa"
     },
-    "ContactPage": {
-        "ManufacturingPlant": "Zakład produkcyjny",
-        "FabricShowroom": "Salon tkanin",
-        "RetailStore": "Sklep detaliczny",
-        "WarehouseShowroom": "Magazyn i salon wystawowy",
-        "Representative": "Przedstawiciel",
-        "GeneralInquiries": "Pytania ogólne",
-        "AccountingInquiries": "Zapytania księgowe",
-        "Phone": "Telefon",
-        "Email": "E-mail",
-        "Website": "Strona internetowa",
-        "WorkHours": "Godziny pracy",
-        "WorkHour1": "24 godziny, wszystkie dni",
-        "WorkHour2": "Poniedziałek - piątek 08:30-19:00, sobota 08:30-14:00 (czasu w Stambule)",
-        "WorkHour3": "Pon. - pt. 09:00-20:30, sob. 09:00-16:00 (czasu w Stambule)",
-        "WorkHour4": "Pon. - Pt. 09:00-18:00, Sob. 09:00-16:00 (czasu moskiewskiego)",
-        "Address": "Adres",
-        "ProductLines": "Linie produktów",
-        "ProductLine1": "Draperie, tapicerki i tkaniny ślubne oraz koronkowe bieżniki",
-        "ProductLine2": "Tkaniny wewnętrzne: draperie i tapicerka",
-        "ProductLine3": "Pościel, narzuty, pokrowce na meble, ręczniki, ręczniki kuchenne, komplety ręczników, obrusy, koce, poduszki, pokrowce na materace, asortyment dziecięcy, szlafroki, ubrania domowe, prześcieradła, koce, fartuchy, zestawy do sauny, pokrowce na deskę do prasowania.",
-        "ProductLine4": "Tkaniny zasłonowe, pościel, narzuty, pokrowce na meble, ręczniki, ręczniki kuchenne, komplety ręczników, obrusy, koce, poduszki, pokrowce na materace, asortyment dziecięcy, szlafroki, ubrania domowe, prześcieradła, koce, fartuchy, zestawy do sauny, pokrowce na deskę do prasowania."
+    "section7": {
+      "methods": {
+        "0": "[TRANSLATE] E-posta: info@demfirat.com (Güvenli elektronik imza ile)",
+        "1": "[TRANSLATE] Posta: Kemalpaşa Mah Gençtürk Cad No 21A     Fatih, İstanbul 34134,  Türkiye",
+        "2": "[TRANSLATE] Islak İmzalı Dilekçe: Yukarıdaki adrese şahsen teslim"
+      },
+      "methodsTitle": "[TRANSLATE] Başvuru Yöntemleri:",
+      "note": "[TRANSLATE] Başvurularınız, talebin niteliğine göre en geç 30 gün içinde ücretsiz olarak sonuçlandırılacaktır. İşlemin ayrıca bir maliyeti gerektirmesi hâlinde, KVKK'da belirtilen tarifedeki ücret talep edilebilir.",
+      "text": "Używamy plików cookie, aby poprawić jakość przeglądania. Obejmują one niezbędne pliki cookie do funkcjonowania strony oraz opcjonalne analityczne pliki cookie, aby zrozumieć, jak korzystasz z naszej strony. Możesz zarządzać preferencjami plików cookie w ustawieniach przeglądarki.",
+      "title": "7. Pliki cookie"
     },
-    "FooterPage": {
-        "StayConnected": "Pozostawanie w kontakcie",
-        "OurStory": "Nasza historia",
-        "ContactUs": "Skontaktuj się z nami",
-        "AllRightsReserved": "Wszelkie prawa zastrzeżone"
+    "section8": {
+      "items": {
+        "0": "[TRANSLATE] Teknik Çerezler: Sitenin çalışması için gerekli, oturum yönetimi",
+        "1": "[TRANSLATE] Analitik Çerezler: Site kullanımının analiz edilmesi (Google Analytics vb.)",
+        "2": "[TRANSLATE] Pazarlama Çerezleri: Kişiselleştirilmiş reklamlar için (onay alınarak)"
+      },
+      "note": "[TRANSLATE] Tarayıcı ayarlarınızdan çerezleri yönetebilir veya engelleyebilirsiniz. Ancak teknik çerezlerin engellenmesi, sitenin doğru çalışmamasına neden olabilir.",
+      "text": "Przechowujemy Twoje dane osobowe tylko tak długo, jak jest to konieczne do realizacji celów, dla których zostały zebrane, w tym do spełnienia wszelkich wymogów prawnych, księgowych lub sprawozdawczych.",
+      "title": "8. Okres przechowywania"
     },
-    "ProductDetailCard": {
-        "quantityMeters": "Metr",
-        "quantityPieces": "Ilość",
-        "addToCart": "Dodaj do koszyka",
-        "requestSample": "Zamów próbkę",
-        "sampleAdded": "Próbka dodana do koszyka",
-        "buyNow": "Kup teraz",
-        "addToFavorites": "Dodaj do ulubionych",
-        "removeFromFavorites": "Usuń z ulubionych",
-        "productAddedToCart": "Produkt dodany do koszyka!",
-        "pleaseLogin": "Proszę się zalogować",
-        "enterValidQuantity": "Proszę podać prawidłową ilość",
-        "errorAddingToCart": "Błąd podczas dodawania do koszyka",
-        "customCurtain": "Szycie zasłon",
-        "availableQuantity": "Dostępna ilość"
+    "section9": {
+      "items": {
+        "0": "[TRANSLATE] SSL (Secure Socket Layer) güvenlik sertifikası ile şifreli veri iletimi",
+        "1": "[TRANSLATE] Ödeme bilgilerinin PCI-DSS standartlarına uygun şekilde işlenmesi",
+        "2": "[TRANSLATE] Güvenlik duvarı (firewall) ve anti-virüs sistemleri",
+        "3": "[TRANSLATE] Yetkisiz erişime karşı güçlü şifreleme yöntemleri",
+        "4": "[TRANSLATE] Erişim yetkilendirme ve log kayıt sistemleri",
+        "5": "[TRANSLATE] Düzenli güvenlik denetimleri ve penetrasyon testleri",
+        "6": "[TRANSLATE] Çalışan eğitimleri ve gizlilik taahhütnameleri"
+      },
+      "text": "Ponieważ działamy globalnie, Twoje dane mogą być przekazywane i przetwarzane w krajach innych niż Twój. Zapewniamy odpowiednie zabezpieczenia chroniące Twoje dane podczas takich transferów.",
+      "title": "9. Przekazywanie międzynarodowe"
     },
-    "CustomCurtain": {
-        "title": "Dostosuj zasłony",
-        "mountingType": "Typ montażu",
-        "cornice": "Gzyms",
-        "rustic": "Rustykalny",
-        "pleatType": "Typ plisy",
-        "flat": "Płaska plisa",
-        "kanun": "Plisa Kanun",
-        "pipe": "Plisa rurkowa",
-        "water_wave": "Fala wodna",
-        "american": "Plisa amerykańska",
-        "extrafor": "Prosty ścieg",
-        "pleatDensity": "Gęstość plisy",
-        "noPleat": "Bez plisy",
-        "dimensions": "Wymiary",
-        "width": "Szerokość (cm)",
-        "height": "Wysokość (cm)",
-        "wingType": "Typ skrzydła",
-        "singleWing": "Pojedyncze skrzydło",
-        "doubleWing": "Podwójne skrzydło",
-        "addToCart": "Dodaj do koszyka",
-        "totalPrice": "Cena całkowita",
-        "fabricUsage": "Zużycie tkaniny",
-        "meter": "m",
-        "buttonText": "Szycie zasłon"
+    "title": "Polityka prywatności"
+  },
+  "Menu": {
+    "AboutUs": "O nas",
+    "Contact": "Kontakt",
+    "Curtains": "Gotowa zasłona",
+    "Fabrics": "Tkaniny",
+    "Home": "Dom",
+    "Products": "Produkty",
+    "SideText": "Myśl holistycznie, myśl haftem"
+  },
+  "MobileNav": {
+    "Account": "Konto",
+    "Cart": "Koszyk",
+    "CustomCurtains": "Szycie zasłon",
+    "Fabrics": "Tkaniny zasłonowe",
+    "Favorites": "Ulubione",
+    "Home": "Strona główna",
+    "Products": "Produkty",
+    "ReadyCurtains": "Gotowe zasłony",
+    "Tracking": "Śledzenie",
+    "TulleCurtains": "Firany"
+  },
+  "OrderTracking": {
+    "carrier": "Przewoźnik",
+    "customCurtain": "ZASŁONA NA ZAMÓWIENIE",
+    "deliveredAt": "Data dostawy",
+    "deliveryAddress": "Adres dostawy",
+    "dimensions": "Wymiary",
+    "enterOrderNumber": "Proszę podać numer zamówienia",
+    "fabric": "Tkanina",
+    "hint": "Numer zamówienia znajdziesz w e-mailu z potwierdzeniem zamówienia",
+    "meter": "metr",
+    "mountingType": "Typ montażu",
+    "mountingTypes": {
+      "cornice": "Karnisz",
+      "rustic": "Rustykalna"
     },
-    "KVKK": {
-        "title": "Polityka prywatności",
-        "lastUpdate": "Ostatnia aktualizacja: 10 grudnia 2024",
-        "section1": {
-            "title": "1. Wprowadzenie",
-            "text": "W Karven Homedecor cenimy Twoją prywatność i zobowiązujemy się do ochrony Twoich danych osobowych. Niniejsza Polityka Ochrony Danych określa, w jaki sposób zbieramy, wykorzystujemy, przechowujemy i chronimy Twoje informacje podczas odwiedzania naszej strony internetowej lub dokonywania zakupów, zapewniając przejrzystość i zaufanie naszych międzynarodowych klientów.",
-            "companyName": "Nazwa firmy",
-            "address": "Adres",
-            "email": "E-mail",
-            "phone": "Telefon",
-            "returned": "Zwrócone"
-        },
-        "section2": {
-            "title": "2. Zbierane dane",
-            "text": "Zbieramy następujące rodzaje danych osobowych w celu świadczenia naszych usług:",
-            "items": [
-                "Dane identyfikacyjne: Imię, nazwisko",
-                "Dane kontaktowe: Adres e-mail, numer telefonu, adres dostawy i rozliczeniowy",
-                "Informacje o transakcjach: Historia zamówień, preferencje produktów, zawartość koszyka",
-                "Informacje techniczne: Adres IP, informacje o urządzeniu, pliki cookie",
-                "Informacje płatnicze: Zaszyfrowane dane płatnicze (przetwarzane bezpiecznie przez zewnętrznych dostawców)"
-            ]
-        },
-        "section3": {
-            "title": "3. Jak wykorzystujemy Twoje dane",
-            "text": "Twoje dane osobowe są wykorzystywane w następujących celach:",
-            "items": [
-                "Przetwarzanie i realizacja zamówień",
-                "Zarządzanie płatnościami i fakturowanie",
-                "Zapewnienie obsługi klienta i rozwiązywanie zapytań",
-                "Ulepszanie naszej strony internetowej i doświadczeń użytkowników",
-                "Wysyłanie aktualizacji i powiadomień o zamówieniach",
-                "Komunikacja marketingowa (tylko za Twoją wyraźną zgodą)",
-                "Zapobieganie oszustwom i bezpieczeństwo"
-            ]
-        },
-        "section4": {
-            "title": "4. Udostępnianie danych",
-            "text": "Możemy udostępniać Twoje dane zaufanym stronom trzecim wyłącznie w celach operacyjnych:",
-            "items": [
-                "Firmy kurierskie: W celu dostarczenia zamówień",
-                "Podmioty przetwarzające płatności: W celu bezpiecznego przetwarzania transakcji (np. iyzico)",
-                "Dostawcy usług: W celu hostingu i obsługi strony internetowej",
-                "Organy prawne: Jeśli wymagane przez prawo"
-            ],
-            "note": "Nie sprzedajemy Twoich danych osobowych stronom trzecim."
-        },
-        "section5": {
-            "title": "5. Bezpieczeństwo danych",
-            "text": "Stosujemy solidne środki bezpieczeństwa w celu ochrony Twoich danych:",
-            "items": [
-                "Szyfrowanie SSL dla bezpiecznej transmisji danych",
-                "Przetwarzanie płatności zgodne ze standardem PCI-DSS",
-                "Bezpieczne serwery i zapory ogniowe",
-                "Regularne audyty bezpieczeństwa"
-            ]
-        },
-        "section6": {
-            "title": "6. Twoje prawa",
-            "text": "Szanujemy Twoje prawa dotyczące danych osobowych. Masz prawo do:",
-            "items": [
-                "Dostępu do danych osobowych, które przechowujemy na Twój temat",
-                "Żądania poprawienia nieścisłych danych",
-                "Żądania usunięcia Twoich danych (z zastrzeżeniem wymogów prawnych dotyczących przechowywania)",
-                "Wycofania zgody na komunikację marketingową",
-                "Sprzeciwu wobec przetwarzania danych w określonych okolicznościach"
-            ]
-        },
-        "section7": {
-            "title": "7. Pliki cookie",
-            "text": "Używamy plików cookie, aby poprawić jakość przeglądania. Obejmują one niezbędne pliki cookie do funkcjonowania strony oraz opcjonalne analityczne pliki cookie, aby zrozumieć, jak korzystasz z naszej strony. Możesz zarządzać preferencjami plików cookie w ustawieniach przeglądarki.",
-            "items": [],
-            "note": ""
-        },
-        "section8": {
-            "title": "8. Okres przechowywania",
-            "text": "Przechowujemy Twoje dane osobowe tylko tak długo, jak jest to konieczne do realizacji celów, dla których zostały zebrane, w tym do spełnienia wszelkich wymogów prawnych, księgowych lub sprawozdawczych.",
-            "items": [],
-            "note": ""
-        },
-        "section9": {
-            "title": "9. Przekazywanie międzynarodowe",
-            "text": "Ponieważ działamy globalnie, Twoje dane mogą być przekazywane i przetwarzane w krajach innych niż Twój. Zapewniamy odpowiednie zabezpieczenia chroniące Twoje dane podczas takich transferów.",
-            "items": []
-        },
-        "section10": {
-            "title": "10. Skontaktuj się z nami",
-            "text": "Jeśli masz pytania dotyczące tej polityki lub swoich danych osobowych, skontaktuj się z nami:",
-            "email": "E-mail",
-            "phone": "Telefon",
-            "address": "Adres"
-        },
-        "disclaimer": "Uwaga: Niniejsza polityka może być okresowo aktualizowana w celu odzwierciedlenia zmian w naszych praktykach lub wymogach prawnych. Prosimy o regularne jej sprawdzanie."
+    "notFound": "Zamówienie nie znalezione. Sprawdź numer zamówienia.",
+    "orderDate": "Data zamówienia",
+    "orderItems": "Produkty w zamówieniu",
+    "orderNumber": "Numer zamówienia",
+    "orderNumberPlaceholder": "np. DK0000001",
+    "orderStatus": "Status zamówienia",
+    "phone": "Telefon",
+    "pleatDensity": "Gęstość fałd",
+    "pleatType": "Typ fałdy",
+    "pleatTypes": {
+      "american": "Amerykańska",
+      "extrafor": "Ekstrafor",
+      "flat": "Płaska",
+      "kanun": "Kanun",
+      "pipe": "Rurowa",
+      "water_wave": "Fala wodna"
     },
-    "ReturnPolicy": {
-        "title": "Dostawa i Zwroty",
-        "lastUpdate": "Ostatnia aktualizacja: 10 grudnia 2024",
-        "delivery": {
-            "title": "Informacje o dostawie",
-            "intro": "Twoje zamówienia są starannie przygotowywane i wysyłane tak szybko, jak to możliwe.",
-            "standardTitle": "Produkty standardowe",
-            "standardTime": "W ciągu 3 dni roboczych",
-            "standardText": "Produkty gotowe do wysyłki dostępne w magazynie są przekazywane kurierowi w ciągu 3 dni roboczych od potwierdzenia zamówienia.",
-            "customTitle": "Produkty szyte na miarę",
-            "customTime": "W ciągu 7 dni roboczych",
-            "customText": "Zasłony na wymiar i produkty szyte na zamówienie są przekazywane kurierowi w ciągu 7 dni roboczych od potwierdzenia zamówienia."
-        },
-        "section1": {
-            "title": "1. General Information",
-            "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations."
-        },
-        "section2": {
-            "title": "2. Withdrawal Period",
-            "days": "14 DAYS",
-            "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
-            "items": [
-                "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
-                "If the last day falls on a public holiday, the period extends to the end of the next business day.",
-                "As a seller, we may extend this period at our own initiative.",
-                "For multiple product orders, a separate withdrawal period starts for each product."
-            ]
-        },
-        "section3": {
-            "title": "3. How to Exercise Your Right of Withdrawal",
-            "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
-            "methodsTitle": "Application Methods:",
-            "methods": [
-                "Email: Send your withdrawal notification to info@demfirat.com",
-                "Phone: Call us at +90 (501) 057-1884",
-                "Written Notice: Fill out the withdrawal form and send it to our address"
-            ],
-            "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason."
-        },
-        "section4": {
-            "title": "4. Returning the Product",
-            "text": "After sending us your withdrawal notification:",
-            "steps": [
-                "You must send the product back to us within 10 days.",
-                "The product must be unused, undamaged, and in its original packaging.",
-                "All accessories and documents that came with the product must be included.",
-                "The invoice or delivery note must be sent with the product."
-            ],
-            "packagingTitle": "Packaging Suggestions:",
-            "packagingItems": [
-                "Place the product in its original box.",
-                "Use additional protective material to prevent damage.",
-                "Keep the shipping tracking number.",
-                "Send via insured shipping if possible."
-            ]
-        },
-        "section5": {
-            "title": "5. Shipping Fees",
-            "infoTitle": "Who Pays for Return Shipping?",
-            "infoItems": [
-                "If the product is defective or incorrect: We cover the shipping cost.",
-                "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
-                "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
-            ],
-            "addressTitle": "Return Address:",
-            "addressLines": [
-                "Karven Homedecor",
-                "Vakıflar OSB Mah. D100 Cad. No:38",
-                "Ergene, Tekirdağ 59930",
-                "Turkey"
-            ]
-        },
-        "section6": {
-            "title": "6. Refunds",
-            "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
-            "processTitle": "Return Process:",
-            "processSteps": [
-                "Withdrawal Notification: You inform us of your request.",
-                "Product Return: You ship the product within 10 days.",
-                "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
-                "Refund: Your refund is processed according to your payment method."
-            ],
-            "methodTitle": "Refund Method:",
-            "methodItems": [
-                "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
-                "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
-                "Cash on Delivery: Refunded via EFT to your bank account."
-            ],
-            "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives."
-        },
-        "section7": {
-            "title": "7. Produkty szyte na miarę",
-            "text": "Produkty szyte na miarę (zasłony wykonane według Twoich indywidualnych wymiarów) nie podlegają zwrotowi, jeśli produkt nie jest wadliwy.",
-            "items": [],
-            "warning": "Ważne: Przed złożeniem zamówienia dokładnie sprawdź swoje wymiary, aby uniknąć błędów pomiarowych."
-        },
-        "section8": {
-            "title": "8. Defective Products - Warranty Rights",
-            "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
-            "items": [
-                "Request free repair of the product.",
-                "Request replacement with a non-defective equivalent.",
-                "Request a price reduction in proportion to the defect.",
-                "Withdraw from the contract and request a refund."
-            ],
-            "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request."
-        },
-        "section9": {
-            "title": "9. Exchanges",
-            "text": "If you only want to exchange a product (different size, color, etc.), please first return the current product using your right of withdrawal, then create a new order.",
-            "note": "Direct exchanges may be possible depending on stock status. Please contact our customer service to evaluate your situation."
-        },
-        "section10": {
-            "title": "10. Contact",
-            "text": "For returns, withdrawal rights, or any questions:",
-            "contactBox": [
-                "Email: info@demfirat.com",
-                "Phone: +90 (501) 057-1884",
-                "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
-                "Working Hours: Monday - Friday, 09:00 - 18:00"
-            ]
-        },
-        "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade."
+    "price": "Cena",
+    "quantity": "Ilość",
+    "search": "Szukaj",
+    "searching": "Szukam...",
+    "shippedAt": "Data wysyłki",
+    "status": {
+      "cancelled": "Anulowane",
+      "confirmed": "Potwierdzone",
+      "delivered": "Dostarczone",
+      "in_transit": "W drodze",
+      "out_for_delivery": "W trakcie dostawy",
+      "pending": "Oczekujące",
+      "preparing": "W przygotowaniu",
+      "returned": "Zwrócone",
+      "shipped": "Wysłane"
     },
-    "OrderTracking": {
-        "title": "Śledzenie zamówienia",
-        "subtitle": "Wprowadź numer zamówienia, aby śledzić jego status",
-        "orderNumber": "Numer zamówienia",
-        "orderNumberPlaceholder": "np. DK0000001",
-        "search": "Szukaj",
-        "searching": "Szukam...",
-        "hint": "Numer zamówienia znajdziesz w e-mailu z potwierdzeniem zamówienia",
-        "enterOrderNumber": "Proszę podać numer zamówienia",
-        "notFound": "Zamówienie nie znalezione. Sprawdź numer zamówienia.",
-        "orderDate": "Data zamówienia",
-        "orderStatus": "Status zamówienia",
-        "trackingInfo": "Informacje o dostawie",
-        "carrier": "Przewoźnik",
-        "trackingNumber": "Numer przesyłki",
-        "shippedAt": "Data wysyłki",
-        "deliveredAt": "Data dostawy",
-        "orderItems": "Produkty w zamówieniu",
-        "quantity": "Ilość",
-        "price": "Cena",
-        "deliveryAddress": "Adres dostawy",
-        "phone": "Telefon",
-        "total": "Razem",
-        "customCurtain": "ZASŁONA NA ZAMÓWIENIE",
-        "dimensions": "Wymiary",
-        "pleatType": "Typ fałdy",
-        "pleatDensity": "Gęstość fałd",
-        "mountingType": "Typ montażu",
-        "fabric": "Tkanina",
-        "meter": "metr",
-        "pleatTypes": {
-            "flat": "Płaska",
-            "kanun": "Kanun",
-            "pipe": "Rurowa",
-            "water_wave": "Fala wodna",
-            "american": "Amerykańska",
-            "extrafor": "Ekstrafor"
-        },
-        "mountingTypes": {
-            "cornice": "Karnisz",
-            "rustic": "Rustykalna"
-        },
-        "status": {
-            "pending": "Oczekujące",
-            "confirmed": "Potwierdzone",
-            "preparing": "W przygotowaniu",
-            "shipped": "Wysłane",
-            "in_transit": "W drodze",
-            "out_for_delivery": "W trakcie dostawy",
-            "delivered": "Dostarczone",
-            "cancelled": "Anulowane",
-            "returned": "Zwrócone"
-        }
+    "subtitle": "Wprowadź numer zamówienia, aby śledzić jego status",
+    "title": "Śledzenie zamówienia",
+    "total": "Razem",
+    "trackingInfo": "Informacje o dostawie",
+    "trackingNumber": "Numer przesyłki"
+  },
+  "ProductDetailCard": {
+    "addToCart": "Dodaj do koszyka",
+    "addToFavorites": "Dodaj do ulubionych",
+    "availableQuantity": "Dostępna ilość",
+    "buyNow": "Kup teraz",
+    "customCurtain": "Szycie zasłon",
+    "enterValidQuantity": "Proszę podać prawidłową ilość",
+    "errorAddingToCart": "Błąd podczas dodawania do koszyka",
+    "pleaseLogin": "Proszę się zalogować",
+    "productAddedToCart": "Produkt dodany do koszyka!",
+    "customCurtainAddedToCart": "Twoja zasłona na wymiar została dodana do koszyka!",
+    "quantityMeters": "Metr",
+    "quantityPieces": "Ilość",
+    "removeFromFavorites": "Usuń z ulubionych",
+    "requestSample": "Zamów próbkę",
+    "sampleAdded": "Próbka dodana do koszyka"
+  },
+  "ProductDetailCardPage": {
+    "Design": "Projekt",
+    "Origin": "Kraj pochodzenia",
+    "SendEmail": "Wyślij e-mail na adres info@karvenhome.com, podając nazwę lub numer projektu.",
+    "WantASample": "Chcesz próbkę?",
+    "Width": "Szerokość"
+  },
+  "Products": {
+    "EmbroideredSheerCurtainFabrics": "Haftowane przezroczyste tkaniny zasłonowe",
+    "Headline": "Produkty"
+  },
+  "ProductsGrid": {
+    "Headline": "Haft",
+    "SearchBar": "Wpisz tutaj numer projektu."
+  },
+  "ReturnPolicy": {
+    "delivery": {
+      "customText": "Zasłony na wymiar i produkty szyte na zamówienie są przekazywane kurierowi w ciągu 7 dni roboczych od potwierdzenia zamówienia.",
+      "customTime": "W ciągu 7 dni roboczych",
+      "customTitle": "Produkty szyte na miarę",
+      "intro": "Twoje zamówienia są starannie przygotowywane i wysyłane tak szybko, jak to możliwe.",
+      "standardText": "Produkty gotowe do wysyłki dostępne w magazynie są przekazywane kurierowi w ciągu 3 dni roboczych od potwierdzenia zamówienia.",
+      "standardTime": "W ciągu 3 dni roboczych",
+      "standardTitle": "Produkty standardowe",
+      "title": "Informacje o dostawie"
     },
-    "HomeReviews": {
-        "review_1_text": "Bardzo ładne zasłony o świetnej jakości. Problemy z wysyłką zostały szybko rozwiązane, obsługa klienta była zawsze dostępna i odpowiadała bardzo szybko! Dzięki! Zawsze z przyjemnością!",
-        "review_2_text": "Piękne zasłony. Wyjątkowa obsługa.",
-        "review_3_text": "Uwielbiam je! Dokładnie takie jak na zdjęciu; wyglądają tak elegancko! Z przyjemnością zamówię w tym sklepie ponownie.",
-        "review_4_text": "Takie ładne i dotarły naprawdę szybko!",
-        "review_5_text": "Wspaniała jakość. Przyjazny sprzedawca, zawsze dostępny. Odpowiada na wiadomości w odpowiednim czasie. Jeszcze raz i jeszcze raz!",
-        "review_6_text": "Do mojego pierwszego zamówienia dołączono prośbę o informację, czy jestem zadowolona z zakupu. Zamiast odpowiadać na pytanie, powtórzyłam moje pierwsze zamówienie. Uważam, że to mówi samo za siebie. Gdybym miała więcej okien potrzebujących firanek, kupowałabym je w kółko. Nigdy nie widziałam tak pięknych!!! Nawet moi dorośli synowie, którzy niczego nie zauważają, powiedzieli 'Wow! Są piękne, mamo'. Dziękuję, dziękuję!",
-        "review_7_text": "Uwielbiam moje zasłony, ale jeszcze bardziej uwielbiam obsługę klienta, zrobili wszystko, co w ich mocy, aby upewnić się, że otrzymam moje piękne zasłony"
+    "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade.",
+    "lastUpdate": "Ostatnia aktualizacja: 10 grudnia 2024",
+    "section1": {
+      "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations.",
+      "title": "1. General Information"
     },
-    "MobileNav": {
-        "Home": "Strona główna",
-        "Products": "Produkty",
-        "Cart": "Koszyk",
-        "Favorites": "Ulubione",
-        "Account": "Konto",
-        "Tracking": "Śledzenie",
-        "Fabrics": "Tkaniny",
-        "ReadyCurtains": "Gotowe zasłony",
-        "CustomCurtains": "Szycie zasłon"
-    }
+    "section10": {
+      "contactBox": {
+        "0": "Email: info@demfirat.com",
+        "1": "Phone: +90 (501) 057-1884",
+        "2": "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
+        "3": "Working Hours: Monday - Friday, 09:00 - 18:00",
+        "4": "[TRANSLATE] Fatih, İstanbul 34134, Türkiye",
+        "5": "[TRANSLATE] Çalışma Saatleri: Pazartesi - Cuma, 09:00 - 18:00"
+      },
+      "text": "For returns, withdrawal rights, or any questions:",
+      "title": "10. Contact"
+    },
+    "section2": {
+      "days": "14 DAYS",
+      "items": {
+        "0": "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
+        "1": "If the last day falls on a public holiday, the period extends to the end of the next business day.",
+        "2": "As a seller, we may extend this period at our own initiative.",
+        "3": "For multiple product orders, a separate withdrawal period starts for each product."
+      },
+      "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
+      "title": "2. Withdrawal Period"
+    },
+    "section3": {
+      "methods": {
+        "0": "Email: Send your withdrawal notification to info@demfirat.com",
+        "1": "Phone: Call us at +90 (501) 057-1884",
+        "2": "Written Notice: Fill out the withdrawal form and send it to our address"
+      },
+      "methodsTitle": "Application Methods:",
+      "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason.",
+      "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
+      "title": "3. How to Exercise Your Right of Withdrawal"
+    },
+    "section4": {
+      "packagingItems": {
+        "0": "Place the product in its original box.",
+        "1": "Use additional protective material to prevent damage.",
+        "2": "Keep the shipping tracking number.",
+        "3": "Send via insured shipping if possible."
+      },
+      "packagingTitle": "Packaging Suggestions:",
+      "steps": {
+        "0": "You must send the product back to us within 10 days.",
+        "1": "The product must be unused, undamaged, and in its original packaging.",
+        "2": "All accessories and documents that came with the product must be included.",
+        "3": "The invoice or delivery note must be sent with the product."
+      },
+      "text": "After sending us your withdrawal notification:",
+      "title": "4. Returning the Product"
+    },
+    "section5": {
+      "addressLines": {
+        "0": "Karven Homedecor",
+        "1": "Vakıflar OSB Mah. D100 Cad. No:38",
+        "2": "Ergene, Tekirdağ 59930"
+      },
+      "addressTitle": "Return Address:",
+      "infoItems": {
+        "0": "If the product is defective or incorrect: We cover the shipping cost.",
+        "1": "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
+        "2": "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
+      },
+      "infoTitle": "Who Pays for Return Shipping?",
+      "title": "5. Shipping Fees"
+    },
+    "section6": {
+      "methodItems": {
+        "0": "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
+        "1": "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
+        "2": "Cash on Delivery: Refunded via EFT to your bank account."
+      },
+      "methodTitle": "Refund Method:",
+      "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives.",
+      "processSteps": {
+        "0": "Withdrawal Notification: You inform us of your request.",
+        "1": "Product Return: You ship the product within 10 days.",
+        "2": "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
+        "3": "Refund: Your refund is processed according to your payment method."
+      },
+      "processTitle": "Return Process:",
+      "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
+      "title": "6. Refunds"
+    },
+    "section7": {
+      "items": {},
+      "text": "Produkty szyte na miarę (zasłony wykonane według Twoich indywidualnych wymiarów) nie podlegają zwrotowi, jeśli produkt nie jest wadliwy.",
+      "title": "7. Produkty szyte na miarę",
+      "warning": "Ważne: Przed złożeniem zamówienia dokładnie sprawdź swoje wymiary, aby uniknąć błędów pomiarowych."
+    },
+    "section8": {
+      "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request.",
+      "items": {
+        "0": "Request free repair of the product.",
+        "1": "Request replacement with a non-defective equivalent.",
+        "2": "Request a price reduction in proportion to the defect.",
+        "3": "Withdraw from the contract and request a refund."
+      },
+      "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
+      "title": "8. Defective Products - Warranty Rights"
+    },
+    "section9": {
+      "note": "Direct exchanges may be possible depending on stock status. Please contact our customer service to evaluate your situation.",
+      "text": "If you only want to exchange a product (different size, color, etc.), please first return the current product using your right of withdrawal, then create a new order.",
+      "title": "9. Exchanges"
+    },
+    "title": "Dostawa i Zwroty"
+  },
+  "Slider": {
+    "desc_1": "Najwyższa jakość tkanin dzięki zaawansowanej technologii i wykwalifikowanemu kunsztowi.",
+    "desc_2": "Tworzenie każdego wzoru, koloru i tkaniny, jakie można sobie wyobrazić",
+    "desc_3": "Nasz różnorodny park maszynowy umożliwia jednoczesne haftowanie włóczkami wielobarwnymi.",
+    "heading_1": "Zanurz się w doskonałości operacyjnej",
+    "heading_2": "Haft Schiffliego",
+    "heading_3": "Haft płaski"
+  }
 }

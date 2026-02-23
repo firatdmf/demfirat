@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import classes from './SimilarProducts.module.css';
+import { getLocalizedProductField } from '@/lib/productUtils';
 
 interface ProductVariant {
     id: number;
@@ -17,6 +18,7 @@ interface SimilarProduct {
     title: string;
     price: number | null;
     primary_image: string;
+    description?: string;
     minPrice?: number | null;
     maxPrice?: number | null;
 }
@@ -142,7 +144,7 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
                                 <div className={classes.imageWrapper}>
                                     <img
                                         src={product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif'}
-                                        alt={product.title}
+                                        alt={getLocalizedProductField(product as any, 'title', locale)}
                                         className={classes.productImage}
                                         loading="lazy"
                                         onError={(e) => {
@@ -151,7 +153,7 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
                                     />
                                 </div>
                                 <div className={classes.productInfo}>
-                                    <h3 className={classes.productTitle}>{product.title}</h3>
+                                    <h3 className={classes.productTitle}>{getLocalizedProductField(product as any, 'title', locale)}</h3>
                                     {priceDisplay && (
                                         <span className={classes.productPrice}>
                                             {priceDisplay}

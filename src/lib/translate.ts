@@ -21,6 +21,7 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'opacity': { 'tr': 'Opaklık', 'ru': 'Непрозрачность', 'pl': 'Przezroczystość', 'en': 'Opacity' },
     'weight': { 'tr': 'Ağırlık', 'ru': 'Вес', 'pl': 'Waga', 'en': 'Weight' },
     'cristal': { 'tr': 'Kristal', 'ru': 'Кристалл', 'pl': 'Kryształ', 'en': 'Crystal' },
+    'pearl': { 'tr': 'İnci Detaylı', 'ru': 'С жемчугом', 'pl': 'Z perłami', 'en': 'Pearl' },
 
     // Categories
     'curtain': { 'tr': 'Perde', 'ru': 'Штора', 'pl': 'Zasłona', 'en': 'Curtain' },
@@ -34,6 +35,8 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     // Yes/No Values
     'yes': { 'tr': 'Evet', 'ru': 'Да', 'pl': 'Tak', 'en': 'Yes' },
     'no': { 'tr': 'Hayır', 'ru': 'Нет', 'pl': 'Nie', 'en': 'No' },
+    'true': { 'tr': 'Evet', 'ru': 'Да', 'pl': 'Tak', 'en': 'Yes' },
+    'false': { 'tr': 'Hayır', 'ru': 'Нет', 'pl': 'Nie', 'en': 'No' },
 
     // Basic Colors
     'ecru': { 'tr': 'Ekru', 'ru': 'Экрю', 'pl': 'Ecru', 'en': 'Ecru' },
@@ -76,6 +79,11 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'ecru-gold': { 'tr': 'Ekru-Altın', 'ru': 'Экрю-золотой', 'pl': 'Ecru-złoty', 'en': 'Ecru-Gold' },
     'silver-gold': { 'tr': 'Gümüş-Altın', 'ru': 'Серебристо-золотой', 'pl': 'Srebrno-złoty', 'en': 'Silver-Gold' },
     'cream-gold': { 'tr': 'Krem-Altın', 'ru': 'Кремово-золотой', 'pl': 'Kremowo-złoty', 'en': 'Cream-Gold' },
+    'silver-white': { 'tr': 'Gümüş-Beyaz', 'ru': 'Серебристо-белый', 'pl': 'Srebrno-biały', 'en': 'Silver-White' },
+    'cream-white': { 'tr': 'Krem-Beyaz', 'ru': 'Кремово-белый', 'pl': 'Kremowo-biały', 'en': 'Cream-White' },
+    'mink': { 'tr': 'Vizon', 'ru': 'Норковый', 'pl': 'Norkowy', 'en': 'Mink' },
+    'cappucino': { 'tr': 'Kapuçino', 'ru': 'Капучино', 'pl': 'Cappuccino', 'en': 'Cappuccino' },
+    'cappuccino': { 'tr': 'Kapuçino', 'ru': 'Капучино', 'pl': 'Cappuccino', 'en': 'Cappuccino' },
 
     // Curtain Styles
     'header': { 'tr': 'Başlık', 'ru': 'Верхняя часть', 'pl': 'Główka', 'en': 'Header' },

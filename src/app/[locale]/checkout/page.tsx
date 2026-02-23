@@ -11,6 +11,8 @@ import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import PreInformationForm from '@/components/PreInformationForm';
 import DistanceSalesContract from '@/components/DistanceSalesContract';
+import { trackBeginCheckout } from '@/lib/tracking';
+import { identifyUser, trackKlaviyoStartedCheckout } from '@/lib/klaviyo';
 import './iyzico-payment-logo.css';
 import './card-form-mobile.css';
 
@@ -61,7 +63,7 @@ export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const locale = useLocale();
   const { refreshCart, guestCart, clearGuestCart, isGuest } = useCart();
-  const { convertPrice, rates } = useCurrency();
+  const { currency, convertPrice, rates } = useCurrency();
 
   // Guest checkout mode
   const isGuestCheckout = searchParams.get('guest') === 'true';
@@ -219,31 +221,45 @@ export default function CheckoutPage() {
         ...prev,
         email: session.user?.email || ''
       }));
+      // Klaviyo Identity
+      identifyUser(session.user.email, session.user?.name || undefined);
     }
   }, [session, isInitialLoad, status, isGuestCheckout, isGuest, guestCart]);
 
-  // Meta Pixel: Fire InitiateCheckout event when checkout loads with cart data
+  // Tracking: Fire begin_checkout event when checkout loads with cart data
   useEffect(() => {
-    if (cartItems.length > 0 && typeof window !== 'undefined' && (window as any).fbq) {
+    if (cartItems.length > 0) {
+      const currentRate = rates.find(r => r.currency_code === currency)?.rate || 1;
+
       const totalValue = cartItems.reduce((sum, item) => {
         if (item.is_sample) return sum; // Samples are free
         const price = item.is_custom_curtain && item.custom_price
           ? Number(item.custom_price)
           : Number(item.product?.price || 0);
-        return sum + (price * parseInt(item.quantity || '1'));
+        return sum + (price * parseInt(item.quantity || '1') * currentRate);
       }, 0);
 
-      (window as any).fbq('track', 'InitiateCheckout', {
-        content_ids: cartItems.map(item => item.product_sku || item.variant_sku),
-        content_type: 'product',
-        num_items: cartItems.length,
-        value: totalValue,
-        currency: 'TRY'
+      const trackingItems = cartItems.map(item => {
+        const basePrice = item.is_custom_curtain && item.custom_price ? Number(item.custom_price) : Number(item.product?.price || 0);
+        return {
+          id: item.product_sku || item.variant_sku || '',
+          name: item.product?.title || '',
+          category: item.product_category || 'product',
+          price: basePrice * currentRate,
+          quantity: parseInt(item.quantity || '1')
+        };
       });
 
-      console.log('[Meta Pixel] InitiateCheckout event fired', { value: totalValue, items: cartItems.length });
+      trackBeginCheckout(totalValue, trackingItems, currency);
+      trackKlaviyoStartedCheckout({
+        $value: totalValue,
+        ItemNames: trackingItems.map(i => i.name),
+        CheckoutURL: window.location.href,
+        Items: trackingItems
+      });
+      console.log('[Tracking] begin_checkout event fired', { value: totalValue, items: cartItems.length, currency: currency });
     }
-  }, [cartItems]);
+  }, [cartItems, currency, rates]);
 
   // Load guest checkout data from localStorage
   const loadGuestCheckoutData = async () => {
@@ -408,168 +424,124 @@ export default function CheckoutPage() {
       setLoading(true);
       const userId = (session?.user as any)?.id || session?.user?.email;
 
-      // Load cart items - Bu da proxy yapılabilir ama şimdilik direkt çağır
-      // TODO: Create /api/cart/get-items proxy route
-      const cartResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_cart/${userId}/`
-      );
+      // ══ Run cart and profile fetch IN PARALLEL ══
+      const [cartResult, profileResult] = await Promise.all([
+        // Task 1: Load cart items
+        (async () => {
+          try {
+            const cartResponse = await fetch(
+              `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_cart/${userId}/`
+            );
+            if (!cartResponse.ok) return null;
 
-      if (cartResponse.ok) {
-        const cartData = await cartResponse.json();
-        const items = cartData.cart_items || [];
+            const cartData = await cartResponse.json();
+            const items = cartData.cart_items || [];
 
-        // Fetch product details for each item
-        const itemsWithDetails = await Promise.all(
-          items.map(async (item: CartItem) => {
-            try {
-              // Eğer variant_sku varsa, varyant resmini çek
-              if (item.variant_sku) {
-                const variantResponse = await fetch(
-                  `/api/cart/get-variant?variant_sku=${item.variant_sku}&product_sku=${item.product_sku}`
-                );
+            // Single batch request for all product/variant details
+            const batchPayload = items.map((item: CartItem) => ({
+              product_sku: item.product_sku,
+              variant_sku: item.variant_sku || null,
+            }));
 
-                if (variantResponse.ok) {
-                  const variantData = await variantResponse.json();
-                  const variant = variantData.variant;
-                  const variantImage = variantData.primary_image;
-                  const variantAttributes = variantData.variant_attributes || {};
+            const batchRes = await fetch('/api/cart/get-items', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ items: batchPayload }),
+            });
 
-                  // Product bilgisini de çek (fiyat ve başlık için)
-                  const productResponse = await fetch(
-                    `/api/cart/get-product?product_sku=${item.product_sku}`
-                  );
+            if (batchRes.ok) {
+              const batchData = await batchRes.json();
+              const batchItems = batchData.items || [];
 
-                  if (productResponse.ok) {
-                    const productData = await productResponse.json();
-                    const product = productData.product;
+              return items.map((item: CartItem, idx: number) => {
+                const detail = batchItems[idx];
 
-                    // CRITICAL: Prioritize embedded price from cart (set at add-time with correct variant_price)
-                    // then fall back to API variant_price, then product.price as last resort
-                    const embeddedPrice = item.product?.price;
-                    const fetchedVariantPrice = variant?.variant_price;
-                    const fetchedProductPrice = product?.price;
+                // CRITICAL: Prioritize embedded price from cart (set at add-time)
+                const embeddedPrice = item.product?.price;
+                const fetchedVariantPrice = detail?.variant?.variant_price;
+                const fetchedProductPrice = detail?.product?.price;
 
-                    // Use embedded price if valid (not null/0), otherwise try fetched prices
-                    let finalPrice: string | number | null = null;
-
-                    if (item.is_sample) {
-                      finalPrice = 0;
-                    } else {
-                      finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
-                        ? embeddedPrice
-                        : (fetchedVariantPrice && Number(fetchedVariantPrice) > 0)
-                          ? fetchedVariantPrice
-                          : fetchedProductPrice || null;
-                    }
-
-                    return {
-                      ...item,
-                      product_category: productData.product_category || item.product_category,
-                      variant_attributes: variantAttributes,
-                      product: {
-                        title: product?.title || item.product?.title || item.product_sku,
-                        price: finalPrice,
-                        primary_image: variantImage || product?.primary_image || item.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                        category: productData.product_category,
-                      },
-                    };
-                  }
+                let finalPrice: string | number | null = null;
+                if (item.is_sample) {
+                  finalPrice = 0;
+                } else {
+                  finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
+                    ? embeddedPrice
+                    : (fetchedVariantPrice && Number(fetchedVariantPrice) > 0)
+                      ? fetchedVariantPrice
+                      : fetchedProductPrice || null;
                 }
-              }
 
-              // Varyant yoksa veya hata olduysa, normal product fetch
-              const productResponse = await fetch(
-                `/api/cart/get-product?product_sku=${item.product_sku}`
-              );
-
-              if (productResponse.ok) {
-                const productData = await productResponse.json();
-                const product = productData.product;
-                if (product) {
-                  // Prioritize embedded price from cart over fetched price
-                  const embeddedPrice = item.product?.price;
-                  const fetchedPrice = product.price;
-
-                  let finalPrice: string | number | null = null;
-
-                  if (item.is_sample) {
-                    finalPrice = 0;
-                  } else {
-                    finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
-                      ? embeddedPrice
-                      : fetchedPrice || null;
-                  }
-
-                  return {
-                    ...item,
-                    product_category: productData.product_category || item.product_category,
-                    product: {
-                      title: product.title || item.product?.title || item.product_sku,
-                      price: finalPrice,
-                      primary_image: product.primary_image || item.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                      category: productData.product_category,
-                    },
-                  };
-                }
-              }
-              return {
-                ...item,
-                product: item.product || {
-                  title: item.product_sku,
-                  price: null,
-                  primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                },
-              };
-            } catch (error) {
-              return {
-                ...item,
-                product: item.product || {
-                  title: item.product_sku,
-                  price: null,
-                  primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
-                },
-              };
+                return {
+                  ...item,
+                  product_category: detail?.product_category || item.product_category,
+                  variant_attributes: detail?.variant_attributes || {},
+                  product: {
+                    title: detail?.product?.title || item.product?.title || item.product_sku,
+                    price: finalPrice,
+                    primary_image: detail?.primary_image || detail?.product?.primary_image || item.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                    category: detail?.product_category,
+                  },
+                };
+              });
             }
-          })
-        );
 
-        setCartItems(itemsWithDetails);
+            // Fallback if batch fails
+            return items.map((item: CartItem) => ({
+              ...item,
+              product: item.product || {
+                title: item.product_sku,
+                price: null,
+                primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+              },
+            }));
+          } catch (error) {
+            console.error('Error loading cart:', error);
+            return null;
+          }
+        })(),
+
+        // Task 2: Load user profile (addresses)
+        (async () => {
+          try {
+            const profileResponse = await fetch(
+              `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_web_client_profile/${userId}/`
+            );
+            if (!profileResponse.ok) return null;
+            return await profileResponse.json();
+          } catch (error) {
+            console.error('Error loading profile/addresses:', error);
+            return null;
+          }
+        })(),
+      ]);
+
+      // Apply cart result
+      if (cartResult) {
+        setCartItems(cartResult);
       }
 
-      // Load user profile (includes addresses)
-      try {
-        const profileResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_web_client_profile/${userId}/`
-        );
+      // Apply profile result
+      if (profileResult) {
+        const userPhoneVal = profileResult.web_client?.phone || profileResult.phone || '';
+        setUserPhone(userPhoneVal);
 
-        if (profileResponse.ok) {
-          const profileData = await profileResponse.json();
+        if (profileResult.addresses && Array.isArray(profileResult.addresses)) {
+          const userAddresses = profileResult.addresses.map((addr: any) => ({
+            ...addr,
+            phone: userPhoneVal,
+          }));
+          setAddresses(userAddresses);
 
-          // Get user phone from web_client
-          const userPhone = profileData.web_client?.phone || profileData.phone || '';
-          setUserPhone(userPhone); // Save for payment API
-
-          // Extract addresses from profile and add phone to each
-          if (profileData.addresses && Array.isArray(profileData.addresses)) {
-            const userAddresses = profileData.addresses.map((addr: any) => ({
-              ...addr,
-              phone: userPhone // Add user's phone to each address
-            }));
-            setAddresses(userAddresses);
-
-            // Set default addresses
-            const defaultAddress = userAddresses.find((addr: any) => addr.isDefault);
-            if (defaultAddress) {
-              setSelectedDeliveryAddressId(defaultAddress.id);
-              setSelectedBillingAddressId(defaultAddress.id);
-            } else if (userAddresses.length > 0) {
-              setSelectedDeliveryAddressId(userAddresses[0].id);
-              setSelectedBillingAddressId(userAddresses[0].id);
-            }
+          const defaultAddress = userAddresses.find((addr: any) => addr.isDefault);
+          if (defaultAddress) {
+            setSelectedDeliveryAddressId(defaultAddress.id);
+            setSelectedBillingAddressId(defaultAddress.id);
+          } else if (userAddresses.length > 0) {
+            setSelectedDeliveryAddressId(userAddresses[0].id);
+            setSelectedBillingAddressId(userAddresses[0].id);
           }
         }
-      } catch (error) {
-        console.error('Error loading profile/addresses:', error);
       }
     } catch (error) {
       console.error('Error loading checkout data:', error);
@@ -1146,9 +1118,40 @@ export default function CheckoutPage() {
   if (status === 'loading' || loading) {
     return (
       <div className={classes.container}>
-        <div className={classes.loadingContainer}>
-          <div className={classes.spinner}></div>
+        <div className={classes.header}>
+          <h1>
+            <FaShoppingCart className={classes.headerIcon} />
+            {t('checkout')}
+          </h1>
         </div>
+        <div className={classes.checkoutGrid}>
+          <div className={classes.leftColumn} style={{ opacity: 0.5, animation: 'pulse 1.5s ease-in-out infinite' }}>
+            <div className={classes.section} style={{ height: 100, background: '#f9f9f9', borderRadius: 8, marginBottom: 24 }}></div>
+            <div className={classes.section} style={{ height: 250, background: '#f9f9f9', borderRadius: 8, marginBottom: 24 }}></div>
+            <div className={classes.section} style={{ height: 150, background: '#f9f9f9', borderRadius: 8, marginBottom: 24 }}></div>
+            <div className={classes.section} style={{ height: 200, background: '#f9f9f9', borderRadius: 8 }}></div>
+          </div>
+
+          <div className={classes.rightColumn} style={{ opacity: 0.5, animation: 'pulse 1.5s ease-in-out infinite' }}>
+            <div className={classes.orderSummary} style={{ background: '#f9f9f9', borderRadius: 8, padding: 24 }}>
+              <div style={{ height: 24, width: '50%', background: '#eee', borderRadius: 4, marginBottom: 24 }}></div>
+              {[1, 2].map(i => (
+                <div key={i} style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
+                  <div style={{ width: 64, height: 64, background: '#eee', borderRadius: 8 }}></div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ height: 14, width: '80%', background: '#eee', borderRadius: 4, marginBottom: 8 }}></div>
+                    <div style={{ height: 14, width: '40%', background: '#eee', borderRadius: 4 }}></div>
+                  </div>
+                </div>
+              ))}
+              <div style={{ height: 1, background: '#eee', margin: '24px 0' }}></div>
+              <div style={{ height: 16, width: '100%', background: '#eee', borderRadius: 4, marginBottom: 16 }}></div>
+              <div style={{ height: 16, width: '100%', background: '#eee', borderRadius: 4, marginBottom: 16 }}></div>
+              <div style={{ height: 24, width: '100%', background: '#eee', borderRadius: 4, marginTop: 24 }}></div>
+            </div>
+          </div>
+        </div>
+        <style>{`@keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.7; } }`}</style>
       </div>
     );
   }

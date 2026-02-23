@@ -24,13 +24,15 @@ interface ProductCardProps {
   allVariantPrices?: number[];
   variantAttributes?: any[];  // product_variant_attributes
   variantAttributeValues?: any[];  // product_variant_attribute_values
+  variantAttributeValuesMap?: Map<number, any>; // O(1) lookup map
   productVariants?: any[];  // product_variants
   fabricType?: 'solid' | 'embroidery' | string; // For discount display
   hasVideo?: boolean; // Whether product has a local video
+  intent?: string; // e.g. 'custom_curtain' to pass down
 }
 
-function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], productVariants = [], fabricType, hasVideo = false }: ProductCardProps) {
-  const { convertPrice } = useCurrency();
+function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], variantAttributeValuesMap, productVariants = [], fabricType, hasVideo = false, intent }: ProductCardProps) {
+  const { convertPrice, formatPreconvertedPrice } = useCurrency();
   const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
   const { data: session } = useSession();
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -73,16 +75,17 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     });
 
     // Sadece kullanılan value ID'leri filtrele ve renk attribute'\u0131naait olanları al
-    const colorValuesForAttr = variantAttributeValues
-      .filter(val =>
-        val.product_variant_attribute_id === colorAttribute.id &&
-        usedValueIds.has(val.id)
-      )
-      .map(val => val.product_variant_attribute_value?.trim() || '');
+    const colorValuesForAttr: string[] = [];
+    usedValueIds.forEach(id => {
+      const val = variantAttributeValuesMap ? variantAttributeValuesMap.get(Number(id)) : variantAttributeValues.find(v => v.id === id);
+      if (val && val.product_variant_attribute_id === colorAttribute.id) {
+        colorValuesForAttr.push(val.product_variant_attribute_value?.trim() || '');
+      }
+    });
 
     // Unique values
     return Array.from(new Set(colorValuesForAttr)).filter(v => v.length > 0);
-  }, [colorAttribute, variantAttributeValues, productVariants, product.id]);
+  }, [colorAttribute, variantAttributeValues, variantAttributeValuesMap, productVariants, product.id]);
 
   // Kumaş değerlerini al - SADECE bu ürünün varyantlarında kullanılan kumaşları
   const fabricValues = useMemo(() => {
@@ -103,16 +106,17 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     });
 
     // Sadece kullanılan value ID'leri filtrele ve kumaş attribute'\u0131na ait olanları al
-    const fabricValuesForAttr = variantAttributeValues
-      .filter(val =>
-        val.product_variant_attribute_id === fabricAttribute.id &&
-        usedValueIds.has(val.id)
-      )
-      .map(val => val.product_variant_attribute_value?.trim() || '');
+    const fabricValuesForAttr: string[] = [];
+    usedValueIds.forEach(id => {
+      const val = variantAttributeValuesMap ? variantAttributeValuesMap.get(Number(id)) : variantAttributeValues.find(v => v.id === id);
+      if (val && val.product_variant_attribute_id === fabricAttribute.id) {
+        fabricValuesForAttr.push(val.product_variant_attribute_value?.trim() || '');
+      }
+    });
 
     // Unique values
     return Array.from(new Set(fabricValuesForAttr)).filter(v => v.length > 0);
-  }, [fabricAttribute, variantAttributeValues, productVariants, product.id]);
+  }, [fabricAttribute, variantAttributeValues, variantAttributeValuesMap, productVariants, product.id]);
 
   // Genişlik değerlerini al - SADECE bu ürünün varyantlarında kullanılanları
   const widthValues = useMemo(() => {
@@ -133,12 +137,13 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     });
 
     // Sadece kullanılan value ID'leri filtrele ve genişlik attribute'\u0131na ait olanları al
-    const widthValuesForAttr = variantAttributeValues
-      .filter(val =>
-        val.product_variant_attribute_id === widthAttribute.id &&
-        usedValueIds.has(val.id)
-      )
-      .map(val => val.product_variant_attribute_value?.trim() || '');
+    const widthValuesForAttr: string[] = [];
+    usedValueIds.forEach(id => {
+      const val = variantAttributeValuesMap ? variantAttributeValuesMap.get(Number(id)) : variantAttributeValues.find(v => v.id === id);
+      if (val && val.product_variant_attribute_id === widthAttribute.id) {
+        widthValuesForAttr.push(val.product_variant_attribute_value?.trim() || '');
+      }
+    });
 
     // Unique values ve sayıya dönüştür
     const uniqueWidths = Array.from(new Set(widthValuesForAttr)).filter(v => v.length > 0);
@@ -148,7 +153,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
       .sort((a, b) => a - b);
 
     return numericWidths;
-  }, [widthAttribute, variantAttributeValues, productVariants, product.id]);
+  }, [widthAttribute, variantAttributeValues, variantAttributeValuesMap, productVariants, product.id]);
 
   // Genişlik display text'ini oluştur
   const widthDisplayText = useMemo(() => {
@@ -193,7 +198,11 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   let product_category_name = pathname.split("/").at(-1);
 
   // Format price with currency (using global context)
-  const formatPrice = (price: string | number) => {
+  // Prefers backend pre-converted prices dict when available.
+  const formatPrice = (price: string | number, pricesDict?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null) => {
+    if (pricesDict) {
+      return formatPreconvertedPrice(pricesDict, typeof price === 'string' ? parseFloat(price) : price);
+    }
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
     return convertPrice(numPrice);
   };
@@ -288,7 +297,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
             // valId might be the ID directly or an object? API usually returns IDs in array
             const valIdStr = String(valId);
 
-            const attrValue = variantAttributeValues.find(av => String(av.id) === valIdStr);
+            const attrValue = variantAttributeValuesMap ? variantAttributeValuesMap.get(Number(valIdStr)) : variantAttributeValues.find(av => String(av.id) === valIdStr);
 
             if (!attrValue) return false;
 
@@ -411,7 +420,10 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         {/* Product Image Container */}
         <div className={classes.imageContainer}>
           <Link
-            href={product_category_name + "/" + product.sku + "#ProductDetailCard"}
+            href={intent === 'custom_curtain'
+              ? `${product_category_name}/${product.sku}/perde#ProductDetailCard`
+              : `${product_category_name}/${product.sku}#ProductDetailCard`
+            }
             className={classes.imageLink}
           >
             <div
@@ -497,7 +509,10 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         {/* Product Info */}
         <div className={classes.productInfo}>
           <Link
-            href={product_category_name + "/" + product.sku + "#ProductDetailCard"}
+            href={intent === 'custom_curtain'
+              ? `${product_category_name}/${product.sku}/perde#ProductDetailCard`
+              : `${product_category_name}/${product.sku}#ProductDetailCard`
+            }
             className={classes.productLink}
           >
             <div className={classes.productTitle}>{getLocalizedProductField(product, 'title', locale)}</div>
@@ -542,18 +557,30 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
             <div className={classes.priceSection}>
               {(() => {
                 // Helper to render price with discount
-                const renderPriceWithDiscount = (price: number) => {
+                const renderPriceWithDiscount = (price: number, pricesDict?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null) => {
                   const discountInfo = getDiscountInfo(price);
                   if (discountInfo) {
                     return (
                       <>
                         <span className={classes.discountBadge}>%{discountInfo.discountPercent}</span>
-                        <span className={classes.originalPrice}>{formatPrice(discountInfo.originalPrice)}</span>
-                        <span className={classes.currentPrice}>{formatPrice(price)}</span>
+                        <span className={classes.originalPrice}>{formatPrice(discountInfo.originalPrice, pricesDict ? {
+                          USD: discountInfo.originalPrice / (pricesDict.USD / (price || 1)),
+                          TRY: discountInfo.originalPrice * (pricesDict.TRY / (price || 1)),
+                          EUR: discountInfo.originalPrice * (pricesDict.EUR / (price || 1)),
+                          RUB: discountInfo.originalPrice * (pricesDict.RUB / (price || 1)),
+                          PLN: discountInfo.originalPrice * (pricesDict.PLN / (price || 1)),
+                        } : null)} {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>
+                        <span className={classes.currentPrice}>
+                          {formatPrice(price, pricesDict)} <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}>{locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>
+                        </span>
                       </>
                     );
                   }
-                  return <span className={classes.currentPrice}>{formatPrice(price)}</span>;
+                  return (
+                    <span className={classes.currentPrice}>
+                      {formatPrice(price, pricesDict)} <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}>{locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>
+                    </span>
+                  );
                 };
 
                 // If multiple variant prices provided, check if they're all the same
@@ -588,7 +615,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                   return renderPriceWithDiscount(Number(variant_price));
                 }
                 if (product.price && Number(product.price) > 0) {
-                  return renderPriceWithDiscount(Number(product.price));
+                  return renderPriceWithDiscount(Number(product.price), product.prices);
                 }
 
                 // No price available
@@ -680,6 +707,22 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 </div>
               </div>
             )}
+
+            {/* Trust Badges - Conversion Boosters */}
+            <div className={classes.trustBadges}>
+              <div className={classes.trustBadge}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                <span>{locale === 'tr' ? 'Ölçüye Göre Özel Dikim' : locale === 'ru' ? 'Пошив по вашим размерам' : locale === 'pl' ? 'Szycie na wymiar' : 'Custom Tailored to Size'}</span>
+              </div>
+              <div className={classes.trustBadge}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                <span>{locale === 'tr' ? '1-3 Gün İçinde Kargoda' : locale === 'ru' ? 'Отправка за 1-3 дня' : locale === 'pl' ? 'Wysyłka w 1-3 dni' : 'Shipped in 1-3 Days'}</span>
+              </div>
+              <div className={classes.trustBadge}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                <span>{locale === 'tr' ? 'Ücretsiz Kargo' : locale === 'ru' ? 'Бесплатная доставка' : locale === 'pl' ? 'Darmowa dostawa' : 'Free Shipping'}</span>
+              </div>
+            </div>
           </Link>
         </div>
       </div>

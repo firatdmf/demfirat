@@ -3,7 +3,11 @@
 import { useTranslations } from 'next-intl';
 import classes from './IadeSartlari.module.css';
 
-export default function IadeSartlari() {
+interface IadeSartlariProps {
+    embedded?: boolean;
+}
+
+export default function IadeSartlari({ embedded = false }: IadeSartlariProps) {
     const t = useTranslations('ReturnPolicy');
 
     // Helper to safely get array content
@@ -16,12 +20,15 @@ export default function IadeSartlari() {
     };
 
     return (
-        <div className={classes.container}>
-            <h1>{t('title')}</h1>
-
-            <div className={classes.lastUpdate}>
-                {t('lastUpdate')}
-            </div>
+        <div className={`${classes.container} ${embedded ? classes.embedded : ''}`}>
+            {!embedded && (
+                <>
+                    <h1>{t('title')}</h1>
+                    <div className={classes.lastUpdate}>
+                        {t('lastUpdate')}
+                    </div>
+                </>
+            )}
 
             {/* Delivery Section */}
             <section className={classes.section}>

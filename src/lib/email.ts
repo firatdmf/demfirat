@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export const sendEmail = async (to: string, subject: string, html: string) => {
+export const sendEmail = async (to: string, subject: string, html: string, attachments?: any[]) => {
     try {
         console.log('Attempting to send email to:', to);
         console.log('SMTP Config:', {
@@ -30,6 +30,7 @@ export const sendEmail = async (to: string, subject: string, html: string) => {
             to,
             subject,
             html,
+            attachments
         });
         console.log('Message sent: %s', info.messageId);
         return { success: true, messageId: info.messageId };

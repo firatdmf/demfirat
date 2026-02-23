@@ -29,6 +29,8 @@ export type Product = {
   primary_image?: string;
   product_files?: ProductFile[] | null;
   product_attributes?: ProductAttribute[] | null;  // Product-level attributes including discount_rate
+  /** Pre-converted prices from backend (USD base) */
+  prices?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null;
 
 }
 
@@ -50,6 +52,8 @@ export type ProductVariant = {
   product_id: bigint | null;
   primary_image?: string;
   product_variant_attribute_values: bigint[];
+  /** Pre-converted prices from backend (USD base) */
+  variant_prices?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null;
 }
 
 export type ProductVariantAttribute = {

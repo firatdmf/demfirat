@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jsPDF from 'jspdf';
+import sharp from 'sharp';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
+import { translateTextSync } from '@/lib/translate';
 
 const USD_TO_TRY = 35.0;
 const NEJUM_API_URL = process.env.NEXT_PUBLIC_NEJUM_API_URL || '';
@@ -33,16 +35,38 @@ async function loadFont(url: string): Promise<string | null> {
 
 async function loadImageAsBase64(url: string): Promise<string | null> {
     if (!url) return null;
-    const transformedUrl = transformCloudinaryUrl(url);
+
+    // Fix relative URL for Node.js fetch environment
+    let targetUrl = url;
+    if (url.startsWith('/')) {
+        targetUrl = `${NEJUM_API_URL}${url}`;
+    }
+
+    const transformedUrl = transformCloudinaryUrl(targetUrl);
     try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 12000);
         const response = await fetch(transformedUrl, { signal: controller.signal });
         clearTimeout(timeout);
         if (!response.ok) return null;
+
         const arrayBuffer = await response.arrayBuffer();
-        return `data:image/jpeg;base64,${Buffer.from(arrayBuffer).toString('base64')}`;
+        const sourceBuffer = Buffer.from(arrayBuffer);
+
+        try {
+            // Guarantee image is JPEG with a white background (removes transparency rendering issues and WebP failures in jsPDF)
+            const jpegBuffer = await sharp(sourceBuffer)
+                .flatten({ background: { r: 255, g: 255, b: 255 } })
+                .jpeg({ quality: 85 })
+                .toBuffer();
+
+            return `data:image/jpeg;base64,${jpegBuffer.toString('base64')}`;
+        } catch (sharpError) {
+            console.error('[PDF] Sharp processing error:', sharpError);
+            return `data:image/jpeg;base64,${sourceBuffer.toString('base64')}`;
+        }
     } catch (error) {
+        console.error('[PDF] Fetch error:', error);
         return null;
     }
 }
@@ -254,6 +278,22 @@ export async function POST(request: NextRequest) {
                 }
             }
 
+            // Translate Attributes
+            productAttributes = productAttributes.map(attr => ({
+                name: translateTextSync(attr.name, locale),
+                values: attr.values.map(v => translateTextSync(v, locale))
+            }));
+
+            // Translate Product Colors
+            let localizedColors: string[] = [];
+            if (product.colors && product.colors.length > 0) {
+                localizedColors = product.colors.map(c => {
+                    const translated = translateTextSync(c, locale);
+                    // Explicit Fallback for uncached weird values
+                    return translated === 'Loading' || translated === 'Loading...' ? c : translated;
+                });
+            }
+
             // ===== HEADER =====
             doc.setFillColor(201, 169, 97);
             doc.rect(0, 0, pageWidth, 20, 'F');
@@ -299,9 +339,15 @@ export async function POST(request: NextRequest) {
 
                         doc.addImage(imageData, 'JPEG', imgX, yPos + 4, imgWidth, imgHeight, undefined, 'FAST');
                     } catch (e) {
+                        console.error('[jsPDF] Image generation failed', e);
                         doc.setFillColor(252, 251, 249);
-                        doc.roundedRect(margin, yPos, contentWidth, maxImageHeight + 8, 3, 3, 'F');
+                        doc.roundedRect(margin, yPos, contentWidth, 50, 3, 3, 'F');
+                        actualImageHeight = 42;
                     }
+                } else {
+                    doc.setFillColor(252, 251, 249);
+                    doc.roundedRect(margin, yPos, contentWidth, 50, 3, 3, 'F');
+                    actualImageHeight = 42;
                 }
             } else {
                 doc.setFillColor(252, 251, 249);
@@ -362,104 +408,142 @@ export async function POST(request: NextRequest) {
                 yPos += Math.min(descLines.length, 8) * 3.5 + 4;
             }
 
+            const sectionStartY = yPos;
+            let attrEndY = yPos;
+            let colorsEndY = yPos;
+
             // ===== ATTRIBUTES (Includes fetch details) =====
             if (productAttributes && productAttributes.length > 0) {
-                yPos += 2; // Azaltılmış üst boşluk
+                let currentY = sectionStartY + 2; // Azaltılmış üst boşluk
                 doc.setFillColor(201, 169, 97);
-                doc.rect(margin, yPos, 3, 5, 'F');
+                doc.rect(margin, currentY, 3, 5, 'F');
                 doc.setFontSize(9);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(44, 44, 44);
-                doc.text(t('attributes'), margin + 6, yPos + 4);
-                yPos += 8;
+                doc.text(t('attributes'), margin + 6, currentY + 4);
+                currentY += 8;
 
-                // Display up to 4 attributes (reduced)
-                for (const attr of productAttributes.slice(0, 4)) {
+                // Display up to 5 attributes
+                for (const attr of productAttributes.slice(0, 5)) {
                     doc.setFontSize(8);
                     doc.setFont('Roboto', 'bold');
                     doc.setTextColor(80, 80, 80);
                     const attrName = typeof attr.name === 'string' ? attr.name : 'Ozellik';
-                    doc.text(`${attrName}:`, margin, yPos);
+                    doc.text(`${attrName}:`, margin, currentY);
 
                     doc.setFont('Roboto', 'normal');
                     doc.setTextColor(60, 60, 60);
                     const valStr = Array.isArray(attr.values) ? attr.values.join(', ') : String(attr.values || '');
-                    doc.text(valStr, margin + 35, yPos);
-                    yPos += 4;
+                    doc.text(valStr, margin + 35, currentY);
+                    currentY += 4;
                 }
-                yPos += 2;
+                attrEndY = currentY + 2;
             }
 
-            // ===== COLORS (unchanged logic) =====
-            if (product.colors && product.colors.length > 0) {
+            // ===== COLORS (Moved to the Right Side) =====
+            if (localizedColors.length > 0) {
+                const rightColumnX = margin + 95; // X koordinatını kolon olarak sağa aldık
+                let currentY = sectionStartY + 2;
+
+                if (currentY > pageHeight - 40) {
+                    doc.addPage();
+                    currentY = margin;
+                }
+
                 doc.setFillColor(201, 169, 97);
-                doc.rect(margin, yPos, 2, 6, 'F');
+                doc.rect(rightColumnX, currentY, 2, 6, 'F');
                 doc.setFontSize(9);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(44, 44, 44);
                 // Increased spacing
-                doc.text(t('colors'), margin + 15, yPos + 4.5);
-                yPos += 10;
+                doc.text(t('colors'), rightColumnX + 5, currentY + 4);
+                currentY += 10;
 
-                let xPos = margin;
-                const swatchSize = 14;
-                const swatchGap = 6;
+                const colorBoxSize = 10; // Daha küçük kutular
+                const colorBoxSpacing = 5; // Kutular arası mesafe azaltıldı
+                let cX = rightColumnX;
+                let cY = currentY;
 
-                for (const colorName of product.colors.slice(0, 12)) {
-                    if (isTwoToneColor(colorName)) {
-                        const { color1, color2 } = splitTwoToneColor(colorName);
-                        const parseHex = (hex: string) => {
-                            if (!hex.startsWith('#')) return { r: 200, g: 200, b: 200 };
-                            return {
-                                r: parseInt(hex.slice(1, 3), 16) || 200,
-                                g: parseInt(hex.slice(3, 5), 16) || 200,
-                                b: parseInt(hex.slice(5, 7), 16) || 200
-                            };
-                        };
-                        const c1 = parseHex(color1);
-                        const c2 = parseHex(color2);
-                        doc.setFillColor(c1.r, c1.g, c1.b);
-                        doc.triangle(xPos, yPos, xPos + swatchSize, yPos, xPos, yPos + swatchSize, 'F');
-                        doc.setFillColor(c2.r, c2.g, c2.b);
-                        doc.triangle(xPos + swatchSize, yPos, xPos + swatchSize, yPos + swatchSize, xPos, yPos + swatchSize, 'F');
-                        doc.setDrawColor(180, 180, 180);
-                        doc.roundedRect(xPos, yPos, swatchSize, swatchSize, 2, 2, 'S');
+                for (let c = 0; c < product.colors!.length; c++) { // Iterate over raw colors for colorMap
+                    const colorVal = product.colors![c];
+                    const localizedColorName = localizedColors[c];
+
+                    if (cX + colorBoxSize > pageWidth - margin) {
+                        cX = rightColumnX;
+                        cY += colorBoxSize + 14; // Alt satır boşluğu da azaltıldı
+
+                        if (cY > pageHeight - 35) {
+                            doc.addPage();
+                            cY = margin + 10;
+                            cX = margin; // Yeni sayfada soldan başlasın
+                        }
+                    }
+
+                    // Shadow/border effect for better visibility
+                    doc.setDrawColor(220, 220, 220);
+                    doc.setLineWidth(0.3);
+
+                    const parseColorToRgbTuple = (colorName: string): [number, number, number] => {
+                        const code = getColorCode(colorName);
+                        if (Array.isArray(code)) return [code[0], code[1], code[2]];
+                        if (typeof code === 'string' && code.startsWith('#')) {
+                            return [
+                                parseInt(code.slice(1, 3), 16) || 200,
+                                parseInt(code.slice(3, 5), 16) || 200,
+                                parseInt(code.slice(5, 7), 16) || 200
+                            ];
+                        }
+                        return [200, 200, 200];
+                    };
+
+                    if (isTwoToneColor(colorVal)) {
+                        const { color1, color2 } = splitTwoToneColor(colorVal);
+
+                        const rgb1 = parseColorToRgbTuple(color1);
+                        const rgb2 = parseColorToRgbTuple(color2);
+
+                        // İki renkli kutuyu çiz (üçgen şeklinde böl)
+                        doc.setFillColor(rgb1[0], rgb1[1], rgb1[2]);
+                        doc.triangle(cX, cY, cX + colorBoxSize, cY, cX, cY + colorBoxSize, 'F');
+
+                        doc.setFillColor(rgb2[0], rgb2[1], rgb2[2]);
+                        doc.triangle(cX + colorBoxSize, cY, cX, cY + colorBoxSize, cX + colorBoxSize, cY + colorBoxSize, 'F');
+
+                        doc.roundedRect(cX, cY, colorBoxSize, colorBoxSize, 2, 2, 'S');
                     } else {
-                        const hexColor = getColorCode(colorName);
-                        let r = 200, g = 200, b = 200;
-                        if (hexColor.startsWith('#')) {
-                            r = parseInt(hexColor.slice(1, 3), 16) || 200;
-                            g = parseInt(hexColor.slice(3, 5), 16) || 200;
-                            b = parseInt(hexColor.slice(5, 7), 16) || 200;
-                        }
+                        const rgb = parseColorToRgbTuple(colorVal);
 
-                        doc.setFillColor(r, g, b);
-                        doc.setDrawColor(150, 150, 150);
-                        doc.roundedRect(xPos, yPos, swatchSize, swatchSize, 2, 2, 'FD');
-
-                        if (r > 240 && g > 240 && b > 240) {
-                            doc.setDrawColor(180, 180, 180);
-                            doc.roundedRect(xPos + 0.5, yPos + 0.5, swatchSize - 1, swatchSize - 1, 1.5, 1.5, 'S');
+                        if (rgb[0] > 240 && rgb[1] > 240 && rgb[2] > 240) {
+                            doc.setDrawColor(200, 200, 200);
+                            doc.setFillColor(255, 255, 255);
+                        } else {
+                            doc.setFillColor(rgb[0], rgb[1], rgb[2]);
                         }
+                        doc.roundedRect(cX, cY, colorBoxSize, colorBoxSize, 2, 2, 'FD');
                     }
 
-                    doc.setFontSize(5);
+                    // Renk adını kutunun altına yaz (ortalayarak)
+                    doc.setFontSize(6); // Daha okunaklı font
                     doc.setFont('Roboto', 'normal');
-                    doc.setTextColor(100, 100, 100);
-                    const label = colorName.length > 7 ? colorName.substring(0, 6) + '..' : colorName;
-                    doc.text(label, xPos + swatchSize / 2, yPos + swatchSize + 3, { align: 'center' });
+                    doc.setTextColor(120, 120, 120);
 
-                    xPos += swatchSize + swatchGap;
-                    if (xPos + swatchSize > pageWidth - margin) {
-                        xPos = margin;
-                        yPos += swatchSize + 7;
-                    }
+                    const colorNameDisplay = localizedColorName.length > 13 ? localizedColorName.substring(0, 12) + '..' : localizedColorName;
+
+                    const textWidth = doc.getTextWidth(colorNameDisplay);
+                    const textX = cX + (colorBoxSize / 2) - (textWidth / 2);
+                    doc.text(colorNameDisplay.toLowerCase(), textX, cY + colorBoxSize + 4.5);
+
+                    cX += colorBoxSize + colorBoxSpacing;
                 }
-                yPos += swatchSize + 8;
+
+                colorsEndY = cY + colorBoxSize + 12; // Varyantlar vs için yPos güncellendi
             }
+
+            yPos = Math.max(attrEndY, colorsEndY);
 
             // ===== VARIANTS =====
             if (product.variants && product.variants.length > 0 && yPos < pageHeight - 50) {
+                yPos += 14; // Renk kutularından sonra mesafe bırak, isimlerin üstüne binmesin
                 // ... variants logic ...
                 doc.setFillColor(201, 169, 97);
                 doc.rect(margin, yPos, 2, 6, 'F');
@@ -529,7 +613,7 @@ export async function POST(request: NextRequest) {
                             const imgRatio = imgProps.width / imgProps.height;
 
                             const vMaxWidth = contentWidth * 0.95;
-                            const vMaxHeight = 140;
+                            const vMaxHeight = 110; // Azaltılmış maksimum yükseklik varyant sayfası için
 
                             let vImgWidth = vMaxWidth;
                             let vImgHeight = vImgWidth / imgRatio;
@@ -545,9 +629,12 @@ export async function POST(request: NextRequest) {
                             doc.roundedRect(margin, vYPos, contentWidth, vImgHeight + 8, 3, 3, 'F');
                             doc.addImage(variantImageData, 'JPEG', imgX, vYPos + 4, vImgWidth, vImgHeight, undefined, 'FAST');
 
-                            vYPos += vImgHeight + 20;
+                            vYPos += vImgHeight + 16;
                         } catch (e) {
-                            vYPos += 50;
+                            console.error('[jsPDF Variant] Image generation failed', e);
+                            doc.setFillColor(252, 251, 249);
+                            doc.roundedRect(margin, vYPos, contentWidth, 50, 3, 3, 'F');
+                            vYPos += 50 + 16;
                         }
                     }
 
@@ -558,11 +645,14 @@ export async function POST(request: NextRequest) {
                     doc.text(`SKU: ${variant.sku || product.sku || '-'}`, margin, vYPos);
                     vYPos += 6;
 
-                    // Color name as title
+                    // Color name as title (Translated)
+                    const rawColorTranslateVariant = translateTextSync(variant.color, locale);
+                    const translatedVariantColor = rawColorTranslateVariant === 'Loading' ? variant.color : rawColorTranslateVariant;
+
                     doc.setFontSize(16);
                     doc.setFont('Roboto', 'bold');
                     doc.setTextColor(44, 44, 44);
-                    doc.text(`${product.title || 'Ürün'} - ${variant.color}`, margin, vYPos);
+                    doc.text(`${product.title || 'Ürün'} - ${translatedVariantColor}`, margin, vYPos);
                     vYPos += 10;
 
                     // Price
@@ -587,11 +677,14 @@ export async function POST(request: NextRequest) {
                     doc.setTextColor(255, 255, 255);
                     doc.text('www.demfirat.com | info@demfirat.com', margin, footerY + 2);
                     doc.setFontSize(8);
+                    const rawFooterVariantColor = translateTextSync(variant.color, locale);
+                    const footerTranslatedColor = rawFooterVariantColor === 'Loading' ? variant.color : rawFooterVariantColor;
+
                     doc.setFont('Roboto', 'bold');
-                    doc.text(variant.color, pageWidth - margin, footerY + 2, { align: 'right' });
+                    doc.text(footerTranslatedColor, pageWidth - margin, footerY + 2, { align: 'right' });
                 }
             }
-        }
+        } // End of products loop
 
         const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
         return new NextResponse(pdfBuffer, {

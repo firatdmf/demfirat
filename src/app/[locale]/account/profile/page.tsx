@@ -77,7 +77,7 @@ interface UserReview {
   created_at: string;
 }
 
-function ReviewsTabContent({ userId, locale, onShowToast }: { userId: number; locale: string; onShowToast: (type: 'success' | 'error', text: string) => void }) {
+function ReviewsTabContent({ userId, locale, onShowToast, t }: { userId: number; locale: string; onShowToast: (type: 'success' | 'error', text: string) => void, t: (key: string) => string }) {
   const [reviews, setReviews] = useState<UserReview[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -203,7 +203,7 @@ function ReviewsTabContent({ userId, locale, onShowToast }: { userId: number; lo
             color: activeSubTab === 'pending' ? '#000' : '#6b7280'
           }}
         >
-          {locale === 'tr' ? `Bekleyen Değerlendirmeler (${pendingItems.length})` : `Pending Reviews (${pendingItems.length})`}
+          {`${t('pendingReviews')} (${pendingItems.length})`}
         </button>
         <button
           onClick={() => setActiveSubTab('history')}
@@ -217,7 +217,7 @@ function ReviewsTabContent({ userId, locale, onShowToast }: { userId: number; lo
             color: activeSubTab === 'history' ? '#000' : '#6b7280'
           }}
         >
-          {locale === 'tr' ? `Değerlendirmelerim (${reviews.length})` : `My Reviews (${reviews.length})`}
+          {`${t('myReviews')} (${reviews.length})`}
         </button>
       </div>
 
@@ -226,9 +226,9 @@ function ReviewsTabContent({ userId, locale, onShowToast }: { userId: number; lo
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {pendingItems.length === 0 ? (
             <div style={{ padding: '2rem', textAlign: 'center', color: '#9ca3af', background: '#f9fafb', borderRadius: '12px' }}>
-              <p>{locale === 'tr' ? 'Değerlendirilecek ürün bulunmuyor.' : 'No items to review.'}</p>
+              <p>{t('noItemsToReview')}</p>
               <Link href={`/${locale}/`} style={{ color: '#2563eb', fontSize: '0.9rem', marginTop: '0.5rem', display: 'inline-block' }}>
-                {locale === 'tr' ? 'Alışverişe Başla' : 'Start Shopping'}
+                {t('startShopping')}
               </Link>
             </div>
           ) : (
@@ -505,10 +505,30 @@ export default function ProfilePage() {
       quantity: { en: 'Qty', tr: 'Adet', ru: 'Кол-во', pl: 'Ilość' },
       price: { en: 'Price', tr: 'Fiyat', ru: 'Цена', pl: 'Cena' },
       notAvailable: { en: 'N/A', tr: 'Bilinmiyor', ru: 'Н/Д', pl: 'Brak' },
+      notifications: { en: 'Notifications', tr: 'Bildirimler', ru: 'Уведомления', pl: 'Powiadomienia' },
+      preferences: { en: 'Preferences', tr: 'Tercihler', ru: 'Настройки', pl: 'Preferencje' },
+      emailNotifications: { en: 'Email Notifications', tr: 'E-posta Bildirimleri', ru: 'Уведомления по email', pl: 'Powiadomienia e-mail' },
+      smsNotifications: { en: 'SMS Notifications', tr: 'SMS Bildirimleri', ru: 'SMS-уведомления', pl: 'Powiadomienia SMS' },
+      newsletter: { en: 'Newsletter', tr: 'Bülten', ru: 'Рассылка', pl: 'Biuletyn' },
+      language: { en: 'Language', tr: 'Dil', ru: 'Язык', pl: 'Język' },
+      currency: { en: 'Currency', tr: 'Para Birimi', ru: 'Валюта', pl: 'Waluta' },
+      pendingReviews: { en: 'Pending Reviews', tr: 'Bekleyen Değerlendirmeler', ru: 'Ожидающие отзывы', pl: 'Oczekujące Opinie' },
+      myReviews: { en: 'My Reviews', tr: 'Değerlendirmelerim', ru: 'Мои отзывы', pl: 'Moje Opinie' },
+      noItemsToReview: { en: 'No items to review.', tr: 'Değerlendirilecek ürün bulunmuyor.', ru: 'Нет товаров для отзыва.', pl: 'Brak produktów do oceny.' },
+      startShopping: { en: 'Start Shopping', tr: 'Alışverişe Başla', ru: 'Начать покупки', pl: 'Rozpocznij zakupy' }
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
   };
+
+  // Sync form settings with global app context so it doesn't show outdated info
+  useEffect(() => {
+    setSettings(prev => ({
+      ...prev,
+      language: locale && locale !== prev.language ? locale : prev.language,
+      currency: globalCurrency && globalCurrency !== prev.currency ? globalCurrency : prev.currency,
+    }));
+  }, [locale, globalCurrency]);
 
   // Order helper functions
   const getStatusIcon = (orderStatus: string) => {
@@ -640,8 +660,8 @@ export default function ProfilePage() {
           if (data.settings) {
             setSettings(prev => ({
               ...prev,
-              currency: data.settings.currency || prev.currency,
-              language: data.settings.language || prev.language,
+              currency: prev.currency, // Handled by global context sync
+              language: prev.language, // Handled by global context sync
               theme: data.settings.theme || prev.theme,
               notifications: {
                 ...prev.notifications,
@@ -1000,6 +1020,12 @@ export default function ProfilePage() {
         setCurrency(settings.currency);
         // Refresh rates immediately to ensure accuracy
         await refreshRates();
+
+        // Redirect to new language if changed
+        if (settings.language !== locale) {
+          const newPathname = window.location.pathname.replace(`/${locale}`, `/${settings.language}`);
+          window.location.href = newPathname + window.location.search;
+        }
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error('[Settings Save] Error response:', errorData);
@@ -2048,6 +2074,7 @@ export default function ProfilePage() {
                     userId={(session?.user as any)?.id}
                     locale={locale}
                     onShowToast={showToast}
+                    t={t}
                   />
                 </div>
               </div>

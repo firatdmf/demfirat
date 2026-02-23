@@ -124,6 +124,20 @@ export default async function Home(props: PageProps<'/[locale]'>) {
                 'Where Elegance Meets Embroidery'}
           locale={locale}
           showCatalogButton={false}
+          primaryCta={{
+            text: locale === 'tr' ? 'Perdeni Tasarla (Özel Dikim)' :
+              locale === 'ru' ? 'Создай свои шторы' :
+                locale === 'pl' ? 'Zaprojektuj swoje zasłony' :
+                  'Design Your Curtain',
+            link: `/${locale}/product/fabric?intent=custom_curtain`
+          }}
+          secondaryCta={{
+            text: locale === 'tr' ? 'Kumaşlar' :
+              locale === 'ru' ? 'Ткани' :
+                locale === 'pl' ? 'Tkaniny' :
+                  'Fabrics',
+            link: `/${locale}/product/fabric`
+          }}
         />
         <CustomCurtainPromo locale={locale} />
         <ProductShowcase

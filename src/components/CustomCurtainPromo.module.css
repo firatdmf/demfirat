@@ -344,24 +344,30 @@
 .priceRow {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.15rem;
     margin-top: auto;
+}
+
+.priceContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
 }
 
 .originalPrice {
     font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.75rem;
-    color: #999;
+    font-size: 0.7rem;
+    color: #a0a0a0;
     text-decoration: line-through;
-    line-height: 1;
+    font-weight: 400;
 }
 
 .currentPrice {
     font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--gold, #c9a961);
-    line-height: 1;
+    white-space: nowrap;
 }
 
 /* Loading Skeleton */

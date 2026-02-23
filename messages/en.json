@@ -1,413 +1,466 @@
 {
-    "Slider": {
-        "heading_1": "Indulge in Operational Brilliance",
-        "desc_1": "Superior quality fabrics through advanced technology and skilled craftsmanship.",
-        "heading_2": "Schiffli Embroidery",
-        "desc_2": "Crafting Every Design, Color, and Fabric Imaginable",
-        "heading_3": "Flatboard Embroidery",
-        "desc_3": "Our diverse set of machinery can simultaneously embroider multi-colored yarns."
+  "AboutUsPage": {
+    "Section1Headline": "FOUNDER'S STORY",
+    "Section1Text": "Our parent company, Dem Fırat Karven Tekstil, was established in 1991 in Istanbul by Cuma Ozturk. Cuma was the eldest child in a family with 21 kids. He grew up near the Iranian border on the rural side of Turkey. Because of the lack of resources during his childhood, he dropped out of school at the age of nine and started working at local shops.",
+    "Section2Headline": "BROAD SHOULDERS",
+    "Section2Text1": "Cuma's parents' negligence and being the eldest among his siblings left him with an immense responsibility to work hard and provide for his family. So to make money fast, he started crossing the Iranian border as a kid to buy goods at a cheaper rate, then brought and traded them in Turkey.",
+    "Section2Text2": "Yet, after getting caught numerously and punished by the authorities, he knew he needed to find a long-term, less risky alternative. So at 13, he moved to the West of Turkey all by himself for better job opportunities. After a decade of hard, laborious work at construction sites, restaurants, and retail shops on the West side of the country, in 1991, at the age of 23, he opened his first textile shop in Laleli, Istanbul, with a business partner. However, in 1997, when his first child was born (that's me!), the partners had disagreements, leading them to separate ways.",
+    "Section3Headline": "Going Solo",
+    "Section3Text": "Although his former partners tried to discourage and force him out of business, this only powered him to open his own textile store. His genuine attitude and fine quality of his products made his shop recognized. With the growing demand, he started bringing his siblings left on the East side of the country and employing them one after the other.",
+    "Section4Headline": "FIRST STEP TO OVERSEAS",
+    "Section4Text": "Cuma and his siblings opened their first abroad warehouse in Moscow and started supplying Turkish textiles to the Russian market, later expanding to Ukraine, Belarus, and Kazakhstan.",
+    "Section5Headline": "MANUFACTURING",
+    "Section5Text": "Soon Cuma's manufacturing partners could not meet his growing market demand. So, he acquired 60,000 SF of empty land and built his first textile mill just an hour from Istanbul to fully supervise the production and cut unnecessary costs bearing his clients.",
+    "Section6Headline": "GRATITUDE",
+    "Section6Text1": "Having started a successful company and being able take care of his siblings by employing them has made Cuma's dreams come true.",
+    "Section6Text2": "Dem Fırat Karven started as a small family-run textile shop in Istanbul in 1991. Today we grew into a manufacturing plant that produces over 20 million yards of fabric every month and supplies all around the globe with its strong supply chain network.",
+    "Section6Text3": "The growth has been an exciting and ever-changing journey. However, our core values have always stayed the same. Our growing family is what encourages us to continue providing high-quality products and exceptional customer service."
+  },
+  "ContactPage": {
+    "AccountingInquiries": "Accounting Inquiries",
+    "Address": "Address",
+    "Email": "Email",
+    "FabricShowroom": "Fabric Showroom",
+    "GeneralInquiries": "General Inquiries",
+    "ManufacturingPlant": "Manufacturing Plant",
+    "Phone": "Phone",
+    "ProductLine1": "Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners",
+    "ProductLine2": "Interior Fabrics: Drapery & Upholstery",
+    "ProductLine3": "Bed Linen, Bedspreads, Furniture Covers, Towels, Kitchen Towels, Towel Sets, Tablecloths, Blankets, Pillows, Mattress Covers, Children's Assortment, Bathrobes, Home Clothes, Sheets, Blankets, Aprons, Sauna Sets, Ironing Board Covers.",
+    "ProductLine4": "Curtain Fabrics, Bed Linen, Bedspreads, Furniture Covers, Towels, Kitchen Towels, Towel Sets, Tablecloths, Blankets, Pillows, Mattress Covers, Children's Assortment, Bathrobes, Home Clothes, Sheets, Blankets, Aprons, Sauna Sets, Ironing Board Covers.",
+    "ProductLines": "Product Lines",
+    "Representative": "Representative",
+    "RetailStore": "Retail Store",
+    "WarehouseShowroom": "Warehouse & Showroom",
+    "Website": "Website",
+    "WorkHour1": "24 hours, All days",
+    "WorkHour2": "Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)",
+    "WorkHour3": "Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)",
+    "WorkHour4": "Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)",
+    "WorkHours": "Work Hours"
+  },
+  "CustomCurtain": {
+    "addToCart": "Add to Cart",
+    "american": "American Pleat",
+    "buttonText": "Custom Curtain",
+    "cornice": "Cornice",
+    "dimensions": "Dimensions",
+    "doubleWing": "Double Wing",
+    "extrafor": "Extrafor Flat Stitch",
+    "fabricUsage": "Fabric Usage",
+    "flat": "Flat Pleat",
+    "height": "Height (cm)",
+    "kanun": "Kanun Pleat",
+    "meter": "m",
+    "mountingType": "Mounting Type",
+    "noPleat": "No Pleat",
+    "pipe": "Pipe Pleat",
+    "pleatDensity": "Pleat Density",
+    "pleatType": "Pleat Type",
+    "rustic": "Rustic",
+    "singleWing": "Single Wing",
+    "title": "Customize Your Curtain",
+    "totalPrice": "Total Price",
+    "water_wave": "Water Wave",
+    "width": "Width (cm)",
+    "wingType": "Wing Type",
+    "chooseInstallationType": "Choose Installation Type",
+    "choosePleatStyle": "Choose Pleat Style",
+    "choosePleatDensity": "Choose Pleat Density",
+    "chooseWingType": "Choose Wing Type",
+    "enterDimensions": "Enter Your Dimensions",
+    "dimensionHint": "Enter curtain width 20% wider than window. Leave 10 cm gap from floor for height.",
+    "widthInCm": "Width (cm)",
+    "willMountToCeiling": "I will mount to ceiling",
+    "winged": "With Wings",
+    "wingsHowMany": "How many wings?",
+    "wizardIntroTitle": "Personalize Your Curtains",
+    "wizardIntroText": "We carefully craft this elegant fabric to fit your windows perfectly. Please follow the steps below to specify your custom tailoring details.",
+    "mount": "Mount",
+    "size": "Size",
+    "wing": "Wing",
+    "density": "Density",
+    "pleat": "Pleat",
+    "maxHeightError": "Max height is {max} cm",
+    "insufficientStock": "Insufficient stock! Required: {required}m, Available: {available}m",
+    "iWantCustomCurtains": "I Want Custom Curtains"
+  },
+  "FooterPage": {
+    "AllRightsReserved": "All Rights Reserved",
+    "ContactUs": "Contact Us",
+    "OurStory": "Our Story",
+    "StayConnected": "Stay Connected"
+  },
+  "Header": {
+    "ShippingText": "Shipping Worldwide"
+  },
+  "HomeReviews": {
+    "review_1_text": "Very nice curtains with great quality. Shipping issues were resolved quickly, customer service was always available and responded very quickly! Thanks! Always my pleasure!",
+    "review_2_text": "Beautiful curtains/drapes. Outstanding service.",
+    "review_3_text": "Love them! Exactly as pictured; so elegant looking! I'll happily order from this shop again.",
+    "review_4_text": "So pretty, and it arrived really fast!",
+    "review_5_text": "Wonderful quality. Friendly salesman, always available. Responds to messages in a timely manner. Again and again!",
+    "review_6_text": "My first order came with a request to know if I was pleased with my purchase. Instead of answering the question I reordered my first purchase. I believe that's speaks more loudly. If I had more windows that needed sheers I would buy these all o we again and again. I have never seen any as beautiful!!! Even my adult sons who don't notice said 'Wow!' Those are beautiful Mom. Thank you thank you!",
+    "review_7_text": "I love my curtains but I love the customer service even better they went beyond to make sure I received my beautiful curtains"
+  },
+  "KVKK": {
+    "disclaimer": "Note: This policy may be updated periodically to reflect changes in our practices or legal requirements. Please review it regularly.",
+    "lastUpdate": "Last update: December 10, 2024",
+    "section1": {
+      "address": "Address",
+      "companyName": "Company Name",
+      "email": "Email",
+      "phone": "Phone",
+      "text": "At Karven Homedecor, we value your privacy and are committed to protecting your personal data. This General Data Protection Policy outlines how we collect, use, store, and safeguard your information when you visit our website or make a purchase, ensuring transparency and trust for our international customers.",
+      "title": "1. Introduction"
     },
-    "Header": {
-        "ShippingText": "Shipping Worldwide"
+    "section10": {
+      "address": "Address",
+      "email": "Email",
+      "phone": "Phone",
+      "text": "If you have any questions about this policy or your personal data, please contact us:",
+      "title": "10. Contact Us"
     },
-    "Menu": {
-        "Home": "Home",
-        "Products": "Products",
-        "Fabrics": "Fabrics",
-        "Curtains": "Ready Made Curtains",
-        "AboutUs": "About Us",
-        "Contact": "Contact",
-        "SideText": "Think Holistic, Think Embroidered"
+    "section2": {
+      "items": {
+        "0": "Identity Information: Name, surname",
+        "1": "Contact Information: Email address, phone number, shipping and billing address",
+        "2": "Transaction Information: Order history, product preferences, cart contents",
+        "3": "Technical Information: IP address, device information, cookies",
+        "4": "Payment Information: Encrypted payment details (processed securely by third-party providers)",
+        "5": "[TRANSLATE] Görsel/İşitsel Kayıtlar: Müşteri hizmetleri görüşme kayıtları (onay alınarak)"
+      },
+      "text": "We collect the following types of personal information to provide you with our services:",
+      "title": "2. Data We Collect"
     },
-    "Products": {
-        "Headline": "Products",
-        "EmbroideredSheerCurtainFabrics": "Embroidered Sheer Curtain Fabrics"
+    "section3": {
+      "items": {
+        "0": "Processing and delivering your orders",
+        "1": "Managing payments and invoicing",
+        "2": "Providing customer support and resolving inquiries",
+        "3": "Improving our website and user experience",
+        "4": "Sending order updates and notifications",
+        "5": "Marketing communications (only with your explicit consent)",
+        "6": "Fraud prevention and security",
+        "7": "[TRANSLATE] Hukuki uyuşmazlıkların çözümü ve hukuki taleplere cevap verilmesi",
+        "8": "[TRANSLATE] Dolandırıcılık önleme ve güvenlik tedbirleri"
+      },
+      "text": "Your personal data is used for the following purposes:",
+      "title": "3. How We Use Your Data"
     },
-    "ProductsGrid": {
-        "Headline": "Embroidery",
-        "SearchBar": "Enter the design number here."
+    "section4": {
+      "items": {
+        "0": "Shipping Companies: To deliver your orders",
+        "1": "Payment Processors: To securely process transactions (e.g., iyzico)",
+        "2": "Service Providers: For website hosting and maintenance",
+        "3": "Legal Authorities: If required by law",
+        "4": "[TRANSLATE] Hukuk Müşavirleri: Hukuki işlemlerin yürütülmesi için",
+        "5": "[TRANSLATE] Bulut Hizmet Sağlayıcıları: Veri depolama ve sistem altyapısı için"
+      },
+      "note": "We do not sell your personal data to third parties.",
+      "text": "We may share your data with trusted third parties solely for operational purposes:",
+      "title": "4. Data Sharing"
     },
-    "ProductDetailCardPage": {
-        "Design": "Design",
-        "Width": "Width",
-        "Origin": "Country of Origin",
-        "WantASample": "Want a Sample?",
-        "SendEmail": "Send an email to info@karvenhome.com providing the design name or number."
+    "section5": {
+      "items": {
+        "0": "SSL encryption for secure data transmission",
+        "1": "PCI-DSS compliant payment processing",
+        "2": "Secure servers and firewalls",
+        "3": "Regular security audits",
+        "4": "[TRANSLATE] Log Kayıtları: Bilgi güvenliği için 2 yıl"
+      },
+      "text": "We implement robust security measures to protect your data:",
+      "title": "5. Data Security"
     },
-    "AboutUsPage": {
-        "Section1Headline": "FOUNDER'S STORY",
-        "Section1Text": "Our parent company, Dem Fırat Karven Tekstil, was established in 1991 in Istanbul by Cuma Ozturk. Cuma was the eldest child in a family with 21 kids. He grew up near the Iranian border on the rural side of Turkey. Because of the lack of resources during his childhood, he dropped out of school at the age of nine and started working at local shops.",
-        "Section2Headline": "BROAD SHOULDERS",
-        "Section2Text1": "Cuma's parents' negligence and being the eldest among his siblings left him with an immense responsibility to work hard and provide for his family. So to make money fast, he started crossing the Iranian border as a kid to buy goods at a cheaper rate, then brought and traded them in Turkey.",
-        "Section2Text2": "Yet, after getting caught numerously and punished by the authorities, he knew he needed to find a long-term, less risky alternative. So at 13, he moved to the West of Turkey all by himself for better job opportunities. After a decade of hard, laborious work at construction sites, restaurants, and retail shops on the West side of the country, in 1991, at the age of 23, he opened his first textile shop in Laleli, Istanbul, with a business partner. However, in 1997, when his first child was born (that's me!), the partners had disagreements, leading them to separate ways.",
-        "Section3Headline": "Going Solo",
-        "Section3Text": "Although his former partners tried to discourage and force him out of business, this only powered him to open his own textile store. His genuine attitude and fine quality of his products made his shop recognized. With the growing demand, he started bringing his siblings left on the East side of the country and employing them one after the other.",
-        "Section4Headline": "FIRST STEP TO OVERSEAS",
-        "Section4Text": "Cuma and his siblings opened their first abroad warehouse in Moscow and started supplying Turkish textiles to the Russian market, later expanding to Ukraine, Belarus, and Kazakhstan.",
-        "Section5Headline": "MANUFACTURING",
-        "Section5Text": "Soon Cuma's manufacturing partners could not meet his growing market demand. So, he acquired 60,000 SF of empty land and built his first textile mill just an hour from Istanbul to fully supervise the production and cut unnecessary costs bearing his clients.",
-        "Section6Headline": "GRATITUDE",
-        "Section6Text1": "Having started a successful company and being able take care of his siblings by employing them has made Cuma's dreams come true.",
-        "Section6Text2": "Dem Fırat Karven started as a small family-run textile shop in Istanbul in 1991. Today we grew into a manufacturing plant that produces over 20 million yards of fabric every month and supplies all around the globe with its strong supply chain network.",
-        "Section6Text3": "The growth has been an exciting and ever-changing journey. However, our core values have always stayed the same. Our growing family is what encourages us to continue providing high-quality products and exceptional customer service."
+    "section6": {
+      "items": {
+        "0": "Access the personal data we hold about you",
+        "1": "Request correction of inaccurate data",
+        "2": "Request deletion of your data (subject to legal retention requirements)",
+        "3": "Withdraw consent for marketing communications",
+        "4": "Object to data processing in certain circumstances",
+        "5": "[TRANSLATE] KVKK'nın 7. maddesinde öngörülen şartlar çerçevesinde kişisel verilerinizin silinmesini veya yok edilmesini isteme,",
+        "6": "[TRANSLATE] Düzeltme, silme veya yok edilme işlemlerinin kişisel verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,",
+        "7": "[TRANSLATE] İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme,",
+        "8": "[TRANSLATE] Kişisel verilerin kanuna aykırı olarak işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme."
+      },
+      "text": "We respect your rights regarding your personal data. You have the right to:",
+      "title": "6. Your Rights"
     },
-    "ContactPage": {
-        "ManufacturingPlant": "Manufacturing Plant",
-        "FabricShowroom": "Fabric Showroom",
-        "RetailStore": "Retail Store",
-        "WarehouseShowroom": "Warehouse & Showroom",
-        "Representative": "Representative",
-        "GeneralInquiries": "General Inquiries",
-        "AccountingInquiries": "Accounting Inquiries",
-        "Phone": "Phone",
-        "Email": "Email",
-        "Website": "Website",
-        "WorkHours": "Work Hours",
-        "WorkHour1": "24 hours, All days",
-        "WorkHour2": "Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)",
-        "WorkHour3": "Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)",
-        "WorkHour4": "Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)",
-        "Address": "Address",
-        "ProductLines": "Product Lines",
-        "ProductLine1": "Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners",
-        "ProductLine2": "Interior Fabrics: Drapery & Upholstery",
-        "ProductLine3": "Bed Linen, Bedspreads, Furniture Covers, Towels, Kitchen Towels, Towel Sets, Tablecloths, Blankets, Pillows, Mattress Covers, Children's Assortment, Bathrobes, Home Clothes, Sheets, Blankets, Aprons, Sauna Sets, Ironing Board Covers.",
-        "ProductLine4": "Curtain Fabrics, Bed Linen, Bedspreads, Furniture Covers, Towels, Kitchen Towels, Towel Sets, Tablecloths, Blankets, Pillows, Mattress Covers, Children's Assortment, Bathrobes, Home Clothes, Sheets, Blankets, Aprons, Sauna Sets, Ironing Board Covers."
+    "section7": {
+      "methods": {
+        "0": "[TRANSLATE] E-posta: info@demfirat.com (Güvenli elektronik imza ile)",
+        "1": "[TRANSLATE] Posta: Kemalpaşa Mah Gençtürk Cad No 21A     Fatih, İstanbul 34134,  Türkiye",
+        "2": "[TRANSLATE] Islak İmzalı Dilekçe: Yukarıdaki adrese şahsen teslim"
+      },
+      "methodsTitle": "[TRANSLATE] Başvuru Yöntemleri:",
+      "note": "[TRANSLATE] Başvurularınız, talebin niteliğine göre en geç 30 gün içinde ücretsiz olarak sonuçlandırılacaktır. İşlemin ayrıca bir maliyeti gerektirmesi hâlinde, KVKK'da belirtilen tarifedeki ücret talep edilebilir.",
+      "text": "We use cookies to enhance your browsing experience. These include essential cookies for site functionality and optional analytics cookies to understand how you use our site. You can manage your cookie preferences through your browser settings.",
+      "title": "7. Cookies"
     },
-    "FooterPage": {
-        "StayConnected": "Stay Connected",
-        "OurStory": "Our Story",
-        "ContactUs": "Contact Us",
-        "AllRightsReserved": "All Rights Reserved"
+    "section8": {
+      "items": {
+        "0": "[TRANSLATE] Teknik Çerezler: Sitenin çalışması için gerekli, oturum yönetimi",
+        "1": "[TRANSLATE] Analitik Çerezler: Site kullanımının analiz edilmesi (Google Analytics vb.)",
+        "2": "[TRANSLATE] Pazarlama Çerezleri: Kişiselleştirilmiş reklamlar için (onay alınarak)"
+      },
+      "note": "[TRANSLATE] Tarayıcı ayarlarınızdan çerezleri yönetebilir veya engelleyebilirsiniz. Ancak teknik çerezlerin engellenmesi, sitenin doğru çalışmamasına neden olabilir.",
+      "text": "We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, including for the purposes of satisfying any legal, accounting, or reporting requirements.",
+      "title": "8. Retention Period"
     },
-    "ProductDetailCard": {
-        "quantityMeters": "Meter",
-        "quantityPieces": "Quantity",
-        "addToCart": "Add to Cart",
-        "requestSample": "Request Sample",
-        "sampleAdded": "Sample added to cart",
-        "buyNow": "Buy Now",
-        "addToFavorites": "Add to favorites",
-        "removeFromFavorites": "Remove from favorites",
-        "productAddedToCart": "Product added to cart!",
-        "pleaseLogin": "Please log in",
-        "enterValidQuantity": "Please enter a valid quantity",
-        "errorAddingToCart": "Error adding to cart",
-        "customCurtain": "Custom Curtain",
-        "availableQuantity": "Available Quantity"
+    "section9": {
+      "items": {
+        "0": "[TRANSLATE] SSL (Secure Socket Layer) güvenlik sertifikası ile şifreli veri iletimi",
+        "1": "[TRANSLATE] Ödeme bilgilerinin PCI-DSS standartlarına uygun şekilde işlenmesi",
+        "2": "[TRANSLATE] Güvenlik duvarı (firewall) ve anti-virüs sistemleri",
+        "3": "[TRANSLATE] Yetkisiz erişime karşı güçlü şifreleme yöntemleri",
+        "4": "[TRANSLATE] Erişim yetkilendirme ve log kayıt sistemleri",
+        "5": "[TRANSLATE] Düzenli güvenlik denetimleri ve penetrasyon testleri",
+        "6": "[TRANSLATE] Çalışan eğitimleri ve gizlilik taahhütnameleri"
+      },
+      "text": "As we operate globally, your data may be transferred to and processed in countries other than your own. We ensure that appropriate safeguards are in place to protect your data during such transfers.",
+      "title": "9. International Transfers"
     },
-    "CustomCurtain": {
-        "title": "Customize Your Curtain",
-        "mountingType": "Mounting Type",
-        "cornice": "Cornice",
-        "rustic": "Rustic",
-        "pleatType": "Pleat Type",
-        "flat": "Flat Pleat",
-        "kanun": "Kanun Pleat",
-        "pipe": "Pipe Pleat",
-        "water_wave": "Water Wave",
-        "american": "American Pleat",
-        "extrafor": "Extrafor Flat Stitch",
-        "pleatDensity": "Pleat Density",
-        "noPleat": "No Pleat",
-        "dimensions": "Dimensions",
-        "width": "Width (cm)",
-        "height": "Height (cm)",
-        "wingType": "Wing Type",
-        "singleWing": "Single Wing",
-        "doubleWing": "Double Wing",
-        "addToCart": "Add to Cart",
-        "totalPrice": "Total Price",
-        "fabricUsage": "Fabric Usage",
-        "meter": "m",
-        "buttonText": "Custom Curtain"
+    "title": "Privacy Policy & GDPR"
+  },
+  "Menu": {
+    "AboutUs": "About Us",
+    "Contact": "Contact",
+    "Curtains": "Ready Made Curtains",
+    "Fabrics": "Fabrics",
+    "Home": "Home",
+    "Products": "Products",
+    "SideText": "Think Holistic, Think Embroidered"
+  },
+  "MobileNav": {
+    "Account": "Account",
+    "Cart": "Cart",
+    "CustomCurtains": "Custom Curtains",
+    "Fabrics": "Curtain Fabrics",
+    "Favorites": "Favorites",
+    "Home": "Home",
+    "Products": "Products",
+    "ReadyCurtains": "Ready Curtains",
+    "Tracking": "Order Tracking",
+    "TulleCurtains": "Tulle Curtains"
+  },
+  "OrderTracking": {
+    "carrier": "Carrier",
+    "customCurtain": "CUSTOM CURTAIN",
+    "deliveredAt": "Delivered Date",
+    "deliveryAddress": "Delivery Address",
+    "dimensions": "Dimensions",
+    "enterOrderNumber": "Please enter an order number",
+    "fabric": "Fabric",
+    "hint": "You can find your order number in the confirmation email we sent you.",
+    "meter": "meter",
+    "mountingType": "Mounting Type",
+    "mountingTypes": {
+      "cornice": "Cornice",
+      "rustic": "Rustic"
     },
-    "KVKK": {
-        "title": "Privacy Policy & GDPR",
-        "lastUpdate": "Last update: December 10, 2024",
-        "section1": {
-            "title": "1. Introduction",
-            "text": "At Karven Homedecor, we value your privacy and are committed to protecting your personal data. This General Data Protection Policy outlines how we collect, use, store, and safeguard your information when you visit our website or make a purchase, ensuring transparency and trust for our international customers.",
-            "companyName": "Company Name",
-            "address": "Address",
-            "email": "Email",
-            "phone": "Phone"
-        },
-        "section2": {
-            "title": "2. Data We Collect",
-            "text": "We collect the following types of personal information to provide you with our services:",
-            "items": [
-                "Identity Information: Name, surname",
-                "Contact Information: Email address, phone number, shipping and billing address",
-                "Transaction Information: Order history, product preferences, cart contents",
-                "Technical Information: IP address, device information, cookies",
-                "Payment Information: Encrypted payment details (processed securely by third-party providers)"
-            ]
-        },
-        "section3": {
-            "title": "3. How We Use Your Data",
-            "text": "Your personal data is used for the following purposes:",
-            "items": [
-                "Processing and delivering your orders",
-                "Managing payments and invoicing",
-                "Providing customer support and resolving inquiries",
-                "Improving our website and user experience",
-                "Sending order updates and notifications",
-                "Marketing communications (only with your explicit consent)",
-                "Fraud prevention and security"
-            ]
-        },
-        "section4": {
-            "title": "4. Data Sharing",
-            "text": "We may share your data with trusted third parties solely for operational purposes:",
-            "items": [
-                "Shipping Companies: To deliver your orders",
-                "Payment Processors: To securely process transactions (e.g., iyzico)",
-                "Service Providers: For website hosting and maintenance",
-                "Legal Authorities: If required by law"
-            ],
-            "note": "We do not sell your personal data to third parties."
-        },
-        "section5": {
-            "title": "5. Data Security",
-            "text": "We implement robust security measures to protect your data:",
-            "items": [
-                "SSL encryption for secure data transmission",
-                "PCI-DSS compliant payment processing",
-                "Secure servers and firewalls",
-                "Regular security audits"
-            ]
-        },
-        "section6": {
-            "title": "6. Your Rights",
-            "text": "We respect your rights regarding your personal data. You have the right to:",
-            "items": [
-                "Access the personal data we hold about you",
-                "Request correction of inaccurate data",
-                "Request deletion of your data (subject to legal retention requirements)",
-                "Withdraw consent for marketing communications",
-                "Object to data processing in certain circumstances"
-            ]
-        },
-        "section7": {
-            "title": "7. Cookies",
-            "text": "We use cookies to enhance your browsing experience. These include essential cookies for site functionality and optional analytics cookies to understand how you use our site. You can manage your cookie preferences through your browser settings.",
-            "items": [],
-            "note": ""
-        },
-        "section8": {
-            "title": "8. Retention Period",
-            "text": "We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, including for the purposes of satisfying any legal, accounting, or reporting requirements.",
-            "items": [],
-            "note": ""
-        },
-        "section9": {
-            "title": "9. International Transfers",
-            "text": "As we operate globally, your data may be transferred to and processed in countries other than your own. We ensure that appropriate safeguards are in place to protect your data during such transfers.",
-            "items": []
-        },
-        "section10": {
-            "title": "10. Contact Us",
-            "text": "If you have any questions about this policy or your personal data, please contact us:",
-            "email": "Email",
-            "phone": "Phone",
-            "address": "Address"
-        },
-        "disclaimer": "Note: This policy may be updated periodically to reflect changes in our practices or legal requirements. Please review it regularly."
+    "notFound": "Order not found. Please check your order number.",
+    "orderDate": "Order Date",
+    "orderItems": "Order Items",
+    "orderNumber": "Order Number",
+    "orderNumberPlaceholder": "e.g. DK0000001",
+    "orderStatus": "Order Status",
+    "phone": "Phone",
+    "pleatDensity": "Pleat Density",
+    "pleatType": "Pleat Type",
+    "pleatTypes": {
+      "american": "American",
+      "extrafor": "Extrafor",
+      "flat": "Flat",
+      "kanun": "Kanun",
+      "pipe": "Pipe",
+      "water_wave": "Water Wave"
     },
-    "ReturnPolicy": {
-        "title": "Delivery & Return Policy",
-        "lastUpdate": "Last update: December 10, 2024",
-        "delivery": {
-            "title": "Delivery Information",
-            "intro": "Your orders are carefully prepared and shipped as quickly as possible.",
-            "standardTitle": "Standard Products",
-            "standardTime": "Within 3 Business Days",
-            "standardText": "Ready-to-ship products in stock are delivered to the courier within 3 business days after order confirmation.",
-            "customTitle": "Custom Tailored Products",
-            "customTime": "Within 7 Business Days",
-            "customText": "Made-to-measure curtains and custom tailored products are delivered to the courier within 7 business days after order confirmation."
-        },
-        "section1": {
-            "title": "1. General Information",
-            "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations."
-        },
-        "section2": {
-            "title": "2. Withdrawal Period",
-            "days": "14 DAYS",
-            "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
-            "items": [
-                "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
-                "If the last day falls on a public holiday, the period extends to the end of the next business day.",
-                "As a seller, we may extend this period at our own initiative.",
-                "For multiple product orders, a separate withdrawal period starts for each product."
-            ]
-        },
-        "section3": {
-            "title": "3. How to Exercise Your Right of Withdrawal",
-            "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
-            "methodsTitle": "Application Methods:",
-            "methods": [
-                "Email: Send your withdrawal notification to info@demfirat.com",
-                "Phone: Call us at +90 (501) 057-1884",
-                "Written Notice: Fill out the withdrawal form and send it to our address"
-            ],
-            "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason."
-        },
-        "section4": {
-            "title": "4. Returning the Product",
-            "text": "After sending us your withdrawal notification:",
-            "steps": [
-                "You must send the product back to us within 10 days.",
-                "The product must be unused, undamaged, and in its original packaging.",
-                "All accessories and documents that came with the product must be included.",
-                "The invoice or delivery note must be sent with the product."
-            ],
-            "packagingTitle": "Packaging Suggestions:",
-            "packagingItems": [
-                "Place the product in its original box.",
-                "Use additional protective material to prevent damage.",
-                "Keep the shipping tracking number.",
-                "Send via insured shipping if possible."
-            ]
-        },
-        "section5": {
-            "title": "5. Shipping Fees",
-            "infoTitle": "Who Pays for Return Shipping?",
-            "infoItems": [
-                "If the product is defective or incorrect: We cover the shipping cost.",
-                "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
-                "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
-            ],
-            "addressTitle": "Return Address:",
-            "addressLines": [
-                "Karven Homedecor",
-                "Vakıflar OSB Mah. D100 Cad. No:38",
-                "Ergene, Tekirdağ 59930",
-                "Turkey"
-            ]
-        },
-        "section6": {
-            "title": "6. Refunds",
-            "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
-            "processTitle": "Return Process:",
-            "processSteps": [
-                "Withdrawal Notification: You inform us of your request.",
-                "Product Return: You ship the product within 10 days.",
-                "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
-                "Refund: Your refund is processed according to your payment method."
-            ],
-            "methodTitle": "Refund Method:",
-            "methodItems": [
-                "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
-                "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
-                "Cash on Delivery: Refunded via EFT to your bank account."
-            ],
-            "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives."
-        },
-        "section7": {
-            "title": "7. Custom Tailored Products",
-            "text": "Custom tailored products (curtains made to your specific measurements) cannot be returned if the product is not defective.",
-            "items": [],
-            "warning": "Important: Please carefully check your measurements before placing your order to avoid measurement errors."
-        },
-        "section8": {
-            "title": "8. Defective Products - Warranty Rights",
-            "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
-            "items": [
-                "Request free repair of the product.",
-                "Request replacement with a non-defective equivalent.",
-                "Request a price reduction in proportion to the defect.",
-                "Withdraw from the contract and request a refund."
-            ],
-            "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request."
-        },
-        "section9": {
-            "title": "9. Exchanges",
-            "text": "If you only want to exchange a product (different size, color, etc.), please first return the current product using your right of withdrawal, then create a new order.",
-            "note": "Direct exchanges may be possible depending on stock status. Please contact our customer service to evaluate your situation."
-        },
-        "section10": {
-            "title": "10. Contact",
-            "text": "For returns, withdrawal rights, or any questions:",
-            "contactBox": [
-                "Email: info@demfirat.com",
-                "Phone: +90 (501) 057-1884",
-                "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
-                "Working Hours: Monday - Friday, 09:00 - 18:00"
-            ]
-        },
-        "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade."
+    "price": "Price",
+    "quantity": "Qty",
+    "search": "Search",
+    "searching": "Searching...",
+    "shippedAt": "Shipped Date",
+    "status": {
+      "cancelled": "[TRANSLATE] İptal Edildi",
+      "confirmed": "Confirmed",
+      "delivered": "Delivered",
+      "in_transit": "In Transit",
+      "out_for_delivery": "[TRANSLATE] Dağıtımda",
+      "pending": "Pending",
+      "preparing": "Preparing",
+      "returned": "[TRANSLATE] İade Edildi",
+      "shipped": "Shipped"
     },
-    "OrderTracking": {
-        "title": "Order Tracking",
-        "subtitle": "Enter your order number to track your order status",
-        "orderNumberPlaceholder": "e.g. DK0000001",
-        "search": "Search",
-        "searching": "Searching...",
-        "hint": "You can find your order number in the confirmation email we sent you.",
-        "enterOrderNumber": "Please enter an order number",
-        "notFound": "Order not found. Please check your order number.",
-        "orderNumber": "Order Number",
-        "orderDate": "Order Date",
-        "orderStatus": "Order Status",
-        "trackingInfo": "Tracking Information",
-        "carrier": "Carrier",
-        "trackingNumber": "Tracking Number",
-        "shippedAt": "Shipped Date",
-        "deliveredAt": "Delivered Date",
-        "orderItems": "Order Items",
-        "quantity": "Qty",
-        "price": "Price",
-        "deliveryAddress": "Delivery Address",
-        "phone": "Phone",
-        "total": "Total",
-        "customCurtain": "CUSTOM CURTAIN",
-        "dimensions": "Dimensions",
-        "pleatType": "Pleat Type",
-        "pleatDensity": "Pleat Density",
-        "mountingType": "Mounting Type",
-        "fabric": "Fabric",
-        "meter": "meter",
-        "pleatTypes": {
-            "flat": "Flat",
-            "kanun": "Kanun",
-            "pipe": "Pipe",
-            "water_wave": "Water Wave",
-            "american": "American",
-            "extrafor": "Extrafor"
-        },
-        "mountingTypes": {
-            "cornice": "Cornice",
-            "rustic": "Rustic"
-        },
-        "status": {
-            "pending": "Pending",
-            "confirmed": "Confirmed",
-            "preparing": "Preparing",
-            "shipped": "Shipped",
-            "in_transit": "In Transit",
-            "delivered": "Delivered"
-        }
+    "subtitle": "Enter your order number to track your order status",
+    "title": "Order Tracking",
+    "total": "Total",
+    "trackingInfo": "Tracking Information",
+    "trackingNumber": "Tracking Number"
+  },
+  "ProductDetailCard": {
+    "addToCart": "Add to Cart",
+    "addToFavorites": "Add to favorites",
+    "availableQuantity": "Available Quantity",
+    "buyNow": "Buy Now",
+    "customCurtain": "Custom Curtain",
+    "enterValidQuantity": "Please enter a valid quantity",
+    "errorAddingToCart": "Error adding to cart",
+    "pleaseLogin": "Please log in",
+    "productAddedToCart": "Product added to cart!",
+    "customCurtainAddedToCart": "Your custom curtain has been added to cart!",
+    "quantityMeters": "Meter",
+    "quantityPieces": "Quantity",
+    "removeFromFavorites": "Remove from favorites",
+    "requestSample": "Request Sample",
+    "sampleAdded": "Sample added to cart"
+  },
+  "ProductDetailCardPage": {
+    "Design": "Design",
+    "Origin": "Country of Origin",
+    "SendEmail": "Send an email to info@karvenhome.com providing the design name or number.",
+    "WantASample": "Want a Sample?",
+    "Width": "Width"
+  },
+  "Products": {
+    "EmbroideredSheerCurtainFabrics": "Embroidered Sheer Curtain Fabrics",
+    "Headline": "Products"
+  },
+  "ProductsGrid": {
+    "Headline": "Embroidery",
+    "SearchBar": "Enter the design number here."
+  },
+  "ReturnPolicy": {
+    "delivery": {
+      "customText": "Made-to-measure curtains and custom tailored products are delivered to the courier within 7 business days after order confirmation.",
+      "customTime": "Within 7 Business Days",
+      "customTitle": "Custom Tailored Products",
+      "intro": "Your orders are carefully prepared and shipped as quickly as possible.",
+      "standardText": "Ready-to-ship products in stock are delivered to the courier within 3 business days after order confirmation.",
+      "standardTime": "Within 3 Business Days",
+      "standardTitle": "Standard Products",
+      "title": "Delivery Information"
     },
-    "HomeReviews": {
-        "review_1_text": "Very nice curtains with great quality. Shipping issues were resolved quickly, customer service was always available and responded very quickly! Thanks! Always my pleasure!",
-        "review_2_text": "Beautiful curtains/drapes. Outstanding service.",
-        "review_3_text": "Love them! Exactly as pictured; so elegant looking! I'll happily order from this shop again.",
-        "review_4_text": "So pretty, and it arrived really fast!",
-        "review_5_text": "Wonderful quality. Friendly salesman, always available. Responds to messages in a timely manner. Again and again!",
-        "review_6_text": "My first order came with a request to know if I was pleased with my purchase. Instead of answering the question I reordered my first purchase. I believe that's speaks more loudly. If I had more windows that needed sheers I would buy these all o we again and again. I have never seen any as beautiful!!! Even my adult sons who don't notice said 'Wow!' Those are beautiful Mom. Thank you thank you!",
-        "review_7_text": "I love my curtains but I love the customer service even better they went beyond to make sure I received my beautiful curtains"
+    "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade.",
+    "lastUpdate": "Last update: December 10, 2024",
+    "section1": {
+      "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations.",
+      "title": "1. General Information"
     },
-    "MobileNav": {
-        "Home": "Home",
-        "Products": "Products",
-        "Cart": "Cart",
-        "Favorites": "Favorites",
-        "Account": "Account",
-        "Tracking": "Order Tracking",
-        "Fabrics": "Fabrics",
-        "ReadyCurtains": "Ready Curtains",
-        "CustomCurtains": "Custom Curtains"
-    }
+    "section10": {
+      "contactBox": {
+        "0": "Email: info@demfirat.com",
+        "1": "Phone: +90 (501) 057-1884",
+        "2": "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
+        "3": "Working Hours: Monday - Friday, 09:00 - 18:00",
+        "4": "[TRANSLATE] Fatih, İstanbul 34134, Türkiye",
+        "5": "[TRANSLATE] Çalışma Saatleri: Pazartesi - Cuma, 09:00 - 18:00"
+      },
+      "text": "For returns, withdrawal rights, or any questions:",
+      "title": "10. Contact"
+    },
+    "section2": {
+      "days": "14 DAYS",
+      "items": {
+        "0": "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
+        "1": "If the last day falls on a public holiday, the period extends to the end of the next business day.",
+        "2": "As a seller, we may extend this period at our own initiative.",
+        "3": "For multiple product orders, a separate withdrawal period starts for each product."
+      },
+      "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
+      "title": "2. Withdrawal Period"
+    },
+    "section3": {
+      "methods": {
+        "0": "Email: Send your withdrawal notification to info@demfirat.com",
+        "1": "Phone: Call us at +90 (501) 057-1884",
+        "2": "Written Notice: Fill out the withdrawal form and send it to our address"
+      },
+      "methodsTitle": "Application Methods:",
+      "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason.",
+      "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
+      "title": "3. How to Exercise Your Right of Withdrawal"
+    },
+    "section4": {
+      "packagingItems": {
+        "0": "Place the product in its original box.",
+        "1": "Use additional protective material to prevent damage.",
+        "2": "Keep the shipping tracking number.",
+        "3": "Send via insured shipping if possible."
+      },
+      "packagingTitle": "Packaging Suggestions:",
+      "steps": {
+        "0": "You must send the product back to us within 10 days.",
+        "1": "The product must be unused, undamaged, and in its original packaging.",
+        "2": "All accessories and documents that came with the product must be included.",
+        "3": "The invoice or delivery note must be sent with the product."
+      },
+      "text": "After sending us your withdrawal notification:",
+      "title": "4. Returning the Product"
+    },
+    "section5": {
+      "addressLines": {
+        "0": "Karven Homedecor",
+        "1": "Vakıflar OSB Mah. D100 Cad. No:38",
+        "2": "Ergene, Tekirdağ 59930"
+      },
+      "addressTitle": "Return Address:",
+      "infoItems": {
+        "0": "If the product is defective or incorrect: We cover the shipping cost.",
+        "1": "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
+        "2": "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
+      },
+      "infoTitle": "Who Pays for Return Shipping?",
+      "title": "5. Shipping Fees"
+    },
+    "section6": {
+      "methodItems": {
+        "0": "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
+        "1": "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
+        "2": "Cash on Delivery: Refunded via EFT to your bank account."
+      },
+      "methodTitle": "Refund Method:",
+      "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives.",
+      "processSteps": {
+        "0": "Withdrawal Notification: You inform us of your request.",
+        "1": "Product Return: You ship the product within 10 days.",
+        "2": "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
+        "3": "Refund: Your refund is processed according to your payment method."
+      },
+      "processTitle": "Return Process:",
+      "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
+      "title": "6. Refunds"
+    },
+    "section7": {
+      "items": {},
+      "text": "Custom tailored products (curtains made to your specific measurements) cannot be returned if the product is not defective.",
+      "title": "7. Custom Tailored Products",
+      "warning": "Important: Please carefully check your measurements before placing your order to avoid measurement errors."
+    },
+    "section8": {
+      "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request.",
+      "items": {
+        "0": "Request free repair of the product.",
+        "1": "Request replacement with a non-defective equivalent.",
+        "2": "Request a price reduction in proportion to the defect.",
+        "3": "Withdraw from the contract and request a refund."
+      },
+      "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
+      "title": "8. Defective Products - Warranty Rights"
+    },
+    "section9": {
+      "note": "Direct exchanges may be possible depending on stock status. Please contact our customer service to evaluate your situation.",
+      "text": "If you only want to exchange a product (different size, color, etc.), please first return the current product using your right of withdrawal, then create a new order.",
+      "title": "9. Exchanges"
+    },
+    "title": "Delivery & Return Policy"
+  },
+  "Slider": {
+    "desc_1": "Superior quality fabrics through advanced technology and skilled craftsmanship.",
+    "desc_2": "Crafting Every Design, Color, and Fabric Imaginable",
+    "desc_3": "Our diverse set of machinery can simultaneously embroider multi-colored yarns.",
+    "heading_1": "Indulge in Operational Brilliance",
+    "heading_2": "Schiffli Embroidery",
+    "heading_3": "Flatboard Embroidery"
+  }
 }

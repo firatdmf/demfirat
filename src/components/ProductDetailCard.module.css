@@ -592,25 +592,29 @@
 
 /* Cart Actions - Clean & Modern */
 .cartActions {
-  background: #fafafa;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-top: 0.75rem;
-  border: 1px solid #f0f0f0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin-top: 1rem;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .quantityWrapper {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
 }
 
 .quantityWrapper label {
   display: block;
   font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #475569;
-  margin-bottom: 0.75rem;
-  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
 /* Price and Stock Display */
@@ -1573,6 +1577,11 @@
   text-align: center;
 }
 
+.deliverySection {
+  padding: 2rem 2.5rem;
+  text-align: left;
+}
+
 .descriptionContent {
   max-width: 800px;
   margin: 0 auto;
@@ -1861,4 +1870,431 @@
 .sampleBtn:hover {
   background: var(--gold, #c9a961);
   color: white;
+}
+
+/* ═══════════════════════════════════════════════════
+   NEW CTA HIERARCHY STYLES
+   ═══════════════════════════════════════════════════ */
+
+/* PRIMARY: Şimdi Al — full-width, dark */
+.buyNowBtnPrimary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.22s, transform 0.18s, box-shadow 0.22s;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+}
+
+.buyNowBtnPrimary:hover {
+  background: #111;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.buyNowBtnPrimary:active {
+  transform: translateY(0);
+}
+
+/* SECONDARY: Sepete Ekle — outline */
+.addToCartBtnSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.82rem 1.5rem;
+  background: transparent;
+  color: #1a1a1a;
+  border: 1.5px solid #d0cdc8;
+  border-radius: 10px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.addToCartBtnSecondary:hover:not(:disabled) {
+  border-color: #1a1a1a;
+  background: #1a1a1a;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.addToCartBtnSecondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* TRUST BAR — compact 3-column strip */
+.trustBar {
+  display: flex;
+  align-items: center;
+  background: #f7f5f0;
+  border-radius: 10px;
+  border: 1px solid #ece8df;
+  padding: 0.6rem 0;
+  gap: 0;
+}
+
+.trustItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0 0.5rem;
+  text-align: center;
+}
+
+.trustIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.trustText {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.trustTitle {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.trustSub {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.6rem;
+  color: #999;
+  font-weight: 500;
+}
+
+.trustDivider {
+  width: 1px;
+  height: 30px;
+  background: #e0dbd0;
+  flex-shrink: 0;
+}
+
+/* ── CTA DIVIDER before Perde Diktir ── */
+.ctaDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.25rem 0;
+}
+
+.ctaDivider::before,
+.ctaDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e8e4dc;
+}
+
+.ctaDivider span {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.65rem;
+  color: #bbb;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* PERDE DİKTİR CARD — inline section */
+.customCurtainCard {
+  background: white;
+  border: 1.5px solid rgba(201, 169, 97, 0.35);
+  border-radius: 12px;
+  padding: 1rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.customCurtainCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.customCurtainCardIcon {
+  font-size: 1.35rem;
+  color: #c9a961;
+  flex-shrink: 0;
+}
+
+.customCurtainCardTitle {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.customCurtainCardSub {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.72rem;
+  color: #888;
+  margin-top: 0.1rem;
+  line-height: 1.35;
+}
+
+/* 3-Step pills */
+.customCurtainSteps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: #faf8f3;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+
+.customCurtainStep {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.stepNum {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #c9a961;
+  color: white;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepLabel {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+}
+
+.stepArrow {
+  font-size: 0.75rem;
+  color: #c9a961;
+  flex-shrink: 0;
+}
+
+.customCurtainCardBtn {
+  width: 100%;
+  padding: 0.72rem 1rem;
+  background: linear-gradient(135deg, #c9a961 0%, #d4b574 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.3);
+}
+
+.customCurtainCardBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(201, 169, 97, 0.42);
+}
+
+/* SAMPLE HINT — small centred text link */
+.sampleHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.1rem 0;
+}
+
+.sampleHintIcon {
+  color: #c9a961;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.sampleHint>span {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.sampleHintBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #c9a961;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.sampleHintBtn:hover {
+  color: #b8922e;
+}
+
+/* ── Wizard CTA Button (Custom Curtain Intent) ── */
+.wizardCtaBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1.1rem 1.5rem;
+  margin-top: 1.25rem;
+  background: linear-gradient(135deg, #c9a961 0%, #d4b872 100%);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 24px rgba(201, 169, 97, 0.45);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  animation: wizardCtaPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes wizardCtaPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 6px 24px rgba(201, 169, 97, 0.45);
+  }
+
+  50% {
+    box-shadow: 0 8px 32px rgba(201, 169, 97, 0.7);
+  }
+}
+
+.wizardCtaBtn:hover {
+  background: linear-gradient(135deg, #b8922e 0%, #c9a961 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(201, 169, 97, 0.6);
+  animation: none;
+}
+
+.wizardCtaBtn:active {
+  transform: translateY(0);
+}
+
+.wizardCtaStep {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.wizardCtaDivider {
+  font-size: 1.25rem;
+  opacity: 0.65;
+  font-weight: 300;
+  line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .wizardCtaBtn {
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem;
+  }
+
+  .wizardCtaDivider {
+    display: none;
+  }
+}
+
+/* ── Mobile Sticky CTA (Bottom right of image gallery) ── */
+.mobileStickyCta {
+  display: none;
+  /* hidden on desktop */
+}
+
+@media (max-width: 768px) {
+  .mobileStickyCta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 10;
+
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s ease;
+    animation: ctaFloat 2.5s ease-in-out infinite;
+  }
+
+  .mobileStickyCtaStandard {
+    background: #1a1a1a;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobileStickyCtaCustom {
+    background: linear-gradient(135deg, #c9a961 0%, #d4b872 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(201, 169, 97, 0.45);
+  }
+
+  .mobileStickyCta svg {
+    flex-shrink: 0;
+  }
+
+  .mobileStickyCta:active {
+    transform: scale(0.96);
+  }
+
+  @keyframes ctaFloat {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-3px);
+    }
+  }
 }

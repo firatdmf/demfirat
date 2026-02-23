@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import classes from './CustomCurtainPromo.module.css';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { getLocalizedProductField } from '@/lib/productUtils';
 
 interface Product {
     id: number;
@@ -11,6 +12,9 @@ interface Product {
     title: string;
     price: number;
     primary_image: string;
+    description?: string;
+    product_attributes?: any[];
+    prices?: any;
 }
 
 interface CustomCurtainPromoProps {
@@ -90,6 +94,12 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
             tr: 'Doğru Ölçü Nasıl Alınır?',
             ru: 'Как измерить?',
             pl: 'Jak mierzyć?'
+        },
+        perMeter: {
+            en: '/ meter',
+            tr: '/ metre',
+            ru: '/ метр',
+            pl: '/ metr'
         }
     };
 
@@ -115,7 +125,10 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                             sku: p.sku,
                             title: p.title,
                             price: variantPrice ? parseFloat(variantPrice) : (p.price ? parseFloat(p.price) : 0),
-                            primary_image: p.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif'
+                            primary_image: p.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                            description: p.description,
+                            product_attributes: p.product_attributes || [],
+                            prices: p.prices
                         };
                     });
                     setProducts(productsWithPrices);
@@ -130,8 +143,28 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
         fetchProducts();
     }, []);
 
-    // Calculate fake discount (50% for fabrics)
-    const getOriginalPrice = (price: number) => price * 2;
+    // Calculate discount from attributes
+    const getDiscountInfo = (product: Product) => {
+        const discountAttr = product.product_attributes?.find(
+            attr => attr.name?.toLowerCase() === 'discount_rate'
+        );
+
+        if (!discountAttr || !discountAttr.value) {
+            return null;
+        }
+
+        const discountRate = parseFloat(discountAttr.value);
+        if (isNaN(discountRate) || discountRate <= 0) {
+            return null;
+        }
+
+        const originalPrice = product.price / (1 - discountRate / 100);
+
+        return {
+            discountPercent: Math.round(discountRate),
+            originalPrice: originalPrice
+        };
+    };
 
     // Scroll handlers
     const scroll = (direction: 'left' | 'right') => {
@@ -232,27 +265,39 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                                     <div className={classes.imageWrapper}>
                                         <img
                                             src={product.primary_image}
-                                            alt={product.title}
+                                            alt={getLocalizedProductField(product as any, 'title', locale)}
                                             className={classes.productImage}
                                             onError={(e) => {
                                                 e.currentTarget.src = 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
                                             }}
                                         />
-                                        <span className={classes.discountBadge}>%50</span>
+                                        {(() => {
+                                            const discountInfo = getDiscountInfo(product);
+                                            return discountInfo ? (
+                                                <span className={classes.discountBadge}>%{discountInfo.discountPercent}</span>
+                                            ) : null;
+                                        })()}
                                     </div>
                                     <div className={classes.productInfo}>
-                                        <h4 className={classes.productTitle}>{product.title}</h4>
+                                        <h4 className={classes.productTitle}>{getLocalizedProductField(product as any, 'title', locale)}</h4>
                                         <div className={classes.priceRow}>
-                                            {product.price > 0 && (
-                                                <>
-                                                    <span className={classes.originalPrice}>
-                                                        {convertPrice(getOriginalPrice(product.price))}
-                                                    </span>
-                                                    <span className={classes.currentPrice}>
-                                                        {convertPrice(product.price)}
-                                                    </span>
-                                                </>
-                                            )}
+                                            {(() => {
+                                                const discountInfo = getDiscountInfo(product);
+                                                return (
+                                                    <div className={classes.priceContainer}>
+                                                        {discountInfo && (
+                                                            <span className={classes.originalPrice}>
+                                                                {convertPrice(discountInfo.originalPrice)} {t.perMeter[lang]}
+                                                            </span>
+                                                        )}
+                                                        {product.price > 0 && (
+                                                            <span className={classes.currentPrice}>
+                                                                {convertPrice(product.price)} {t.perMeter[lang]}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })()}
                                         </div>
                                     </div>
                                 </Link>

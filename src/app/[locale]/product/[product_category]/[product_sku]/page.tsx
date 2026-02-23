@@ -80,23 +80,60 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   const displayTitle = getLocalizedProductField(product as Product, 'title', locale);
   const displayDescription = getLocalizedProductField(product as Product, 'description', locale) || "";
 
-  // JSON-LD Product Schema for Meta Catalog auto-detection
+  const baseUrl = `https://karven.com/${locale}`;
+  const productUrl = `${baseUrl}/product/${product_category}/${product_sku}`;
+  const categoryUrl = `${baseUrl}/product/${product_category}`;
+  const categoryName = product_category === 'ready-made_curtain'
+    ? (locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains')
+    : (locale === 'tr' ? 'Kumaşlar' : locale === 'ru' ? 'Ткани' : locale === 'pl' ? 'Tkaniny' : 'Fabrics');
+
+  // JSON-LD Breadcrumb Schema
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": locale === 'tr' ? 'Anasayfa' : locale === 'ru' ? 'Главная' : locale === 'pl' ? 'Strona główna' : 'Home',
+        "item": baseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": categoryName,
+        "item": categoryUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": displayTitle,
+        "item": productUrl
+      }
+    ]
+  };
+
+  // JSON-LD Product Schema for Meta Catalog auto-detection and Google SEO
   const jsonLd = product ? {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": displayTitle,
-    "image": [product.primary_image],
+    "image": product_files.length > 0 ? product_files.map(f => f.file) : [product.primary_image],
     "description": displayDescription,
     "sku": product.sku,
+    "url": productUrl,
     "brand": {
       "@type": "Brand",
       "name": "Karven"
     },
+    // Adding aggregate rating placeholder for future reviews system if needed
+    // "aggregateRating": { ... }
     "offers": {
       "@type": "Offer",
-      "url": `https://karven.com/${locale}/product/${product_category}/${product_sku}`,
+      "url": productUrl,
       "priceCurrency": "USD",
       "price": product.price,
+      "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
       "availability": Number(product.available_quantity || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       "itemCondition": "https://schema.org/NewCondition"
     }
@@ -110,6 +147,10 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {product ? (
         <div>
           <ProductDetailCard

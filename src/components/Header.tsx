@@ -37,7 +37,7 @@ function Header({ menuTArray }: HeaderProps) {
   const { data: session, status } = useSession();
   const locale = useLocale();
   const { cartCount } = useCart();
-  const { convertPrice } = useCurrency();
+  const { convertPrice, currency, setCurrency, symbol } = useCurrency();
   const router = useRouter();
   const pathname = usePathname();
   const searchRef = useRef<HTMLDivElement>(null);
@@ -346,6 +346,29 @@ function Header({ menuTArray }: HeaderProps) {
             )}
           </Link>
 
+          {/* Currency Selector */}
+          <div className={classes.currencySelector}>
+            <button className={classes.currencyBtn} title="Select currency">
+              <span className={classes.currencySymbol}>{symbol}</span>
+              <span className={classes.currencyCode}>{currency}</span>
+              <svg className={classes.currencyArrow} width="9" height="5" viewBox="0 0 9 5" fill="currentColor">
+                <path d="M1 1l3.5 3L8 1" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              </svg>
+            </button>
+            <div className={classes.currencyDropdown}>
+              {[{ code: 'TRY', sym: '₺' }, { code: 'USD', sym: '$' }, { code: 'EUR', sym: '€' }, { code: 'RUB', sym: '₽' }, { code: 'PLN', sym: 'zł' }].map(c => (
+                <button
+                  key={c.code}
+                  className={`${classes.currencyOption} ${currency === c.code ? classes.currencyOptionActive : ''}`}
+                  onClick={() => setCurrency(c.code)}
+                >
+                  <span className={classes.currencyOptionSym}>{c.sym}</span>
+                  <span className={classes.currencyOptionCode}>{c.code}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className={classes.localeSwitcherDesktop}>
             <LocaleSwitcher />
           </div>
@@ -399,7 +422,7 @@ function Header({ menuTArray }: HeaderProps) {
                     <h4 className={classes.megaMenuTitle}>
                       {locale === 'tr' ? 'Özel Dikim Perde' : locale === 'ru' ? 'Пошив штор' : locale === 'pl' ? 'Szycie na miarę' : 'Custom Curtains'}
                     </h4>
-                    <Link href={`/${locale}/product/fabric`} className={classes.megaMenuItem}>
+                    <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuItem}>
                       {locale === 'tr' ? 'Perde Diktir' : locale === 'ru' ? 'Заказать пошив' : locale === 'pl' ? 'Zamów szycie' : 'Order Custom Curtain'}
                     </Link>
                     <Link href={`/${locale}/blog/ozel-dikim-perde-siparisi`} className={classes.megaMenuItem}>
@@ -426,6 +449,9 @@ function Header({ menuTArray }: HeaderProps) {
             {menuTArray[2]}
           </Link>
           */}
+          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.navLink}>
+            {locale === 'tr' ? 'TÜL PERDE' : locale === 'ru' ? 'ТЮЛЬ' : locale === 'pl' ? 'FIRANY' : 'TULLE CURTAIN'}
+          </Link>
           <Link href={`/${locale}/about`} className={classes.navLink}>
             {menuTArray[3]}
           </Link>
@@ -457,7 +483,7 @@ function Header({ menuTArray }: HeaderProps) {
           <div className={classes.mobileSectionTitle} style={{ paddingLeft: '1.5rem', marginTop: '0.5rem', fontSize: '0.85rem' }}>
             {locale === 'tr' ? 'Özel Dikim Perde' : locale === 'ru' ? 'Пошив штор' : locale === 'pl' ? 'Szycie na miarę' : 'Custom Curtains'}
           </div>
-          <Link href={`/${locale}/product/fabric`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
             {locale === 'tr' ? 'Perde Diktir' : locale === 'ru' ? 'Заказать пошив' : locale === 'pl' ? 'Zamów szycie' : 'Order Custom Curtain'}
           </Link>
           <Link href={`/${locale}/blog/ozel-dikim-perde-siparisi`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
@@ -481,6 +507,24 @@ function Header({ menuTArray }: HeaderProps) {
           <Link href={`/${locale}/follow-us`} className={`${classes.mobileNavLink} ${classes.instagramLink}`} onClick={() => setMobileMenuOpen(false)}>
             {t('followUs')}
           </Link>
+
+          {/* Currency selector - mobile */}
+          <div className={classes.mobileCurrency}>
+            <span className={classes.mobileCurrencyLabel}>
+              {locale === 'tr' ? 'Para Birimi' : locale === 'ru' ? 'Валюта' : locale === 'pl' ? 'Waluta' : 'Currency'}
+            </span>
+            <div className={classes.mobileCurrencyChips}>
+              {[{ code: 'TRY', sym: '₺' }, { code: 'USD', sym: '$' }, { code: 'EUR', sym: '€' }, { code: 'RUB', sym: '₽' }, { code: 'PLN', sym: 'zł' }].map(c => (
+                <button
+                  key={c.code}
+                  className={`${classes.mobileCurrencyChip} ${currency === c.code ? classes.mobileCurrencyChipActive : ''}`}
+                  onClick={() => { setCurrency(c.code); setMobileMenuOpen(false); }}
+                >
+                  {c.sym} {c.code}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className={classes.mobileLocale} style={{ paddingBottom: 0 }}>
             <LocaleSwitcher />
