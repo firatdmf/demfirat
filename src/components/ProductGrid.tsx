@@ -429,10 +429,10 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           <div className={classes.headerContent}>
             <h1 className={classes.pageTitle}>
               {product_category?.toLowerCase().includes('fabric')
-                ? (locale === 'tr' ? 'Kumaşlar' :
-                  locale === 'ru' ? 'Ткани' :
-                    locale === 'pl' ? 'Tkaniny' :
-                      locale === 'de' ? 'Stoffe' : 'Fabrics')
+                ? (locale === 'tr' ? 'Tül Perdeler' :
+                  locale === 'ru' ? 'Тюлевые шторы' :
+                    locale === 'pl' ? 'Firany' :
+                      locale === 'de' ? 'Tüllvorhänge' : 'Tulle Curtains')
                 : product_category?.toLowerCase().includes('curtain')
                   ? (locale === 'tr' ? 'Perdeler' :
                     locale === 'ru' ? 'Шторы' :
@@ -445,11 +445,11 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             </h1>
             <p className={classes.pageDescription}>
               {product_category?.toLowerCase().includes('fabric')
-                ? (locale === 'tr' ? 'Nakışlı tül perde kumaşları - Premium ev tekstili koleksiyonu' :
-                  locale === 'ru' ? 'Вышитые прозрачные ткани для штор - Роскошная коллекция домашнего текстиля' :
-                    locale === 'pl' ? 'Haftowane przezroczyste tkaniny zasłonowe - Luksusowa kolekcja tekstyliów domowych' :
-                      locale === 'de' ? 'Bestickte transparente Vorhangsstoffe - Luxuriöse Heimtextilien-Kollektion' :
-                        'Embroidered sheer curtain fabrics - Luxury home textile collection')
+                ? (locale === 'tr' ? 'Nakışlı ve düz tül perde modelleri - Premium ev tekstili koleksiyonu' :
+                  locale === 'ru' ? 'Модели вышитого и гладкого тюля - Премиальная коллекция домашнего текстиля' :
+                    locale === 'pl' ? 'Modele haftowanych i gładkich firan - Luksusowa kolekcja tekstyliów domowych' :
+                      locale === 'de' ? 'Bestickte und glatte Tüllvorhänge - Premium Heimtextilien-Kollektion' :
+                        'Embroidered and solid tulle curtain models - Premium home textile collection')
                 : product_category?.toLowerCase().includes('curtain')
                   ? (locale === 'tr' ? 'Terziyi beklemeyi bırakın. Premium hazır perdelerimizle bugün mükemmel pencere görünümünü yakalayın. Tamamen bitmiş olarak gelir ve dakikalar içinde pencerelerinizi süsler.' :
                     locale === 'ru' ? 'Забудьте о портном и ожидании. Получите идеальный вид окна сегодня с нашими премиальными готовыми шторами. Полностью готовы и украсят ваши окна за считанные минуты.' :

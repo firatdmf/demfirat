@@ -131,13 +131,6 @@ export default async function Home(props: PageProps<'/[locale]'>) {
                   'Design Your Curtain',
             link: `/${locale}/product/fabric?intent=custom_curtain`
           }}
-          secondaryCta={{
-            text: locale === 'tr' ? 'Kumaşlar' :
-              locale === 'ru' ? 'Ткани' :
-                locale === 'pl' ? 'Tkaniny' :
-                  'Fabrics',
-            link: `/${locale}/product/fabric`
-          }}
         />
         <CustomCurtainPromo locale={locale} />
         <ProductShowcase

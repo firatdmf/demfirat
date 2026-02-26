@@ -337,7 +337,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
             title: t('delivery'),
             content: locale === 'tr' ? (
                 <>
-                    <p><strong>Teslimat Süresi:</strong> Siparişiniz onaylandıktan sonra 3-7 iş günü içinde kargoya verilir. Kargo süresi bölgeye göre değişiklik gösterebilir.</p>
+                    <p><strong>Teslimat Süresi:</strong> Tüm ürünlerimiz siparişiniz onaylandıktan sonra 1-3 iş günü içinde kargoya verilir. Kargo süresi bölgeye göre değişiklik gösterebilir.</p>
 
                     <p><strong>Teslimat Adresi:</strong> Ürünler, sipariş sırasında belirtilen teslimat adresine teslim edilecektir.</p>
 
@@ -394,7 +394,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                         <li>Sipariş onayından sonra fiyat değişikliği yapılmaz.</li>
                     </ul>
 
-                    <p><strong>Ödeme Hatası:</strong> Ödeme işlemi sırasında hata oluşması durumunda, sipariş otomatik olarak iptal edilir. Hatalı tahsilat yapılmışsa, tutar 7-14 iş günü içinde bankanız tarafından hesabınıza iade edilir.</p>
+                    <p><strong>Ödeme Hatası:</strong> Ödeme işlemi sırasında hata oluşması durumunda, sipariş otomatik olarak iptal edilir. Hatalı tahsilat yapılmışsa, tutar 1-3 iş günü içinde bankanız tarafından hesabınıza iade edilir.</p>
                 </>
             ) : (
                 <>

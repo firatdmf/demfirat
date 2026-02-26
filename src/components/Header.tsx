@@ -393,7 +393,44 @@ function Header({ menuTArray }: HeaderProps) {
             {menuTArray[0]}
           </Link>
 
-          {/* Kumaşlar Mega Menu */}
+          {/* TÜL PERDELER Mega Menu (Replacing Kumaşlar) */}
+          <div className={classes.navDropdown}>
+            <span className={classes.navLink}>
+              {locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains'}
+              <svg className={classes.dropdownArrow} width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              </svg>
+            </span>
+            <div className={classes.megaMenu}>
+              <div className={classes.megaMenuContent}>
+                <div className={classes.megaMenuCategories}>
+                  <div className={classes.megaMenuColumn}>
+                    <h4 className={classes.megaMenuTitle}>
+                      {locale === 'tr' ? 'Tül Çeşitleri' : locale === 'ru' ? 'Виды тюля' : locale === 'pl' ? 'Rodzaje firan' : 'Tulle Types'}
+                    </h4>
+                    <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`} className={classes.megaMenuItem}>
+                      {locale === 'tr' ? 'Nakışlı Tül Perde' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
+                    </Link>
+                    <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`} className={classes.megaMenuItem}>
+                      {locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains'}
+                    </Link>
+                    <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuItem}>
+                      {locale === 'tr' ? 'Tüm Perdeler' : locale === 'ru' ? 'Все шторы' : locale === 'pl' ? 'Wszystkie zasłony' : 'All Curtains'}
+                    </Link>
+                  </div>
+                </div>
+                <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuImage}>
+                  <img src="/media/hero/fabric-hero.png" alt="Tulle Curtains" />
+                  <div className={classes.megaMenuImageOverlay}>
+                    <h3>{locale === 'tr' ? 'Tül Perde Koleksiyonu' : locale === 'ru' ? 'Коллекция тюля' : locale === 'pl' ? 'Kolekcja firan' : 'Tulle Collection'}</h3>
+                    <span>{locale === 'tr' ? 'ALIŞVERİŞE BAŞLA' : locale === 'ru' ? 'НАЧАТЬ ПОКУПКИ' : locale === 'pl' ? 'ZACZNIJ ZAKUPY' : 'START SHOPPING'}</span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* TEMPORARILY HIDDEN - Kumaşlar Mega Menu
           <div className={classes.navDropdown}>
             <span className={classes.navLink}>
               {menuTArray[1]}
@@ -443,15 +480,14 @@ function Header({ menuTArray }: HeaderProps) {
               </div>
             </div>
           </div>
+          */}
 
           {/* TEMPORARILY HIDDEN - Ready-made curtains
           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
             {menuTArray[2]}
           </Link>
           */}
-          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.navLink}>
-            {locale === 'tr' ? 'TÜL PERDE' : locale === 'ru' ? 'ТЮЛЬ' : locale === 'pl' ? 'FIRANY' : 'TULLE CURTAIN'}
-          </Link>
+
           <Link href={`/${locale}/about`} className={classes.navLink}>
             {menuTArray[3]}
           </Link>
@@ -470,6 +506,20 @@ function Header({ menuTArray }: HeaderProps) {
           <Link href={`/${locale}`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[0]}
           </Link>
+          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+            {locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains'}
+          </Link>
+          <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {locale === 'tr' ? 'Nakışlı Tül Perde' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
+          </Link>
+          <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains'}
+          </Link>
+          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+            {locale === 'tr' ? 'Tüm Perdeler' : locale === 'ru' ? 'Все шторы' : locale === 'pl' ? 'Wszystkie zasłony' : 'All Curtains'}
+          </Link>
+
+          {/* TEMPORARILY HIDDEN - Kumaşlar
           <Link href={`/${locale}/product/fabric`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[1]}
           </Link>
@@ -492,6 +542,7 @@ function Header({ menuTArray }: HeaderProps) {
           <Link href={`/${locale}/blog/dogru-olcu-nasil-alinir`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
             {locale === 'tr' ? 'Ölçü Nasıl Alınır?' : locale === 'ru' ? 'Как измерить?' : locale === 'pl' ? 'Jak mierzyć?' : 'How to Measure?'}
           </Link>
+          */}
 
           {/* TEMPORARILY HIDDEN - Ready-made curtains
           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>

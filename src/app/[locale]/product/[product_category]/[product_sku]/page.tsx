@@ -85,7 +85,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   const categoryUrl = `${baseUrl}/product/${product_category}`;
   const categoryName = product_category === 'ready-made_curtain'
     ? (locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains')
-    : (locale === 'tr' ? 'Kumaşlar' : locale === 'ru' ? 'Ткани' : locale === 'pl' ? 'Tkaniny' : 'Fabrics');
+    : (locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains');
 
   // JSON-LD Breadcrumb Schema
   const breadcrumbJsonLd = {

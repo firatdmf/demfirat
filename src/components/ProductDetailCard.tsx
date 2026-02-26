@@ -53,13 +53,12 @@ function ProductDetailCard({
 
   const t = useTranslations('ProductDetailCard');
   const { currency, convertPrice, formatPreconvertedPrice, rates, loading } = useCurrency();
-  const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
+  const placeholder_image_link = "/media/karvenLogo.webp";
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const viewItemFiredRef = useRef<string | null>(null);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
-  // sidebar state removed — wizard is now inline
   const [isTryAtHomeSidebarOpen, setIsTryAtHomeSidebarOpen] = useState(false);
   const touchStartX = React.useRef<number | null>(null);
 
@@ -149,6 +148,8 @@ function ProductDetailCard({
   const isCustomCurtainIntent = searchParams?.intent === 'custom_curtain';
   const hasStandardCartOptions = !isCustomCurtainIntent;
   const [showWizard, setShowWizard] = useState(false);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [showPleatGuide, setShowPleatGuide] = useState(false);
 
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(
@@ -176,7 +177,7 @@ function ProductDetailCard({
   const [quantity, setQuantity] = useState<string>('1');
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery'>('description');
+  const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery' | 'returns' | null>('description');
   const [isAdding, setIsAdding] = useState(false);
 
   const findSelectedVariant = () => {
@@ -564,14 +565,22 @@ function ProductDetailCard({
     }
   };
 
-  const handleAddToCart = async () => {
-    if (isAdding) return;
+  const handleAddToCart = async (): Promise<boolean> => {
+    if (isAdding) return false;
+
+    // Check if variant selection is required but missing
+    if (product_variants && product_variants.length > 0 && !selectedVariant && !isCustomCurtainIntent) {
+      alert(locale === 'tr' ? 'Lütfen gerekli seçimleri yapınız (kumaş, renk vb.).' : 'Please select the required options (fabric, color, etc.).');
+      return false;
+    }
+
     setIsAdding(true);
 
     const qty = parseFloat(quantity);
     if (isNaN(qty) || qty <= 0) {
       alert(t('enterValidQuantity'));
-      return;
+      setIsAdding(false);
+      return false;
     }
 
     // Stock validation
@@ -585,7 +594,8 @@ function ProductDetailCard({
           ? `Yetersiz stok! Gerekli: ${qty}, Mevcut: ${availableQty}`
           : `Insufficient stock! Required: ${qty}, Available: ${availableQty}`
       );
-      return;
+      setIsAdding(false);
+      return false;
     }
 
     // Get price for Meta Pixel
@@ -635,6 +645,8 @@ function ProductDetailCard({
           Quantity: qty
         });
         console.log(`[Tracking] add_to_cart event fired (Guest)`, { sku: product.sku, value: convertedItemPrice * qty, currency: currency });
+        setIsAdding(false);
+        return true;
       } else {
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
@@ -683,19 +695,23 @@ function ProductDetailCard({
             Quantity: qty
           });
           console.log(`[Tracking] add_to_cart event fired (Auth)`, { sku: product.sku, value: convertedItemPrice * qty, currency: currency });
+          setIsAdding(false);
+          return true;
         } else {
           alert(t('errorAddingToCart'));
+          setIsAdding(false);
+          return false;
         }
       }
     } catch (error) {
       console.error('Cart error:', error);
       alert(t('errorAddingToCart'));
-    } finally {
       setIsAdding(false);
+      return false;
     }
   };
 
-  const handleCustomCurtainAddToCart = async (customizationData: any, totalPrice: number) => {
+  const handleCustomCurtainAddToCart = async (customizationData: any, totalPrice: number, quantity: number = 1, isBuyNow: boolean = false) => {
     // Stock validation for custom curtain
     const requiredFabric = customizationData.width && customizationData.height
       ? (parseFloat(customizationData.width) / 100) *
@@ -709,11 +725,13 @@ function ProductDetailCard({
       ? Number(selectedVariant.variant_quantity)
       : (product.available_quantity ? Number(product.available_quantity) : Number(product.quantity));
 
-    if (requiredFabric > availableQty) {
+    const totalRequiredFabric = requiredFabric * quantity;
+
+    if (totalRequiredFabric > availableQty) {
       alert(
         locale === 'tr'
-          ? `Yetersiz stok! Gerekli: ${requiredFabric.toFixed(2)}m, Mevcut: ${availableQty}cm`
-          : `Insufficient stock! Required: ${requiredFabric.toFixed(2)}m, Available: ${availableQty}cm`
+          ? `Yetersiz stok! Gerekli: ${totalRequiredFabric.toFixed(2)}m, Mevcut: ${availableQty}cm`
+          : `Insufficient stock! Required: ${totalRequiredFabric.toFixed(2)}m, Available: ${availableQty}cm`
       );
       return;
     }
@@ -724,7 +742,7 @@ function ProductDetailCard({
         addToGuestCart({
           product_sku: product.sku,
           variant_sku: selectedVariant?.variant_sku || null,
-          quantity: '1',
+          quantity: String(quantity),
           product_category: product_category || undefined,
           is_custom_curtain: true,
           custom_attributes: customizationData,
@@ -741,6 +759,9 @@ function ProductDetailCard({
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => setShowSuccessMessage(false), 5000); // Keep custom message slightly longer
         // sidebar closed by wizard internally
+        if (isBuyNow) {
+          router.push(`/${locale}/cart`);
+        }
       } else {
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
@@ -753,7 +774,7 @@ function ProductDetailCard({
             body: JSON.stringify({
               product_sku: product.sku,
               variant_sku: selectedVariant?.variant_sku || null,
-              quantity: 1,
+              quantity: quantity,
               is_custom_curtain: true,
               custom_attributes: customizationData,
               custom_price: totalPrice
@@ -768,6 +789,9 @@ function ProductDetailCard({
           setTimeout(() => setShowSuccessMessage(false), 5000);
           // sidebar closed by wizard internally
           await refreshCart();
+          if (isBuyNow) {
+            router.push(`/${locale}/cart`);
+          }
         } else {
           const errorData = await response.json();
           alert(errorData.message || t('errorAddingToCart'));
@@ -780,9 +804,11 @@ function ProductDetailCard({
   };
 
   const handleBuyNow = async () => {
-    await handleAddToCart();
-    // Navigate to cart page
-    router.push(`/${locale}/cart`);
+    const success = await handleAddToCart();
+    if (success) {
+      // Navigate to cart page
+      router.push(`/${locale}/cart`);
+    }
   };
 
   const handleToggleFavorite = async () => {
@@ -827,8 +853,9 @@ function ProductDetailCard({
       items.push({ type: 'image', url: imageFiles[0] });
     }
 
-    // 2. Add videos (2nd position)
-    videoFiles.forEach(video => {
+    // 2. Add videos (2nd position) - Deduplicate to prevent multiple clones from showing up
+    const uniqueVideos = Array.from(new Map(videoFiles.filter(v => v.file).map(v => [v.file, v])).values());
+    uniqueVideos.forEach(video => {
       items.push({ type: 'video', url: video.file });
     });
 
@@ -861,11 +888,14 @@ function ProductDetailCard({
 
   // Extract video files again for sidebar use (since we need them separately)
   const videoFilesForSidebar = useMemo(() => {
-    return product_files?.filter(file => {
+    const allVideos = product_files?.filter(file => {
       const isVideo = file.file_type === 'video' ||
         file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
       return isVideo;
     }) || [];
+
+    // Deduplicate by URL
+    return Array.from(new Map(allVideos.filter(v => v.file).map(v => [v.file, v])).values());
   }, [product_files]);
 
   if (!product) {
@@ -905,10 +935,11 @@ function ProductDetailCard({
                       </div>
                     </>
                   ) : (
-                    <img
+                    <Image
                       src={media.url || placeholder_image_link}
                       alt="product image"
-                      loading="lazy"
+                      fill
+                      sizes="80px"
                     />
                   )}
                 </div>
@@ -943,54 +974,27 @@ function ProductDetailCard({
             </div>
             <button className={classes.nextButton} onClick={handleNextImage}>{">"}</button>
 
-            {/* Mobile Sticky CTA (Only visible on mobile via CSS) */}
-            {isFabricProduct && (
-              <button
-                className={`${classes.mobileStickyCta} ${isCustomCurtainIntent ? classes.mobileStickyCtaCustom : classes.mobileStickyCtaStandard}`}
-                onClick={() => {
-                  if (isCustomCurtainIntent) {
-                    setShowWizard(true);
-                    setTimeout(() => {
-                      const wizardEl = document.getElementById('curtainWizardContainer');
-                      if (wizardEl) {
-                        const y = wizardEl.getBoundingClientRect().top + window.scrollY - 100;
-                        window.scrollTo({ top: y, behavior: 'smooth' });
-                      }
-                    }, 50);
-                  } else {
-                    const cartEl = document.getElementById('cartActions');
-                    if (cartEl) {
-                      const y = cartEl.getBoundingClientRect().top + window.scrollY - 150;
-                      window.scrollTo({ top: y, behavior: 'smooth' });
-                    }
-                  }
-                }}
-              >
-                {isCustomCurtainIntent ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 14a8 8 0 0 1-8 8v-2a6 6 0 0 0 6-6h2Z" />
-                    <path d="M12 22v-2" />
-                    <path d="M18 10V6a6 6 0 0 0-12 0v8" />
-                    <path d="M9 14h-3" />
-                    <path d="M11 16H8a4 4 0 0 1-4-4V6A8 8 0 0 1 20 6v4" />
-                    <path d="M14 18l3.5 3.5 3.5-3.5" />
-                  </svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
-                  </svg>
-                )}
-                {isCustomCurtainIntent
-                  ? (locale === 'tr' ? 'Ölçünü Gir Sipariş Ver' : locale === 'ru' ? 'Введите размеры' : locale === 'pl' ? 'Podaj wymiary i zamów' : 'Enter Dimensions & Order')
-                  : t('addToCart')}
-              </button>
-            )}
+
           </div>
         </div>
         <div className={classes.productHero}>
           <div className={classes.titleRow}>
             <h2>{getLocalizedProductField(product, 'title', locale)}</h2>
             <div className={classes.titleActions}>
+              <button
+                onClick={handleToggleFavorite}
+                className={`${classes.titleFavoriteBtn} ${isFavorite(product.sku) ? classes.favorited : ''}`}
+                title={isFavorite(product.sku) ? t('removeFromFavorites') : t('addToFavorites')}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    fill={isFavorite(product.sku) ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </button>
               {/* PDF Download Button */}
               <button
                 onClick={() => {
@@ -1011,28 +1015,13 @@ function ProductDetailCard({
                   <line x1="15" y1="15" x2="12" y2="18" />
                 </svg>
               </button>
-              {/* Favorite Button */}
-              <button
-                onClick={handleToggleFavorite}
-                className={`${classes.titleFavoriteBtn} ${isFavorite(product.sku) ? classes.favorited : ''}`}
-                title={isFavorite(product.sku) ? t('removeFromFavorites') : t('addToFavorites')}
-              >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    fill={isFavorite(product.sku) ? 'currentColor' : 'none'}
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                </svg>
-              </button>
             </div>
           </div>
           {/* SKU under product name */}
           <div className={classes.skuCode}>
             {locale === 'tr' ? 'Ürün Kodu' :
               locale === 'ru' ? 'Артикул' :
-                locale === 'pl' ? 'Kod produktu' : 'Product Code'}: {selectedVariant?.variant_sku || product.sku}
+                locale === 'pl' ? 'Kod produktu' : 'Product Code'}: {selectedVariant?.variant_sku ? `${product.sku}-${selectedVariant.variant_sku}` : product.sku}
           </div>
 
           {/* Category + Attributes in one row */}
@@ -1063,105 +1052,130 @@ function ProductDetailCard({
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
-                {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => (
-                  <li key={attribute.id.toString()}>
-                    <label><h3>{translateAttributeName(attribute.name || '')}</h3></label>
-                    {/* Check if this is Fabric attribute */}
-                    {attribute.name?.toLowerCase() === 'fabric' || attribute.name?.toLowerCase() === 'kumaş' ? (
-                      <div className={classes.fabric_swatches}>
-                        {values.map((value: string) => {
-                          const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
-                          const isChecked = selectedAttributes[attribute.name ?? ''] === value;
-                          // Image path: /media/fabrics/{value}.jpg (assuming jpg, can be adjusted)
-                          // value usually comes as "bamboo", "grek" etc.
-                          const bgImage = `/media/fabrics/${value.toLowerCase()}.avif`;
+                {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => {
+                  const isSizeAttribute = attribute.name?.toLowerCase() === 'width' || attribute.name?.toLowerCase() === 'genişlik' || attribute.name?.toLowerCase() === 'beden' || attribute.name?.toLowerCase() === 'ölçü' || attribute.name?.toLowerCase() === 'size';
+                  return (
+                    <li key={attribute.id.toString()}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                        <label style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {['en', 'width', 'genişlik'].includes(attribute.name?.toLowerCase() || '') ? (
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, color: '#666' }}>
+                              <line x1="2" y1="12" x2="22" y2="12"></line>
+                              <polygon points="6,8 2,12 6,16"></polygon>
+                              <polygon points="18,8 22,12 18,16"></polygon>
+                            </svg>
+                          ) : ['boy', 'height', 'yükseklik', 'uzunluk'].includes(attribute.name?.toLowerCase() || '') ? (
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, color: '#666' }}>
+                              <line x1="12" y1="2" x2="12" y2="22"></line>
+                              <polygon points="8,6 12,2 16,6"></polygon>
+                              <polygon points="8,18 12,22 16,18"></polygon>
+                            </svg>
+                          ) : null}
+                          <h3 style={{ margin: 0 }}>{translateAttributeName(attribute.name || '')}</h3>
+                        </label>
+                        {isSizeAttribute && (
+                          <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
+                            {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : locale === 'de' ? 'Wie man misst?' : 'Size Guide'}
+                          </div>
+                        )}
+                      </div>
+                      {/* Check if this is Fabric attribute */}
+                      {attribute.name?.toLowerCase() === 'fabric' || attribute.name?.toLowerCase() === 'kumaş' ? (
+                        <div className={classes.fabric_swatches}>
+                          {values.map((value: string) => {
+                            const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
+                            const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                            // Image path: /media/fabrics/{value}.jpg (assuming jpg, can be adjusted)
+                            // value usually comes as "bamboo", "grek" etc.
+                            const bgImage = `/media/fabrics/${value.toLowerCase()}.avif`;
 
-                          return (
-                            <div key={value} className={classes.fabric_swatch_container}>
-                              <Link
-                                href={href}
-                                replace
-                                className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""}`}
-                                onClick={e => {
-                                  e.preventDefault();
-                                  handleAttributeChange(attribute.name ?? '', value);
-                                }}
-                                style={{ backgroundImage: `url(${bgImage})` }}
-                                title={translateAttributeName(value)}
-                              >
-                                <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                              </Link>
-                              <span className={classes.color_label}>{translateAttributeName(value)}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : attribute.name?.toLowerCase() === 'color' ? (
-                      <div className={classes.color_swatches}>
-                        {values.map((value: string) => {
-                          const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
-                          const isChecked = selectedAttributes[attribute.name ?? ''] === value;
-                          const isTwoTone = isTwoToneColor(value);
+                            return (
+                              <div key={value} className={classes.fabric_swatch_container}>
+                                <Link
+                                  href={href}
+                                  replace
+                                  className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""}`}
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    handleAttributeChange(attribute.name ?? '', value);
+                                  }}
+                                  style={{ backgroundImage: `url(${bgImage})` }}
+                                  title={translateAttributeName(value)}
+                                >
+                                  <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                </Link>
+                                <span className={classes.color_label}>{translateAttributeName(value)}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : attribute.name?.toLowerCase() === 'color' ? (
+                        <div className={classes.color_swatches}>
+                          {values.map((value: string) => {
+                            const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
+                            const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                            const isTwoTone = isTwoToneColor(value);
 
-                          return (
-                            <div key={value} className={classes.color_swatch_container}>
-                              <Link
-                                href={href}
-                                replace
-                                className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""}`}
-                                onClick={e => {
-                                  e.preventDefault();
-                                  handleAttributeChange(attribute.name ?? '', value);
-                                }}
-                                style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
-                                title={translateAttributeName(value)}
-                              >
-                                {isTwoTone ? (
-                                  // İki renkli swatch - daire yarıya bölünür
-                                  <>
-                                    <span
-                                      className={classes.half_circle_left}
-                                      style={{ backgroundColor: splitTwoToneColor(value).color1 }}
-                                    />
-                                    <span
-                                      className={classes.half_circle_right}
-                                      style={{ backgroundColor: splitTwoToneColor(value).color2 }}
-                                    />
-                                  </>
-                                ) : null}
-                                <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                              </Link>
-                              <span className={classes.color_label}>{translateAttributeName(value)}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className={classes.variant_links}>
-                        {values.map((value: string) => {
-                          const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
-                          const isChecked = selectedAttributes[attribute.name ?? ''] === value;
-                          return (
-                            <div key={value}>
-                              <Link
-                                href={href}
-                                replace
-                                className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}
-                                onClick={e => {
-                                  e.preventDefault();
-                                  handleAttributeChange(attribute.name ?? '', value);
-                                }}
-                              >
-                                {/* replace underscored with spaces for better client visual */}
-                                {translateAttributeName(value)}
-                              </Link>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </li>
-                ))}
+                            return (
+                              <div key={value} className={classes.color_swatch_container}>
+                                <Link
+                                  href={href}
+                                  replace
+                                  className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""}`}
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    handleAttributeChange(attribute.name ?? '', value);
+                                  }}
+                                  style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
+                                  title={translateAttributeName(value)}
+                                >
+                                  {isTwoTone ? (
+                                    // İki renkli swatch - daire yarıya bölünür
+                                    <>
+                                      <span
+                                        className={classes.half_circle_left}
+                                        style={{ backgroundColor: splitTwoToneColor(value).color1 }}
+                                      />
+                                      <span
+                                        className={classes.half_circle_right}
+                                        style={{ backgroundColor: splitTwoToneColor(value).color2 }}
+                                      />
+                                    </>
+                                  ) : null}
+                                  <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                </Link>
+                                <span className={classes.color_label}>{translateAttributeName(value)}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className={classes.variant_links}>
+                          {values.map((value: string) => {
+                            const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
+                            const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                            return (
+                              <div key={value}>
+                                <Link
+                                  href={href}
+                                  replace
+                                  className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    handleAttributeChange(attribute.name ?? '', value);
+                                  }}
+                                >
+                                  {/* replace underscored with spaces for better client visual */}
+                                  {translateAttributeName(value)}
+                                </Link>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ) :
@@ -1238,93 +1252,35 @@ function ProductDetailCard({
 
             {hasStandardCartOptions && (
               <>
-                <div className={classes.quantityWrapper}>
-                  <label htmlFor="quantity">{quantityLabel}:</label>
-                  <div className={classes.quantitySelector}>
-                    <button
-                      type="button"
-                      onClick={handleDecrement}
-                      className={classes.quantityBtn}
-                      aria-label="Decrease quantity"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                    <input
-                      id="quantity"
-                      type="text"
-                      value={quantity}
-                      onChange={handleQuantityChange}
-                      className={classes.quantityInput}
-                      placeholder="1.0"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleIncrement}
-                      className={classes.quantityBtn}
-                      aria-label="Increase quantity"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                  </div>
+                <div className={classes.actionRowTop}>
+                  <button onClick={handleBuyNow} className={classes.buyNowBtn}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    {t('buyNow')}
+                  </button>
                 </div>
-                {/* PRIMARY CTA: Simdi Al */}
-                <button onClick={handleBuyNow} className={classes.buyNowBtnPrimary}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                  {t('buyNow')}
-                </button>
-
-                {/* SECONDARY CTA: Sepete Ekle */}
-                <button onClick={handleAddToCart} className={classes.addToCartBtnSecondary} disabled={isAdding}>
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
-                  </svg>
-                  {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t('addToCart')}
-                </button>
+                <div className={classes.actionRowBottom}>
+                  <div className={classes.quantityWrapper}>
+                    <div className={classes.quantitySelector}>
+                      <button type="button" onClick={handleDecrement} className={classes.quantityBtn} aria-label="Decrease quantity">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+                      </button>
+                      <input id="quantity" type="text" value={quantity} onChange={handleQuantityChange} className={classes.quantityInput} placeholder="1.0" />
+                      <button type="button" onClick={handleIncrement} className={classes.quantityBtn} aria-label="Increase quantity">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <button onClick={handleAddToCart} className={classes.addToCartBtn} disabled={isAdding}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
+                    </svg>
+                    {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t('addToCart')}
+                  </button>
+                </div>
               </>
             )}
-
-            {/* TRUST BAR */}
-            <div className={classes.trustBar}>
-              <div className={classes.trustItem}>
-                <span className={classes.trustIcon}>🚚</span>
-                <div className={classes.trustText}>
-                  <span className={classes.trustTitle}>
-                    {locale === 'tr' ? '1–3 İş Günü' : locale === 'ru' ? '1–3 дня' : locale === 'pl' ? '1–3 dni' : '1–3 Days'}
-                  </span>
-                  <span className={classes.trustSub}>
-                    {locale === 'tr' ? 'Hızlı kargo' : locale === 'ru' ? 'Быстрая доставка' : locale === 'pl' ? 'Szybka wysyłka' : 'Fast shipping'}
-                  </span>
-                </div>
-              </div>
-              <div className={classes.trustDivider} />
-              <div className={classes.trustItem}>
-                <span className={classes.trustIcon}>🔒</span>
-                <div className={classes.trustText}>
-                  <span className={classes.trustTitle}>
-                    {locale === 'tr' ? 'Güvenli Ödeme' : locale === 'ru' ? 'Безопасный платёж' : locale === 'pl' ? 'Bezpieczna płatność' : 'Secure Payment'}
-                  </span>
-                  <span className={classes.trustSub}>SSL</span>
-                </div>
-              </div>
-              <div className={classes.trustDivider} />
-              <div className={classes.trustItem}>
-                <span className={classes.trustIcon}>↩️</span>
-                <div className={classes.trustText}>
-                  <span className={classes.trustTitle}>
-                    {locale === 'tr' ? 'İade & Değişim' : locale === 'ru' ? 'Возврат и обмен' : locale === 'pl' ? 'Zwroty i wymiany' : 'Returns & Exchange'}
-                  </span>
-                  <span className={classes.trustSub}>
-                    {locale === 'tr' ? 'Kolay iade' : locale === 'ru' ? 'Простой возврат' : locale === 'pl' ? 'Łatwy zwrot' : 'Easy returns'}
-                  </span>
-                </div>
-              </div>
-            </div>
 
             {/* PERDE DIKTIR — Wizard on demand (no button) */}
             {isFabricProduct && isCustomCurtainIntent && (
@@ -1337,22 +1293,12 @@ function ProductDetailCard({
                   selectedAttributes={selectedAttributes}
                   forceOpen={true}
                   hideHeader={true}
+                  onSizeGuideClick={() => setShowSizeGuide(true)}
+                  onPleatGuideClick={() => setShowPleatGuide(true)}
                 />
               </div>
             )}
 
-            {/* Regular fabric wizard (no custom curtain intent) */}
-            {isFabricProduct && !isCustomCurtainIntent && (
-              <CurtainWizard
-                product={product}
-                selectedVariant={selectedVariant}
-                unitPrice={selectedVariant?.variant_price ? parseFloat(String(selectedVariant.variant_price)) : (product.price ? parseFloat(String(product.price)) : 0)}
-                onAddToCart={handleCustomCurtainAddToCart}
-                selectedAttributes={selectedAttributes}
-                forceOpen={false}
-                hideHeader={false}
-              />
-            )}
 
             {/* SAMPLE HINT (fabric only, when not forcing custom curtain) */}
             {isFabricProduct && !isCustomCurtainIntent && (
@@ -1366,147 +1312,86 @@ function ProductDetailCard({
                 </button>
               </div>
             )}
+
+            {/* TRUST BAR REMOVED */}
+          </div>
+
+          {/* Expandable Accordion Sections - Replaces Tabs */}
+          <div className={classes.accordionWrapper}>
+            <div className={classes.accordionItem}>
+              <button className={classes.accordionHeader} onClick={() => setActiveTab(activeTab === 'description' ? null : 'description')}>
+                <span>{locale === 'tr' ? 'Ürün Açıklaması' : locale === 'ru' ? 'Описание продукта' : locale === 'pl' ? 'Opis produktu' : locale === 'de' ? 'Produktbeschreibung' : 'Product Description'}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'description' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <div style={{ maxHeight: activeTab === 'description' ? '2500px' : '0', overflow: 'hidden', transition: 'max-height 0.3s ease-in-out' }}>
+                <div className={classes.accordionContent}>
+                  {getLocalizedProductField(product, 'description', locale) ? (
+                    <p style={{ whiteSpace: "pre-line", margin: 0 }}>{getLocalizedProductField(product, 'description', locale)}</p>
+                  ) : (
+                    <p style={{ margin: 0 }}>{locale === 'tr' ? 'Açıklama bulunmamaktadır.' : 'No description available.'}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className={classes.accordionItem}>
+              <button className={classes.accordionHeader} onClick={() => setActiveTab(activeTab === 'details' ? null : 'details')}>
+                <span>{locale === 'tr' ? 'Ürün Detayları' : locale === 'ru' ? 'Детали продукта' : locale === 'pl' ? 'Szczegóły produktu' : locale === 'de' ? 'Produktdetails' : 'Details'}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'details' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <div style={{ maxHeight: activeTab === 'details' ? '2500px' : '0', overflow: 'hidden', transition: 'max-height 0.3s ease-in-out' }}>
+                <div className={classes.accordionContent}>
+                  <table className={classes.detailsTable}>
+                    <tbody>
+                      <tr><td className={classes.detailTableLabel}>SKU</td><td className={classes.detailTableValue}>{selectedVariant?.variant_sku ? `${product.sku}-${selectedVariant.variant_sku}` : product.sku}</td></tr>
+                      {(selectedVariant?.variant_barcode || product.barcode) && (
+                        <tr><td className={classes.detailTableLabel}>{locale === 'tr' ? 'Barkod' : 'Barcode'}</td><td className={classes.detailTableValue}>{selectedVariant?.variant_barcode || product.barcode}</td></tr>
+                      )}
+                      {Object.entries(selectedAttributes).map(([attrName, attrValue]) => (
+                        <tr key={attrName}><td className={classes.detailTableLabel}>{translateAttributeName(attrName)}</td><td className={classes.detailTableValue}>{translateAttributeName(attrValue)}</td></tr>
+                      ))}
+                      {product_attributes && product_attributes.filter(attr => attr.name?.toLowerCase() !== 'discount_rate').map((attr, index) => (
+                        <tr key={`product-attr-${index}`}>
+                          <td className={classes.detailTableLabel}>
+                            {attr.name?.toLowerCase() !== 'property' ? translateAttributeName((attr.name || '').toLowerCase()) : ''}
+                          </td>
+                          <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div className={classes.accordionItem}>
+              <button className={classes.accordionHeader} onClick={() => setActiveTab(activeTab === 'delivery' ? null : 'delivery')}>
+                <span>{locale === 'tr' ? 'Teslimat Bilgileri' : locale === 'ru' ? 'Информация о доставке' : locale === 'pl' ? 'Informacje o dostawie' : locale === 'de' ? 'Lieferinformationen' : 'Delivery Information'}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'delivery' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <div style={{ maxHeight: activeTab === 'delivery' ? '2500px' : '0', overflow: 'hidden', transition: 'max-height 0.4s ease-in-out' }}>
+                <div className={classes.accordionContent}>
+                  <IadeSartlari embedded={true} mode="delivery" />
+                </div>
+              </div>
+            </div>
+
+            <div className={classes.accordionItem}>
+              <button className={classes.accordionHeader} onClick={() => setActiveTab(activeTab === 'returns' ? null : 'returns')}>
+                <span>{locale === 'tr' ? 'İade ve Değişim Koşulları' : locale === 'ru' ? 'Условия возврата и обмена' : locale === 'pl' ? 'Warunki zwrotów i wymian' : locale === 'de' ? 'Rückgabe und Umtausch' : 'Returns & Exchange Conditions'}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'returns' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <div style={{ maxHeight: activeTab === 'returns' ? '4000px' : '0', overflow: 'hidden', transition: 'max-height 0.4s ease-in-out' }}>
+                <div className={classes.accordionContent}>
+                  <IadeSartlari embedded={true} mode="compact" />
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
 
-      </div>
-
-      {/* Description Section with Tabs - Full width centered at bottom */}
-      <div className={classes.descriptionWrapper}>
-        {/* Tab Buttons */}
-        <div className={classes.tabButtons}>
-          <button
-            className={`${classes.tabButton} ${activeTab === 'description' ? classes.tabButtonActive : ''}`}
-            onClick={() => setActiveTab('description')}
-          >
-            {locale === 'tr' ? 'Açıklama' :
-              locale === 'ru' ? 'Описание' :
-                locale === 'pl' ? 'Opis' :
-                  locale === 'de' ? 'Beschreibung' :
-                    'Description'}
-          </button>
-          <button
-            className={`${classes.tabButton} ${activeTab === 'details' ? classes.tabButtonActive : ''}`}
-            onClick={() => setActiveTab('details')}
-          >
-            {locale === 'tr' ? 'Ürün Detayları' :
-              locale === 'ru' ? 'Детали продукта' :
-                locale === 'pl' ? 'Szczegóły produktu' :
-                  locale === 'de' ? 'Produktdetails' :
-                    'Product Details'}
-          </button>
-          <button
-            className={`${classes.tabButton} ${activeTab === 'delivery' ? classes.tabButtonActive : ''}`}
-            onClick={() => setActiveTab('delivery')}
-          >
-            {locale === 'tr' ? 'İade ve Teslimat Koşulları' :
-              locale === 'ru' ? 'Условия возврата и доставки' :
-                locale === 'pl' ? 'Warunki zwrotu i dostawy' :
-                  locale === 'de' ? 'Rückgabe- und Lieferbedingungen' :
-                    'Delivery & Return Conditions'}
-          </button>
-        </div>
-
-        {/* Tab Content */}
-        <div className={classes.tabContent}>
-          {/* Description Tab */}
-          {activeTab === 'description' && (
-            <div className={classes.descriptionSection}>
-              {getLocalizedProductField(product, 'description', locale) ? (
-                <div className={classes.descriptionContent}>
-                  <p style={{ whiteSpace: "pre-line" }}>{getLocalizedProductField(product, 'description', locale)}</p>
-                </div>
-              ) : (
-                <p className={classes.noDescription}>
-                  {locale === 'tr' ? 'Açıklama bulunmamaktadır.' :
-                    locale === 'ru' ? 'Описание отсутствует.' :
-                      locale === 'pl' ? 'Brak opisu.' :
-                        locale === 'de' ? 'Keine Beschreibung verfügbar.' :
-                          'No description available.'}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Product Details Tab */}
-          {activeTab === 'details' && (
-            <div className={classes.descriptionSection}>
-              <table className={classes.detailsTable}>
-                <tbody>
-                  {/* SKU */}
-                  <tr>
-                    <td className={classes.detailTableLabel}>SKU</td>
-                    <td className={classes.detailTableValue}>{selectedVariant?.variant_sku || product.sku}</td>
-                  </tr>
-
-                  {/* Barcode */}
-                  {(selectedVariant?.variant_barcode || product.barcode) && (
-                    <tr>
-                      <td className={classes.detailTableLabel}>
-                        {locale === 'tr' ? 'Barkod' :
-                          locale === 'ru' ? 'Штрихкод' :
-                            locale === 'pl' ? 'Kod kreskowy' :
-                              locale === 'de' ? 'Barcode' :
-                                'Barcode'}
-                      </td>
-                      <td className={classes.detailTableValue}>{selectedVariant?.variant_barcode || product.barcode}</td>
-                    </tr>
-                  )}
-
-                  {/* Price */}
-                  {((selectedVariant?.variant_price && Number(selectedVariant.variant_price) > 0) || (product.price && Number(product.price) > 0)) && (
-                    <tr>
-                      <td className={classes.detailTableLabel}>
-                        {locale === 'tr' ? 'Fiyat' :
-                          locale === 'ru' ? 'Цена' :
-                            locale === 'pl' ? 'Cena' :
-                              locale === 'de' ? 'Preis' :
-                                'Price'}
-                      </td>
-                      <td className={classes.detailTableValue}>
-                        {formatPrice(selectedVariant?.variant_price || product.price)}
-                      </td>
-                    </tr>
-                  )}
-
-                  {/* Variant Attributes (Color, Size, etc.) */}
-                  {Object.entries(selectedAttributes).map(([attrName, attrValue]) => (
-                    <tr key={attrName}>
-                      <td className={classes.detailTableLabel}>{translateAttributeName(attrName)}</td>
-                      <td className={classes.detailTableValue}>{translateAttributeName(attrValue)}</td>
-                    </tr>
-                  ))}
-
-                  {/* Product Attributes (hide discount_rate) */}
-                  {product_attributes && product_attributes.length > 0 && product_attributes
-                    .filter(attr => attr.name?.toLowerCase() !== 'discount_rate')
-                    .map((attr, index) => {
-                      const attrNameLower = (attr.name || '').toLowerCase();
-                      const isProperty = attrNameLower === 'property';
-
-                      return (
-                        <tr key={`product-attr-${index}`}>
-                          <td className={classes.detailTableLabel}>
-                            {!isProperty ? translateAttributeName(attrNameLower) : ''}
-                          </td>
-                          <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Delivery & Return Tab */}
-          {activeTab === 'delivery' && (
-            <div className={classes.deliverySection}>
-              <IadeSartlari embedded={true} />
-            </div>
-          )}
-        </div>
-      </div>
+      </div >
 
       {/* CustomCurtainSidebar removed — wizard is now inline */}
 
@@ -1523,18 +1408,85 @@ function ProductDetailCard({
       <ProductReviewsList productSku={product.sku} />
 
       {/* Similar Products Section */}
-      {product_category === 'fabric' && (
-        <SimilarProducts
-          fabricType={
-            product_attributes?.find((attr) => attr.name?.toLowerCase() === 'fabric_type')?.value ||
-            (product.tags?.includes('embroidery') ? 'embroidery' : 'solid')
-          }
-          currentProductSku={product.sku}
-          locale={locale}
-        />
-      )}
+      {
+        product_category === 'fabric' && (
+          <SimilarProducts
+            fabricType={
+              product_attributes?.find((attr) => attr.name?.toLowerCase() === 'fabric_type')?.value ||
+              (product.tags?.includes('embroidery') ? 'embroidery' : 'solid')
+            }
+            currentProductSku={product.sku}
+            locale={locale}
+          />
+        )
+      }
 
+      {/* Size Guide Sidebar / Drawer */}
+      <div
+        className={classes.sizeGuideOverlay}
+        style={{ opacity: showSizeGuide ? 1 : 0, pointerEvents: showSizeGuide ? 'auto' : 'none' }}
+        onClick={() => setShowSizeGuide(false)}
+      />
+      <div
+        className={classes.sizeGuideDrawer}
+        style={{ right: showSizeGuide ? 0 : '-500px' }}>
+        <div className={classes.drawerHeader}>
+          <h3>{locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : locale === 'de' ? 'Wie man misst?' : 'Size Guide'}</h3>
+          <button className={classes.closeDrawerBtn} onClick={() => setShowSizeGuide(false)}>×</button>
+        </div>
+        <div className={classes.drawerContent}>
+          <p>
+            {locale === 'tr' ? 'Perdenizi en doğru şekilde ölçmek için aşağıdaki görsel rehberi kullanabilirsiniz. Pile sıklığını ve boyu belirlerken korniş veya rustik mesafesine dikkat ediniz.' :
+              locale === 'ru' ? 'Используйте это визуальное руководство для правильного снятия мерок. Обратите внимание на расстояние до карниза.' :
+                locale === 'pl' ? 'Użyj tego przewodnika wizualnego, aby poprawnie zmierzyć zasłony. Zwróć uwagę na odległość karnisza.' :
+                  locale === 'de' ? 'Verwenden Sie diese visuelle Anleitung, um Ihre Vorhänge richtig zu messen.' :
+                    'Use this visual guide to correctly measure your curtains. Pay attention to the cornice distance.'}
+          </p>
+          {/* Use standard placeholder image for now, user can replace this file at /media/size-guide.jpg */}
+          <img
+            src={`/media/guides/size-guide-${locale}.avif`}
+            alt="Size Guide Instructions"
+            className={classes.sizeGuideImg}
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = "/media/karvenLogo.webp";
+            }}
+          />
+        </div>
+      </div>
 
+      {/* Pleat Guide Sidebar / Drawer */}
+      <div
+        className={classes.sizeGuideOverlay}
+        style={{ opacity: showPleatGuide ? 1 : 0, pointerEvents: showPleatGuide ? 'auto' : 'none' }}
+        onClick={() => setShowPleatGuide(false)}
+      />
+      <div
+        className={classes.sizeGuideDrawer}
+        style={{ right: showPleatGuide ? 0 : '-500px' }}>
+        <div className={classes.drawerHeader}>
+          <h3>{locale === 'tr' ? 'Pile Rehberi' : locale === 'ru' ? 'Руководство по складкам' : locale === 'pl' ? 'Przewodnik po fałdach' : locale === 'de' ? 'Faltenführer' : 'Pleat Guide'}</h3>
+          <button className={classes.closeDrawerBtn} onClick={() => setShowPleatGuide(false)}>×</button>
+        </div>
+        <div className={classes.drawerContent}>
+          <p>
+            {locale === 'tr' ? 'Perdenizin pile sıklığını ve görünümünü belirlemek için aşağıdaki rehberi inceleyebilirsiniz. Pile sıklığı arttıkça kumaş kullanımı ve dalgalanma efekti artar.' :
+              locale === 'ru' ? 'Используйте это руководство для выбора типа и плотности складок. Чем плотнее складки, тем больше расход ткани.' :
+                locale === 'pl' ? 'Skorzystaj z tego przewodnika, aby wybrać gęstość i rodzaj fałd. Gęstsze fałdy oznaczają większe zużycie tkaniny.' :
+                  locale === 'de' ? 'Verwenden Sie diese Anleitung, um die Faltenart und -dichte zu bestimmen.' :
+                    'Use this guide to determine the pleat density and appearance of your curtain. More pleats mean more fabric and a richer effect.'}
+          </p>
+          <img
+            src={`/media/guides/pleat-guide-${locale}.avif`}
+            alt="Pleat Guide Instructions"
+            className={classes.sizeGuideImg}
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = "/media/karvenLogo.webp";
+            }}
+          />
+        </div>
+      </div>
     </div >
   );
 }

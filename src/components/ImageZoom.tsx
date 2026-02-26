@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 import styles from './ImageZoom.module.css';
 
 interface ImageZoomProps {
@@ -90,12 +91,15 @@ export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
                 onMouseLeave={handleMouseLeave}
                 onMouseMove={handleMouseMove}
             >
-                <img
+                <Image
                     src={src}
                     alt={alt}
                     className={styles.mainImage}
                     onLoad={onLoad}
                     draggable={false}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
                 />
                 {isZooming && (
                     <div

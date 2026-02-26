@@ -8,6 +8,7 @@ import { useFavorites } from '@/contexts/FavoriteContext';
 
 // Importing Product interface from the parent.
 import { Product } from '@/lib/interfaces';
+import Image from "next/image";
 // Icons
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
@@ -33,7 +34,7 @@ interface ProductCardProps {
 
 function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], variantAttributeValuesMap, productVariants = [], fabricType, hasVideo = false, intent }: ProductCardProps) {
   const { convertPrice, formatPreconvertedPrice } = useCurrency();
-  const placeholder_image_link = "https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif";
+  const placeholder_image_link = "/media/karvenLogo.webp";
   const { data: session } = useSession();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [averageRating, setAverageRating] = useState(0);
@@ -180,7 +181,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     setHasTriedFallback(false);
 
     // Check if image is already cached/loaded
-    const img = new Image();
+    const img = new window.Image();
     img.src = newSrc;
     if (img.complete) {
       setImageLoading(false);
@@ -437,20 +438,20 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                   <div className={classes.spinner}></div>
                 </div>
               )}
-              <img
+              <Image
                 src={imageSrc}
                 alt={`${getLocalizedProductField(product, 'title', locale)} - ${product.sku}`}
                 className={classes.productImage}
-                loading="lazy"
-                decoding="async"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 onLoad={(e) => {
-                  if (e.currentTarget.complete) {
+                  if ((e.currentTarget as HTMLImageElement).complete) {
                     setImageLoading(false);
                   }
                 }}
                 onError={(e) => {
                   setImageLoading(false);
-                  const currentSrc = e.currentTarget.src;
+                  const currentSrc = (e.currentTarget as HTMLImageElement).src || imageSrc;
                   if (!hasTriedFallback && currentSrc.includes('/thumbnails/')) {
                     setHasTriedFallback(true);
                     setImageSrc(currentSrc.replace('/thumbnails/', '/'));
@@ -463,13 +464,14 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
 
               {/* Secondary Image for Hover */}
               {secondImage && (
-                <img
+                <Image
                   src={secondImage}
                   alt={`${getLocalizedProductField(product, 'title', locale)} - Secondary`}
                   className={classes.productImageHover}
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                   onError={(e) => {
-                    e.currentTarget.style.display = 'none';
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
                   }}
                 />
               )}
@@ -707,22 +709,6 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 </div>
               </div>
             )}
-
-            {/* Trust Badges - Conversion Boosters */}
-            <div className={classes.trustBadges}>
-              <div className={classes.trustBadge}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-                <span>{locale === 'tr' ? 'Ölçüye Göre Özel Dikim' : locale === 'ru' ? 'Пошив по вашим размерам' : locale === 'pl' ? 'Szycie na wymiar' : 'Custom Tailored to Size'}</span>
-              </div>
-              <div className={classes.trustBadge}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                <span>{locale === 'tr' ? '1-3 Gün İçinde Kargoda' : locale === 'ru' ? 'Отправка за 1-3 дня' : locale === 'pl' ? 'Wysyłka w 1-3 dni' : 'Shipped in 1-3 Days'}</span>
-              </div>
-              <div className={classes.trustBadge}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-                <span>{locale === 'tr' ? 'Ücretsiz Kargo' : locale === 'ru' ? 'Бесплатная доставка' : locale === 'pl' ? 'Darmowa dostawa' : 'Free Shipping'}</span>
-              </div>
-            </div>
           </Link>
         </div>
       </div>

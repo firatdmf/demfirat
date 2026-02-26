@@ -149,7 +149,7 @@ export default function CartPage() {
             product: {
               title: detail?.product?.title || item.product_sku,
               price,
-              primary_image: detail?.primary_image || detail?.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+              primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/karvenLogo.webp',
               category: detail?.product_category,
             },
           };
@@ -160,7 +160,7 @@ export default function CartPage() {
         setCartItems(guestCart.map(item => ({
           ...item,
           id: item.id as any,
-          product: { title: item.product_sku, price: item.is_sample ? 0 : null, primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif' },
+          product: { title: item.product_sku, price: item.is_sample ? 0 : null, primary_image: '/media/karvenLogo.webp' },
         })) as CartItem[]);
       }
     } catch (error) {
@@ -218,7 +218,7 @@ export default function CartPage() {
               product: {
                 title: detail?.product?.title || item.product_sku,
                 price,
-                primary_image: detail?.primary_image || detail?.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/karvenLogo.webp',
                 category: detail?.product_category,
               },
             };
@@ -228,7 +228,7 @@ export default function CartPage() {
           // Fallback
           setCartItems(items.map((item: CartItem) => ({
             ...item,
-            product: { title: item.product_sku, price: null, primary_image: 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif' },
+            product: { title: item.product_sku, price: null, primary_image: '/media/karvenLogo.webp' },
           })));
         }
       }
@@ -415,10 +415,11 @@ export default function CartPage() {
                 >
                   <div className={classes.itemImage}>
                     <img
-                      src={item.product?.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif'}
+                      src={item.product?.primary_image || '/media/karvenLogo.webp'}
                       alt={item.product?.title || item.product_sku}
                       onError={(e) => {
-                        e.currentTarget.src = 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
+                        const placeholder_image_link = "/media/karvenLogo.webp";
+                        e.currentTarget.src = placeholder_image_link;
                       }}
                     />
                     {/* Custom Curtain Badge on Image */}

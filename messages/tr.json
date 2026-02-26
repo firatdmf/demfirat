@@ -331,14 +331,11 @@
     "SearchBar": "Tasarım numarasını buraya girin."
   },
   "ReturnPolicy": {
+    "summary": "Demfirat.com üzerinden yaptığınız alışverişlerde, ürünü teslim aldığınız tarihten itibaren 14 gün içinde, herhangi bir gerekçe göstermeden cayma hakkınızı kullanabilirsiniz. Cayma talebinizi e-posta, telefon veya yazılı bildirim yoluyla iletmeniz yeterlidir. Bildirim sonrası ürünü 10 gün içinde, kullanılmamış ve hasarsız şekilde tarafımıza göndermeniz gerekir. Ürün hatalı veya ayıplı ise iade kargo ücreti tarafımızca karşılanır; cayma hakkı kapsamında yapılan iadelerde kargo ücreti müşteriye aittir. Ödediğiniz tutar, ürün tarafımıza ulaştıktan sonra en geç 14 gün içinde ödeme yönteminize göre iade edilir.\n\nKişiye özel ölçüyle üretilen ürünlerde, ürün hatalı değilse iade kabul edilmemektedir. Ayıplı ürün durumunda ise onarım, değişim, indirim veya ücret iadesi haklarınız saklıdır. Detaylı bilgi için ilgili iade ve cayma hakkı sayfamızı inceleyebilirsiniz.",
+    "readMore": "Tümünü Oku",
     "delivery": {
-      "customText": "Kişiye özel ölçülerde hazırlanan perde ve dikim ürünleri, sipariş onayından sonra 7 iş günü içinde kargoya teslim edilir.",
-      "customTime": "7 İş Günü İçinde",
-      "customTitle": "Özel Dikim Ürünler",
-      "intro": "Siparişleriniz özenle hazırlanarak en kısa sürede kargoya verilmektedir.",
-      "standardText": "Stokta bulunan hazır ürünler, sipariş onayından sonra 3 iş günü içinde kargoya teslim edilir.",
-      "standardTime": "3 İş Günü İçinde",
-      "standardTitle": "Standart Ürünler",
+      "text": "Tüm ürünlerimiz sipariş onayından sonra 1-3 iş günü içinde kargoya teslim edilmektedir.",
+      "time": "1-3 İş Günü",
       "title": "Teslimat Bilgileri"
     },
     "disclaimer": "Tüketici Hakem Heyeti ve Tüketici Mahkemeleri: İşbu sözleşmeden doğabilecek uyuşmazlıklarda, her yıl Ticaret Bakanlığı tarafından ilan edilen parasal sınırlar dâhilinde tüketicinin yerleşim yerinin veya tüketici işleminin yapıldığı yerdeki İl/İlçe Tüketici Hakem Heyetine veya Tüketici Mahkemesine başvurabilirsiniz.",

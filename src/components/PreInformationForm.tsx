@@ -184,7 +184,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                     <p><strong>Ödeme Yöntemi:</strong> Kredi/Banka Kartı veya Havale/EFT</p>
                     <p><strong>Güvenli Ödeme:</strong> Tüm ödemelerimiz iyzico güvenli ödeme altyapısı ile 3D Secure teknolojisi kullanılarak gerçekleştirilir.</p>
                     <p><strong>Kargo:</strong> Ücretsiz kargo</p>
-                    <p><strong>Teslimat Süresi:</strong> Siparişiniz onaylandıktan sonra 3-7 iş günü içinde kargoya verilir.</p>
+                    <p><strong>Teslimat Süresi:</strong> Tüm ürünlerimiz siparişiniz onaylandıktan sonra 1-3 iş günü içinde kargoya verilir.</p>
                     <p><strong>Teslimat Adresi:</strong> Sipariş sırasında belirttiğiniz adrese teslim edilecektir.</p>
                     <p><strong>Önemli Not:</strong> Ödeme tutarı USD cinsinden gösterilmektedir. Kredi kartı ile yapılan ödemelerde, banka tarafından TRY'ye çevrilerek tahsil edilir.</p>
                 </>

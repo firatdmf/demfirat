@@ -420,6 +420,7 @@
   background: linear-gradient(180deg, #faf8f3 0%, #f5f3ee 100%);
   border-top: 1px solid rgba(201, 169, 97, 0.15);
   border-bottom: 1px solid rgba(201, 169, 97, 0.15);
+  position: relative;
 }
 
 .navContent {
@@ -465,7 +466,7 @@
 
 /* Dropdown Menu */
 .navDropdown {
-  position: relative;
+  position: static;
 }
 
 .navDropdown>.navLink {
@@ -522,8 +523,8 @@
 
 /* Mega Menu */
 .megaMenu {
-  position: fixed;
-  top: auto;
+  position: absolute;
+  top: 100%;
   left: 0;
   right: 0;
   width: 100%;

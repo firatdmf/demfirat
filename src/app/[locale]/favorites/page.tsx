@@ -167,7 +167,7 @@ export default function FavoritesPage() {
                     >
                       <div className={classes.imageWrapper}>
                         <img
-                          src={product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif'}
+                          src={product.primary_image || '/media/karvenLogo.webp'}
                           alt={product.title}
                           className={classes.productImage}
                         />

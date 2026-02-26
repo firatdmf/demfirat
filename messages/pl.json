@@ -331,129 +331,124 @@
     "SearchBar": "Wpisz tutaj numer projektu."
   },
   "ReturnPolicy": {
+    "summary": "W przypadku zakupów za pośrednictwem Demfirat.com można skorzystać z prawa do odstąpienia od umowy w ciągu 14 dni od daty dostawy bez podania przyczyny. Wystarczy przesłać prośbę o odstąpienie od umowy pocztą elektroniczną, telefoniczną lub pisemną. Po otrzymaniu powiadomienia produkt musi zostać odesłany do nas w ciągu 10 dni, nieużywany i nieuszkodzony. Jeśli produkt jest wadliwy lub uszkodzony, koszt wysyłki zwrotnej pokrywamy my; w przypadku zwrotów w ramach prawa do odstąpienia od umowy koszt wysyłki ponosi klient. Zapłacona kwota zostanie zwrócona zgodnie z wybraną metodą płatności w ciągu maksymalnie 14 dni od otrzymania przez nas produktu.\n\nW przypadku produktów wykonanych według indywidualnych pomiarów zwroty nie są przyjmowane, chyba że produkt jest wadliwy. W przypadku wadliwego produktu zachowane zostają prawa do naprawy, wymiany, zniżki lub zwrotu pieniędzy. Aby uzyskać szczegółowe informacje, zapoznaj się z naszą stroną dotyczącą zwrotów i prawa do odstąpienia od umowy.",
+    "readMore": "Czytaj więcej",
     "delivery": {
-      "customText": "Zasłony na wymiar i produkty szyte na zamówienie są przekazywane kurierowi w ciągu 7 dni roboczych od potwierdzenia zamówienia.",
-      "customTime": "W ciągu 7 dni roboczych",
-      "customTitle": "Produkty szyte na miarę",
-      "intro": "Twoje zamówienia są starannie przygotowywane i wysyłane tak szybko, jak to możliwe.",
-      "standardText": "Produkty gotowe do wysyłki dostępne w magazynie są przekazywane kurierowi w ciągu 3 dni roboczych od potwierdzenia zamówienia.",
-      "standardTime": "W ciągu 3 dni roboczych",
-      "standardTitle": "Produkty standardowe",
+      "text": "Wszystkie nasze produkty są przekazywane kurierowi w ciągu 1-3 dni roboczych od potwierdzenia zamówienia.",
+      "time": "1-3 Dni Robocze",
       "title": "Informacje o dostawie"
     },
-    "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade.",
+    "disclaimer": "Komisje Arbitrażowe i Sądy Konsumenckie: W przypadku sporów wynikających z tej umowy, możesz skierować sprawę do Komisji Arbitrażowej ds. Konsumentów.",
     "lastUpdate": "Ostatnia aktualizacja: 10 grudnia 2024",
     "section1": {
-      "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations.",
-      "title": "1. General Information"
+      "text": "Ta strona opisuje prawo odstąpienia od umowy i warunki zwrotów dla klientów dokonujących zakupów w sklepie Karven Homedecor. Nasza polityka ma na celu zapewnienie zadowolenia klientów.",
+      "title": "1. Informacje ogólne"
     },
     "section10": {
-      "contactBox": {
-        "0": "Email: info@demfirat.com",
-        "1": "Phone: +90 (501) 057-1884",
-        "2": "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
-        "3": "Working Hours: Monday - Friday, 09:00 - 18:00",
-        "4": "[TRANSLATE] Fatih, İstanbul 34134, Türkiye",
-        "5": "[TRANSLATE] Çalışma Saatleri: Pazartesi - Cuma, 09:00 - 18:00"
-      },
-      "text": "For returns, withdrawal rights, or any questions:",
-      "title": "10. Contact"
+      "contactBox": [
+        "E-mail: info@demfirat.com",
+        "Telefon: +90 (501) 057-1884",
+        "Adres: Kemalpasa Mah Gencturk Cad No 21A, Fatih, Stambuł 34134, Turcja",
+        "Godziny pracy: Poniedziałek - Piątek, 09:00 - 18:00"
+      ],
+      "text": "W przypadku zwrotów, prawa odstąpienia lub pytań:",
+      "title": "10. Kontakt"
     },
     "section2": {
-      "days": "14 DAYS",
-      "items": {
-        "0": "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
-        "1": "If the last day falls on a public holiday, the period extends to the end of the next business day.",
-        "2": "As a seller, we may extend this period at our own initiative.",
-        "3": "For multiple product orders, a separate withdrawal period starts for each product."
-      },
-      "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
-      "title": "2. Withdrawal Period"
+      "days": "14 DNI",
+      "items": [
+        "Okres zwrotu rozpoczyna się w dniu otrzymania produktu przez Ciebie lub osobę trzecią.",
+        "Jeśli ostatni dzień przypada na święto państwowe, okres wydłuża się do końca następnego dnia roboczego.",
+        "Jako sprzedawca, możemy przedłużyć ten okres z własnej inicjatywy.",
+        "W przypadku zamówienia na wiele produktów obowiązuje oddzielny termin zwrotu dla każdego produktu."
+      ],
+      "text": "Masz prawo odstąpić od umowy bez podawania przyczyny i bez ponoszenia opłat w terminie 14 dni od otrzymania produktu.",
+      "title": "2. Okres zwrotu"
     },
     "section3": {
-      "methods": {
-        "0": "Email: Send your withdrawal notification to info@demfirat.com",
-        "1": "Phone: Call us at +90 (501) 057-1884",
-        "2": "Written Notice: Fill out the withdrawal form and send it to our address"
-      },
-      "methodsTitle": "Application Methods:",
-      "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason.",
-      "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
-      "title": "3. How to Exercise Your Right of Withdrawal"
+      "methods": [
+        "E-mail: Wyślij swoje oświadczenie na info@demfirat.com",
+        "Telefon: Zadzwoń pod numer +90 (501) 057-1884",
+        "Pisemnie: Wypełnij formularz zwrotu i wyślij na nasz adres."
+      ],
+      "methodsTitle": "Metody Zgłoszenia:",
+      "note": "Ważne: Wystarczy, że poinformujesz nas, o chęci dokonania zwrotu. Nie musisz podawać przyczyny.",
+      "text": "Aby zrezygnować, możesz wybrać jedną z następujących metod:",
+      "title": "3. Jak dokonać zwrotu"
     },
     "section4": {
-      "packagingItems": {
-        "0": "Place the product in its original box.",
-        "1": "Use additional protective material to prevent damage.",
-        "2": "Keep the shipping tracking number.",
-        "3": "Send via insured shipping if possible."
-      },
-      "packagingTitle": "Packaging Suggestions:",
-      "steps": {
-        "0": "You must send the product back to us within 10 days.",
-        "1": "The product must be unused, undamaged, and in its original packaging.",
-        "2": "All accessories and documents that came with the product must be included.",
-        "3": "The invoice or delivery note must be sent with the product."
-      },
-      "text": "After sending us your withdrawal notification:",
-      "title": "4. Returning the Product"
+      "packagingItems": [
+        "Umieść produkt w oryginalnym opakowaniu.",
+        "Użyj materiału ochronnego, aby zapobiec uszkodzeniom.",
+        "Zachowaj numer nadania przesyłki.",
+        "Wyślij z opcją śledzenia/ubezpieczenia, jeśli to możliwe."
+      ],
+      "packagingTitle": "Sugestie dotyczące pakowania:",
+      "steps": [
+        "Musisz odesłać do nas produkt w ciągu 10 dni.",
+        "Produkt nie może być używany, musi być nieuszkodzony i znajdować się w oryginalnym opakowaniu.",
+        "Wymagane są wszystkie akcesoria i dokumenty dostarczone wraz z produktem.",
+        "Do produktu należy dołączyć fakturę lub dowód dostawy."
+      ],
+      "text": "Po przesłaniu nam oświadczenia:",
+      "title": "4. Zwrot produktu"
     },
     "section5": {
-      "addressLines": {
-        "0": "Karven Homedecor",
-        "1": "Vakıflar OSB Mah. D100 Cad. No:38",
-        "2": "Ergene, Tekirdağ 59930"
-      },
-      "addressTitle": "Return Address:",
-      "infoItems": {
-        "0": "If the product is defective or incorrect: We cover the shipping cost.",
-        "1": "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
-        "2": "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
-      },
-      "infoTitle": "Who Pays for Return Shipping?",
-      "title": "5. Shipping Fees"
+      "addressLines": [
+        "Dem Fırat Karven Tekstil San. ve Tic. A.Ş.",
+        "Kemalpasa Mah Gencturk Cad No 21A",
+        "Fatih, Stambuł 34134, Turcja"
+      ],
+      "addressTitle": "Adres do zwrotu:",
+      "infoItems": [
+        "Jeśli produkt jest wadliwy: My pokrywamy koszty wysyłki.",
+        "W przypadku skorzystania tylko z prawa odstąpienia: Koszty wysyłki ponosi klient.",
+        "W przypadku produktów promocyjnych: Zgodnie z regulaminem, klient opłaca przesyłkę."
+      ],
+      "infoTitle": "Kto płaci za przesyłkę zwrotną?",
+      "title": "5. Koszty wysyłki"
     },
     "section6": {
-      "methodItems": {
-        "0": "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
-        "1": "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
-        "2": "Cash on Delivery: Refunded via EFT to your bank account."
-      },
-      "methodTitle": "Refund Method:",
-      "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives.",
-      "processSteps": {
-        "0": "Withdrawal Notification: You inform us of your request.",
-        "1": "Product Return: You ship the product within 10 days.",
-        "2": "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
-        "3": "Refund: Your refund is processed according to your payment method."
-      },
-      "processTitle": "Return Process:",
-      "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
-      "title": "6. Refunds"
+      "methodItems": [
+        "Karta: Zwrot środków pojawi się na Twojej karcie w ciągu 2-10 dni roboczych.",
+        "Przelew bankowy (EFT): W ciągu 1-3 dni roboczych po podaniu danych konta.",
+        "Płatność przy odbiorze: Zwrot następuje na Twoje konto bankowe przez przelew bankowy."
+      ],
+      "methodTitle": "Metoda zwrotu pieniędzy:",
+      "note": "Ważne: Zwroty środków nie zostaną zrealizowane, dopóki nie otrzymamy produktu u nas z powrotem na magazyn.",
+      "processSteps": [
+        "Zgłoszenie odstąpienia od umowy: Poinformuj nas telefonicznie, lub e-mailem.",
+        "Zwrot produktu: Odsyłasz produkt w ciągu 10 dni.",
+        "Inspekcja produktu: Kontrolujemy produkt (1-2 dni robocze).",
+        "Zwrot pieniędzy: Zakończenie procesu i wykonanie zwrotu pieniędzy."
+      ],
+      "processTitle": "Proces zwrotu:",
+      "text": "Zwrócimy pełną zapłaconą kwotę w ciągu 14 dni od otrzymania oświadczenia o odstąpieniu od umowy.",
+      "title": "6. Zwroty pieniędzy"
     },
     "section7": {
-      "items": {},
-      "text": "Produkty szyte na miarę (zasłony wykonane według Twoich indywidualnych wymiarów) nie podlegają zwrotowi, jeśli produkt nie jest wadliwy.",
-      "title": "7. Produkty szyte na miarę",
-      "warning": "Ważne: Przed złożeniem zamówienia dokładnie sprawdź swoje wymiary, aby uniknąć błędów pomiarowych."
+      "items": [],
+      "text": "Produkty szyte na wymiar klienta (Twoje określone pomiary) nie podlegają zwrotowi, jeśli produkt nie posiada wad lub usterek produkcyjnych.",
+      "title": "7. Produkty Niestandardowe",
+      "warning": "Ważne: Przed złożeniem zamówienia dokładnie sprawdź swoje wymiary, aby uniknąć błędów projektowych."
     },
     "section8": {
-      "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request.",
-      "items": {
-        "0": "Request free repair of the product.",
-        "1": "Request replacement with a non-defective equivalent.",
-        "2": "Request a price reduction in proportion to the defect.",
-        "3": "Withdraw from the contract and request a refund."
-      },
-      "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
-      "title": "8. Defective Products - Warranty Rights"
+      "info": "Gdy otrzymasz wadliwy produkt, możesz dokonać wyboru i go zgłosić. My odniesiemy się do twojego roszczenia.",
+      "items": [
+        "Poproś o darmową naprawę.",
+        "Poproś o wymianę na taki sam sprawny lub odpowiednik tego produktu.",
+        "Poproś o obniżkę ceny ze względu na wadę.",
+        "Wycofaj umowę i zażądaj zwrotu pieniędzy."
+      ],
+      "text": "Jeśli wykryjesz usterkę (błąd lub wadę fabryczną), wówczas skorzystaj z uprawnień reklamacyjnych z tytułu wady:",
+      "title": "8. Prawa Reklamacyjne / Wady"
     },
     "section9": {
-      "note": "Direct exchanges may be possible depending on stock status. Please contact our customer service to evaluate your situation.",
-      "text": "If you only want to exchange a product (different size, color, etc.), please first return the current product using your right of withdrawal, then create a new order.",
-      "title": "9. Exchanges"
+      "note": "Bezpośrednia wymiana bywa utrudniona w związku z rezerwacjami zapasów sklepowych.",
+      "text": "Dlatego polecamy odesłać towar, co otworzy Ci drogę, do złożenia nowego zamówienia na wymieniany model.",
+      "title": "9. Wymiany"
     },
-    "title": "Dostawa i Zwroty"
+    "title": "Zasady dostawy i zwrotów"
   },
   "Slider": {
     "desc_1": "Najwyższa jakość tkanin dzięki zaawansowanej technologii i wykwalifikowanemu kunsztowi.",

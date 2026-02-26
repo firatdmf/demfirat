@@ -125,7 +125,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                             sku: p.sku,
                             title: p.title,
                             price: variantPrice ? parseFloat(variantPrice) : (p.price ? parseFloat(p.price) : 0),
-                            primary_image: p.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif',
+                            primary_image: p.primary_image || '/media/karvenLogo.webp',
                             description: p.description,
                             product_attributes: p.product_attributes || [],
                             prices: p.prices
@@ -268,7 +268,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                                             alt={getLocalizedProductField(product as any, 'title', locale)}
                                             className={classes.productImage}
                                             onError={(e) => {
-                                                e.currentTarget.src = 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
+                                                e.currentTarget.src = '/media/karvenLogo.webp';
                                             }}
                                         />
                                         {(() => {

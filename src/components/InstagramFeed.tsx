@@ -13,7 +13,7 @@ const INSTAGRAM_HANDLE = '@karvenhomedecor';
 const INSTAGRAM_URL = 'https://www.instagram.com/karvenhomedecor/';
 
 // Access Token provided by user
-const ACCESS_TOKEN = 'IGAAQsTyGdb71BZAFo0aExRX2V1cTh1T2hMT0J2eXF2V0hEeWIySDVzSDJKOXlYaGs2N09XdmRISHJ4Vk1ObHFuckFfSHVpNVRsS0M1c1d3YV9OVHZANeGNpX2NrTWhGUUw1RGZAIS1VvaXBEOThYaGM5VDB4QjhlbDU2OUtOampXMAZDZD';
+const ACCESS_TOKEN = '926654021fdbaccdc52658be447ff0ff';
 
 interface InstagramMedia {
     id: string;

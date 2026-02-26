@@ -143,12 +143,12 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
                             >
                                 <div className={classes.imageWrapper}>
                                     <img
-                                        src={product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif'}
+                                        src={product.primary_image || '/media/karvenLogo.webp'}
                                         alt={getLocalizedProductField(product as any, 'title', locale)}
                                         className={classes.productImage}
                                         loading="lazy"
                                         onError={(e) => {
-                                            e.currentTarget.src = 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
+                                            e.currentTarget.src = '/media/karvenLogo.webp';
                                         }}
                                     />
                                 </div>

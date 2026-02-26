@@ -96,18 +96,11 @@
 }
 
 /* Delivery Section Styles */
-.deliveryInfo {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
 .deliveryBox {
-    background: #fafafa;
-    border: 1px solid #eaeaea;
+    background: #fdfaf3;
+    border: 1px solid #f3e9d2;
     border-radius: 8px;
-    padding: 2rem;
+    padding: 1.5rem;
     text-align: left;
     /* fixed previous center align error */
 }
@@ -273,6 +266,108 @@
     font-size: 0.85rem;
     color: #888;
     text-align: center;
+}
+
+/* Minimalist Simple Layout Overrides */
+.simpleLayout .section {
+    margin-bottom: 2rem;
+}
+
+.simpleLayout .section h2 {
+    border-bottom: none;
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    padding-bottom: 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.simpleLayout .section h3 {
+    font-size: 1rem;
+    color: #1a1a1a;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.simpleLayout .section p,
+.simpleLayout .section li {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.simpleLayout .deliveryBox,
+.simpleLayout .methodBox,
+.simpleLayout .shippingInfo,
+.simpleLayout .refundProcess,
+.simpleLayout .packagingGuide,
+.simpleLayout .contactBox,
+.simpleLayout .important,
+.simpleLayout .note,
+.simpleLayout .warning,
+.simpleLayout .warrantyInfo,
+.simpleLayout .cargoAddress {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.embedded {
+    padding: 0;
+    max-width: 100%;
+}
+
+.readMoreLink {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--gold, #c9a961);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.readMoreLink:hover {
+    color: #b8922e;
+}
+
+.simpleLayout .deliveryInfo {
+    display: block;
+    margin: 0;
+}
+
+.simpleLayout .deliveryTime {
+    font-size: 1rem;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+}
+
+.simpleLayout .section ul {
+    list-style-type: disc;
+    padding-left: 1.2rem;
+}
+
+.simpleLayout .section ul li::before {
+    content: none;
+}
+
+.simpleLayout .timeline li::before {
+    font-size: 1rem;
+    color: #333;
+    top: 0;
+}
+
+.simpleLayout .timeline li {
+    padding-left: 1.5rem;
+    border-left: none;
 }
 
 /* Mobile */

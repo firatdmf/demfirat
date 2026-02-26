@@ -97,7 +97,7 @@ export default function MesafeliSatisSozlesmesi() {
                 <h2>{locale === 'tr' ? '4. TESLİMAT VE İADE ŞARTLARI' : locale === 'ru' ? '4. ДОСТАВКА И УСЛОВИЯ ВОЗВРАТА' : locale === 'pl' ? '4. DOSTAWA I WARUNKI ZWROTU' : '4. DELIVERY AND RETURN CONDITIONS'}</h2>
 
                 <h3>{locale === 'tr' ? 'Teslimat:' : 'Delivery:'}</h3>
-                <p><strong>{locale === 'tr' ? 'Teslimat Süresi:' : 'Delivery Time:'}</strong> {locale === 'tr' ? 'Siparişiniz onaylandıktan sonra 1-3 iş günü içinde kargoya verilir. Özel dikim ürünlerde 7 iş günü içinde kargoya verilir.' : 'Your order will be shipped within 1-3 business days after confirmation. Custom sewing products ship within 7 business days.'}</p>
+                <p><strong>{locale === 'tr' ? 'Teslimat Süresi:' : 'Delivery Time:'}</strong> {locale === 'tr' ? 'Tüm ürünlerimiz siparişiniz onaylandıktan sonra 1-3 iş günü içinde kargoya verilir.' : 'All products will be shipped within 1-3 business days after confirmation.'}</p>
                 <p><strong>{locale === 'tr' ? 'Teslimat Adresi:' : 'Delivery Address:'}</strong> {locale === 'tr' ? 'Ürünler, sipariş sırasında belirtilen teslimat adresine teslim edilecektir.' : 'Products will be delivered to the delivery address specified during order.'}</p>
                 <p><strong>{locale === 'tr' ? 'Teslimat Şekli:' : 'Delivery Method:'}</strong> {locale === 'tr' ? 'Ürünler, anlaşmalı kargo firması aracılığıyla teslim edilir.' : 'Products are delivered through contracted cargo company.'}</p>
 

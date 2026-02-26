@@ -29,11 +29,23 @@ interface CurrencyContextType {
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
+/** Read saved exchange rates from localStorage synchronously so the first render already has rates. */
+function getInitialRates(): ExchangeRate[] {
+    if (typeof window === 'undefined') return [];
+    try {
+        const saved = localStorage.getItem('lastExchangeRates');
+        if (saved) return JSON.parse(saved) as ExchangeRate[];
+    } catch (_) { }
+    return [];
+}
+
 export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { data: session } = useSession();
     const [currency, setCurrency] = useState('TRY');
-    const [rates, setRates] = useState<ExchangeRate[]>([]);
-    const [loading, setLoading] = useState(true);
+    // Seed rates from localStorage immediately to avoid a flash
+    const [rates, setRates] = useState<ExchangeRate[]>(getInitialRates);
+    // If we already have cached rates we're not really "loading"
+    const [loading, setLoading] = useState(() => getInitialRates().length === 0);
 
     // Currency symbols
     const symbols: { [key: string]: string } = {
@@ -154,12 +166,13 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(priceInUsd);
         }
 
-        // If rates haven't loaded yet, fallback to USD silently
+        // If rates haven't loaded yet AND currency isn't USD, return empty so UI shows nothing rather than wrong currency
         if (rates.length === 0) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(priceInUsd);
+            if (currency === 'USD') {
+                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(priceInUsd);
+            }
+            // Don't flash USD — return empty string, prices will render once rates arrive
+            return '';
         }
 
         // Find rate for target currency

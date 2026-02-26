@@ -35,7 +35,7 @@ export async function GET() {
             const description = (product.description || title).replace(/<[^>]*>?/gm, '').substring(0, 5000);
             // Link needs to be absolute
             const link = `https://karven.com/tr/product/${product.product_category || 'product'}/${sku}`;
-            const imageLink = product.primary_image || 'https://res.cloudinary.com/dnnrxuhts/image/upload/v1750547519/product_placeholder.avif';
+            const imageLink = product.primary_image || '/media/karvenLogo.webp';
 
             // Meta requires price in a specific format: "15.00 USD"
             const priceValue = parseFloat(product.price) || 0;

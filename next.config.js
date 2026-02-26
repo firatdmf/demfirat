@@ -43,6 +43,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'demfiratkarven.b-cdn.net',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Image optimization settings
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],

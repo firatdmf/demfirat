@@ -331,14 +331,11 @@
     "SearchBar": "Enter the design number here."
   },
   "ReturnPolicy": {
+    "summary": "For your purchases via Demfirat.com, you can exercise your right of withdrawal within 14 days from the date of delivery without giving any reason. It is sufficient to convey your withdrawal request via e-mail, telephone, or written notification. After the notification, the product must be sent to us within 10 days, unused and undamaged. If the product is faulty or defective, the return shipping fee is covered by us; for returns within the scope of the right of withdrawal, the shipping fee belongs to the customer. The amount you paid will be refunded according to your payment method within 14 days at the latest after the product is received by us.\n\nFor products produced with personalized measurements, returns are not accepted unless the product is faulty. In the case of a defective product, your rights to repair, replacement, discount, or refund are reserved. For detailed information, you can review our relevant return and withdrawal rights page.",
+    "readMore": "Read More",
     "delivery": {
-      "customText": "Made-to-measure curtains and custom tailored products are delivered to the courier within 7 business days after order confirmation.",
-      "customTime": "Within 7 Business Days",
-      "customTitle": "Custom Tailored Products",
-      "intro": "Your orders are carefully prepared and shipped as quickly as possible.",
-      "standardText": "Ready-to-ship products in stock are delivered to the courier within 3 business days after order confirmation.",
-      "standardTime": "Within 3 Business Days",
-      "standardTitle": "Standard Products",
+      "text": "All our products are delivered to the courier within 1-3 business days after order confirmation.",
+      "time": "1-3 Business Days",
       "title": "Delivery Information"
     },
     "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade.",
@@ -348,103 +345,101 @@
       "title": "1. General Information"
     },
     "section10": {
-      "contactBox": {
-        "0": "Email: info@demfirat.com",
-        "1": "Phone: +90 (501) 057-1884",
-        "2": "Address: Vakıflar OSB Mah. D100 Cad. No:38, Ergene/Tekirdağ 59930, Turkey",
-        "3": "Working Hours: Monday - Friday, 09:00 - 18:00",
-        "4": "[TRANSLATE] Fatih, İstanbul 34134, Türkiye",
-        "5": "[TRANSLATE] Çalışma Saatleri: Pazartesi - Cuma, 09:00 - 18:00"
-      },
+      "contactBox": [
+        "Email: info@demfirat.com",
+        "Phone: +90 (501) 057-1884",
+        "Address: Kemalpasa Mah Gencturk Cad No 21A, Fatih, Istanbul 34134, Turkey",
+        "Working Hours: Monday - Friday, 09:00 - 18:00"
+      ],
       "text": "For returns, withdrawal rights, or any questions:",
       "title": "10. Contact"
     },
     "section2": {
       "days": "14 DAYS",
-      "items": {
-        "0": "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
-        "1": "If the last day falls on a public holiday, the period extends to the end of the next business day.",
-        "2": "As a seller, we may extend this period at our own initiative.",
-        "3": "For multiple product orders, a separate withdrawal period starts for each product."
-      },
+      "items": [
+        "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
+        "If the last day falls on a public holiday, the period extends to the end of the next business day.",
+        "As a seller, we may extend this period at our own initiative.",
+        "For multiple product orders, a separate withdrawal period starts for each product."
+      ],
       "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
       "title": "2. Withdrawal Period"
     },
     "section3": {
-      "methods": {
-        "0": "Email: Send your withdrawal notification to info@demfirat.com",
-        "1": "Phone: Call us at +90 (501) 057-1884",
-        "2": "Written Notice: Fill out the withdrawal form and send it to our address"
-      },
+      "methods": [
+        "Email: Send your withdrawal notification to info@demfirat.com",
+        "Phone: Call us at +90 (501) 057-1884",
+        "Written Notice: Fill out the withdrawal form and send it to our address"
+      ],
       "methodsTitle": "Application Methods:",
       "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason.",
       "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
       "title": "3. How to Exercise Your Right of Withdrawal"
     },
     "section4": {
-      "packagingItems": {
-        "0": "Place the product in its original box.",
-        "1": "Use additional protective material to prevent damage.",
-        "2": "Keep the shipping tracking number.",
-        "3": "Send via insured shipping if possible."
-      },
+      "packagingItems": [
+        "Place the product in its original box.",
+        "Use additional protective material to prevent damage.",
+        "Keep the shipping tracking number.",
+        "Send via insured shipping if possible."
+      ],
       "packagingTitle": "Packaging Suggestions:",
-      "steps": {
-        "0": "You must send the product back to us within 10 days.",
-        "1": "The product must be unused, undamaged, and in its original packaging.",
-        "2": "All accessories and documents that came with the product must be included.",
-        "3": "The invoice or delivery note must be sent with the product."
-      },
+      "steps": [
+        "You must send the product back to us within 10 days.",
+        "The product must be unused, undamaged, and in its original packaging.",
+        "All accessories and documents that came with the product must be included.",
+        "The invoice or delivery note must be sent with the product."
+      ],
       "text": "After sending us your withdrawal notification:",
       "title": "4. Returning the Product"
     },
     "section5": {
-      "addressLines": {
-        "0": "Karven Homedecor",
-        "1": "Vakıflar OSB Mah. D100 Cad. No:38",
-        "2": "Ergene, Tekirdağ 59930"
-      },
+      "addressLines": [
+        "Dem Fırat Karven Tekstil San. ve Tic. A.Ş.",
+        "Kemalpasa Mah Gencturk Cad No 21A",
+        "Fatih, Istanbul 34134, Turkey"
+      ],
       "addressTitle": "Return Address:",
-      "infoItems": {
-        "0": "If the product is defective or incorrect: We cover the shipping cost.",
-        "1": "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
-        "2": "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
-      },
+      "infoItems": [
+        "If the product is defective or incorrect: We cover the shipping cost.",
+        "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
+        "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
+      ],
       "infoTitle": "Who Pays for Return Shipping?",
       "title": "5. Shipping Fees"
     },
     "section6": {
-      "methodItems": {
-        "0": "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
-        "1": "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
-        "2": "Cash on Delivery: Refunded via EFT to your bank account."
-      },
+      "methodItems": [
+        "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
+        "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
+        "Cash on Delivery: Refunded via EFT to your bank account."
+      ],
       "methodTitle": "Refund Method:",
       "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives.",
-      "processSteps": {
-        "0": "Withdrawal Notification: You inform us of your request.",
-        "1": "Product Return: You ship the product within 10 days.",
-        "2": "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
-        "3": "Refund: Your refund is processed according to your payment method."
-      },
+      "processSteps": [
+        "Withdrawal Notification: You inform us of your request.",
+        "Product Return: You ship the product within 10 days.",
+        "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
+        "Refund: Your refund is processed according to your payment method."
+      ],
       "processTitle": "Return Process:",
       "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
       "title": "6. Refunds"
     },
     "section7": {
-      "items": {},
+      "items": [],
       "text": "Custom tailored products (curtains made to your specific measurements) cannot be returned if the product is not defective.",
       "title": "7. Custom Tailored Products",
       "warning": "Important: Please carefully check your measurements before placing your order to avoid measurement errors."
     },
     "section8": {
       "info": "In case of a defective product, you can choose one of the above and notify us. As the seller, we are obliged to fulfill your chosen request.",
-      "items": {
-        "0": "Request free repair of the product.",
-        "1": "Request replacement with a non-defective equivalent.",
-        "2": "Request a price reduction in proportion to the defect.",
-        "3": "Withdraw from the contract and request a refund."
-      },
+      "items": [
+        "Request free repair of the product.",
+        "Request replacement with a non-defective equivalent.",
+        "Request a price reduction in proportion to the defect.",
+        "Withdraw from the contract and request a refund."
+      ],
       "text": "If you detect a defect (fault, error) in your product, you can use your rights regarding defective goods instead of the right of withdrawal:",
       "title": "8. Defective Products - Warranty Rights"
     },

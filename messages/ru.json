@@ -331,129 +331,124 @@
     "SearchBar": "Введите здесь номер дизайна."
   },
   "ReturnPolicy": {
+    "summary": "При покупках на Demfirat.com вы можете воспользоваться правом на отказ в течение 14 дней с даты доставки без объяснения причин. Достаточно направить запрос по электронной почте, телефону или письменно. После уведомления товар должен быть отправлен нам в течение 10 дней неиспользованным и неповрежденным. Если товар неисправен или бракован, стоимость обратной доставки оплачивается нами; при возврате в рамках права на отказ стоимость доставки оплачивается клиентом. Оплаченная вами сумма будет возвращена в соответствии с вашим методом оплаты не позднее 14 дней после получения нами товара.\n\nДля товаров, изготовленных по индивидуальным размерам, возврат не принимается, если товар не является бракованным. В случае брака ваши права на ремонт, замену, скидку или возврат средств сохраняются. Для получения подробной информации вы можете ознакомиться с нашей соответствующей страницей о правах на возврат и отказ.",
+    "readMore": "Читать далее",
     "delivery": {
-      "customText": "Шторы по индивидуальным размерам и изделия на заказ передаются курьеру в течение 7 рабочих дней после подтверждения заказа.",
-      "customTime": "В течение 7 рабочих дней",
-      "customTitle": "Изделия на заказ",
-      "intro": "Ваши заказы тщательно готовятся и отправляются в кратчайшие сроки.",
-      "standardText": "Готовые к отправке товары на складе передаются курьеру в течение 3 рабочих дней после подтверждения заказа.",
-      "standardTime": "В течение 3 рабочих дней",
-      "standardTitle": "Стандартные товары",
+      "text": "Все наши товары передаются курьеру в течение 1-3 рабочих дней после подтверждения заказа.",
+      "time": "1-3 рабочих дня",
       "title": "Информация о доставке"
     },
-    "disclaimer": "Потребительские арбитражные комиссии и потребительские суды: В случае споров, вытекающих из данного договора, вы можете обратиться в Потребительскую арбитражную комиссию или Потребительский суд по месту вашего жительства или по месту совершения сделки.",
-    "lastUpdate": "Последнее обновление: 10 декабря 2024",
+    "disclaimer": "Потребительские арбитражные комиссии и потребительские суды: В случае споров, вытекающих из данного договора, вы можете обратиться в Потребительскую арбитражную комиссию или потребительский суд по месту вашего жительства в рамках денежных лимитов, ежегодно объявляемых Министерством торговли.",
+    "lastUpdate": "Последнее обновление: 10 декабря 2024 г.",
     "section1": {
-      "text": "This page explains the withdrawal rights and return conditions for consumers shopping on the Karven Homedecor e-commerce site. Our return policy is designed to ensure customer satisfaction while complying with relevant consumer protection regulations.",
-      "title": "1. General Information"
+      "text": "На этой странице описываются права отказа и условия возврата для покупателей магазина Karven Homedecor. Наша политика возврата направлена на обеспечение удовлетворенности клиентов в соответствии с правилами защиты прав потребителей.",
+      "title": "1. Общая информация"
     },
     "section10": {
-      "contactBox": {
-        "0": "Email: info@demfirat.com",
-        "1": "Телефон: +90 (501) 057-1884",
-        "2": "Адрес: Kemalpaşa Mah Gençtürk Cad No 21A, Fatih, İstanbul 34134, Turkey",
-        "3": "Часы работы: Понедельник - Пятница, 09:00 - 18:00",
-        "4": "[TRANSLATE] Fatih, İstanbul 34134, Türkiye",
-        "5": "[TRANSLATE] Çalışma Saatleri: Pazartesi - Cuma, 09:00 - 18:00"
-      },
-      "text": "По вопросам возврата, права отказа или другим вопросам:",
+      "contactBox": [
+        "Email: info@demfirat.com",
+        "Телефон: +90 (501) 057-1884",
+        "Адрес: Kemalpasa Mah Gencturk Cad No 21A, Fatih, г. Стамбул 34134, Турция",
+        "Часы работы: Понедельник - Пятница, 09:00 - 18:00"
+      ],
+      "text": "По вопросам возврата, права на отказ или любым другим вопросам:",
       "title": "10. Контакты"
     },
     "section2": {
-      "days": "14 DAYS",
-      "items": {
-        "0": "The withdrawal period starts from the day you or a third party indicated by you receives the product.",
-        "1": "If the last day falls on a public holiday, the period extends to the end of the next business day.",
-        "2": "As a seller, we may extend this period at our own initiative.",
-        "3": "For multiple product orders, a separate withdrawal period starts for each product."
-      },
-      "text": "You have the right to withdraw from the contract within 14 days of receiving your product, without giving any reason and without paying any penalty.",
-      "title": "2. Withdrawal Period"
+      "days": "14 ДНЕЙ",
+      "items": [
+        "Срок для права отказа от товара начинает отсчитываться со дня получения вами товара.",
+        "Если последний день выпадает на выходной, срок продлевается до конца следующего рабочего дня.",
+        "Как продавец, мы можем продлить этот срок по нашей инициативе.",
+        "При покупке нескольких товаров в одном заказе для каждого из них отсчитывается свой отдельный срок."
+      ],
+      "text": "Вы имеете право отказаться от договора в течение 14 дней с момента получения вашего продукта без объяснения причин и какой-либо неустойки.",
+      "title": "2. Срок Возврата"
     },
     "section3": {
-      "methods": {
-        "0": "Email: Send your withdrawal notification to info@demfirat.com",
-        "1": "Phone: Call us at +90 (501) 057-1884",
-        "2": "Written Notice: Fill out the withdrawal form and send it to our address"
-      },
-      "methodsTitle": "Application Methods:",
-      "note": "Important: It is sufficient to notify us that you wish to withdraw. You do not need to state a reason.",
-      "text": "To exercise your right of withdrawal, you can choose one of the following methods:",
-      "title": "3. How to Exercise Your Right of Withdrawal"
+      "methods": [
+        "Email: Отправьте уведомление о возврате на info@demfirat.com",
+        "Телефон: Позвоните нам +90 (501) 057-1884",
+        "Письменно: Заполните форму уведомления об отказе и отправьте по нашему адресу"
+      ],
+      "methodsTitle": "Способы обращения:",
+      "note": "Важно: Достаточно просто сообщить нам о желании вернуть товар. Причину указывать не обязательно.",
+      "text": "Чтобы воспользоваться правом на возврат, вы можете выбрать один из следующих способов:",
+      "title": "3. Как воспользоваться правом возврата"
     },
     "section4": {
-      "packagingItems": {
-        "0": "Place the product in its original box.",
-        "1": "Use additional protective material to prevent damage.",
-        "2": "Keep the shipping tracking number.",
-        "3": "Send via insured shipping if possible."
-      },
-      "packagingTitle": "Packaging Suggestions:",
-      "steps": {
-        "0": "You must send the product back to us within 10 days.",
-        "1": "The product must be unused, undamaged, and in its original packaging.",
-        "2": "All accessories and documents that came with the product must be included.",
-        "3": "The invoice or delivery note must be sent with the product."
-      },
-      "text": "After sending us your withdrawal notification:",
-      "title": "4. Returning the Product"
+      "packagingItems": [
+        "Поместите товар в его оригинальную коробку.",
+        "Используйте дополнительные защитные материалы для предотвращения повреждений.",
+        "Обязательно сохраните номер отслеживания посылки.",
+        "По возможности отправляйте со страховкой."
+      ],
+      "packagingTitle": "Рекомендации по упаковке:",
+      "steps": [
+        "Вы должны отправить товар нам обратно в течение 10 дней.",
+        "Товар должен быть неиспользованным, неповрежденным и в оригинальной упаковке.",
+        "Все аксессуары и документы, поставляемые с продуктом, должны быть включены.",
+        "Счет-фактура или накладная должны быть отправлены вместе с товаром."
+      ],
+      "text": "После передачи нам вашего уведомления об отказе:",
+      "title": "4. Возврат Товара"
     },
     "section5": {
-      "addressLines": {
-        "0": "Karven Homedecor",
-        "1": "Vakıflar OSB Mah. D100 Cad. No:38",
-        "2": "Ergene, Tekirdağ 59930"
-      },
-      "addressTitle": "Return Address:",
-      "infoItems": {
-        "0": "If the product is defective or incorrect: We cover the shipping cost.",
-        "1": "If exercising the right of withdrawal only: The customer is responsible for return shipping costs.",
-        "2": "For promotional products: Unless we covered the initial shipping, the customer pays for return shipping."
-      },
-      "infoTitle": "Who Pays for Return Shipping?",
-      "title": "5. Shipping Fees"
+      "addressLines": [
+        "Dem Fırat Karven Tekstil San. ve Tic. A.Ş.",
+        "Kemalpasa Mah Gencturk Cad No 21A",
+        "Fatih, Istanbul 34134, Турция"
+      ],
+      "addressTitle": "Адрес для возврата:",
+      "infoItems": [
+        "Если товар с дефектом или ошибочный: Расходы по доставке оплачиваются нами.",
+        "Если используется только право отказа: Расходы по доставке возврата несет клиент.",
+        "Для акционных товаров: Если мы не брали на себя первоначальную доставку, покупатель оплачивает возвратную доставку."
+      ],
+      "infoTitle": "Кто оплачивает стоимость обратной доставки?",
+      "title": "5. Стоимость доставки"
     },
     "section6": {
-      "methodItems": {
-        "0": "Credit Card: The refund appears on your card within 2-10 business days (depending on the bank).",
-        "1": "Bank Transfer (EFT): Within 1-3 business days if you provide your account details.",
-        "2": "Cash on Delivery: Refunded via EFT to your bank account."
-      },
-      "methodTitle": "Refund Method:",
-      "note": "Important: Refunds will not be issued before we receive the product. However, the process starts once your application is accepted, even before the product arrives.",
-      "processSteps": {
-        "0": "Withdrawal Notification: You inform us of your request.",
-        "1": "Product Return: You ship the product within 10 days.",
-        "2": "Product Inspection: The product is inspected in our warehouse (1-2 business days).",
-        "3": "Refund: Your refund is processed according to your payment method."
-      },
-      "processTitle": "Return Process:",
-      "text": "We will refund the full amount you paid within 14 days of receiving your withdrawal notification.",
-      "title": "6. Refunds"
+      "methodItems": [
+        "Кредитная карта: Возврат средств отображается на вашей карте в течение 2-10 рабочих дней.",
+        "Банковский перевод (EFT): В течение 1-3 рабочих дней, если вы предоставите реквизиты вашего счета.",
+        "Наложенный платеж: Возвращается через перевод EFT на ваш банковский счет."
+      ],
+      "methodTitle": "Способ возврата средств:",
+      "note": "Важно: Возврат средств не будет произведен до получения нами товара. Однако процесс начнется с момента одобрения вашей заявки, даже до прибытия товара.",
+      "processSteps": [
+        "Уведомление: Вы направляете нам свой запрос об отказе.",
+        "Возврат товара: Вы отправляете товар в течение 10 дней.",
+        "Проверка товара: Товар проверяется на нашем складе (1-2 рабочих дня).",
+        "Возврат стредств: Возврат осуществляется в соответствии с вашим способом оплаты."
+      ],
+      "processTitle": "Процесс возврата:",
+      "text": "Мы вернем полную уплаченную вами сумму в течение 14 дней с момента доставки нам вашего уведомления об отказе.",
+      "title": "6. Возврат средств"
     },
     "section7": {
-      "items": {},
-      "text": "Изделия, изготовленные на заказ (шторы, пошитые по вашим индивидуальным размерам), не подлежат возврату, если товар не является дефектным.",
-      "title": "7. Изделия на заказ",
-      "warning": "Важно: Пожалуйста, внимательно проверьте свои размеры перед оформлением заказа, чтобы избежать ошибок в замерах."
+      "items": [],
+      "text": "Изделия, изготовленные на заказ (шторы по индивидуальным размерам), не подлежат возврату, если товар не имеет производственных дефектов.",
+      "title": "7. Товары на Заказ",
+      "warning": "Важно: Пожалуйста, внимательно проверяйте свои размеры перед оформлением заказа."
     },
     "section8": {
-      "info": "В случае дефектного товара вы можете выбрать один из вышеперечисленных вариантов и уведомить нас. Как продавец, мы обязаны выполнить ваш выбранный запрос.",
-      "items": {
-        "0": "Запросить бесплатный ремонт товара.",
-        "1": "Запросить замену на исправный аналог.",
-        "2": "Запросить снижение цены пропорционально дефекту.",
-        "3": "Отказаться от договора и запросить возврат средств."
-      },
-      "text": "Если вы обнаружили дефект в вашем товаре, вы можете воспользоваться правами на дефектные товары вместо права отказа:",
-      "title": "8. Дефектные товары - Гарантийные права"
+      "info": "В случае обнаружения дефектного товара вы можете выбрать один из указанных выше вариантов и уведомить нас. Как продавец, мы обязаны выполнить ваш выбранный запрос.",
+      "items": [
+        "Запросить бесплатный ремонт товара.",
+        "Запросить замену на неповрежденный аналог.",
+        "Запросить снижение цены соразмерно дефекту.",
+        "Расторгнуть договор и запросить возврат уплаченной суммы."
+      ],
+      "text": "Если вы обнаружите дефект (недостаток, ошибку) в вашем продукте, вы можете воспользоваться своими гарантийными правами вместо права на отказ:",
+      "title": "8. Дефектные Товары и Гарантийные Права"
     },
     "section9": {
-      "note": "Прямой обмен возможен в зависимости от наличия на складе. Пожалуйста, свяжитесь с нашей службой поддержки для оценки вашей ситуации.",
-      "text": "Если вы хотите только обменять товар (другой размер, цвет и т.д.), пожалуйста, сначала верните текущий товар, используя право отказа, а затем создайте новый заказ.",
+      "note": "Прямой обмен возможен в зависимости от наличия товара на складе. Пожалуйста, свяжитесь с нашей службой поддержки для оценки.",
+      "text": "Если вы хотите только обменять товар (на другой размер, цвет и т. д.), пожалуйста, сначала верните текущий товар с использованием вашего права на отказ, а затем оформите новый заказ.",
       "title": "9. Обмен"
     },
-    "title": "Доставка и Возвраты"
+    "title": "Условия доставки и возврата"
   },
   "Slider": {
     "desc_1": "Ткани превосходного качества благодаря передовым технологиям и квалифицированному мастерству.",
