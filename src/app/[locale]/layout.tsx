@@ -66,7 +66,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         {/* End Google Tag Manager */}
 
         {/* Meta Pixel Code */}
-        <Script id="meta-pixel" strategy="afterInteractive">
+        <Script id="meta-pixel" strategy="lazyOnload">
           {`
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -90,7 +90,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
 
         {/* Klaviyo Tracking Script */}
         {process.env.NEXT_PUBLIC_KLAVIYO_PUBLIC_KEY && (
-          <Script id="klaviyo" strategy="afterInteractive">
+          <Script id="klaviyo" strategy="lazyOnload">
             {`
               !function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();
             `}
@@ -98,7 +98,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         )}
         {process.env.NEXT_PUBLIC_KLAVIYO_PUBLIC_KEY && (
           <Script
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             src={`https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=${process.env.NEXT_PUBLIC_KLAVIYO_PUBLIC_KEY}`}
             async
           />

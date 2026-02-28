@@ -25,9 +25,22 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         const imageUrl = product.primary_image || "";
         const price = product.price;
 
+        const baseUrl = `https://karven.com`;
+        const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}/perde`;
+
         return {
             title: `${title} - Perde Diktir | Karven`,
             description: description.substring(0, 160),
+            alternates: {
+                canonical: canonicalUrl,
+                languages: {
+                    'en': `${baseUrl}/en/product/${data.product_category}/${product_sku}/perde`,
+                    'tr': `${baseUrl}/tr/product/${data.product_category}/${product_sku}/perde`,
+                    'ru': `${baseUrl}/ru/product/${data.product_category}/${product_sku}/perde`,
+                    'pl': `${baseUrl}/pl/product/${data.product_category}/${product_sku}/perde`,
+                    'x-default': `${baseUrl}/en/product/${data.product_category}/${product_sku}/perde`,
+                },
+            },
             openGraph: {
                 title,
                 description: description.substring(0, 100),
@@ -100,6 +113,39 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         }
     } : null;
 
+    const baseUrl = `https://karven.com/${locale}`;
+    const productUrl = `${baseUrl}/product/${product_category}/${product_sku}/perde`;
+    const categoryUrl = `${baseUrl}/product/${product_category}`;
+    const categoryName = product_category === 'ready-made_curtain'
+        ? (locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains')
+        : (locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains');
+
+    // JSON-LD Breadcrumb Schema
+    const breadcrumbJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": locale === 'tr' ? 'Anasayfa' : locale === 'ru' ? 'Главная' : locale === 'pl' ? 'Strona główna' : 'Home',
+                "item": baseUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": categoryName,
+                "item": categoryUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": displayTitle,
+                "item": productUrl
+            }
+        ]
+    };
+
     // Inject intent=custom_curtain — this page is ALWAYS the custom curtain experience
     const forcedSearchParams = { ...searchParams, intent: 'custom_curtain' };
 
@@ -111,6 +157,10 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             )}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
             {product ? (
                 <div>
                     <ProductDetailCard

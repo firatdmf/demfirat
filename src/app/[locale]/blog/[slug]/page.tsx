@@ -48,14 +48,78 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         }
     };
 
-    // Helper to get localized content
     const getLocalized = (field: 'title' | 'content' | 'excerpt' | 'category') => {
         const key = `${field}_${lang}` as keyof BlogPost;
         return (post[key] as string) || (post[`${field}_tr` as keyof BlogPost] as string);
     };
 
+    const baseUrl = `https://karven.com/${locale}`;
+    const blogUrl = `${baseUrl}/blog`;
+    const postUrl = `${baseUrl}/blog/${slug}`;
+    const imageUrl = post.hero_image || post.cover_image || 'https://karven.com/media/blog/default-hero.jpg';
+
+    // JSON-LD Breadcrumb Schema for Blog post
+    const breadcrumbJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": locale === 'tr' ? 'Anasayfa' : locale === 'ru' ? 'Главная' : locale === 'pl' ? 'Strona główna' : 'Home',
+                "item": baseUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": locale === 'tr' ? 'Blog' : locale === 'ru' ? 'Блог' : locale === 'pl' ? 'Blog' : 'Blog',
+                "item": blogUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": getLocalized('title'),
+                "item": postUrl
+            }
+        ]
+    };
+
+    // JSON-LD Article Schema for Blog post
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": getLocalized('title'),
+        "image": imageUrl,
+        "datePublished": post.published_at,
+        "dateModified": post.published_at,
+        "author": {
+            "@type": "Person",
+            "name": post.author || "Karven"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Karven",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://karven.com/media/karvenLogo.webp"
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": postUrl
+        }
+    };
+
     return (
         <main className={classes.blogPost}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+            />
             {/* Custom Header Content (Styles, etc) */}
             {post.header_content && (
                 <div dangerouslySetInnerHTML={{ __html: post.header_content }} />

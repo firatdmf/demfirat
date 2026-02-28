@@ -60,10 +60,10 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
             pl: 'Zobacz wszystkie'
         },
         featuredFabrics: {
-            en: 'Featured Fabrics',
-            tr: 'Öne Çıkan Kumaşlar',
-            ru: 'Избранные ткани',
-            pl: 'Polecane tkaniny'
+            en: 'Featured Curtains',
+            tr: 'Öne Çıkan Perdeler',
+            ru: 'Избранные шторы',
+            pl: 'Polecane zasłony'
         },
         step1: {
             en: 'Fabric',
@@ -212,7 +212,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
 
                     <div className={classes.buttonRow}>
                         <Link
-                            href={`/${locale}/product/fabric`}
+                            href={`/${locale}/product/fabric?intent=custom_curtain`}
                             className={classes.ctaButton}
                         >
                             {t.cta[lang]}
@@ -232,7 +232,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
             <div className={classes.carouselSection}>
                 <div className={classes.carouselHeader}>
                     <h3 className={classes.carouselTitle}>{t.featuredFabrics[lang]}</h3>
-                    <Link href={`/${locale}/product/fabric`} className={classes.viewAllLink}>
+                    <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.viewAllLink}>
                         {t.viewAll[lang]} →
                     </Link>
                 </div>
@@ -259,7 +259,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                             products.map((product) => (
                                 <Link
                                     key={product.id}
-                                    href={`/${locale}/product/fabric/${product.sku}#ProductDetailCard`}
+                                    href={`/${locale}/product/fabric/${product.sku}/perde#ProductDetailCard`}
                                     className={classes.productCard}
                                 >
                                     <div className={classes.imageWrapper}>

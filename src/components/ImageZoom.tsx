@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import styles from './ImageZoom.module.css';
 
@@ -12,106 +11,63 @@ interface ImageZoomProps {
 }
 
 export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
-    const [isZooming, setIsZooming] = useState(false);
+    const [isZoomed, setIsZoomed] = useState(false);
     const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
-    const [panelPosition, setPanelPosition] = useState({ top: 0, left: 0, height: 0 });
-    const [mounted, setMounted] = useState(false);
-    const imageRef = useRef<HTMLDivElement>(null);
+    // Ref is used to calculate mouse position relative to the wrapper
+    const imageWrapperRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    const updatePanelPosition = () => {
-        if (!imageRef.current) return;
-        const rect = imageRef.current.getBoundingClientRect();
-        setPanelPosition({
-            top: rect.top + window.scrollY,
-            left: rect.right + 20,
-            height: rect.height
-        });
-    };
-
-    const handleMouseEnter = () => {
-        // Only enable zoom on desktop
+    const toggleZoom = () => {
+        // Only allow zooming on desktop
         if (window.innerWidth >= 1024) {
-            setIsZooming(true);
-            updatePanelPosition();
+            setIsZoomed(!isZoomed);
         }
     };
 
-    const handleMouseLeave = () => {
-        setIsZooming(false);
-    };
-
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!imageRef.current) return;
+        if (!isZoomed || !imageWrapperRef.current) return;
 
-        const rect = imageRef.current.getBoundingClientRect();
+        const rect = imageWrapperRef.current.getBoundingClientRect();
+
+        // Calculate percentages
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
 
+        // Keep bounds between 0 and 100 to prevent weird scrolling at edges
         setZoomPosition({
             x: Math.max(0, Math.min(100, x)),
             y: Math.max(0, Math.min(100, y))
         });
-
-        // Update panel position on move to stay aligned
-        updatePanelPosition();
     };
 
-    const zoomPanel = mounted && isZooming ? createPortal(
-        <div
-            className={styles.zoomPanel}
-            style={{
-                position: 'absolute',
-                top: `${panelPosition.top}px`,
-                left: `${panelPosition.left}px`,
-                height: `${Math.min(panelPosition.height, 500)}px`,
-                width: `${Math.min(panelPosition.height, 500)}px`,
-            }}
-        >
-            <div
-                className={styles.zoomImage}
-                style={{
-                    backgroundImage: `url(${src})`,
-                    backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                }}
-            />
-        </div>,
-        document.body
-    ) : null;
+    const handleMouseLeave = () => {
+        // Automatically zoom out when the mouse leaves the image area
+        if (isZoomed) {
+            setIsZoomed(false);
+        }
+    };
 
     return (
-        <>
-            <div
-                ref={imageRef}
-                className={styles.imageWrapper}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onMouseMove={handleMouseMove}
-            >
-                <Image
-                    src={src}
-                    alt={alt}
-                    className={styles.mainImage}
-                    onLoad={onLoad}
-                    draggable={false}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority
-                />
-                {isZooming && (
-                    <div
-                        className={styles.lensBox}
-                        style={{
-                            left: `${zoomPosition.x}%`,
-                            top: `${zoomPosition.y}%`,
-                        }}
-                    />
-                )}
-            </div>
-            {zoomPanel}
-        </>
+        <div
+            ref={imageWrapperRef}
+            className={`${styles.imageWrapper} ${isZoomed ? styles.zoomedIn : styles.zoomedOut}`}
+            onClick={toggleZoom}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+        >
+            <Image
+                src={src}
+                alt={alt}
+                className={styles.mainImage}
+                onLoad={onLoad}
+                draggable={false}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+                style={{
+                    transformOrigin: isZoomed ? `${zoomPosition.x}% ${zoomPosition.y}%` : '50% 50%',
+                    transform: isZoomed ? 'scale(2.5)' : 'scale(1)',
+                }}
+            />
+        </div>
     );
 }

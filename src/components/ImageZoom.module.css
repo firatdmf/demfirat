@@ -1,15 +1,19 @@
-.zoomContainer {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
 .imageWrapper {
     width: 100%;
     height: 100%;
     position: relative;
-    cursor: crosshair;
+    overflow: hidden;
+    /* Prevent zoomed image from going outside the container */
+    border-radius: 16px;
+}
+
+/* Custom cursors for zoom states */
+.zoomedOut {
+    cursor: zoom-in;
+}
+
+.zoomedIn {
+    cursor: zoom-out;
 }
 
 .mainImage {
@@ -17,59 +21,14 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: transform 0.3s ease;
+    /* transition allows smooth zooming in and out */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform, transform-origin;
 }
 
-/* Lens box indicator on the image */
-.lensBox {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    border: 2px solid var(--gold, #c9a961);
-    background: rgba(201, 169, 97, 0.1);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-}
-
-/* Magnified image panel - rendered via portal */
-.zoomPanel {
-    width: 450px;
-    height: 450px;
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    z-index: 9999;
-}
-
-.zoomImage {
-    width: 100%;
-    height: 100%;
-    background-size: 300%;
-    background-repeat: no-repeat;
-}
-
-/* Hide on mobile and tablet */
+/* On mobile/tablet, reset cursor to default as zooming is generally awkward or tap-based */
 @media (max-width: 1024px) {
-    .zoomPanel {
-        display: none;
-    }
-
-    .lensBox {
-        display: none;
-    }
-
     .imageWrapper {
         cursor: default;
-    }
-}
-
-/* Adjust for smaller screens */
-@media (max-width: 1400px) and (min-width: 1025px) {
-    .zoomPanel {
-        width: 400px;
-        height: 400px;
     }
 }

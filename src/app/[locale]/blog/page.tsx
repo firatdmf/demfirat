@@ -61,8 +61,35 @@ export default async function BlogPage({ params }: BlogPageProps) {
         return (post[key] as string) || (post[`${field}_tr` as keyof BlogPost] as string);
     };
 
+    const baseUrl = `https://karven.com/${locale}`;
+    const blogUrl = `${baseUrl}/blog`;
+
+    // JSON-LD Breadcrumb Schema for Blog Listing
+    const breadcrumbJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": locale === 'tr' ? 'Anasayfa' : locale === 'ru' ? 'Главная' : locale === 'pl' ? 'Strona główna' : 'Home',
+                "item": baseUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": t.title[lang],
+                "item": blogUrl
+            }
+        ]
+    };
+
     return (
         <main className={classes.blogPage}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
             {/* Hero Section */}
             <section className={classes.hero}>
                 <div className={classes.heroContent}>

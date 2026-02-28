@@ -282,9 +282,22 @@ function ProductDetailCard({
     // Filter out video files - they will be handled separately
     images = images.filter(file => {
       const isVideo = file.file_type === 'video' ||
-        file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
+        file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)(\?.*)?$/);
       return !isVideo;
     });
+
+    // Helper function to normalize Cloudinary URLs for strict deduplication
+    const normalizeUrl = (url: string | null) => {
+      if (!url) return '';
+      // Remove query parameters
+      let clean = url.split('?')[0];
+      // Optional: remove Cloudinary version numbers like /v169000000/
+      clean = clean.replace(/\/v\d+\//, '/');
+      return clean;
+    };
+
+    // Deduplicate images by normalized URL to prevent showing clones from Virtual Sharing
+    images = Array.from(new Map(images.filter(v => v.file).map(v => [normalizeUrl(v.file), v])).values());
 
     // Sequence'e göre sırala
     images.sort((a, b) => {
@@ -831,17 +844,26 @@ function ProductDetailCard({
   const mediaItems = useMemo(() => {
     const items: MediaItem[] = [];
 
-    // Get videos from product_files - filter by variant if selected
-    // Only show videos that belong to the selected variant or are product-level (no variant_id)
     const videoFiles = product_files?.filter(file => {
       const isVideo = file.file_type === 'video' ||
-        file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
+        file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)(\?.*)?$/);
 
       if (!isVideo) return false;
 
-      // If a variant is selected, only show videos for that variant or product-level videos
+      // If a variant is selected
       if (selectedVariant) {
-        return String(file.product_variant_id) === String(selectedVariant.id) || !file.product_variant_id;
+        // Check if the current variant has ANY videos specifically assigned to it
+        const variantHasOwnVideos = product_files.some(
+          vFile => (vFile.file_type === 'video' || vFile.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)(\?.*)?$/)) && String(vFile.product_variant_id) === String(selectedVariant.id)
+        );
+
+        // If the variant HAS its own videos, ONLY show those. Don't bleed product-level videos in.
+        if (variantHasOwnVideos) {
+          return String(file.product_variant_id) === String(selectedVariant.id);
+        }
+
+        // IF the variant has NO videos assigned, fall back to showing the general product-level videos
+        return !file.product_variant_id;
       }
 
       // If no variant selected, only show product-level videos (no variant_id)
@@ -853,8 +875,15 @@ function ProductDetailCard({
       items.push({ type: 'image', url: imageFiles[0] });
     }
 
+    const normalizeUrl = (url: string | null) => {
+      if (!url) return '';
+      let clean = url.split('?')[0];
+      clean = clean.replace(/\/v\d+\//, '/');
+      return clean;
+    };
+
     // 2. Add videos (2nd position) - Deduplicate to prevent multiple clones from showing up
-    const uniqueVideos = Array.from(new Map(videoFiles.filter(v => v.file).map(v => [v.file, v])).values());
+    const uniqueVideos = Array.from(new Map(videoFiles.filter(v => v.file).map(v => [normalizeUrl(v.file), v])).values());
     uniqueVideos.forEach(video => {
       items.push({ type: 'video', url: video.file });
     });
@@ -890,12 +919,19 @@ function ProductDetailCard({
   const videoFilesForSidebar = useMemo(() => {
     const allVideos = product_files?.filter(file => {
       const isVideo = file.file_type === 'video' ||
-        file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
+        file.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)(\?.*)?$/);
       return isVideo;
     }) || [];
 
+    const normalizeUrl = (url: string | null) => {
+      if (!url) return '';
+      let clean = url.split('?')[0];
+      clean = clean.replace(/\/v\d+\//, '/');
+      return clean;
+    };
+
     // Deduplicate by URL
-    return Array.from(new Map(allVideos.filter(v => v.file).map(v => [v.file, v])).values());
+    return Array.from(new Map(allVideos.filter(v => v.file).map(v => [normalizeUrl(v.file), v])).values());
   }, [product_files]);
 
   if (!product) {
@@ -1392,6 +1428,24 @@ function ProductDetailCard({
         </div>
 
       </div >
+
+      {/* STANDALONE SAMPLE BLOCK FOR CUSTOM CURTAINS */}
+      {isFabricProduct && isCustomCurtainIntent && (
+        <div className={classes.standaloneSampleBlock}>
+          <FaSwatchbook className={classes.standaloneSampleIcon} />
+          <div className={classes.standaloneSampleText}>
+            <h4>
+              {locale === 'tr' ? 'Kumaştan emin değil misiniz?' : locale === 'ru' ? 'Не уверены в ткани?' : locale === 'pl' ? 'Nie jesteś pewien tkaniny?' : 'Not sure about the fabric?'}
+            </h4>
+            <p>
+              {locale === 'tr' ? 'Sipariş vermeden önce kumaşı hissedin. Numunelerimiz sayesinde rengi ve dokuyu evinizde gerçek ışıkta inceleyebilirsiniz.' : locale === 'ru' ? 'Почувствуйте ткань перед заказом. Наши образцы позволяют оценить цвет и текстуру.' : locale === 'pl' ? 'Poczuj tkaninę przed zamówieniem. Nasze próbki pozwalają ocenić kolor i teksturę.' : 'Feel the fabric before ordering. Our samples let you evaluate color and texture in your own home lighting.'}
+            </p>
+          </div>
+          <button onClick={handleRequestSample} className={classes.standaloneSampleBtn}>
+            {locale === 'tr' ? 'Numune İste' : locale === 'ru' ? 'Запросить образец' : locale === 'pl' ? 'Zamów próbkę' : 'Request Sample'}
+          </button>
+        </div>
+      )}
 
       {/* CustomCurtainSidebar removed — wizard is now inline */}
 

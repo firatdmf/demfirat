@@ -3,7 +3,39 @@ import ProductCategories from "@/components/ProductCategories";
 import { getTranslations } from "next-intl/server";
 import classes from './page.module.css'
 import { ProductCategory } from "@/lib/interfaces"
+import { Metadata } from "next";
+import Image from 'next/image';
 
+export async function generateMetadata(props: PageProps<'/[locale]/product'>): Promise<Metadata> {
+  const { locale } = await props.params;
+  const baseUrl = `https://karven.com`;
+  const canonicalUrl = `${baseUrl}/${locale}/product`;
+
+  const title = locale === 'tr' ? 'Tüm Ürünler | Karven'
+    : locale === 'ru' ? 'Все Продукты | Karven'
+      : locale === 'pl' ? 'Wszystkie Produkty | Karven'
+        : 'All Products | Karven';
+
+  const desc = locale === 'tr' ? 'Lüks ev tekstili koleksiyonumuzu keşfedin. Her mekan için özel tasarımlar.'
+    : locale === 'ru' ? 'Откройте для себя нашу коллекцию роскошного домашнего текстиля. Уникальные дизайны для каждого пространства.'
+      : locale === 'pl' ? 'Odkryj naszą kolekcję luksusowych tekstyliów domowych. Unikalne wzory dla każdej przestrzeni.'
+        : 'Discover our luxury home textile collection. Unique designs for every space.';
+
+  return {
+    title,
+    description: desc,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en': `${baseUrl}/en/product`,
+        'tr': `${baseUrl}/tr/product`,
+        'ru': `${baseUrl}/ru/product`,
+        'pl': `${baseUrl}/pl/product`,
+        'x-default': `${baseUrl}/en/product`,
+      }
+    }
+  };
+}
 
 export default async function Products(props: PageProps<'/[locale]/product'>) {
   const { locale } = await props.params;
@@ -12,15 +44,15 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
   // Multi-language content
   const pageContent = {
     slogan: locale === 'tr' ? 'Her detayda incelik, her dokunuşta konfor' :
-            locale === 'ru' ? 'Изящество в каждой детали, комфорт в каждом прикосновении' :
-            locale === 'pl' ? 'Elegancja w każdym detalu, komfort w każdym dotyku' :
-            locale === 'de' ? 'Eleganz in jedem Detail, Komfort in jeder Berührung' :
+      locale === 'ru' ? 'Изящество в каждой детали, комфорт в каждом прикосновении' :
+        locale === 'pl' ? 'Elegancja w każdym detalu, komfort w każdym dotyku' :
+          locale === 'de' ? 'Eleganz in jedem Detail, Komfort in jeder Berührung' :
             'Elegance in every detail, comfort in every touch',
     description: locale === 'tr' ? 'Lüks ev tekstili koleksiyonumuzu keşfedin. Her mekan için özel tasarımlar.' :
-                 locale === 'ru' ? 'Откройте для себя нашу коллекцию роскошного домашнего текстиля. Уникальные дизайны для каждого пространства.' :
-                 locale === 'pl' ? 'Odkryj naszą kolekcję luksusowych tekstyliów domowych. Unikalne wzory dla każdej przestrzeni.' :
-                 locale === 'de' ? 'Entdecken Sie unsere luxuriöse Heimtextilien-Kollektion. Einzigartige Designs für jeden Raum.' :
-                 'Discover our luxury home textile collection. Unique designs for every space.'
+      locale === 'ru' ? 'Откройте для себя нашу коллекцию роскошного домашнего текстиля. Уникальные дизайны для каждого пространства.' :
+        locale === 'pl' ? 'Odkryj naszą kolekcję luksusowych tekstyliów domowych. Unikalne wzory dla każdej przestrzeni.' :
+          locale === 'de' ? 'Entdecken Sie unsere luxuriöse Heimtextilien-Kollektion. Einzigartige Designs für jeden Raum.' :
+            'Discover our luxury home textile collection. Unique designs for every space.'
   };
 
   const get_product_categories_API_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_categories`);
@@ -68,30 +100,36 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
               <div className={classes.sliderTrack}>
                 {/* Slide 1 */}
                 <div className={classes.slide}>
-                  <img 
-                    src="/media/showcase/products-hero.jpg" 
-                    alt="Karven textile collection" 
+                  <Image
+                    src="/media/showcase/products-hero.jpg"
+                    alt="Karven textile collection"
                     className={classes.showcaseImage}
-                    loading="eager"
+                    fill
+                    sizes="100vw"
+                    priority
                   />
                 </div>
-                
+
                 {/* Slide 2 */}
                 <div className={classes.slide}>
-                  <img 
-                    src="/media/showcase/slide-2.jpg" 
-                    alt="Karven collection slide 2" 
+                  <Image
+                    src="/media/showcase/slide-2.jpg"
+                    alt="Karven collection slide 2"
                     className={classes.showcaseImage}
+                    fill
+                    sizes="100vw"
                     loading="lazy"
                   />
                 </div>
-                
+
                 {/* Slide 3 */}
                 <div className={classes.slide}>
-                  <img 
-                    src="/media/showcase/slide-3.jpg" 
-                    alt="Karven collection slide 3" 
+                  <Image
+                    src="/media/showcase/slide-3.jpg"
+                    alt="Karven collection slide 3"
                     className={classes.showcaseImage}
+                    fill
+                    sizes="100vw"
                     loading="lazy"
                   />
                 </div>

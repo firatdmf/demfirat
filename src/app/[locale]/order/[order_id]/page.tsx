@@ -85,7 +85,17 @@ export default async function Page(props: PageProps<'/[locale]/order/[order_id]'
                                                                 <p className="mb-0.5">📏 Boyut: {item.custom_attributes.width}cm x {item.custom_attributes.height}cm</p>
                                                             )}
                                                             {item.custom_attributes.pleat_type && (
-                                                                <p className="mb-0.5">🧵 Pile: {item.custom_attributes.pleat_type}</p>
+                                                                <p className="mb-0.5">🧵 Pile: {{
+                                                                    'pencil_pleat': 'Sık Pile',
+                                                                    'pencil pleat': 'Sık Pile',
+                                                                    'pinch_pleat': 'Tutam Pile',
+                                                                    'pinch pleat': 'Tutam Pile',
+                                                                    'wave': 'Dalga Pile',
+                                                                    'wave_pleat': 'Dalga Pile',
+                                                                    'goblet_pleat': 'Kadeh Pile',
+                                                                    'eyelet': 'Halkalı',
+                                                                    'grommet': 'Halkalı',
+                                                                }[item.custom_attributes.pleat_type] || item.custom_attributes.pleat_type}</p>
                                                             )}
                                                             {item.custom_attributes.pleat_density && (
                                                                 <p className="mb-0.5">📊 Pile Sıklığı: {item.custom_attributes.pleat_density}</p>
@@ -94,7 +104,7 @@ export default async function Page(props: PageProps<'/[locale]/order/[order_id]'
                                                                 <p className="mb-0.5">🔧 Montaj: {item.custom_attributes.mounting_type === 'cornice' ? 'Korniş' : 'Rustik'}</p>
                                                             )}
                                                             {item.custom_attributes.wing_type && (
-                                                                <p>🪟 Kanat: {item.custom_attributes.wing_type === 'single' ? 'Tek' : 'Çift'}</p>
+                                                                <p>🔧 Montaj Tipi: {item.custom_attributes.wing_type === 'single' ? 'Tek Kanat' : 'Çift Kanat'}</p>
                                                             )}
                                                         </div>
                                                     )}

@@ -1,0 +1,241 @@
+Total products with videos: 26
+
+Product: Dandelion (SKU: RK72010)
+  Total Videos for this product: 4
+  Variant ID None has 4 video records.
+    - ID: 2664, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/72010_video_ldryr3.mp4, Primary: False, Seq: 5
+    - ID: 2665, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/72010_video_ldryr3.mp4, Primary: False, Seq: 5
+    - ID: 2666, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/72010_video_ldryr3.mp4, Primary: False, Seq: 5
+    - ID: 2667, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/72010_video_ldryr3.mp4, Primary: False, Seq: 5
+
+Product: Branch (SKU: RN1268)
+  Total Videos for this product: 4
+  Variant ID None has 4 video records.
+    - ID: 2543, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1268/1268_video_yvp905.mp4, Primary: False, Seq: 7
+    - ID: 2551, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1268/1268_video_yvp905.mp4, Primary: False, Seq: 7
+    - ID: 2567, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1268/1268_video_yvp905.mp4, Primary: False, Seq: 7
+    - ID: 2575, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1268/1268_video_yvp905.mp4, Primary: False, Seq: 7
+
+Product: Floral (SKU: RN1337)
+  Total Videos for this product: 4
+  Variant ID None has 4 video records.
+    - ID: 2477, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1337/1337_video_gbai3e.mp4, Primary: False, Seq: 9
+    - ID: 2499, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1337/1337_video_gbai3e.mp4, Primary: False, Seq: 9
+    - ID: 2520, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1337/1337_video_gbai3e.mp4, Primary: False, Seq: 10
+    - ID: 2521, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1337/1337_video_gbai3e.mp4, Primary: False, Seq: 10
+
+Product: Feather (SKU: RN1360)
+  Total Videos for this product: 4
+  Variant ID None has 4 video records.
+    - ID: 2523, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1360/1360_video_mfwpbt.mp4, Primary: False, Seq: 8
+    - ID: 2524, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1360/1360_video_mfwpbt.mp4, Primary: False, Seq: 8
+    - ID: 2525, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1360/1360_video_mfwpbt.mp4, Primary: False, Seq: 10
+    - ID: 2526, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_RN1360/1360_video_mfwpbt.mp4, Primary: False, Seq: 10
+
+Product: K25289 (SKU: K25289)
+  Total Videos for this product: 7
+  Variant ID 449 has 1 video records.
+    - ID: 2813, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25289/tgd2orkbunghdsfpp0h2.mp4, Primary: False, Seq: 2
+  Variant ID 453 has 1 video records.
+    - ID: 2811, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25289/tgd2orkbunghdsfpp0h2.mp4, Primary: False, Seq: 4
+  Variant ID None has 3 video records.
+    - ID: 2302, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25289/tgd2orkbunghdsfpp0h2.mp4, Primary: False, Seq: 6
+    - ID: 2304, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25289/tgd2orkbunghdsfpp0h2.mp4, Primary: False, Seq: 7
+    - ID: 2305, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25289/tgd2orkbunghdsfpp0h2.mp4, Primary: False, Seq: 7
+  Variant ID 470 has 1 video records.
+    - ID: 2306, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25289/tgd2orkbunghdsfpp0h2.mp4, Primary: False, Seq: 6
+  Variant ID 450 has 1 video records.
+    - ID: 2810, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25289/tgd2orkbunghdsfpp0h2.mp4, Primary: False, Seq: 6
+
+Product: N1466T (SKU: N1466T)
+  Total Videos for this product: 5
+  Variant ID 464 has 1 video records.
+    - ID: 2800, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_N1466T/oklxnzy98lagyafyzccd.mp4, Primary: False, Seq: 4
+  Variant ID 465 has 1 video records.
+    - ID: 2339, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_N1466T/oklxnzy98lagyafyzccd.mp4, Primary: False, Seq: 5
+  Variant ID None has 2 video records.
+    - ID: 2340, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_N1466T/oklxnzy98lagyafyzccd.mp4, Primary: False, Seq: 5
+    - ID: 2338, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_N1466T/oklxnzy98lagyafyzccd.mp4, Primary: False, Seq: 6
+  Variant ID 369 has 1 video records.
+    - ID: 2798, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_N1466T/oklxnzy98lagyafyzccd.mp4, Primary: False, Seq: 5
+
+Product: Savannah (SKU: K24704)
+  Total Videos for this product: 4
+  Variant ID None has 4 video records.
+    - ID: 2453, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K24704/K24704.mp4, Primary: False, Seq: 4
+    - ID: 2454, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K24704/K24704.mp4, Primary: False, Seq: 4
+    - ID: 2455, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K24704/K24704.mp4, Primary: False, Seq: 4
+    - ID: 2456, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K24704/K24704.mp4, Primary: False, Seq: 4
+
+Product: K25318 (SKU: K25318)
+  Total Videos for this product: 9
+  Variant ID 624 has 1 video records.
+    - ID: 2809, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 3
+  Variant ID 501 has 1 video records.
+    - ID: 2278, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 4
+  Variant ID None has 4 video records.
+    - ID: 2279, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 6
+    - ID: 2277, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 7
+    - ID: 2280, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 8
+    - ID: 2281, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 8
+  Variant ID 499 has 1 video records.
+    - ID: 2805, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 6
+  Variant ID 500 has 1 video records.
+    - ID: 2807, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 6
+  Variant ID 618 has 1 video records.
+    - ID: 2808, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K25318/phasbdtku9yys78weo0t.mp4, Primary: False, Seq: 7
+
+Product: Santuk (SKU: KZL000131)
+  Total Videos for this product: 3
+  Variant ID None has 1 video records.
+    - ID: 2350, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_KZL000131/KZL000131.mp4, Primary: False, Seq: 5
+  Variant ID 514 has 1 video records.
+    - ID: 2351, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_KZL000131/KZL000131.mp4, Primary: False, Seq: 5
+  Variant ID 515 has 1 video records.
+    - ID: 2797, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_KZL000131/KZL000131.mp4, Primary: False, Seq: 5
+
+Product: Liva (SKU: 2047)
+  Total Videos for this product: 3
+  Variant ID 552 has 1 video records.
+    - ID: 2801, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2047/jomqxzxprx3am9eotdon.mp4, Primary: False, Seq: 2
+  Variant ID 519 has 1 video records.
+    - ID: 2253, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2047/jomqxzxprx3am9eotdon.mp4, Primary: False, Seq: 3
+  Variant ID None has 1 video records.
+    - ID: 2257, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2047/jomqxzxprx3am9eotdon.mp4, Primary: False, Seq: 3
+
+Product: Foldet (SKU: 1201)
+  Total Videos for this product: 2
+  Variant ID None has 2 video records.
+    - ID: 2174, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1201/lyvgwx2y94ie70u77zb9.mp4, Primary: False, Seq: 3
+    - ID: 2175, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1201/akpxqtjsespqzxmbrtsw.mp4, Primary: False, Seq: 3
+
+Product: Sable (SKU: sable)
+  Total Videos for this product: 2
+  Variant ID None has 2 video records.
+    - ID: 2184, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_sable/mh4qtpuiinkdujsom4bi.mp4, Primary: False, Seq: 1
+    - ID: 2183, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_sable/mh4qtpuiinkdujsom4bi.mp4, Primary: False, Seq: 6
+
+Product: Bamboo Plise (SKU: TTEMPILISE)
+  Total Videos for this product: 1
+  Variant ID 558 has 1 video records.
+    - ID: 2220, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_TTEMPILISE/f4k800cjkgb5662y1svh.mp4, Primary: False, Seq: 3
+
+Product: S-LINE (SKU: S-LINE)
+  Total Videos for this product: 1
+  Variant ID 561 has 1 video records.
+    - ID: 2185, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_S-LINE/qnxb6tzaupaijcxzj5xs.mp4, Primary: False, Seq: 5
+
+Product: 3014 Crepe (SKU: 3014)
+  Total Videos for this product: 3
+  Variant ID 570 has 1 video records.
+    - ID: 2794, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3014/q61yjdhvcw9m9lo0gjfe.mp4, Primary: False, Seq: 3
+  Variant ID None has 1 video records.
+    - ID: 2199, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3014/kyrc3wplectbiub4wli0.mp4, Primary: False, Seq: 5
+  Variant ID 569 has 1 video records.
+    - ID: 2198, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3014/q61yjdhvcw9m9lo0gjfe.mp4, Primary: False, Seq: 6
+
+Product: 2086 (SKU: 2086)
+  Total Videos for this product: 3
+  Variant ID 575 has 1 video records.
+    - ID: 2205, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2086/dgqmdyant2fcpfy7d0ss.mp4, Primary: False, Seq: 5
+  Variant ID None has 1 video records.
+    - ID: 2208, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2086/thfcxeb2dapcympjdil3.mp4, Primary: False, Seq: 5
+  Variant ID 576 has 1 video records.
+    - ID: 2781, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2086/dgqmdyant2fcpfy7d0ss.mp4, Primary: False, Seq: 5
+
+Product: 1021 (SKU: 1021)
+  Total Videos for this product: 5
+  Variant ID 587 has 1 video records.
+    - ID: 2195, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1021/qbiffnzslgl2sscwxnnb.mp4, Primary: False, Seq: 2
+  Variant ID 586 has 1 video records.
+    - ID: 2773, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1021/qbiffnzslgl2sscwxnnb.mp4, Primary: False, Seq: 2
+  Variant ID None has 2 video records.
+    - ID: 2188, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1021/m8pw1om1wp4ov9ozbdvh.mp4, Primary: False, Seq: 3
+    - ID: 2190, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1021/aygiqsbcl4vdoxrmpdqr.mp4, Primary: False, Seq: 3
+  Variant ID 588 has 1 video records.
+    - ID: 2776, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1021/qbiffnzslgl2sscwxnnb.mp4, Primary: False, Seq: 3
+
+Product: 3009 (SKU: 3009)
+  Total Videos for this product: 5
+  Variant ID None has 1 video records.
+    - ID: 2212, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3009/fjasm3ozaelawyjp5dfj.mp4, Primary: False, Seq: 3
+  Variant ID 591 has 1 video records.
+    - ID: 2786, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3009/kpd7nggkqlreo8wypysg.mp4, Primary: False, Seq: 3
+  Variant ID 592 has 1 video records.
+    - ID: 2211, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3009/kpd7nggkqlreo8wypysg.mp4, Primary: False, Seq: 4
+  Variant ID 590 has 1 video records.
+    - ID: 2213, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3009/ktpcsikobimb71ymhaaz.mp4, Primary: False, Seq: 4
+  Variant ID 589 has 1 video records.
+    - ID: 2214, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3009/mvtdgsjyzyno9nngmtmu.mp4, Primary: False, Seq: 4
+
+Product: K12447 (SKU: K12447)
+  Total Videos for this product: 9
+  Variant ID None has 4 video records.
+    - ID: 2243, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 0
+    - ID: 2245, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 0
+    - ID: 2247, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 0
+    - ID: 2222, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 1
+  Variant ID 623 has 1 video records.
+    - ID: 2240, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 5
+  Variant ID 593 has 1 video records.
+    - ID: 2815, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 5
+  Variant ID 620 has 1 video records.
+    - ID: 2819, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 5
+  Variant ID 621 has 1 video records.
+    - ID: 2822, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 5
+  Variant ID 622 has 1 video records.
+    - ID: 2824, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K12447/alkzxre86zn9bpyazlws.mp4, Primary: False, Seq: 5
+
+Product: Vienna Ağır Gramajlı Ütü İstemez Tül Perde Kumaşı (SKU: 1020)
+  Total Videos for this product: 1
+  Variant ID 598 has 1 video records.
+    - ID: 2730, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_1020/vienna_video (1).mp4, Primary: False, Seq: 6
+
+Product: 24592 (SKU: 24592)
+  Total Videos for this product: 6
+  Variant ID 601 has 1 video records.
+    - ID: 2287, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_24592/tyasfggetuqhw8wjr6t7.mp4, Primary: False, Seq: 3
+  Variant ID 603 has 1 video records.
+    - ID: 2284, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_24592/vyqhrnwsxmyc278jykri.mp4, Primary: False, Seq: 4
+  Variant ID None has 2 video records.
+    - ID: 2285, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_24592/am3zniqzsu342qe3kxfl.mp4, Primary: False, Seq: 4
+    - ID: 2286, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_24592/f7rmwsggjtejko5zogjh.mp4, Primary: False, Seq: 4
+  Variant ID 604 has 1 video records.
+    - ID: 2790, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_24592/tyasfggetuqhw8wjr6t7.mp4, Primary: False, Seq: 4
+  Variant ID 602 has 1 video records.
+    - ID: 2792, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_24592/vyqhrnwsxmyc278jykri.mp4, Primary: False, Seq: 4
+
+Product: Victoria (SKU: 3012)
+  Total Videos for this product: 3
+  Variant ID 605 has 1 video records.
+    - ID: 2186, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3012/mx9hetvb3rdruqve5net.mp4, Primary: False, Seq: 5
+  Variant ID None has 1 video records.
+    - ID: 2187, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3012/mx9hetvb3rdruqve5net.mp4, Primary: False, Seq: 5
+  Variant ID 606 has 1 video records.
+    - ID: 2827, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_3012/mx9hetvb3rdruqve5net.mp4, Primary: False, Seq: 5
+
+Product: 2023 (SKU: 2023)
+  Total Videos for this product: 1
+  Variant ID 607 has 1 video records.
+    - ID: 2200, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2023/pluh1gnkallxhxmxknij.mp4, Primary: False, Seq: 6
+
+Product: K13094 (SKU: K13094)
+  Total Videos for this product: 2
+  Variant ID None has 1 video records.
+    - ID: 2217, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K13094/afzkk0q82sfuthpfybke.mp4, Primary: False, Seq: 2
+  Variant ID 610 has 1 video records.
+    - ID: 2216, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_K13094/afzkk0q82sfuthpfybke.mp4, Primary: False, Seq: 4
+
+Product: 2073 (SKU: 2073)
+  Total Videos for this product: 3
+  Variant ID None has 1 video records.
+    - ID: 2282, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2073/feihvsqz9nyed2he6s4y.mp4, Primary: False, Seq: 6
+  Variant ID 612 has 1 video records.
+    - ID: 2283, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2073/feihvsqz9nyed2he6s4y.mp4, Primary: False, Seq: 6
+  Variant ID 613 has 1 video records.
+    - ID: 2780, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_2073/feihvsqz9nyed2he6s4y.mp4, Primary: False, Seq: 6
+
+Product: 5019 (SKU: 5019)
+  Total Videos for this product: 1
+  Variant ID 617 has 1 video records.
+    - ID: 2341, URL: https://demfiratkarven.b-cdn.net/media/product_images/product_5019/anbqffzyawodcwqinzuj.mp4, Primary: False, Seq: 5

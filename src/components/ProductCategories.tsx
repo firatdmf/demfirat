@@ -20,16 +20,16 @@ function ProductCategories({
     const name = categoryName.toLowerCase();
     if (name === 'curtain') {
       return locale === 'tr' ? 'Lüks perde koleksiyonu - Evinizi zarafetle süsleyin' :
-             locale === 'ru' ? 'Роскошная коллекция штор - украсьте свой дом элегантностью' :
-             locale === 'pl' ? 'Luksusowa kolekcja zasłon - ozdobić dom elegancją' :
-             locale === 'de' ? 'Luxuriöse Vorhang-Kollektion - schmücken Sie Ihr Zuhause mit Eleganz' :
-             'Luxury curtain collection - Decorate your home with elegance';
+        locale === 'ru' ? 'Роскошная коллекция штор - украсьте свой дом элегантностью' :
+          locale === 'pl' ? 'Luksusowa kolekcja zasłon - ozdobić dom elegancją' :
+            locale === 'de' ? 'Luxuriöse Vorhang-Kollektion - schmücken Sie Ihr Zuhause mit Eleganz' :
+              'Luxury curtain collection - Decorate your home with elegance';
     } else if (name === 'fabric') {
       return locale === 'tr' ? 'Nakışlı kumaş koleksiyonu - Her detayda sanat eseri' :
-             locale === 'ru' ? 'Коллекция вышитых тканей - произведение искусства в каждой детали' :
-             locale === 'pl' ? 'Kolekcja haftowanych tkanin - dzieło sztuki w każdym detalu' :
-             locale === 'de' ? 'Bestickte Stoffkollektion - Kunstwerk in jedem Detail' :
-             'Embroidered fabric collection - Artwork in every detail';
+        locale === 'ru' ? 'Коллекция вышитых тканей - произведение искусства в каждой детали' :
+          locale === 'pl' ? 'Kolekcja haftowanych tkanin - dzieło sztuki w każdym detalu' :
+            locale === 'de' ? 'Bestickte Stoffkollektion - Kunstwerk in jedem Detail' :
+              'Embroidered fabric collection - Artwork in every detail';
     }
     return '';
   };
@@ -39,10 +39,10 @@ function ProductCategories({
       {Headline && <h2 className={classes.componentTitle}>{Headline}</h2>}
       <div className={classes.container}>
         {(product_categories ?? []).map((product_category, index) => {
-          const href = product_category.name.toLowerCase() === "fabrics" ? 
-                      "/product/fabric" : 
-                      "/product/" + product_category.name.toLowerCase();
-          
+          const href = product_category.name.toLowerCase() === "fabrics" ?
+            "/product/fabric" :
+            "/product/" + product_category.name.toLowerCase();
+
           return (
             <Link
               href={href}
@@ -71,10 +71,10 @@ function ProductCategories({
                   </p>
                   <div className={classes.exploreLink}>
                     {locale === 'tr' ? 'Koleksiyonu Keşfet' :
-                     locale === 'ru' ? 'Исследовать коллекцию' :
-                     locale === 'pl' ? 'Poznaj kolekcję' :
-                     locale === 'de' ? 'Kollektion entdecken' :
-                     'Explore Collection'}
+                      locale === 'ru' ? 'Исследовать коллекцию' :
+                        locale === 'pl' ? 'Poznaj kolekcję' :
+                          locale === 'de' ? 'Kollektion entdecken' :
+                            'Explore Collection'}
                   </div>
                 </div>
               </div>

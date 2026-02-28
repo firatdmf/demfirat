@@ -41,7 +41,14 @@ function getInitialRates(): ExchangeRate[] {
 
 export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { data: session } = useSession();
-    const [currency, setCurrency] = useState('TRY');
+    // Use an initializer function to quickly get the saved currency or default to TRY
+    const [currency, setCurrencyState] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('preferredCurrency');
+            if (saved) return saved;
+        }
+        return 'TRY';
+    });
     // Seed rates from localStorage immediately to avoid a flash
     const [rates, setRates] = useState<ExchangeRate[]>(getInitialRates);
     // If we already have cached rates we're not really "loading"
@@ -112,6 +119,17 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
     };
 
+    // Override setCurrency to also save to localStorage
+    const setCurrency = (newCurrency: string) => {
+        setCurrencyState(newCurrency);
+        try {
+            localStorage.setItem('preferredCurrency', newCurrency);
+            // Optionally, we could also send an API request here to save it to their profile.
+        } catch (e) {
+            console.error('Failed to save currency to localStorage', e);
+        }
+    };
+
     useEffect(() => {
         fetchRates();
 
@@ -134,13 +152,17 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                     if (response.ok) {
                         const data = await response.json();
                         if (data.settings && data.settings.currency) {
-                            // Only set currency if we have rates for it, otherwise default to USD
-                            const hasCurrencyRate = rates.find(r => r.currency_code === data.settings.currency);
-                            if (data.settings.currency === 'USD' || hasCurrencyRate) {
-                                setCurrency(data.settings.currency);
+                            // Only apply backend preference if there is NO explicitly saved local preference
+                            // This stops tab-focus from resetting the currency back to default.
+                            const savedLocal = localStorage.getItem('preferredCurrency');
+                            const targetCurrency = savedLocal || data.settings.currency;
+
+                            const hasCurrencyRate = rates.find(r => r.currency_code === targetCurrency);
+                            if (targetCurrency === 'USD' || hasCurrencyRate) {
+                                setCurrencyState(targetCurrency);
                             } else {
-                                console.warn(`No rate available for ${data.settings.currency}, defaulting to USD`);
-                                setCurrency('USD');
+                                console.warn(`No rate available for ${targetCurrency}, defaulting to USD`);
+                                setCurrencyState('USD');
                             }
                         }
                     }

@@ -4,6 +4,7 @@ import classes from "./ProductGrid.module.css";
 import ProductCard from "@/components/ProductCard";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { useCurrency } from '@/contexts/CurrencyContext';
@@ -412,17 +413,17 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
         <div className={classes.headerSection}>
           <div className={classes.headerBackground}>
             {/* Dynamic Hero Image based on category */}
-            <img
+            <Image
               src={
                 product_category?.toLowerCase().includes('fabric') ? '/media/hero/fabric-hero.png' :
                   product_category?.toLowerCase().includes('curtain') ? '/media/ks-curtains-image.jpg' :
                     '/image/category-hero.jpg'
               }
               alt={product_category || 'Category Hero'}
-              onError={(e) => {
-                // Fallback if image fails
-                e.currentTarget.src = '/media/hero/fabric-hero.png';
-              }}
+              fill
+              sizes="100vw"
+              priority
+              style={{ objectFit: 'cover' }}
             />
           </div>
           <div className={classes.headerOverlay}></div>

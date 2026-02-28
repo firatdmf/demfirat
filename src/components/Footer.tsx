@@ -1,6 +1,7 @@
 import { memo } from "react";
 import classes from "@/components/Footer.module.css";
 import Link from "next/link";
+import Image from "next/image";
 import { FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 interface FooterProps {
@@ -29,6 +30,9 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       privacyPolicy: { en: 'Privacy Policy & GDPR', tr: 'Gizlilik Sözleşmesi ve KVKK', ru: 'Политика конфиденциальности', pl: 'Polityka prywatności' },
       deliveryReturns: { en: 'Delivery & Returns', tr: 'Teslimat ve İade Şartları', ru: 'Доставка и возврат', pl: 'Dostawa i zwroty' },
       distanceSales: { en: 'Distance Sales Agreement', tr: 'Mesafeli Satış Sözleşmesi', ru: 'Договор дистанционной продажи', pl: 'Umowa sprzedaży na odległość' },
+      trackOrder: { en: 'Order Tracking', tr: 'Sipariş Takibi', ru: 'Отслеживание заказов', pl: 'Śledzenie zamówienia' },
+      blog: { en: 'Blog', tr: 'Blog', ru: 'Блог', pl: 'Blog' },
+      helpSupport: { en: 'Help & Support', tr: 'Yardım & Destek', ru: 'Помощь', pl: 'Pomoc' },
       followUs: { en: 'Follow Us', tr: 'Bizi Takip Edin', ru: 'Подписывайтесь', pl: 'Obserwuj nas' },
       newsletter: { en: 'Stay updated with our latest collections', tr: 'En son koleksiyonlarımızdan haberdar olun', ru: 'Будьте в курсе наших новинок', pl: 'Bądź na bieżąco z nowościami' },
       phone: { en: 'Phone', tr: 'Telefon', ru: 'Телефон', pl: 'Telefon' },
@@ -53,6 +57,9 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
               <Link href={`/${locale}/contact`}>{ContactUs}</Link>
             </li>
             <li>
+              <Link href={`/${locale}/blog`}>{t('blog')}</Link>
+            </li>
+            <li>
               <Link href={`/${locale}/kvkk`}>{t('privacyPolicy')}</Link>
             </li>
           </ul>
@@ -63,16 +70,31 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
           <h4 className={classes.columnTitle}>{t('products')}</h4>
           <ul className={classes.linkList}>
             <li>
-              <Link href={`/${locale}/product/fabric`}>{t('fabrics')}</Link>
+              {/* Tül Perdeler (Özel dikim - all custom curtains) */}
+              <Link href={`/${locale}/product/fabric?intent=custom_curtain`}>
+                {locale === 'tr' ? 'Tül Perdeler (Özel Dikim)' :
+                  locale === 'ru' ? 'Тюлевые шторы (Под заказ)' :
+                    locale === 'pl' ? 'Tiulowe zasłony (Szyte na miarę)' :
+                      'Tulle Curtains (Custom Made)'}
+              </Link>
             </li>
             <li>
-              <Link href={`/${locale}/product/fabric?fabric_type=solid`}>{t('solidFabric')}</Link>
+              {/* Nakışlı Tül Perdeler */}
+              <Link href={`/${locale}/product/fabric?fabric_type=embroidery&intent=custom_curtain`}>
+                {locale === 'tr' ? 'Nakışlı Tül Perdeler' :
+                  locale === 'ru' ? 'Вышитые тюлевые шторы' :
+                    locale === 'pl' ? 'Haftowane firanki tiulowe' :
+                      'Embroidered Tulle Curtains'}
+              </Link>
             </li>
             <li>
-              <Link href={`/${locale}/product/fabric?fabric_type=embroidery`}>{t('embroideredFabric')}</Link>
-            </li>
-            <li>
-              <Link href={`/${locale}/product/ready-made_curtain`}>{t('curtains')}</Link>
+              {/* Düz Tül Perdeler */}
+              <Link href={`/${locale}/product/fabric?fabric_type=solid&intent=custom_curtain`}>
+                {locale === 'tr' ? 'Düz Tül Perdeler' :
+                  locale === 'ru' ? 'Однотонные тюлевые шторы' :
+                    locale === 'pl' ? 'Gładkie firanki tiulowe' :
+                      'Plain Tulle Curtains'}
+              </Link>
             </li>
           </ul>
         </div>
@@ -81,6 +103,12 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
         <div className={classes.column}>
           <h4 className={classes.columnTitle}>{t('customerServices')}</h4>
           <ul className={classes.linkList}>
+            <li>
+              <Link href={`/${locale}/order-tracking`}>{t('trackOrder')}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/help`}>{t('helpSupport')}</Link>
+            </li>
             <li>
               <Link href={`/${locale}/iade-sartlari`}>{t('deliveryReturns')}</Link>
             </li>
@@ -114,10 +142,13 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
 
         {/* Column 5: Brand & Social */}
         <div className={classes.brandColumn}>
-          <img
-            className={classes.logo}
+          <Image
             src="/media/karvenLogo.webp"
             alt="Karven Logo"
+            width={150}
+            height={50}
+            style={{ objectFit: 'contain' }}
+            className={classes.logo}
           />
           <p className={classes.tagline}>{t('newsletter')}</p>
 
@@ -149,18 +180,24 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       {/* Bottom Bar */}
       <div className={classes.bottomBar}>
         <div className={classes.bottomContent}>
-          <img
+          <Image
             src="/image/etbis.jpg"
             alt="Etbise Kayıtlıdır"
+            width={80}
+            height={80}
+            style={{ objectFit: 'contain' }}
             className={classes.etbiseImage}
           />
           <p className={classes.copyright}>
             © {currentYear} Dem Fırat Karven Tekstil San. Tic. Ltd. Şti. | {AllRightsReserved}
           </p>
           <div className={classes.paymentBadge}>
-            <img
+            <Image
               src="/media/iyzico/footer_iyzico_ile_ode/Colored/logo_band_colored.svg"
               alt="iyzico ile güvenli ödeme"
+              width={250}
+              height={30}
+              style={{ objectFit: 'contain' }}
               className={classes.iyzicoLogo}
             />
           </div>

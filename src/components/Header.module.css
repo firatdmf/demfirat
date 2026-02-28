@@ -24,6 +24,9 @@
 .utilityBar {
   background: #2c2c2c;
   font-size: 0.8rem;
+  overflow: hidden;
+  max-height: 50px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .utilityContent {
@@ -33,6 +36,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: padding 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease-out;
+}
+
+/* Animations for scroll */
+.scrolled .utilityBar {
+  max-height: 0;
+}
+
+.scrolled .utilityContent {
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
 }
 
 .utilityPromo {
@@ -75,7 +90,7 @@
 .topBar {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -88,7 +103,7 @@
 }
 
 .logo {
-  height: 60px;
+  height: 50px;
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -441,6 +456,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 1rem 0;
+  /* Increased top/bottom padding */
   position: relative;
   transition: color 0.3s ease;
 }

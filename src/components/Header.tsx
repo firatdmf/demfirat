@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
+import Image from 'next/image';
 import { FaUser, FaHeart, FaShoppingCart, FaSearch, FaTimes, FaBox, FaBook, FaHeadset } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import LocaleSwitcher from "./LocaleSwitcher";
@@ -42,13 +43,19 @@ function Header({ menuTArray }: HeaderProps) {
   const pathname = usePathname();
   const searchRef = useRef<HTMLDivElement>(null);
 
-  // Check if on product detail page
-  const isProductDetail = /\/product\/[^/]+\/[^/]+/.test(pathname);
-
   // Prevent hydration mismatch - always render logged-out state on server
   const [hasMounted, setHasMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
     setHasMounted(true);
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 40);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -178,15 +185,19 @@ function Header({ menuTArray }: HeaderProps) {
   const handleProductClick = (product: Product) => {
     // Use SKU for URL, fallback to ID if SKU not available
     const productIdentifier = product.sku || product.id;
-    // Determine the category path part
-    const categoryPath = product.product_category === 'ready-made_curtain' ? 'ready-made_curtain' : 'fabric';
-    router.push(`/${locale}/product/${categoryPath}/${productIdentifier}`);
+    // Fabric products → custom curtain (özel dikim) page; ready-made curtains go to their own page
+    if (product.product_category === 'ready-made_curtain') {
+      router.push(`/${locale}/product/ready-made_curtain/${productIdentifier}`);
+    } else {
+      // All fabric products redirect to the custom curtain configurator
+      router.push(`/${locale}/product/fabric/${productIdentifier}?intent=custom_curtain`);
+    }
     setShowResults(false);
     setSearchQuery("");
   };
 
   return (
-    <header className={`${classes.header} ${isProductDetail ? classes.headerNotSticky : ''}`}>
+    <header className={`${classes.header} ${isScrolled ? classes.scrolled : ''}`}>
       {/* Utility Bar - Top strip */}
       <div className={classes.utilityBar}>
         <div className={classes.utilityContent}>
@@ -206,10 +217,14 @@ function Header({ menuTArray }: HeaderProps) {
       <div className={classes.topBar}>
         {/* Logo */}
         <Link href={`/${locale}`} className={classes.logoLink}>
-          <img
+          <Image
             src="/media/karvenLogo.webp"
             alt="Karven"
             className={classes.logo}
+            width={150}
+            height={50}
+            priority
+            style={{ objectFit: 'contain', display: 'block' }}
           />
         </Link>
 
@@ -252,10 +267,13 @@ function Header({ menuTArray }: HeaderProps) {
                       onClick={() => handleProductClick(product)}
                     >
                       {product.primary_image && (
-                        <img
+                        <Image
                           src={product.primary_image}
                           alt={getLocalizedProductField(product as any, 'title', locale)}
                           className={classes.resultImage}
+                          width={50}
+                          height={50}
+                          style={{ objectFit: 'cover', borderRadius: '4px' }}
                         />
                       )}
                       <div className={classes.resultInfo}>
@@ -308,6 +326,9 @@ function Header({ menuTArray }: HeaderProps) {
 
         {/* Action Icons */}
         <div className={classes.actionIcons}>
+          <Link href={`/${locale}/order-tracking`} className={classes.iconButton} title={t('trackOrder')}>
+            <FaBox />
+          </Link>
           <Link href={`/${locale}/favorites`} className={classes.iconButton} title="Favorites">
             <FaHeart />
           </Link>
@@ -349,8 +370,8 @@ function Header({ menuTArray }: HeaderProps) {
           {/* Currency Selector */}
           <div className={classes.currencySelector}>
             <button className={classes.currencyBtn} title="Select currency">
-              <span className={classes.currencySymbol}>{symbol}</span>
-              <span className={classes.currencyCode}>{currency}</span>
+              <span className={classes.currencySymbol}>{hasMounted ? symbol : '₺'}</span>
+              <span className={classes.currencyCode}>{hasMounted ? currency : 'TRY'}</span>
               <svg className={classes.currencyArrow} width="9" height="5" viewBox="0 0 9 5" fill="currentColor">
                 <path d="M1 1l3.5 3L8 1" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
               </svg>
@@ -359,7 +380,7 @@ function Header({ menuTArray }: HeaderProps) {
               {[{ code: 'TRY', sym: '₺' }, { code: 'USD', sym: '$' }, { code: 'EUR', sym: '€' }, { code: 'RUB', sym: '₽' }, { code: 'PLN', sym: 'zł' }].map(c => (
                 <button
                   key={c.code}
-                  className={`${classes.currencyOption} ${currency === c.code ? classes.currencyOptionActive : ''}`}
+                  className={`${classes.currencyOption} ${hasMounted ? (currency === c.code ? classes.currencyOptionActive : '') : (c.code === 'TRY' ? classes.currencyOptionActive : '')}`}
                   onClick={() => setCurrency(c.code)}
                 >
                   <span className={classes.currencyOptionSym}>{c.sym}</span>
@@ -420,7 +441,7 @@ function Header({ menuTArray }: HeaderProps) {
                   </div>
                 </div>
                 <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuImage}>
-                  <img src="/media/hero/fabric-hero.png" alt="Tulle Curtains" />
+                  <Image src="/media/hero/fabric-hero.png" alt="Tulle Curtains" width={300} height={200} style={{ objectFit: 'cover', borderRadius: '4px' }} />
                   <div className={classes.megaMenuImageOverlay}>
                     <h3>{locale === 'tr' ? 'Tül Perde Koleksiyonu' : locale === 'ru' ? 'Коллекция тюля' : locale === 'pl' ? 'Kolekcja firan' : 'Tulle Collection'}</h3>
                     <span>{locale === 'tr' ? 'ALIŞVERİŞE BAŞLA' : locale === 'ru' ? 'НАЧАТЬ ПОКУПКИ' : locale === 'pl' ? 'ZACZNIJ ZAKUPY' : 'START SHOPPING'}</span>
@@ -471,7 +492,7 @@ function Header({ menuTArray }: HeaderProps) {
                   </div>
                 </div>
                 <Link href={`/${locale}/product/fabric`} className={classes.megaMenuImage}>
-                  <img src="/media/hero/fabric-hero.png" alt="Kumaş Koleksiyonu" />
+                  <Image src="/media/hero/fabric-hero.png" alt="Kumaş Koleksiyonu" width={300} height={200} style={{ objectFit: 'cover', borderRadius: '4px' }} />
                   <div className={classes.megaMenuImageOverlay}>
                     <h3>{locale === 'tr' ? 'Kumaş Koleksiyonu' : locale === 'ru' ? 'Коллекция тканей' : locale === 'pl' ? 'Kolekcja tkanin' : 'Fabric Collection'}</h3>
                     <span>{locale === 'tr' ? 'ALIŞVERİŞE BAŞLA' : locale === 'ru' ? 'НАЧАТЬ ПОКУПКИ' : locale === 'pl' ? 'ZACZNIJ ZAKUPY' : 'START SHOPPING'}</span>
@@ -493,6 +514,9 @@ function Header({ menuTArray }: HeaderProps) {
           </Link>
           <Link href={`/${locale}/contact`} className={classes.navLink}>
             {menuTArray[4]}
+          </Link>
+          <Link href={`/${locale}/blog`} className={classes.navLink}>
+            {t('blog')}
           </Link>
           <Link href={`/${locale}/follow-us`} className={`${classes.navLink} ${classes.instagramLink}`}>
             {t('followUs')}
@@ -554,6 +578,9 @@ function Header({ menuTArray }: HeaderProps) {
           </Link>
           <Link href={`/${locale}/contact`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[4]}
+          </Link>
+          <Link href={`/${locale}/blog`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+            {t('blog')}
           </Link>
           <Link href={`/${locale}/follow-us`} className={`${classes.mobileNavLink} ${classes.instagramLink}`} onClick={() => setMobileMenuOpen(false)}>
             {t('followUs')}

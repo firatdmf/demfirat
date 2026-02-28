@@ -479,17 +479,28 @@ export default function CartPage() {
                       )}
                       {item.custom_attributes.pleatType && (
                         <span className={classes.customAttr}>
-                          <strong>{locale === 'tr' ? 'Pile' : locale === 'ru' ? 'Складка' : locale === 'pl' ? 'Fałda' : 'Pleat'}:</strong> {item.custom_attributes.pleatType.replace(/_/g, ' ')}
+                          <strong>{locale === 'tr' ? 'Pile Tipi' : locale === 'ru' ? 'Тип складки' : locale === 'pl' ? 'Typ fałdy' : 'Pleat Type'}:</strong> {{
+                            'flat': { tr: 'Düz Pile', ru: 'Плоская складка', pl: 'Fałda płaska', en: 'Flat Pleat' },
+                            'kanun': { tr: 'Kanun Pile', ru: 'Канунная складка', pl: 'Fałda kanun', en: 'Kanun Pleat' },
+                            'pipe': { tr: 'Boru Pile', ru: 'Трубчатая складка', pl: 'Fałda rurowa', en: 'Pipe Pleat' },
+                            'water_wave': { tr: 'Su Dalgası', ru: 'Водяная волна', pl: 'Fałda wodna', en: 'Water Wave' },
+                            'american': { tr: 'Amerikan Pile', ru: 'Американская складка', pl: 'Fałda amerykańska', en: 'American Pleat' },
+                            'extrafor': { tr: 'Ekstrafor', ru: 'Экстрафор', pl: 'Ekstrafor', en: 'Extrafor' },
+                            'pencil_pleat': { tr: 'Sık Pile', ru: 'Карандашная складка', pl: 'Fałda ołówkowa', en: 'Pencil Pleat' },
+                            'pencil pleat': { tr: 'Sık Pile', ru: 'Карандашная складка', pl: 'Fałda ołówkowa', en: 'Pencil Pleat' },
+                            'pinch_pleat': { tr: 'Tutam Pile', ru: 'Тройная складка', pl: 'Fałda szczypana', en: 'Pinch Pleat' },
+                            'pinch pleat': { tr: 'Tutam Pile', ru: 'Тройная складка', pl: 'Fałda szczypana', en: 'Pinch Pleat' },
+                            'wave': { tr: 'Dalga Pile', ru: 'Волнообразная складка', pl: 'Fałda falista', en: 'Wave Pleat' },
+                            'wave_pleat': { tr: 'Dalga Pile', ru: 'Волнообразная складка', pl: 'Fałda falista', en: 'Wave Pleat' },
+                            'goblet_pleat': { tr: 'Kadeh Pile', ru: 'Бокальная складка', pl: 'Fałda pucharowa', en: 'Goblet Pleat' },
+                            'eyelet': { tr: 'Halkalı', ru: 'С люверсами', pl: 'Z oczkami', en: 'Eyelet' },
+                            'grommet': { tr: 'Halkalı', ru: 'С люверсами', pl: 'Z oczkami', en: 'Eyelet' },
+                          }[item.custom_attributes.pleatType]?.[locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en'] || item.custom_attributes.pleatType.replace(/_/g, ' ')}
                         </span>
                       )}
                       {item.custom_attributes.pleatDensity && item.custom_attributes.pleatDensity !== '0' && (
                         <span className={classes.customAttr}>
-                          <strong>{locale === 'tr' ? 'Sıklık' : locale === 'ru' ? 'Плотность' : locale === 'pl' ? 'Gęstość' : 'Density'}:</strong> {item.custom_attributes.pleatDensity}
-                        </span>
-                      )}
-                      {item.custom_attributes.wingType && (
-                        <span className={classes.customAttr}>
-                          <strong>{locale === 'tr' ? 'Kanat' : locale === 'ru' ? 'Крыло' : locale === 'pl' ? 'Skrzydło' : 'Wing'}:</strong> {item.custom_attributes.wingType === 'single' ? (locale === 'tr' ? 'Tek' : locale === 'ru' ? 'Одинарное' : locale === 'pl' ? 'Pojedyncze' : 'Single') : (locale === 'tr' ? 'Çift' : locale === 'ru' ? 'Двойное' : locale === 'pl' ? 'Podwójne' : 'Double')}
+                          <strong>{locale === 'tr' ? 'Pile Sıklığı' : locale === 'ru' ? 'Плотность' : locale === 'pl' ? 'Gęstość' : 'Density'}:</strong> {item.custom_attributes.pleatDensity}
                         </span>
                       )}
                     </div>
@@ -499,7 +510,7 @@ export default function CartPage() {
                   {item.variant_attributes && Object.keys(item.variant_attributes).length > 0 && (
                     <div className={classes.variantAttributes}>
                       {Object.entries(item.variant_attributes).map(([key, value]) => {
-                        // Translate common attribute names
+                        // Translate attribute labels
                         const attrTranslations: Record<string, Record<string, string>> = {
                           color: { tr: 'Renk', en: 'Color', ru: 'Цвет', pl: 'Kolor' },
                           height: { tr: 'Boy', en: 'Height', ru: 'Высота', pl: 'Wysokość' },
@@ -507,9 +518,40 @@ export default function CartPage() {
                           width: { tr: 'En', en: 'Width', ru: 'Ширина', pl: 'Szerokość' },
                         };
                         const translatedKey = attrTranslations[key.toLowerCase()]?.[locale] || key;
+                        // Translate attribute values (colors, etc.) using manual dict
+                        const colorDict: Record<string, Record<string, string>> = {
+                          whitesmoke: { tr: 'Duman Beyazı', ru: 'Дымчато-белый', pl: 'Biały dymny', en: 'White Smoke' },
+                          white: { tr: 'Beyaz', ru: 'Белый', pl: 'Biały', en: 'White' },
+                          black: { tr: 'Siyah', ru: 'Черный', pl: 'Czarny', en: 'Black' },
+                          beige: { tr: 'Bej', ru: 'Бежевый', pl: 'Beżowy', en: 'Beige' },
+                          cream: { tr: 'Krem', ru: 'Кремовый', pl: 'Kremowy', en: 'Cream' },
+                          grey: { tr: 'Gri', ru: 'Серый', pl: 'Szary', en: 'Grey' },
+                          gray: { tr: 'Gri', ru: 'Серый', pl: 'Szary', en: 'Gray' },
+                          ecru: { tr: 'Ekru', ru: 'Экрю', pl: 'Ecru', en: 'Ecru' },
+                          gold: { tr: 'Altın', ru: 'Золотой', pl: 'Złoty', en: 'Gold' },
+                          silver: { tr: 'Gümüş', ru: 'Серебряный', pl: 'Srebrny', en: 'Silver' },
+                          ivory: { tr: 'Fildişi', ru: 'Слоновая кость', pl: 'Kość słoniowa', en: 'Ivory' },
+                          navy: { tr: 'Lacivert', ru: 'Темно-синий', pl: 'Granatowy', en: 'Navy' },
+                          pink: { tr: 'Pembe', ru: 'Розовый', pl: 'Różowy', en: 'Pink' },
+                          mink: { tr: 'Vizon', ru: 'Норковый', pl: 'Norkowy', en: 'Mink' },
+                          cappuccino: { tr: 'Kapuçino', ru: 'Капучино', pl: 'Cappuccino', en: 'Cappuccino' },
+                          teal: { tr: 'Çam Yeşili', ru: 'Бирюзовый', pl: 'Morski', en: 'Teal' },
+                          'off-white': { tr: 'Kırık Beyaz', ru: 'Молочно-белый', pl: 'Złamana biel', en: 'Off-White' },
+                          offwhite: { tr: 'Kırık Beyaz', ru: 'Молочно-белый', pl: 'Złamana biel', en: 'Off-White' },
+                          'grey-white': { tr: 'Gri-Beyaz', ru: 'Серо-белый', pl: 'Szaro-biały', en: 'Grey-White' },
+                          'gold-beige': { tr: 'Altın-Bej', ru: 'Золотисто-бежевый', pl: 'Złoto-beżowy', en: 'Gold-Beige' },
+                          'gold-white': { tr: 'Altın-Beyaz', ru: 'Золотисто-белый', pl: 'Złoto-biały', en: 'Gold-White' },
+                          'gold-ecru': { tr: 'Altın-Ekru', ru: 'Золотисто-экрю', pl: 'Złoto-ecru', en: 'Gold-Ecru' },
+                          'gold-silver': { tr: 'Altın-Gümüş', ru: 'Золотисто-серебряный', pl: 'Złoto-srebrny', en: 'Gold-Silver' },
+                          'cream-gold': { tr: 'Krem-Altın', ru: 'Кремово-золотой', pl: 'Kremowo-złoty', en: 'Cream-Gold' },
+                          'silver-white': { tr: 'Gümüş-Beyaz', ru: 'Серебристо-белый', pl: 'Srebrno-biały', en: 'Silver-White' },
+                          'pink-white': { tr: 'Pembe-Beyaz', ru: 'Розово-белый', pl: 'Różowo-biały', en: 'Pink-White' },
+                        };
+                        const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
+                        const translatedValue = colorDict[value.toLowerCase()]?.[lang] || value.replace(/_/g, ' ');
                         return (
                           <span key={key} className={classes.variantAttr}>
-                            <strong>{translatedKey}:</strong> {value.replace(/_/g, ' ')}
+                            <strong>{translatedKey}:</strong> {translatedValue}
                           </span>
                         );
                       })}
@@ -520,6 +562,10 @@ export default function CartPage() {
                   {item.product?.category && (
                     <p className={classes.itemCategory}>
                       {(() => {
+                        // Custom curtains always show as ÖZEL PERDE regardless of base category
+                        if (item.is_custom_curtain) {
+                          return locale === 'tr' ? 'ÖZEL PERDE' : locale === 'ru' ? 'ОСОБЫЙ ЗАКАЗ' : locale === 'pl' ? 'ZASŁONA NA MIARĘ' : 'CUSTOM CURTAIN';
+                        }
                         const cat = item.product.category.toLowerCase();
                         const categoryTranslations: Record<string, Record<string, string>> = {
                           fabric: { tr: 'KUMAŞ', en: 'FABRIC', ru: 'ТКАНЬ', pl: 'TKANINA' },

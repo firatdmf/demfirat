@@ -138,7 +138,7 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
                         return (
                             <Link
                                 key={product.sku}
-                                href={`/${locale}/product/fabric/${product.sku}`}
+                                href={`/${locale}/product/fabric/${product.sku}/perde#ProductDetailCard`}
                                 className={classes.productCard}
                             >
                                 <div className={classes.imageWrapper}>

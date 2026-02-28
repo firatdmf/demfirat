@@ -61,14 +61,7 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
             </div>
           </div>
 
-          <div className={classes.ctaContainer}>
-            <Link href={`/${locale}/product/fabric`} className={classes.ctaButton}>
-              {locale === 'en' ? 'Explore Collection' :
-                locale === 'ru' ? 'Изучить коллекцию' :
-                  locale === 'pl' ? 'Odkryj kolekcję' :
-                    'Ürünlerimizi Keşfedin'}
-            </Link>
-          </div>
+
         </div>
       </div>
     </section>

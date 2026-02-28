@@ -23,9 +23,22 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
     const imageUrl = product.primary_image || "";
     const price = product.price;
 
+    const baseUrl = `https://karven.com`;
+    const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}`;
+
     return {
       title: `${title} | Karven`,
       description: description.substring(0, 160), // Clamp for SEO
+      alternates: {
+        canonical: canonicalUrl,
+        languages: {
+          'en': `${baseUrl}/en/product/${data.product_category}/${product_sku}`,
+          'tr': `${baseUrl}/tr/product/${data.product_category}/${product_sku}`,
+          'ru': `${baseUrl}/ru/product/${data.product_category}/${product_sku}`,
+          'pl': `${baseUrl}/pl/product/${data.product_category}/${product_sku}`,
+          'x-default': `${baseUrl}/en/product/${data.product_category}/${product_sku}`,
+        },
+      },
       openGraph: {
         title,
         description: description.substring(0, 100),

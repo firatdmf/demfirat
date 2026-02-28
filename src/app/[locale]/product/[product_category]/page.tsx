@@ -62,6 +62,57 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+import { Metadata } from 'next';
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { product_category, locale } = await props.params;
+  const searchParams = await props.searchParams;
+
+  const baseUrl = `https://karven.com`;
+  const canonicalUrl = `${baseUrl}/${locale}/product/${product_category}`;
+
+  // Define attributes that create filter permutations which shouldn't be indexed to avoid bloat
+  const indexingFilters = ['color', 'pattern', 'style', 'material', 'texture', 'care', 'sheerness', 'property', 'price_min', 'price_max'];
+
+  // Check if any filter parameter exists
+  const hasIndexBloatFilter = indexingFilters.some(filter => {
+    return Object.keys(searchParams || {}).includes(filter);
+  });
+
+  // Calculate generic localized title
+  let categoryName = 'Products';
+  if (product_category === 'ready-made_curtain') {
+    categoryName = locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains';
+  } else if (product_category === 'fabric' || product_category === 'all') {
+    categoryName = locale === 'tr' ? 'Kumaşlar & Tül Perdeler' : locale === 'ru' ? 'Ткани и Тюлевые Шторы' : locale === 'pl' ? 'Tkaniny i Firany' : 'Fabrics & Tulle Curtains';
+  }
+
+  // SEO metadata block
+  return {
+    title: `${categoryName} | Karven`,
+    description: `Shop the finest collection of ${categoryName.toLowerCase()} at Karven.`,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en': `${baseUrl}/en/product/${product_category}`,
+        'tr': `${baseUrl}/tr/product/${product_category}`,
+        'ru': `${baseUrl}/ru/product/${product_category}`,
+        'pl': `${baseUrl}/pl/product/${product_category}`,
+        'x-default': `${baseUrl}/en/product/${product_category}`,
+      },
+    },
+    // If heavy filters are active, do not index the permutation, but follow the product links
+    robots: {
+      index: !hasIndexBloatFilter,
+      follow: true,
+      googleBot: {
+        index: !hasIndexBloatFilter,
+        follow: true,
+      }
+    }
+  };
+}
+
 export default async function Page(props: Props) {
   const { product_category, locale } = await props.params;
   const searchParams = await props.searchParams;
@@ -232,8 +283,42 @@ export default async function Page(props: Props) {
     productVideoSKUs = videoSKUs;
   }
 
+  const baseUrl = `https://karven.com/${locale}`;
+  const categoryUrl = `${baseUrl}/product/${product_category}`;
+
+  let categoryName = 'Products';
+  if (product_category === 'ready-made_curtain') {
+    categoryName = locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains';
+  } else if (product_category === 'fabric' || product_category === 'all') {
+    categoryName = locale === 'tr' ? 'Kumaşlar & Tül Perdeler' : locale === 'ru' ? 'Ткани и Тюлевые Шторы' : locale === 'pl' ? 'Tkaniny i Firany' : 'Fabrics & Tulle Curtains';
+  }
+
+  // JSON-LD Breadcrumb Schema for the Category Page
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": locale === 'tr' ? 'Anasayfa' : locale === 'ru' ? 'Главная' : locale === 'pl' ? 'Strona główna' : 'Home',
+        "item": baseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": categoryName,
+        "item": categoryUrl
+      }
+    ]
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {errorMessage ? (<div style={{ color: "red" }}>
         {errorMessage}
       </div>) : (<>
