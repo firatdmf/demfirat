@@ -256,7 +256,7 @@ export default async function Page(props: Props) {
                 }
                 return false;
               });
-            return { ...p, product_files: files };
+            return { ...p, product_files: files.map(f => ({ ...f, file: f.file_url })) };
           });
 
           // Enrich variants with primary image

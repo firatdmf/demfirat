@@ -164,33 +164,39 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     return `${widthValues[0]}-${widthValues[widthValues.length - 1]}cm`;
   }, [widthValues]);
 
+  // Find the first variant that has an image, or just the first variant
+  const initialVariant = useMemo(() => {
+    if (productVariants && productVariants.length > 0) {
+      const withImage = productVariants.find(v => v.primary_image);
+      if (withImage) return withImage;
+      return productVariants[0];
+    }
+    return null;
+  }, [productVariants]);
+
+  const initialImageSrc = initialVariant?.primary_image || product.primary_image || placeholder_image_link;
+
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
-  const [imageSrc, setImageSrc] = useState(product.primary_image || placeholder_image_link);
+  const [imageSrc, setImageSrc] = useState(initialImageSrc);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const [isTouching, setIsTouching] = useState(false);
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(initialVariant ? String(initialVariant.id) : null);
 
   const isWishlisted = isFavorite(product.sku);
 
   // Reset image states when product changes
   useEffect(() => {
-    const newSrc = product.primary_image || placeholder_image_link;
+    const newSrc = initialVariant?.primary_image || product.primary_image || placeholder_image_link;
     setImageSrc(newSrc);
     setImageError(false);
     setHasTriedFallback(false);
-
-    // Check if image is already cached/loaded
-    const img = new window.Image();
-    img.src = newSrc;
-    if (img.complete) {
-      setImageLoading(false);
-    } else {
-      setImageLoading(true);
-      img.onload = () => setImageLoading(false);
-      img.onerror = () => setImageLoading(false);
+    setImageLoading(true); // Let Next.js <Image> handle the loading state via its onLoad event
+    if (initialVariant) {
+      setSelectedVariantId(String(initialVariant.id));
     }
-  }, [product.primary_image, product.sku]);
+  }, [initialVariant, product.primary_image, product.sku]);
 
   // Review stats removed for performance - was causing N+1 API calls
   // If needed, these should be included in the main product API response
@@ -262,17 +268,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
 
   const router = useRouter();
 
-  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
-
-  // Initialize selectedVariantId from initial primary_image if possible
-  useEffect(() => {
-    if (product.primary_image && productVariants.length > 0) {
-      const initialVariant = productVariants.find(v => v.primary_image === product.primary_image);
-      if (initialVariant) {
-        setSelectedVariantId(String(initialVariant.id));
-      }
-    }
-  }, [product.primary_image, productVariants]);
+  // selectedVariantId is now handled in the main initialization block
 
   const handleColorSwatchClick = (e: React.MouseEvent, color: string) => {
     e.preventDefault();
@@ -339,81 +335,38 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const secondImage = useMemo(() => {
     if (!product.product_files || product.product_files.length === 0) return null;
 
-    // Filter for valid images - STRICTLY exclude videos by extension if type is missing
+    // Exclude videos
     const images = product.product_files.filter(f => {
-      // 1. Check explicit type
       if (f.file_type === 'video') return false;
-
-      // 2. Check file extension if type is loose
       const isVideoFile = f.file?.toLowerCase().match(/\.(mp4|webm|mov|avi|mkv)$/);
       if (isVideoFile) return false;
-
-      return !f.file_type || f.file_type === 'image';
+      return true;
     });
 
-    // We need at least one other image besides the current one to show a hover effect
     if (images.length === 0) return null;
 
-    const currentSrc = (imageSrc || product.primary_image || '').trim();
-
-    // Helper to check if two image URLs are effectively the same
-    const areImagesSame = (url1: string, url2: string) => {
-      if (!url1 || !url2) return false;
-      // 1. Remove domain (http/https)
-      const stripDomain = (u: string) => u.replace(/^https?:\/\/[^\/]+/, '');
-      // 2. Remove query params
-      const stripQuery = (u: string) => u.split('?')[0];
-      // 3. Remove leading slash
-      const normalize = (u: string) => stripQuery(stripDomain(u)).replace(/^\//, '');
-
-      return normalize(url1) === normalize(url2);
+    const normalize = (u: string | null | undefined) => {
+      if (!u) return '';
+      return u.split('?')[0].replace(/^https?:\/\/[^/]+/, '').replace(/^\//, '');
     };
+    const currentNorm = normalize(imageSrc || product.primary_image || '');
 
-    // 1. Identify Target Variant (if any)
-    let targetVariantId = selectedVariantId;
+    // Sort all images by sequence (ascending)
+    const sorted = [...images].sort((a, b) => (a.sequence ?? 999) - (b.sequence ?? 999));
 
-    if (!targetVariantId) {
-      // Try to infer from current image
-      const activeVariant = productVariants.find(v => areImagesSame(v.primary_image || '', currentSrc));
-      const activeFile = images.find(f => areImagesSame(f.file, currentSrc) && f.product_variant_id);
-
-      if (activeVariant) {
-        targetVariantId = String(activeVariant.id);
-      } else if (activeFile) {
-        targetVariantId = String(activeFile.product_variant_id);
+    if (selectedVariantId) {
+      const variantImages = sorted.filter(f => String(f.product_variant_id) === selectedVariantId);
+      const currentIdx = variantImages.findIndex(f => normalize(f.file) === currentNorm);
+      if (variantImages.length >= 2) {
+        const nextIdx = currentIdx >= 0 ? (currentIdx + 1) % variantImages.length : 1;
+        if (nextIdx !== currentIdx) return variantImages[nextIdx].file;
       }
     }
 
-    let candidate = null;
-
-    // Strategy A: Strict Variant Match (The Ideal Case)
-    // Look for a secondary image explicitly assigned to this variant
-    if (targetVariantId) {
-      candidate = images.find(f =>
-        f.product_variant_id &&
-        String(f.product_variant_id) === String(targetVariantId) &&
-        !areImagesSame(f.file, currentSrc)
-      );
-    }
-
-    // Strategy B: Generic Image Match (Good Fallback)
-    // If A failed (or no variant), look for an image that belongs to NO variant
-    if (!candidate) {
-      candidate = images.find(f =>
-        !f.product_variant_id &&
-        !areImagesSame(f.file, currentSrc)
-      );
-    }
-
-    // Strategy C: Ultimate Fallback (Any Image)
-    // If A and B failed, just grab ANY image that isn't the current one.
-    // This handles cases where data might be messy (e.g. all images have wrong variant IDs)
-    if (!candidate) {
-      candidate = images.find(f => !areImagesSame(f.file, currentSrc));
-    }
-
-    return candidate ? candidate.file : null;
-  }, [product.product_files, imageSrc, product.primary_image, productVariants, selectedVariantId]);
+    // Fallback: any non-current image
+    const fallback = sorted.find(f => normalize(f.file) !== currentNorm && normalize(f.file) !== '');
+    return fallback ? fallback.file : null;
+  }, [product.product_files, imageSrc, product.primary_image, selectedVariantId]);
 
   return (
     <div className={classes.productCard}>
@@ -422,8 +375,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         <div className={classes.imageContainer}>
           <Link
             href={intent === 'custom_curtain'
-              ? `${product_category_name}/${product.sku}/perde#ProductDetailCard`
-              : `${product_category_name}/${product.sku}#ProductDetailCard`
+              ? `${product_category_name}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+              : `${product_category_name}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
             }
             className={classes.imageLink}
           >
@@ -512,8 +465,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         <div className={classes.productInfo}>
           <Link
             href={intent === 'custom_curtain'
-              ? `${product_category_name}/${product.sku}/perde#ProductDetailCard`
-              : `${product_category_name}/${product.sku}#ProductDetailCard`
+              ? `${product_category_name}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+              : `${product_category_name}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
             }
             className={classes.productLink}
           >

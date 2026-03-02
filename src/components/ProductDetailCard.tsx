@@ -61,6 +61,9 @@ function ProductDetailCard({
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
   const [isTryAtHomeSidebarOpen, setIsTryAtHomeSidebarOpen] = useState(false);
   const touchStartX = React.useRef<number | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // Video URL is set only on thumbnail hover, keeping page load fast
+  const [videoPreloadUrl, setVideoPreloadUrl] = useState<string | null>(null);
 
   // Format price with currency - uses pre-converted prices dict from backend when available
   const formatPrice = (
@@ -93,7 +96,25 @@ function ProductDetailCard({
   const getInitialAttributes = () => {
     const initialAttributes: { [key: string]: string } = {};
 
-    // Önce URL parametrelerini kontrol et
+    // 1. Check if a specific variant ID was passed in URL (e.g. from ProductCard)
+    const variantIdParam = searchParams['variant'];
+    if (variantIdParam && typeof variantIdParam === 'string' && product_variants) {
+      const targetVariant = product_variants.find(v => String(v.id) === variantIdParam);
+      if (targetVariant && targetVariant.product_variant_attribute_values && product_variant_attribute_values && product_variant_attributes) {
+        targetVariant.product_variant_attribute_values.forEach((valId: any) => {
+          const valObj = product_variant_attribute_values.find(v => String(v.id) === String(valId));
+          if (valObj) {
+            const attrDef = product_variant_attributes.find(a => String(a.id) === String(valObj.product_variant_attribute_id));
+            if (attrDef && attrDef.name) {
+              initialAttributes[attrDef.name] = valObj.product_variant_attribute_value || '';
+            }
+          }
+        });
+        return initialAttributes;
+      }
+    }
+
+    // 2. Önce URL parametrelerini (isim bazlı: ?color=Red) kontrol et
     const hasUrlParams = Object.keys(searchParams).length > 0;
 
     if (hasUrlParams) {
@@ -118,14 +139,27 @@ function ProductDetailCard({
       });
     }
 
-    // Eksik attribute'lar için ilk varyanttan al
+    // 3. Eksik attribute'lar için ilk varyanttan al
     product_variant_attributes?.forEach(attribute => {
       const attrName = attribute.name ?? '';
 
       if (!initialAttributes[attrName]) {
-        const firstValue = product_variant_attribute_values?.find(
-          val => val.product_variant_attribute_id === attribute.id
-        )?.product_variant_attribute_value;
+        // Get the first variant's value for this attribute to ensure consistency
+        let firstValue = undefined;
+        if (product_variants && product_variants.length > 0 && product_variants[0].product_variant_attribute_values && product_variant_attribute_values) {
+          const firstVariantValIds = product_variants[0].product_variant_attribute_values;
+          const valObj = product_variant_attribute_values.find(v => firstVariantValIds.some((id: any) => String(id) === String(v.id)) && String(v.product_variant_attribute_id) === String(attribute.id));
+          if (valObj) {
+            firstValue = valObj.product_variant_attribute_value;
+          }
+        }
+
+        // Fallback to the first available value for this attribute if variant didn't have it
+        if (!firstValue) {
+          firstValue = product_variant_attribute_values?.find(
+            val => val.product_variant_attribute_id === attribute.id
+          )?.product_variant_attribute_value;
+        }
 
         if (firstValue) {
           initialAttributes[attrName] = firstValue;
@@ -143,7 +177,7 @@ function ProductDetailCard({
   ]);
 
   // Determine context from category and intent param.
-  // The /perde route forces intent=custom_curtain server-side, so this is always reliable.
+  // The /curtain route forces intent=custom_curtain server-side, so this is always reliable.
   const isFabricProduct = product_category?.toLowerCase().includes('fabric') || product_category?.toLowerCase().includes('kumaş');
   const isCustomCurtainIntent = searchParams?.intent === 'custom_curtain';
   const hasStandardCartOptions = !isCustomCurtainIntent;
@@ -151,7 +185,9 @@ function ProductDetailCard({
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [showPleatGuide, setShowPleatGuide] = useState(false);
 
-  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
+  // Initialize selectedAttributes synchronously with initialAttributes 
+  // to avoid rendering empty state and flashing the fallback product image.
+  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>(initialAttributes);
   const [userHasSelectedVariant, setUserHasSelectedVariant] = useState<boolean>(
     !!(product_variant_attributes && product_variant_attributes.length > 0)
   );
@@ -870,7 +906,7 @@ function ProductDetailCard({
       return !file.product_variant_id;
     }) || [];
 
-    // 1. Add first image (1st position)
+    // 1. Add first image
     if (imageFiles.length > 0) {
       items.push({ type: 'image', url: imageFiles[0] });
     }
@@ -882,7 +918,7 @@ function ProductDetailCard({
       return clean;
     };
 
-    // 2. Add videos (2nd position) - Deduplicate to prevent multiple clones from showing up
+    // 2. Add videos at 2nd position
     const uniqueVideos = Array.from(new Map(videoFiles.filter(v => v.file).map(v => [normalizeUrl(v.file), v])).values());
     uniqueVideos.forEach(video => {
       items.push({ type: 'video', url: video.file });
@@ -948,6 +984,10 @@ function ProductDetailCard({
                 className={`${classes.thumb} ${selectedThumbIndex === index ? classes.thumb_selected : ''} ${media.type === 'video' ? classes.videoThumb : ''}`}
                 key={index}
                 onClick={() => selectThumb(index)}
+                onMouseEnter={() => {
+                  // Preload video on hover so it's ready when clicked
+                  if (media.type === 'video' && media.url) setVideoPreloadUrl(media.url);
+                }}
               >
                 <div className={classes.img}>
                   {media.type === 'video' ? (
@@ -976,6 +1016,7 @@ function ProductDetailCard({
                       alt="product image"
                       fill
                       sizes="80px"
+                      priority
                     />
                   )}
                 </div>
@@ -990,17 +1031,70 @@ function ProductDetailCard({
             <button className={classes.prevButton} onClick={handlePrevImage}>{"<"}</button>
             <div className={imageLoaded || isVideoSelected ? ` ${classes.img} ${classes.loaded}` : `${classes.img}`}>
               {isVideoSelected && currentMedia ? (
-                <video
-                  key={`${currentMedia.url}-${selectedVariant?.id || 'default'}`}
-                  src={currentMedia.url}
-                  controls
-                  autoPlay
-                  preload="auto"
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000' }}
-                />
+                <div style={{ position: 'relative', width: '100%', height: '100%', backgroundColor: '#000' }}>
+                  <video
+                    ref={videoRef}
+                    key={`${currentMedia.url}-${selectedVariant?.id || 'default'}`}
+                    src={videoPreloadUrl || currentMedia.url}
+                    controls
+                    autoPlay
+                    muted
+                    preload="none"
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    onPlay={(e) => {
+                      const overlay = (e.currentTarget.parentElement as HTMLDivElement)?.querySelector('.video-play-overlay') as HTMLDivElement;
+                      if (overlay) overlay.style.display = 'none';
+                    }}
+                    onPause={(e) => {
+                      const overlay = (e.currentTarget.parentElement as HTMLDivElement)?.querySelector('.video-play-overlay') as HTMLDivElement;
+                      if (overlay) overlay.style.display = 'flex';
+                    }}
+                  />
+                  {/* Centered play button — hides when video plays */}
+                  <div
+                    className="video-play-overlay"
+                    onClick={() => videoRef.current?.play()}
+                    style={{
+                      position: 'absolute', inset: 0,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 80, height: 80, borderRadius: '50%',
+                        backgroundColor: 'rgba(255,255,255,0.92)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+                        transition: 'transform 0.15s',
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
+                      onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                    >
+                      <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                        <polygon points="6,3 20,12 6,21" fill="#111" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
               ) : (
                 <>
+                  {/* Offscreen preload container: images become cached before user clicks them */}
+                  <div aria-hidden="true" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}>
+                    {imageFiles.map((url, i) => i !== selectedThumbIndex && url ? (
+                      <div key={`preload-wrap-${url}`} style={{ position: 'relative', width: 1, height: 1 }}>
+                        <Image
+                          src={url}
+                          alt=""
+                          fill
+                          sizes="1px"
+                          tabIndex={-1}
+                        />
+                      </div>
+                    ) : null)}
+                  </div>
                   <ImageZoom
+                    key={currentMedia?.url || placeholder_image_link}
                     src={currentMedia?.url || imageFiles[selectedThumbIndex] || placeholder_image_link}
                     alt="Product image"
                     onLoad={() => setImageLoaded(true)}

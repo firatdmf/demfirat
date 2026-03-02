@@ -259,7 +259,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                             products.map((product) => (
                                 <Link
                                     key={product.id}
-                                    href={`/${locale}/product/fabric/${product.sku}/perde#ProductDetailCard`}
+                                    href={`/${locale}/product/fabric/${product.sku}/curtain#ProductDetailCard`}
                                     className={classes.productCard}
                                 >
                                     <div className={classes.imageWrapper}>

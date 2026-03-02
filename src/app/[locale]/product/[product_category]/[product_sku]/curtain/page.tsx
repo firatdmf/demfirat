@@ -5,10 +5,10 @@ import classes from "../page.module.css";
 import { Metadata } from "next";
 
 // This route is the DEDICATED "Tül Perde / Perde Diktir" product detail page.
-// URL: /[locale]/product/[product_category]/[product_sku]/perde
+// URL: /[locale]/product/[product_category]/[product_sku]/curtain
 // It always forces intent=custom_curtain so the wizard CTA is shown instead of standard cart buttons.
 
-export async function generateMetadata(props: PageProps<'/[locale]/product/[product_category]/[product_sku]/perde'>): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/[locale]/product/[product_category]/[product_sku]/curtain'>): Promise<Metadata> {
     const { product_sku, locale } = await props.params;
     const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
 
@@ -26,7 +26,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         const price = product.price;
 
         const baseUrl = `https://karven.com`;
-        const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}/perde`;
+        const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}/curtain`;
 
         return {
             title: `${title} - Perde Diktir | Karven`,
@@ -34,18 +34,18 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
             alternates: {
                 canonical: canonicalUrl,
                 languages: {
-                    'en': `${baseUrl}/en/product/${data.product_category}/${product_sku}/perde`,
-                    'tr': `${baseUrl}/tr/product/${data.product_category}/${product_sku}/perde`,
-                    'ru': `${baseUrl}/ru/product/${data.product_category}/${product_sku}/perde`,
-                    'pl': `${baseUrl}/pl/product/${data.product_category}/${product_sku}/perde`,
-                    'x-default': `${baseUrl}/en/product/${data.product_category}/${product_sku}/perde`,
+                    'en': `${baseUrl}/en/product/${data.product_category}/${product_sku}/curtain`,
+                    'tr': `${baseUrl}/tr/product/${data.product_category}/${product_sku}/curtain`,
+                    'ru': `${baseUrl}/ru/product/${data.product_category}/${product_sku}/curtain`,
+                    'pl': `${baseUrl}/pl/product/${data.product_category}/${product_sku}/curtain`,
+                    'x-default': `${baseUrl}/en/product/${data.product_category}/${product_sku}/curtain`,
                 },
             },
             openGraph: {
                 title,
                 description: description.substring(0, 100),
                 images: [{ url: imageUrl }],
-                url: `https://karven.com/${locale}/product/${data.product_category}/${product_sku}/perde`,
+                url: `https://karven.com/${locale}/product/${data.product_category}/${product_sku}/curtain`,
                 type: 'website',
             },
             other: {
@@ -62,7 +62,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
     }
 }
 
-export default async function Page(props: PageProps<'/[locale]/product/[product_category]/[product_sku]/perde'>) {
+export default async function Page(props: PageProps<'/[locale]/product/[product_category]/[product_sku]/curtain'>) {
     const { product_sku, locale } = await props.params;
     const searchParams = await props.searchParams;
 
@@ -105,7 +105,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         "brand": { "@type": "Brand", "name": "Karven" },
         "offers": {
             "@type": "Offer",
-            "url": `https://karven.com/${locale}/product/${product_category}/${product_sku}/perde`,
+            "url": `https://karven.com/${locale}/product/${product_category}/${product_sku}/curtain`,
             "priceCurrency": "USD",
             "price": product.price,
             "availability": Number(product.available_quantity || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
@@ -114,7 +114,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     } : null;
 
     const baseUrl = `https://karven.com/${locale}`;
-    const productUrl = `${baseUrl}/product/${product_category}/${product_sku}/perde`;
+    const productUrl = `${baseUrl}/product/${product_category}/${product_sku}/curtain`;
     const categoryUrl = `${baseUrl}/product/${product_category}`;
     const categoryName = product_category === 'ready-made_curtain'
         ? (locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains')

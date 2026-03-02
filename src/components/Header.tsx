@@ -50,8 +50,21 @@ function Header({ menuTArray }: HeaderProps) {
   useEffect(() => {
     setHasMounted(true);
 
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        // Hysteresis: turn ON at 80px, turn OFF only back below 20px
+        // This dead zone prevents rapid toggling when scroll position hovers near the threshold
+        setIsScrolled(prev => {
+          if (!prev && y > 80) return true;
+          if (prev && y < 20) return false;
+          return prev;
+        });
+        ticking = false;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -190,7 +203,7 @@ function Header({ menuTArray }: HeaderProps) {
       router.push(`/${locale}/product/ready-made_curtain/${productIdentifier}`);
     } else {
       // All fabric products redirect to the custom curtain configurator
-      router.push(`/${locale}/product/fabric/${productIdentifier}?intent=custom_curtain`);
+      router.push(`/${locale}/product/fabric/${productIdentifier}/curtain#ProductDetailCard`);
     }
     setShowResults(false);
     setSearchQuery("");
