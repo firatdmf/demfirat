@@ -268,6 +268,7 @@ function ProductDetailCard({
     window.scrollTo(0, 0);
   }, []);
 
+
   // Meta Pixel & GA4: ViewItem Event
   useEffect(() => {
     if (product && !loading) {
@@ -874,6 +875,17 @@ function ProductDetailCard({
       ? filteredImages.map(img => img.file)
       : [(placeholder_image_link)];
 
+  // Preload ALL gallery images at the correct Next.js optimized size
+  // This warms the browser cache so thumbnail switching is instant
+  useEffect(() => {
+    if (!imageFiles || imageFiles.length === 0) return;
+    imageFiles.forEach((url) => {
+      if (!url) return;
+      const img = new window.Image();
+      img.src = `/_next/image?url=${encodeURIComponent(url)}&w=1080&q=75`;
+    });
+  }, [imageFiles]);
+
   // Prepare media items: images first, then video at 2nd position (if available)
   type MediaItem = { type: 'video' | 'image'; url: string };
 
@@ -1079,22 +1091,7 @@ function ProductDetailCard({
                 </div>
               ) : (
                 <>
-                  {/* Offscreen preload container: images become cached before user clicks them */}
-                  <div aria-hidden="true" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}>
-                    {imageFiles.map((url, i) => i !== selectedThumbIndex && url ? (
-                      <div key={`preload-wrap-${url}`} style={{ position: 'relative', width: 1, height: 1 }}>
-                        <Image
-                          src={url}
-                          alt=""
-                          fill
-                          sizes="1px"
-                          tabIndex={-1}
-                        />
-                      </div>
-                    ) : null)}
-                  </div>
                   <ImageZoom
-                    key={currentMedia?.url || placeholder_image_link}
                     src={currentMedia?.url || imageFiles[selectedThumbIndex] || placeholder_image_link}
                     alt="Product image"
                     onLoad={() => setImageLoaded(true)}

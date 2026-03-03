@@ -45,24 +45,40 @@ function Header({ menuTArray }: HeaderProps) {
 
   // Prevent hydration mismatch - always render logged-out state on server
   const [hasMounted, setHasMounted] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false); // compact (utility bar collapsed)
+  const [isHidden, setIsHidden] = useState(false);     // fully hidden (scrolled past top)
 
   useEffect(() => {
     setHasMounted(true);
 
+    let lastY = window.scrollY;
     let ticking = false;
+
     const handleScroll = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        // Hysteresis: turn ON at 80px, turn OFF only back below 20px
-        // This dead zone prevents rapid toggling when scroll position hovers near the threshold
-        setIsScrolled(prev => {
-          if (!prev && y > 80) return true;
-          if (prev && y < 20) return false;
-          return prev;
-        });
+        const delta = y - lastY;
+
+        if (y < 10) {
+          // At very top: show everything
+          setIsScrolled(false);
+          setIsHidden(false);
+        } else {
+          // Any scroll past 10px: collapse utility bar
+          setIsScrolled(true);
+
+          if (delta > 4 && y > 120) {
+            // Scrolling DOWN past 120px → hide header too
+            setIsHidden(true);
+          } else if (delta < -4) {
+            // Scrolling UP → show compact header
+            setIsHidden(false);
+          }
+        }
+
+        lastY = y;
         ticking = false;
       });
     };
@@ -209,8 +225,14 @@ function Header({ menuTArray }: HeaderProps) {
     setSearchQuery("");
   };
 
+  const headerClasses = [
+    classes.header,
+    hasMounted && isScrolled ? classes.scrolled : '',
+    hasMounted && isHidden ? classes.hidden : ''
+  ].filter(Boolean).join(' ');
+
   return (
-    <header className={`${classes.header} ${isScrolled ? classes.scrolled : ''}`}>
+    <header className={headerClasses}>
       {/* Utility Bar - Top strip */}
       <div className={classes.utilityBar}>
         <div className={classes.utilityContent}>

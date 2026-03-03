@@ -30,9 +30,10 @@ interface ProductCardProps {
   fabricType?: 'solid' | 'embroidery' | string; // For discount display
   hasVideo?: boolean; // Whether product has a local video
   intent?: string; // e.g. 'custom_curtain' to pass down
+  priority?: boolean; // LCP optimization: first N cards load eagerly
 }
 
-function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], variantAttributeValuesMap, productVariants = [], fabricType, hasVideo = false, intent }: ProductCardProps) {
+function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], variantAttributeValuesMap, productVariants = [], fabricType, hasVideo = false, intent, priority = false }: ProductCardProps) {
   const { convertPrice, formatPreconvertedPrice } = useCurrency();
   const placeholder_image_link = "/media/karvenLogo.webp";
   const { data: session } = useSession();
@@ -397,6 +398,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 className={classes.productImage}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                priority={priority}
+                loading={priority ? undefined : 'lazy'}
                 onLoad={(e) => {
                   if ((e.currentTarget as HTMLImageElement).complete) {
                     setImageLoading(false);

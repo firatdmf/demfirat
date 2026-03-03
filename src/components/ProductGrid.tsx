@@ -920,7 +920,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             </div>
           </div>
           <div className={classes.products}>
-            {(Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product) => {
+            {(Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product, i: number) => {
               // Get all variant prices for this product using O(1) map
               const productVariants = variantsByProductId.get(Number(product.id)) || product_variants.filter(v => v.product_id === product.id);
               const allVariantPrices = productVariants
@@ -932,7 +932,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               const fabricType = searchParams?.fabric_type as string | undefined;
               const intent = searchParams?.intent as string | undefined;
 
-              return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} variantAttributeValuesMap={variantAttributeValuesMap} productVariants={productVariants} fabricType={fabricType} hasVideo={videoSKUsSet.has(product.sku)} intent={intent} />;
+              return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} variantAttributeValuesMap={variantAttributeValuesMap} productVariants={productVariants} fabricType={fabricType} hasVideo={videoSKUsSet.has(product.sku)} intent={intent} priority={i < 8} />;
             })}
           </div>
         </div>
