@@ -204,7 +204,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
 
   const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);
-  const isReadyMadeCurtain = pathname.includes('ready-made_curtain') || product.product_category === 'ready-made_curtain';
+  const isReadyMadeCurtain = pathname.includes('ready-made_curtain') || (product as any).product_category === 'ready-made_curtain';
 
   // Format price with currency (using global context)
   // Prefers backend pre-converted prices dict when available.
