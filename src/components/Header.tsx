@@ -538,11 +538,9 @@ function Header({ menuTArray }: HeaderProps) {
           </div>
           */}
 
-          {/* TEMPORARILY HIDDEN - Ready-made curtains
           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
-            {menuTArray[2]}
+            {locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые шторы' : locale === 'pl' ? 'Gotowe zasłony' : 'Ready Made Curtains'}
           </Link>
-          */}
 
           <Link href={`/${locale}/about`} className={classes.navLink}>
             {menuTArray[3]}
@@ -603,11 +601,9 @@ function Header({ menuTArray }: HeaderProps) {
           </Link>
           */}
 
-          {/* TEMPORARILY HIDDEN - Ready-made curtains
           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-            {menuTArray[2]}
+            {locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые шторы' : locale === 'pl' ? 'Gotowe zasłony' : 'Ready Made Curtains'}
           </Link>
-          */}
           <Link href={`/${locale}/about`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
             {menuTArray[3]}
           </Link>

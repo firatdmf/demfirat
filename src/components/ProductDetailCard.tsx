@@ -53,9 +53,9 @@ function ProductDetailCard({
 
   const t = useTranslations('ProductDetailCard');
   const { currency, convertPrice, formatPreconvertedPrice, rates, loading } = useCurrency();
-  const placeholder_image_link = "/media/karvenLogo.webp";
+  const placeholder_image_link = "/media/woocommerce-placeholder.svg";
 
-  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  const [imageLoaded, setImageLoaded] = useState<boolean>(true);
   const viewItemFiredRef = useRef<string | null>(null);
   const [zoomPosition, setZoomPosition] = useState<{ x: number, y: number } | null>(null);
   const [zoomBoxPosition, setZoomBoxPosition] = useState<{ x: number, y: number } | null>(null);
@@ -350,7 +350,6 @@ function ProductDetailCard({
   const [selectedThumbIndex, setSelectedThumbIndex] = useState<number>(0);
   useEffect(() => {
     setSelectedThumbIndex(0);
-    setImageLoaded(false);
   }, [filteredImages]);
 
 
@@ -879,10 +878,25 @@ function ProductDetailCard({
   // This warms the browser cache so thumbnail switching is instant
   useEffect(() => {
     if (!imageFiles || imageFiles.length === 0) return;
-    imageFiles.forEach((url) => {
+    imageFiles.forEach((url, i) => {
       if (!url) return;
-      const img = new window.Image();
-      img.src = `/_next/image?url=${encodeURIComponent(url)}&w=1080&q=75`;
+      // Use <link rel="preload"> for first image (highest priority)
+      // Use Image() for the rest (background preload)
+      if (i === 0 && typeof document !== 'undefined') {
+        const optimizedUrl = `/_next/image?url=${encodeURIComponent(url)}&w=1080&q=75`;
+        const existing = document.querySelector(`link[href="${CSS.escape(optimizedUrl)}"]`);
+        if (!existing) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = optimizedUrl;
+          link.setAttribute('fetchpriority', 'high');
+          document.head.appendChild(link);
+        }
+      } else {
+        const img = new window.Image();
+        img.src = `/_next/image?url=${encodeURIComponent(url)}&w=1080&q=75`;
+      }
     });
   }, [imageFiles]);
 
@@ -1028,7 +1042,8 @@ function ProductDetailCard({
                       alt="product image"
                       fill
                       sizes="80px"
-                      priority
+                      priority={index < 3}
+                      loading={index < 3 ? undefined : 'lazy'}
                     />
                   )}
                 </div>
@@ -1094,7 +1109,6 @@ function ProductDetailCard({
                   <ImageZoom
                     src={currentMedia?.url || imageFiles[selectedThumbIndex] || placeholder_image_link}
                     alt="Product image"
-                    onLoad={() => setImageLoaded(true)}
                   />
                 </>
               )}
@@ -1345,24 +1359,28 @@ function ProductDetailCard({
                         <span className={classes.discountBadge}>%{Math.round(discountRate)}</span>
                         <span className={classes.originalPrice}>{formatPrice(originalPrice)}</span>
                         <span className={classes.priceDisplay}>{formatPrice(currentPrice)}</span>
-                        <span className={classes.pricePerMeterNote}>
-                          {locale === 'tr' ? 'Belirtilen fiyat metre fiyatıdır.' :
-                            locale === 'ru' ? 'Указанная цена за метр.' :
-                              locale === 'pl' ? 'Podana cena jest ceną za metr.' :
-                                'Price shown is per meter.'}
-                        </span>
+                        {isFabricProduct && (
+                          <span className={classes.pricePerMeterNote}>
+                            {locale === 'tr' ? 'Belirtilen fiyat metre fiyatıdır.' :
+                              locale === 'ru' ? 'Указанная цена за метр.' :
+                                locale === 'pl' ? 'Podana cena jest ceną za metr.' :
+                                  'Price shown is per meter.'}
+                          </span>
+                        )}
                       </div>
                     );
                   } else {
                     return (
                       <div className={classes.priceWrapper}>
                         <span className={classes.priceDisplay}>{formatPrice(currentPrice)}</span>
-                        <span className={classes.pricePerMeterNote}>
-                          {locale === 'tr' ? 'Belirtilen fiyat metre fiyatıdır.' :
-                            locale === 'ru' ? 'Указанная цена за метр.' :
-                              locale === 'pl' ? 'Podana cena jest ceną za metr.' :
-                                'Price shown is per meter.'}
-                        </span>
+                        {isFabricProduct && (
+                          <span className={classes.pricePerMeterNote}>
+                            {locale === 'tr' ? 'Belirtilen fiyat metre fiyatıdır.' :
+                              locale === 'ru' ? 'Указанная цена за метр.' :
+                                locale === 'pl' ? 'Podana cena jest ceną za metr.' :
+                                  'Price shown is per meter.'}
+                          </span>
+                        )}
                       </div>
                     );
                   }
@@ -1594,7 +1612,7 @@ function ProductDetailCard({
             className={classes.sizeGuideImg}
             loading="lazy"
             onError={(e) => {
-              e.currentTarget.src = "/media/karvenLogo.webp";
+              e.currentTarget.src = "/media/woocommerce-placeholder.svg";
             }}
           />
         </div>
@@ -1627,7 +1645,7 @@ function ProductDetailCard({
             className={classes.sizeGuideImg}
             loading="lazy"
             onError={(e) => {
-              e.currentTarget.src = "/media/karvenLogo.webp";
+              e.currentTarget.src = "/media/woocommerce-placeholder.svg";
             }}
           />
         </div>

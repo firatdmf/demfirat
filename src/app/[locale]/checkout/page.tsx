@@ -305,7 +305,7 @@ export default function CheckoutPage() {
                 product: {
                   title: product?.title || item.product?.title || item.product_sku,
                   price: finalPrice,
-                  primary_image: product?.primary_image || '/media/karvenLogo.webp',
+                  primary_image: product?.primary_image || '/media/woocommerce-placeholder.svg',
                   category: productData.product_category,
                 },
               };
@@ -319,7 +319,7 @@ export default function CheckoutPage() {
             product: {
               title: item.product_sku,
               price: item.custom_price || null,
-              primary_image: '/media/karvenLogo.webp',
+              primary_image: '/media/woocommerce-placeholder.svg',
             },
           };
         })
@@ -479,7 +479,7 @@ export default function CheckoutPage() {
                   product: {
                     title: detail?.product?.title || item.product?.title || item.product_sku,
                     price: finalPrice,
-                    primary_image: detail?.primary_image || detail?.product?.primary_image || item.product?.primary_image || '/media/karvenLogo.webp',
+                    primary_image: detail?.primary_image || detail?.product?.primary_image || item.product?.primary_image || '/media/woocommerce-placeholder.svg',
                     category: detail?.product_category,
                   },
                 };
@@ -492,7 +492,7 @@ export default function CheckoutPage() {
               product: item.product || {
                 title: item.product_sku,
                 price: null,
-                primary_image: '/media/karvenLogo.webp',
+                primary_image: '/media/woocommerce-placeholder.svg',
               },
             }));
           } catch (error) {
@@ -1229,7 +1229,7 @@ export default function CheckoutPage() {
                         alt={item.product?.title || ''}
                         className={classes.horizontalItemImage}
                         onError={(e) => {
-                          e.currentTarget.src = '/media/karvenLogo.webp';
+                          e.currentTarget.src = '/media/woocommerce-placeholder.svg';
                         }}
                       />
                       {/* Custom Curtain Badge */}

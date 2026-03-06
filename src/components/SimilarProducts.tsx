@@ -143,12 +143,12 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
                             >
                                 <div className={classes.imageWrapper}>
                                     <img
-                                        src={product.primary_image || '/media/karvenLogo.webp'}
+                                        src={product.primary_image || '/media/woocommerce-placeholder.svg'}
                                         alt={getLocalizedProductField(product as any, 'title', locale)}
                                         className={classes.productImage}
                                         loading="lazy"
                                         onError={(e) => {
-                                            e.currentTarget.src = '/media/karvenLogo.webp';
+                                            e.currentTarget.src = '/media/woocommerce-placeholder.svg';
                                         }}
                                     />
                                 </div>

@@ -167,7 +167,7 @@ export default function FavoritesPage() {
                     >
                       <div className={classes.imageWrapper}>
                         <img
-                          src={product.primary_image || '/media/karvenLogo.webp'}
+                          src={product.primary_image || '/media/woocommerce-placeholder.svg'}
                           alt={product.title}
                           className={classes.productImage}
                         />

@@ -3,20 +3,27 @@ import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAt
 import { getLocalizedProductField } from "@/lib/productUtils";
 import classes from "./page.module.css";
 import { Metadata } from "next";
+import { cache } from "react";
+
+// Deduplicated fetch: React.cache ensures generateMetadata and Page share the same promise
+const getProductData = cache(async (product_sku: string) => {
+  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
+  const response = await fetch(nejum_api_link, { next: { revalidate: 300 } });
+
+  if (response.ok && (response.headers.get('content-type') || '').includes('application/json')) {
+    return await response.json();
+  }
+  return null;
+});
 
 export async function generateMetadata(props: PageProps<'/[locale]/product/[product_category]/[product_sku]'>): Promise<Metadata> {
   const { product_sku, locale } = await props.params;
-  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
 
   try {
-    const response = await fetch(nejum_api_link, { next: { revalidate: 300 } });
-    if (!response.ok) return { title: "Product Not Found | Karven" };
+    const data = await getProductData(product_sku);
+    if (!data?.product) return { title: "Product Not Found | Karven" };
 
-    const data = await response.json();
     const product = data.product;
-    if (!product) return { title: "Product Not Found | Karven" };
-
-    // Localization Logic
     const title = getLocalizedProductField(product, 'title', locale);
     const description = getLocalizedProductField(product, 'description', locale) || "";
 
@@ -28,7 +35,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
 
     return {
       title: `${title} | Karven`,
-      description: description.substring(0, 160), // Clamp for SEO
+      description: description.substring(0, 160),
       alternates: {
         canonical: canonicalUrl,
         languages: {
@@ -63,31 +70,21 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
 export default async function Page(props: PageProps<'/[locale]/product/[product_category]/[product_sku]'>) {
   const { product_sku, locale } = await props.params;
   const searchParams = await props.searchParams;
-  let product: Product | null = null;
-  let product_category: string | null = null;
-  let product_variants: ProductVariant[] = [];
-  let product_variant_attributes: ProductVariantAttribute[] = [];
-  let product_variant_attribute_values: ProductVariantAttributeValue[] = [];
-  let product_files: ProductFile[] = [];
-  let product_attributes: ProductAttribute[] = []; // Product-level attributes
-  let variant_attributes: ProductAttribute[] = []; // Variant-level attributes
 
-  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`);
-  const nejum_response = await fetch(nejum_api_link, { next: { revalidate: 300 } })
+  const data = await getProductData(product_sku);
 
-  if (nejum_response.ok && (nejum_response.headers.get('content-type') || '').includes('application/json')) {
-    const data = await nejum_response.json()
-    product = data.product;
-    product_category = data.product_category;
-    product_variants = data.product_variants || [];
-    product_variant_attributes = data.product_variant_attributes || [];
-    product_variant_attribute_values = data.product_variant_attribute_values || [];
-    product_files = data.product_files || [];
-    product_attributes = data.product_attributes || [];
-    variant_attributes = data.variant_attributes || [];
-  } else {
+  if (!data?.product) {
     return <div className={classes.error}>Error fetching product details.</div>;
   }
+
+  const product: Product = data.product;
+  const product_category: string | null = data.product_category;
+  const product_variants: ProductVariant[] = data.product_variants || [];
+  const product_variant_attributes: ProductVariantAttribute[] = data.product_variant_attributes || [];
+  const product_variant_attribute_values: ProductVariantAttributeValue[] = data.product_variant_attribute_values || [];
+  const product_files: ProductFile[] = data.product_files || [];
+  const product_attributes: ProductAttribute[] = data.product_attributes || [];
+  const variant_attributes: ProductAttribute[] = data.variant_attributes || [];
 
   // Get localized title/description for JSON-LD
   const displayTitle = getLocalizedProductField(product as Product, 'title', locale);
@@ -127,7 +124,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   };
 
   // JSON-LD Product Schema for Meta Catalog auto-detection and Google SEO
-  const jsonLd = product ? {
+  const jsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": displayTitle,
@@ -139,8 +136,6 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
       "@type": "Brand",
       "name": "Karven"
     },
-    // Adding aggregate rating placeholder for future reviews system if needed
-    // "aggregateRating": { ... }
     "offers": {
       "@type": "Offer",
       "url": productUrl,
@@ -150,16 +145,14 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
       "availability": Number(product.available_quantity || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       "itemCondition": "https://schema.org/NewCondition"
     }
-  } : null;
+  };
 
   return (
     <>
-      {jsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

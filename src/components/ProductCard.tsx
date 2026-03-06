@@ -35,7 +35,7 @@ interface ProductCardProps {
 
 function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], variantAttributeValuesMap, productVariants = [], fabricType, hasVideo = false, intent, priority = false }: ProductCardProps) {
   const { convertPrice, formatPreconvertedPrice } = useCurrency();
-  const placeholder_image_link = "/media/karvenLogo.webp";
+  const placeholder_image_link = "/media/woocommerce-placeholder.svg";
   const { data: session } = useSession();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [averageRating, setAverageRating] = useState(0);
@@ -204,6 +204,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
 
   const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);
+  const isReadyMadeCurtain = pathname.includes('ready-made_curtain') || product.product_category === 'ready-made_curtain';
 
   // Format price with currency (using global context)
   // Prefers backend pre-converted prices dict when available.
@@ -527,16 +528,16 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                           EUR: discountInfo.originalPrice * (pricesDict.EUR / (price || 1)),
                           RUB: discountInfo.originalPrice * (pricesDict.RUB / (price || 1)),
                           PLN: discountInfo.originalPrice * (pricesDict.PLN / (price || 1)),
-                        } : null)} {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>
+                        } : null)}{!isReadyMadeCurtain ? ` ${locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}` : ''}</span>
                         <span className={classes.currentPrice}>
-                          {formatPrice(price, pricesDict)} <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}>{locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>
+                          {formatPrice(price, pricesDict)}{!isReadyMadeCurtain && <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
                         </span>
                       </>
                     );
                   }
                   return (
                     <span className={classes.currentPrice}>
-                      {formatPrice(price, pricesDict)} <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}>{locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>
+                      {formatPrice(price, pricesDict)}{!isReadyMadeCurtain && <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
                     </span>
                   );
                 };

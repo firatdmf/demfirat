@@ -149,7 +149,7 @@ export default function CartPage() {
             product: {
               title: detail?.product?.title || item.product_sku,
               price,
-              primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/karvenLogo.webp',
+              primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/woocommerce-placeholder.svg',
               category: detail?.product_category,
             },
           };
@@ -160,7 +160,7 @@ export default function CartPage() {
         setCartItems(guestCart.map(item => ({
           ...item,
           id: item.id as any,
-          product: { title: item.product_sku, price: item.is_sample ? 0 : null, primary_image: '/media/karvenLogo.webp' },
+          product: { title: item.product_sku, price: item.is_sample ? 0 : null, primary_image: '/media/woocommerce-placeholder.svg' },
         })) as CartItem[]);
       }
     } catch (error) {
@@ -218,7 +218,7 @@ export default function CartPage() {
               product: {
                 title: detail?.product?.title || item.product_sku,
                 price,
-                primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/karvenLogo.webp',
+                primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/woocommerce-placeholder.svg',
                 category: detail?.product_category,
               },
             };
@@ -228,7 +228,7 @@ export default function CartPage() {
           // Fallback
           setCartItems(items.map((item: CartItem) => ({
             ...item,
-            product: { title: item.product_sku, price: null, primary_image: '/media/karvenLogo.webp' },
+            product: { title: item.product_sku, price: null, primary_image: '/media/woocommerce-placeholder.svg' },
           })));
         }
       }
@@ -415,10 +415,10 @@ export default function CartPage() {
                 >
                   <div className={classes.itemImage}>
                     <img
-                      src={item.product?.primary_image || '/media/karvenLogo.webp'}
+                      src={item.product?.primary_image || '/media/woocommerce-placeholder.svg'}
                       alt={item.product?.title || item.product_sku}
                       onError={(e) => {
-                        const placeholder_image_link = "/media/karvenLogo.webp";
+                        const placeholder_image_link = "/media/woocommerce-placeholder.svg";
                         e.currentTarget.src = placeholder_image_link;
                       }}
                     />
