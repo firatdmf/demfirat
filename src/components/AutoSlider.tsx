@@ -75,8 +75,7 @@ export default function AutoSlider({ locale }: AutoSliderProps) {
   };
 
   return (
-    <section className={classes.sliderSection}>
-      <div className={classes.sliderContainer}>
+    <div className={classes.sliderContainer}>
         <div className={classes.slides}>
           {slides.map((slide, index) => (
             <div
@@ -99,6 +98,5 @@ export default function AutoSlider({ locale }: AutoSliderProps) {
           ))}
         </div>
       </div>
-    </section>
   );
 }

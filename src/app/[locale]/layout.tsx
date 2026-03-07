@@ -124,7 +124,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
           {/* <ScrollSmoother /> - Temporarily disabled */}
           <Header menuTArray={menuTArray} />
           {/* Spacer: pushes content below the fixed header */}
-          <div style={{ height: 'var(--header-height, 110px)' }} aria-hidden="true" />
+          <div style={{ height: 'var(--header-height, 96px)' }} aria-hidden="true" />
           {children}
           {/* <div className="flex flex-col min-h-screen max-w-4xl mx-auto">
             <h1>Header</h1>

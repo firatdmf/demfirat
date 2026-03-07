@@ -5,7 +5,10 @@
       "Bash(do:*)",
       "Bash(npx tsc:*)",
       "Bash(curl:*)",
-      "Bash(do curl:*)"
+      "Bash(do curl:*)",
+      "WebFetch(domain:www.brooklinen.com)",
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ]
   }
 }

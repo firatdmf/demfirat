@@ -98,6 +98,12 @@
     color: #d4af37;
 }
 
+.perMeter {
+    font-size: 0.7em;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.3);
+}
+
 .loading {
     display: flex;
     justify-content: center;

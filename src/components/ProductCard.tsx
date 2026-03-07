@@ -193,10 +193,19 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     setImageSrc(newSrc);
     setImageError(false);
     setHasTriedFallback(false);
-    setImageLoading(true); // Let Next.js <Image> handle the loading state via its onLoad event
+    setImageLoading(true);
     if (initialVariant) {
       setSelectedVariantId(String(initialVariant.id));
     }
+    // For cached images: check if already loaded after a tick
+    requestAnimationFrame(() => {
+      const imgs = document.querySelectorAll(`img[alt*="${product.sku}"]`);
+      imgs.forEach((img) => {
+        if ((img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0) {
+          setImageLoading(false);
+        }
+      });
+    });
   }, [initialVariant, product.primary_image, product.sku]);
 
   // Review stats removed for performance - was causing N+1 API calls
@@ -401,10 +410,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 priority={priority}
                 loading={priority ? undefined : 'lazy'}
-                onLoad={(e) => {
-                  if ((e.currentTarget as HTMLImageElement).complete) {
-                    setImageLoading(false);
-                  }
+                onLoad={() => {
+                  setImageLoading(false);
                 }}
                 onError={(e) => {
                   setImageLoading(false);
@@ -512,6 +519,83 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
               </div>
             )}
 
+            {/* Color/Fabric Swatches - Above Price */}
+            {colorValues.length > 0 && (
+              <div className={classes.colorSwatchesContainer}>
+                <div className={classes.colorSwatchesRow}>
+                  {colorValues.slice(0, 4).map((color: string, index: number) => {
+                    const isTwoTone = isTwoToneColor(color);
+
+                    return (
+                      <div
+                        key={`${color}-${index}`}
+                        className={classes.colorSwatchSmall}
+                        title={color}
+                        onClick={(e) => handleColorSwatchClick(e, color)}
+                        style={!isTwoTone ? { backgroundColor: getColorCode(color) } : {}}
+                      >
+                        {isTwoTone ? (
+                          <>
+                            <span
+                              style={{
+                                position: 'absolute',
+                                width: '50%',
+                                height: '100%',
+                                left: 0,
+                                backgroundColor: splitTwoToneColor(color).color1,
+                                borderRadius: '50% 0 0 50%'
+                              }}
+                            />
+                            <span
+                              style={{
+                                position: 'absolute',
+                                width: '50%',
+                                height: '100%',
+                                right: 0,
+                                backgroundColor: splitTwoToneColor(color).color2,
+                                borderRadius: '0 50% 50% 0'
+                              }}
+                            />
+                          </>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                  {colorValues.length > 4 && (
+                    <div className={classes.moreSwatchesSmall} title={`+${colorValues.length - 4} more`}>
+                      +{colorValues.length - 4}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Fabric Swatches */}
+            {fabricValues.length > 0 && (
+              <div className={classes.colorSwatchesContainer}>
+                <div className={classes.colorSwatchesRow}>
+                  {fabricValues.slice(0, 4).map((fabric: string, index: number) => {
+                    const bgImage = `/media/fabrics/${fabric.toLowerCase()}.avif`;
+
+                    return (
+                      <div
+                        key={`${fabric}-${index}`}
+                        className={classes.fabricSwatchSmall}
+                        title={fabric}
+                        onClick={(e) => handleFabricSwatchClick(e, fabric)}
+                        style={{ backgroundImage: `url(${bgImage})` }}
+                      />
+                    );
+                  })}
+                  {fabricValues.length > 4 && (
+                    <div className={classes.moreSwatchesSmall} title={`+${fabricValues.length - 4} more`}>
+                      +{fabricValues.length - 4}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Price Section with Discount Display */}
             <div className={classes.priceSection}>
               {(() => {
@@ -519,25 +603,29 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 const renderPriceWithDiscount = (price: number, pricesDict?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null) => {
                   const discountInfo = getDiscountInfo(price);
                   if (discountInfo) {
+                    const meterLabel = locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter';
                     return (
                       <>
-                        <span className={classes.discountBadge}>%{discountInfo.discountPercent}</span>
-                        <span className={classes.originalPrice}>{formatPrice(discountInfo.originalPrice, pricesDict ? {
-                          USD: discountInfo.originalPrice / (pricesDict.USD / (price || 1)),
-                          TRY: discountInfo.originalPrice * (pricesDict.TRY / (price || 1)),
-                          EUR: discountInfo.originalPrice * (pricesDict.EUR / (price || 1)),
-                          RUB: discountInfo.originalPrice * (pricesDict.RUB / (price || 1)),
-                          PLN: discountInfo.originalPrice * (pricesDict.PLN / (price || 1)),
-                        } : null)}{!isReadyMadeCurtain ? ` ${locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}` : ''}</span>
-                        <span className={classes.currentPrice}>
-                          {formatPrice(price, pricesDict)}{!isReadyMadeCurtain && <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
-                        </span>
+                        <div className={classes.discountRow}>
+                          <span className={classes.discountBadge}>%{discountInfo.discountPercent}</span>
+                          <span className={classes.originalPrice}>{formatPrice(discountInfo.originalPrice, pricesDict ? {
+                            USD: discountInfo.originalPrice / (pricesDict.USD / (price || 1)),
+                            TRY: discountInfo.originalPrice * (pricesDict.TRY / (price || 1)),
+                            EUR: discountInfo.originalPrice * (pricesDict.EUR / (price || 1)),
+                            RUB: discountInfo.originalPrice * (pricesDict.RUB / (price || 1)),
+                            PLN: discountInfo.originalPrice * (pricesDict.PLN / (price || 1)),
+                          } : null)}</span>
+                        </div>
+                        <div className={classes.currentPriceRow}>
+                          <span className={classes.currentPrice}>{formatPrice(price, pricesDict)}</span>
+                          {!isReadyMadeCurtain && <span className={classes.perMeter}>{meterLabel}</span>}
+                        </div>
                       </>
                     );
                   }
                   return (
                     <span className={classes.currentPrice}>
-                      {formatPrice(price, pricesDict)}{!isReadyMadeCurtain && <span style={{ fontSize: '0.85em', fontWeight: 500, color: '#888' }}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
+                      {formatPrice(price, pricesDict)}{!isReadyMadeCurtain && <span className={classes.perMeter}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
                     </span>
                   );
                 };
@@ -589,83 +677,6 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 );
               })()}
             </div>
-
-            {/* Color/Fabric Swatches - Below Price */}
-            {colorValues.length > 0 && (
-              <div className={classes.colorSwatchesContainer}>
-                <div className={classes.colorSwatchesRow}>
-                  {colorValues.slice(0, 4).map((color: string, index: number) => {
-                    const isTwoTone = isTwoToneColor(color);
-
-                    return (
-                      <div
-                        key={`${color}-${index}`}
-                        className={classes.colorSwatchSmall}
-                        title={color}
-                        onClick={(e) => handleColorSwatchClick(e, color)}
-                        style={!isTwoTone ? { backgroundColor: getColorCode(color) } : {}}
-                      >
-                        {isTwoTone ? (
-                          <>
-                            <span
-                              style={{
-                                position: 'absolute',
-                                width: '50%',
-                                height: '100%',
-                                left: 0,
-                                backgroundColor: splitTwoToneColor(color).color1,
-                                borderRadius: '50% 0 0 50%'
-                              }}
-                            />
-                            <span
-                              style={{
-                                position: 'absolute',
-                                width: '50%',
-                                height: '100%',
-                                right: 0,
-                                backgroundColor: splitTwoToneColor(color).color2,
-                                borderRadius: '0 50% 50% 0'
-                              }}
-                            />
-                          </>
-                        ) : null}
-                      </div>
-                    );
-                  })}
-                  {colorValues.length > 4 && (
-                    <div className={classes.moreSwatchesSmall} title={`+${colorValues.length - 4} more`}>
-                      +{colorValues.length - 4}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Fabric Swatches - Below Price */}
-            {fabricValues.length > 0 && (
-              <div className={classes.colorSwatchesContainer}>
-                <div className={classes.colorSwatchesRow}>
-                  {fabricValues.slice(0, 4).map((fabric: string, index: number) => {
-                    const bgImage = `/media/fabrics/${fabric.toLowerCase()}.avif`;
-
-                    return (
-                      <div
-                        key={`${fabric}-${index}`}
-                        className={classes.fabricSwatchSmall}
-                        title={fabric}
-                        onClick={(e) => handleFabricSwatchClick(e, fabric)}
-                        style={{ backgroundImage: `url(${bgImage})` }}
-                      />
-                    );
-                  })}
-                  {fabricValues.length > 4 && (
-                    <div className={classes.moreSwatchesSmall} title={`+${fabricValues.length - 4} more`}>
-                      +{fabricValues.length - 4}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </Link>
         </div>
       </div>

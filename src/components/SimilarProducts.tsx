@@ -156,7 +156,7 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
                                     <h3 className={classes.productTitle}>{getLocalizedProductField(product as any, 'title', locale)}</h3>
                                     {priceDisplay && (
                                         <span className={classes.productPrice}>
-                                            {priceDisplay}
+                                            {priceDisplay}<span className={classes.perMeter}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : '/ meter'}</span>
                                         </span>
                                     )}
                                 </div>

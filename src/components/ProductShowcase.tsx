@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import classes from "./ProductShowcase.module.css";
+import AutoSlider from "./AutoSlider";
 import Link from "next/link";
 
 interface ProductShowcaseProps {
@@ -61,6 +62,9 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
             </div>
           </div>
 
+          <div className={classes.sliderWrapper}>
+            <AutoSlider locale={locale} />
+          </div>
 
         </div>
       </div>

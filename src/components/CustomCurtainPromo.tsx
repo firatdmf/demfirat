@@ -26,6 +26,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [scrollProgress, setScrollProgress] = useState(0);
 
     // Translations
     const t = {
@@ -166,6 +167,20 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
         };
     };
 
+    // Track scroll progress
+    useEffect(() => {
+        const el = scrollContainerRef.current;
+        if (!el) return;
+        const handleScroll = () => {
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            if (maxScroll > 0) {
+                setScrollProgress(el.scrollLeft / maxScroll);
+            }
+        };
+        el.addEventListener('scroll', handleScroll, { passive: true });
+        return () => el.removeEventListener('scroll', handleScroll);
+    }, [loading]);
+
     // Scroll handlers
     const scroll = (direction: 'left' | 'right') => {
         if (scrollContainerRef.current) {
@@ -243,7 +258,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                         onClick={() => scroll('left')}
                         aria-label="Scroll left"
                     >
-                        ‹
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                     </button>
 
                     <div className={classes.carousel} ref={scrollContainerRef}>
@@ -287,12 +302,12 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                                                     <div className={classes.priceContainer}>
                                                         {discountInfo && (
                                                             <span className={classes.originalPrice}>
-                                                                {convertPrice(discountInfo.originalPrice)} {t.perMeter[lang]}
+                                                                {convertPrice(discountInfo.originalPrice)} <span className={classes.perMeterLabel}>{t.perMeter[lang]}</span>
                                                             </span>
                                                         )}
                                                         {product.price > 0 && (
                                                             <span className={classes.currentPrice}>
-                                                                {convertPrice(product.price)} {t.perMeter[lang]}
+                                                                {convertPrice(product.price)} <span className={classes.perMeterLabel}>{t.perMeter[lang]}</span>
                                                             </span>
                                                         )}
                                                     </div>
@@ -310,8 +325,15 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                         onClick={() => scroll('right')}
                         aria-label="Scroll right"
                     >
-                        ›
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                     </button>
+                </div>
+
+                <div className={classes.scrollIndicator}>
+                    <div
+                        className={classes.scrollIndicatorThumb}
+                        style={{ left: `${scrollProgress * 100}%` }}
+                    />
                 </div>
             </div>
         </section>

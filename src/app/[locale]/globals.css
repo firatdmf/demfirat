@@ -4,6 +4,7 @@
 @tailwind utilities;
 
 :root {
+  /* Colors */
   --primary-beige: #f5f3ed;
   --secondary-beige: #e8e3d8;
   --ivory: #faf8f3;
@@ -13,14 +14,31 @@
   --gold: #c9a961;
   --bronze: #b8956a;
   --white: #ffffff;
+  --discount-red: #c62828;
 
+  /* Typography */
   --font-heading: 'Cormorant Garamond', serif;
   --font-body: 'Montserrat', sans-serif;
+  --h1-size: 3.5rem;
+  --h2-size: 2.25rem;
+  --body-size: 1rem;
 
+  /* Layout */
+  --container-max: 1280px;
+  --section-py: 5rem;
+  --section-px: 2rem;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  /* Effects */
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* Button */
+  --btn-height: 48px;
+  --btn-radius: 50px;
 }
 
 * {
@@ -48,7 +66,7 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--text-dark);
-  background-color: var(--ivory);
+  background-color: #ffffff;
   line-height: 1.6;
   width: 100%;
   max-width: 100vw;
@@ -95,71 +113,97 @@ h6 {
 
 /* Utility Classes */
 .container {
-  max-width: 1280px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--section-px);
 }
 
 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-height);
   background: linear-gradient(135deg, var(--gold) 0%, var(--bronze) 100%);
-  color: var(--white);
-  padding: 1rem 2.5rem;
-  border-radius: 50px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  color: #1a1a1a;
+  padding: 0 2.25rem;
+  border-radius: var(--btn-radius);
+  font-size: 0.9rem;
+  font-weight: 700;
   letter-spacing: 0.05em;
-  box-shadow: var(--shadow-md);
+  text-transform: uppercase;
+  box-shadow: 0 4px 16px rgba(201, 169, 97, 0.35);
   transition: var(--transition);
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(201, 169, 97, 0.45);
+  color: #1a1a1a;
 }
 
 .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-height);
   background: transparent;
-  color: var(--text-dark);
+  color: var(--gold);
   border: 2px solid var(--gold);
-  padding: 1rem 2.5rem;
-  border-radius: 50px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 0 2.25rem;
+  border-radius: var(--btn-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
   transition: var(--transition);
 }
 
 .btn-secondary:hover {
   background: var(--gold);
-  color: var(--white);
+  color: #1a1a1a;
 }
 
 /* Mobile Responsive Utilities */
 @media (max-width: 768px) {
+  :root {
+    --h1-size: 2.25rem;
+    --h2-size: 1.75rem;
+    --section-py: 3.5rem;
+    --section-px: 1.5rem;
+  }
+
   .container {
-    padding: 0 1.5rem;
+    padding: 0 var(--section-px);
   }
 
   .btn-primary,
   .btn-secondary {
-    padding: 0.875rem 2rem;
-    font-size: 0.9rem;
+    min-height: 44px;
+    padding: 0 1.75rem;
+    font-size: 0.82rem;
   }
 
-  /* Add bottom padding for mobile bottom nav */
   body {
     padding-bottom: 75px;
   }
 }
 
 @media (max-width: 480px) {
+  :root {
+    --h1-size: 1.85rem;
+    --h2-size: 1.5rem;
+    --section-py: 3rem;
+    --section-px: 1rem;
+  }
+
   .container {
-    padding: 0 1rem;
+    padding: 0 var(--section-px);
   }
 
   .btn-primary,
   .btn-secondary {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.85rem;
+    min-height: 42px;
+    padding: 0 1.5rem;
+    font-size: 0.8rem;
   }
 }

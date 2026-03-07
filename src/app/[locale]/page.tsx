@@ -2,7 +2,6 @@ import React from "react";
 import "./page.css";
 import HeroVideo from "@/components/HeroVideo";
 import ProductShowcase from "@/components/ProductShowcase";
-import AutoSlider from "@/components/AutoSlider";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
 import CustomCurtainPromo from "@/components/CustomCurtainPromo";
 // below is irrelevant
@@ -137,7 +136,6 @@ export default async function Home(props: PageProps<'/[locale]'>) {
           title={productsLocale("Headline")}
           locale={locale}
         />
-        <AutoSlider locale={locale} />
         <DraggableTestimonials reviews={reviews} locale={locale} />
       </div>
     </main>

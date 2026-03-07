@@ -1,11 +1,11 @@
 .clientReviews {
-  padding: 4rem 2rem 2rem 2rem;
+  padding: var(--section-py, 5rem) var(--section-px, 2rem);
   background: transparent;
 }
 
 .clientReviews h2 {
   font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: 3rem;
+  font-size: var(--h2-size, 2.25rem);
   font-weight: 400;
   text-align: center;
   margin-bottom: 1rem;
@@ -22,7 +22,7 @@
 }
 
 .clientReviewsContainer {
-  max-width: 1400px;
+  max-width: var(--container-max, 1280px);
   margin: 0 auto;
   padding: 2rem 0;
   overflow: hidden;
@@ -66,12 +66,8 @@
 }
 
 @media (max-width: 768px) {
-  .clientReviews {
-    padding: 4rem 1rem;
-  }
-  
   .clientReviews h2 {
-    font-size: 2rem;
+    font-size: var(--h2-size, 1.75rem);
   }
   
   .clientReviewsSlider {

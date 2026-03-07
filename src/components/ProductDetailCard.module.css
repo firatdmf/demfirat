@@ -1,8 +1,7 @@
 .ProductDetailCard {
-  background: var(--ivory, #faf8f3);
+  background: #ffffff;
   min-height: 100vh;
-  padding: 2.5rem 0 0.5rem 0;
-  /* Increased top padding */
+  padding: 0;
   width: 100%;
   max-width: 100vw;
   box-sizing: border-box;
@@ -11,14 +10,11 @@
 .detailCardContainer {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 2.5rem 2rem 3rem 2rem;
+  padding: 2rem 2rem 3rem 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   background: white;
-  border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--light-gray, #e0dcd2);
   box-sizing: border-box;
   width: 100%;
   align-items: start;
@@ -318,10 +314,10 @@
 .productCategory {
   display: inline-flex;
   align-items: center;
-  padding: 0.35rem 0.7rem;
-  background: linear-gradient(135deg, rgba(201, 169, 97, 0.08) 0%, rgba(201, 169, 97, 0.12) 100%);
+  padding: 0.4rem 0.65rem;
+  background: rgba(201, 169, 97, 0.1);
   border: 1px solid rgba(201, 169, 97, 0.3);
-  border-radius: 30px;
+  border-radius: 4px;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -332,28 +328,28 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.35rem 0.75rem;
-  background: #f5f5f5;
-  border: 1px solid #e8e8e8;
-  border-radius: 30px;
+  padding: 0.4rem 0.65rem;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
   font-size: 0.65rem;
   transition: all 0.2s ease;
 }
 
 .attributeBadge:hover {
-  background: #fff;
-  border-color: var(--gold, #c9a961);
+  border-color: #ccc;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .attrName {
-  color: #888;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  color: #999;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .attrValue {
-  color: #333;
-  font-weight: 700;
+  color: #2c2c2c;
+  font-weight: 600;
 }
 
 /* Variant Selection - Clean Card Design */

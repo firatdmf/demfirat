@@ -5,14 +5,112 @@
   font-family: var(--font-body, 'Montserrat', sans-serif);
 }
 
-/* Main Content Area */
-.footerContent {
+/* ========== Layer 1: Links + Contact ========== */
+.topLayer {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topContent {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
   gap: 2rem;
-  max-width: 1400px;
+  max-width: var(--container-max, 1280px);
   margin: 0 auto;
-  padding: 4rem 2rem 3rem;
+  padding: 3.5rem 2rem 3rem;
+}
+
+/* Brand Column */
+.brandColumn {
+  display: flex;
+  flex-direction: column;
+  padding-right: 1rem;
+}
+
+.logo {
+  height: 44px;
+  width: auto;
+  margin-bottom: 1rem;
+  filter: brightness(1.1);
+}
+
+.tagline {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+  margin: 0 0 1.25rem 0;
+}
+
+/* Newsletter Form */
+.newsletterForm {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.25rem;
+}
+
+.newsletterInput {
+  flex: 1;
+  padding: 0.6rem 0.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.newsletterInput::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.newsletterInput:focus {
+  border-color: var(--gold, #c9a961);
+}
+
+.newsletterBtn {
+  padding: 0.6rem 1.1rem;
+  background: var(--gold, #c9a961);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.newsletterBtn:hover {
+  background: #d4b97a;
+}
+
+/* Social Icons */
+.socialIcons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.socialIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.socialIcon:hover {
+  background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+  transform: translateY(-2px);
 }
 
 /* Column Styles */
@@ -23,14 +121,14 @@
 
 .columnTitle {
   font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin: 0 0 1.5rem 0;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid rgba(201, 169, 97, 0.4);
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid rgba(201, 169, 97, 0.35);
 }
 
 /* Link List */
@@ -41,20 +139,18 @@
 }
 
 .linkList li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
 }
 
 .linkList a {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
-  transition: all 0.3s ease;
-  display: inline-block;
+  transition: color 0.2s ease;
 }
 
 .linkList a:hover {
-  color: #c9a961;
-  transform: translateX(4px);
+  color: var(--gold, #c9a961);
 }
 
 /* Contact List */
@@ -67,184 +163,100 @@
 .contactList li {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .contactIcon {
-  color: #c9a961;
-  font-size: 1rem;
+  color: var(--gold, #c9a961);
+  font-size: 0.9rem;
   margin-top: 0.15rem;
   flex-shrink: 0;
 }
 
 .contactList a {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .contactList a:hover {
-  color: #c9a961;
+  color: var(--gold, #c9a961);
 }
 
-/* Brand Column */
-.brandColumn {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.logo {
-  height: 50px;
-  width: auto;
-  margin-bottom: 1rem;
-  filter: brightness(1.1);
-}
-
-.tagline {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.5;
-  margin: 0 0 1.5rem 0;
-}
-
-/* Social Section */
-.socialSection {
-  margin-bottom: 1.5rem;
-}
-
-.socialLabel {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #c9a961;
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.socialIcons {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.socialIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
-}
-
-.socialIcon:hover {
-  background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(131, 58, 180, 0.4);
-}
-
-/* Certifications */
-.certifications {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.certifications span {
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.35rem 0.65rem;
-  border-radius: 4px;
-  letter-spacing: 0.03em;
-}
-
-/* Bottom Bar */
+/* ========== Layer 2: Bottom Bar ========== */
 .bottomBar {
-  background: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .bottomContent {
-  max-width: 1400px;
+  max-width: var(--container-max, 1280px);
   margin: 0 auto;
-  padding: 1rem 2rem;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  padding: 1.25rem 2rem;
+  display: flex;
   align-items: center;
-  gap: 2rem;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.etbiseImage {
-  height: 80px !important;
+.etbisImage {
+  height: 40px !important;
   width: auto !important;
-  opacity: 0.9;
-  transition: opacity 0.3s ease;
+  opacity: 0.85;
+  border-radius: 4px;
   flex-shrink: 0;
 }
 
-.leftContent {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
 .copyright {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
   margin: 0;
-  text-align: center;
+  line-height: 1.4;
 }
 
-.etbiseRegistered {
+/* Certifications - inline icon-like row */
+.certRow {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.etbiseImage {
-  height: 40px;
-  width: auto;
-  opacity: 0.9;
-  transition: opacity 0.3s ease;
+.certRow span {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
-.etbiseImage:hover {
-  opacity: 1;
+.certRow span::after {
+  content: '|';
+  margin-left: 0.5rem;
+  color: rgba(255, 255, 255, 0.15);
 }
 
-.paymentBadge {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+.certRow span:last-child::after {
+  display: none;
 }
 
 .iyzicoLogo {
-  height: 28px;
+  height: 32px;
   width: auto;
   opacity: 0.85;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
 }
 
 .iyzicoLogo:hover {
   opacity: 1;
 }
 
-.etbiseImage:hover {
-  opacity: 1;
-}
-
-/* Responsive Design */
+/* ========== Responsive ========== */
 @media (max-width: 1200px) {
-  .footerContent {
+  .topContent {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -252,12 +264,12 @@
     grid-column: span 3;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 1rem;
+    gap: 1.5rem;
+    padding-right: 0;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 0.5rem;
   }
 
   .logo {
@@ -266,23 +278,24 @@
 
   .tagline {
     margin: 0;
-    max-width: 300px;
+    max-width: 250px;
   }
 
-  .socialSection {
+  .newsletterForm {
     margin-bottom: 0;
+    min-width: 260px;
+  }
+
+  .socialIcons {
+    margin-left: auto;
   }
 }
 
 @media (max-width: 768px) {
-  .footerContent {
+  .topContent {
     grid-template-columns: repeat(2, 1fr);
-    padding: 3rem 1.5rem 2rem;
-    gap: 2rem 1.5rem;
-  }
-
-  .column:nth-child(4) {
-    grid-column: span 2;
+    padding: 2.5rem 1.5rem 2rem;
+    gap: 1.5rem;
   }
 
   .brandColumn {
@@ -297,42 +310,43 @@
     max-width: 100%;
   }
 
+  .newsletterForm {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .socialIcons {
+    margin-left: 0;
+  }
+
   .columnTitle {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   .linkList a,
   .contactList li {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
 
   .bottomContent {
-    grid-template-columns: 1fr;
-    padding: 1rem 1.5rem;
-  }
-
-  .copyright {
-    order: 2;
-  }
-
-  .paymentBadge {
-    order: 3;
+    padding: 1.25rem 1.5rem;
+    gap: 1rem;
     justify-content: center;
   }
 
-  .etbiseImage {
-    order: 1;
+  .copyright {
+    width: 100%;
+    text-align: center;
+    order: 10;
   }
 }
 
 @media (max-width: 480px) {
-  .footerContent {
+  .topContent {
     grid-template-columns: 1fr;
-    padding: 2.5rem 1rem 2rem;
+    padding: 2rem 1rem;
   }
 
-  .column,
-  .column:nth-child(4),
   .brandColumn {
     grid-column: span 1;
   }
@@ -341,19 +355,11 @@
     margin-bottom: 1rem;
   }
 
-  .certifications {
-    justify-content: center;
-  }
-
   .iyzicoLogo {
-    height: 24px;
+    height: 28px;
   }
 
-  .bottomContent {
-    grid-template-columns: 1fr;
-  }
-
-  .etbiseImage {
-    height: 60px !important;
+  .etbisImage {
+    height: 40px !important;
   }
 }
