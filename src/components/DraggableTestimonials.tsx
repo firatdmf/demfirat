@@ -7,6 +7,7 @@ interface Review {
   image: string;
   name: string;
   review: string;
+  date: string;
 }
 
 interface DraggableTestimonialsProps {
@@ -99,6 +100,8 @@ export default function DraggableTestimonials({ reviews, locale }: DraggableTest
               image={review.image}
               name={review.name}
               review={review.review}
+              date={review.date}
+              locale={locale}
             />
           ))}
         </div>

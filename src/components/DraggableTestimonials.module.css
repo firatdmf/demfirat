@@ -1,5 +1,5 @@
 .clientReviews {
-  padding: var(--section-py, 5rem) var(--section-px, 2rem);
+  padding: var(--section-py, 3rem) var(--section-px, 2rem);
   background: transparent;
 }
 
@@ -24,7 +24,7 @@
 .clientReviewsContainer {
   max-width: var(--container-max, 1280px);
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 1rem 0;
   overflow: hidden;
   position: relative;
 }
@@ -36,8 +36,8 @@
   overflow-y: hidden;
   cursor: grab;
   scroll-behavior: smooth;
-  padding: 1rem 0;
-  
+  padding: 0.5rem 0;
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */

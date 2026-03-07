@@ -75,36 +75,43 @@ export default async function Home(props: PageProps<'/[locale]'>) {
       image: "/media/client-images/iris.webp",
       name: "Iris",
       review: homeReviewsLocale("review_1_text"),
+      date: "2025-08-12",
     },
     {
       image: "/media/client-images/jeanmarie.webp",
       name: "Jeanmarie",
       review: homeReviewsLocale("review_2_text"),
+      date: "2025-09-03",
     },
     {
       image: "/media/client-images/mary.webp",
       name: "Mary",
       review: homeReviewsLocale("review_3_text"),
+      date: "2025-10-18",
     },
     {
       image: "/media/client-images/meredith.webp",
       name: "Meredith",
       review: homeReviewsLocale("review_4_text"),
+      date: "2025-11-05",
     },
     {
       image: "/media/client-images/maria.jpg",
       name: "Maria",
       review: homeReviewsLocale("review_5_text"),
+      date: "2025-12-22",
     },
     {
       image: "/media/client-images/jane.webp",
       name: "Jane",
       review: homeReviewsLocale("review_6_text"),
+      date: "2026-01-14",
     },
     {
       image: "/media/client-images/ava.webp",
       name: "Ava",
       review: homeReviewsLocale("review_7_text"),
+      date: "2026-02-08",
     },
   ];
 

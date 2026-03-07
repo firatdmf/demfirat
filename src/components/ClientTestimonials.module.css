@@ -1,83 +1,128 @@
-.ClientTestimonialsPage .reviewCard {
-  position: relative;
-  width: 100%;
-  min-width: 300px;
-  max-width: 350px;
+.cardWrapper {
   flex-shrink: 0;
-  background: transparent;
-  border-radius: 0;
+  width: 300px;
+}
+
+.reviewCard {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.ClientTestimonialsPage .reviewCard:hover {
-  transform: translateY(-5px);
+.reviewCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
-.ClientTestimonialsPage .reviewCard .reviewImage {
+.reviewImage {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 320px;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.ClientTestimonialsPage .reviewCard .reviewImage .Image {
+.reviewImage .Image {
   height: 100%;
   width: 100%;
   object-fit: cover;
   object-position: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s ease;
 }
 
-.ClientTestimonialsPage .reviewCard:hover .reviewImage {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+.reviewCard:hover .reviewImage .Image {
+  transform: scale(1.03);
 }
 
-.ClientTestimonialsPage .reviewCard:hover .reviewImage .Image {
-  transform: scale(1.02);
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.2rem 1.2rem;
+  gap: 0.5rem;
 }
 
-.ClientTestimonialsPage .reviewCard .reviewText {
-  padding: 1.5rem 0;
+.stars {
+  color: var(--gold, #c9a961);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+.reviewText {
   font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-style: italic;
   line-height: 1.6;
   color: var(--dark-gray, #4a4a4a);
-  background: transparent;
+  min-height: calc(0.85rem * 1.6 * 3);
+}
+
+.readMore {
+  display: inline;
+  background: none;
+  border: none;
+  color: var(--gold, #c9a961);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.3rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+}
+
+.readMore:hover {
+  text-decoration: underline;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.6rem;
+  margin-top: 0.2rem;
+}
+
+.reviewerName {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dark, #2c2c2c);
+}
+
+.reviewDate {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.7rem;
+  color: #999;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .ClientTestimonialsPage .reviewCard {
-    min-width: 280px;
-    max-width: 320px;
+  .cardWrapper {
+    width: 270px;
   }
 
-  .ClientTestimonialsPage .reviewCard .reviewImage {
-    height: 360px;
+  .reviewImage {
+    height: 280px;
   }
 
-  .ClientTestimonialsPage .reviewCard .reviewText {
-    font-size: 0.9rem;
-    padding: 1.25rem 0;
+  .reviewText {
+    font-size: 0.82rem;
   }
 }
 
 @media (max-width: 480px) {
-  .ClientTestimonialsPage .reviewCard {
-    min-width: 250px;
-    max-width: 280px;
+  .cardWrapper {
+    width: 250px;
   }
 
-  .ClientTestimonialsPage .reviewCard .reviewImage {
-    height: 320px;
+  .reviewImage {
+    height: 260px;
   }
 
-  .ClientTestimonialsPage .reviewCard .reviewText {
-    font-size: 0.85rem;
-    padding: 1rem 0;
+  .reviewText {
+    font-size: 0.8rem;
   }
 }
