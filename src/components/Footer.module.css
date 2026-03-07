@@ -89,6 +89,25 @@
   background: #d4b97a;
 }
 
+.newsletterBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.newsletterMsg {
+  font-size: 0.75rem;
+  margin: 0.4rem 0 0;
+  line-height: 1.3;
+}
+
+.newsletterSuccess {
+  color: #4caf50;
+}
+
+.newsletterError {
+  color: #ef5350;
+}
+
 /* Social Icons */
 .socialIcons {
   display: flex;

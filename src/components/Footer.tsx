@@ -1,5 +1,5 @@
 "use client";
-import { memo } from "react";
+import { memo, useState } from "react";
 import classes from "@/components/Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,6 +15,36 @@ interface FooterProps {
 
 function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [newsletterMsg, setNewsletterMsg] = useState('');
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail || newsletterStatus === 'loading') return;
+
+    setNewsletterStatus('loading');
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_NEJUM_API_URL || 'http://127.0.0.1:8000';
+      const res = await fetch(`${backendUrl}/marketing/api/subscribe/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail, name: 'Unknown', phone: '' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setNewsletterStatus('success');
+        setNewsletterMsg(locale === 'tr' ? 'Başarıyla kaydoldunuz!' : locale === 'ru' ? 'Вы успешно подписались!' : locale === 'pl' ? 'Zapisano pomyślnie!' : 'Subscribed successfully!');
+        setNewsletterEmail('');
+      } else {
+        setNewsletterStatus('error');
+        setNewsletterMsg(data.error || (locale === 'tr' ? 'Bir hata oluştu' : 'An error occurred'));
+      }
+    } catch {
+      setNewsletterStatus('error');
+      setNewsletterMsg(locale === 'tr' ? 'Bir hata oluştu' : 'An error occurred');
+    }
+  };
 
   const t = (key: string): string => {
     const translations: Record<string, Record<string, string>> = {
@@ -54,16 +84,24 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
               className={classes.logo}
             />
             <p className={classes.tagline}>{t('newsletter')}</p>
-            <form className={classes.newsletterForm} onSubmit={(e) => e.preventDefault()}>
+            <form className={classes.newsletterForm} onSubmit={handleNewsletterSubmit}>
               <input
                 type="email"
                 placeholder={t('emailPlaceholder')}
                 className={classes.newsletterInput}
+                value={newsletterEmail}
+                onChange={(e) => { setNewsletterEmail(e.target.value); if (newsletterStatus !== 'idle') setNewsletterStatus('idle'); }}
+                required
               />
-              <button type="submit" className={classes.newsletterBtn}>
-                {t('subscribe')}
+              <button type="submit" className={classes.newsletterBtn} disabled={newsletterStatus === 'loading'}>
+                {newsletterStatus === 'loading' ? '...' : t('subscribe')}
               </button>
             </form>
+            {newsletterStatus !== 'idle' && (
+              <p className={`${classes.newsletterMsg} ${newsletterStatus === 'success' ? classes.newsletterSuccess : classes.newsletterError}`}>
+                {newsletterMsg}
+              </p>
+            )}
             <div className={classes.socialIcons}>
               <Link
                 href="https://www.instagram.com/karvenhomedecor/"

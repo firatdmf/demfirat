@@ -8,7 +8,9 @@
       "Bash(do curl:*)",
       "WebFetch(domain:www.brooklinen.com)",
       "Bash(ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npx next build)",
+      "Bash(taskkill //F //IM node.exe)"
     ]
   }
 }
