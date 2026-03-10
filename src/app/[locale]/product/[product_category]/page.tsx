@@ -31,7 +31,8 @@ const getProductFilesCached = unstable_cache(
         product_variant_id: true,
         file_url: true,
         is_primary: true,
-        sequence: true
+        sequence: true,
+        alt_text: true
       },
       orderBy: { sequence: 'asc' }
     });
@@ -43,7 +44,8 @@ const getProductFilesCached = unstable_cache(
       product_variant_id: f.product_variant_id ? String(f.product_variant_id) : null,
       file_url: f.file_url,
       is_primary: f.is_primary,
-      sequence: f.sequence
+      sequence: f.sequence,
+      alt_text: f.alt_text || ''
     }));
   },
   ['product-files-db'],

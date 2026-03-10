@@ -72,45 +72,53 @@ export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
     };
 
     return (
-        <div
-            ref={imageWrapperRef}
-            className={`${styles.imageWrapper} ${isZoomed ? styles.zoomedIn : styles.zoomedOut}`}
-            onClick={toggleZoom}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
+        <a
+            href={src}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.preventDefault()}
+            style={{ display: 'contents' }}
         >
-            {/* Current displayed image - always visible */}
-            <Image
-                key={displayedSrc}
-                src={displayedSrc}
-                alt={alt}
-                className={styles.mainImage}
-                onLoad={handleFirstLoad}
-                draggable={false}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-                style={zoomStyle}
-            />
-            {/* Next image loading on top - hidden until loaded, then replaces current */}
-            {nextSrc && nextSrc !== displayedSrc && (
+            <div
+                ref={imageWrapperRef}
+                className={`${styles.imageWrapper} ${isZoomed ? styles.zoomedIn : styles.zoomedOut}`}
+                onClick={toggleZoom}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+            >
+                {/* Current displayed image - always visible */}
                 <Image
-                    key={nextSrc}
-                    src={nextSrc}
+                    key={displayedSrc}
+                    src={displayedSrc}
                     alt={alt}
                     className={styles.mainImage}
-                    onLoad={handleNextLoad}
+                    onLoad={handleFirstLoad}
                     draggable={false}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
-                    style={{
-                        ...zoomStyle,
-                        opacity: nextReady ? 1 : 0,
-                        transition: 'opacity 0.15s ease',
-                    }}
+                    style={zoomStyle}
                 />
-            )}
-        </div>
+                {/* Next image loading on top - hidden until loaded, then replaces current */}
+                {nextSrc && nextSrc !== displayedSrc && (
+                    <Image
+                        key={nextSrc}
+                        src={nextSrc}
+                        alt={alt}
+                        className={styles.mainImage}
+                        onLoad={handleNextLoad}
+                        draggable={false}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        priority
+                        style={{
+                            ...zoomStyle,
+                            opacity: nextReady ? 1 : 0,
+                            transition: 'opacity 0.15s ease',
+                        }}
+                    />
+                )}
+            </div>
+        </a>
     );
 }

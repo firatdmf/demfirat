@@ -901,7 +901,7 @@ function ProductDetailCard({
   }, [imageFiles]);
 
   // Prepare media items: images first, then video at 2nd position (if available)
-  type MediaItem = { type: 'video' | 'image'; url: string };
+  type MediaItem = { type: 'video' | 'image'; url: string; alt_text?: string };
 
   const mediaItems = useMemo(() => {
     const items: MediaItem[] = [];
@@ -933,8 +933,8 @@ function ProductDetailCard({
     }) || [];
 
     // 1. Add first image
-    if (imageFiles.length > 0) {
-      items.push({ type: 'image', url: imageFiles[0] });
+    if (filteredImages.length > 0) {
+      items.push({ type: 'image', url: filteredImages[0].file, alt_text: filteredImages[0].alt_text || '' });
     }
 
     const normalizeUrl = (url: string | null) => {
@@ -947,16 +947,16 @@ function ProductDetailCard({
     // 2. Add videos at 2nd position
     const uniqueVideos = Array.from(new Map(videoFiles.filter(v => v.file).map(v => [normalizeUrl(v.file), v])).values());
     uniqueVideos.forEach(video => {
-      items.push({ type: 'video', url: video.file });
+      items.push({ type: 'video', url: video.file, alt_text: video.alt_text || '' });
     });
 
     // 3. Add remaining images
-    imageFiles.slice(1).forEach(img => {
-      items.push({ type: 'image', url: img });
+    filteredImages.slice(1).forEach(img => {
+      items.push({ type: 'image', url: img.file, alt_text: img.alt_text || '' });
     });
 
     return items;
-  }, [imageFiles, product_files, selectedVariant]);
+  }, [imageFiles, filteredImages, product_files, selectedVariant]);
 
   // Thumbnail/image navigation
   const selectThumb = (index: number) => setSelectedThumbIndex(index);
@@ -1039,7 +1039,7 @@ function ProductDetailCard({
                   ) : (
                     <Image
                       src={media.url || placeholder_image_link}
-                      alt="product image"
+                      alt={media.alt_text || getLocalizedProductField(product, 'title', locale) || 'product image'}
                       fill
                       sizes="80px"
                       priority={index < 3}
@@ -1108,7 +1108,7 @@ function ProductDetailCard({
                 <>
                   <ImageZoom
                     src={currentMedia?.url || imageFiles[selectedThumbIndex] || placeholder_image_link}
-                    alt="Product image"
+                    alt={currentMedia?.alt_text || getLocalizedProductField(product, 'title', locale) || 'Product image'}
                   />
                 </>
               )}

@@ -87,6 +87,7 @@ export type ProductFile = {
   product_id: bigint | null;
   product_variant_id?: bigint | null;
   sequence?: number | null;
+  alt_text?: string | null;
 }
 
 

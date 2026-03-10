@@ -343,7 +343,18 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
 
 
 
-  const secondImage = useMemo(() => {
+  const primaryAltText = useMemo(() => {
+    if (!product.product_files || product.product_files.length === 0) return '';
+    const normalize = (u: string | null | undefined) => {
+      if (!u) return '';
+      return u.split('?')[0].replace(/^https?:\/\/[^/]+/, '').replace(/^\//, '');
+    };
+    const currentNorm = normalize(imageSrc);
+    const match = product.product_files.find(f => normalize(f.file) === currentNorm);
+    return match?.alt_text || '';
+  }, [product.product_files, imageSrc]);
+
+  const secondImage = useMemo((): { url: string; alt_text: string } | null => {
     if (!product.product_files || product.product_files.length === 0) return null;
 
     // Exclude videos
@@ -370,13 +381,13 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
       const currentIdx = variantImages.findIndex(f => normalize(f.file) === currentNorm);
       if (variantImages.length >= 2) {
         const nextIdx = currentIdx >= 0 ? (currentIdx + 1) % variantImages.length : 1;
-        if (nextIdx !== currentIdx) return variantImages[nextIdx].file;
+        if (nextIdx !== currentIdx) return { url: variantImages[nextIdx].file, alt_text: variantImages[nextIdx].alt_text || '' };
       }
     }
 
     // Fallback: any non-current image
     const fallback = sorted.find(f => normalize(f.file) !== currentNorm && normalize(f.file) !== '');
-    return fallback ? fallback.file : null;
+    return fallback ? { url: fallback.file, alt_text: fallback.alt_text || '' } : null;
   }, [product.product_files, imageSrc, product.primary_image, selectedVariantId]);
 
   return (
@@ -404,7 +415,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
               )}
               <Image
                 src={imageSrc}
-                alt={`${getLocalizedProductField(product, 'title', locale)} - ${product.sku}`}
+                alt={primaryAltText || `${getLocalizedProductField(product, 'title', locale)} - ${product.sku}`}
                 className={classes.productImage}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
@@ -429,8 +440,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
               {/* Secondary Image for Hover */}
               {secondImage && (
                 <Image
-                  src={secondImage}
-                  alt={`${getLocalizedProductField(product, 'title', locale)} - Secondary`}
+                  src={secondImage.url}
+                  alt={secondImage.alt_text || `${getLocalizedProductField(product, 'title', locale)} - ${product.sku}`}
                   className={classes.productImageHover}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"

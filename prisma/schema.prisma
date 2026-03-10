@@ -679,6 +679,9 @@ model marketing_productfile {
   file_url                                                                    String?                   @db.VarChar(200)
   is_primary                                                                  Boolean
   file_path                                                                   String?                   @db.VarChar(500)
+  file_type                                                                   String?                   @db.VarChar(10)
+  alt_text                                                                    String?                   @db.VarChar(255)
+  created_at                                                                  DateTime?                 @db.Timestamptz(6)
   marketing_product_marketing_product_primary_image_idTomarketing_productfile marketing_product[]       @relation("marketing_product_primary_image_idTomarketing_productfile")
   marketing_product                                                           marketing_product?        @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productfil_product_id_68c8359c_fk_marketing")
   marketing_productvariant                                                    marketing_productvariant? @relation(fields: [product_variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marketing_productfil_product_variant_id_74a0d958_fk_marketing")
