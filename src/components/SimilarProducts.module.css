@@ -1,8 +1,7 @@
 .container {
     width: 100%;
-    max-width: 1400px;
-    margin: 3rem auto 2rem;
-    padding: 0 1rem;
+    margin: 3rem 0 2rem;
+    padding: 0 2rem;
 }
 
 .title {
@@ -36,15 +35,13 @@
 }
 
 .productGrid {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1rem;
     padding: 0.5rem 0;
-    min-width: max-content;
 }
 
 .productCard {
-    flex: 0 0 auto;
-    width: 180px;
     background: #fff;
     border-radius: 12px;
     overflow: hidden;
@@ -138,8 +135,8 @@
         margin-bottom: 1rem;
     }
 
-    .productCard {
-        width: 150px;
+    .productGrid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
 
     .productTitle {

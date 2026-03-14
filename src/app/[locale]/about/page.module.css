@@ -1,23 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap");
-
+/* About Page - Modern Design */
 .main {
   min-height: 100vh;
-  background: var(--ivory, #faf8f3);
-  font-family: var(--font-body, 'Montserrat', sans-serif);
+  background: #faf8f3;
+  font-family: 'Jost', sans-serif;
 }
 
-/* Hero Section */
+/* ========== Hero Section ========== */
 .hero {
   position: relative;
-  min-height: 65vh;
+  height: 80vh;
+  min-height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--navy, #2c2c2c);
-  color: white;
   overflow: hidden;
-  padding: 4rem 2rem;
 }
 
 .heroVideo {
@@ -36,7 +32,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(44, 44, 44, 0.75) 0%, rgba(60, 60, 60, 0.6) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
   z-index: 1;
 }
 
@@ -44,35 +45,35 @@
   position: relative;
   z-index: 3;
   text-align: center;
-  max-width: 1000px;
+  max-width: 800px;
   padding: 0 2rem;
 }
 
 .heroTitle {
-  font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: 5rem;
-  font-weight: 400;
-  margin: 0 0 1.25rem 0;
-  letter-spacing: 0.05em;
-  animation: fadeInUp 0.8s ease-out;
-  text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
+  font-family: 'Jost', sans-serif;
+  font-size: 4rem;
+  font-weight: 300;
+  color: white;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: heroFadeIn 1s ease-out;
 }
 
 .heroSubtitle {
-  font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 1.25rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 1.1rem;
   font-weight: 300;
-  line-height: 1.8;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
-  opacity: 0.95;
-  animation: fadeInUp 0.8s ease-out 0.2s backwards;
-  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.4);
+  animation: heroFadeIn 1s ease-out 0.3s backwards;
 }
 
-@keyframes fadeInUp {
+@keyframes heroFadeIn {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -80,188 +81,231 @@
   }
 }
 
-/* Timeline Section */
+/* ========== Timeline Section ========== */
 .timeline {
   position: relative;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 3rem 2rem 4rem 2rem;
+  padding: 5rem 2rem 6rem;
 }
 
+/* Center vertical line */
 .timeline::before {
   content: '';
   position: absolute;
   left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, 
-    rgba(201, 169, 97, 0.3), 
-    rgba(201, 169, 97, 0.5), 
-    rgba(201, 169, 97, 0.3));
+  top: 3rem;
+  bottom: 3rem;
+  width: 1px;
+  background: #c9a961;
+  opacity: 0.35;
   transform: translateX(-50%);
 }
 
+/* Each timeline row */
 .timelineItem {
   position: relative;
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
   align-items: center;
-  animation: fadeInUp 0.6s ease-out backwards;
 }
 
-.timelineLeft {
-  /* Text on left, image on right */
+.timelineItem:last-child {
+  margin-bottom: 0;
 }
 
-.timelineRight {
-  /* Image on left, text on right */
+.timelineLeft {}
+.timelineRight {}
+
+/* ========== Timeline Dot ========== */
+.timelineDot {
+  width: 14px;
+  height: 14px;
+  background: #c9a961;
+  border: 3px solid #faf8f3;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #c9a961;
+  z-index: 10;
+  justify-self: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.timelineItem:hover .timelineDot {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 4px rgba(201, 169, 97, 0.2);
+}
+
+/* ========== Image Wrapper ========== */
 .timelineImageWrapper {
   position: relative;
   width: 100%;
-  min-height: 350px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  aspect-ratio: 4/3;
   overflow: hidden;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .timelineImageWrapper:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(201, 169, 97, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
 .timelineImage {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  transition: transform 0.5s ease;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .timelineImageWrapper:hover .timelineImage {
-  transform: scale(1.03);
-}
-
-.timelineContent {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.timelineContent:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(201, 169, 97, 0.15);
-}
-
-.timelineYear {
-  display: inline-block;
-  font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--gold, #c9a961);
-  padding: 0.5rem 1.5rem;
-  background: linear-gradient(135deg, rgba(201, 169, 97, 0.1), rgba(201, 169, 97, 0.05));
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  letter-spacing: 0.05em;
+  transform: scale(1.05);
 }
 
 .timelineYearMobile {
   display: none;
 }
 
-.timelineTitle {
-  font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--text-dark, #2c2c2c);
-  margin: 0.75rem 0 1rem 0;
-  line-height: 1.3;
-  letter-spacing: 0.02em;
+/* ========== Content Block ========== */
+.timelineContent {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
+.timelineContent:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Left-aligned items: content on left, pad right edge toward center */
+.timelineLeft .timelineContent {
+  text-align: right;
+  margin-right: 1rem;
+}
+
+.timelineLeft .timelineImageWrapper {
+  margin-left: 1rem;
+}
+
+/* Right-aligned items: content on right, pad left edge toward center */
+.timelineRight .timelineContent {
+  text-align: left;
+  margin-left: 1rem;
+}
+
+.timelineRight .timelineImageWrapper {
+  margin-right: 1rem;
+}
+
+/* Year badge */
+.timelineYear {
+  display: inline-block;
+  font-family: 'Jost', sans-serif;
+  font-size: 3rem;
+  font-weight: 300;
+  color: #c9a961;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+/* Title */
+.timelineTitle {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #2c2c2c;
+  margin: 0.5rem 0 1rem 0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Description */
 .timelineDescription {
-  font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 1rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.95rem;
   line-height: 1.8;
   color: #666;
   margin: 0;
+  font-weight: 300;
 }
 
-.timelineDot {
-  width: 20px;
-  height: 20px;
-  background: white;
-  border: 3px solid var(--gold, #c9a961);
-  border-radius: 50%;
-  box-shadow: 0 0 0 6px rgba(201, 169, 97, 0.15);
-  transition: all 0.3s ease;
-  z-index: 10;
-  align-self: center;
-}
-
-.timelineItem:hover .timelineDot {
-  background: var(--gold, #c9a961);
-  box-shadow: 0 0 0 10px rgba(201, 169, 97, 0.25);
-  transform: scale(1.15);
-}
-
-/* Responsive Design */
+/* ========== Responsive ========== */
 @media (max-width: 1024px) {
   .heroTitle {
-    font-size: 3.5rem;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
   }
-  
+
   .heroSubtitle {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
 
   .timeline {
-    padding: 2.5rem 1.5rem 3rem 1.5rem;
+    padding: 4rem 1.5rem 5rem;
   }
 
-  .timelineImageWrapper {
-    min-height: 280px;
+  .timelineItem {
+    margin-bottom: 4rem;
+    grid-template-columns: 1fr 40px 1fr;
   }
 
   .timelineContent {
-    padding: 1.75rem;
+    padding: 1.5rem;
+  }
+
+  .timelineLeft .timelineContent {
+    margin-right: 0.5rem;
+  }
+
+  .timelineLeft .timelineImageWrapper {
+    margin-left: 0.5rem;
+  }
+
+  .timelineRight .timelineContent {
+    margin-left: 0.5rem;
+  }
+
+  .timelineRight .timelineImageWrapper {
+    margin-right: 0.5rem;
+  }
+
+  .timelineYear {
+    font-size: 2.5rem;
+  }
+
+  .timelineTitle {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 50vh;
-    padding: 3rem 1.5rem;
+    height: 60vh;
+    min-height: 400px;
   }
 
   .heroTitle {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
+    letter-spacing: 0.12em;
   }
-  
+
   .heroSubtitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.7;
   }
 
-  /* Modern mobil app stili timeline */
+  /* Switch to card-based mobile layout */
   .timeline {
-    padding: 1.5rem 1rem 2rem 1rem;
-    background: transparent;
+    padding: 2rem 1rem 3rem;
   }
 
   .timeline::before {
@@ -272,13 +316,11 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    margin-bottom: 2rem;
-    padding: 0;
-    position: relative;
+    margin-bottom: 2.5rem;
     background: white;
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
   }
 
   .timelineDot {
@@ -292,93 +334,97 @@
   .timelineYearMobile {
     display: block;
     position: absolute;
-    top: 2.5rem;
-    right: 1rem;
-    font-size: 1.125rem;
-    padding: 0.3rem 0.875rem;
-    background: var(--gold, #c9a961);
+    top: 1rem;
+    left: 1rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 1rem;
+    background: rgba(0, 0, 0, 0.6);
     color: white;
-    border-radius: 16px;
+    border-radius: 20px;
     z-index: 10;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(201, 169, 97, 0.3);
-  }
-
-  .timelineContent {
-    padding: 1.5rem;
-    order: 2;
-    background: white;
-    border: none;
-    box-shadow: none;
+    backdrop-filter: blur(4px);
   }
 
   .timelineImageWrapper {
     order: 1;
-    min-height: 220px;
-    margin: 0;
     border-radius: 0;
-    position: relative;
+    aspect-ratio: 16/9;
+  }
+
+  .timelineContent {
+    order: 2;
+    padding: 1.5rem;
+    text-align: left !important;
+  }
+
+  .timelineLeft .timelineContent,
+  .timelineRight .timelineContent {
+    padding: 1.5rem;
+    text-align: left;
   }
 
   .timelineTitle {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     margin: 0 0 0.75rem 0;
-    color: var(--text-dark, #2c2c2c);
   }
 
   .timelineDescription {
-    font-size: 0.925rem;
-    line-height: 1.65;
-    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.7;
   }
 }
 
 @media (max-width: 480px) {
   .hero {
-    min-height: 45vh;
-    padding: 2.5rem 1rem;
+    height: 50vh;
+    min-height: 350px;
+  }
+
+  .heroContent {
+    padding: 0 1.25rem;
   }
 
   .heroTitle {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    letter-spacing: 0.1em;
   }
-  
+
   .heroSubtitle {
-    font-size: 0.925rem;
+    font-size: 0.875rem;
     line-height: 1.65;
   }
 
   .timeline {
-    padding: 1rem 0.5rem 1.5rem 0.5rem;
+    padding: 1.5rem 0.75rem 2rem;
   }
 
   .timelineItem {
-    margin-bottom: 1.5rem;
-    border-radius: 12px;
-  }
-
-  .timelineYearMobile {
-    font-size: 1rem;
-    padding: 0.25rem 0.75rem;
-    top: 2rem;
-    right: 0.75rem;
+    margin-bottom: 2rem;
+    border-radius: 10px;
   }
 
   .timelineContent {
     padding: 1.25rem;
   }
 
-  .timelineImageWrapper {
-    min-height: 180px;
+  .timelineLeft .timelineContent,
+  .timelineRight .timelineContent {
+    padding: 1.25rem;
   }
 
   .timelineTitle {
-    font-size: 1.2rem;
-    margin: 0 0 0.625rem 0;
+    font-size: 1rem;
   }
 
   .timelineDescription {
-    font-size: 0.875rem;
-    line-height: 1.6;
+    font-size: 0.85rem;
+  }
+
+  .timelineYearMobile {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.85rem;
   }
 }

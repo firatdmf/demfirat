@@ -41,11 +41,7 @@ export default function ForgotPasswordPage() {
             <div className={classes.loginCard}>
                 {/* Logo Section */}
                 <div className={classes.logoSection}>
-                    <img
-                        src="/media/karvenLogo.webp"
-                        alt="Karven Logo"
-                        className={classes.logo}
-                    />
+                    <span className={classes.logoText}>DEMFIRAT</span>
                     <h1 className={classes.title}>Forgot Password?</h1>
                     <p className={classes.subtitle}>Enter your email to reset your password</p>
                 </div>

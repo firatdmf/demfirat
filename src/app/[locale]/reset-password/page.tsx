@@ -21,11 +21,7 @@ export default function ResetPasswordPage() {
             <div className={classes.loginContainer}>
                 <div className={classes.loginCard}>
                     <div className={classes.logoSection}>
-                        <img
-                            src="/media/karvenLogo.webp"
-                            alt="Karven Logo"
-                            className={classes.logo}
-                        />
+                        <span className={classes.logoText}>DEMFIRAT</span>
                         <h1 className={classes.title} style={{ color: '#c33' }}>Invalid Link</h1>
                         <p className={classes.subtitle}>This password reset link is invalid or missing.</p>
                     </div>

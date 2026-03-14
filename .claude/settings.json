@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"lazy\\\\|loading=\" /c/Users/enes3/demfirat/src/components/*.tsx)",
+      "Bash(grep -r \"fetch.*api\" /c/Users/enes3/demfirat/src/app/[locale]/product/*.tsx)",
+      "Bash(grep -n \"NextResponse.json\\\\|headers\" /c/Users/enes3/demfirat/src/app/[locale]/product/[product_category]/[product_sku]/page.tsx)",
+      "Bash(cat /c/Users/enes3/demfirat/next.config.*)",
+      "Bash(grep -n \"PageProps\\\\|PageParamProps\" /c/Users/enes3/demfirat/src/app/[locale]/product/[product_category]/[product_sku]/page.tsx)",
+      "Bash(cat /c/Users/enes3/demfirat/src/types/*.ts)",
+      "Bash(grep -n \"NEXT_PUBLIC_NEJUM_API_URL\\\\|process.env.NEJUM_API_URL\" /c/Users/enes3/demfirat/src/app/[locale]/product/[product_category]/page.tsx /c/Users/enes3/demfirat/src/app/[locale]/product/[product_category]/[product_sku]/page.tsx)",
+      "Bash(for i:*)",
+      "Bash(done)"
+    ]
+  }
+}

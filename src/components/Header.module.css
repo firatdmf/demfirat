@@ -37,7 +37,7 @@
 
 .marqueeContent {
   display: flex;
-  animation: marqueeScroll 28s linear infinite;
+  animation: marqueeScroll 60s linear infinite;
   will-change: transform;
 }
 
@@ -67,8 +67,8 @@
 /* ── Main Bar (Single Line: logo + nav + icons) ── */
 .mainBar {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   padding: 0 2rem;
   display: flex;
   align-items: center;
@@ -81,16 +81,21 @@
 /* Logo */
 .logoLink {
   flex-shrink: 0;
+  text-decoration: none;
+  margin-right: auto;
 }
 
-.logo {
-  height: 44px;
-  width: auto;
-  transition: transform 0.3s ease;
+.logoText {
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color:  #944f05;
+  transition: opacity 0.3s ease;
 }
 
-.logo:hover {
-  transform: scale(1.02);
+.logoText:hover {
+  opacity: 0.85;
 }
 
 /* ── Desktop Nav (inline in mainBar) ── */
@@ -338,7 +343,9 @@
 
 .localeSwitcherDesktop {
   margin-left: 0.25rem;
-  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  height: 40px;
 }
 
 /* User Dropdown */
@@ -736,6 +743,9 @@
 /* ── Currency Selector (Desktop) ── */
 .currencySelector {
   position: relative;
+  display: flex;
+  align-items: center;
+  height: 40px;
 }
 
 .currencyBtn {
@@ -950,8 +960,8 @@
     justify-content: center;
   }
 
-  .logo {
-    height: 36px;
+  .logoText {
+    font-size: 1.4rem;
   }
 
   .actionIcons {
@@ -984,8 +994,8 @@
     padding: 0 0.5rem;
   }
 
-  .logo {
-    height: 32px;
+  .logoText {
+    font-size: 1.2rem;
   }
 
   .iconButton,

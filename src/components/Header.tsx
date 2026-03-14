@@ -231,16 +231,13 @@ function Header({ menuTArray }: HeaderProps) {
         <div className={classes.announcementBar}>
           <div className={classes.marqueeTrack}>
             <div className={classes.marqueeContent}>
-              {marqueeMessages.map((msg, i) => (
-                <span key={i} className={classes.marqueeItem}>
-                  <span className={classes.marqueeDot}>✦</span> {msg}
-                </span>
-              ))}
-              {marqueeMessages.map((msg, i) => (
-                <span key={`dup-${i}`} className={classes.marqueeItem}>
-                  <span className={classes.marqueeDot}>✦</span> {msg}
-                </span>
-              ))}
+              {Array.from({ length: 8 }, (_, setIdx) =>
+                marqueeMessages.map((msg, i) => (
+                  <span key={`s${setIdx}-${i}`} className={classes.marqueeItem}>
+                    <span className={classes.marqueeDot}>✦</span> {msg}
+                  </span>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -249,6 +246,11 @@ function Header({ menuTArray }: HeaderProps) {
         <div className={classes.mainBar}>
           {!searchOpen ? (
             <>
+              {/* Logo */}
+              <Link href={`/${locale}`} className={classes.logoLink}>
+                <span className={classes.logoText}>DEMFIRAT</span>
+              </Link>
+
               {/* Mobile hamburger */}
               <button
                 className={classes.mobileMenuToggle}
@@ -259,19 +261,6 @@ function Header({ menuTArray }: HeaderProps) {
                 <span className={mobileMenuOpen ? classes.active : ''}></span>
                 <span className={mobileMenuOpen ? classes.active : ''}></span>
               </button>
-
-              {/* Logo */}
-              <Link href={`/${locale}`} className={classes.logoLink}>
-                <Image
-                  src="/media/karvenLogo.webp"
-                  alt="Karven"
-                  className={classes.logo}
-                  width={150}
-                  height={50}
-                  priority
-                  style={{ objectFit: 'contain', display: 'block' }}
-                />
-              </Link>
 
               {/* Desktop Nav Links */}
               <nav className={classes.desktopNav}>

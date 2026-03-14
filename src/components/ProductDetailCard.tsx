@@ -1468,7 +1468,7 @@ function ProductDetailCard({
                 <span>{locale === 'tr' ? 'Ürün Açıklaması' : locale === 'ru' ? 'Описание продукта' : locale === 'pl' ? 'Opis produktu' : locale === 'de' ? 'Produktbeschreibung' : 'Product Description'}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'description' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
               </button>
-              <div style={{ maxHeight: activeTab === 'description' ? '2500px' : '0', overflow: 'hidden', transition: 'max-height 0.3s ease-in-out' }}>
+              <div className={`${classes.accordionPanel} ${activeTab === 'description' ? classes.accordionPanelOpen : ''}`}>
                 <div className={classes.accordionContent}>
                   {getLocalizedProductField(product, 'description', locale) ? (
                     <p style={{ whiteSpace: "pre-line", margin: 0 }}>{getLocalizedProductField(product, 'description', locale)}</p>
@@ -1484,7 +1484,7 @@ function ProductDetailCard({
                 <span>{locale === 'tr' ? 'Ürün Detayları' : locale === 'ru' ? 'Детали продукта' : locale === 'pl' ? 'Szczegóły produktu' : locale === 'de' ? 'Produktdetails' : 'Details'}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'details' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
               </button>
-              <div style={{ maxHeight: activeTab === 'details' ? '2500px' : '0', overflow: 'hidden', transition: 'max-height 0.3s ease-in-out' }}>
+              <div className={`${classes.accordionPanel} ${activeTab === 'details' ? classes.accordionPanelOpen : ''}`}>
                 <div className={classes.accordionContent}>
                   <table className={classes.detailsTable}>
                     <tbody>
@@ -1514,7 +1514,7 @@ function ProductDetailCard({
                 <span>{locale === 'tr' ? 'Teslimat Bilgileri' : locale === 'ru' ? 'Информация о доставке' : locale === 'pl' ? 'Informacje o dostawie' : locale === 'de' ? 'Lieferinformationen' : 'Delivery Information'}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'delivery' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
               </button>
-              <div style={{ maxHeight: activeTab === 'delivery' ? '2500px' : '0', overflow: 'hidden', transition: 'max-height 0.4s ease-in-out' }}>
+              <div className={`${classes.accordionPanel} ${activeTab === 'delivery' ? classes.accordionPanelOpen : ''}`}>
                 <div className={classes.accordionContent}>
                   <IadeSartlari embedded={true} mode="delivery" />
                 </div>
@@ -1526,7 +1526,7 @@ function ProductDetailCard({
                 <span>{locale === 'tr' ? 'İade ve Değişim Koşulları' : locale === 'ru' ? 'Условия возврата и обмена' : locale === 'pl' ? 'Warunki zwrotów i wymian' : locale === 'de' ? 'Rückgabe und Umtausch' : 'Returns & Exchange Conditions'}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'returns' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
               </button>
-              <div style={{ maxHeight: activeTab === 'returns' ? '4000px' : '0', overflow: 'hidden', transition: 'max-height 0.4s ease-in-out' }}>
+              <div className={`${classes.accordionPanel} ${activeTab === 'returns' ? classes.accordionPanelOpen : ''}`}>
                 <div className={classes.accordionContent}>
                   <IadeSartlari embedded={true} mode="compact" />
                 </div>

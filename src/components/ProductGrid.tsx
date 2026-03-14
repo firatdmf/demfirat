@@ -415,7 +415,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             {/* Dynamic Hero Image based on category */}
             <Image
               src={
-                product_category?.toLowerCase().includes('fabric') ? '/media/hero/fabric-hero.png' :
+                product_category?.toLowerCase().includes('fabric') ? '/media/hero/resim.png' :
                   product_category?.toLowerCase().includes('curtain') ? '/media/ks-curtains-image.jpg' :
                     '/image/category-hero.jpg'
               }

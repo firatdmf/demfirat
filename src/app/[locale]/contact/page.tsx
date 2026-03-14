@@ -1,13 +1,46 @@
 'use client';
 
 import { useParams } from 'next/navigation';
+import { useRef, useState, useEffect } from 'react';
 import classes from './page.module.css';
+
+// Lazy-loaded map iframe - only loads when visible
+function LazyMap({ src }: { src: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { rootMargin: '200px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref}>
+      {visible ? (
+        <iframe
+          title=" "
+          src={src}
+          loading="lazy"
+          style={{ border: '0', width: '100%', height: '320px', borderRadius: '10px' }}
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      ) : (
+        <div style={{ width: '100%', height: '320px', borderRadius: '10px', background: '#f0ede6' }} />
+      )}
+    </div>
+  );
+}
 
 export default function Contact() {
   const params = useParams();
   const locale = params.locale as string;
 
-  // Simplified translations - using direct text for now
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
       ManufacturingPlant: { en: 'Manufacturing Plant', tr: 'Üretim Tesisi', ru: 'Производственный завод', pl: 'Zakład Produkcyjny' },
@@ -30,7 +63,9 @@ export default function Contact() {
       ProductLine1: { en: 'Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners', tr: 'Perde, Döşemelik ve Gelinlik Kumaşlar & Dantel Masa Örtüleri', ru: 'Ткани для штор, обивки и свадебных платьев', pl: 'Tkaniny zasłonowe, tapicerskie i ślubne' },
       ProductLine2: { en: 'Interior Fabrics: Drapery & Upholstery', tr: 'İç Mekan Kumaşları: Perde ve Döşemelik', ru: 'Интерьерные ткани: портьеры и обивка', pl: 'Tkaniny do Wnętrz: Zasłony i Tapicerka' },
       ProductLine3: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца', pl: 'Pościel, narzuty, pokrowce na meble, ręczniki, obrusy' },
-      ProductLine4: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца', pl: 'Pościel, narzuty, pokrowce na meble, ręczniki, obrusy' }
+      ProductLine4: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца', pl: 'Pościel, narzuty, pokrowce na meble, ręczniki, obrusy' },
+      PageTitle: { en: 'Contact Us', tr: 'Bize Ulaşın', ru: 'Свяжитесь с нами', pl: 'Skontaktuj się z nami' },
+      PageSubtitle: { en: 'Our locations around the world', tr: 'Dünya genelindeki lokasyonlarımız', ru: 'Наши локации по всему миру', pl: 'Nasze lokalizacje na całym świecie' }
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -42,6 +77,8 @@ export default function Contact() {
   };
   return (
     <div className={classes.ContactPage}>
+      <h1 className={classes.pageTitle}>{t('PageTitle')}</h1>
+      <p className={classes.pageSubtitle}>{t('PageSubtitle')}</p>
       <div className={`${classes.row} ${classes.row1}`}>
         <div className={` ${classes.item} ${classes.textInfo}`}>
           <h2>{t('ManufacturingPlant')} (Tekirdağ, Türkiye)</h2>
@@ -63,47 +100,18 @@ export default function Contact() {
             Türkiye
           </p>
           <h4>{t('ProductLines')}:</h4>
-          {/* <p>Drapery, Upholstery, and Bridal Fabrics & Lace Table Runners</p> */}
           <p>{t('ProductLine1')}</p>
         </div>
 
         <div className={`${classes.item} ${classes.map} `}>
-          <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2998.686713960122!2d27.633625475834872!3d41.27215670313513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b4c1844bb93f27%3A0xcc32597014cd891f!2sDem%20F%C4%B1rat%20Karven%20Tekstil!5e0!3m2!1sen!2sus!4v1692136980792!5m2!1sen!2sus"
-            // allowFullScreen=""
-            loading="lazy"
-            style={{ border: "0" }}
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-          <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!4v1692136911765!6m8!1m7!1sbvQ2ILty-DqtI9eXYi8tew!2m2!1d41.27192773807073!2d27.63652985915878!3f225.87813419497698!4f3.6607593875984747!5f0.7820865974627469"
-            // allowFullScreen=""
-            loading="lazy"
-            style={{ border: "0" }}
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
+          <LazyMap src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2998.686713960122!2d27.633625475834872!3d41.27215670313513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b4c1844bb93f27%3A0xcc32597014cd891f!2sDem%20F%C4%B1rat%20Karven%20Tekstil!5e0!3m2!1sen!2sus!4v1692136980792!5m2!1sen!2sus" />
+          <LazyMap src="https://www.google.com/maps/embed?pb=!4v1692136911765!6m8!1m7!1sbvQ2ILty-DqtI9eXYi8tew!2m2!1d41.27192773807073!2d27.63652985915878!3f225.87813419497698!4f3.6607593875984747!5f0.7820865974627469" />
         </div>
       </div>
 
       <div className={`${classes.row} ${classes.row2}`}>
         <div className={` ${classes.map} ${classes.item}`}>
-          <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d752.6692567557905!2d28.95524754012674!3d41.01044178468319!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1692137913829!5m2!1sen!2sus"
-            // allowFullScreen=""
-            loading="lazy"
-            style={{ border: "0" }}
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-          {/* <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!4v1692136743712!6m8!1m7!1sH95SKn0zsoizFxc2esUcNw!2m2!1d41.01049627569196!2d28.95540105451114!3f298.7412353650941!4f-11.65487231269131!5f0.7820865974627469"
-            // allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe> */}
+          <LazyMap src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d752.6692567557905!2d28.95524754012674!3d41.01044178468319!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1692137913829!5m2!1sen!2sus" />
           <div className={classes.image}>
             <img src="/media/store/store-5.jpeg" alt="Demfirat Karven Store Image" />
           </div>
@@ -120,7 +128,6 @@ export default function Contact() {
           <p>krvn.dmf@gmail.com</p>
           <p>info@demfirat.com</p>
           <h4>{t('WorkHours')}</h4>
-          {/* <p>Mon - Fri 08:30-19:00, Sat 08:30-14:00 (Istanbul Time)</p> */}
           <p>{t('WorkHour2')}</p>
           <h4>{t('Address')}:</h4>
           <p>
@@ -130,7 +137,6 @@ export default function Contact() {
             Türkiye
           </p>
           <h4>{t('ProductLines')}:</h4>
-          {/* <p>Interior Fabrics: Drapery & Upholstery</p> */}
           <p>{t('ProductLine2')}</p>
         </div>
       </div>
@@ -147,7 +153,6 @@ export default function Contact() {
           <p>info@demfirat.com</p>
           <p>mustafadmf@hotmail.com</p>
           <h4>{t('WorkHours')}</h4>
-          {/* <p>Mon - Fri 09:00-20:30, Sat 09:00-16:00 (Istanbul Time)</p> */}
           <p>{t('WorkHour3')}</p>
           <h4>{t('Address')}:</h4>
           <p>
@@ -157,26 +162,11 @@ export default function Contact() {
             Türkiye
           </p>
           <h4>{t('ProductLines')}:</h4>
-          {/* <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p> */}
           <p>{titleCase(t('ProductLine3'))}</p>
         </div>
 
         <div className={`${classes.item} ${classes.map} `}>
-          <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.82211472467!2d28.95293187582215!3d41.0072665194874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab98864d1f17f%3A0x8bfc30e20c812ba9!2sDem%20F%C4%B1rat%20Karven%20Tekstil!5e0!3m2!1sen!2sus!4v1692138941178!5m2!1sen!2sus"
-            // allowFullScreen=""
-            loading="lazy"
-            style={{ border: "0" }}
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-          {/* <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!4v1692139036103!6m8!1m7!1sJCzxW-kIO64pIRmdjbUmJg!2m2!1d41.00715116010365!2d28.95547816700329!3f35.09908123812337!4f-2.0610459668727827!5f1.7385114864122344"
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe> */}
+          <LazyMap src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.82211472467!2d28.95293187582215!3d41.0072665194874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab98864d1f17f%3A0x8bfc30e20c812ba9!2sDem%20F%C4%B1rat%20Karven%20Tekstil!5e0!3m2!1sen!2sus!4v1692138941178!5m2!1sen!2sus" />
           <div className={classes.image}>
             <img src="/media/store/demfirat_karven_1_exterior.jpg" alt="" />
           </div>
@@ -185,25 +175,10 @@ export default function Contact() {
 
       <div className={`${classes.row} ${classes.row4}`}>
         <div className={`${classes.item} ${classes.map} `}>
+          <LazyMap src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2248.3406043395717!2d37.69408517663421!3d55.700451096022434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54ad91d0d5301%3A0x5d8683607752f34!2sCarven%20Wholesale%20Company!5e0!3m2!1sen!2sus!4v1692139145140!5m2!1sen!2sus" />
           <div className={classes.image}>
-            {/* <img src="/media/heimtextile6.jpg" alt="" /> */}
             <img src="/media/store/moscow_store_1.jpg" alt="" />
           </div>
-          <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2248.3406043395717!2d37.69408517663421!3d55.700451096022434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54ad91d0d5301%3A0x5d8683607752f34!2sCarven%20Wholesale%20Company!5e0!3m2!1sen!2sus!4v1692139145140!5m2!1sen!2sus"
-            // allowFullScreen=""
-            loading="lazy"
-            style={{ border: "0" }}
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-          {/* <iframe
-            title=" "
-            src="https://www.google.com/maps/embed?pb=!4v1692136743712!6m8!1m7!1sH95SKn0zsoizFxc2esUcNw!2m2!1d41.01049627569196!2d28.95540105451114!3f298.7412353650941!4f-11.65487231269131!5f0.7820865974627469"
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe> */}
         </div>
         <div className={`${classes.item} ${classes.textInfo}`}>
           <h2>{t('WarehouseShowroom')} (Москва, Pоссия)</h2>
@@ -219,7 +194,6 @@ export default function Contact() {
           <h4>{t('Website')}:</h4>
           <p><a href="https://www.karven.ru" target="_blank" >www.karven.ru</a></p>
           <h4>{t('WorkHours')}</h4>
-          {/* <p>Mon - Fri 09:00-18:00, Sat 09:00-16:00 (Moscow Time)</p> */}
           <p>{t('WorkHour4')}</p>
           <h4>{t('Address')}:</h4>
           <p>
@@ -229,9 +203,7 @@ export default function Contact() {
           </p>
           <p>2nd Yuzhnoportovy proezd, 12G, building 1s <br /> Moscow, Russia</p>
           <h4>{t('ProductLines')}:</h4>
-          {/* <p>{titleCase("bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers, children's assortment, bathrobes, home clothes, sheets, blankets, aprons, sauna sets, ironing board covers.")}</p> */}
           <p>{titleCase(t('ProductLine4'))}</p>
-
         </div>
       </div>
     </div>

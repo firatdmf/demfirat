@@ -417,6 +417,7 @@
 .variant_links .link:hover {
   border-color: var(--gold, #c9a961);
   background: #fffbf5;
+  color: #1a1a1a;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(201, 169, 97, 0.15);
 }
@@ -424,11 +425,13 @@
 .variant_links .checked_variant_link {
   background: linear-gradient(135deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
   border-color: var(--gold, #c9a961);
-  color: white;
+  color: #1a1a1a;
+  font-weight: 700;
   box-shadow: 0 3px 10px rgba(201, 169, 97, 0.25);
 }
 
 .variant_links .checked_variant_link:hover {
+  color: #1a1a1a;
   transform: translateY(-1px);
   box-shadow: 0 4px 14px rgba(201, 169, 97, 0.35);
 }
@@ -697,8 +700,25 @@
   color: var(--gold, #c9a961);
 }
 
-.accordionContent {
+.accordionPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+  overflow: hidden;
+}
+
+.accordionPanelOpen {
+  grid-template-rows: 1fr;
   padding-bottom: 1.25rem;
+}
+
+.accordionPanel > .accordionContent {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.accordionContent {
+  padding-bottom: 0;
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 0.9rem;
   color: #4b5563;

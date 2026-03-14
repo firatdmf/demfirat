@@ -1,7 +1,7 @@
 // import { use } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Jost } from "next/font/google";
 import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -16,6 +16,7 @@ import NewsletterPopup from "@/components/NewsletterPopup";
 
 
 const inter = Inter({ subsets: ["latin"] });
+const jost = Jost({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: "--font-jost" });
 
 export const metadata: Metadata = {
   title: "DEMFIRAT® KARVEN | Home Collection",
@@ -105,7 +106,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         )}
         {/* End Klaviyo Tracking */}
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${jost.variable}`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

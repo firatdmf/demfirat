@@ -72,19 +72,13 @@ export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
     };
 
     return (
-        <a
-            href={src}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.preventDefault()}
-            style={{ display: 'contents' }}
-        >
             <div
                 ref={imageWrapperRef}
                 className={`${styles.imageWrapper} ${isZoomed ? styles.zoomedIn : styles.zoomedOut}`}
                 onClick={toggleZoom}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
+                onContextMenu={(e) => e.preventDefault()}
             >
                 {/* Current displayed image - always visible */}
                 <Image
@@ -95,7 +89,7 @@ export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
                     onLoad={handleFirstLoad}
                     draggable={false}
                     fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 640px"
                     priority
                     style={zoomStyle}
                 />
@@ -109,7 +103,7 @@ export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
                         onLoad={handleNextLoad}
                         draggable={false}
                         fill
-                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 640px"
                         priority
                         style={{
                             ...zoomStyle,
@@ -119,6 +113,5 @@ export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
                     />
                 )}
             </div>
-        </a>
     );
 }

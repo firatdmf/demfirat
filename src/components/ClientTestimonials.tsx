@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import classes from "./ClientTestimonials.module.css";
 import Image from "next/image";
 
@@ -28,11 +27,6 @@ function formatDate(dateStr: string, locale: string): string {
 }
 
 function ClientTestimonials({ image, name, review, date, locale }: ReviewProps) {
-  const [expanded, setExpanded] = useState(false);
-  const isLong = review.length > 120;
-  const displayReview = !expanded && isLong ? review.slice(0, 120) + "..." : review;
-  const readMoreText = locale === "tr" ? "Devamini oku" : locale === "ru" ? "Читать далее" : locale === "pl" ? "Czytaj dalej" : "Read more";
-
   return (
     <div className={classes.cardWrapper}>
       <div className={classes.reviewCard}>
@@ -44,15 +38,7 @@ function ClientTestimonials({ image, name, review, date, locale }: ReviewProps) 
             {"★★★★★"}
           </div>
           <div className={classes.reviewText}>
-            &ldquo;{displayReview}&rdquo;
-            {isLong && !expanded && (
-              <button
-                className={classes.readMore}
-                onClick={() => setExpanded(true)}
-              >
-                {readMoreText}
-              </button>
-            )}
+            &ldquo;{review}&rdquo;
           </div>
           <div className={classes.cardFooter}>
             <span className={classes.reviewerName}>{maskName(name)}</span>

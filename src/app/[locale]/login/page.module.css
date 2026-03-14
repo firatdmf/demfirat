@@ -49,10 +49,14 @@
   margin-bottom: 32px;
 }
 
-.logo {
-  width: 180px;
-  height: auto;
+.logoText {
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: #944f05;
   margin-bottom: 24px;
+  display: inline-block;
 }
 
 .title {
@@ -320,8 +324,8 @@
     padding: 32px 24px;
   }
 
-  .logo {
-    width: 140px;
+  .logoText {
+    font-size: 1.6rem;
   }
 
   .title {

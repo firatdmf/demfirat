@@ -98,11 +98,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         },
         "publisher": {
             "@type": "Organization",
-            "name": "Karven",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://karven.com/media/karvenLogo.webp"
-            }
+            "name": "DEMFIRAT"
         },
         "mainEntityOfPage": {
             "@type": "WebPage",

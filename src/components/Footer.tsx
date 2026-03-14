@@ -63,6 +63,9 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       newsletter: { en: 'Stay updated with our latest collections', tr: 'En son koleksiyonlarımızdan haberdar olun', ru: 'Будьте в курсе наших новинок', pl: 'Bądź na bieżąco z nowościami' },
       subscribe: { en: 'Subscribe', tr: 'Kaydol', ru: 'Подписаться', pl: 'Subskrybuj' },
       emailPlaceholder: { en: 'Your email', tr: 'E-posta adresiniz', ru: 'Ваш email', pl: 'Twój e-mail' },
+      getOnList: { en: 'Get on the List', tr: 'Listede Yerinizi Alın', ru: 'Подпишитесь', pl: 'Zapisz się' },
+      signUpText: { en: 'Sign up to know when we launch new products.', tr: 'Yeni ürünlerimizden haberdar olun.', ru: 'Узнавайте первыми о новинках.', pl: 'Bądź na bieżąco z nowymi produktami.' },
+      contactUs: { en: 'Contact Us', tr: 'Bize Ulaşın', ru: 'Свяжитесь с нами', pl: 'Skontaktuj się' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || translations[key]?.['en'] || key;
@@ -70,58 +73,18 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
 
   return (
     <footer className={classes.footer}>
-      {/* Layer 1: Links + Contact + Brand */}
+      {/* Top: Link columns + Newsletter */}
       <div className={classes.topLayer}>
         <div className={classes.topContent}>
-          {/* Brand & Newsletter */}
-          <div className={classes.brandColumn}>
-            <Image
-              src="/media/karvenLogo.webp"
-              alt="Karven Logo"
-              width={150}
-              height={50}
-              style={{ objectFit: 'contain' }}
-              className={classes.logo}
-            />
-            <p className={classes.tagline}>{t('newsletter')}</p>
-            <form className={classes.newsletterForm} onSubmit={handleNewsletterSubmit}>
-              <input
-                type="email"
-                placeholder={t('emailPlaceholder')}
-                className={classes.newsletterInput}
-                value={newsletterEmail}
-                onChange={(e) => { setNewsletterEmail(e.target.value); if (newsletterStatus !== 'idle') setNewsletterStatus('idle'); }}
-                required
-              />
-              <button type="submit" className={classes.newsletterBtn} disabled={newsletterStatus === 'loading'}>
-                {newsletterStatus === 'loading' ? '...' : t('subscribe')}
-              </button>
-            </form>
-            {newsletterStatus !== 'idle' && (
-              <p className={`${classes.newsletterMsg} ${newsletterStatus === 'success' ? classes.newsletterSuccess : classes.newsletterError}`}>
-                {newsletterMsg}
-              </p>
-            )}
-            <div className={classes.socialIcons}>
-              <Link
-                href="https://www.instagram.com/karvenhomedecor/"
-                target="_blank"
-                className={classes.socialIcon}
-                title="Instagram"
-              >
-                <FaInstagram />
-              </Link>
-            </div>
-          </div>
-
           {/* Column 1: Corporate */}
           <div className={classes.column}>
             <h4 className={classes.columnTitle}>{t('corporate')}</h4>
             <ul className={classes.linkList}>
               <li><Link href={`/${locale}/about`}>{t('aboutUs')}</Link></li>
-              <li><Link href={`/${locale}/contact`}>{ContactUs}</Link></li>
+              <li><Link href={`/${locale}/contact`}>{t('contactUs')}</Link></li>
               <li><Link href={`/${locale}/blog`}>{t('blog')}</Link></li>
               <li><Link href={`/${locale}/kvkk`}>{t('privacyPolicy')}</Link></li>
+              <li><Link href={`/${locale}/legal/mesafeli-satis-sozlesmesi`}>{t('distanceSales')}</Link></li>
             </ul>
           </div>
 
@@ -194,10 +157,44 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
               </li>
             </ul>
           </div>
+
+          {/* Newsletter + Social */}
+          <div className={classes.newsletterColumn}>
+            <h4 className={classes.newsletterTitle}>{t('getOnList')}</h4>
+            <p className={classes.newsletterDesc}>{t('signUpText')}</p>
+            <form className={classes.newsletterForm} onSubmit={handleNewsletterSubmit}>
+              <input
+                type="email"
+                placeholder={t('emailPlaceholder')}
+                className={classes.newsletterInput}
+                value={newsletterEmail}
+                onChange={(e) => { setNewsletterEmail(e.target.value); if (newsletterStatus !== 'idle') setNewsletterStatus('idle'); }}
+                required
+              />
+              <button type="submit" className={classes.newsletterBtn} disabled={newsletterStatus === 'loading'}>
+                {newsletterStatus === 'loading' ? '...' : '→'}
+              </button>
+            </form>
+            {newsletterStatus !== 'idle' && (
+              <p className={`${classes.newsletterMsg} ${newsletterStatus === 'success' ? classes.newsletterSuccess : classes.newsletterError}`}>
+                {newsletterMsg}
+              </p>
+            )}
+            <div className={classes.socialIcons}>
+              <Link
+                href="https://www.instagram.com/karvenhomedecor/"
+                target="_blank"
+                className={classes.socialIcon}
+                title="Instagram"
+              >
+                <FaInstagram />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Layer 2: Copyright + Payment + ETBİS + Certifications */}
+      {/* Bottom Bar */}
       <div className={classes.bottomBar}>
         <div className={classes.bottomContent}>
           <Image
@@ -215,7 +212,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
             <span>OEKO-TEX</span>
           </div>
           <p className={classes.copyright}>
-            © {currentYear} Dem Fırat Karven Tekstil San. Tic. Ltd. Şti. | {AllRightsReserved}
+            © {currentYear} DEMFIRAT
           </p>
           <Image
             src="/media/iyzico/footer_iyzico_ile_ode/Colored/logo_band_colored.svg"

@@ -80,10 +80,14 @@
     margin-bottom: 28px;
 }
 
-.logo {
-    width: 160px;
-    height: auto;
+.logoText {
+    font-family: var(--font-jost), 'Jost', sans-serif;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #944f05;
     margin-bottom: 20px;
+    display: inline-block;
 }
 
 .title {
@@ -347,8 +351,8 @@
         border-radius: 20px;
     }
 
-    .logo {
-        width: 140px;
+    .logoText {
+        font-size: 1.6rem;
     }
 
     .title {

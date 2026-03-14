@@ -167,11 +167,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
 
                 {/* Logo Section */}
                 <div className={classes.logoSection}>
-                    <img
-                        src="/media/karvenLogo.webp"
-                        alt="Karven Logo"
-                        className={classes.logo}
-                    />
+                    <span className={classes.logoText}>DEMFIRAT</span>
                     <h1 className={classes.title}>{t.welcomeBack}</h1>
                     <p className={classes.subtitle}>{t.signInSubtitle}</p>
                 </div>

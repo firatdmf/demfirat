@@ -4,7 +4,10 @@ import "./Spinner.css"
 function Spinner() {
   return (
     <div className="loadingSpinnerContainer">
-      <div className="loadingSpinner"></div>
+      <div className="logoLoader">
+        <span className="logoLetter">D</span>
+        <div className="logoRing"></div>
+      </div>
     </div>
   );
 }

@@ -70,11 +70,7 @@ export default function RegisterPage() {
       <div className={classes.registerCard}>
         {/* Logo Section */}
         <div className={classes.logoSection}>
-          <img
-            src="/media/karvenLogo.webp"
-            alt="Karven Logo"
-            className={classes.logo}
-          />
+          <span className={classes.logoText}>DEMFIRAT</span>
           <h1 className={classes.title}>Create Account</h1>
           <p className={classes.subtitle}>Join Karven family today</p>
         </div>
