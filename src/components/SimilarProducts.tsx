@@ -43,7 +43,7 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
         const fetchSimilarProducts = async () => {
             try {
                 const response = await fetch(
-                    `/api/products/similar?fabric_type=${fabricType}&exclude_sku=${currentProductSku}&limit=12`
+                    `/api/products/similar?fabric_type=${fabricType}&exclude_sku=${currentProductSku}&limit=6`
                 );
                 if (response.ok) {
                     const data = await response.json();

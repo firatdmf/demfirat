@@ -36,7 +36,7 @@
 
 .productGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(6, 1fr);
     gap: 1rem;
     padding: 0.5rem 0;
 }
@@ -123,6 +123,13 @@
     }
 }
 
+/* Tablet responsiveness */
+@media (max-width: 1024px) {
+    .productGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .container {
@@ -136,7 +143,7 @@
     }
 
     .productGrid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .productTitle {

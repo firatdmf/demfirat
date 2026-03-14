@@ -9,7 +9,20 @@
       "Bash(cat /c/Users/enes3/demfirat/src/types/*.ts)",
       "Bash(grep -n \"NEXT_PUBLIC_NEJUM_API_URL\\\\|process.env.NEJUM_API_URL\" /c/Users/enes3/demfirat/src/app/[locale]/product/[product_category]/page.tsx /c/Users/enes3/demfirat/src/app/[locale]/product/[product_category]/[product_sku]/page.tsx)",
       "Bash(for i:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(find /c/Users/enes3/demfirat -type f \\\\\\(-name .env* -o -name *.env* \\\\\\))",
+      "Bash(grep -E \"\\\\.\\(config|rc|json\\)$\")",
+      "Bash(grep -E \"\\\\.tsx$\")",
+      "Read(//c/Users/enes3/erp/**)",
+      "Bash(grep -r \"onLoadingComplete\\\\|getImageProps\\\\|unoptimized\" /c/Users/enes3/demfirat/src --include=*.tsx --include=*.ts)",
+      "Bash(grep -r Image.*loading= /c/Users/enes3/demfirat/src --include=*.tsx)",
+      "Bash(grep -r \"fill\\\\|unoptimized\" /c/Users/enes3/demfirat/src --include=*.tsx)",
+      "Read(//c/Users/enes3/**)",
+      "Bash(find c:Usersenes3demfirat -maxdepth 3 -type f \\\\\\(-name *.tsx -o -name *.jsx \\\\\\))",
+      "Bash(grep -l \"f_auto\\\\|q_auto\\\\|/upload/\" c:Usersenes3demfiratsrccomponents*.tsx)",
+      "Bash(grep -E \"import.*from ''@react-pdf|import.*jspdf|import.*pdf-lib|import.*sharp|dynamic|React.lazy\" /c/Users/enes3/demfirat/src/components/ProductDetailCard.tsx)",
+      "Bash(wc -l /c/Users/enes3/demfirat/src/app/[locale]/globals.css)",
+      "Bash(git checkout:*)"
     ]
   }
 }
