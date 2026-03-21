@@ -133,7 +133,7 @@ function ProductDetailCard({
 
           if (isValidValue) {
             initialAttributes[attrName] = urlValue;
-            console.log(`[ProductDetailCard] URL'den alındı: ${attrName} = ${urlValue}`);
+            console.log(`[ProductDetailCard] Taken from the URL: ${attrName} = ${urlValue}`);
           }
         }
       });
@@ -239,6 +239,66 @@ function ProductDetailCard({
       });
     });
   };
+
+  // Compute which attribute values lead ONLY to sku-"0" variants (non-selectable)
+  // Hierarchy uses the API's natural attribute order.
+  // Each attribute is only filtered by attributes that come BEFORE it in that order.
+  const precedingAttributes = useMemo(() => {
+    const result: Record<string, Set<string>> = {};
+    if (!product_variant_attributes) return result;
+    for (let i = 0; i < product_variant_attributes.length; i++) {
+      const name = product_variant_attributes[i].name ?? '';
+      const preceding = new Set<string>();
+      for (let j = 0; j < i; j++) {
+        preceding.add(product_variant_attributes[j].name ?? '');
+      }
+      result[name] = preceding;
+    }
+    return result;
+  }, [product_variant_attributes]);
+
+  const getHierarchyFilteredVariants = (attrName: string) => {
+    const preceding = precedingAttributes[attrName] ?? new Set<string>();
+    const relevantSelections = Object.entries(selectedAttributes).filter(
+      ([key]) => preceding.has(key)
+    );
+    if (relevantSelections.length === 0) return product_variants || [];
+    return (product_variants || []).filter(variant =>
+      relevantSelections.every(([key, val]) => {
+        const attrDef = product_variant_attributes?.find(attr => attr.name === key);
+        if (!attrDef) return false;
+        const valueObj = product_variant_attribute_values?.find(
+          v => String(v.product_variant_attribute_id) === String(attrDef.id) && v.product_variant_attribute_value === val
+        );
+        if (!valueObj) return false;
+        return variant.product_variant_attribute_values?.includes(valueObj.id);
+      })
+    );
+  };
+
+  const disabledValues = useMemo(() => {
+    const result: Record<string, Set<string>> = {};
+    if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return result;
+
+    for (const attribute of product_variant_attributes) {
+      const attrName = attribute.name ?? '';
+      const disabled = new Set<string>();
+      const eligibleVariants = getHierarchyFilteredVariants(attrName);
+      const allValuesForAttr = product_variant_attribute_values.filter(
+        v => String(v.product_variant_attribute_id) === String(attribute.id)
+      );
+      for (const attrValue of allValuesForAttr) {
+        const matchingVariants = eligibleVariants.filter(variant =>
+          variant.product_variant_attribute_values?.includes(attrValue.id)
+        );
+        if (matchingVariants.length > 0 && matchingVariants.every(v => Number(v.variant_quantity ?? 0) <= 0)) {
+          disabled.add(attrValue.product_variant_attribute_value);
+        }
+      }
+      result[attrName] = disabled;
+    }
+    return result;
+  }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values, precedingAttributes]);
 
   // useMemo ile selectedVariant'ı hesapla
   const selectedVariant = useMemo(() => {
@@ -353,52 +413,24 @@ function ProductDetailCard({
   }, [filteredImages]);
 
 
-  // Group attribute values by attribute and filter out duplicates
-  // ONLY show values that actually exist in product_variants
-  // NOW: Also filter based on currently selected attributes (dynamic filtering)
+  // Group attribute values by attribute, filtered using the hierarchy
+  // (each attribute only filtered by attributes before it in the API order)
   const groupedAttributeValues = useMemo(() => {
     const grouped = product_variant_attributes?.map(attribute => {
       const currentAttributeName = attribute.name ?? '';
 
-      // Get all attribute value objects for this attribute
       const allAttributeValuesForThisAttribute = product_variant_attribute_values?.filter(
         (value: ProductVariantAttributeValue) => value.product_variant_attribute_id === attribute.id
       ) || [];
 
-      // Filter variants based on OTHER selected attributes (not the current one)
-      const otherSelectedAttributes = Object.entries(selectedAttributes).filter(
-        ([key]) => key !== currentAttributeName
-      );
+      const eligibleVariants = getHierarchyFilteredVariants(currentAttributeName);
 
-      // Find variants that match all OTHER selected attributes
-      let eligibleVariants = product_variants || [];
-
-      if (otherSelectedAttributes.length > 0) {
-        eligibleVariants = product_variants?.filter(variant => {
-          return otherSelectedAttributes.every(([key, value]) => {
-            const attrDef = product_variant_attributes?.find(attr => attr.name === key);
-            if (!attrDef) return false;
-
-            const valueObj = product_variant_attribute_values?.find(
-              val =>
-                String(val.product_variant_attribute_id) === String(attrDef.id) &&
-                val.product_variant_attribute_value === value
-            );
-            if (!valueObj) return false;
-
-            return variant.product_variant_attribute_values?.includes(valueObj.id);
-          });
-        }) || [];
-      }
-
-      // Only keep values that are used in eligible variants
       const valuesUsedInEligibleVariants = allAttributeValuesForThisAttribute.filter(attrValue => {
         return eligibleVariants.some(variant =>
           variant.product_variant_attribute_values?.includes(attrValue.id)
         );
       });
 
-      // Extract unique value strings
       const uniqueValues = Array.from(
         new Set(
           valuesUsedInEligibleVariants.map((value: ProductVariantAttributeValue) => value.product_variant_attribute_value)
@@ -411,16 +443,13 @@ function ProductDetailCard({
       };
     });
 
-    // Sort: Color always first, then others
+    // Preserve the API's attribute order
     return grouped?.sort((a, b) => {
-      const aIsColor = a.attribute.name?.toLowerCase() === 'color';
-      const bIsColor = b.attribute.name?.toLowerCase() === 'color';
-
-      if (aIsColor && !bIsColor) return -1;
-      if (!aIsColor && bIsColor) return 1;
-      return 0; // Keep original order for non-color attributes
+      const aIdx = product_variant_attributes?.indexOf(a.attribute) ?? 0;
+      const bIdx = product_variant_attributes?.indexOf(b.attribute) ?? 0;
+      return aIdx - bIdx;
     });
-  }, [product_variant_attributes, product_variant_attribute_values, product_variants, selectedAttributes]);
+  }, [product_variant_attributes, product_variant_attribute_values, product_variants, selectedAttributes, precedingAttributes]);
 
   // Tek değerli attribute'ları otomatik olarak seç
   // VE seçili değer artık mevcut değilse, ilk mevcut değere geç
@@ -432,19 +461,25 @@ function ProductDetailCard({
 
     groupedAttributeValues.forEach(({ attribute, values }) => {
       const attrName = attribute.name ?? '';
-      // console.log(`Attribute: ${attrName}, Values: [${values.join(', ')}], Length: ${values.length}`);
+      const disabledSet = disabledValues[attrName];
+      const enabledValues = values.filter(v => !disabledSet?.has(v));
+      const firstAvailable = enabledValues.length > 0 ? enabledValues[0] : values[0];
 
-      // Eğer sadece 1 değer varsa ve henüz seçilmemişse, otomatik seç
+      // Auto-select if only one value and not yet selected
       if (values.length === 1 && !updatedAttributes[attrName]) {
-        // console.log(`Auto-selecting ${attrName}: ${values[0]}`);
-        updatedAttributes[attrName] = values[0];
+        updatedAttributes[attrName] = firstAvailable;
         hasChanges = true;
       }
 
-      // Eğer seçili değer artık mevcut değilse, ilk mevcut değere geç
+      // If current selection is no longer in the list, switch to first available
       if (values.length > 0 && updatedAttributes[attrName] && !values.includes(updatedAttributes[attrName])) {
-        // console.log(`Current selection "${updatedAttributes[attrName]}" for ${attrName} is no longer available. Switching to: ${values[0]}`);
-        updatedAttributes[attrName] = values[0];
+        updatedAttributes[attrName] = firstAvailable;
+        hasChanges = true;
+      }
+
+      // If current selection is disabled (out of stock), switch to first enabled value
+      if (values.length > 0 && updatedAttributes[attrName] && disabledSet?.has(updatedAttributes[attrName]) && enabledValues.length > 0) {
+        updatedAttributes[attrName] = firstAvailable;
         hasChanges = true;
       }
     });
@@ -453,7 +488,7 @@ function ProductDetailCard({
       // console.log('Updated attributes:', updatedAttributes);
       setSelectedAttributes(updatedAttributes);
     }
-  }, [groupedAttributeValues]); // selectedAttributes'u buradan çıkardık, sonsuz loop olmasın
+  }, [groupedAttributeValues, disabledValues]);
 
 
   // Thumbnail/image navigation
@@ -1226,25 +1261,36 @@ function ProductDetailCard({
                           {values.map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                            const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
                             // Image path: /media/fabrics/{value}.jpg (assuming jpg, can be adjusted)
                             // value usually comes as "bamboo", "grek" etc.
                             const bgImage = `/media/fabrics/${value.toLowerCase()}.avif`;
 
                             return (
                               <div key={value} className={classes.fabric_swatch_container}>
-                                <Link
-                                  href={href}
-                                  replace
-                                  className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""}`}
-                                  onClick={e => {
-                                    e.preventDefault();
-                                    handleAttributeChange(attribute.name ?? '', value);
-                                  }}
-                                  style={{ backgroundImage: `url(${bgImage})` }}
-                                  title={translateAttributeName(value)}
-                                >
-                                  <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                                </Link>
+                                {isDisabled ? (
+                                  <span
+                                    className={`${classes.fabric_swatch} ${classes.disabled_swatch}`}
+                                    style={{ backgroundImage: `url(${bgImage})` }}
+                                    title={translateAttributeName(value)}
+                                  >
+                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                  </span>
+                                ) : (
+                                  <Link
+                                    href={href}
+                                    replace
+                                    className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""}`}
+                                    onClick={e => {
+                                      e.preventDefault();
+                                      handleAttributeChange(attribute.name ?? '', value);
+                                    }}
+                                    style={{ backgroundImage: `url(${bgImage})` }}
+                                    title={translateAttributeName(value)}
+                                  >
+                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                  </Link>
+                                )}
                                 <span className={classes.color_label}>{translateAttributeName(value)}</span>
                               </div>
                             );
@@ -1255,36 +1301,58 @@ function ProductDetailCard({
                           {values.map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                            const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
                             const isTwoTone = isTwoToneColor(value);
 
                             return (
                               <div key={value} className={classes.color_swatch_container}>
-                                <Link
-                                  href={href}
-                                  replace
-                                  className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""}`}
-                                  onClick={e => {
-                                    e.preventDefault();
-                                    handleAttributeChange(attribute.name ?? '', value);
-                                  }}
-                                  style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
-                                  title={translateAttributeName(value)}
-                                >
-                                  {isTwoTone ? (
-                                    // İki renkli swatch - daire yarıya bölünür
-                                    <>
-                                      <span
-                                        className={classes.half_circle_left}
-                                        style={{ backgroundColor: splitTwoToneColor(value).color1 }}
-                                      />
-                                      <span
-                                        className={classes.half_circle_right}
-                                        style={{ backgroundColor: splitTwoToneColor(value).color2 }}
-                                      />
-                                    </>
-                                  ) : null}
-                                  <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                                </Link>
+                                {isDisabled ? (
+                                  <span
+                                    className={`${classes.color_swatch} ${classes.disabled_swatch}`}
+                                    style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
+                                    title={translateAttributeName(value)}
+                                  >
+                                    {isTwoTone ? (
+                                      <>
+                                        <span
+                                          className={classes.half_circle_left}
+                                          style={{ backgroundColor: splitTwoToneColor(value).color1 }}
+                                        />
+                                        <span
+                                          className={classes.half_circle_right}
+                                          style={{ backgroundColor: splitTwoToneColor(value).color2 }}
+                                        />
+                                      </>
+                                    ) : null}
+                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                  </span>
+                                ) : (
+                                  <Link
+                                    href={href}
+                                    replace
+                                    className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""}`}
+                                    onClick={e => {
+                                      e.preventDefault();
+                                      handleAttributeChange(attribute.name ?? '', value);
+                                    }}
+                                    style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
+                                    title={translateAttributeName(value)}
+                                  >
+                                    {isTwoTone ? (
+                                      <>
+                                        <span
+                                          className={classes.half_circle_left}
+                                          style={{ backgroundColor: splitTwoToneColor(value).color1 }}
+                                        />
+                                        <span
+                                          className={classes.half_circle_right}
+                                          style={{ backgroundColor: splitTwoToneColor(value).color2 }}
+                                        />
+                                      </>
+                                    ) : null}
+                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                  </Link>
+                                )}
                                 <span className={classes.color_label}>{translateAttributeName(value)}</span>
                               </div>
                             );
@@ -1295,20 +1363,26 @@ function ProductDetailCard({
                           {values.map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
+                            const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
                             return (
                               <div key={value}>
-                                <Link
-                                  href={href}
-                                  replace
-                                  className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}
-                                  onClick={e => {
-                                    e.preventDefault();
-                                    handleAttributeChange(attribute.name ?? '', value);
-                                  }}
-                                >
-                                  {/* replace underscored with spaces for better client visual */}
-                                  {translateAttributeName(value)}
-                                </Link>
+                                {isDisabled ? (
+                                  <span className={`${classes.link} ${classes.disabled_variant_link}`}>
+                                    {translateAttributeName(value)}
+                                  </span>
+                                ) : (
+                                  <Link
+                                    href={href}
+                                    replace
+                                    className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}
+                                    onClick={e => {
+                                      e.preventDefault();
+                                      handleAttributeChange(attribute.name ?? '', value);
+                                    }}
+                                  >
+                                    {translateAttributeName(value)}
+                                  </Link>
+                                )}
                               </div>
                             );
                           })}

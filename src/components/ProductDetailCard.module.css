@@ -436,6 +436,29 @@
   box-shadow: 0 4px 14px rgba(201, 169, 97, 0.35);
 }
 
+.disabled_variant_link.disabled_variant_link {
+  opacity: 0.35;
+  cursor: not-allowed;
+  /* text-decoration: line-through; */
+}
+
+.disabled_swatch.disabled_swatch {
+  opacity: 0.3;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.disabled_swatch::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.4);
+  transform: rotate(-45deg);
+}
+
 /* Color Swatches - Refined */
 .color_swatches {
   display: flex;
