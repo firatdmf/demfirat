@@ -4,16 +4,25 @@ export const revalidate = 3600; // Cache for 1 hour
 
 export async function GET() {
     try {
-        // 1. Fetch all active products from backend API
-        const response = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/top_products`);
+        const apiUrl = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch products: ${response.status}`);
+        // Fetch both categories in parallel
+        const [fabricRes, readyMadeRes] = await Promise.all([
+            fetch(`${apiUrl}/marketing/api/get_products?product_category=fabric`),
+            fetch(`${apiUrl}/marketing/api/get_products?product_category=ready-made_curtain`),
+        ]);
+
+        if (!fabricRes.ok && !readyMadeRes.ok) {
+            throw new Error(`Failed to fetch products: fabric=${fabricRes.status}, ready-made=${readyMadeRes.status}`);
         }
 
-        // Assuming backend returns a list of products under 'products'
-        const data = await response.json();
-        const products = Array.isArray(data) ? data : data.products || [];
+        const fabricData = fabricRes.ok ? await fabricRes.json() : { products: [] };
+        const readyMadeData = readyMadeRes.ok ? await readyMadeRes.json() : { products: [] };
+
+        const products = [
+            ...(fabricData.products || []).map((p: any) => ({ ...p, product_category: 'fabric' })),
+            ...(readyMadeData.products || []).map((p: any) => ({ ...p, product_category: 'ready-made_curtain' })),
+        ];
 
         // Protocol: RSS 2.0 standard with g: namespace for Google/Meta catalogs
         // Reference: https://developers.facebook.com/docs/commerce-platform/catalog/formats/xml
@@ -21,7 +30,7 @@ export async function GET() {
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
   <channel>
     <title>Karven Products Catalog</title>
-    <link>https://karven.com</link>
+    <link>https://www.demfirat.com</link>
     <description>Product feed for Meta/Google Ads.</description>
 `;
 
@@ -34,7 +43,7 @@ export async function GET() {
             // Clean HTML tags from description if needed, fallback to title
             const description = (product.description || title).replace(/<[^>]*>?/gm, '').substring(0, 5000);
             // Link needs to be absolute
-            const link = `https://karven.com/tr/product/${product.product_category || 'product'}/${sku}`;
+            const link = `https://www.demfirat.com/tr/product/${product.product_category || 'product'}/${sku}`;
             const imageLink = product.primary_image || '/media/woocommerce-placeholder.svg';
 
             // Meta requires price in a specific format: "15.00 USD"
