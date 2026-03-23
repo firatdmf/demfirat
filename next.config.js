@@ -18,6 +18,10 @@ const nextConfig = {
   // to our client bundle at all. Do not show them on the browser (no client side, only server side)
   serverExternalPackages: ["@prisma/client", "bcrypt", "iyzipay"],
   images: {
+    // unoptimized: true prevents Next.js from proxying images through Railway
+    // This eliminates DOUBLE EGRESS (CDN→Railway→Client) and serves directly from CDN
+    // BunnyCDN already serves optimized avif/webp images
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -50,11 +54,10 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    // Image optimization settings
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 172800,
+    minimumCacheTTL: 604800,
   },
 };
 
