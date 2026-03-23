@@ -8,13 +8,13 @@ import Image from 'next/image';
 
 export async function generateMetadata(props: PageProps<'/[locale]/product'>): Promise<Metadata> {
   const { locale } = await props.params;
-  const baseUrl = `https://karven.com`;
+  const baseUrl = `https://DEMFIRAT.com`;
   const canonicalUrl = `${baseUrl}/${locale}/product`;
 
-  const title = locale === 'tr' ? 'Tüm Ürünler | Karven'
-    : locale === 'ru' ? 'Все Продукты | Karven'
-      : locale === 'pl' ? 'Wszystkie Produkty | Karven'
-        : 'All Products | Karven';
+  const title = locale === 'tr' ? 'Tüm Ürünler | DEMFIRAT'
+    : locale === 'ru' ? 'Все Продукты | DEMFIRAT'
+      : locale === 'pl' ? 'Wszystkie Produkty | DEMFIRAT'
+        : 'All Products | DEMFIRAT';
 
   const desc = locale === 'tr' ? 'Lüks ev tekstili koleksiyonumuzu keşfedin. Her mekan için özel tasarımlar.'
     : locale === 'ru' ? 'Откройте для себя нашу коллекцию роскошного домашнего текстиля. Уникальные дизайны для каждого пространства.'
@@ -92,7 +92,7 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
       <section className={classes.heroSection}>
         <div className={classes.heroContent}>
           <div className={classes.brandHeader}>
-            <div className={classes.brand}>Karven</div>
+            <div className={classes.brand}>DEMFIRAT</div>
             <div className={classes.slogan}>{pageContent.slogan}</div>
           </div>
           <div className={classes.showcaseArea}>
@@ -102,7 +102,7 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
                 <div className={classes.slide}>
                   <Image
                     src="/media/showcase/products-hero.jpg"
-                    alt="Karven textile collection"
+                    alt="DEMFIRAT textile collection"
                     className={classes.showcaseImage}
                     fill
                     sizes="100vw"
@@ -114,7 +114,7 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
                 <div className={classes.slide}>
                   <Image
                     src="/media/showcase/slide-2.jpg"
-                    alt="Karven collection slide 2"
+                    alt="DEMFIRAT collection slide 2"
                     className={classes.showcaseImage}
                     fill
                     sizes="100vw"
@@ -126,7 +126,7 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
                 <div className={classes.slide}>
                   <Image
                     src="/media/showcase/slide-3.jpg"
-                    alt="Karven collection slide 3"
+                    alt="DEMFIRAT collection slide 3"
                     className={classes.showcaseImage}
                     fill
                     sizes="100vw"

@@ -25,7 +25,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
 
     try {
         const data = await getProductData(product_sku);
-        if (!data?.product) return { title: "Product Not Found | Karven" };
+        if (!data?.product) return { title: "Product Not Found | DEMFIRAT" };
 
         const product = data.product;
         const title = getLocalizedProductField(product, 'title', locale);
@@ -33,11 +33,11 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         const imageUrl = product.primary_image || "";
         const price = product.price;
 
-        const baseUrl = `https://karven.com`;
+        const baseUrl = `https://DEMFIRAT.com`;
         const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}/curtain`;
 
         return {
-            title: `${title} - Perde Diktir | Karven`,
+            title: `${title} - Perde Diktir | DEMFIRAT`,
             description: description.substring(0, 160),
             alternates: {
                 canonical: canonicalUrl,
@@ -53,7 +53,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
                 title,
                 description: description.substring(0, 100),
                 images: [{ url: imageUrl }],
-                url: `https://karven.com/${locale}/product/${data.product_category}/${product_sku}/curtain`,
+                url: `https://DEMFIRAT.com/${locale}/product/${data.product_category}/${product_sku}/curtain`,
                 type: 'website',
             },
             other: {
@@ -61,12 +61,12 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
                 'product:price:currency': 'USD',
                 'product:availability': Number(product.available_quantity || 0) > 0 ? 'instock' : 'oos',
                 'product:condition': 'new',
-                'product:brand': 'Karven',
+                'product:brand': 'DEMFIRAT',
                 'product:retailer_item_id': product_sku,
             }
         };
     } catch {
-        return { title: "Karven" };
+        return { title: "DEMFIRAT" };
     }
 }
 
@@ -99,10 +99,10 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         "image": [product.primary_image],
         "description": displayDescription,
         "sku": product.sku,
-        "brand": { "@type": "Brand", "name": "Karven" },
+        "brand": { "@type": "Brand", "name": "DEMFIRAT" },
         "offers": {
             "@type": "Offer",
-            "url": `https://karven.com/${locale}/product/${product_category}/${product_sku}/curtain`,
+            "url": `https://DEMFIRAT.com/${locale}/product/${product_category}/${product_sku}/curtain`,
             "priceCurrency": "USD",
             "price": product.price,
             "availability": Number(product.available_quantity || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
@@ -110,7 +110,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         }
     };
 
-    const baseUrl = `https://karven.com/${locale}`;
+    const baseUrl = `https://DEMFIRAT.com/${locale}`;
     const productUrl = `${baseUrl}/product/${product_category}/${product_sku}/curtain`;
     const categoryUrl = `${baseUrl}/product/${product_category}`;
     const categoryName = product_category === 'ready-made_curtain'

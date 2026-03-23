@@ -21,7 +21,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
 
   try {
     const data = await getProductData(product_sku);
-    if (!data?.product) return { title: "Product Not Found | Karven" };
+    if (!data?.product) return { title: "Product Not Found | DEMFIRAT" };
 
     const product = data.product;
     const title = getLocalizedProductField(product, 'title', locale);
@@ -30,11 +30,11 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
     const imageUrl = product.primary_image || "";
     const price = product.price;
 
-    const baseUrl = `https://karven.com`;
+    const baseUrl = `https://DEMFIRAT.com`;
     const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}`;
 
     return {
-      title: `${title} | Karven`,
+      title: `${title} | DEMFIRAT`,
       description: description.substring(0, 160),
       alternates: {
         canonical: canonicalUrl,
@@ -50,7 +50,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         title,
         description: description.substring(0, 100),
         images: [{ url: imageUrl }],
-        url: `https://karven.com/${locale}/product/${data.product_category}/${product_sku}`,
+        url: `https://DEMFIRAT.com/${locale}/product/${data.product_category}/${product_sku}`,
         type: 'website',
       },
       other: {
@@ -58,12 +58,12 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         'product:price:currency': 'USD',
         'product:availability': Number(product.available_quantity || 0) > 0 ? 'instock' : 'oos',
         'product:condition': 'new',
-        'product:brand': 'Karven',
+        'product:brand': 'DEMFIRAT',
         'product:retailer_item_id': product_sku,
       }
     };
   } catch (error) {
-    return { title: "Karven" };
+    return { title: "DEMFIRAT" };
   }
 }
 
@@ -90,7 +90,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   const displayTitle = getLocalizedProductField(product as Product, 'title', locale);
   const displayDescription = getLocalizedProductField(product as Product, 'description', locale) || "";
 
-  const baseUrl = `https://karven.com/${locale}`;
+  const baseUrl = `https://DEMFIRAT.com/${locale}`;
   const productUrl = `${baseUrl}/product/${product_category}/${product_sku}`;
   const categoryUrl = `${baseUrl}/product/${product_category}`;
   const categoryName = product_category === 'ready-made_curtain'
@@ -134,7 +134,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     "url": productUrl,
     "brand": {
       "@type": "Brand",
-      "name": "Karven"
+      "name": "DEMFIRAT"
     },
     "offers": {
       "@type": "Offer",

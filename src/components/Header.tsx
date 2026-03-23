@@ -264,9 +264,9 @@ function Header({ menuTArray }: HeaderProps) {
 
               {/* Desktop Nav Links */}
               <nav className={classes.desktopNav}>
-                <Link href={`/${locale}`} className={classes.navLink}>
+                {/* <Link href={`/${locale}`} className={classes.navLink}>
                   {menuTArray[0]}
-                </Link>
+                </Link> */}
 
                 {/* TÜL PERDELER Dropdown */}
                 <div className={classes.navDropdown}>

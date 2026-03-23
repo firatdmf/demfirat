@@ -70,7 +70,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { product_category, locale } = await props.params;
   const searchParams = await props.searchParams;
 
-  const baseUrl = `https://karven.com`;
+  const baseUrl = `https://DEMFIRAT.com`;
   const canonicalUrl = `${baseUrl}/${locale}/product/${product_category}`;
 
   // Define attributes that create filter permutations which shouldn't be indexed to avoid bloat
@@ -91,8 +91,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   // SEO metadata block
   return {
-    title: `${categoryName} | Karven`,
-    description: `Shop the finest collection of ${categoryName.toLowerCase()} at Karven.`,
+    title: `${categoryName} | DEMFIRAT`,
+    description: `Shop the finest collection of ${categoryName.toLowerCase()} at DEMFIRAT.`,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -285,7 +285,7 @@ export default async function Page(props: Props) {
     productVideoSKUs = videoSKUs;
   }
 
-  const baseUrl = `https://karven.com/${locale}`;
+  const baseUrl = `https://DEMFIRAT.com/${locale}`;
   const categoryUrl = `${baseUrl}/product/${product_category}`;
 
   let categoryName = 'Products';
