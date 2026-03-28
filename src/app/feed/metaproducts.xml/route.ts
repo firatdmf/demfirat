@@ -129,6 +129,68 @@ export async function GET() {
             variantsByProduct.get(v.product_id)!.push(v);
         }
 
+        // Helper: build query string from variant attributes (e.g. ?color=grey-white)
+        function buildVariantQuery(variant: ApiVariant): string {
+            const params = new URLSearchParams();
+            for (const avId of variant.product_variant_attribute_values) {
+                const av = attrValueMap.get(avId);
+                if (av) {
+                    const attr = attrMap.get(av.product_variant_attribute_id);
+                    if (attr?.name) {
+                        params.set(attr.name, av.product_variant_attribute_value);
+                    }
+                }
+            }
+            const qs = params.toString();
+            return qs ? `?${qs}` : '';
+        }
+
+        // Helper: build variant label (e.g. "color: grey-white / size: large")
+        function buildVariantLabel(variant: ApiVariant): string {
+            const parts: string[] = [];
+            for (const avId of variant.product_variant_attribute_values) {
+                const av = attrValueMap.get(avId);
+                if (av) {
+                    const attr = attrMap.get(av.product_variant_attribute_id);
+                    parts.push(`${attr?.name || ''}: ${av.product_variant_attribute_value}`);
+                }
+            }
+            return parts.join(' / ');
+        }
+
+        // Helper: generate XML item
+        function buildItem(opts: {
+            id: string;
+            groupId?: string;
+            title: string;
+            description: string;
+            link: string;
+            imageLink: string;
+            price: string;
+            availability: string;
+            inventory?: number;
+        }): string {
+            let item = `    <item>
+      <g:id>${escapeXml(opts.id)}</g:id>`;
+            if (opts.groupId) {
+                item += `\n      <g:item_group_id>${escapeXml(opts.groupId)}</g:item_group_id>`;
+            }
+            item += `
+      <g:title><![CDATA[${opts.title}]]></g:title>
+      <g:description><![CDATA[${opts.description}]]></g:description>
+      <g:link>${opts.link}</g:link>
+      <g:image_link>${escapeXml(opts.imageLink)}</g:image_link>
+      <g:brand>Karven</g:brand>
+      <g:condition>new</g:condition>
+      <g:availability>${opts.availability}</g:availability>
+      <g:price>${opts.price}</g:price>`;
+            if (opts.inventory !== undefined) {
+                item += `\n      <g:inventory>${opts.inventory}</g:inventory>`;
+            }
+            item += `\n    </item>\n`;
+            return item;
+        }
+
         // Build XML feed
         let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
@@ -140,12 +202,13 @@ export async function GET() {
 
         for (const product of allProducts) {
             const category = (product as any)._category || 'fabric';
+            const isFabric = category === 'fabric';
             const variants = variantsByProduct.get(product.id) || [];
             const trTitle = getTurkishTitle(product);
             const trDescription = getTurkishDescription(product.description)
                 .replace(/<[^>]*>?/gm, '')
                 .substring(0, 5000);
-            const link = `https://www.demfirat.com/tr/product/${category}/${product.sku}`;
+            const baseLink = `https://www.demfirat.com/tr/product/${category}/${product.sku}`;
             const imageLink = product.primary_image || '';
 
             if (variants.length === 0) {
@@ -153,60 +216,70 @@ export async function GET() {
                 const tryPrice = product.prices?.TRY ?? product.price ?? 0;
                 const price = `${Number(tryPrice).toFixed(2)} TRY`;
 
-                xml += `    <item>
-      <g:id>${escapeXml(String(product.sku))}</g:id>
-      <g:title><![CDATA[${trTitle}]]></g:title>
-      <g:description><![CDATA[${trDescription || trTitle}]]></g:description>
-      <g:link>${link}</g:link>
-      <g:image_link>${escapeXml(imageLink)}</g:image_link>
-      <g:brand>Karven</g:brand>
-      <g:condition>new</g:condition>
-      <g:availability>in stock</g:availability>
-      <g:price>${price}</g:price>
-    </item>
-`;
+                if (isFabric) {
+                    // Fabric products only as custom curtain
+                    xml += buildItem({
+                        id: `curtain_${product.sku}`,
+                        title: `${trTitle} - Özel Perde`,
+                        description: trDescription || `${trTitle} - Özel Dikim Perde`,
+                        link: `${baseLink}/curtain`,
+                        imageLink,
+                        price,
+                        availability: 'in stock',
+                    });
+                } else {
+                    // Non-fabric products as normal
+                    xml += buildItem({
+                        id: String(product.sku),
+                        title: trTitle,
+                        description: trDescription || trTitle,
+                        link: baseLink,
+                        imageLink,
+                        price,
+                        availability: 'in stock',
+                    });
+                }
             } else {
-                // Each variant becomes a separate item
+                // Each variant becomes a separate item with query params
                 for (const variant of variants) {
-                    // Get variant attribute names/values
-                    const variantAttrs: string[] = [];
-                    for (const avId of variant.product_variant_attribute_values) {
-                        const av = attrValueMap.get(avId);
-                        if (av) {
-                            const attr = attrMap.get(av.product_variant_attribute_id);
-                            const attrName = attr?.name || '';
-                            variantAttrs.push(`${attrName}: ${av.product_variant_attribute_value}`);
-                        }
-                    }
-
-                    const variantLabel = variantAttrs.join(' / ');
+                    const queryString = buildVariantQuery(variant);
+                    const variantLabel = buildVariantLabel(variant);
                     const variantTitle = variantLabel ? `${trTitle} - ${variantLabel}` : trTitle;
 
-                    // TRY price from variant or fallback to product
                     const tryPrice = variant.variant_prices?.TRY ?? product.prices?.TRY ?? variant.variant_price ?? product.price ?? 0;
                     const price = `${Number(tryPrice).toFixed(2)} TRY`;
 
-                    // Variant stock
                     const quantity = variant.variant_quantity ?? 0;
                     const availability = quantity > 0 ? 'in stock' : 'out of stock';
-
-                    // Unique ID per variant
                     const itemId = variant.variant_sku || `${product.sku}_${variant.id}`;
 
-                    xml += `    <item>
-      <g:id>${escapeXml(itemId)}</g:id>
-      <g:item_group_id>${escapeXml(String(product.sku))}</g:item_group_id>
-      <g:title><![CDATA[${variantTitle}]]></g:title>
-      <g:description><![CDATA[${trDescription || variantTitle}]]></g:description>
-      <g:link>${link}</g:link>
-      <g:image_link>${escapeXml(imageLink)}</g:image_link>
-      <g:brand>Karven</g:brand>
-      <g:condition>new</g:condition>
-      <g:availability>${availability}</g:availability>
-      <g:price>${price}</g:price>
-      <g:inventory>${Math.max(0, Math.floor(quantity))}</g:inventory>
-    </item>
-`;
+                    if (isFabric) {
+                        // Fabric variants only as custom curtain
+                        xml += buildItem({
+                            id: `curtain_${itemId}`,
+                            groupId: `curtain_${product.sku}`,
+                            title: `${variantTitle} - Özel Perde`,
+                            description: trDescription || `${variantTitle} - Özel Dikim Perde`,
+                            link: `${baseLink}/curtain${queryString}`,
+                            imageLink,
+                            price,
+                            availability,
+                            inventory: Math.max(0, Math.floor(quantity)),
+                        });
+                    } else {
+                        // Non-fabric variants as normal
+                        xml += buildItem({
+                            id: itemId,
+                            groupId: String(product.sku),
+                            title: variantTitle,
+                            description: trDescription || variantTitle,
+                            link: `${baseLink}${queryString}`,
+                            imageLink,
+                            price,
+                            availability,
+                            inventory: Math.max(0, Math.floor(quantity)),
+                        });
+                    }
                 }
             }
         }
