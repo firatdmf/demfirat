@@ -176,9 +176,9 @@ export async function GET() {
                 item += `\n      <g:item_group_id>${escapeXml(opts.groupId)}</g:item_group_id>`;
             }
             item += `
-      <g:title><![CDATA[${opts.title}]]></g:title>
-      <g:description><![CDATA[${opts.description}]]></g:description>
-      <g:link>${opts.link}</g:link>
+      <g:title>${escapeXml(opts.title)}</g:title>
+      <g:description>${escapeXml(opts.description)}</g:description>
+      <g:link>${escapeXml(opts.link)}</g:link>
       <g:image_link>${escapeXml(opts.imageLink)}</g:image_link>
       <g:brand>Karven</g:brand>
       <g:condition>new</g:condition>
