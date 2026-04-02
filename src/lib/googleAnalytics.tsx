@@ -1,7 +1,5 @@
 import Script from "next/script";
 
-// const globalForGoogleAnalytics = global as unknown as {prisma: PrismaClient}
-
 function GoogleAnalytics() {
   return (
     <>

@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 
 
 // below are for produc interfaces
@@ -14,18 +13,18 @@ export type Product = {
   tags: String[] | null;
   type: string | null;
   unit_of_measurement: string | null;
-  quantity: Decimal | null;
-  available_quantity: Decimal | null;  // Available stock in cm for curtain fabrics
+  quantity: number | null;
+  available_quantity: number | null;  // Available stock in cm for curtain fabrics
   price: number | null;
   featured: boolean;
   selling_while_out_of_stock: boolean;
-  weight: Decimal | null;
+  weight: number | null;
   unit_of_weight: string | null;
   category_id: bigint | null;
   supplier_id: bigint | null;
   // has_variants: boolean | null;
   datasheet_url: string | null;
-  minimum_inventory_level: Decimal | null;
+  minimum_inventory_level: number | null;
   primary_image?: string;
   product_files?: ProductFile[] | null;
   product_attributes?: ProductAttribute[] | null;  // Product-level attributes including discount_rate
@@ -45,9 +44,9 @@ export type ProductVariant = {
   id: bigint;
   variant_sku: string | null;
   variant_barcode: string | null;
-  variant_quantity: Decimal | null;
-  variant_price: Decimal | null;
-  variant_cost: Decimal | null;
+  variant_quantity: number | null;
+  variant_price: number | null;
+  variant_cost: number | null;
   variant_featured: boolean | null;
   product_id: bigint | null;
   primary_image?: string;
@@ -115,7 +114,7 @@ export type OrderItem = {
   product_title: string;
   product_image?: string | null;
   description: string | null;
-  quantity: Decimal;
+  quantity: number;
   status: string;
   unit_of_measurement: string;
   // Custom Curtain Fields

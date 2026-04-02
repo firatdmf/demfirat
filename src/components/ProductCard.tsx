@@ -165,15 +165,24 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     return `${widthValues[0]}-${widthValues[widthValues.length - 1]}cm`;
   }, [widthValues]);
 
-  // Find the first variant that has an image, or just the first variant
+  // Find the variant that owns the product's primary_image
   const initialVariant = useMemo(() => {
-    if (productVariants && productVariants.length > 0) {
-      const withImage = productVariants.find(v => v.primary_image);
-      if (withImage) return withImage;
-      return productVariants[0];
+    if (!productVariants || productVariants.length === 0) return null;
+
+    if (product.primary_image && product.product_files?.length) {
+      const normalize = (u: string) => u.split('?')[0].replace(/^https?:\/\/[^/]+/, '');
+      const primaryNorm = normalize(product.primary_image);
+      const matchingFile = product.product_files.find(f => f.file && normalize(f.file) === primaryNorm);
+      if (matchingFile?.product_variant_id) {
+        const variant = productVariants.find(v => String(v.id) === String(matchingFile.product_variant_id));
+        if (variant) return variant;
+      }
     }
-    return null;
-  }, [productVariants]);
+
+    const withImage = productVariants.find(v => v.primary_image);
+    if (withImage) return withImage;
+    return productVariants[0];
+  }, [productVariants, product.primary_image, product.product_files]);
 
   const initialImageSrc = initialVariant?.primary_image || product.primary_image || placeholder_image_link;
 
@@ -388,7 +397,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     // Fallback: any non-current image
     const fallback = sorted.find(f => normalize(f.file) !== currentNorm && normalize(f.file) !== '');
     return fallback ? { url: fallback.file, alt_text: fallback.alt_text || '' } : null;
-  }, [product.product_files, imageSrc, product.primary_image, selectedVariantId]);
+  }, [product.product_files, imageSrc, product.primary_image, selectedVariantId, productVariants, variantAttributes, variantAttributeValues]);
 
   return (
     <div className={classes.productCard}>

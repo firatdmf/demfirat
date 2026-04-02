@@ -1,56 +1,9 @@
 // This file brings the products inside the specified product category url param, and provides it to the product grid component.
 // This is a server component, so we can do async and database calls.
-import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue, ProductFile } from "@/lib/interfaces";
+import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
 import { getVideoSKUs } from "@/lib/getProductVideo";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
-import { Suspense } from 'react';
-import Spinner from '@/components/Spinner';
-import { unstable_cache } from 'next/cache';
-
-// Cached Prisma DB call to fetch product files (avoids 1000ms penalty on every F5 refresh)
-// We pass string arrays because Next.js cache serialization doesn't support BigInt directly.
-const getProductFilesCached = unstable_cache(
-  async (productIdsStr: string[], variantIdsStr: string[]) => {
-    const { prisma } = await import("@/lib/prisma");
-
-    const productIds = productIdsStr.map(id => BigInt(id));
-    const variantIds = variantIdsStr.map(id => BigInt(id));
-
-    const productFiles = await prisma.marketing_productfile.findMany({
-      where: {
-        OR: [
-          { product_id: { in: productIds } },
-          { product_variant_id: { in: variantIds } }
-        ],
-        file_url: { not: null }
-      },
-      select: {
-        id: true,
-        product_id: true,
-        product_variant_id: true,
-        file_url: true,
-        is_primary: true,
-        sequence: true,
-        alt_text: true
-      },
-      orderBy: { sequence: 'asc' }
-    });
-
-    // Convert BigInts to Strings/Numbers for Next.js cache serialization
-    return productFiles.map(f => ({
-      id: Number(f.id),
-      product_id: String(f.product_id),
-      product_variant_id: f.product_variant_id ? String(f.product_variant_id) : null,
-      file_url: f.file_url,
-      is_primary: f.is_primary,
-      sequence: f.sequence,
-      alt_text: f.alt_text || ''
-    }));
-  },
-  ['product-files-db'],
-  { revalidate: 300 } // 5 minutes cache
-);
 
 // type apiResponse = {
 //   products: Product[];
@@ -221,68 +174,11 @@ export default async function Page(props: Props) {
   const endTime = Date.now();
   console.log(`[PERFORMANCE] API call for ${product_category} took ${endTime - startTime}ms`);
 
-  // ENRICH DATA WITH PRODUCT FILES (for hover effect) AND CHECK VIDEOS — IN PARALLEL
-  // The API doesn't return product_files, so we fetch them directly from DB for the displayed products
   let productVideoSKUs: string[] = [];
 
   if (data.products.length > 0) {
-    // Build video SKU list from product data
     const allSKUs = data.products.map((p: Product) => p.sku).filter(Boolean);
-
-    // Run DB query and video check in PARALLEL
-    const [_, videoSKUs] = await Promise.all([
-      // Task 1: Cached Supabase DB query for product files
-      (async () => {
-        try {
-          const productIds = data.products.map((p: any) => String(p.id));
-          const variantIds = data.product_variants
-            .filter((v: any) => data.products.some((p: any) => String(p.id) === String(v.product_id)))
-            .map((v: any) => String(v.id));
-
-          const variantToProductMap = new Map();
-          data.product_variants.forEach((v: any) => {
-            variantToProductMap.set(String(v.id), String(v.product_id));
-          });
-
-          const productFiles = await getProductFilesCached(productIds, variantIds);
-
-          // Map files to products
-          data.products = data.products.map((p: any) => {
-            const pId = String(p.id);
-            const files = productFiles
-              .filter(f => {
-                if (String(f.product_id) === pId) return true;
-                if (f.product_variant_id) {
-                  const mappedPId = variantToProductMap.get(String(f.product_variant_id));
-                  return mappedPId === pId;
-                }
-                return false;
-              });
-            return { ...p, product_files: files.map(f => ({ ...f, file: f.file_url })) };
-          });
-
-          // Enrich variants with primary image
-          data.product_variants = data.product_variants.map((v: any) => {
-            const vId = String(v.id);
-            let variantFile = productFiles.find(f => String(f.product_variant_id) === vId && f.is_primary);
-            if (!variantFile) {
-              variantFile = productFiles.find(f => String(f.product_variant_id) === vId);
-            }
-            if (variantFile && variantFile.file_url) {
-              return { ...v, primary_image: variantFile.file_url };
-            }
-            return v;
-          });
-        } catch (dbError) {
-          console.error("Failed to fetch product files from DB:", dbError);
-        }
-      })(),
-
-      // Task 2: Video SKU check (uses cached Set — instant)
-      Promise.resolve(getVideoSKUs(allSKUs))
-    ]);
-
-    productVideoSKUs = videoSKUs;
+    productVideoSKUs = getVideoSKUs(allSKUs);
   }
 
   const baseUrl = `https://DEMFIRAT.com/${locale}`;

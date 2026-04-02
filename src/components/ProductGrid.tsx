@@ -1,5 +1,4 @@
 "use client"
-// import { Decimal } from "@prisma/client/runtime/library";
 import classes from "./ProductGrid.module.css";
 import ProductCard from "@/components/ProductCard";
 import Spinner from "@/components/Spinner";
