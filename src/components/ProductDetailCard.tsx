@@ -1545,7 +1545,7 @@ function ProductDetailCard({
               <div className={`${classes.accordionPanel} ${activeTab === 'description' ? classes.accordionPanelOpen : ''}`}>
                 <div className={classes.accordionContent}>
                   {getLocalizedProductField(product, 'description', locale) ? (
-                    <p style={{ whiteSpace: "pre-line", margin: 0 }}>{getLocalizedProductField(product, 'description', locale)}</p>
+                    <div className={classes.descriptionHtml} dangerouslySetInnerHTML={{ __html: getLocalizedProductField(product, 'description', locale) || '' }} />
                   ) : (
                     <p style={{ margin: 0 }}>{locale === 'tr' ? 'Açıklama bulunmamaktadır.' : 'No description available.'}</p>
                   )}
