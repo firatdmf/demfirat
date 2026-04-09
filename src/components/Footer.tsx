@@ -153,7 +153,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
               </li>
               <li>
                 <FaMapMarkerAlt className={classes.contactIcon} />
-                <span>Ergene, Tekirdağ, Türkiye</span>
+                <span>Fatih, İstanbul, Türkiye</span>
               </li>
             </ul>
           </div>

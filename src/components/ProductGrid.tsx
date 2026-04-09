@@ -409,9 +409,12 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   } else {
     return (
       <div className={classes.ProductGrid}>
+         { /*
         <div className={classes.headerSection}>
+          
+        
           <div className={classes.headerBackground}>
-            {/* Dynamic Hero Image based on category */}
+           
             <Image
               src={
                 product_category?.toLowerCase().includes('fabric') ? '/media/hero/resim.png' :
@@ -425,6 +428,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               style={{ objectFit: 'cover' }}
             />
           </div>
+    
           <div className={classes.headerOverlay}></div>
           <div className={classes.headerContent}>
             <h1 className={classes.pageTitle}>
@@ -461,7 +465,9 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           </div>
         </div>
 
-        {/* Category Tabs - only show for fabric category */}
+       
+              */
+  }
         {product_category?.toLowerCase().includes('fabric') && (
           <div className={classes.categoryTabs}>
             <Link

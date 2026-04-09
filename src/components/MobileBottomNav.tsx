@@ -77,9 +77,10 @@ const MobileBottomNav = () => {
     ];
 
     const productSubmenuItems = [
-        { href: `/${locale}/product/fabric`, label: t('Fabrics') },
         { href: `/${locale}/product/fabric?intent=custom_curtain`, label: t('TulleCurtains') },
-        { href: `/${locale}/product/fabric?intent=custom_curtain`, label: t('CustomCurtains') },
+        { href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`, label: locale === 'tr' ? 'Nakışlı Tül Perde' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains' },
+        { href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`, label: locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains' },
+        { href: `/${locale}/product/ready-made_curtain`, label: locale === 'tr' ? 'Dikili Rustik Perdeler' : locale === 'ru' ? 'Готовые рустикальные шторы' : locale === 'pl' ? 'Gotowe rustykalne zasłony' : 'Ready Made Rustic Curtains' },
     ];
 
     const handleProductsClick = (e: React.MouseEvent) => {

@@ -178,13 +178,13 @@ export default function CurtainWizard({
                 </p>
                 <div className={classes.dimRowSelect}>
                     <div className={classes.dimGroup}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', fontSize: '0.8rem', fontWeight: 600, color: '#333' }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#666' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px', fontSize: '0.72rem', fontWeight: 600, color: '#333' }}>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#666', flexShrink: 0 }}>
                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                 <polygon points="6,8 2,12 6,16"></polygon>
                                 <polygon points="18,8 22,12 18,16"></polygon>
                             </svg>
-                            {locale === 'tr' ? 'Perde En Ölçüsü (cm)' : 'Width (cm)'}
+                            {locale === 'tr' ? 'En Ölçüsü (cm)' : 'Width (cm)'}
                         </label>
                         <select className={classes.dimSelect} value={width} onChange={e => setWidth(e.target.value)}>
                             <option value="" disabled>{locale === 'tr' ? 'En Seçiniz' : t('width')}</option>
@@ -194,13 +194,13 @@ export default function CurtainWizard({
                         </select>
                     </div>
                     <div className={classes.dimGroup}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', fontSize: '0.8rem', fontWeight: 600, color: '#333' }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#666' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px', fontSize: '0.72rem', fontWeight: 600, color: '#333' }}>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#666', flexShrink: 0 }}>
                                 <line x1="12" y1="2" x2="12" y2="22"></line>
                                 <polygon points="8,6 12,2 16,6"></polygon>
                                 <polygon points="8,18 12,22 16,18"></polygon>
                             </svg>
-                            {locale === 'tr' ? 'Perde Boy Ölçüsü (cm)' : 'Height (cm)'}
+                            {locale === 'tr' ? 'Boy Ölçüsü (cm)' : 'Height (cm)'}
                         </label>
                         <select className={`${classes.dimSelect} ${heightError ? classes.dimInputError : ''}`} value={height} onChange={e => setHeight(e.target.value)}>
                             <option value="" disabled>{locale === 'tr' ? 'Boy Seçiniz' : t('height')}</option>

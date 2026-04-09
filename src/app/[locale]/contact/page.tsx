@@ -44,8 +44,8 @@ export default function Contact() {
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
       ManufacturingPlant: { en: 'Manufacturing Plant', tr: 'Üretim Tesisi', ru: 'Производственный завод', pl: 'Zakład Produkcyjny' },
-      FabricShowroom: { en: 'Fabric Showroom', tr: 'Kumaş Showroom', ru: 'Шоу-рум тканей', pl: 'Showroom Tkanin' },
-      RetailStore: { en: 'Retail Store', tr: 'Perakende Mağaza', ru: 'Розничный магазин', pl: 'Sklep Detaliczny' },
+      FabricShowroom: { en: 'Curtain Store', tr: 'Perde Mağazası', ru: 'Магазин занавесей', pl: 'Sklep z Zasłonami' },
+      RetailStore: { en: 'Hometextiles Store', tr: 'Ev Tekstili Perakende Mağaza', ru: 'Магазин домашних текстилей', pl: 'Sklep z Tekstylami Domy' },
       WarehouseShowroom: { en: 'Warehouse & Showroom', tr: 'Depo ve Showroom', ru: 'Склад и Шоу-рум', pl: 'Hurtownia i Showroom' },
       Representative: { en: 'Representative', tr: 'Temsilci', ru: 'Представитель', pl: 'Przedstawiciel' },
       Phone: { en: 'Phone', tr: 'Telefon', ru: 'Телефон', pl: 'Telefon' },
@@ -93,8 +93,7 @@ export default function Contact() {
           <h4>{t('WorkHours')}</h4>
           <p>{t('WorkHour1')}</p>
           <h4>{t('Address')}:</h4>
-          <p>
-            Karven Tekstil <br />
+          <p>         
             Vakıflar OSB Mah D100 Cad No 38 <br />
             Ergene, Tekirdağ 59930 <br />
             Türkiye
@@ -119,9 +118,11 @@ export default function Contact() {
         <div className={` ${classes.item} ${classes.textInfo}`}>
           <h2>{t('FabricShowroom')} (İstanbul, Türkiye)</h2>
           <h4>{t('Representative')}:</h4>
+          <p>Muhammed Fırat Öztürk</p>
           <p>Özcan Öztürk</p>
           <p>Devrim Eraslan</p>
           <h4>{t('Phone')}:</h4>
+          <p>+90 (501) 057-1884 (Muhammed Fırat)</p>
           <p>+90 (555) 087-5555 (Özcan)</p>
           <p>+90 (543) 440-2157 (Devrim)</p>
           <h4>{t('Email')}:</h4>
@@ -131,7 +132,7 @@ export default function Contact() {
           <p>{t('WorkHour2')}</p>
           <h4>{t('Address')}:</h4>
           <p>
-            Karven Home Collection <br />
+
             Kemalpaşa Mah Gençtürk Cad No 21A <br />
             Fatih, İstanbul 34134 <br />
             Türkiye
@@ -156,7 +157,7 @@ export default function Contact() {
           <p>{t('WorkHour3')}</p>
           <h4>{t('Address')}:</h4>
           <p>
-            Demfırat Tekstil <br />
+
             Mesihpaşa Mah Hayriye Tüccarı Cad <br />
             Fatih İstanbul, 34130 <br />
             Türkiye

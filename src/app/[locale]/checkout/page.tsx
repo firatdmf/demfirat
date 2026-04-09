@@ -127,6 +127,7 @@ export default function CheckoutPage() {
     phone: '',
     email: ''
   });
+  const [emailError, setEmailError] = useState('');
 
   // Location data state
   const [countries, setCountries] = useState<Array<{ code: string; name: string; flag?: string }>>([]);
@@ -635,9 +636,17 @@ export default function CheckoutPage() {
     }
 
     // Validate email for guest checkout
-    if (isGuestCheckout && !userInfo.email.trim()) {
-      alert(locale === 'tr' ? 'Lütfen e-posta adresinizi girin' : 'Please enter your email address');
-      return;
+    if (isGuestCheckout) {
+      const emailVal = userInfo.email.trim();
+      if (!emailVal) {
+        setEmailError(locale === 'tr' ? 'Lütfen e-posta adresinizi girin' : 'Please enter your email address');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+        setEmailError(locale === 'tr' ? 'Geçerli bir e-posta adresi girin (örn: ad@email.com)' : 'Enter a valid email address (e.g. name@email.com)');
+        return;
+      }
+      setEmailError('');
     }
 
     // Validate legal document agreements
@@ -735,27 +744,20 @@ export default function CheckoutPage() {
       // For card payment, initiate iyzico payment
       const [expMonth, expYear] = expiryDate.split('/');
 
-      // Get user IP address
-      let buyerIp = '85.34.78.112'; // Default fallback IP
-      try {
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-        buyerIp = ipData.ip;
-      } catch (error) {
-        console.error('Could not fetch IP:', error);
-      }
+      // Fetch IP and exchange rate in parallel
+      let buyerIp = '85.34.78.112';
+      let exchangeRate = 34.5;
 
-      // Get exchange rate USD to TRY
-      let exchangeRate = 34.5; // Fallback rate
-      try {
-        const rateResponse = await fetch('/api/exchange-rate');
-        const rateData = await rateResponse.json();
-        if (rateData.success) {
-          exchangeRate = rateData.rate;
-          console.log('Exchange rate USD/TRY:', exchangeRate);
-        }
-      } catch (error) {
-        console.error('Could not fetch exchange rate:', error);
+      const [ipResult, rateResult] = await Promise.allSettled([
+        fetch('https://api.ipify.org?format=json').then(r => r.json()),
+        fetch('/api/exchange-rate').then(r => r.json())
+      ]);
+
+      if (ipResult.status === 'fulfilled') {
+        buyerIp = ipResult.value.ip;
+      }
+      if (rateResult.status === 'fulfilled' && rateResult.value.success) {
+        exchangeRate = rateResult.value.rate;
       }
 
       // Convert USD to TRY for payment
@@ -1307,15 +1309,38 @@ export default function CheckoutPage() {
                 className={classes.input}
                 required
               />
-              <input
-                type="email"
-                placeholder={t('email') + (isGuestCheckout ? ' *' : '')}
-                value={userInfo.email}
-                onChange={(e) => isGuestCheckout && setUserInfo({ ...userInfo, email: e.target.value })}
-                className={`${classes.input} ${!isGuestCheckout ? classes.readOnly : ''}`}
-                readOnly={!isGuestCheckout}
-                required={isGuestCheckout}
-              />
+              <div style={{ width: '100%' }}>
+                <input
+                  type="email"
+                  placeholder={t('email') + (isGuestCheckout ? ' *' : '')}
+                  value={userInfo.email}
+                  onChange={(e) => {
+                    if (isGuestCheckout) {
+                      setUserInfo({ ...userInfo, email: e.target.value });
+                      if (emailError) {
+                        const v = e.target.value.trim();
+                        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) setEmailError('');
+                      }
+                    }
+                  }}
+                  onBlur={() => {
+                    if (isGuestCheckout && userInfo.email.trim()) {
+                      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userInfo.email.trim())) {
+                        setEmailError(locale === 'tr' ? 'Geçerli bir e-posta adresi girin (örn: ad@email.com)' : 'Enter a valid email address (e.g. name@email.com)');
+                      } else {
+                        setEmailError('');
+                      }
+                    }
+                  }}
+                  className={`${classes.input} ${!isGuestCheckout ? classes.readOnly : ''}`}
+                  style={emailError ? { borderColor: '#e74c3c' } : undefined}
+                  readOnly={!isGuestCheckout}
+                  required={isGuestCheckout}
+                />
+                {emailError && (
+                  <p style={{ color: '#e74c3c', fontSize: '0.75rem', margin: '4px 0 0', fontWeight: 500 }}>{emailError}</p>
+                )}
+              </div>
             </div>
           </div>
 

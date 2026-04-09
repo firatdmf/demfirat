@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
+const BACKEND_URL = process.env.NEJUM_API_URL || 'http://127.0.0.1:8000';
 
 export async function POST(request: NextRequest) {
     try {
@@ -24,42 +24,82 @@ export async function POST(request: NextRequest) {
             const email = body.email;
 
             const htmlContent = `
-            <div style="font-family: 'Montserrat', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #faf8f3;">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <img src="https://www.demfirat.com/logo/logo-dark.png" alt="Karven Home Collection" style="height: 60px;" />
-                </div>
-                
-                <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
-                    <h1 style="color: #2c2c2c; text-align: center; font-family: Georgia, serif; font-size: 28px; margin: 0 0 20px 0;">Hoş Geldiniz! 🎉</h1>
-                    
-                    <p style="color: #666; font-size: 16px; line-height: 1.6; text-align: center;">
-                        Karven Home Collection bültenimize abone olduğunuz için teşekkür ederiz!
-                    </p>
-                    
-                    <div style="background: linear-gradient(135deg, #c9a961 0%, #b8956a 100%); padding: 30px; border-radius: 12px; text-align: center; margin: 30px 0;">
-                        <p style="color: white; margin: 0 0 10px 0; font-size: 14px;">Size özel %5 indirim kodunuz:</p>
-                        <p style="color: white; font-size: 32px; font-weight: bold; margin: 0; letter-spacing: 3px;">${discountCode}</p>
-                    </div>
-                    
-                    <p style="color: #666; font-size: 14px; line-height: 1.6; text-align: center;">
-                        Bu kodu ödeme sayfasında kullanarak ilk siparişinizde <strong>%5 indirim</strong> kazanabilirsiniz.
-                    </p>
-                    
-                    <p style="color: #999; font-size: 12px; margin-top: 30px; text-align: center;">
-                        ⚠️ Bu kod tek kullanımlıktır.
-                    </p>
-                </div>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://www.demfirat.com" style="display: inline-block; background: #2c2c2c; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">Alışverişe Başla</a>
-                </div>
-                
-                <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
-                    Sevgilerle,<br>
-                    <strong>Karven Home Collection</strong><br>
-                    <a href="https://www.demfirat.com" style="color: #c9a961;">www.demfirat.com</a>
-                </p>
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f5f2ec;font-family:'Montserrat',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f2ec;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+
+        <!-- Header with Logo -->
+        <tr>
+          <td style="background:rgb(250,245,235);padding:28px 0;text-align:center;">
+            <span style="font-family:'Jost','Montserrat',Arial,sans-serif;font-size:28px;font-weight:500;color:#944f05;letter-spacing:2px;">DEMFIRAT</span>
+          </td>
+        </tr>
+
+        <!-- Content -->
+        <tr>
+          <td style="padding:40px;">
+            <h1 style="color:#2c2c2c;text-align:center;font-family:'Jost','Montserrat',Arial,sans-serif;font-size:26px;margin:0 0 20px;">Hoş Geldiniz!</h1>
+
+            <p style="color:#666;font-size:15px;line-height:1.6;text-align:center;margin:0 0 24px;">
+             DEMFIRAT Karven Home Collections bültenimize abone olduğunuz için teşekkür ederiz!
+            </p>
+
+            <div style="background:linear-gradient(135deg,#c9a961 0%,#b8956a 100%);padding:30px;border-radius:12px;text-align:center;margin:0 0 24px;">
+              <p style="color:white;margin:0 0 10px;font-size:14px;">Size ozel %5 indirim kodunuz:</p>
+              <p style="color:white;font-size:32px;font-weight:bold;margin:0;letter-spacing:3px;">${discountCode}</p>
             </div>
+
+            <p style="color:#666;font-size:14px;line-height:1.6;text-align:center;margin:0 0 8px;">
+              Bu kodu ödeme sayfasında kullanarak ilk siparişinizde <strong>%5 indirim</strong> kazanabilirsiniz.
+            </p>
+
+            <p style="color:#999;font-size:12px;text-align:center;margin:24px 0 0;">
+              Bu kod tek kullanimlıktır.
+            </p>
+          </td>
+        </tr>
+
+        <!-- CTA Button -->
+        <tr>
+          <td style="padding:0 40px 32px;text-align:center;">
+            <a href="https://www.demfirat.com" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#c9a961,#b8956a);color:white;text-decoration:none;border-radius:30px;font-family:'Montserrat',Arial,sans-serif;font-size:14px;font-weight:600;">Alisverise Basla</a>
+          </td>
+        </tr>
+
+        <!-- Divider -->
+        <tr>
+          <td style="padding:0 40px;">
+            <div style="height:1px;background:linear-gradient(90deg,transparent,#c9a961,transparent);"></div>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:20px 40px;text-align:center;">
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:12px;color:#999;margin:0;">
+              Sevgilerle,<br>
+              <strong>Karven Home Collection</strong><br>
+              <a href="https://www.demfirat.com" style="color:#c9a961;text-decoration:none;">www.demfirat.com</a>
+            </p>
+          </td>
+        </tr>
+
+        <!-- Bottom Bar -->
+        <tr>
+          <td style="background:rgb(250,245,235);padding:14px 40px;text-align:center;">
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0;">&copy; ${new Date().getFullYear()} Demfirat Karven. Tum haklari saklidir.</p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
             `;
 
             try {

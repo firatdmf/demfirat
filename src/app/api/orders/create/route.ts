@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { sendEmail } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -201,62 +202,160 @@ export async function POST(request: NextRequest) {
       // Order is already created successfully
     }
 
-    // ===== E-ARŞİV FATURA OLUŞTUR =====
-    console.log('===== E-ARŞİV FATURA OLUŞTURMA =====');
-    let invoiceData = null;
-
+    // ===== SİPARİŞ ONAY MAİLİ (fire-and-forget) =====
     try {
-      // Fatura oluşturma API'sini çağır
-      const invoiceResponse = await fetch(`${request.nextUrl.origin}/api/invoice/create`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderId: result.order_id || result.id,
-          orderData: {
-            orderDate: new Date().toISOString().split('T')[0],
-            firstName: deliveryAddress?.first_name || 'Müşteri',
-            lastName: deliveryAddress?.last_name || 'Adı',
-            taxNumber: '11111111111', // Test için - Gerçekte müşteriden alınmalı
-            email: paymentData?.email || 'musteri@email.com',
-            phone: deliveryAddress?.phone || '',
-            deliveryAddress: {
-              address: deliveryAddress?.address || '',
-              city: deliveryAddress?.city || '',
-              district: deliveryAddress?.district,
-              postal_code: deliveryAddress?.postal_code
-            },
-            items: cartItems?.map((item: any) => ({
-              product_sku: item.product_sku,
-              name: item.product?.title || 'Ürün',
-              quantity: item.quantity,
-              price: parseFloat(item.product?.price || item.custom_price || 0) * exchangeRate // TRY'ye çevir
-            })),
-            paymentMethod: 'iyzico_card',
-            exchangeRate: exchangeRate,
-            originalCurrency: originalCurrency
-          }
-        })
-      });
+      const customerEmail = guestInfo?.email || paymentData?.email;
+      const customerName = `${deliveryAddress?.first_name || guestInfo?.firstName || ''} ${deliveryAddress?.last_name || guestInfo?.lastName || ''}`.trim() || 'Değerli Müşterimiz';
+      const orderId = result.order_id || result.id;
+      const totalTRY = parseFloat(paymentData?.paidPrice) || 0;
+      const currency = paymentData?.currency || 'TRY';
 
-      if (invoiceResponse.ok) {
-        invoiceData = await invoiceResponse.json();
-        console.log('✅ E-Arşiv fatura oluşturuldu:', invoiceData.invoice);
-      } else {
-        const errorData = await invoiceResponse.json();
-        console.error('⚠️ E-Arşiv fatura oluşturulamadı:', errorData.error);
-        // Sipariş oluşturuldu ama fatura oluşturulamadı - devam et
+      if (customerEmail) {
+        const itemsHtml = (cartItems || []).map((item: any) => {
+          const title = item.product?.title || item.product_sku || 'Ürün';
+          const qty = item.quantity || 1;
+          const isCustom = item.is_custom_curtain;
+          const attrs = item.custom_attributes;
+          let details = '';
+          if (isCustom && attrs) {
+            details = `<br><span style="font-size:12px;color:#888;">Özel Dikim: ${attrs.width || ''}×${attrs.height || ''}cm, ${attrs.pleatDensity || ''}, ${attrs.wingType === 'double' ? 'Çift Kanat' : 'Tek Kanat'}</span>`;
+          }
+          return `
+            <tr>
+              <td style="padding:10px 12px;border-bottom:1px solid #f0ece3;font-family:'Montserrat',Arial,sans-serif;font-size:14px;color:#333;">${title}${details}</td>
+              <td style="padding:10px 12px;border-bottom:1px solid #f0ece3;font-family:'Montserrat',Arial,sans-serif;font-size:14px;color:#333;text-align:center;">${qty}</td>
+            </tr>`;
+        }).join('');
+
+        const emailHtml = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f5f2ec;font-family:'Montserrat',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f2ec;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+
+        <!-- Header with Logo -->
+        <tr>
+          <td style="background:rgb(250,245,235);padding:28px 0;text-align:center;">
+            <span style="font-family:'Jost','Montserrat',Arial,sans-serif;font-size:28px;font-weight:500;color:#944f05;letter-spacing:2px;">DEMFIRAT</span>
+          </td>
+        </tr>
+
+        <!-- Success Icon -->
+        <tr>
+          <td style="padding:30px 40px 10px;text-align:center;">
+            <div style="width:64px;height:64px;background:linear-gradient(135deg,#27ae60,#2ecc71);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">
+              <span style="color:white;font-size:32px;">✓</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Title -->
+        <tr>
+          <td style="padding:16px 40px 8px;text-align:center;">
+            <h1 style="font-family:'Jost','Montserrat',Arial,sans-serif;font-size:24px;font-weight:600;color:#1a1a1a;margin:0;">Siparişiniz Alındı!</h1>
+          </td>
+        </tr>
+
+        <!-- Greeting -->
+        <tr>
+          <td style="padding:0 40px 24px;text-align:center;">
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:14px;color:#777;margin:0;">Merhaba ${customerName}, siparişiniz başarıyla oluşturuldu.</p>
+          </td>
+        </tr>
+
+        <!-- Order Info Box -->
+        <tr>
+          <td style="padding:0 40px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#faf8f3;border-radius:8px;padding:16px;">
+              <tr>
+                <td style="padding:12px 16px;">
+                  <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#888;padding-bottom:6px;">Sipariş No</td>
+                      <td style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#888;padding-bottom:6px;text-align:right;">Toplam Tutar</td>
+                    </tr>
+                    <tr>
+                      <td style="font-family:'Montserrat',Arial,sans-serif;font-size:18px;font-weight:700;color:#1a1a1a;">#${orderId}</td>
+                      <td style="font-family:'Montserrat',Arial,sans-serif;font-size:18px;font-weight:700;color:#c9a961;text-align:right;">${totalTRY.toFixed(2)} ${currency}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Items Table -->
+        <tr>
+          <td style="padding:0 40px 24px;">
+            <h3 style="font-family:'Montserrat',Arial,sans-serif;font-size:14px;font-weight:600;color:#333;margin:0 0 12px;">Sipariş Edilen Ürünler</h3>
+            <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #f0ece3;border-radius:8px;overflow:hidden;">
+              <tr style="background:#faf8f3;">
+                <td style="padding:10px 12px;font-family:'Montserrat',Arial,sans-serif;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;">Ürün</td>
+                <td style="padding:10px 12px;font-family:'Montserrat',Arial,sans-serif;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;text-align:center;">Adet</td>
+              </tr>
+              ${itemsHtml}
+            </table>
+          </td>
+        </tr>
+
+        <!-- Delivery Address -->
+        <tr>
+          <td style="padding:0 40px 24px;">
+            <h3 style="font-family:'Montserrat',Arial,sans-serif;font-size:14px;font-weight:600;color:#333;margin:0 0 8px;">Teslimat Adresi</h3>
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#555;margin:0;line-height:1.6;">
+              ${deliveryAddress?.first_name || ''} ${deliveryAddress?.last_name || ''}<br>
+              ${deliveryAddress?.address || ''}<br>
+              ${deliveryAddress?.city || ''} ${deliveryAddress?.country || ''}<br>
+              ${deliveryAddress?.phone || ''}
+            </p>
+          </td>
+        </tr>
+
+        <!-- Divider -->
+        <tr>
+          <td style="padding:0 40px;">
+            <div style="height:1px;background:linear-gradient(90deg,transparent,#c9a961,transparent);"></div>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:24px 40px 30px;text-align:center;">
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#888;margin:0 0 16px;">Siparişiniz en kısa sürede kargoya verilecektir.</p>
+            <a href="https://www.demfirat.com" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#c9a961,#b8956a);color:white;text-decoration:none;border-radius:30px;font-family:'Montserrat',Arial,sans-serif;font-size:14px;font-weight:600;">Alışverişe Devam Et</a>
+          </td>
+        </tr>
+
+        <!-- Bottom Bar -->
+        <tr>
+          <td style="background:rgb(250,245,235);padding:16px 40px;text-align:center;">
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0;">© ${new Date().getFullYear()} Demfirat Karven. Tüm hakları saklıdır.</p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+        sendEmail(customerEmail, `Siparişiniz Alındı - #${orderId}`, emailHtml)
+          .then(r => { if (r.success) console.log('✅ Sipariş onay maili gönderildi:', customerEmail); else console.warn('⚠️ Mail gönderilemedi:', r.error); })
+          .catch(e => console.error('⚠️ Mail hatası:', e.message));
       }
-    } catch (invoiceError: any) {
-      console.error('⚠️ E-Arşiv fatura hatası:', invoiceError.message);
-      // Fatura oluşturulamazsa sipariş yine de geçerli
+    } catch (e) {
+      // ignore - mail gönderemezse sipariş yine geçerli
     }
 
-    // ===== FACEBOOK CONVERSIONS API - PURCHASE EVENT =====
-    console.log('===== FACEBOOK CONVERSIONS API =====');
+    // ===== FACEBOOK CONVERSIONS API - PURCHASE EVENT (fire-and-forget) =====
+    // Don't await — send in background, don't block the response
     try {
       const totalAmount = parseFloat(paymentData?.paidPrice) || 0;
-
-      const conversionResponse = await fetch(`${request.nextUrl.origin}/api/meta-conversions`, {
+      fetch(`${request.nextUrl.origin}/api/meta-conversions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -286,23 +385,18 @@ export async function POST(request: NextRequest) {
             order_id: result.order_id || result.id
           }
         })
-      });
-
-      if (conversionResponse.ok) {
-        const conversionResult = await conversionResponse.json();
-        console.log('✅ Facebook Conversions API - Purchase event sent:', conversionResult);
-      } else {
-        console.warn('⚠️ Facebook Conversions API error:', await conversionResponse.text());
-      }
-    } catch (conversionError: any) {
-      console.error('⚠️ Facebook Conversions API error:', conversionError.message);
-      // Sipariş yine de başarılı
+      }).then(r => {
+        if (r.ok) console.log('✅ Facebook Conversions API - Purchase event sent');
+        else console.warn('⚠️ Facebook Conversions API error:', r.status);
+      }).catch(e => console.error('⚠️ Facebook Conversions API error:', e.message));
+    } catch (e) {
+      // ignore
     }
 
     return NextResponse.json({
       success: true,
       order: result,
-      invoice: invoiceData?.invoice || null
+      invoice: null
     });
 
   } catch (error: any) {

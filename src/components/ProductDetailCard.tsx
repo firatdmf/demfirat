@@ -1590,6 +1590,18 @@ function ProductDetailCard({
               </button>
               <div className={`${classes.accordionPanel} ${activeTab === 'delivery' ? classes.accordionPanelOpen : ''}`}>
                 <div className={classes.accordionContent}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: '#333', fontWeight: 600 }}>
+                      <span>🇹🇷</span>
+                      <span>{locale === 'tr' ? 'Türkiye\'den gönderilir' : locale === 'ru' ? 'Отправляется из Турции' : locale === 'pl' ? 'Wysyłka z Turcji' : 'Ships From Turkey'}</span>
+                    </div>
+                    {product_category?.toLowerCase().includes('curtain') && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: '#27ae60', fontWeight: 600 }}>
+                        <span>⚡</span>
+                        <span>{locale === 'tr' ? 'Saat 17:00\'ye kadar verilen siparişlerde aynı gün kargo' : locale === 'ru' ? 'Заказы до 17:00 — отправка в тот же день' : locale === 'pl' ? 'Zamówienia do 17:00 — wysyłka tego samego dnia' : 'Orders placed before 5 PM ship the same day'}</span>
+                      </div>
+                    )}
+                  </div>
                   <IadeSartlari embedded={true} mode="delivery" />
                 </div>
               </div>
