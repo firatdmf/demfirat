@@ -169,7 +169,7 @@ export default function Contact() {
         <div className={`${classes.item} ${classes.map} `}>
           <LazyMap src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.82211472467!2d28.95293187582215!3d41.0072665194874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab98864d1f17f%3A0x8bfc30e20c812ba9!2sDem%20F%C4%B1rat%20Karven%20Tekstil!5e0!3m2!1sen!2sus!4v1692138941178!5m2!1sen!2sus" />
           <div className={classes.image}>
-            <img src="/media/store/demfirat_karven_1_exterior.jpg" alt="" />
+            <img src="/media/store/DemFirat-Karven-textile-store-laleli-istanbul.avif" alt="" style={{ objectPosition: 'bottom' }} />
           </div>
         </div>
       </div>

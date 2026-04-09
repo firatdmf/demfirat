@@ -748,6 +748,32 @@
   line-height: 1.6;
 }
 
+/* Isolate product description HTML so it can't leak styles into the page */
+.descriptionHtml {
+  all: revert;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.7;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.descriptionHtml h1, .descriptionHtml h2, .descriptionHtml h3 {
+  margin: 0.8em 0 0.4em;
+  color: #1f2937;
+  line-height: 1.3;
+}
+.descriptionHtml h1 { font-size: 1.4em; }
+.descriptionHtml h2 { font-size: 1.2em; }
+.descriptionHtml h3 { font-size: 1.05em; }
+.descriptionHtml p { margin: 0 0 0.6em; }
+.descriptionHtml ul, .descriptionHtml ol { margin: 0.4em 0; padding-left: 1.5em; }
+.descriptionHtml li { margin-bottom: 0.2em; }
+.descriptionHtml a { color: #2563eb; text-decoration: underline; }
+.descriptionHtml img { max-width: 100%; height: auto; border-radius: 4px; }
+.descriptionHtml blockquote { margin: 0.6em 0; padding: 0.4em 1em; border-left: 3px solid #d1d5db; color: #6b7280; }
+.descriptionHtml * { max-width: 100%; }
+
 .quantityWrapper {
   margin-bottom: 0;
 }

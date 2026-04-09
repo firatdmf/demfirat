@@ -1155,7 +1155,7 @@ function ProductDetailCard({
         </div>
         <div className={classes.productHero}>
           <div className={classes.titleRow}>
-            <h2>{getLocalizedProductField(product, 'title', locale)}</h2>
+            <h1>{getLocalizedProductField(product, 'title', locale)}</h1>
             <div className={classes.titleActions}>
               <button
                 onClick={handleToggleFavorite}
@@ -1197,7 +1197,7 @@ function ProductDetailCard({
           <div className={classes.skuCode}>
             {locale === 'tr' ? 'Ürün Kodu' :
               locale === 'ru' ? 'Артикул' :
-                locale === 'pl' ? 'Kod produktu' : 'Product Code'}: {selectedVariant?.variant_sku ? `${product.sku}-${selectedVariant.variant_sku}` : product.sku}
+                locale === 'pl' ? 'Kod produktu' : 'Product Code'}: {selectedVariant?.variant_sku ? `${selectedVariant.variant_sku}` : product.sku}
           </div>
 
           {/* Category + Attributes in one row */}
@@ -1216,7 +1216,7 @@ function ProductDetailCard({
 
                 return (
                   <span key={`attr-${attr.name}-${index}`} className={classes.attributeBadge}>
-                    {!isProperty && <span className={classes.attrName}>{translateAttributeName(attrNameLower)}:</span>}
+                    {!isProperty && <span className={classes.attrName}>{translateAttributeName(attr.name || '')}:</span>}
                     <span className={classes.attrValue}>{translateAttributeName(attr.value)}</span>
                   </span>
                 );
@@ -1545,7 +1545,7 @@ function ProductDetailCard({
               <div className={`${classes.accordionPanel} ${activeTab === 'description' ? classes.accordionPanelOpen : ''}`}>
                 <div className={classes.accordionContent}>
                   {getLocalizedProductField(product, 'description', locale) ? (
-                    <p style={{ whiteSpace: "pre-line", margin: 0 }}>{getLocalizedProductField(product, 'description', locale)}</p>
+                    <div className={classes.descriptionHtml} dangerouslySetInnerHTML={{ __html: getLocalizedProductField(product, 'description', locale) || '' }} />
                   ) : (
                     <p style={{ margin: 0 }}>{locale === 'tr' ? 'Açıklama bulunmamaktadır.' : 'No description available.'}</p>
                   )}
@@ -1562,7 +1562,7 @@ function ProductDetailCard({
                 <div className={classes.accordionContent}>
                   <table className={classes.detailsTable}>
                     <tbody>
-                      <tr><td className={classes.detailTableLabel}>SKU</td><td className={classes.detailTableValue}>{selectedVariant?.variant_sku ? `${product.sku}-${selectedVariant.variant_sku}` : product.sku}</td></tr>
+                      <tr><td className={classes.detailTableLabel}>SKU</td><td className={classes.detailTableValue}>{selectedVariant?.variant_sku ? `${selectedVariant.variant_sku}` : product.sku}</td></tr>
                       {(selectedVariant?.variant_barcode || product.barcode) && (
                         <tr><td className={classes.detailTableLabel}>{locale === 'tr' ? 'Barkod' : 'Barcode'}</td><td className={classes.detailTableValue}>{selectedVariant?.variant_barcode || product.barcode}</td></tr>
                       )}
@@ -1572,7 +1572,7 @@ function ProductDetailCard({
                       {product_attributes && product_attributes.filter(attr => attr.name?.toLowerCase() !== 'discount_rate').map((attr, index) => (
                         <tr key={`product-attr-${index}`}>
                           <td className={classes.detailTableLabel}>
-                            {attr.name?.toLowerCase() !== 'property' ? translateAttributeName((attr.name || '').toLowerCase()) : ''}
+                            {attr.name?.toLowerCase() !== 'property' ? translateAttributeName(attr.name || '') : ''}
                           </td>
                           <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
                         </tr>
