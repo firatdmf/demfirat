@@ -268,10 +268,10 @@ function Header({ menuTArray }: HeaderProps) {
                   {menuTArray[0]}
                 </Link> */}
 
-                {/* TÜL PERDELER Dropdown */}
+                {/* PERDELER Dropdown */}
                 <div className={classes.navDropdown}>
                   <span className={classes.navLink}>
-                    {locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains'}
+                    {locale === 'tr' ? 'Perdeler' : locale === 'ru' ? 'Шторы' : locale === 'pl' ? 'Zasłony' : 'Curtains'}
                     <svg className={classes.dropdownArrow} width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
                       <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" />
                     </svg>
@@ -281,33 +281,45 @@ function Header({ menuTArray }: HeaderProps) {
                       <div className={classes.megaMenuCategories}>
                         <div className={classes.megaMenuColumn}>
                           <h4 className={classes.megaMenuTitle}>
-                            {locale === 'tr' ? 'Tül Çeşitleri' : locale === 'ru' ? 'Виды тюля' : locale === 'pl' ? 'Rodzaje firan' : 'Tulle Types'}
+                            {locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains'}
                           </h4>
+                          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuItem}>
+                            {locale === 'tr' ? 'Tüm Tül Perdeler' : locale === 'ru' ? 'Все тюлевые шторы' : locale === 'pl' ? 'Wszystkie firany' : 'All Tulle Curtains'}
+                          </Link>
                           <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`} className={classes.megaMenuItem}>
                             {locale === 'tr' ? 'Nakışlı Tül Perde' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
                           </Link>
                           <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`} className={classes.megaMenuItem}>
                             {locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains'}
                           </Link>
-                          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuItem}>
-                            {locale === 'tr' ? 'Tüm Perdeler' : locale === 'ru' ? 'Все шторы' : locale === 'pl' ? 'Wszystkie zasłony' : 'All Curtains'}
+                        </div>
+                        <div className={classes.megaMenuColumn}>
+                          <h4 className={classes.megaMenuTitle}>
+                            {locale === 'tr' ? 'Dikili Rustik Perdeler' : locale === 'ru' ? 'Готовые рустикальные шторы' : locale === 'pl' ? 'Gotowe rustykalne zasłony' : 'Ready Made Rustic Curtains'}
+                          </h4>
+                          <Link href={`/${locale}/product/ready-made_curtain`} className={classes.megaMenuItem}>
+                            {locale === 'tr' ? 'Dikili Rustik Perdeler' : locale === 'ru' ? 'Готовые рустикальные шторы' : locale === 'pl' ? 'Gotowe rustykalne zasłony' : 'Ready Made Rustic Curtains'}
+                          </Link>
+                        </div>
+                        <div className={classes.megaMenuColumn}>
+                          <h4 className={classes.megaMenuTitle}>
+                            {locale === 'tr' ? 'Fon Perdeler' : locale === 'ru' ? 'Блэкаут шторы' : locale === 'pl' ? 'Zasłony zaciemniające' : 'Blackout Curtains'}
+                          </h4>
+                          <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`} className={classes.megaMenuItem}>
+                            {locale === 'tr' ? 'Tüm Fon Perdeler' : locale === 'ru' ? 'Все блэкаут шторы' : locale === 'pl' ? 'Wszystkie zasłony zaciemniające' : 'All Blackout Curtains'}
                           </Link>
                         </div>
                       </div>
                       <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuImage}>
-                        <Image src="/media/hero/fabric-hero.png" alt="Tulle Curtains" width={300} height={200} style={{ objectFit: 'cover', borderRadius: '4px' }} />
+                        <Image src="/media/hero/fabric-hero.png" alt="Curtains" width={300} height={200} style={{ objectFit: 'cover', borderRadius: '4px' }} />
                         <div className={classes.megaMenuImageOverlay}>
-                          <h3>{locale === 'tr' ? 'Tül Perde Koleksiyonu' : locale === 'ru' ? 'Коллекция тюля' : locale === 'pl' ? 'Kolekcja firan' : 'Tulle Collection'}</h3>
+                          <h3>{locale === 'tr' ? 'Perde Koleksiyonu' : locale === 'ru' ? 'Коллекция штор' : locale === 'pl' ? 'Kolekcja zasłon' : 'Curtain Collection'}</h3>
                           <span>{locale === 'tr' ? 'ALIŞVERİŞE BAŞLA' : locale === 'ru' ? 'НАЧАТЬ ПОКУПКИ' : locale === 'pl' ? 'ZACZNIJ ZAKUPY' : 'START SHOPPING'}</span>
                         </div>
                       </Link>
                     </div>
                   </div>
                 </div>
-
-                <Link href={`/${locale}/product/ready-made_curtain`} className={classes.navLink}>
-                  {locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые шторы' : locale === 'pl' ? 'Gotowe zasłony' : 'Ready Made Curtains'}
-                </Link>
                 <Link href={`/${locale}/about`} className={classes.navLink}>
                   {menuTArray[3]}
                 </Link>
@@ -478,7 +490,11 @@ function Header({ menuTArray }: HeaderProps) {
             </Link>
 
             <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые шторы' : locale === 'pl' ? 'Gotowe zasłony' : 'Ready Made Curtains'}
+              {locale === 'tr' ? 'Dikili Rustik Perdeler' : locale === 'ru' ? 'Готовые рустикальные шторы' : locale === 'pl' ? 'Gotowe rustykalne zasłony' : 'Ready Made Rustic Curtains'}
+            </Link>
+
+            <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+              {locale === 'tr' ? 'Fon Perdeler' : locale === 'ru' ? 'Блэкаут шторы' : locale === 'pl' ? 'Zasłony zaciemniające' : 'Blackout Curtains'}
             </Link>
             <Link href={`/${locale}/about`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
               {menuTArray[3]}

@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FaShoppingCart, FaCreditCard, FaMapMarkerAlt, FaUser, FaCheck, FaPhone, FaEnvelope } from 'react-icons/fa';
 import Link from 'next/link';
 import classes from './page.module.css';
@@ -68,11 +68,26 @@ export default function CheckoutPage() {
   // Guest checkout mode
   const isGuestCheckout = searchParams.get('guest') === 'true';
 
+  // Toast notification state
+  const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' | 'info' } | null>(null);
+  const toastTimeout = useRef<NodeJS.Timeout | null>(null);
+  const showToast = useCallback((message: string, type: 'error' | 'success' | 'info' = 'error') => {
+    if (toastTimeout.current) clearTimeout(toastTimeout.current);
+    setToast({ message, type });
+    toastTimeout.current = setTimeout(() => setToast(null), 4000);
+  }, []);
+
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedDeliveryAddressId, setSelectedDeliveryAddressId] = useState<string | null>(null);
   const [selectedBillingAddressId, setSelectedBillingAddressId] = useState<string | null>(null);
   const [sameAsDelivery, setSameAsDelivery] = useState(true);
+  const [billingAddr, setBillingAddr] = useState({
+    address_line: '',
+    city: '',
+    country: 'Turkey',
+    postal_code: '',
+  });
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank_transfer'>('card');
   const [loading, setLoading] = useState(true);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
@@ -627,11 +642,11 @@ export default function CheckoutPage() {
   const handleCompleteOrder = async () => {
     // Validate user information
     if (!userInfo.firstName.trim() || !userInfo.lastName.trim()) {
-      alert(t('pleaseEnterName'));
+      showToast(t('pleaseEnterName'));
       return;
     }
     if (!userInfo.phone.trim()) {
-      alert(t('pleaseEnterPhone'));
+      showToast(t('pleaseEnterPhone'));
       return;
     }
 
@@ -639,11 +654,15 @@ export default function CheckoutPage() {
     if (isGuestCheckout) {
       const emailVal = userInfo.email.trim();
       if (!emailVal) {
-        setEmailError(locale === 'tr' ? 'Lütfen e-posta adresinizi girin' : 'Please enter your email address');
+        const msg = locale === 'tr' ? 'Lütfen e-posta adresinizi girin' : 'Please enter your email address';
+        setEmailError(msg);
+        showToast(msg);
         return;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-        setEmailError(locale === 'tr' ? 'Geçerli bir e-posta adresi girin (örn: ad@email.com)' : 'Enter a valid email address (e.g. name@email.com)');
+        const msg = locale === 'tr' ? 'Geçerli bir e-posta adresi girin (örn: ad@email.com)' : 'Enter a valid email address (e.g. name@email.com)';
+        setEmailError(msg);
+        showToast(msg);
         return;
       }
       setEmailError('');
@@ -651,27 +670,27 @@ export default function CheckoutPage() {
 
     // Validate legal document agreements
     if (!agreedToPreInfo) {
-      alert(t('pleaseAgreeToPreInfo'));
+      showToast(t('pleaseAgreeToPreInfo'));
       return;
     }
     if (!agreedToTerms) {
-      alert(t('pleaseAgreeToTerms'));
+      showToast(t('pleaseAgreeToTerms'));
       return;
     }
 
     // Validate address - for guests, check inline form; for users, check selected address
     if (isGuestCheckout) {
       if (!newAddress.address_line.trim() || !newAddress.city.trim() || !newAddress.country.trim()) {
-        alert(locale === 'tr' ? 'Lütfen teslimat adresini girin' : 'Please enter delivery address');
+        showToast(locale === 'tr' ? 'Lütfen teslimat adresini girin' : 'Please enter delivery address');
         return;
       }
     } else {
       if (!selectedDeliveryAddressId) {
-        alert(t('pleaseSelectAddress'));
+        showToast(t('pleaseSelectAddress'));
         return;
       }
       if (!sameAsDelivery && !selectedBillingAddressId) {
-        alert(t('pleaseSelectAddress'));
+        showToast(t('pleaseSelectAddress'));
         return;
       }
     }
@@ -679,19 +698,19 @@ export default function CheckoutPage() {
     // Validate card information if payment method is card
     if (paymentMethod === 'card') {
       if (!cardHolderName.trim()) {
-        alert(locale === 'tr' ? 'Kart üzerindeki ismi girin' : 'Enter cardholder name');
+        showToast(locale === 'tr' ? 'Kart üzerindeki ismi girin' : 'Enter cardholder name');
         return;
       }
       if (!cardNumber.trim() || cardNumber.replace(/\s/g, '').length < 15) {
-        alert(locale === 'tr' ? 'Geçerli bir kart numarası girin' : 'Enter a valid card number');
+        showToast(locale === 'tr' ? 'Geçerli bir kart numarası girin' : 'Enter a valid card number');
         return;
       }
       if (!expiryDate.trim() || expiryDate.length < 5) {
-        alert(locale === 'tr' ? 'Son kullanma tarihi girin (AA/YY)' : 'Enter expiry date (MM/YY)');
+        showToast(locale === 'tr' ? 'Son kullanma tarihi girin (AA/YY)' : 'Enter expiry date (MM/YY)');
         return;
       }
       if (!cvv.trim() || cvv.length < 3) {
-        alert(locale === 'tr' ? 'CVV girin' : 'Enter CVV');
+        showToast(locale === 'tr' ? 'CVV girin' : 'Enter CVV');
         return;
       }
     }
@@ -718,7 +737,22 @@ export default function CheckoutPage() {
           country: newAddress.country,
           isDefault: true
         };
-        billingAddress = deliveryAddress;
+        if (sameAsDelivery) {
+          billingAddress = deliveryAddress;
+        } else {
+          billingAddress = {
+            id: 'guest-billing',
+            title: 'Fatura Adresi',
+            first_name: userInfo.firstName,
+            last_name: userInfo.lastName,
+            phone: userInfo.phone,
+            address: billingAddr.address_line,
+            city: billingAddr.city,
+            postal_code: billingAddr.postal_code,
+            country: billingAddr.country,
+            isDefault: false
+          };
+        }
       } else {
         deliveryAddress = addresses.find(addr => addr.id === selectedDeliveryAddressId)!;
         billingAddress = sameAsDelivery
@@ -726,7 +760,7 @@ export default function CheckoutPage() {
           : addresses.find(addr => addr.id === selectedBillingAddressId)!;
 
         if (!deliveryAddress || !billingAddress) {
-          alert(locale === 'tr' ? 'Adres bilgisi eksik' : 'Address information missing');
+          showToast(locale === 'tr' ? 'Adres bilgisi eksik' : 'Address information missing');
           return;
         }
       }
@@ -734,9 +768,9 @@ export default function CheckoutPage() {
       // For bank transfer, create order directly
       if (paymentMethod === 'bank_transfer') {
         // TODO: Create order in Django backend with 'pending_payment' status
-        alert(locale === 'tr'
+        showToast(locale === 'tr'
           ? 'Havale/EFT ödemesi için banka bilgileri e-posta ile gönderilecektir.'
-          : 'Bank transfer details will be sent via email.');
+          : 'Bank transfer details will be sent via email.', 'info');
         router.push(`/${locale}/order/confirmation`);
         return;
       }
@@ -925,7 +959,7 @@ export default function CheckoutPage() {
           const features = `scrollbars=yes,resizable=yes,width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no,location=no,status=no`;
           const popup = window.open('', 'iyzico_3ds_popup', features);
           if (!popup) {
-            alert(locale === 'tr' ? 'Lütfen açılır pencereyi (popup) engellemeyi kapatın.' : 'Please allow popups to continue.');
+            showToast(locale === 'tr' ? 'Lütfen açılır pencereyi (popup) engellemeyi kapatın.' : 'Please allow popups to continue.');
           } else {
             popup.document.open();
             popup.document.write(decodedHtml);
@@ -940,7 +974,7 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       console.error('Error creating order:', error);
-      alert(locale === 'tr'
+      showToast(locale === 'tr'
         ? 'Ödeme başlatılamadı. Lütfen bilgilerinizi kontrol edin.'
         : 'Payment failed. Please check your information.');
     } finally {
@@ -952,27 +986,27 @@ export default function CheckoutPage() {
     try {
       // Validate required fields
       if (!newAddress.title.trim()) {
-        alert(t('addressTitle') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        showToast(t('addressTitle') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
         return;
       }
       if (!newAddress.first_name.trim() || !newAddress.last_name.trim()) {
-        alert(t('fullName') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        showToast(t('fullName') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
         return;
       }
       if (!newAddress.phone.trim()) {
-        alert(t('phone') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        showToast(t('phone') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
         return;
       }
       if (!newAddress.address_line.trim()) {
-        alert(t('addressLine') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        showToast(t('addressLine') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
         return;
       }
       if (!newAddress.city.trim()) {
-        alert(t('city') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        showToast(t('city') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
         return;
       }
       if (!newAddress.country.trim()) {
-        alert(t('country') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
+        showToast(t('country') + ' ' + (locale === 'tr' ? 'gerekli' : 'is required'));
         return;
       }
 
@@ -1042,11 +1076,11 @@ export default function CheckoutPage() {
       }
 
       // Show success message
-      alert(locale === 'tr'
+      showToast(locale === 'tr'
         ? 'Adres başarıyla kaydedildi!'
         : locale === 'ru' ? 'Адрес успешно сохранен!'
           : locale === 'pl' ? 'Adres został pomyślnie zapisany!'
-            : 'Address saved successfully!');
+            : 'Address saved successfully!', 'success');
 
       // Reset form
       setNewAddress({
@@ -1066,7 +1100,7 @@ export default function CheckoutPage() {
       setShowNewAddressForm(false);
     } catch (error: any) {
       console.error('Error saving address:', error);
-      alert(locale === 'tr'
+      showToast(locale === 'tr'
         ? 'Adres kaydedilemedi: ' + (error.message || 'Bilinmeyen hata')
         : locale === 'ru' ? 'Не удалось сохранить адрес: ' + (error.message || 'Неизвестная ошибка')
           : locale === 'pl' ? 'Nie udało się zapisać adresu: ' + (error.message || 'Nieznany błąd')
@@ -1183,6 +1217,46 @@ export default function CheckoutPage() {
 
   return (
     <div className={classes.container}>
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          onClick={() => setToast(null)}
+          style={{
+            position: 'fixed',
+            top: '24px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 9999,
+            padding: '14px 28px',
+            borderRadius: '12px',
+            background: toast.type === 'error' ? '#fff0f0' : toast.type === 'success' ? '#f0fff4' : '#f0f4ff',
+            border: `1px solid ${toast.type === 'error' ? '#fecaca' : toast.type === 'success' ? '#bbf7d0' : '#bfdbfe'}`,
+            color: toast.type === 'error' ? '#b91c1c' : toast.type === 'success' ? '#15803d' : '#1d4ed8',
+            fontFamily: "'Montserrat', Arial, sans-serif",
+            fontSize: '0.875rem',
+            fontWeight: 600,
+            boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            maxWidth: '90vw',
+            animation: 'toastSlideIn 0.3s ease-out',
+          }}
+        >
+          <span style={{ fontSize: '1.1rem' }}>
+            {toast.type === 'error' ? '⚠️' : toast.type === 'success' ? '✓' : 'ℹ️'}
+          </span>
+          {toast.message}
+        </div>
+      )}
+      <style>{`
+        @keyframes toastSlideIn {
+          from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+      `}</style>
+
       <div className={classes.header}>
         <h1>
           <FaShoppingCart className={classes.headerIcon} />
@@ -1326,7 +1400,9 @@ export default function CheckoutPage() {
                   onBlur={() => {
                     if (isGuestCheckout && userInfo.email.trim()) {
                       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userInfo.email.trim())) {
-                        setEmailError(locale === 'tr' ? 'Geçerli bir e-posta adresi girin (örn: ad@email.com)' : 'Enter a valid email address (e.g. name@email.com)');
+                        const msg = locale === 'tr' ? 'Geçerli bir e-posta adresi girin (örn: ad@email.com)' : 'Enter a valid email address (e.g. name@email.com)';
+                        setEmailError(msg);
+                        showToast(msg);
                       } else {
                         setEmailError('');
                       }
@@ -1355,12 +1431,7 @@ export default function CheckoutPage() {
               {isGuestCheckout ? (
                 /* Guest checkout - simple inline address form, no saving */
                 <div className={classes.guestAddressForm}>
-                  <p className={classes.guestAddressNote}>
-                    {locale === 'tr' ? 'Teslimat adresinizi girin (kayıt yapılmayacak)' :
-                      locale === 'ru' ? 'Введите адрес доставки (не сохраняется)' :
-                        locale === 'pl' ? 'Wprowadź adres dostawy (nie zostanie zapisany)' :
-                          'Enter your delivery address (will not be saved)'}
-                  </p>
+              
                   <div className={classes.formGrid}>
                     <input
                       type="text"
@@ -1641,7 +1712,49 @@ export default function CheckoutPage() {
 
             {!sameAsDelivery && (
               <div className={classes.addressList}>
-                {addresses.length === 0 ? (
+                {isGuestCheckout ? (
+                  <div className={classes.guestAddressForm}>
+                    <p className={classes.guestAddressNote}>
+                      {locale === 'tr' ? 'Fatura adresinizi girin' :
+                        locale === 'ru' ? 'Введите адрес для счета' :
+                          locale === 'pl' ? 'Wprowadź adres rozliczeniowy' :
+                            'Enter your billing address'}
+                    </p>
+                    <div className={classes.formGrid}>
+                      <input
+                        type="text"
+                        placeholder={t('addressLine') + ' *'}
+                        value={billingAddr.address_line}
+                        onChange={(e) => setBillingAddr({ ...billingAddr, address_line: e.target.value })}
+                        className={classes.input}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder={t('city') + ' *'}
+                        value={billingAddr.city}
+                        onChange={(e) => setBillingAddr({ ...billingAddr, city: e.target.value })}
+                        className={classes.input}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder={t('country') + ' *'}
+                        value={billingAddr.country}
+                        onChange={(e) => setBillingAddr({ ...billingAddr, country: e.target.value })}
+                        className={classes.input}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder={t('postalCode')}
+                        value={billingAddr.postal_code}
+                        onChange={(e) => setBillingAddr({ ...billingAddr, postal_code: e.target.value })}
+                        className={classes.input}
+                      />
+                    </div>
+                  </div>
+                ) : addresses.length === 0 ? (
                   <div className={classes.noAddresses}>
                     <p>
                       {locale === 'tr' ? 'Henüz kayıtlı adresiniz yok' :

@@ -4,23 +4,23 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     padding: 1rem;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
 }
 
 .modal {
-    background: var(--white, #fff);
-    border-radius: 16px;
-    max-width: 480px;
+    background: #fff;
+    border-radius: 20px;
+    max-width: 440px;
     width: 100%;
-    padding: 2rem;
+    padding: 2.5rem 2rem 2rem;
     position: relative;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
     animation: slideUp 0.3s ease;
 }
 
@@ -29,7 +29,6 @@
         opacity: 0;
         transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -43,7 +42,7 @@
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: var(--dark-gray, #4a4a4a);
+    color: #999;
     cursor: pointer;
     width: 32px;
     height: 32px;
@@ -55,83 +54,105 @@
 }
 
 .closeButton:hover {
-    background: var(--secondary-beige, #e8e3d8);
+    background: #f0ece3;
+    color: #333;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .header h2 {
-    font-family: var(--font-heading, 'Cormorant Garamond', serif);
-    font-size: 1.75rem;
-    font-weight: 500;
-    color: var(--text-dark, #2c2c2c);
-    margin: 0 0 0.5rem 0;
+    font-family: 'Jost', 'Montserrat', Arial, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 0.4rem 0;
 }
 
 .header p {
-    color: var(--dark-gray, #4a4a4a);
-    font-size: 0.95rem;
+    color: #888;
+    font-size: 0.88rem;
     margin: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .options {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.6rem;
 }
 
 .optionPrimary,
 .optionSecondary {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    border-radius: 12px;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
     text-decoration: none;
     transition: all 0.2s;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .optionPrimary {
-    background: linear-gradient(135deg, var(--gold, #c9a961) 0%, var(--bronze, #b8956a) 100%);
-    color: white;
+    background: linear-gradient(135deg, #c9a961 0%, #b8956a 100%);
+    border: 1.5px solid #c9a961;
+    color: #fff;
 }
 
 .optionPrimary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(201, 169, 97, 0.4);
+    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.35);
+}
+
+.optionPrimary .optionContent h3 {
+    color: #fff;
+}
+
+.optionPrimary .optionContent p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.optionPrimary .arrowIcon {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .optionSecondary {
-    background: var(--ivory, #faf8f3);
-    border: 2px solid var(--gold, #c9a961);
-    color: var(--text-dark, #2c2c2c);
+    background: #faf8f3;
+    border: 1.5px solid #e8e3d8;
+    color: #1a1a1a;
 }
 
 .optionSecondary:hover {
-    background: var(--secondary-beige, #e8e3d8);
+    border-color: #c9a961;
+    background: #f5f2ec;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.12);
 }
 
 .optionIcon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     flex-shrink: 0;
+    background: #f0ece3;
+    color: #c9a961;
 }
 
 .optionPrimary .optionIcon {
     background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
 .optionSecondary .optionIcon {
-    background: var(--gold, #c9a961);
-    color: white;
+    background: #f0ece3;
+    color: #c9a961;
 }
 
 .optionContent {
@@ -139,27 +160,34 @@
 }
 
 .optionContent h3 {
-    font-size: 1rem;
+    font-size: 0.92rem;
     font-weight: 600;
-    margin: 0 0 0.25rem 0;
+    margin: 0 0 0.15rem 0;
+    color: #1a1a1a;
 }
 
 .optionContent p {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     margin: 0;
-    opacity: 0.85;
+    color: #888;
 }
 
 .arrowIcon {
-    font-size: 0.9rem;
-    opacity: 0.7;
+    font-size: 0.85rem;
+    color: #bbb;
+    transition: color 0.2s;
+}
+
+.optionPrimary:hover .arrowIcon,
+.optionSecondary:hover .arrowIcon {
+    color: #c9a961;
 }
 
 .divider {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
 }
 
 .divider::before,
@@ -167,57 +195,77 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--light-gray, #e0dcd2);
+    background: #e8e3d8;
 }
 
 .divider span {
-    font-size: 0.85rem;
-    color: var(--dark-gray, #4a4a4a);
+    font-size: 0.78rem;
+    color: #aaa;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    font-weight: 500;
 }
 
+/* Guest checkout */
 .optionGuest {
-    text-align: center;
-    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
     text-decoration: none;
-    color: var(--text-dark, #2c2c2c);
+    color: #1a1a1a;
+    background: #faf8f3;
+    border: 1.5px solid #e8e3d8;
+    border-radius: 14px;
     transition: all 0.2s;
+    font-family: 'Montserrat', sans-serif;
+    text-align: left;
 }
 
 .optionGuest:hover {
-    color: var(--gold, #c9a961);
+    border-color: #c9a961;
+    background: #f5f2ec;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.12);
 }
 
 .optionGuest span {
-    font-size: 1rem;
+    font-size: 0.92rem;
     font-weight: 600;
     display: block;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
+    color: #1a1a1a;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .optionGuest p {
-    font-size: 0.8rem;
-    color: var(--dark-gray, #4a4a4a);
+    font-size: 0.75rem;
+    color: #888;
     margin: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
     .modal {
-        padding: 1.5rem;
-        margin: 1rem;
+        padding: 1.75rem 1.5rem 1.5rem;
+        margin: 0.75rem;
+        border-radius: 16px;
     }
 
     .header h2 {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
     }
 
     .optionContent h3 {
-        font-size: 0.95rem;
+        font-size: 0.88rem;
     }
 
     .optionContent p {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
+    }
+
+    .optionGuest {
+        padding: 0.9rem 1.25rem;
     }
 }

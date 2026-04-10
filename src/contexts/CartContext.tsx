@@ -54,6 +54,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [authenticatedCartCount, setAuthenticatedCartCount] = useState<number>(0);
   const [guestCart, setGuestCart] = useState<GuestCartItem[]>([]);
   const [hasMerged, setHasMerged] = useState(false);
+  const [cartLoaded, setCartLoaded] = useState(false);
 
   // Derive isGuest and cartCount
   const isGuest = status === 'unauthenticated' || (status !== 'loading' && !session);
@@ -72,15 +73,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
           localStorage.removeItem(GUEST_CART_KEY);
         }
       }
+      setCartLoaded(true);
     }
   }, []);
 
-  // Save guest cart to localStorage when it changes
+  // Save guest cart to localStorage when it changes — only after initial load
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && cartLoaded) {
       localStorage.setItem(GUEST_CART_KEY, JSON.stringify(guestCart));
     }
-  }, [guestCart]);
+  }, [guestCart, cartLoaded]);
 
   // Update authenticated cart count
   useEffect(() => {

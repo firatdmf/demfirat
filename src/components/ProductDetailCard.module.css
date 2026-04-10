@@ -459,6 +459,44 @@
   transform: rotate(-45deg);
 }
 
+/* Out of stock swatch - selectable but visually muted */
+.oos_swatch {
+  opacity: 0.4;
+  position: relative;
+  cursor: pointer;
+}
+
+.oos_swatch::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: rgba(0, 0, 0, 0.5);
+  transform: rotate(-45deg);
+}
+
+.oos_variant_link {
+  opacity: 0.45;
+  text-decoration: line-through;
+  cursor: pointer;
+}
+
+.outOfStockBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.85rem;
+  background: #fff0f0;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 /* Color Swatches - Refined */
 .color_swatches {
   display: flex;
@@ -1065,6 +1103,15 @@
   gap: 0.5rem;
   letter-spacing: 0.02em;
   height: 44px;
+}
+
+.addToCartBtn:disabled,
+.buyNowBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .quantitySelector {

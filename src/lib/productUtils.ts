@@ -65,7 +65,8 @@ export const getLocalizedProductField = (product: Product, field: 'title' | 'des
         // If the valid JSON doesn't have the translations we need, we should probably fall back to defaultTitle for title.
         // For description, if it is JSON, we shouldn't show raw JSON.
 
-        return field === 'title' ? defaultTitle : defaultDescription;
+        // JSON parsed but no description found — return empty for description (don't show raw JSON)
+        return field === 'title' ? defaultTitle : '';
 
     } catch (e) {
         // Not JSON format, return default for title, or as-is for description

@@ -64,7 +64,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
   // ── Tab Counts Calculation (From original products prop) ──
   const tabCounts = useMemo(() => {
-    if (!products) return { all: 0, embroidery: 0, solid: 0 };
+    if (!products) return { all: 0, embroidery: 0, solid: 0, blackout: 0 };
     return {
       all: products.length,
       embroidery: products.filter(p =>
@@ -72,6 +72,9 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       ).length,
       solid: products.filter(p =>
         p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'solid')
+      ).length,
+      blackout: products.filter(p =>
+        p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'blackout')
       ).length
     };
   }, [products]);
@@ -496,6 +499,16 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="3" y1="12" x2="21" y2="12" /></svg>
               {locale === 'tr' ? 'Düz Modeller' : locale === 'ru' ? 'Однотонные' : locale === 'pl' ? 'Tkaniny gładkie' : 'Solid Patterns'}
+            </Link>
+            <Link
+              href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.set('fabric_type', 'blackout'); return p.toString(); })()}`}
+              replace={true}
+              scroll={false}
+              className={`${classes.categoryTab} ${activeFabricType === 'blackout' ? classes.categoryTabActive : ''}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 010 18" fill="currentColor" opacity="0.3" /></svg>
+              {locale === 'tr' ? 'Fon Perdeler' : locale === 'ru' ? 'Блэкаут' : locale === 'pl' ? 'Zaciemniające' : 'Blackout'}
+              <span className={classes.tabCount}>{tabCounts.blackout}</span>
             </Link>
           </div>
         )}

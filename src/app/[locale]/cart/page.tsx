@@ -8,6 +8,7 @@ import { FaShoppingCart, FaTrash, FaPlus, FaMinus, FaArrowRight, FaBox } from 'r
 import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
+import { getLocalizedProductField } from '@/lib/productUtils';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import GuestCheckoutModal from '@/components/GuestCheckoutModal';
 
@@ -147,7 +148,7 @@ export default function CartPage() {
             product_category: detail?.product_category || item.product_category,
             variant_attributes: detail?.variant_attributes || {},
             product: {
-              title: detail?.product?.title || item.product_sku,
+              title: getLocalizedProductField({ title: detail?.product?.title || item.product_sku, description: detail?.product?.description } as any, 'title', locale),
               price,
               primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/woocommerce-placeholder.svg',
               category: detail?.product_category,
@@ -216,7 +217,7 @@ export default function CartPage() {
               product_category: detail?.product_category || item.product_category,
               variant_attributes: detail?.variant_attributes || {},
               product: {
-                title: detail?.product?.title || item.product_sku,
+                title: getLocalizedProductField({ title: detail?.product?.title || item.product_sku, description: detail?.product?.description } as any, 'title', locale),
                 price,
                 primary_image: detail?.primary_image || detail?.product?.primary_image || '/media/woocommerce-placeholder.svg',
                 category: detail?.product_category,

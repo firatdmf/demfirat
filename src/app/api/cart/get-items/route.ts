@@ -103,6 +103,7 @@ export async function POST(request: NextRequest) {
                 variant_sku: item.variant_sku || null,
                 product: product ? {
                     title: product.title,
+                    description: product.description,
                     price: product.price,
                     primary_image: product.primary_image,
                 } : null,

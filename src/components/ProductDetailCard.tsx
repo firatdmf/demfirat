@@ -322,6 +322,8 @@ function ProductDetailCard({
     });
   }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
 
+  // Check if currently selected variant is out of stock
+  const isCurrentOutOfStock = selectedVariant ? Number(selectedVariant.variant_quantity ?? 0) <= 0 : false;
 
   // Sayfa yüklenince en üste scroll yap
   useEffect(() => {
@@ -477,11 +479,7 @@ function ProductDetailCard({
         hasChanges = true;
       }
 
-      // If current selection is disabled (out of stock), switch to first enabled value
-      if (values.length > 0 && updatedAttributes[attrName] && disabledSet?.has(updatedAttributes[attrName]) && enabledValues.length > 0) {
-        updatedAttributes[attrName] = firstAvailable;
-        hasChanges = true;
-      }
+      // Out of stock items are now selectable — don't auto-switch away from them
     });
 
     if (hasChanges) {
@@ -650,7 +648,7 @@ function ProductDetailCard({
   };
 
   const handleAddToCart = async (): Promise<boolean> => {
-    if (isAdding) return false;
+    if (isAdding || isCurrentOutOfStock) return false;
 
     // Check if variant selection is required but missing
     if (product_variants && product_variants.length > 0 && !selectedVariant && !isCustomCurtainIntent) {
@@ -1268,29 +1266,19 @@ function ProductDetailCard({
 
                             return (
                               <div key={value} className={classes.fabric_swatch_container}>
-                                {isDisabled ? (
-                                  <span
-                                    className={`${classes.fabric_swatch} ${classes.disabled_swatch}`}
-                                    style={{ backgroundImage: `url(${bgImage})` }}
-                                    title={translateAttributeName(value)}
-                                  >
-                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                                  </span>
-                                ) : (
-                                  <Link
-                                    href={href}
-                                    replace
-                                    className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""}`}
-                                    onClick={e => {
-                                      e.preventDefault();
-                                      handleAttributeChange(attribute.name ?? '', value);
-                                    }}
-                                    style={{ backgroundImage: `url(${bgImage})` }}
-                                    title={translateAttributeName(value)}
-                                  >
-                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                                  </Link>
-                                )}
+                                <Link
+                                  href={href}
+                                  replace
+                                  className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""} ${isDisabled ? classes.oos_swatch : ""}`}
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    handleAttributeChange(attribute.name ?? '', value);
+                                  }}
+                                  style={{ backgroundImage: `url(${bgImage})` }}
+                                  title={translateAttributeName(value)}
+                                >
+                                  <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                </Link>
                                 <span className={classes.color_label}>{translateAttributeName(value)}</span>
                               </div>
                             );
@@ -1306,53 +1294,31 @@ function ProductDetailCard({
 
                             return (
                               <div key={value} className={classes.color_swatch_container}>
-                                {isDisabled ? (
-                                  <span
-                                    className={`${classes.color_swatch} ${classes.disabled_swatch}`}
-                                    style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
-                                    title={translateAttributeName(value)}
-                                  >
-                                    {isTwoTone ? (
-                                      <>
-                                        <span
-                                          className={classes.half_circle_left}
-                                          style={{ backgroundColor: splitTwoToneColor(value).color1 }}
-                                        />
-                                        <span
-                                          className={classes.half_circle_right}
-                                          style={{ backgroundColor: splitTwoToneColor(value).color2 }}
-                                        />
-                                      </>
-                                    ) : null}
-                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                                  </span>
-                                ) : (
-                                  <Link
-                                    href={href}
-                                    replace
-                                    className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""}`}
-                                    onClick={e => {
-                                      e.preventDefault();
-                                      handleAttributeChange(attribute.name ?? '', value);
-                                    }}
-                                    style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
-                                    title={translateAttributeName(value)}
-                                  >
-                                    {isTwoTone ? (
-                                      <>
-                                        <span
-                                          className={classes.half_circle_left}
-                                          style={{ backgroundColor: splitTwoToneColor(value).color1 }}
-                                        />
-                                        <span
-                                          className={classes.half_circle_right}
-                                          style={{ backgroundColor: splitTwoToneColor(value).color2 }}
-                                        />
-                                      </>
-                                    ) : null}
-                                    <span className={classes.sr_only}>{translateAttributeName(value)}</span>
-                                  </Link>
-                                )}
+                                <Link
+                                  href={href}
+                                  replace
+                                  className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""} ${isDisabled ? classes.oos_swatch : ""}`}
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    handleAttributeChange(attribute.name ?? '', value);
+                                  }}
+                                  style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
+                                  title={translateAttributeName(value)}
+                                >
+                                  {isTwoTone ? (
+                                    <>
+                                      <span
+                                        className={classes.half_circle_left}
+                                        style={{ backgroundColor: splitTwoToneColor(value).color1 }}
+                                      />
+                                      <span
+                                        className={classes.half_circle_right}
+                                        style={{ backgroundColor: splitTwoToneColor(value).color2 }}
+                                      />
+                                    </>
+                                  ) : null}
+                                  <span className={classes.sr_only}>{translateAttributeName(value)}</span>
+                                </Link>
                                 <span className={classes.color_label}>{translateAttributeName(value)}</span>
                               </div>
                             );
@@ -1366,23 +1332,17 @@ function ProductDetailCard({
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
                             return (
                               <div key={value}>
-                                {isDisabled ? (
-                                  <span className={`${classes.link} ${classes.disabled_variant_link}`}>
-                                    {translateAttributeName(value)}
-                                  </span>
-                                ) : (
-                                  <Link
-                                    href={href}
-                                    replace
-                                    className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""}`}
-                                    onClick={e => {
-                                      e.preventDefault();
-                                      handleAttributeChange(attribute.name ?? '', value);
-                                    }}
-                                  >
-                                    {translateAttributeName(value)}
-                                  </Link>
-                                )}
+                                <Link
+                                  href={href}
+                                  replace
+                                  className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""} ${isDisabled ? classes.oos_variant_link : ""}`}
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    handleAttributeChange(attribute.name ?? '', value);
+                                  }}
+                                >
+                                  {translateAttributeName(value)}
+                                </Link>
                               </div>
                             );
                           })}
@@ -1462,17 +1422,28 @@ function ProductDetailCard({
                 return null;
               })()}
 
-              {(selectedVariant?.variant_quantity && Number(selectedVariant.variant_quantity) > 0) ? (
-                <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {Number(selectedVariant.variant_quantity)}</span>
-              ) : (product.quantity && Number(product.quantity) > 0) ? (
-                <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {Number(product.quantity)}</span>
-              ) : null}
+              {(() => {
+                const variantQty = selectedVariant ? Number(selectedVariant.variant_quantity ?? 0) : null;
+                const productQty = Number(product.quantity ?? 0);
+
+                if (isCurrentOutOfStock) {
+                  return (
+                    <span className={classes.outOfStockBadge}>
+                      {locale === 'tr' ? 'Bu renk/seçenek şu an stokta yok' : locale === 'ru' ? 'Этот вариант сейчас нет в наличии' : locale === 'pl' ? 'Ten wariant jest obecnie niedostępny' : 'This option is currently out of stock'}
+                    </span>
+                  );
+                }
+                if (!isCurrentOutOfStock && (variantQty || productQty)) {
+                  return <span className={classes.stockDisplay}>{t('availableQuantity') || 'Available'}: {variantQty ?? productQty}</span>;
+                }
+                return null;
+              })()}
             </div>
 
             {hasStandardCartOptions && (
               <>
                 <div className={classes.actionRowTop}>
-                  <button onClick={handleBuyNow} className={classes.buyNowBtn}>
+                  <button onClick={handleBuyNow} className={classes.buyNowBtn} disabled={isCurrentOutOfStock}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -1491,7 +1462,7 @@ function ProductDetailCard({
                       </button>
                     </div>
                   </div>
-                  <button onClick={handleAddToCart} className={classes.addToCartBtn} disabled={isAdding}>
+                  <button onClick={handleAddToCart} className={classes.addToCartBtn} disabled={isAdding || isCurrentOutOfStock}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
                     </svg>

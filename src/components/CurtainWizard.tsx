@@ -351,7 +351,7 @@ export default function CurtainWizard({
                 {stockError && <div className={classes.errText}>{stockError}</div>}
 
                 <div className={classes.actionRowTop}>
-                    <button className={classes.buyNowBtn} onClick={() => handleSubmit(true)}>
+                    <button className={classes.buyNowBtn} onClick={() => handleSubmit(true)} disabled={!canSubmit}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
@@ -372,7 +372,7 @@ export default function CurtainWizard({
                         </div>
                     </div>
 
-                    <button className={classes.addToCartBtn} onClick={() => handleSubmit(false)}>
+                    <button className={classes.addToCartBtn} onClick={() => handleSubmit(false)} disabled={!canSubmit}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
                         </svg>
