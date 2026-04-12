@@ -9,6 +9,7 @@ import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
 import { getLocalizedProductField } from '@/lib/productUtils';
+import { translateTextSync } from '@/lib/translate';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import GuestCheckoutModal from '@/components/GuestCheckoutModal';
 
@@ -510,52 +511,11 @@ export default function CartPage() {
                   {/* Variant Attributes */}
                   {item.variant_attributes && Object.keys(item.variant_attributes).length > 0 && (
                     <div className={classes.variantAttributes}>
-                      {Object.entries(item.variant_attributes).map(([key, value]) => {
-                        // Translate attribute labels
-                        const attrTranslations: Record<string, Record<string, string>> = {
-                          color: { tr: 'Renk', en: 'Color', ru: 'Цвет', pl: 'Kolor' },
-                          height: { tr: 'Boy', en: 'Height', ru: 'Высота', pl: 'Wysokość' },
-                          size: { tr: 'Boyut', en: 'Size', ru: 'Размер', pl: 'Rozmiar' },
-                          width: { tr: 'En', en: 'Width', ru: 'Ширина', pl: 'Szerokość' },
-                        };
-                        const translatedKey = attrTranslations[key.toLowerCase()]?.[locale] || key;
-                        // Translate attribute values (colors, etc.) using manual dict
-                        const colorDict: Record<string, Record<string, string>> = {
-                          whitesmoke: { tr: 'Duman Beyazı', ru: 'Дымчато-белый', pl: 'Biały dymny', en: 'White Smoke' },
-                          white: { tr: 'Beyaz', ru: 'Белый', pl: 'Biały', en: 'White' },
-                          black: { tr: 'Siyah', ru: 'Черный', pl: 'Czarny', en: 'Black' },
-                          beige: { tr: 'Bej', ru: 'Бежевый', pl: 'Beżowy', en: 'Beige' },
-                          cream: { tr: 'Krem', ru: 'Кремовый', pl: 'Kremowy', en: 'Cream' },
-                          grey: { tr: 'Gri', ru: 'Серый', pl: 'Szary', en: 'Grey' },
-                          gray: { tr: 'Gri', ru: 'Серый', pl: 'Szary', en: 'Gray' },
-                          ecru: { tr: 'Ekru', ru: 'Экрю', pl: 'Ecru', en: 'Ecru' },
-                          gold: { tr: 'Altın', ru: 'Золотой', pl: 'Złoty', en: 'Gold' },
-                          silver: { tr: 'Gümüş', ru: 'Серебряный', pl: 'Srebrny', en: 'Silver' },
-                          ivory: { tr: 'Fildişi', ru: 'Слоновая кость', pl: 'Kość słoniowa', en: 'Ivory' },
-                          navy: { tr: 'Lacivert', ru: 'Темно-синий', pl: 'Granatowy', en: 'Navy' },
-                          pink: { tr: 'Pembe', ru: 'Розовый', pl: 'Różowy', en: 'Pink' },
-                          mink: { tr: 'Vizon', ru: 'Норковый', pl: 'Norkowy', en: 'Mink' },
-                          cappuccino: { tr: 'Kapuçino', ru: 'Капучино', pl: 'Cappuccino', en: 'Cappuccino' },
-                          teal: { tr: 'Çam Yeşili', ru: 'Бирюзовый', pl: 'Morski', en: 'Teal' },
-                          'off-white': { tr: 'Kırık Beyaz', ru: 'Молочно-белый', pl: 'Złamana biel', en: 'Off-White' },
-                          offwhite: { tr: 'Kırık Beyaz', ru: 'Молочно-белый', pl: 'Złamana biel', en: 'Off-White' },
-                          'grey-white': { tr: 'Gri-Beyaz', ru: 'Серо-белый', pl: 'Szaro-biały', en: 'Grey-White' },
-                          'gold-beige': { tr: 'Altın-Bej', ru: 'Золотисто-бежевый', pl: 'Złoto-beżowy', en: 'Gold-Beige' },
-                          'gold-white': { tr: 'Altın-Beyaz', ru: 'Золотисто-белый', pl: 'Złoto-biały', en: 'Gold-White' },
-                          'gold-ecru': { tr: 'Altın-Ekru', ru: 'Золотисто-экрю', pl: 'Złoto-ecru', en: 'Gold-Ecru' },
-                          'gold-silver': { tr: 'Altın-Gümüş', ru: 'Золотисто-серебряный', pl: 'Złoto-srebrny', en: 'Gold-Silver' },
-                          'cream-gold': { tr: 'Krem-Altın', ru: 'Кремово-золотой', pl: 'Kremowo-złoty', en: 'Cream-Gold' },
-                          'silver-white': { tr: 'Gümüş-Beyaz', ru: 'Серебристо-белый', pl: 'Srebrno-biały', en: 'Silver-White' },
-                          'pink-white': { tr: 'Pembe-Beyaz', ru: 'Розово-белый', pl: 'Różowo-biały', en: 'Pink-White' },
-                        };
-                        const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
-                        const translatedValue = colorDict[value.toLowerCase()]?.[lang] || value.replace(/_/g, ' ');
-                        return (
+                      {Object.entries(item.variant_attributes).map(([key, value]) => (
                           <span key={key} className={classes.variantAttr}>
-                            <strong>{translatedKey}:</strong> {translatedValue}
+                            <strong>{translateTextSync(key, locale)}:</strong> {translateTextSync(value, locale)}
                           </span>
-                        );
-                      })}
+                      ))}
                     </div>
                   )}
 

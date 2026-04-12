@@ -290,7 +290,7 @@ function Header({ menuTArray }: HeaderProps) {
                             {locale === 'tr' ? 'Tüm Tül Perdeler' : locale === 'ru' ? 'Все тюлевые шторы' : locale === 'pl' ? 'Wszystkie firany' : 'All Tulle Curtains'}
                           </Link>
                           <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`} className={classes.megaMenuItem}>
-                            {locale === 'tr' ? 'Nakışlı Tül Perde' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
+                            {locale === 'tr' ? 'Nakışlı Tül Perdeler' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
                           </Link>
                           <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`} className={classes.megaMenuItem}>
                             {locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains'}
@@ -309,7 +309,7 @@ function Header({ menuTArray }: HeaderProps) {
                         </div>
                         <div className={classes.megaMenuColumn}>
                           <Link href={`/${locale}/product/ready-made_curtain`} className={classes.megaMenuColumnImage}>
-                            <Image src="/media/header_pictures/curtain_ready_made.avif" alt="Rustic Curtains" width={200} height={130} style={{ objectFit: 'cover', borderRadius: '6px', width: '100%', height: 'auto' }} />
+                            <Image src="https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/rk72010gw-08-white-sheer-floral-dandelion-embroidered-curtain-grommet-header-installation-top.avif" alt="Rustic Curtains" width={200} height={130} style={{ objectFit: 'cover', borderRadius: '6px', width: '100%', height: '130px' }} />
                           </Link>
                           <h4 className={classes.megaMenuTitle}>
                             {locale === 'tr' ? 'Rustik Perdeler' : locale === 'ru' ? 'Рустикальные шторы' : locale === 'pl' ? 'Rustykalne zasłony' : 'Rustic Curtains'}
@@ -488,7 +488,7 @@ function Header({ menuTArray }: HeaderProps) {
               {locale === 'tr' ? 'Tüm Tül Perdeler' : locale === 'ru' ? 'Все тюлевые шторы' : locale === 'pl' ? 'Wszystkie firany' : 'All Tulle Curtains'}
             </Link>
             <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Nakışlı Tül Perde' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
+              {locale === 'tr' ? 'Nakışlı Tül Perdeler' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
             </Link>
             <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
               {locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains'}

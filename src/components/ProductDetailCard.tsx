@@ -80,6 +80,7 @@ function ProductDetailCard({
     return translateTextSync(name, locale);
   };
 
+
   // Translation helper for category names (uses same utility)
   const translateCategory = (category: string): string => {
     return translateTextSync(category, locale);
@@ -1030,6 +1031,52 @@ function ProductDetailCard({
     return Array.from(new Map(allVideos.filter(v => v.file).map(v => [normalizeUrl(v.file), v])).values());
   }, [product_files]);
 
+  // Shared helpers for curtain feature icons and localized labels
+  const getFeatureIcon = (name: string, value: string): string | null => {
+    const n = name.toLowerCase();
+    const v = value.toLowerCase();
+    if (n === 'panel_type' || n === 'header') {
+      if (v === 'grommet') return '/media/curtain_features/Grommet.png';
+      if (v === 'rod_pocket' || v === 'rod pocket') return '/media/curtain_features/rod_pocket.png';
+    }
+    if (n === 'number_of_panels' && v === '2') return '/media/curtain_features/two_panel.png';
+    if (n === 'sheerness_level') {
+      const level = parseInt(v);
+      if (level >= 1 && level <= 4) return `/media/curtain_features/level_${level}.png`;
+    }
+    return null;
+  };
+
+  const getSheernessLabel = (value: string): string => {
+    const level = parseInt(value);
+    const key = level === 1 ? 'sheer' : level === 2 ? 'semi-sheer' : level === 3 ? 'light filtering' : level === 4 ? 'blackout' : null;
+    return key ? translateAttributeName(key) : value;
+  };
+
+  const getPanelTypeLabel = (value: string, short?: boolean): string => {
+    const v = value.toLowerCase();
+    if (locale === 'tr') return v === 'grommet' ? (short ? 'Halkalı' : 'Halkalı (Grommet)') : v === 'rod_pocket' ? (short ? 'Büzgülü' : 'Büzgülü (Rod Pocket)') : translateAttributeName(value);
+    if (locale === 'ru') return v === 'grommet' ? 'Люверсы' : v === 'rod_pocket' ? 'Кулиска' : translateAttributeName(value);
+    if (locale === 'pl') return v === 'grommet' ? (short ? 'Oczka' : 'Oczka (Grommet)') : v === 'rod_pocket' ? (short ? 'Tunel' : 'Tunel (Rod Pocket)') : translateAttributeName(value);
+    return v === 'grommet' ? 'Grommet' : v === 'rod_pocket' ? 'Rod Pocket' : translateAttributeName(value);
+  };
+
+  const getNumberOfPanelsLabel = (value: string, short?: boolean): string => {
+    if (value === '2') {
+      if (short) return locale === 'tr' ? '2 Kanat' : locale === 'ru' ? '2 панели' : locale === 'pl' ? '2 panele' : '2 Panels';
+      return locale === 'tr' ? '2 Kanat' : locale === 'ru' ? '2 панели (пара)' : locale === 'pl' ? '2 panele (para)' : '2 Panels (Pair)';
+    }
+    return translateAttributeName(value);
+  };
+
+  const getFeatureLabel = (name: string, value: string, short?: boolean): string => {
+    const n = name.toLowerCase();
+    if (n === 'sheerness_level') return getSheernessLabel(value);
+    if (n === 'panel_type' || n === 'header') return getPanelTypeLabel(value, short);
+    if (n === 'number_of_panels') return getNumberOfPanelsLabel(value, short);
+    return value;
+  };
+
   if (!product) {
     return <div>{translateAttributeName('loading...')}</div>;
   }
@@ -1196,11 +1243,11 @@ function ProductDetailCard({
           <div className={classes.skuCode}>
             {locale === 'tr' ? 'Ürün Kodu' :
               locale === 'ru' ? 'Артикул' :
-                locale === 'pl' ? 'Kod produktu' : 'Product Code'}: {selectedVariant?.variant_sku ? `${selectedVariant.variant_sku}` : product.sku}
+                locale === 'pl' ? 'Kod produktu' : 'SKU'}: {selectedVariant?.variant_sku ? `${selectedVariant.variant_sku}` : product.sku}
           </div>
 
           {/* Category + Attributes in one row */}
-          <div className={classes.categoryAndAttributes}>
+          {/* <div className={classes.categoryAndAttributes}>
             {product_category && <span className={classes.productCategory}>{translateCategory(product_category.toString())}</span>}
             {(() => {
               const variantAttrs = selectedVariant && variant_attributes
@@ -1209,68 +1256,17 @@ function ProductDetailCard({
               const attributesToShow = (variantAttrs.length > 0 ? variantAttrs : (product_attributes || []))
                 .filter(attr => attr.name?.toLowerCase() !== 'discount_rate');
 
-              // Map attribute names to curtain feature icons
-              const getFeatureIcon = (name: string, value: string): string | null => {
-                const n = name.toLowerCase();
-                const v = value.toLowerCase();
-                if (n === 'panel_type' || n === 'header') {
-                  if (v === 'grommet') return '/media/curtain_features/Grommet.png';
-                  if (v === 'rod_pocket' || v === 'rod pocket') return '/media/curtain_features/rod_pocket.png';
-                }
-                if (n === 'number_of_panel' && v === '2') return '/media/curtain_features/two_panel.png';
-                if (n === 'sheerness_level') {
-                  const level = parseInt(v);
-                  if (level >= 1 && level <= 4) return `/media/curtain_features/level_${level}.png`;
-                }
-                return null;
-              };
-
-              // Localize sheerness level labels
-              const getSheernessLabel = (value: string): string => {
-                const level = parseInt(value);
-                if (locale === 'tr') {
-                  return level === 1 ? 'Çok Şeffaf' : level === 2 ? 'Şeffaf' : level === 3 ? 'Yarı Şeffaf' : level === 4 ? 'Karartma' : value;
-                }
-                if (locale === 'ru') {
-                  return level === 1 ? 'Прозрачная' : level === 2 ? 'Полупрозрачная' : level === 3 ? 'Затемняющая' : level === 4 ? 'Блэкаут' : value;
-                }
-                if (locale === 'pl') {
-                  return level === 1 ? 'Przezroczysta' : level === 2 ? 'Półprzezroczysta' : level === 3 ? 'Przyciemniająca' : level === 4 ? 'Zaciemniająca' : value;
-                }
-                return level === 1 ? 'Sheer' : level === 2 ? 'Semi-Sheer' : level === 3 ? 'Light Filtering' : level === 4 ? 'Blackout' : value;
-              };
-
-              // Localize panel type labels
-              const getPanelTypeLabel = (value: string): string => {
-                const v = value.toLowerCase();
-                if (locale === 'tr') return v === 'grommet' ? 'Halkalı (Grommet)' : v === 'rod_pocket' ? 'Büzgülü (Rod Pocket)' : translateAttributeName(value);
-                if (locale === 'ru') return v === 'grommet' ? 'Люверсы' : v === 'rod_pocket' ? 'Кулиска' : translateAttributeName(value);
-                if (locale === 'pl') return v === 'grommet' ? 'Oczka (Grommet)' : v === 'rod_pocket' ? 'Tunel (Rod Pocket)' : translateAttributeName(value);
-                return v === 'grommet' ? 'Grommet' : v === 'rod_pocket' ? 'Rod Pocket' : translateAttributeName(value);
-              };
-
-              const getNumberOfPanelLabel = (value: string): string => {
-                if (value === '2') {
-                  return locale === 'tr' ? '2 Panel (Çift Kanat)' : locale === 'ru' ? '2 панели (пара)' : locale === 'pl' ? '2 panele (para)' : '2 Panels (Pair)';
-                }
-                return translateAttributeName(value);
-              };
-
               return attributesToShow.map((attr, index) => {
                 const attrNameLower = (attr.name || '').toLowerCase();
                 const isProperty = attrNameLower === 'property';
                 const featureIcon = getFeatureIcon(attr.name || '', attr.value);
 
-                // Replace "(each)" with localized text
                 let displayValue = translateAttributeName(attr.value);
-                if (displayValue.includes('(each)')) {
-                  displayValue = displayValue.replace('(each)', locale === 'tr' ? '(Tek Parça Boyutu)' : locale === 'ru' ? '(Размер одной панели)' : locale === 'pl' ? '(Rozmiar jednego panelu)' : '(Per Panel)');
-                }
 
                 // Apply special labels for known attributes
-                if (attrNameLower === 'sheerness_level') displayValue = getSheernessLabel(attr.value);
-                if (attrNameLower === 'panel_type' || attrNameLower === 'header') displayValue = getPanelTypeLabel(attr.value);
-                if (attrNameLower === 'number_of_panel') displayValue = getNumberOfPanelLabel(attr.value);
+                if (attrNameLower === 'sheerness_level' || attrNameLower === 'panel_type' || attrNameLower === 'header' || attrNameLower === 'number_of_panels') {
+                  displayValue = getFeatureLabel(attr.name || '', attr.value);
+                }
 
                 // Feature icon attributes are shown below price, skip them here
                 if (featureIcon) return null;
@@ -1283,14 +1279,14 @@ function ProductDetailCard({
                 );
               });
             })()}
-          </div>
+          </div> */}
 
           {/* If the product has variants, display the variant information. */}
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
                 {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => {
-                  const isSizeAttribute = attribute.name?.toLowerCase() === 'width' || attribute.name?.toLowerCase() === 'genişlik' || attribute.name?.toLowerCase() === 'beden' || attribute.name?.toLowerCase() === 'ölçü' || attribute.name?.toLowerCase() === 'size';
+                  const isSizeAttribute = ['width', 'genişlik', 'beden', 'ölçü', 'size', 'size per panel'].includes(attribute.name?.toLowerCase() || '');
                   return (
                     <li key={attribute.id.toString()}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
@@ -1404,7 +1400,7 @@ function ProductDetailCard({
                                     handleAttributeChange(attribute.name ?? '', value);
                                   }}
                                 >
-                                  {translateAttributeName(value).replace('(each)', locale === 'tr' ? '(Tek Parça Boyutu)' : locale === 'ru' ? '(Размер одной панели)' : locale === 'pl' ? '(Rozmiar jednego panelu)' : '(Per Panel)')}
+                                  {translateAttributeName(value)}
                                 </Link>
                               </div>
                             );
@@ -1494,47 +1490,7 @@ function ProductDetailCard({
                   return (variantAttrs.length > 0 ? variantAttrs : (product_attributes || []));
                 })();
 
-                const getIcon = (name: string, value: string): string | null => {
-                  const n = name.toLowerCase();
-                  const v = value.toLowerCase();
-                  if (n === 'panel_type' || n === 'header') {
-                    if (v === 'grommet') return '/media/curtain_features/Grommet.png';
-                    if (v === 'rod_pocket' || v === 'rod pocket') return '/media/curtain_features/rod_pocket.png';
-                  }
-                  if (n === 'number_of_panel' && v === '2') return '/media/curtain_features/two_panel.png';
-                  if (n === 'sheerness_level') {
-                    const level = parseInt(v);
-                    if (level >= 1 && level <= 4) return `/media/curtain_features/level_${level}.png`;
-                  }
-                  return null;
-                };
-
-                const getLabel = (name: string, value: string): string => {
-                  const n = name.toLowerCase();
-                  const v = value.toLowerCase();
-                  if (n === 'sheerness_level') {
-                    const level = parseInt(value);
-                    if (locale === 'tr') return level === 1 ? 'Çok Şeffaf' : level === 2 ? 'Şeffaf' : level === 3 ? 'Yarı Şeffaf' : 'Karartma';
-                    if (locale === 'ru') return level === 1 ? 'Прозрачная' : level === 2 ? 'Полупрозрачная' : level === 3 ? 'Затемняющая' : 'Блэкаут';
-                    if (locale === 'pl') return level === 1 ? 'Przezroczysta' : level === 2 ? 'Półprzezroczysta' : level === 3 ? 'Przyciemniająca' : 'Zaciemniająca';
-                    return level === 1 ? 'Sheer' : level === 2 ? 'Semi-Sheer' : level === 3 ? 'Light Filtering' : 'Blackout';
-                  }
-                  if (n === 'panel_type' || n === 'header') {
-                    if (locale === 'tr') return v === 'grommet' ? 'Halkalı' : 'Büzgülü';
-                    if (locale === 'ru') return v === 'grommet' ? 'Люверсы' : 'Кулиска';
-                    if (locale === 'pl') return v === 'grommet' ? 'Oczka' : 'Tunel';
-                    return v === 'grommet' ? 'Grommet' : 'Rod Pocket';
-                  }
-                  if (n === 'number_of_panel') {
-                    if (locale === 'tr') return '2 Panel';
-                    if (locale === 'ru') return '2 панели';
-                    if (locale === 'pl') return '2 panele';
-                    return '2 Panels';
-                  }
-                  return value;
-                };
-
-                const featureAttrs = allAttrs.filter(a => getIcon(a.name || '', a.value));
+                const featureAttrs = allAttrs.filter(a => getFeatureIcon(a.name || '', a.value));
                 if (featureAttrs.length === 0 && !isReadyMadeCurtain) return null;
 
                 return (
@@ -1542,8 +1498,8 @@ function ProductDetailCard({
                     {featureAttrs.map((attr, i) => (
                       <div key={`feat-${i}`} className={classes.featureBadge}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={getIcon(attr.name || '', attr.value)!} alt={getLabel(attr.name || '', attr.value)} className={classes.featureIcon} />
-                        <span className={classes.featureLabel}>{getLabel(attr.name || '', attr.value)}</span>
+                        <img src={getFeatureIcon(attr.name || '', attr.value)!} alt={getFeatureLabel(attr.name || '', attr.value, true)} className={classes.featureIcon} />
+                        <span className={classes.featureLabel}>{getFeatureLabel(attr.name || '', attr.value, true)}</span>
                       </div>
                     ))}
                     {isReadyMadeCurtain && (
@@ -1551,7 +1507,7 @@ function ProductDetailCard({
                         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
-                        <span className={classes.featureLabel}>{locale === 'tr' ? 'Dikilmiş & Hazır' : locale === 'ru' ? 'Сшитые и готовые' : locale === 'pl' ? 'Uszyte i gotowe' : 'Sewn & Ready'}</span>
+                        <span className={classes.featureLabel}>{locale === 'tr' ? 'Hazır & Dikili' : locale === 'ru' ? 'Сшитые и готовые' : locale === 'pl' ? 'Uszyte i gotowe' : 'Sewn & Ready'}</span>
                       </div>
                     )}
                   </div>
@@ -1570,7 +1526,8 @@ function ProductDetailCard({
                     </span>
                   );
                 }
-                if (qty > 0 && qty <= 30) {
+                const lowStockThreshold = product.unit_of_measurement?.toLowerCase() === 'meter' ? 30 : 5;
+                if (qty > 0 && qty <= lowStockThreshold) {
                   return (
                     <span className={classes.lowStockBadge}>
                       🔥 {locale === 'tr' ? 'Son stoklar! Tükenmeden sipariş verin.' : locale === 'ru' ? 'Последние штуки! Закажите пока есть в наличии.' : locale === 'pl' ? 'Ostatnie sztuki! Zamów zanim się skończą.' : 'Low stock! Order before it sells out.'}
@@ -1686,7 +1643,7 @@ function ProductDetailCard({
                           <td className={classes.detailTableLabel}>
                             {attr.name?.toLowerCase() !== 'property' ? translateAttributeName(attr.name || '') : ''}
                           </td>
-                          <td className={classes.detailTableValue}>{translateAttributeName(attr.value)}</td>
+                          <td className={classes.detailTableValue}>{['sheerness_level', 'panel_type', 'header', 'number_of_panels'].includes(attr.name?.toLowerCase() || '') ? getFeatureLabel(attr.name || '', attr.value) : translateAttributeName(attr.value)}</td>
                         </tr>
                       ))}
                     </tbody>

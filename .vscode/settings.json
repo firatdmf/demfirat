@@ -4,5 +4,9 @@
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
-    }
+    },
+    "i18n-ally.localesPaths": [
+        "messages",
+        "public/locales"
+    ]
 }
