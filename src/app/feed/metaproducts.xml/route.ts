@@ -216,29 +216,16 @@ export async function GET() {
                 const tryPrice = product.prices?.TRY ?? product.price ?? 0;
                 const price = `${Number(tryPrice).toFixed(2)} TRY`;
 
-                if (isFabric) {
-                    // Fabric products only as custom curtain
-                    xml += buildItem({
-                        id: `curtain_${product.sku}`,
-                        title: `${trTitle} - Özel Perde`,
-                        description: trDescription || `${trTitle} - Özel Dikim Perde`,
-                        link: `${baseLink}/curtain`,
-                        imageLink,
-                        price,
-                        availability: 'in stock',
-                    });
-                } else {
-                    // Non-fabric products as normal
-                    xml += buildItem({
-                        id: String(product.sku),
-                        title: trTitle,
-                        description: trDescription || trTitle,
-                        link: baseLink,
-                        imageLink,
-                        price,
-                        availability: 'in stock',
-                    });
-                }
+                // ID matches pixel content_id (raw SKU)
+                xml += buildItem({
+                    id: String(product.sku),
+                    title: isFabric ? `${trTitle} - Özel Perde` : trTitle,
+                    description: trDescription || trTitle,
+                    link: isFabric ? `${baseLink}/curtain` : baseLink,
+                    imageLink,
+                    price,
+                    availability: 'in stock',
+                });
             } else {
                 // Each variant becomes a separate item with query params
                 for (const variant of variants) {
@@ -253,33 +240,18 @@ export async function GET() {
                     const availability = quantity > 0 ? 'in stock' : 'out of stock';
                     const itemId = variant.variant_sku || `${product.sku}_${variant.id}`;
 
-                    if (isFabric) {
-                        // Fabric variants only as custom curtain
-                        xml += buildItem({
-                            id: `curtain_${itemId}`,
-                            groupId: `curtain_${product.sku}`,
-                            title: `${variantTitle} - Özel Perde`,
-                            description: trDescription || `${variantTitle} - Özel Dikim Perde`,
-                            link: `${baseLink}/curtain${queryString}`,
-                            imageLink,
-                            price,
-                            availability,
-                            inventory: Math.max(0, Math.floor(quantity)),
-                        });
-                    } else {
-                        // Non-fabric variants as normal
-                        xml += buildItem({
-                            id: itemId,
-                            groupId: String(product.sku),
-                            title: variantTitle,
-                            description: trDescription || variantTitle,
-                            link: `${baseLink}${queryString}`,
-                            imageLink,
-                            price,
-                            availability,
-                            inventory: Math.max(0, Math.floor(quantity)),
-                        });
-                    }
+                    // ID matches pixel content_id (raw SKU/variant_sku)
+                    xml += buildItem({
+                        id: itemId,
+                        groupId: String(product.sku),
+                        title: isFabric ? `${variantTitle} - Özel Perde` : variantTitle,
+                        description: trDescription || variantTitle,
+                        link: isFabric ? `${baseLink}/curtain${queryString}` : `${baseLink}${queryString}`,
+                        imageLink,
+                        price,
+                        availability,
+                        inventory: Math.max(0, Math.floor(quantity)),
+                    });
                 }
             }
         }

@@ -41,10 +41,12 @@ export default function OrderConfirmationPage() {
       // Tracking: Purchase Event
       if (typeof window !== 'undefined' && parsedOrderData) {
         const trackingItems = parsedOrderData.cartItems?.map((item: any) => ({
-          id: item.sku || item.id,
-          name: item.title || item.name || 'Ürün',
+          product_id: item.product_sku || item.sku || item.id,
+          id: item.product_sku || item.sku || item.id,
+          title: item.product?.title || item.title || item.name || 'Ürün',
+          name: item.product?.title || item.title || item.name || 'Ürün',
           category: 'product',
-          price: parseFloat(item.price) || 0,
+          price: parseFloat(item.price || item.product?.price) || 0,
           quantity: parseInt(item.quantity) || 1
         })) || [];
 

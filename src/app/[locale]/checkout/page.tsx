@@ -258,7 +258,9 @@ export default function CheckoutPage() {
       const trackingItems = cartItems.map(item => {
         const basePrice = item.is_custom_curtain && item.custom_price ? Number(item.custom_price) : Number(item.product?.price || 0);
         return {
+          product_id: item.product_sku || item.variant_sku || '',
           id: item.product_sku || item.variant_sku || '',
+          title: item.product?.title || '',
           name: item.product?.title || '',
           category: item.product_category || 'product',
           price: basePrice * currentRate,
