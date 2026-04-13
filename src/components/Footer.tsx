@@ -94,34 +94,42 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
             <ul className={classes.linkList}>
               <li>
                 <Link href={`/${locale}/product/fabric?intent=custom_curtain`}>
-                  {locale === 'tr' ? 'Tül Perdeler (Özel Dikim)' :
-                    locale === 'ru' ? 'Тюлевые шторы (Под заказ)' :
-                      locale === 'pl' ? 'Tiulowe zasłony (Szyte na miarę)' :
-                        'Tulle Curtains (Custom Made)'}
+                  {locale === 'tr' ? 'Tül Perdeler' :
+                    locale === 'ru' ? 'Тюлевые шторы' :
+                      locale === 'pl' ? 'Firany' :
+                        'Tulle Curtains'}
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/product/fabric?fabric_type=embroidery&intent=custom_curtain`}>
+                <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`}>
                   {locale === 'tr' ? 'Nakışlı Tül Perdeler' :
-                    locale === 'ru' ? 'Вышитые тюлевые шторы' :
-                      locale === 'pl' ? 'Haftowane firanki tiulowe' :
+                    locale === 'ru' ? 'Вышитый тюль' :
+                      locale === 'pl' ? 'Haftowane firany' :
                         'Embroidered Tulle Curtains'}
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/product/fabric?fabric_type=solid&intent=custom_curtain`}>
+                <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`}>
                   {locale === 'tr' ? 'Düz Tül Perdeler' :
-                    locale === 'ru' ? 'Однотонные тюлевые шторы' :
-                      locale === 'pl' ? 'Gładkie firanki tiulowe' :
-                        'Plain Tulle Curtains'}
+                    locale === 'ru' ? 'Гладкий тюль' :
+                      locale === 'pl' ? 'Gładkie firany' :
+                        'Solid Tulle Curtains'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`}>
+                  {locale === 'tr' ? 'Fon Perdeler' :
+                    locale === 'ru' ? 'Блэкаут шторы' :
+                      locale === 'pl' ? 'Zasłony zaciemniające' :
+                        'Blackout Curtains'}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/product/ready-made_curtain`}>
-                  {locale === 'tr' ? 'Hazır Perdeler' :
-                    locale === 'ru' ? 'Готовые шторы' :
-                      locale === 'pl' ? 'Gotowe zasłony' :
-                        'Ready-Made Curtains'}
+                  {locale === 'tr' ? 'Rustik Perdeler' :
+                    locale === 'ru' ? 'Рустикальные шторы' :
+                      locale === 'pl' ? 'Rustykalne zasłony' :
+                        'Rustic Curtains'}
                 </Link>
               </li>
             </ul>

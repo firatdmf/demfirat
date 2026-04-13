@@ -936,7 +936,7 @@
 .skuCode {
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 0.8rem;
-  color: #888;
+  color: rgba(0, 0, 0, 0.3);
   font-weight: 500;
   margin-top: 0.25rem;
 }
@@ -1971,6 +1971,7 @@
   width: 40%;
   background: #fafafa;
   vertical-align: middle;
+  text-transform: capitalize;
 }
 
 .detailTableValue {
