@@ -238,7 +238,9 @@ export async function GET() {
 
                     const quantity = variant.variant_quantity ?? 0;
                     const availability = quantity > 0 ? 'in stock' : 'out of stock';
-                    const itemId = variant.variant_sku || `${product.sku}_${variant.id}`;
+                    // Ensure unique ID: if variant_sku equals product sku, append variant id
+                    const rawVariantId = variant.variant_sku || `${product.sku}_${variant.id}`;
+                    const itemId = rawVariantId === product.sku ? `${product.sku}_v${variant.id}` : rawVariantId;
 
                     // ID matches pixel content_id (raw SKU/variant_sku)
                     xml += buildItem({
