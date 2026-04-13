@@ -361,7 +361,7 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           eventName: 'Purchase',
           eventId: `purchase_${result.order_id || result.id}_${Date.now()}`,
-          eventSourceUrl: `${request.nextUrl.origin}/order/confirmation`,
+          eventSourceUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/order/confirmation`,
           userData: {
             email: guestInfo?.email || paymentData?.email,
             phone: guestInfo?.phone || deliveryAddress?.phone,
