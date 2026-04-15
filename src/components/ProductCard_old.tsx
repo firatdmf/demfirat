@@ -21,7 +21,7 @@ const ProductCard: NextPage<Props> = (props) => {
         <div className={classes.card}>
           <div className={classes.image}>
             {/* <Image
-              src={"/media/products/"+productType+"/thumbnails/"+product.files[0].name}
+              src={"https://demfiratkarven.b-cdn.net/media/products/"+productType+"/thumbnails/"+product.files[0].name}
               alt={"Image of the "+productType.replace(/_/g,' ') + " product: " + product.design}
               key={product.files[0].name}
               height={500}
@@ -32,7 +32,7 @@ const ProductCard: NextPage<Props> = (props) => {
             /> */}
             <img
               src={
-                "/media/products/" +
+                "https://demfiratkarven.b-cdn.net/media/products/" +
                 productType +
                 "/thumbnails/" +
                 product.files[0].name

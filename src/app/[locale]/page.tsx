@@ -122,7 +122,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     <main>
       <div className="HomePage">
         <HeroVideo
-          videoSrc="/media/hero-video.mp4"
+          videoSrc="https://demfiratkarven.b-cdn.net/website-videos/hero-video.mp4"
           subtitle={locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
             locale === 'ru' ? 'Премиальная текстильная коллекция' :
               locale === 'pl' ? 'Kolekcja Premium Tekstyliów' :

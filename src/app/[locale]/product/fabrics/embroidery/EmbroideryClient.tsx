@@ -56,7 +56,7 @@ const transformFabricToProduct = (fabric: any, index: number): Product => {
     datasheet_url: null,
     minimum_inventory_level: null,
     available_quantity: 0 as any,
-    primary_image: fabric.files?.[0] ? `/media/products/embroidered_sheer_curtain_fabrics/thumbnails/${fabric.files[0].name}` : undefined,
+    primary_image: fabric.files?.[0] ? `https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/thumbnails/${fabric.files[0].name}` : undefined,
     created_at: new Date(fabric.date || Date.now())
   };
 };

@@ -169,7 +169,7 @@ function About() {
       {/* Video Background Hero Section */}
       <section className={classes.hero}>
         <video autoPlay loop muted playsInline className={classes.heroVideo}>
-          <source src="/media/karven.mp4" type="video/mp4" />
+          <source src="https://demfiratkarven.b-cdn.net/website-videos/karven.mp4" type="video/mp4" />
         </video>
         <div className={classes.heroOverlay}></div>
         <div className={classes.heroContent}>

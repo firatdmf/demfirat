@@ -40,3 +40,8 @@ next-env.d.ts
 
 
 pass.txt
+
+# Large media files - served from CDN
+/public/media/products/
+/public/media/hero-video.mp4
+/public/media/karven.mp4

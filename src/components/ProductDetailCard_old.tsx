@@ -134,7 +134,7 @@ function ProductDetailCard({
     // console.log(productVariants);
     if (product) {
       setMainImageUrl(
-        "/media/products/embroidered_sheer_curtain_fabrics/" + product.files[0].name
+        "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" + product.files[0].name
       );
     }
   }, []);
@@ -157,7 +157,7 @@ function ProductDetailCard({
                       // <Image
                       //   key={index}
                       //   src={
-                      //     "/media/products/embroidered_sheer_curtain_fabrics/" +
+                      //     "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                       //     item.name
                       //   }
                       //   // src={mainImageUrl}
@@ -166,7 +166,7 @@ function ProductDetailCard({
                       //   width={500}
                       //   onClick={() =>
                       //     window.open(
-                      //       "/media/products/embroidered_sheer_curtain_fabrics/" +
+                      //       "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                       //         item.name,
                       //       "_blank"
                       //     )
@@ -175,7 +175,7 @@ function ProductDetailCard({
                       <img
                         key={index}
                         src={
-                          "/media/products/embroidered_sheer_curtain_fabrics/" +
+                          "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                           item.name
                         }
                         // src={mainImageUrl}
@@ -184,7 +184,7 @@ function ProductDetailCard({
                         width={500}
                         onClick={() =>
                           window.open(
-                            "/media/products/embroidered_sheer_curtain_fabrics/" +
+                            "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                               item.name,
                             "_blank"
                           )
@@ -199,12 +199,12 @@ function ProductDetailCard({
                   return (
                     <div className="img-item" key={index}>
                       <a href="" data-id={index + 1}>
-                        {"/media/products/embroidered_sheer_curtain_fabrics/" +
+                        {"https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                           item.name ===
                         mainImageUrl ? (
                           // <Image
                           //   src={
-                          //     "/media/products/embroidered_sheer_curtain_fabrics/" +
+                          //     "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                           //     item.name
                           //   }
                           //   alt=""
@@ -213,14 +213,14 @@ function ProductDetailCard({
                           //   width={500}
                           //   onClick={() => {
                           //     setMainImageUrl(
-                          //       "/media/products/embroidered_sheer_curtain_fabrics/" +
+                          //       "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                           //         item.name
                           //     );
                           //   }}
                           // />
                           <img
                             src={
-                              "/media/products/embroidered_sheer_curtain_fabrics/" +
+                              "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                               item.name
                             }
                             alt=""
@@ -229,7 +229,7 @@ function ProductDetailCard({
                             width={500}
                             onClick={() => {
                               setMainImageUrl(
-                                "/media/products/embroidered_sheer_curtain_fabrics/" +
+                                "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                                   item.name
                               );
                             }}
@@ -237,14 +237,14 @@ function ProductDetailCard({
                         ) : (
                           <img
                             src={
-                              "/media/products/embroidered_sheer_curtain_fabrics/" +
+                              "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                               item.name
                             }
                             alt=""
                             className="non-clicked"
                             onClick={() => {
                               setMainImageUrl(
-                                "/media/products/embroidered_sheer_curtain_fabrics/" +
+                                "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                                   item.name
                               );
                             }}
@@ -254,7 +254,7 @@ function ProductDetailCard({
                           className="variant-label"
                           onClick={() =>
                             setMainImageUrl(
-                              "/media/products/embroidered_sheer_curtain_fabrics/" +
+                              "https://demfiratkarven.b-cdn.net/media/products/embroidered_sheer_curtain_fabrics/" +
                                 item.name
                             )
                           }

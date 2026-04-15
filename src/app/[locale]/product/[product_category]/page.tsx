@@ -4,7 +4,7 @@
 // Cache product listing pages for 5 minutes
 export const revalidate = 300;
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
-import { getVideoSKUs } from "@/lib/getProductVideo";
+// import { getVideoSKUs } from "@/lib/getProductVideo";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
 
@@ -177,12 +177,7 @@ export default async function Page(props: Props) {
   const endTime = Date.now();
   console.log(`[PERFORMANCE] API call for ${product_category} took ${endTime - startTime}ms`);
 
-  let productVideoSKUs: string[] = [];
-
-  if (data.products.length > 0) {
-    const allSKUs = data.products.map((p: Product) => p.sku).filter(Boolean);
-    productVideoSKUs = getVideoSKUs(allSKUs);
-  }
+  const productVideoSKUs: string[] = [];
 
   const baseUrl = `https://DEMFIRAT.com/${locale}`;
   const categoryUrl = `${baseUrl}/product/${product_category}`;
