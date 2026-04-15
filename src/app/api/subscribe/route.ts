@@ -83,11 +83,11 @@ export async function POST(request: NextRequest) {
             <h1 style="color:#2c2c2c;text-align:center;font-family:'Jost','Montserrat',Arial,sans-serif;font-size:26px;margin:0 0 20px;">Hoş Geldiniz!</h1>
 
             <p style="color:#666;font-size:15px;line-height:1.6;text-align:center;margin:0 0 24px;">
-             DEMFIRAT Karven Home Collections bültenimize abone olduğunuz için teşekkür ederiz!
+             DEMFIRAT Karven Home Collection bültenimize abone olduğunuz için teşekkür ederiz!
             </p>
 
             <div style="background:linear-gradient(135deg,#c9a961 0%,#b8956a 100%);padding:30px;border-radius:12px;text-align:center;margin:0 0 24px;">
-              <p style="color:white;margin:0 0 10px;font-size:14px;">Size ozel %5 indirim kodunuz:</p>
+              <p style="color:white;margin:0 0 10px;font-size:14px;">Size özel %5 indirim kodunuz:</p>
               <p style="color:white;font-size:32px;font-weight:bold;margin:0;letter-spacing:3px;">${discountCode}</p>
             </div>
 
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
             </p>
 
             <p style="color:#999;font-size:12px;text-align:center;margin:24px 0 0;">
-              Bu kod tek kullanimlıktır.
+              Bu kod tek kullanımlıktır.
             </p>
           </td>
         </tr>
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
         <!-- CTA Button -->
         <tr>
           <td style="padding:0 40px 32px;text-align:center;">
-            <a href="https://www.demfirat.com" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#c9a961,#b8956a);color:white;text-decoration:none;border-radius:30px;font-family:'Montserrat',Arial,sans-serif;font-size:14px;font-weight:600;">Alisverise Basla</a>
+            <a href="https://www.demfirat.com" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#c9a961,#b8956a);color:white;text-decoration:none;border-radius:30px;font-family:'Montserrat',Arial,sans-serif;font-size:14px;font-weight:600;">Alışverişe Başla</a>
           </td>
         </tr>
 
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
           <td style="padding:20px 40px;text-align:center;">
             <p style="font-family:'Montserrat',Arial,sans-serif;font-size:12px;color:#999;margin:0;">
               Sevgilerle,<br>
-              <strong>Karven Home Collection</strong><br>
+              <strong>DEMFIRAT | Karven Home Collection</strong><br>
               <a href="https://www.demfirat.com" style="color:#c9a961;text-decoration:none;">www.demfirat.com</a>
             </p>
           </td>
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
         <!-- Bottom Bar -->
         <tr>
           <td style="background:rgb(250,245,235);padding:14px 40px;text-align:center;">
-            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0 0 8px;">&copy; ${new Date().getFullYear()} Demfirat Karven. Tum haklari saklidir.</p>
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0 0 8px;">&copy; ${new Date().getFullYear()} DEMFIRAT. Tüm hakları saklıdır.</p>
             <a href="https://www.demfirat.com/unsubscribe?email=${encodeURIComponent(email)}" style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;text-decoration:underline;">Abonelikten cik</a>
           </td>
         </tr>
