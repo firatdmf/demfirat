@@ -25,11 +25,21 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
 
     setNewsletterStatus('loading');
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_NEJUM_API_URL || 'http://127.0.0.1:8000';
-      const res = await fetch(`${backendUrl}/marketing/api/subscribe/`, {
+      // Get reCAPTCHA token
+      let recaptchaToken = '';
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+      if (siteKey && typeof window !== 'undefined' && (window as any).grecaptcha) {
+        try {
+          recaptchaToken = await (window as any).grecaptcha.execute(siteKey, { action: 'subscribe_footer' });
+        } catch (err) {
+          console.warn('reCAPTCHA failed:', err);
+        }
+      }
+
+      const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newsletterEmail, name: 'Unknown', phone: '' }),
+        body: JSON.stringify({ email: newsletterEmail, source: 'footer', recaptchaToken }),
       });
       const data = await res.json();
       if (data.success) {

@@ -909,28 +909,24 @@ function ProductDetailCard({
       ? filteredImages.map(img => img.file)
       : [(placeholder_image_link)];
 
-  // Preload ALL gallery images at the correct Next.js optimized size
-  // This warms the browser cache so thumbnail switching is instant
+  // Preload first 3 gallery images directly from CDN (no /_next/image proxy)
   useEffect(() => {
     if (!imageFiles || imageFiles.length === 0) return;
-    imageFiles.forEach((url, i) => {
+    imageFiles.slice(0, 3).forEach((url, i) => {
       if (!url) return;
-      // Use <link rel="preload"> for first image (highest priority)
-      // Use Image() for the rest (background preload)
       if (i === 0 && typeof document !== 'undefined') {
-        const optimizedUrl = `/_next/image?url=${encodeURIComponent(url)}&w=1080&q=75`;
-        const existing = document.querySelector(`link[href="${CSS.escape(optimizedUrl)}"]`);
+        const existing = document.querySelector(`link[href="${CSS.escape(url)}"]`);
         if (!existing) {
           const link = document.createElement('link');
           link.rel = 'preload';
           link.as = 'image';
-          link.href = optimizedUrl;
+          link.href = url;
           link.setAttribute('fetchpriority', 'high');
           document.head.appendChild(link);
         }
       } else {
         const img = new window.Image();
-        img.src = `/_next/image?url=${encodeURIComponent(url)}&w=1080&q=75`;
+        img.src = url;
       }
     });
   }, [imageFiles]);

@@ -54,6 +54,14 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
   return (
     <html lang={locale}>
       <head>
+        {/* Google reCAPTCHA v3 */}
+        {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && (
+          <Script
+            src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+            strategy="lazyOnload"
+          />
+        )}
+
         {/* Google Tag Manager */}
         <Script id="gtm" strategy="afterInteractive">
           {`

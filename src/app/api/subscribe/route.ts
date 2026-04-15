@@ -7,18 +7,56 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
-        // First, call Django backend to validate and create subscription
+        // Verify reCAPTCHA v3 token
+        const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+        if (recaptchaSecret && body.recaptchaToken) {
+            const recaptchaRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `secret=${recaptchaSecret}&response=${body.recaptchaToken}`,
+            });
+            const recaptchaData = await recaptchaRes.json();
+
+            if (!recaptchaData.success || recaptchaData.score < 0.3) {
+                console.log('[Subscribe] reCAPTCHA failed:', recaptchaData);
+                return NextResponse.json(
+                    { success: false, error: 'Bot aktivitesi tespit edildi. Lütfen tekrar deneyin.' },
+                    { status: 403 }
+                );
+            }
+            console.log('[Subscribe] reCAPTCHA score:', recaptchaData.score);
+        } else if (recaptchaSecret && !body.recaptchaToken) {
+            return NextResponse.json(
+                { success: false, error: 'Doğrulama başarısız. Sayfayı yenileyip tekrar deneyin.' },
+                { status: 403 }
+            );
+        }
+
+        const isFooter = body.source === 'footer';
+
+        // For footer: only email required, no phone needed
+        // For popup: email + phone required
+        const subscribeBody = isFooter
+            ? { email: body.email, phone: body.phone || '0000000000', skip_discount: true }
+            : { email: body.email, phone: body.phone };
+
+        // Call Django backend to validate and create subscription
         const response = await fetch(`${BACKEND_URL}/marketing/api/subscribe/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body),
+            body: JSON.stringify(subscribeBody),
         });
 
         const data = await response.json();
 
-        // If subscription was successful, send email from Next.js
+        // Footer subscriptions: no discount email, just confirm
+        if (isFooter && data.success) {
+            return NextResponse.json({ success: true });
+        }
+
+        // Popup subscriptions: send discount code email
         if (data.success && data.code) {
             const discountCode = data.code;
             const email = body.email;
@@ -91,7 +129,8 @@ export async function POST(request: NextRequest) {
         <!-- Bottom Bar -->
         <tr>
           <td style="background:rgb(250,245,235);padding:14px 40px;text-align:center;">
-            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0;">&copy; ${new Date().getFullYear()} Demfirat Karven. Tum haklari saklidir.</p>
+            <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0 0 8px;">&copy; ${new Date().getFullYear()} Demfirat Karven. Tum haklari saklidir.</p>
+            <a href="https://www.demfirat.com/unsubscribe?email=${encodeURIComponent(email)}" style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;text-decoration:underline;">Abonelikten cik</a>
           </td>
         </tr>
 

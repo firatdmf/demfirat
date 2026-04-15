@@ -123,10 +123,21 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
         setIsSubmitting(true);
 
         try {
+            // Get reCAPTCHA token
+            let recaptchaToken = '';
+            const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+            if (siteKey && typeof window !== 'undefined' && (window as any).grecaptcha) {
+                try {
+                    recaptchaToken = await (window as any).grecaptcha.execute(siteKey, { action: 'subscribe' });
+                } catch (err) {
+                    console.warn('reCAPTCHA failed:', err);
+                }
+            }
+
             const response = await fetch('/api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, phone }),
+                body: JSON.stringify({ email, phone, recaptchaToken }),
             });
 
             const data = await response.json();

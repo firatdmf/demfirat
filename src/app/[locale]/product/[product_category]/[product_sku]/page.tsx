@@ -1,4 +1,7 @@
 import ProductDetailCard from "@/components/ProductDetailCard"
+
+// Cache product detail pages for 5 minutes
+export const revalidate = 300;
 import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAttribute, ProductFile, ProductAttribute } from "@/lib/interfaces";
 import { getLocalizedProductField } from "@/lib/productUtils";
 import classes from "./page.module.css";

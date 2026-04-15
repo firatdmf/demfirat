@@ -1,5 +1,8 @@
 import React from "react";
 import "./page.css";
+
+// Revalidate homepage every 5 minutes to reduce SSR load
+export const revalidate = 300;
 import HeroVideo from "@/components/HeroVideo";
 import ProductShowcase from "@/components/ProductShowcase";
 import DraggableTestimonials from "@/components/DraggableTestimonials";

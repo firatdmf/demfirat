@@ -1,5 +1,8 @@
 // This file brings the products inside the specified product category url param, and provides it to the product grid component.
 // This is a server component, so we can do async and database calls.
+
+// Cache product listing pages for 5 minutes
+export const revalidate = 300;
 import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces";
 import { getVideoSKUs } from "@/lib/getProductVideo";
 import classes from "./page.module.css"
