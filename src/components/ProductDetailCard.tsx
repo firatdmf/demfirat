@@ -1282,8 +1282,7 @@ function ProductDetailCard({
             <div className={classes.variant_menu}>
               <ul>
                 {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => {
-                  const attrNameLwr = attribute.name?.toLowerCase() || '';
-                  const isSizeAttribute = ['width', 'genişlik', 'beden', 'ölçü', 'size', 'size per panel'].includes(attrNameLwr) || attrNameLwr.includes('width') || attrNameLwr.includes('height') || attrNameLwr.includes('per panel');
+                  const isSizeAttribute = ['width', 'genişlik', 'beden', 'ölçü', 'size', 'size per panel'].includes(attribute.name?.toLowerCase() || '');
                   return (
                     <li key={attribute.id.toString()}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
