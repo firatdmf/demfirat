@@ -23,6 +23,30 @@ const nextConfig = {
   // I added these below myself. These prisma and bcrpyt are two libraries that we do not want to add
   // to our client bundle at all. Do not show them on the browser (no client side, only server side)
   serverExternalPackages: ["@prisma/client", "bcrypt", "iyzipay"],
+
+  // Cache headers for static assets
+  async headers() {
+    return [
+      {
+        source: '/:all*(svg|jpg|jpeg|png|gif|ico|webp|avif|mp4|webm|woff|woff2|ttf|eot)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=0, s-maxage=300, stale-while-revalidate=600' },
+        ],
+      },
+    ];
+  },
   images: {
     // unoptimized: true prevents Next.js from proxying images through Railway
     // This eliminates DOUBLE EGRESS (CDN→Railway→Client) and serves directly from CDN
