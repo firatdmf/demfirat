@@ -7,6 +7,7 @@ import HeroVideo from "@/components/HeroVideo";
 import ProductShowcase from "@/components/ProductShowcase";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
 import CustomCurtainPromo from "@/components/CustomCurtainPromo";
+import InstagramFeed from "@/components/InstagramFeed";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
 // import { useTranslations } from "next-intl";
@@ -147,6 +148,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
           locale={locale}
         />
         <DraggableTestimonials reviews={reviews} locale={locale} />
+        <InstagramFeed locale={locale} />
       </div>
     </main>
   );
