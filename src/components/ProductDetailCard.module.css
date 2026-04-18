@@ -110,6 +110,18 @@
   position: relative;
 }
 
+.videoThumbInner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #2c2c2c 0%, #444 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .videoPlayOverlay {
   position: absolute;
   top: 0;
@@ -341,12 +353,172 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
+/* Panel info box for ready-made curtains */
+.panelInfoBox {
+  padding: 0.75rem 0;
+}
+
+.panelInfoContent {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  background: #faf8f3;
+  border: 1px solid #e8e3d8;
+  border-radius: 8px;
+}
+
+.panelDiagram {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.panelDiagramIcon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.panelDimensions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dimArrowH {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.dimArrowV {
+  position: absolute;
+  right: -8px;
+  top: 0;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1px;
+}
+
+.dimText {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #c9a961;
+  white-space: nowrap;
+}
+
+.panelInfoText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.panelInfoTitle {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.panelInfoDesc {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.68rem;
+  color: #888;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.panelInfoSize {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #c9a961;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .panelInfoContent {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem;
+  }
+
+  .panelDiagramIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .panelDimensions {
+    display: none;
+  }
+
+  .panelInfoTitle {
+    font-size: 0.7rem;
+  }
+
+  .panelInfoDesc {
+    font-size: 0.62rem;
+  }
+
+  .panelInfoSize {
+    font-size: 0.65rem;
+  }
+
+  .unitLabel {
+    font-size: 0.65rem;
+  }
+
+  .toggleTrack {
+    width: 32px;
+    height: 18px;
+  }
+
+  .toggleThumb {
+    width: 14px;
+    height: 14px;
+  }
+
+  .toggleThumbRight {
+    left: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .panelInfoContent {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
 /* Feature icons row below price */
 .featureRow {
   display: flex;
   flex-wrap: wrap;
-  padding: 0.6rem 0;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid #f0ece3;
+  padding-top: 1rem;
+  padding-bottom: 0.6rem;
 }
 
 .featureBadge {
@@ -368,6 +540,7 @@
   height: 30px;
   object-fit: contain;
   flex-shrink: 0;
+  background: white;
 }
 
 .featureLabel {
@@ -1393,12 +1566,15 @@
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
     padding: 1.5rem;
+    max-width: 700px;
+    margin: 0 auto;
   }
 
   .productMedia {
     order: 1;
     flex-direction: column;
     position: static;
+    width: 100%;
   }
 
   .thumbs {
@@ -1407,6 +1583,9 @@
     overflow-x: auto;
     gap: 0.6rem;
     padding-bottom: 0.5rem;
+    order: 2;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 
   .thumb {
@@ -1417,11 +1596,15 @@
 
   .productHero {
     order: 2;
+    position: static;
   }
 
   .gallery {
-    min-height: 400px;
-    height: auto;
+    min-height: 550px;
+    height: 85vw;
+    max-height: 750px;
+    width: 100%;
+    order: 1;
   }
 }
 
@@ -2825,13 +3008,64 @@
 }
 
 /* Sidebar Trigger Link */
+/* CM / IN toggle */
+.unitToggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0 0;
+}
+
+.unitToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.unitLabel {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #bbb;
+  transition: color 0.2s;
+}
+
+.unitLabelActive {
+  color: #1a1a1a;
+}
+
+.toggleTrack {
+  width: 36px;
+  height: 20px;
+  background: #e0dcd2;
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggleThumb {
+  width: 16px;
+  height: 16px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.25s ease;
+}
+
+.toggleThumbRight {
+  left: 18px;
+}
+
 .sizeGuideLink {
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 0.75rem;
   color: #475569;
   text-decoration: underline;
   cursor: pointer;
-  float: right;
   font-weight: 500;
   transition: color 0.2s;
 }

@@ -87,17 +87,15 @@ export default function CurtainWizard({
 
     const unitPricePerCurtain = useMemo(() => {
         if (!width || !height) return 0;
-        const wm = parseFloat(width) / 100;
         const fabricCost = fabricNeededPerCurtain * unitPrice;
 
         let pleatCost = 0;
         if (pleatType) {
-            const rate = ['american', 'water_wave'].includes(pleatType) ? 2.5 : (pleatDensity === '0' ? 0 : 1.25);
-            pleatCost = wm * rate * densityMult; // single wing
+            const rate = ['american', 'water_wave'].includes(pleatType) ? 2.5 : (pleatDensity === '0' ? 0 : 2);
+            pleatCost = fabricNeededPerCurtain * rate;
         }
-        const mountCost = wm * 1.25; // cornice is standard
-        return fabricCost + pleatCost + mountCost;
-    }, [width, height, pleatType, pleatDensity, densityMult, fabricNeededPerCurtain, unitPrice]);
+        return fabricCost + pleatCost;
+    }, [width, height, pleatType, pleatDensity, fabricNeededPerCurtain, unitPrice]);
 
     const totalPrice = unitPricePerCurtain * quantity;
 
@@ -173,9 +171,6 @@ export default function CurtainWizard({
                         </span>
                     )}
                 </div>
-                <p className={classes.sectionDesc}>
-                    {locale === 'tr' ? 'Sipariș vermek istediğiniz perdenin ölçüsünü veriniz, sistem pileyi kendisi hesaplamaktadır.' : t('dimensionHint')}
-                </p>
                 <div className={classes.dimRowSelect}>
                     <div className={classes.dimGroup}>
                         <label style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px', fontSize: '0.72rem', fontWeight: 600, color: '#333' }}>

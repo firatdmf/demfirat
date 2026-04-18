@@ -527,6 +527,25 @@
   padding-top: 0.5rem;
 }
 
+.reviewRating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.reviewStars {
+  display: flex;
+  gap: 1px;
+}
+
+.reviewCount {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.65rem;
+  color: #999;
+  font-weight: 500;
+}
+
 .discountRow {
   display: flex;
   align-items: center;

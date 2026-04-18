@@ -200,6 +200,132 @@
     margin: 0;
 }
 
+.reviewImages {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.reviewImage {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e8e3d8;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.reviewImage:hover {
+    transform: scale(1.05);
+}
+
+.morePhotos {
+    width: 64px;
+    height: 64px;
+    border-radius: 6px;
+    background: #f5f2ec;
+    border: 1px solid #e8e3d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #c9a961;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.morePhotos:hover {
+    background: #ece7dc;
+}
+
+/* Lightbox */
+.lightboxOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightboxClose {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    padding: 0.5rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.lightboxClose:hover {
+    opacity: 1;
+}
+
+.lightboxPrev,
+.lightboxNext {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 1rem 0.75rem;
+    border-radius: 8px;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.lightboxPrev:hover,
+.lightboxNext:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.lightboxPrev {
+    left: 1rem;
+}
+
+.lightboxNext {
+    right: 1rem;
+}
+
+.lightboxContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.lightboxImage {
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.lightboxCounter {
+    color: rgba(255, 255, 255, 0.7);
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
 .filledStar {
     color: #f59e0b;
 }

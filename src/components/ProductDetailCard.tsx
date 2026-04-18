@@ -185,6 +185,8 @@ function ProductDetailCard({
   const hasStandardCartOptions = !isCustomCurtainIntent;
   const [showWizard, setShowWizard] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [sizeUnit, setSizeUnit] = useState<'cm' | 'in'>('cm');
+  const cmToInch = (cm: number) => (cm / 2.54).toFixed(1);
   const [showPleatGuide, setShowPleatGuide] = useState(false);
 
   // Initialize selectedAttributes synchronously with initialAttributes 
@@ -215,7 +217,7 @@ function ProductDetailCard({
   const [quantity, setQuantity] = useState<string>('1');
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery' | 'returns' | null>('description');
+  const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery' | 'returns' | 'care' | null>('description');
   const [isAdding, setIsAdding] = useState(false);
 
   const findSelectedVariant = () => {
@@ -549,24 +551,20 @@ function ProductDetailCard({
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Only allow numbers and decimal point
-    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+    if (value === '' || /^\d+$/.test(value)) {
       setQuantity(value);
     }
   };
 
   const handleIncrement = () => {
-    const currentQty = parseFloat(quantity) || 0;
-    const step = isFabricProduct ? 0.5 : 1; // Kumaşlar için 0.5 metre, hazır perdeler için 1 adet
-    setQuantity((currentQty + step).toFixed(1));
+    const currentQty = parseInt(quantity) || 0;
+    setQuantity(String(currentQty + 1));
   };
 
   const handleDecrement = () => {
-    const currentQty = parseFloat(quantity) || 0;
-    const step = isFabricProduct ? 0.5 : 1;
-    const minQty = step;
-    if (currentQty > minQty) {
-      setQuantity(Math.max(minQty, currentQty - step).toFixed(1));
+    const currentQty = parseInt(quantity) || 0;
+    if (currentQty > 1) {
+      setQuantity(String(currentQty - 1));
     }
   };
 
@@ -1032,14 +1030,18 @@ function ProductDetailCard({
     const n = name.toLowerCase();
     const v = value.toLowerCase();
     if (n === 'panel_type' || n === 'header') {
-      if (v === 'grommet') return '/media/curtain_features/Grommet.png';
-      if (v === 'rod_pocket' || v === 'rod pocket') return '/media/curtain_features/rod_pocket.png';
+      if (v === 'grommet') return '/media/curtain_features/Grommet.avif';
+      if (v === 'rod_pocket' || v === 'rod pocket') return '/media/curtain_features/rod_pocket.avif';
     }
-    if (n === 'number_of_panels' && v === '2') return '/media/curtain_features/two_panel.png';
+    if ((n === 'number_of_panels' || n === 'number_of_panel') && v === '2') return '/media/curtain_features/two_panel.avif';
     if (n === 'sheerness_level') {
       const level = parseInt(v);
-      if (level >= 1 && level <= 4) return `/media/curtain_features/level_${level}.png`;
+      if (level >= 1 && level <= 4) return `/media/curtain_features/level_${level}.avif`;
     }
+    if (n === 'care' && v.includes('none iron')) return '/media/curtain_features/none_iron.avif';
+    if (n === 'wrinkle_resistance' && v === 'yes') return '/media/curtain_features/wrinkle_resistance.avif';
+    if (n === 'fast_shipping' && v === 'yes') return '/media/curtain_features/fast_shipping.avif';
+    if (n === 'warranty' && v === '2') return '/media/curtain_features/warranty_en.avif';
     return null;
   };
 
@@ -1069,7 +1071,11 @@ function ProductDetailCard({
     const n = name.toLowerCase();
     if (n === 'sheerness_level') return getSheernessLabel(value);
     if (n === 'panel_type' || n === 'header') return getPanelTypeLabel(value, short);
-    if (n === 'number_of_panels') return getNumberOfPanelsLabel(value, short);
+    if (n === 'number_of_panels' || n === 'number_of_panel') return getNumberOfPanelsLabel(value, short);
+    if (n === 'care' && value.toLowerCase().includes('none iron')) return locale === 'tr' ? 'Ütü Gerektirmez' : locale === 'ru' ? 'Не требует глажки' : locale === 'pl' ? 'Nie wymaga prasowania' : 'No Iron Needed';
+    if (n === 'wrinkle_resistance') return locale === 'tr' ? 'Kırışmaz' : locale === 'ru' ? 'Не мнётся' : locale === 'pl' ? 'Nie gniecie się' : 'Wrinkle Free';
+    if (n === 'fast_shipping') return locale === 'tr' ? '24 Saatte Kargoda' : locale === 'ru' ? 'Отправка за 24 часа' : locale === 'pl' ? 'Wysyłka w 24h' : 'Ships in 24h';
+    if (n === 'warranty') return locale === 'tr' ? '2 Yıl Garanti' : locale === 'ru' ? '2 года гарантии' : locale === 'pl' ? '2 lata gwarancji' : '2 Year Warranty';
     return value;
   };
 
@@ -1095,22 +1101,17 @@ function ProductDetailCard({
                 <div className={classes.img}>
                   {media.type === 'video' ? (
                     <>
-                      {/* Don't load video for thumbnail - use static placeholder */}
-                      <div
-                        className={classes.videoThumbnailPlaceholder}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                      >
-                        <span style={{ fontSize: '1.5rem', color: 'white' }}>🎬</span>
-                      </div>
+                      <video
+                        src={media.url}
+                        muted
+                        preload="metadata"
+                        playsInline
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
+                      />
                       <div className={classes.videoPlayOverlay}>
-                        <span className={classes.playIcon}>▶</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{ filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.5))' }}>
+                          <polygon points="8,5 20,12 8,19" />
+                        </svg>
                       </div>
                     </>
                   ) : (
@@ -1302,11 +1303,6 @@ function ProductDetailCard({
                           ) : null}
                           <h3 style={{ margin: 0 }}>{translateAttributeName(attribute.name || '')}</h3>
                         </label>
-                        {isSizeAttribute && (
-                          <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
-                            {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : locale === 'de' ? 'Wie man misst?' : 'Size Guide'}
-                          </div>
-                        )}
                       </div>
                       {/* Check if this is Fabric attribute */}
                       {attribute.name?.toLowerCase() === 'fabric' || attribute.name?.toLowerCase() === 'kumaş' ? (
@@ -1396,7 +1392,20 @@ function ProductDetailCard({
                                     handleAttributeChange(attribute.name ?? '', value);
                                   }}
                                 >
-                                  {translateAttributeName(value)}
+                                  {(() => {
+                                    const sizeMatch = value.match(/(\d+)\s*x\s*(\d+)/i);
+                                    if (sizeMatch && ['size', 'boyut', 'beden', 'ölçü', 'size per panel'].includes(attribute.name?.toLowerCase() || '')) {
+                                      const wL = locale === 'tr' ? 'En' : 'W';
+                                      const hL = locale === 'tr' ? 'Boy' : 'H';
+                                      if (sizeUnit === 'in') {
+                                        return `${wL}: ${cmToInch(Number(sizeMatch[1]))}″ × ${hL}: ${cmToInch(Number(sizeMatch[2]))}″`;
+                                      }
+                                      return `${wL}: ${sizeMatch[1]} × ${hL}: ${sizeMatch[2]} cm`;
+                                    }
+                                    let display = translateAttributeName(value);
+                                    display = display.replace('(each)', locale === 'tr' ? '(Tek Parça Boyutu)' : locale === 'ru' ? '(Размер одной панели)' : locale === 'pl' ? '(Rozmiar jednego panelu)' : '(Per Panel)');
+                                    return display;
+                                  })()}
                                 </Link>
                               </div>
                             );
@@ -1407,6 +1416,21 @@ function ProductDetailCard({
                   )
                 })}
               </ul>
+              {/* CM / IN toggle + Size Guide below variants */}
+              {groupedAttributeValues?.some(({ attribute }) => ['size', 'boyut', 'beden', 'ölçü', 'size per panel'].includes(attribute.name?.toLowerCase() || '')) && (
+                <div className={classes.unitToggleRow}>
+                  <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
+                    {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : 'Size Guide'}
+                  </div>
+                  <div className={classes.unitToggle} onClick={() => setSizeUnit(sizeUnit === 'cm' ? 'in' : 'cm')}>
+                    <span className={`${classes.unitLabel} ${sizeUnit === 'in' ? classes.unitLabelActive : ''}`}>IN</span>
+                    <div className={classes.toggleTrack}>
+                      <div className={`${classes.toggleThumb} ${sizeUnit === 'cm' ? classes.toggleThumbRight : ''}`} />
+                    </div>
+                    <span className={`${classes.unitLabel} ${sizeUnit === 'cm' ? classes.unitLabelActive : ''}`}>CM</span>
+                  </div>
+                </div>
+              )}
             </div>
           ) :
             <div className={classes.parent_product_info}>
@@ -1477,13 +1501,80 @@ function ProductDetailCard({
                 return null;
               })()}
 
+              {/* Ready-made curtain: 2 panel info + size diagram */}
+              {isReadyMadeCurtain && (() => {
+                // Get size from selected variant's attributes
+                const sizeAttr = selectedAttributes['size'] || '';
+                const sizeMatch = sizeAttr.match(/(\d+)\s*x\s*(\d+)/i);
+                const panelWidth = sizeMatch ? sizeMatch[1] : null;
+                const panelHeight = sizeMatch ? sizeMatch[2] : null;
+
+                return (
+                  <div className={classes.panelInfoBox}>
+                    <div className={classes.panelInfoContent}>
+                      {/* Two panel icon large */}
+                      <div className={classes.panelDiagram}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="/media/curtain_features/two_panel.avif" alt="2 Panel" className={classes.panelDiagramIcon} />
+                        {panelWidth && panelHeight && (
+                          <div className={classes.panelDimensions}>
+                            {/* Width arrow */}
+                            <div className={classes.dimArrowH}>
+                              <svg width="100%" height="16" viewBox="0 0 120 16" fill="none">
+                                <line x1="8" y1="8" x2="112" y2="8" stroke="#c9a961" strokeWidth="1.5" />
+                                <polygon points="2,8 10,4 10,12" fill="#c9a961" />
+                                <polygon points="118,8 110,4 110,12" fill="#c9a961" />
+                              </svg>
+                              <span className={classes.dimText}>{sizeUnit === 'in' ? `${cmToInch(Number(panelWidth))}″` : `${panelWidth} cm`}</span>
+                            </div>
+                            {/* Height arrow */}
+                            <div className={classes.dimArrowV}>
+                              <svg width="16" height="100%" viewBox="0 0 16 80" fill="none">
+                                <line x1="8" y1="8" x2="8" y2="72" stroke="#c9a961" strokeWidth="1.5" />
+                                <polygon points="8,2 4,10 12,10" fill="#c9a961" />
+                                <polygon points="8,78 4,70 12,70" fill="#c9a961" />
+                              </svg>
+                              <span className={classes.dimText}>{sizeUnit === 'in' ? `${cmToInch(Number(panelHeight))}″` : `${panelHeight} cm`}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      {/* Text info */}
+                      <div className={classes.panelInfoText}>
+                        <p className={classes.panelInfoTitle}>
+                          {locale === 'tr' ? '2 Panel (Çift Kanat) olarak satılır' : locale === 'ru' ? 'Продается как 2 панели (пара)' : locale === 'pl' ? 'Sprzedawane jako 2 panele (para)' : 'Sold as 2 Panels (Pair)'}
+                        </p>
+                        <p className={classes.panelInfoDesc}>
+                          {locale === 'tr' ? 'Fiyat 2 panel içindir. Tek pencere için 1 adet sipariş yeterlidir.' : locale === 'ru' ? 'Цена за 2 панели. Для одного окна достаточно 1 заказа.' : locale === 'pl' ? 'Cena za 2 panele. Dla jednego okna wystarczy 1 zamówienie.' : 'Price includes 2 panels. Order 1 for a single window.'}
+                        </p>
+                        {panelWidth && panelHeight && (
+                          <p className={classes.panelInfoSize}>
+                            {sizeUnit === 'in'
+                              ? (locale === 'tr' ? `Tek panel: En ${cmToInch(Number(panelWidth))}″ × Boy ${cmToInch(Number(panelHeight))}″` : `Each panel: W ${cmToInch(Number(panelWidth))}″ × H ${cmToInch(Number(panelHeight))}″`)
+                              : (locale === 'tr' ? `Tek panel: En ${panelWidth} cm × Boy ${panelHeight} cm` : `Each panel: W ${panelWidth} cm × H ${panelHeight} cm`)
+                            }
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* Feature icons from product attributes + ready-made info */}
               {(() => {
                 const allAttrs = (() => {
                   const variantAttrs = selectedVariant && variant_attributes
                     ? variant_attributes.filter(attr => attr.variant_id === selectedVariant.id)
                     : [];
-                  return (variantAttrs.length > 0 ? variantAttrs : (product_attributes || []));
+                  const combined = [...(product_attributes || []), ...variantAttrs];
+                  const seen = new Set<string>();
+                  return combined.filter(a => {
+                    const name = (a.name || '').toLowerCase();
+                    if (seen.has(name)) return false;
+                    seen.add(name);
+                    return true;
+                  });
                 })();
 
                 const featureAttrs = allAttrs.filter(a => getFeatureIcon(a.name || '', a.value));
@@ -1500,7 +1591,7 @@ function ProductDetailCard({
                     ))}
                     {isReadyMadeCurtain && (
                       <div className={classes.featureBadge}>
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                         <span className={classes.featureLabel}>{locale === 'tr' ? 'Hazır & Dikili' : locale === 'ru' ? 'Сшитые и готовые' : locale === 'pl' ? 'Uszyte i gotowe' : 'Sewn & Ready'}</span>
@@ -1550,7 +1641,7 @@ function ProductDetailCard({
                       <button type="button" onClick={handleDecrement} className={classes.quantityBtn} aria-label="Decrease quantity">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
                       </button>
-                      <input id="quantity" type="text" value={quantity} onChange={handleQuantityChange} className={classes.quantityInput} placeholder="1.0" />
+                      <input id="quantity" type="text" value={quantity} onChange={handleQuantityChange} className={classes.quantityInput} placeholder={isFabricProduct ? "1.0" : "1"} />
                       <button type="button" onClick={handleIncrement} className={classes.quantityBtn} aria-label="Increase quantity">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
                       </button>
@@ -1634,14 +1725,33 @@ function ProductDetailCard({
                       {Object.entries(selectedAttributes).map(([attrName, attrValue]) => (
                         <tr key={attrName}><td className={classes.detailTableLabel}>{translateAttributeName(attrName)}</td><td className={classes.detailTableValue}>{translateAttributeName(attrValue)}</td></tr>
                       ))}
-                      {product_attributes && product_attributes.filter(attr => attr.name?.toLowerCase() !== 'discount_rate').map((attr, index) => (
-                        <tr key={`product-attr-${index}`}>
-                          <td className={classes.detailTableLabel}>
-                            {attr.name?.toLowerCase() !== 'property' ? translateAttributeName(attr.name || '') : ''}
-                          </td>
-                          <td className={classes.detailTableValue}>{['sheerness_level', 'panel_type', 'header', 'number_of_panels'].includes(attr.name?.toLowerCase() || '') ? getFeatureLabel(attr.name || '', attr.value) : translateAttributeName(attr.value)}</td>
-                        </tr>
-                      ))}
+                      {(() => {
+                        // Show variant-specific product attributes, avoid duplicates with selectedAttributes
+                        const shownKeys = new Set(Object.keys(selectedAttributes).map(k => k.toLowerCase()));
+                        const variantAttrs = selectedVariant && variant_attributes
+                          ? variant_attributes.filter(attr => attr.variant_id === selectedVariant.id)
+                          : [];
+                        const attrsToShow = (variantAttrs.length > 0 ? variantAttrs : (product_attributes || []))
+                          .filter(attr => {
+                            const name = (attr.name || '').toLowerCase();
+                            return name !== 'discount_rate' && !shownKeys.has(name);
+                          });
+                        // Deduplicate by name (keep first occurrence)
+                        const seen = new Set<string>();
+                        return attrsToShow.filter(attr => {
+                          const name = (attr.name || '').toLowerCase();
+                          if (seen.has(name)) return false;
+                          seen.add(name);
+                          return true;
+                        }).map((attr, index) => (
+                          <tr key={`product-attr-${index}`}>
+                            <td className={classes.detailTableLabel}>
+                              {attr.name?.toLowerCase() !== 'property' ? translateAttributeName(attr.name || '') : ''}
+                            </td>
+                            <td className={classes.detailTableValue}>{['sheerness_level', 'panel_type', 'header', 'number_of_panels', 'number_of_panel'].includes(attr.name?.toLowerCase() || '') ? getFeatureLabel(attr.name || '', attr.value) : translateAttributeName(attr.value)}</td>
+                          </tr>
+                        ));
+                      })()}
                     </tbody>
                   </table>
                 </div>
@@ -1683,6 +1793,21 @@ function ProductDetailCard({
                 </div>
               </div>
             </div>
+
+            {/* Care Instructions - only show if available */}
+            {getLocalizedProductField(product, 'care_instructions', locale) && (
+              <div className={classes.accordionItem}>
+                <button className={classes.accordionHeader} onClick={() => setActiveTab(activeTab === 'care' ? null : 'care')}>
+                  <span>{locale === 'tr' ? 'Bakım Talimatları' : locale === 'ru' ? 'Инструкции по уходу' : locale === 'pl' ? 'Instrukcje pielęgnacji' : 'Care Instructions'}</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: activeTab === 'care' ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div className={`${classes.accordionPanel} ${activeTab === 'care' ? classes.accordionPanelOpen : ''}`}>
+                  <div className={classes.accordionContent}>
+                    <div className={classes.descriptionHtml} dangerouslySetInnerHTML={{ __html: getLocalizedProductField(product, 'care_instructions', locale) }} />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
         </div>

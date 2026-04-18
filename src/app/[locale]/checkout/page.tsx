@@ -1892,6 +1892,13 @@ export default function CheckoutPage() {
                       locale === 'pl' ? 'Dane karty' :
                         'Card Details'}
                 </h3>
+                <p style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: '#27ae60', fontWeight: 500, margin: '0 0 0.75rem', fontFamily: "'Montserrat', sans-serif" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                  {locale === 'tr' ? 'Kredi Kartı Bilgileriniz 128 Bit SSL Sertifikası ile Korunmaktadır' :
+                    locale === 'ru' ? 'Данные вашей карты защищены 128-битным SSL сертификатом' :
+                      locale === 'pl' ? 'Dane karty są chronione 128-bitowym certyfikatem SSL' :
+                        'Your card details are protected with 128-Bit SSL Certificate'}
+                </p>
                 <div className={classes.formGrid}>
                   <input
                     type="text"

@@ -12,9 +12,6 @@ interface InstagramFeedProps {
 const INSTAGRAM_HANDLE = '@karvenhomedecor';
 const INSTAGRAM_URL = 'https://www.instagram.com/karvenhomedecor/';
 
-// Access Token provided by user
-const ACCESS_TOKEN = '926654021fdbaccdc52658be447ff0ff';
-
 interface InstagramMedia {
     id: string;
     media_url: string;
@@ -31,10 +28,7 @@ export default function InstagramFeed({ locale }: InstagramFeedProps) {
     useEffect(() => {
         const fetchInstagramPosts = async () => {
             try {
-                // Fetch fields: id, media_type, media_url, permalink, thumbnail_url, caption
-                const response = await fetch(
-                    `https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,thumbnail_url,caption&access_token=${ACCESS_TOKEN}&limit=6`
-                );
+                const response = await fetch('/api/instagram');
 
                 if (response.ok) {
                     const data = await response.json();

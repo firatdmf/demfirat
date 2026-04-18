@@ -87,12 +87,12 @@ export async function POST(request: NextRequest) {
             </p>
 
             <div style="background:linear-gradient(135deg,#c9a961 0%,#b8956a 100%);padding:30px;border-radius:12px;text-align:center;margin:0 0 24px;">
-              <p style="color:white;margin:0 0 10px;font-size:14px;">Size özel %5 indirim kodunuz:</p>
+              <p style="color:white;margin:0 0 10px;font-size:14px;">Size özel %10 indirim kodunuz:</p>
               <p style="color:white;font-size:32px;font-weight:bold;margin:0;letter-spacing:3px;">${discountCode}</p>
             </div>
 
             <p style="color:#666;font-size:14px;line-height:1.6;text-align:center;margin:0 0 8px;">
-              Bu kodu ödeme sayfasında kullanarak ilk siparişinizde <strong>%5 indirim</strong> kazanabilirsiniz.
+              Bu kodu ödeme sayfasında kullanarak ilk siparişinizde <strong>%10 indirim</strong> kazanabilirsiniz.
             </p>
 
             <p style="color:#999;font-size:12px;text-align:center;margin:24px 0 0;">
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
         <tr>
           <td style="background:rgb(250,245,235);padding:14px 40px;text-align:center;">
             <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0 0 8px;">&copy; ${new Date().getFullYear()} DEMFIRAT. Tüm hakları saklıdır.</p>
-            <a href="https://www.demfirat.com/unsubscribe?email=${encodeURIComponent(email)}" style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;text-decoration:underline;">Abonelikten cik</a>
+            <a href="https://www.demfirat.com/tr/unsubscribe?email=${encodeURIComponent(email)}" style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;text-decoration:underline;">Abonelikten cik</a>
           </td>
         </tr>
 
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
             try {
                 await sendEmail(
                     email,
-                    'Hoş Geldiniz! %5 İndirim Kodunuz 🎉',
+                    'Hoş Geldiniz! %10 İndirim Kodunuz 🎉',
                     htmlContent
                 );
                 console.log('[Subscribe] Email sent successfully to:', email);

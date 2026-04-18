@@ -10,7 +10,7 @@ import { Product } from "./interfaces";
  * @param locale The current locale
  * @returns The localized string or the default/original value
  */
-export const getLocalizedProductField = (product: Product, field: 'title' | 'description', locale: string = 'en'): string => {
+export const getLocalizedProductField = (product: Product, field: 'title' | 'description' | 'care_instructions', locale: string = 'en'): string => {
     const description = product.description;
     const defaultTitle = product.title;
     const defaultDescription = product.description || "";

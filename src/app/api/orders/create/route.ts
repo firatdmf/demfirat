@@ -346,6 +346,11 @@ export async function POST(request: NextRequest) {
         sendEmail(customerEmail, `Siparişiniz Alındı - #${orderId}`, emailHtml)
           .then(r => { if (r.success) console.log('✅ Sipariş onay maili gönderildi:', customerEmail); else console.warn('⚠️ Mail gönderilemedi:', r.error); })
           .catch(e => console.error('⚠️ Mail hatası:', e.message));
+
+        // Admin bilgilendirme maili
+        sendEmail('firat@nejum.com', `Yeni Sipariş - #${orderId} | ${customerName}`, emailHtml)
+          .then(r => { if (r.success) console.log('✅ Admin bilgi maili gönderildi'); })
+          .catch(() => {});
       }
     } catch (e) {
       // ignore - mail gönderemezse sipariş yine geçerli

@@ -31,9 +31,10 @@ interface ProductCardProps {
   hasVideo?: boolean; // Whether product has a local video
   intent?: string; // e.g. 'custom_curtain' to pass down
   priority?: boolean; // LCP optimization: first N cards load eagerly
+  reviewData?: { avg: number; count: number } | null;
 }
 
-function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], variantAttributeValuesMap, productVariants = [], fabricType, hasVideo = false, intent, priority = false }: ProductCardProps) {
+function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, variantAttributes = [], variantAttributeValues = [], variantAttributeValuesMap, productVariants = [], fabricType, hasVideo = false, intent, priority = false, reviewData }: ProductCardProps) {
   const { convertPrice, formatPreconvertedPrice } = useCurrency();
   const placeholder_image_link = "/media/woocommerce-placeholder.svg";
   const { data: session } = useSession();
@@ -697,6 +698,18 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 );
               })()}
             </div>
+
+            {/* Review Rating */}
+            {reviewData && reviewData.count > 0 && (
+              <div className={classes.reviewRating}>
+                <div className={classes.reviewStars}>
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <span key={i} style={{ color: i <= Math.round(reviewData.avg) ? '#f59e0b' : '#e0dcd2', fontSize: '0.7rem' }}>★</span>
+                  ))}
+                </div>
+                <span className={classes.reviewCount}>({reviewData.count})</span>
+              </div>
+            )}
           </Link>
         </div>
       </div>

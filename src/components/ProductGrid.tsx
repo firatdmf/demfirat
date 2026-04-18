@@ -62,6 +62,24 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   const [priceMax, setPriceMax] = useState<string>('');
   const [activePriceRange, setActivePriceRange] = useState<string>('');
 
+  // Review data for product cards - fetched via single batch endpoint
+  const [reviewDataMap, setReviewDataMap] = useState<Record<string, { avg: number; count: number }>>({});
+
+  useEffect(() => {
+    if (!products || products.length === 0) return;
+    const fetchReviews = async () => {
+      try {
+        const skus = products.map(p => p.sku).filter(Boolean);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_reviews_summary/?skus=${skus.join(',')}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) setReviewDataMap(data.summaries || {});
+        }
+      } catch { /* ignore */ }
+    };
+    fetchReviews();
+  }, [products]);
+
   // ── Tab Counts Calculation (From original products prop) ──
   const tabCounts = useMemo(() => {
     if (!products) return { all: 0, embroidery: 0, solid: 0, blackout: 0 };
@@ -950,7 +968,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               const fabricType = searchParams?.fabric_type as string | undefined;
               const intent = searchParams?.intent as string | undefined;
 
-              return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} variantAttributeValuesMap={variantAttributeValuesMap} productVariants={productVariants} fabricType={fabricType} hasVideo={videoSKUsSet.has(product.sku)} intent={intent} priority={i < 8} />;
+              return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} variantAttributeValuesMap={variantAttributeValuesMap} productVariants={productVariants} fabricType={fabricType} hasVideo={videoSKUsSet.has(product.sku)} intent={intent} priority={i < 8} reviewData={reviewDataMap[product.sku] || null} />;
             })}
           </div>
         </div>
