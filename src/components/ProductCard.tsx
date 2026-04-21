@@ -170,16 +170,29 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const initialVariant = useMemo(() => {
     if (!productVariants || productVariants.length === 0) return null;
 
+    const inStock = (v: any) => Number(v.variant_quantity ?? 0) > 0;
+    const anyInStock = productVariants.some(inStock);
+
+    // Try to match primary image variant first (if in stock OR no variant is in stock)
     if (product.primary_image && product.product_files?.length) {
       const normalize = (u: string) => u.split('?')[0].replace(/^https?:\/\/[^/]+/, '');
       const primaryNorm = normalize(product.primary_image);
       const matchingFile = product.product_files.find(f => f.file && normalize(f.file) === primaryNorm);
       if (matchingFile?.product_variant_id) {
         const variant = productVariants.find(v => String(v.id) === String(matchingFile.product_variant_id));
-        if (variant) return variant;
+        if (variant && (inStock(variant) || !anyInStock)) return variant;
       }
     }
 
+    // Prefer in-stock variant with image
+    const inStockWithImage = productVariants.find(v => v.primary_image && inStock(v));
+    if (inStockWithImage) return inStockWithImage;
+
+    // Any in-stock variant
+    const anyInStockVariant = productVariants.find(inStock);
+    if (anyInStockVariant) return anyInStockVariant;
+
+    // Fallback: original behavior (any variant with image)
     const withImage = productVariants.find(v => v.primary_image);
     if (withImage) return withImage;
     return productVariants[0];
