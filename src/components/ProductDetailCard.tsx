@@ -818,6 +818,7 @@ function ProductDetailCard({
       return;
     }
 
+    const isFabricOnly = customizationData.isFabricOnly === true;
     try {
       if (isGuest) {
         // For guests, add to localStorage cart
@@ -826,12 +827,14 @@ function ProductDetailCard({
           variant_sku: selectedVariant?.variant_sku || null,
           quantity: String(quantity),
           product_category: product_category || undefined,
-          is_custom_curtain: true,
-          custom_attributes: customizationData,
-          custom_price: totalPrice,
+          is_custom_curtain: !isFabricOnly,
+          custom_attributes: isFabricOnly ? undefined : customizationData,
+          custom_price: isFabricOnly ? undefined : totalPrice,
           product: {
             title: product.title,
-            price: totalPrice,
+            price: isFabricOnly
+              ? (selectedVariant?.variant_price ? Number(selectedVariant.variant_price) : (product.price ? Number(product.price) : null))
+              : totalPrice,
             primary_image: product.primary_image || placeholder_image_link,
             category: product_category || undefined,
           }
@@ -857,9 +860,9 @@ function ProductDetailCard({
               product_sku: product.sku,
               variant_sku: selectedVariant?.variant_sku || null,
               quantity: quantity,
-              is_custom_curtain: true,
-              custom_attributes: customizationData,
-              custom_price: totalPrice
+              is_custom_curtain: !isFabricOnly,
+              custom_attributes: isFabricOnly ? undefined : customizationData,
+              custom_price: isFabricOnly ? undefined : totalPrice
             }),
           }
         );

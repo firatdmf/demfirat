@@ -13,21 +13,41 @@ interface FavoriteContextType {
 
 const FavoriteContext = createContext<FavoriteContextType | undefined>(undefined);
 
+const GUEST_FAVORITES_KEY = 'karven_guest_favorites';
+
 export function FavoriteProvider({ children }: { children: ReactNode }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
-  // Load favorites on mount and when session changes
+  const isGuest = status === 'unauthenticated' || (status !== 'loading' && !session);
+
+  // Load guest favorites from localStorage on mount
   useEffect(() => {
-    loadFavorites();
-  }, [session?.user?.email]);
-
-  const loadFavorites = async () => {
-    if (!session?.user?.email) {
-      setFavorites(new Set());
-      return;
+    if (typeof window !== 'undefined' && !loaded) {
+      try {
+        const saved = localStorage.getItem(GUEST_FAVORITES_KEY);
+        if (saved) {
+          const arr = JSON.parse(saved);
+          if (Array.isArray(arr)) setFavorites(new Set(arr));
+        }
+      } catch { /* ignore */ }
+      setLoaded(true);
     }
+  }, [loaded]);
+
+  // Load from backend when authenticated; merge guest favorites
+  useEffect(() => {
+    if (!loaded) return;
+    if (session?.user?.email) {
+      loadAndMergeFavorites();
+    }
+    // When logged out, keep whatever is in state (guest favorites from localStorage)
+  }, [session?.user?.email, loaded]);
+
+  const loadAndMergeFavorites = async () => {
+    if (!session?.user?.email) return;
 
     try {
       const userId = (session.user as any)?.id || session.user.email;
@@ -37,19 +57,51 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         const data = await response.json();
-        const skus = new Set<string>(data.favorites.map((fav: any) => fav.product_sku));
-        setFavorites(skus);
+        const backendSkus = new Set<string>((data.favorites || []).map((fav: any) => fav.product_sku));
+
+        // Merge guest favorites into backend
+        const guestOnly: string[] = [];
+        favorites.forEach(sku => {
+          if (!backendSkus.has(sku)) guestOnly.push(sku);
+        });
+
+        // Push guest favorites to backend
+        for (const sku of guestOnly) {
+          try {
+            await fetch(
+              `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/toggle_favorite/${userId}/`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_sku: sku }),
+              }
+            );
+            backendSkus.add(sku);
+          } catch { /* ignore */ }
+        }
+
+        setFavorites(backendSkus);
+        // Clear guest storage after merge
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem(GUEST_FAVORITES_KEY);
+        }
       }
     } catch (error) {
       console.error('[FAVORITES] Error loading:', error);
     }
   };
 
-  const toggleFavorite = async (sku: string) => {
-    if (!session?.user?.email) {
-      return;
+  // Save guest favorites to localStorage
+  useEffect(() => {
+    if (!loaded || !isGuest) return;
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(GUEST_FAVORITES_KEY, JSON.stringify(Array.from(favorites)));
+      } catch { /* quota */ }
     }
+  }, [favorites, isGuest, loaded]);
 
+  const toggleFavorite = async (sku: string) => {
     // Optimistic update
     const newFavorites = new Set(favorites);
     if (newFavorites.has(sku)) {
@@ -59,7 +111,12 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
     }
     setFavorites(newFavorites);
 
-    // API call
+    // Guest: only localStorage (useEffect handles it)
+    if (!session?.user?.email) {
+      return;
+    }
+
+    // Authenticated: also sync with backend
     try {
       const userId = (session.user as any)?.id || session.user.email;
       const response = await fetch(
@@ -72,12 +129,10 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
       );
 
       if (!response.ok) {
-        // Revert on error
         setFavorites(favorites);
       }
     } catch (error) {
       console.error('[FAVORITES] Error toggling:', error);
-      // Revert on error
       setFavorites(favorites);
     }
   };
@@ -87,7 +142,7 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshFavorites = async () => {
-    await loadFavorites();
+    if (session?.user?.email) await loadAndMergeFavorites();
   };
 
   return (

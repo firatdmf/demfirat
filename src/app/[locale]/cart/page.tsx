@@ -398,7 +398,7 @@ export default function CartPage() {
         <div className={classes.emptyState}>
           <FaBox className={classes.emptyIcon} />
           <h2>{t('emptyCart')}</h2>
-          <Link href={`/${locale}/product/fabric`} className={classes.startShoppingBtn}>
+          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.startShoppingBtn}>
             {t('startShopping')}
           </Link>
         </div>
@@ -674,7 +674,7 @@ export default function CartPage() {
               <FaArrowRight />
             </button>
 
-            <Link href={`/${locale}/product/fabric`} className={classes.continueBtn}>
+            <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.continueBtn}>
               {t('continueShopping')}
             </Link>
           </div>

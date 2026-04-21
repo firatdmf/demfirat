@@ -40,7 +40,7 @@ function ProductCategories({
       <div className={classes.container}>
         {(product_categories ?? []).map((product_category, index) => {
           const href = product_category.name.toLowerCase() === "fabrics" ?
-            "/product/fabric" :
+            "/product/fabric?intent=custom_curtain" :
             "/product/" + product_category.name.toLowerCase();
 
           return (

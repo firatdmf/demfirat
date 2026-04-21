@@ -33,6 +33,14 @@ export default function CurtainWizard({
 
     const [width, setWidth] = useState('');
     const [height, setHeight] = useState('');
+    const [toast, setToast] = useState<string | null>(null);
+    const toastTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+    const [dimMissing, setDimMissing] = useState(false);
+    const showToast = (msg: string) => {
+        if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+        setToast(msg);
+        toastTimeoutRef.current = setTimeout(() => setToast(null), 3500);
+    };
 
     // Default config: Düz Pile (flat), Sık Pile (1x3)
     const [pleatType, setPleatType] = useState<PleatType>('flat');
@@ -113,17 +121,44 @@ export default function CurtainWizard({
 
     const canSubmit = !!(width && height && !heightError && !stockError && totalPrice > 0);
 
-    const handleSubmit = (isBuyNow: boolean) => {
+    const handleFabricOnly = () => {
         if (!width || !height) {
-            alert(locale === 'tr' ? 'Lütfen perde enini ve boyunu seçiniz.' : 'Please select curtain width and height.');
+            setDimMissing(true);
+            showToast(locale === 'tr' ? 'Lütfen perde enini ve boyunu seçiniz.' : 'Please select curtain width and height.');
             return;
         }
+        setDimMissing(false);
+        // Fabric only: per curtain meters + 20cm fire (0.20m)
+        const metersPerCurtain = fabricNeededPerCurtain + 0.20;
+        const totalMeters = metersPerCurtain * quantity;
+        const fabricOnlyPrice = totalMeters * unitPrice;
+
+        onAddToCart({
+            mountingType: 'none',
+            pleatType: null,
+            pleatDensity: '0',
+            width,
+            height,
+            wingType: 'single',
+            isCustomCurtain: false,
+            isFabricOnly: true,
+            fabricMeters: Number(totalMeters.toFixed(2)),
+        }, fabricOnlyPrice, totalMeters, false);
+    };
+
+    const handleSubmit = (isBuyNow: boolean) => {
+        if (!width || !height) {
+            setDimMissing(true);
+            showToast(locale === 'tr' ? 'Lütfen perde enini ve boyunu seçiniz.' : 'Please select curtain width and height.');
+            return;
+        }
+        setDimMissing(false);
         if (heightError) {
-            alert(heightError);
+            showToast(heightError);
             return;
         }
         if (stockError) {
-            alert(stockError);
+            showToast(stockError);
             return;
         }
         if (totalPrice <= 0) return;
@@ -159,6 +194,20 @@ export default function CurtainWizard({
 
     return (
         <div className={classes.simpleWizardWrapper}>
+            {toast && (
+                <div style={{
+                    position: 'fixed', top: '50%', right: '24px', transform: 'translateY(-50%)',
+                    zIndex: 9999, padding: '14px 24px', borderRadius: '12px',
+                    background: '#fff0f0', border: '1px solid #fecaca', color: '#b91c1c',
+                    fontFamily: "'Montserrat', Arial, sans-serif", fontSize: '0.875rem', fontWeight: 600,
+                    boxShadow: '0 8px 30px rgba(0,0,0,0.12)', display: 'flex', alignItems: 'center', gap: '10px',
+                    maxWidth: 'min(380px, 90vw)', animation: 'toastSlide 0.3s ease-out',
+                    cursor: 'pointer',
+                }} onClick={() => setToast(null)}>
+                    <span>⚠️</span>{toast}
+                </div>
+            )}
+            <style>{`@keyframes toastSlide { from { opacity: 0; transform: translateY(-50%) translateX(20px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }`}</style>
             {/* Step 1: Dimensions */}
             <div className={classes.wizardSection}>
                 <div className={classes.sectionTitleContainer}>
@@ -181,7 +230,7 @@ export default function CurtainWizard({
                             </svg>
                             {locale === 'tr' ? 'En Ölçüsü (cm)' : 'Width (cm)'}
                         </label>
-                        <select className={classes.dimSelect} value={width} onChange={e => setWidth(e.target.value)}>
+                        <select className={`${classes.dimSelect} ${dimMissing && !width ? classes.dimInputError : ''}`} value={width} onChange={e => { setWidth(e.target.value); if (e.target.value) setDimMissing(false); }}>
                             <option value="" disabled>{locale === 'tr' ? 'En Seçiniz' : t('width')}</option>
                             {Array.from({ length: 951 }, (_, i) => 50 + i * 1).map(w => (
                                 <option key={w} value={w}>{w} cm</option>
@@ -197,7 +246,7 @@ export default function CurtainWizard({
                             </svg>
                             {locale === 'tr' ? 'Boy Ölçüsü (cm)' : 'Height (cm)'}
                         </label>
-                        <select className={`${classes.dimSelect} ${heightError ? classes.dimInputError : ''}`} value={height} onChange={e => setHeight(e.target.value)}>
+                        <select className={`${classes.dimSelect} ${(heightError || (dimMissing && !height)) ? classes.dimInputError : ''}`} value={height} onChange={e => { setHeight(e.target.value); if (e.target.value) setDimMissing(false); }}>
                             <option value="" disabled>{locale === 'tr' ? 'Boy Seçiniz' : t('height')}</option>
                             {Array.from({ length: maxHeight - 49 }, (_, i) => 50 + i * 1).filter(h => h <= maxHeight).map(h => (
                                 <option key={h} value={h}>{h} cm</option>
@@ -334,11 +383,26 @@ export default function CurtainWizard({
                     <div className={classes.priceBox}>
                         <div className={classes.priceRow}>
                             <span>{t('fabricUsage')}</span>
-                            <span>{(fabricNeededPerCurtain * quantity).toFixed(2)} m</span>
+                            <span>{(fabricNeededPerCurtain * quantity).toFixed(2)} m (+20 cm)</span>
                         </div>
                         <div className={classes.priceTotalRow}>
-                            <span>{t('totalPrice')}</span>
+                            <span>{locale === 'tr' ? 'Dikim dahil toplam fiyat' : locale === 'ru' ? 'Общая цена с пошивом' : locale === 'pl' ? 'Cena całkowita z szyciem' : 'Total Price (sewing included)'}</span>
                             <span className={classes.priceAmount}>{convertPrice(totalPrice)}</span>
+                        </div>
+                        <div style={{ textAlign: 'right', marginTop: '0.35rem' }}>
+                            <span
+                                onClick={handleFabricOnly}
+                                style={{
+                                    fontFamily: "'Montserrat', sans-serif",
+                                    fontSize: '0.75rem',
+                                    color: '#c9a961',
+                                    textDecoration: 'underline',
+                                    cursor: 'pointer',
+                                    fontWeight: 500,
+                                }}
+                            >
+                                {locale === 'tr' ? 'Dikimsiz sadece kumaşı satın al' : locale === 'ru' ? 'Купить только ткань (без пошива)' : locale === 'pl' ? 'Kup tylko tkaninę (bez szycia)' : 'Buy fabric only (no sewing)'}
+                            </span>
                         </div>
                     </div>
                 )}
@@ -346,7 +410,7 @@ export default function CurtainWizard({
                 {stockError && <div className={classes.errText}>{stockError}</div>}
 
                 <div className={classes.actionRowTop}>
-                    <button className={classes.buyNowBtn} onClick={() => handleSubmit(true)} disabled={!canSubmit}>
+                    <button className={classes.buyNowBtn} onClick={() => handleSubmit(true)}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
@@ -367,7 +431,7 @@ export default function CurtainWizard({
                         </div>
                     </div>
 
-                    <button className={classes.addToCartBtn} onClick={() => handleSubmit(false)} disabled={!canSubmit}>
+                    <button className={classes.addToCartBtn} onClick={() => handleSubmit(false)}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
                         </svg>
@@ -385,6 +449,7 @@ export default function CurtainWizard({
                         </svg>
                     </button>
                 </div>
+
             </div>
         </div >
     );
