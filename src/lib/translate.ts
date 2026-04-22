@@ -142,9 +142,6 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'warranty': { 'tr': 'Garanti', 'ru': 'Гарантия', 'pl': 'Gwarancja', 'en': 'Warranty' },
     'panel_type': { 'tr': 'Başlık Tipi', 'ru': 'Тип панели', 'pl': 'Typ panelu', 'en': 'Panel Type' },
     'panel type': { 'tr': 'Başlık Tipi', 'ru': 'Тип панели', 'pl': 'Typ panelu', 'en': 'Panel Type' },
-    'grommet': { 'tr': 'Halkalı', 'ru': 'Люверсы', 'pl': 'Oczka', 'en': 'Grommet' },
-    'rod_pocket': { 'tr': 'Büzgülü', 'ru': 'Кулиска', 'pl': 'Tunel', 'en': 'Rod Pocket' },
-    'rod pocket': { 'tr': 'Büzgülü', 'ru': 'Кулиска', 'pl': 'Tunel', 'en': 'Rod Pocket' },
     'gold glitter': { 'tr': 'Altın Simli', 'ru': 'Золотые блестки', 'pl': 'Złoty brokat', 'en': 'Gold Glitter' },
     'gold_glitter': { 'tr': 'Altın Simli', 'ru': 'Золотые блестки', 'pl': 'Złoty brokat', 'en': 'Gold Glitter' },
     // Mounting / Installation Types
