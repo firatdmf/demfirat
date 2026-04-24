@@ -292,7 +292,18 @@ export default function CurtainWizard({
                         <span className={classes.densRatio}>1x2.5</span>
                     </button>
                     <button className={`${classes.densityBtn} ${isBasicActive('1x3') ? classes.densityActive : ''}`}
+                        style={{ position: 'relative' }}
                         onClick={() => handleBasicPleatSelect('1x3')}>
+                        <span style={{
+                            position: 'absolute', top: '-8px', right: '-6px',
+                            background: 'linear-gradient(135deg, #c9a961, #b8956a)',
+                            color: 'white', fontSize: '0.55rem', fontWeight: 700,
+                            padding: '2px 6px', borderRadius: '10px',
+                            letterSpacing: '0.02em', whiteSpace: 'nowrap',
+                            boxShadow: '0 2px 4px rgba(201, 169, 97, 0.3)',
+                        }}>
+                            {locale === 'tr' ? 'ÖNERİLEN' : locale === 'ru' ? 'РЕКОМЕНДУЕТСЯ' : locale === 'pl' ? 'POLECANE' : 'RECOMMENDED'}
+                        </span>
                         <span className={classes.densName}>{locale === 'tr' ? 'Sık Pile' : 'Dense'}</span>
                         <span className={classes.densRatio}>1x3</span>
                     </button>

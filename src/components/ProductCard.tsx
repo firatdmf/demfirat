@@ -237,6 +237,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const pathname = usePathname();
   let product_category_name = pathname.split("/").at(-1);
   const isReadyMadeCurtain = pathname.includes('ready-made_curtain') || (product as any).product_category === 'ready-made_curtain';
+  const isBedCategory = pathname.includes('/product/bed') || (product as any).product_category === 'bed';
+  const isPerPiece = isReadyMadeCurtain || isBedCategory;
 
   // Format price with currency (using global context)
   // Prefers backend pre-converted prices dict when available.
@@ -516,7 +518,6 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
             className={classes.productLink}
           >
             <div className={classes.productTitle}>{getLocalizedProductField(product, 'title', locale)}</div>
-            <div className={classes.productSku}>SKU: {product.sku}</div>
 
             {/* Attributes: Width and Fabric Type */}
             <div className={classes.productAttributes}>
@@ -652,14 +653,14 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                         </div>
                         <div className={classes.currentPriceRow}>
                           <span className={classes.currentPrice}>{formatPrice(price, pricesDict)}</span>
-                          {!isReadyMadeCurtain && <span className={classes.perMeter}>{meterLabel}</span>}
+                          {!isPerPiece && <span className={classes.perMeter}>{meterLabel}</span>}
                         </div>
                       </>
                     );
                   }
                   return (
                     <span className={classes.currentPrice}>
-                      {formatPrice(price, pricesDict)}{!isReadyMadeCurtain && <span className={classes.perMeter}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
+                      {formatPrice(price, pricesDict)}{!isPerPiece && <span className={classes.perMeter}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
                     </span>
                   );
                 };

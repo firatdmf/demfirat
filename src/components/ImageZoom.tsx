@@ -78,7 +78,6 @@ export default function ImageZoom({ src, alt, onLoad }: ImageZoomProps) {
                 onClick={toggleZoom}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                onContextMenu={(e) => e.preventDefault()}
             >
                 {/* Current displayed image - always visible */}
                 <Image

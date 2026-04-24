@@ -41,7 +41,7 @@ type ProductDetailCardPageProps = {
 function ProductDetailCard({
   product,
   product_category,
-  product_variants,
+  product_variants: all_product_variants,
   product_variant_attributes,
   product_variant_attribute_values,
   searchParams,
@@ -50,6 +50,11 @@ function ProductDetailCard({
   variant_attributes = [],
   locale = 'en'
 }: ProductDetailCardPageProps) {
+
+  // Filter out non-featured variants — they should be hidden from customers
+  const product_variants = (all_product_variants || []).filter(
+    v => v.variant_featured !== false
+  );
 
   const t = useTranslations('ProductDetailCard');
   const { currency, convertPrice, formatPreconvertedPrice, rates, loading } = useCurrency();
@@ -1050,8 +1055,11 @@ function ProductDetailCard({
 
   const getSheernessLabel = (value: string): string => {
     const level = parseInt(value);
-    const key = level === 1 ? 'sheer' : level === 2 ? 'semi-sheer' : level === 3 ? 'light filtering' : level === 4 ? 'blackout' : null;
-    return key ? translateAttributeName(key) : value;
+    if (!isNaN(level)) {
+      const key = level === 1 ? 'sheer' : level === 2 ? 'semi-sheer' : level === 3 ? 'light filtering' : level === 4 ? 'blackout' : null;
+      if (key) return translateAttributeName(key);
+    }
+    return translateAttributeName(value.toLowerCase());
   };
 
   const getPanelTypeLabel = (value: string, short?: boolean): string => {
@@ -1310,7 +1318,7 @@ function ProductDetailCard({
                       {/* Check if this is Fabric attribute */}
                       {attribute.name?.toLowerCase() === 'fabric' || attribute.name?.toLowerCase() === 'kumaş' ? (
                         <div className={classes.fabric_swatches}>
-                          {values.map((value: string) => {
+                          {values.filter((value: string) => !disabledValues[attribute.name ?? '']?.has(value)).map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
@@ -1340,7 +1348,7 @@ function ProductDetailCard({
                         </div>
                       ) : attribute.name?.toLowerCase() === 'color' ? (
                         <div className={classes.color_swatches}>
-                          {values.map((value: string) => {
+                          {values.filter((value: string) => !disabledValues[attribute.name ?? '']?.has(value)).map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
@@ -1380,7 +1388,7 @@ function ProductDetailCard({
                         </div>
                       ) : (
                         <div className={classes.variant_links}>
-                          {values.map((value: string) => {
+                          {values.filter((value: string) => !disabledValues[attribute.name ?? '']?.has(value)).map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
@@ -1419,8 +1427,8 @@ function ProductDetailCard({
                   )
                 })}
               </ul>
-              {/* CM / IN toggle + Size Guide below variants */}
-              {groupedAttributeValues?.some(({ attribute }) => ['size', 'boyut', 'beden', 'ölçü', 'size per panel'].includes(attribute.name?.toLowerCase() || '')) && (
+              {/* CM / IN toggle + Size Guide below variants (not for bed category) */}
+              {product_category?.toLowerCase() !== 'bed' && groupedAttributeValues?.some(({ attribute }) => ['size', 'boyut', 'beden', 'ölçü', 'size per panel'].includes(attribute.name?.toLowerCase() || '')) && (
                 <div className={classes.unitToggleRow}>
                   <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
                     {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : 'Size Guide'}
@@ -1751,7 +1759,14 @@ function ProductDetailCard({
                             <td className={classes.detailTableLabel}>
                               {attr.name?.toLowerCase() !== 'property' ? translateAttributeName(attr.name || '') : ''}
                             </td>
-                            <td className={classes.detailTableValue}>{['sheerness_level', 'panel_type', 'header', 'number_of_panels', 'number_of_panel'].includes(attr.name?.toLowerCase() || '') ? getFeatureLabel(attr.name || '', attr.value) : translateAttributeName(attr.value)}</td>
+                            <td className={classes.detailTableValue}>{(() => {
+                              const n = (attr.name || '').toLowerCase();
+                              if (['sheerness_level', 'panel_type', 'header', 'number_of_panels', 'number_of_panel'].includes(n)) return getFeatureLabel(attr.name || '', attr.value);
+                              if (n === 'warranty') return locale === 'tr' ? `${attr.value} Yıl` : locale === 'ru' ? `${attr.value} года` : locale === 'pl' ? `${attr.value} lata` : `${attr.value} Year${attr.value === '1' ? '' : 's'}`;
+                              if (n === 'fast_shipping' && attr.value.toLowerCase() === 'yes') return locale === 'tr' ? '24 Saatte Kargoda' : locale === 'ru' ? 'Отправка за 24 часа' : locale === 'pl' ? 'Wysyłka w 24h' : 'Ships in 24h';
+                              if (n === 'wrinkle_resistance' && attr.value.toLowerCase() === 'yes') return locale === 'tr' ? 'Kırışmaz' : locale === 'ru' ? 'Не мнётся' : locale === 'pl' ? 'Nie gniecie się' : 'Wrinkle Free';
+                              return translateAttributeName(attr.value);
+                            })()}</td>
                           </tr>
                         ));
                       })()}

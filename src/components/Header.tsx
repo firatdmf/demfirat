@@ -322,6 +322,9 @@ function Header({ menuTArray }: HeaderProps) {
                     </div>
                   </div>
                 </div>
+                <Link href={`/${locale}/product/bed`} className={classes.navLink}>
+                  {locale === 'tr' ? 'Yatak Odası' : locale === 'ru' ? 'Спальня' : locale === 'pl' ? 'Sypialnia' : 'Bedroom'}
+                </Link>
                 <Link href={`/${locale}/about`} className={classes.navLink}>
                   {menuTArray[3]}
                 </Link>
@@ -507,6 +510,11 @@ function Header({ menuTArray }: HeaderProps) {
             <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
               {locale === 'tr' ? 'Tüm Rustik Perdeler' : locale === 'ru' ? 'Все рустикальные шторы' : locale === 'pl' ? 'Wszystkie rustykalne zasłony' : 'All Rustic Curtains'}
             </Link>
+
+            <Link href={`/${locale}/product/bed`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+              {locale === 'tr' ? 'Yatak Odası' : locale === 'ru' ? 'Спальня' : locale === 'pl' ? 'Sypialnia' : 'Bedroom'}
+            </Link>
+
             <Link href={`/${locale}/about`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
               {menuTArray[3]}
             </Link>
