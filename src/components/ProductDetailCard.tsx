@@ -1427,12 +1427,14 @@ function ProductDetailCard({
                   )
                 })}
               </ul>
-              {/* CM / IN toggle + Size Guide below variants (not for bed category) */}
-              {product_category?.toLowerCase() !== 'bed' && groupedAttributeValues?.some(({ attribute }) => ['size', 'boyut', 'beden', 'ölçü', 'size per panel'].includes(attribute.name?.toLowerCase() || '')) && (
+              {/* CM / IN toggle + Size Guide below variants */}
+              {(groupedAttributeValues?.some(({ attribute }) => ['size', 'boyut', 'beden', 'ölçü', 'size per panel', 'width', 'height', 'genişlik', 'yükseklik', 'boy', 'en', 'dimension', 'dimensions', 'ebat'].includes(attribute.name?.toLowerCase() || '')) || isCustomCurtainIntent) && (
                 <div className={classes.unitToggleRow}>
-                  <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
-                    {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : 'Size Guide'}
-                  </div>
+                  {product_category?.toLowerCase() !== 'bed' ? (
+                    <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
+                      {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : 'Size Guide'}
+                    </div>
+                  ) : <span />}
                   <div className={classes.unitToggle} onClick={() => setSizeUnit(sizeUnit === 'cm' ? 'in' : 'cm')}>
                     <span className={`${classes.unitLabel} ${sizeUnit === 'in' ? classes.unitLabelActive : ''}`}>IN</span>
                     <div className={classes.toggleTrack}>
