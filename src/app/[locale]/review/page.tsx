@@ -1,16 +1,46 @@
 'use client';
 
 import { useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
 
 function ReviewForm() {
     const searchParams = useSearchParams();
+    const params = useParams();
     const sku = searchParams.get('sku') || '';
+    const locale = (params?.locale as string) || 'tr';
+    const isEn = locale === 'en';
+
+    const t = {
+        title: isEn ? 'Product Review' : 'Ürün Değerlendirmesi',
+        subtitle: isEn ? 'Share your experience with us' : 'Deneyiminizi bizimle paylaşın',
+        firstName: isEn ? 'First Name' : 'Ad',
+        firstNamePh: isEn ? 'Your first name' : 'Adınız',
+        lastName: isEn ? 'Last Name' : 'Soyad',
+        lastNamePh: isEn ? 'Your last name' : 'Soyadınız',
+        hideName: isEn ? "Don't show my full name" : 'Adım ve soyadım gözükmesin',
+        willShow: isEn ? 'Shown as' : 'Görünecek',
+        rating: isEn ? 'Your Rating' : 'Puanınız',
+        comment: isEn ? 'Your Review' : 'Yorumunuz',
+        commentPh: isEn ? 'Share your thoughts about the product...' : 'Ürün hakkındaki düşüncelerinizi paylaşın...',
+        photos: isEn ? 'Add Photos (Max 5)' : 'Fotoğraf Ekleyin (Max 5)',
+        uploading: isEn ? 'Uploading...' : 'Yükleniyor...',
+        submit: isEn ? 'Submit Review' : 'Değerlendirmeyi Gönder',
+        submitting: isEn ? 'Submitting...' : 'Gönderiliyor...',
+        successTitle: isEn ? 'Review Received!' : 'Değerlendirmeniz Alındı!',
+        successDesc: isEn ? 'Your review will be published after moderation. Thank you!' : 'Yorumunuz incelendikten sonra yayınlanacaktır. Teşekkür ederiz!',
+        backHome: isEn ? 'Back to Home' : 'Ana Sayfaya Dön',
+        invalidLink: isEn ? 'Invalid link. Product info missing.' : 'Geçersiz link. Ürün bilgisi eksik.',
+        nameRequired: isEn ? 'First and last name are required' : 'Ad ve soyad zorunludur',
+        ratingRequired: isEn ? 'Please give a rating' : 'Lütfen puan verin',
+        productMissing: isEn ? 'Product information is missing' : 'Ürün bilgisi eksik',
+        connError: isEn ? 'Connection error' : 'Bağlantı hatası',
+        genericError: isEn ? 'An error occurred' : 'Bir hata oluştu',
+    };
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [hideName, setHideName] = useState(false);
+    const [hideName, setHideName] = useState(true);
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const [comment, setComment] = useState('');
@@ -59,15 +89,15 @@ function ReviewForm() {
         setError('');
 
         if (!firstName.trim() || !lastName.trim()) {
-            setError('Ad ve soyad zorunludur');
+            setError(t.nameRequired);
             return;
         }
         if (rating === 0) {
-            setError('Lütfen puan verin');
+            setError(t.ratingRequired);
             return;
         }
         if (!sku) {
-            setError('Ürün bilgisi eksik');
+            setError(t.productMissing);
             return;
         }
 
@@ -90,10 +120,10 @@ function ReviewForm() {
             if (data.success) {
                 setSuccess(true);
             } else {
-                setError(data.error || 'Bir hata oluştu');
+                setError(data.error || t.genericError);
             }
         } catch {
-            setError('Bağlantı hatası');
+            setError(t.connError);
         } finally {
             setSubmitting(false);
         }
@@ -105,7 +135,7 @@ function ReviewForm() {
         return (
             <div style={styles.container}>
                 <div style={styles.card}>
-                    <p style={{ color: '#888', textAlign: 'center' as const }}>Geçersiz link. Ürün bilgisi eksik.</p>
+                    <p style={{ color: '#888', textAlign: 'center' as const }}>{t.invalidLink}</p>
                 </div>
             </div>
         );
@@ -121,12 +151,12 @@ function ReviewForm() {
                             <span style={{ color: 'white', fontSize: 28 }}>✓</span>
                         </div>
                         <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '1.3rem', color: '#1a1a1a', marginBottom: 8 }}>
-                            Değerlendirmeniz Alındı!
+                            {t.successTitle}
                         </h2>
                         <p style={{ color: '#888', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                            Yorumunuz incelendikten sonra yayınlanacaktır. Teşekkür ederiz!
+                            {t.successDesc}
                         </p>
-                        <Link href="/" style={styles.homeBtn}>Ana Sayfaya Dön</Link>
+                        <Link href={`/${locale}`} style={styles.homeBtn}>{t.backHome}</Link>
                     </div>
                 </div>
             </div>
@@ -137,30 +167,30 @@ function ReviewForm() {
         <div style={styles.container}>
             <div style={styles.card}>
                 <div style={styles.logo}>DEMFIRAT</div>
-                <h1 style={styles.title}>Ürün Değerlendirmesi</h1>
-                <p style={styles.subtitle}>Deneyiminizi bizimle paylaşın</p>
+                <h1 style={styles.title}>{t.title}</h1>
+                <p style={styles.subtitle}>{t.subtitle}</p>
 
                 <form onSubmit={handleSubmit} style={styles.form}>
                     {/* Name Fields */}
                     <div style={styles.row}>
                         <div style={styles.field}>
-                            <label style={styles.label}>Ad *</label>
+                            <label style={styles.label}>{t.firstName} *</label>
                             <input
                                 type="text"
                                 value={firstName}
                                 onChange={e => setFirstName(e.target.value)}
-                                placeholder="Adınız"
+                                placeholder={t.firstNamePh}
                                 style={styles.input}
                                 required
                             />
                         </div>
                         <div style={styles.field}>
-                            <label style={styles.label}>Soyad *</label>
+                            <label style={styles.label}>{t.lastName} *</label>
                             <input
                                 type="text"
                                 value={lastName}
                                 onChange={e => setLastName(e.target.value)}
-                                placeholder="Soyadınız"
+                                placeholder={t.lastNamePh}
                                 style={styles.input}
                                 required
                             />
@@ -176,10 +206,10 @@ function ReviewForm() {
                             style={{ accentColor: '#c9a961', width: 16, height: 16 }}
                         />
                         <span style={{ fontSize: '0.82rem', color: '#666' }}>
-                            Adım ve soyadım gözükmesin
+                            {t.hideName}
                             {hideName && firstName && lastName && (
                                 <span style={{ color: '#c9a961', marginLeft: 8 }}>
-                                    (Görünecek: {firstName[0]}.{lastName[0]}.)
+                                    ({t.willShow}: {firstName[0]}.{lastName[0]}.)
                                 </span>
                             )}
                         </span>
@@ -187,7 +217,7 @@ function ReviewForm() {
 
                     {/* Rating */}
                     <div style={{ marginBottom: 16 }}>
-                        <label style={styles.label}>Puanınız *</label>
+                        <label style={styles.label}>{t.rating} *</label>
                         <div style={{ display: 'flex', gap: 4 }}>
                             {[1, 2, 3, 4, 5].map(i => (
                                 <span
@@ -210,11 +240,11 @@ function ReviewForm() {
 
                     {/* Comment */}
                     <div style={styles.field}>
-                        <label style={styles.label}>Yorumunuz</label>
+                        <label style={styles.label}>{t.comment}</label>
                         <textarea
                             value={comment}
                             onChange={e => setComment(e.target.value)}
-                            placeholder="Ürün hakkındaki düşüncelerinizi paylaşın..."
+                            placeholder={t.commentPh}
                             rows={4}
                             style={{ ...styles.input, resize: 'vertical' as const, minHeight: 100 }}
                         />
@@ -222,7 +252,7 @@ function ReviewForm() {
 
                     {/* Image Upload */}
                     <div style={styles.field}>
-                        <label style={styles.label}>Fotoğraf Ekleyin (Max 5)</label>
+                        <label style={styles.label}>{t.photos}</label>
                         <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 8, marginBottom: 8 }}>
                             {images.map((url, i) => (
                                 <div key={i} style={{ position: 'relative' as const, width: 72, height: 72, borderRadius: 8, overflow: 'hidden', border: '1px solid #e0e0e0' }}>
@@ -250,7 +280,7 @@ function ReviewForm() {
                                 </label>
                             )}
                         </div>
-                        {uploading && <p style={{ fontSize: '0.75rem', color: '#c9a961' }}>Yükleniyor...</p>}
+                        {uploading && <p style={{ fontSize: '0.75rem', color: '#c9a961' }}>{t.uploading}</p>}
                     </div>
 
                     {/* Error */}
@@ -266,7 +296,7 @@ function ReviewForm() {
                             cursor: submitting ? 'not-allowed' : 'pointer',
                         }}
                     >
-                        {submitting ? 'Gönderiliyor...' : 'Değerlendirmeyi Gönder'}
+                        {submitting ? t.submitting : t.submit}
                     </button>
                 </form>
             </div>
@@ -292,7 +322,7 @@ const styles: Record<string, React.CSSProperties> = {
 
 export default function ReviewPage() {
     return (
-        <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Yükleniyor...</div>}>
+        <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
             <ReviewForm />
         </Suspense>
     );
