@@ -2,34 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
 
 const MAX_LONG_EDGE = 1500;
-const TARGET_KB = 300;
-const INITIAL_QUALITY = 80;
-const MIN_QUALITY = 40;
-const QUALITY_STEP = 10;
 
 async function optimizeToAvif(buffer: Buffer): Promise<Buffer> {
-    let img = sharp(buffer, { failOn: 'none' }).rotate(); // auto-rotate based on EXIF
-
-    const meta = await img.metadata();
-    const longEdge = Math.max(meta.width || 0, meta.height || 0);
-    if (longEdge > MAX_LONG_EDGE) {
-        img = img.resize({
-            width: meta.width! >= meta.height! ? MAX_LONG_EDGE : undefined,
-            height: meta.height! > meta.width! ? MAX_LONG_EDGE : undefined,
+    // Single pass — fast (effort: 0 = fastest, lower quality 60 keeps file small)
+    return await sharp(buffer, { failOn: 'none' })
+        .rotate()
+        .resize({
+            width: MAX_LONG_EDGE,
+            height: MAX_LONG_EDGE,
+            fit: 'inside',
             withoutEnlargement: true,
-        });
-    }
-
-    let quality = INITIAL_QUALITY;
-    let out = await img.avif({ quality }).toBuffer();
-    while (out.length / 1024 > TARGET_KB && quality > MIN_QUALITY) {
-        quality -= QUALITY_STEP;
-        out = await sharp(buffer, { failOn: 'none' }).rotate().resize({
-            width: longEdge > MAX_LONG_EDGE ? MAX_LONG_EDGE : undefined,
-            withoutEnlargement: true,
-        }).avif({ quality }).toBuffer();
-    }
-    return out;
+        })
+        .avif({ quality: 60, effort: 0 })
+        .toBuffer();
 }
 
 export async function POST(request: NextRequest) {
@@ -53,18 +38,37 @@ export async function POST(request: NextRequest) {
         }
 
         const rawBuffer = Buffer.from(await file.arrayBuffer());
-        // Convert to AVIF
         let buffer: Buffer;
+        let extension = 'avif';
+        let contentType = 'image/avif';
+
         try {
             buffer = await optimizeToAvif(rawBuffer);
-            console.log(`[Upload] AVIF: ${(rawBuffer.length / 1024).toFixed(0)}KB → ${(buffer.length / 1024).toFixed(0)}KB`);
+            console.log(`[Upload] AVIF: ${file.name} ${(rawBuffer.length / 1024).toFixed(0)}KB → ${(buffer.length / 1024).toFixed(0)}KB`);
         } catch (err) {
-            console.error('[Upload] AVIF conversion failed, using original:', err);
-            buffer = rawBuffer;
+            console.error('[Upload] AVIF failed, trying WebP:', err);
+            try {
+                // Fallback to WebP
+                const meta = await sharp(rawBuffer, { failOn: 'none' }).metadata();
+                const longEdge = Math.max(meta.width || 0, meta.height || 0);
+                let pipeline = sharp(rawBuffer, { failOn: 'none' }).rotate();
+                if (longEdge > MAX_LONG_EDGE) {
+                    pipeline = pipeline.resize({ width: MAX_LONG_EDGE, height: MAX_LONG_EDGE, fit: 'inside', withoutEnlargement: true });
+                }
+                buffer = await pipeline.webp({ quality: 80 }).toBuffer();
+                extension = 'webp';
+                contentType = 'image/webp';
+                console.log(`[Upload] WebP fallback: ${(rawBuffer.length / 1024).toFixed(0)}KB → ${(buffer.length / 1024).toFixed(0)}KB`);
+            } catch (err2) {
+                console.error('[Upload] WebP fallback failed, using original:', err2);
+                buffer = rawBuffer;
+                extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+                contentType = file.type || 'image/jpeg';
+            }
         }
 
         const baseName = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9._-]/g, '');
-        const fileName = `reviews/${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${baseName}.avif`;
+        const fileName = `reviews/${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${baseName}.${extension}`;
 
         const storageZone = process.env.BUNNY_STORAGE_ZONE;
         const apiKey = process.env.BUNNY_STORAGE_API_KEY;
@@ -80,7 +84,7 @@ export async function POST(request: NextRequest) {
                 method: 'PUT',
                 headers: {
                     'AccessKey': apiKey,
-                    'Content-Type': 'image/avif',
+                    'Content-Type': contentType,
                 },
                 body: new Uint8Array(buffer),
             }
