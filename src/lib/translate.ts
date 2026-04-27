@@ -134,7 +134,6 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'property': { 'tr': 'Özellik', 'ru': 'Свойство', 'pl': 'Właściwość', 'en': 'Property' },
 
     // Bedding attributes
-    'material': { 'tr': 'Malzeme', 'ru': 'Материал', 'pl': 'Materiał', 'en': 'Material' },
     'cotton-sateen': { 'tr': 'Pamuk-Saten', 'ru': 'Хлопок-Сатин', 'pl': 'Bawełna-Satyna', 'en': 'Cotton-Sateen' },
     'cotton sateen': { 'tr': 'Pamuk-Saten', 'ru': 'Хлопок-Сатин', 'pl': 'Bawełna-Satyna', 'en': 'Cotton-Sateen' },
     'cotton': { 'tr': 'Pamuk', 'ru': 'Хлопок', 'pl': 'Bawełna', 'en': 'Cotton' },
@@ -145,7 +144,6 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'sheet_type': { 'tr': 'Çarşaf Türü', 'ru': 'Тип простыни', 'pl': 'Typ prześcieradła', 'en': 'Sheet Type' },
     'sheet type': { 'tr': 'Çarşaf Türü', 'ru': 'Тип простыни', 'pl': 'Typ prześcieradła', 'en': 'Sheet Type' },
     'fitted': { 'tr': 'Lastikli', 'ru': 'На резинке', 'pl': 'Z gumką', 'en': 'Fitted' },
-    'flat': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Flat' },
     'non-fitted': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Non-Fitted' },
     'non_fitted': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Non-Fitted' },
     'flat sheet (non-elastic)': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Flat Sheet (Non-Elastic)' },
@@ -157,8 +155,6 @@ const manualTranslations: { [key: string]: { [key: string]: string } } = {
     'fitted sheet (elastic)': { 'tr': 'Lastikli', 'ru': 'На резинке', 'pl': 'Z gumką', 'en': 'Fitted Sheet (Elastic)' },
 
     // Bed sizes
-    'single': { 'tr': 'Tek Kişilik', 'ru': 'Односпальный', 'pl': 'Pojedynczy', 'en': 'Single' },
-    'double': { 'tr': 'Çift Kişilik', 'ru': 'Двуспальный', 'pl': 'Podwójny', 'en': 'Double' },
     'queen': { 'tr': 'Queen', 'ru': 'Queen', 'pl': 'Queen', 'en': 'Queen' },
     'king': { 'tr': 'King', 'ru': 'King', 'pl': 'King', 'en': 'King' },
 

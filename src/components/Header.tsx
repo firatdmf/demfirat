@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FaUser, FaHeart, FaShoppingCart, FaSearch, FaTimes, FaBox, FaHeadset } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import LocaleSwitcher from "./LocaleSwitcher";
+import { getCurtainSections, getTopNavItems } from "@/lib/navMenu";
 import { useSession } from "next-auth/react";
 import { useLocale } from "next-intl";
 import { useCart } from "@/contexts/CartContext";
@@ -279,52 +280,26 @@ function Header({ menuTArray }: HeaderProps) {
                   <div className={classes.megaMenu}>
                     <div className={classes.megaMenuContent}>
                       <div className={classes.megaMenuCategories}>
-                        <div className={classes.megaMenuColumn}>
-                          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuColumnImage}>
-                            <Image src="/media/header_pictures/curtain_solid.avif" alt="Tulle Curtains" width={200} height={130} style={{ objectFit: 'cover', borderRadius: '6px', width: '100%', height: 'auto' }} />
-                          </Link>
-                          <h4 className={classes.megaMenuTitle}>
-                            {locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains'}
-                          </h4>
-                          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.megaMenuItem}>
-                            {locale === 'tr' ? 'Tüm Tül Perdeler' : locale === 'ru' ? 'Все тюлевые шторы' : locale === 'pl' ? 'Wszystkie firany' : 'All Tulle Curtains'}
-                          </Link>
-                          <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`} className={classes.megaMenuItem}>
-                            {locale === 'tr' ? 'Nakışlı Tül Perdeler' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
-                          </Link>
-                          <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`} className={classes.megaMenuItem}>
-                            {locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains'}
-                          </Link>
-                        </div>
-                        <div className={classes.megaMenuColumn}>
-                          <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`} className={classes.megaMenuColumnImage}>
-                            <Image src="/media/header_pictures/curtain_blackout.avif" alt="Blackout Curtains" width={200} height={130} style={{ objectFit: 'cover', borderRadius: '6px', width: '100%', height: 'auto' }} />
-                          </Link>
-                          <h4 className={classes.megaMenuTitle}>
-                            {locale === 'tr' ? 'Fon Perdeler' : locale === 'ru' ? 'Блэкаут шторы' : locale === 'pl' ? 'Zasłony zaciemniające' : 'Blackout Curtains'}
-                          </h4>
-                          <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`} className={classes.megaMenuItem}>
-                            {locale === 'tr' ? 'Tüm Fon Perdeler' : locale === 'ru' ? 'Все блэкаут шторы' : locale === 'pl' ? 'Wszystkie zasłony zaciemniające' : 'All Blackout Curtains'}
-                          </Link>
-                        </div>
-                        <div className={classes.megaMenuColumn}>
-                          <Link href={`/${locale}/product/ready-made_curtain`} className={classes.megaMenuColumnImage}>
-                            <Image src="https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/rk72010gw-08-white-sheer-floral-dandelion-embroidered-curtain-grommet-header-installation-top.avif" alt="Rustic Curtains" width={200} height={130} style={{ objectFit: 'cover', borderRadius: '6px', width: '100%', height: '130px' }} />
-                          </Link>
-                          <h4 className={classes.megaMenuTitle}>
-                            {locale === 'tr' ? 'Rustik Perdeler' : locale === 'ru' ? 'Рустикальные шторы' : locale === 'pl' ? 'Rustykalne zasłony' : 'Rustic Curtains'}
-                          </h4>
-                          <Link href={`/${locale}/product/ready-made_curtain`} className={classes.megaMenuItem}>
-                            {locale === 'tr' ? 'Tüm Rustik Perdeler' : locale === 'ru' ? 'Все рустикальные шторы' : locale === 'pl' ? 'Wszystkie rustykalne zasłony' : 'All Rustic Curtains'}
-                          </Link>
-                        </div>
+                        {getCurtainSections(locale).map((section, idx) => (
+                          <div key={idx} className={classes.megaMenuColumn}>
+                            {section.image && (
+                              <Link href={section.href} className={classes.megaMenuColumnImage}>
+                                <Image src={section.image} alt={section.title} width={200} height={130} style={{ objectFit: 'cover', borderRadius: '6px', width: '100%', height: '130px' }} />
+                              </Link>
+                            )}
+                            <h4 className={classes.megaMenuTitle}>{section.title}</h4>
+                            {section.links.map((link, i) => (
+                              <Link key={i} href={link.href} className={classes.megaMenuItem}>{link.label}</Link>
+                            ))}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
-                <Link href={`/${locale}/product/bed`} className={classes.navLink}>
-                  {locale === 'tr' ? 'Yatak Odası' : locale === 'ru' ? 'Спальня' : locale === 'pl' ? 'Sypialnia' : 'Bedroom'}
-                </Link>
+                {getTopNavItems(locale).map((item, idx) => (
+                  <Link key={idx} href={item.href} className={classes.navLink}>{item.label}</Link>
+                ))}
                 <Link href={`/${locale}/about`} className={classes.navLink}>
                   {menuTArray[3]}
                 </Link>
@@ -484,36 +459,23 @@ function Header({ menuTArray }: HeaderProps) {
             <Link href={`/${locale}`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
               {menuTArray[0]}
             </Link>
-            <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюлевые шторы' : locale === 'pl' ? 'Firany' : 'Tulle Curtains'}
-            </Link>
-            <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Tüm Tül Perdeler' : locale === 'ru' ? 'Все тюлевые шторы' : locale === 'pl' ? 'Wszystkie firany' : 'All Tulle Curtains'}
-            </Link>
-            <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Nakışlı Tül Perdeler' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains'}
-            </Link>
-            <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains'}
-            </Link>
-
-            <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Fon Perdeler' : locale === 'ru' ? 'Блэкаут шторы' : locale === 'pl' ? 'Zasłony zaciemniające' : 'Blackout Curtains'}
-            </Link>
-            <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Tüm Fon Perdeler' : locale === 'ru' ? 'Все блэкаут шторы' : locale === 'pl' ? 'Wszystkie zasłony zaciemniające' : 'All Blackout Curtains'}
-            </Link>
-
-            <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Rustik Perdeler' : locale === 'ru' ? 'Рустикальные шторы' : locale === 'pl' ? 'Rustykalne zasłony' : 'Rustic Curtains'}
-            </Link>
-            <Link href={`/${locale}/product/ready-made_curtain`} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Tüm Rustik Perdeler' : locale === 'ru' ? 'Все рустикальные шторы' : locale === 'pl' ? 'Wszystkie rustykalne zasłony' : 'All Rustic Curtains'}
-            </Link>
-
-            <Link href={`/${locale}/product/bed`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              {locale === 'tr' ? 'Yatak Odası' : locale === 'ru' ? 'Спальня' : locale === 'pl' ? 'Sypialnia' : 'Bedroom'}
-            </Link>
+            {getCurtainSections(locale).map((section, idx) => (
+              <React.Fragment key={`mob-section-${idx}`}>
+                <Link href={section.href} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                  {section.title}
+                </Link>
+                {section.links.map((link, i) => (
+                  <Link key={`mob-link-${idx}-${i}`} href={link.href} className={classes.mobileSubLink} onClick={() => setMobileMenuOpen(false)}>
+                    {link.label}
+                  </Link>
+                ))}
+              </React.Fragment>
+            ))}
+            {getTopNavItems(locale).map((item, idx) => (
+              <Link key={`mob-top-${idx}`} href={item.href} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                {item.label}
+              </Link>
+            ))}
 
             <Link href={`/${locale}/about`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
               {menuTArray[3]}

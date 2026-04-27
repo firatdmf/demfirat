@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { FaHome, FaTh, FaShoppingCart, FaBox, FaHeart, FaUser, FaTimes } from 'react-icons/fa';
 import { useCart } from '@/contexts/CartContext';
+import { getCurtainSections, getTopNavItems } from '@/lib/navMenu';
 import styles from './MobileBottomNav.module.css';
 
 const MobileBottomNav = () => {
@@ -76,12 +77,13 @@ const MobileBottomNav = () => {
         },
     ];
 
+    // Build submenu from shared nav config (same as desktop + hamburger)
     const productSubmenuItems = [
-        { href: `/${locale}/product/fabric?intent=custom_curtain`, label: t('TulleCurtains') },
-        { href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`, label: locale === 'tr' ? 'Nakışlı Tül Perdeler' : locale === 'ru' ? 'Вышитый тюль' : locale === 'pl' ? 'Haftowane firany' : 'Embroidered Tulle Curtains' },
-        { href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`, label: locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : locale === 'pl' ? 'Gładkie firany' : 'Solid Tulle Curtains' },
-        { href: `/${locale}/product/ready-made_curtain`, label: locale === 'tr' ? 'Dikili Rustik Perdeler' : locale === 'ru' ? 'Готовые рустикальные шторы' : locale === 'pl' ? 'Gotowe rustykalne zasłony' : 'Ready Made Rustic Curtains' },
-        { href: `/${locale}/product/bed`, label: locale === 'tr' ? 'Yatak Odası' : locale === 'ru' ? 'Спальня' : locale === 'pl' ? 'Sypialnia' : 'Bedroom' },
+        ...getCurtainSections(locale).flatMap(section => [
+            { href: section.href, label: section.title },
+            ...section.links.filter(l => !l.label.toLowerCase().startsWith('tüm') && !l.label.toLowerCase().startsWith('all')),
+        ]),
+        ...getTopNavItems(locale),
     ];
 
     const handleProductsClick = (e: React.MouseEvent) => {
