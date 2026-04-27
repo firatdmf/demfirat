@@ -12,7 +12,7 @@ export default function LocaleSwitcher() {
     const currentPath = window.location.pathname;
 
     const segments = currentPath.split("/");
-    const hasLocale = ["en", "ru", "pl", "tr"].includes(segments[1]);
+    const hasLocale = ["en", "tr"].includes(segments[1]);
     const updatedPath = hasLocale
       ? currentPath.replace(`/${segments[1]}`, `/${nextLocale}`)
       : `/${nextLocale}${currentPath}`;
@@ -35,8 +35,6 @@ export default function LocaleSwitcher() {
         className="locale-select"
       >
         <option value="en">EN</option>
-        <option value="ru">RU</option>
-        <option value="pl">PL</option>
         <option value="tr">TR</option>
       </select>
       <svg className="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
