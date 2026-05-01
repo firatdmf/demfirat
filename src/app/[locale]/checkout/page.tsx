@@ -248,10 +248,11 @@ export default function CheckoutPage() {
       const currentRate = rates.find(r => r.currency_code === currency)?.rate || 1;
 
       const totalValue = cartItems.reduce((sum, item) => {
-        if (item.is_sample) return sum; // Samples are free
-        const price = item.is_custom_curtain && item.custom_price
-          ? Number(item.custom_price)
-          : Number(item.product?.price || 0);
+        const price = item.is_sample
+          ? 0.10
+          : item.is_custom_curtain && item.custom_price
+            ? Number(item.custom_price)
+            : Number(item.product?.price || 0);
         return sum + (price * parseInt(item.quantity || '1') * currentRate);
       }, 0);
 
@@ -307,7 +308,7 @@ export default function CheckoutPage() {
               let finalPrice: string | number | null = null;
 
               if (item.is_sample) {
-                finalPrice = 0;
+                finalPrice = 0.10;
               } else {
                 finalPrice = item.custom_price
                   ? item.custom_price
@@ -481,7 +482,7 @@ export default function CheckoutPage() {
 
                 let finalPrice: string | number | null = null;
                 if (item.is_sample) {
-                  finalPrice = 0;
+                  finalPrice = 0.10;
                 } else {
                   finalPrice = (embeddedPrice && Number(embeddedPrice) > 0)
                     ? embeddedPrice
@@ -570,11 +571,12 @@ export default function CheckoutPage() {
 
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) => {
-      // Sample check - always 0
-      if (item.is_sample) return sum;
+      const quantity = parseFloat(item.quantity);
+
+      // Samples: $0.10 each (10 samples = $1)
+      if (item.is_sample) return sum + (0.10 * quantity);
 
       let price = 0;
-      const quantity = parseFloat(item.quantity);
 
       // Özel perde ise custom_price kullan (1 adet perde fiyatı)
       if (item.is_custom_curtain && item.custom_price) {
@@ -854,7 +856,7 @@ export default function CheckoutPage() {
           const quantity = parseFloat(item.quantity);
 
           if (item.is_sample) {
-            itemTotalUSD = 0;
+            itemTotalUSD = 0.10 * quantity;
           } else if (item.is_custom_curtain) {
             // Custom curtain: custom_price is price for 1 curtain, multiply by quantity
             if (!item.custom_price) {
@@ -1333,9 +1335,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className={classes.horizontalItemPrice}>
                         {item.is_sample ? (
-                          <span className={classes.freePrice} style={{ color: '#4CAF50', fontWeight: 'bold' }}>
-                            {t('sample')}
-                          </span>
+                          formatPrice(0.10 * (parseFloat(item.quantity) || 1))
                         ) : item.is_custom_curtain && item.custom_price ? (
                           formatPrice(item.custom_price)
                         ) : formatPrice(item.product?.price) ? (

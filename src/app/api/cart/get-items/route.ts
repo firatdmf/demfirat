@@ -13,8 +13,14 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'items array is required' }, { status: 400 });
         }
 
-        // Deduplicate product SKUs to avoid redundant backend calls
-        const uniqueProductSKUs = [...new Set(items.map((i: any) => i.product_sku).filter(Boolean))];
+        // Sample items use SKU "{realSku}-SAMPLE" — strip the suffix for backend lookup
+        const stripSampleSuffix = (sku: string | null | undefined) =>
+            (sku || '').replace(/-SAMPLE$/i, '');
+
+        // Deduplicate product SKUs (using cleaned SKUs) to avoid redundant backend calls
+        const uniqueProductSKUs = [...new Set(
+            items.map((i: any) => stripSampleSuffix(i.product_sku)).filter(Boolean)
+        )];
 
         // Fetch all unique products in parallel from Django backend
         const productResponses = await Promise.all(
@@ -35,7 +41,7 @@ export async function POST(request: NextRequest) {
             })
         );
 
-        // Build lookup map: product_sku -> full product data
+        // Build lookup map: cleaned product_sku -> full product data
         const productMap = new Map<string, any>();
         productResponses.forEach(({ sku, data }) => {
             if (data) productMap.set(sku, data);
@@ -43,7 +49,9 @@ export async function POST(request: NextRequest) {
 
         // Now resolve each cart item with its product/variant details
         const results = items.map((item: any) => {
-            const productData = productMap.get(item.product_sku);
+            const cleanProductSku = stripSampleSuffix(item.product_sku);
+            const cleanVariantSku = stripSampleSuffix(item.variant_sku);
+            const productData = productMap.get(cleanProductSku);
             if (!productData) {
                 return {
                     product_sku: item.product_sku,
@@ -66,9 +74,9 @@ export async function POST(request: NextRequest) {
             let variantAttributes: { [key: string]: string } = {};
             let primaryImage = product?.primary_image || null;
 
-            // If variant_sku is provided, find the variant
-            if (item.variant_sku) {
-                variant = productVariants.find((v: any) => v.variant_sku === item.variant_sku) || null;
+            // If variant_sku is provided, find the variant (sample variant uses "{sku}-SAMPLE")
+            if (cleanVariantSku) {
+                variant = productVariants.find((v: any) => v.variant_sku === cleanVariantSku) || null;
 
                 if (variant) {
                     // Find variant images

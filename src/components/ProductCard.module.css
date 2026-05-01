@@ -171,7 +171,42 @@
   box-shadow: 0 6px 16px rgba(201, 169, 97, 0.5);
 }
 
+/* Ready Made Curtain Badge - bottom-left of card, outside image */
+.readyMadeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 8px 4px 10px auto;
+  padding: 3px 9px 3px 7px;
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.5);
+  color: #8a7438;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  pointer-events: none;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.readyMadeDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c9a961;
+  box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.18);
+  flex-shrink: 0;
+}
+
+.readyMadeText {
+  line-height: 1;
+}
+
 /* Video Badge - Bottom Right */
+
 .videoBadge {
   position: absolute;
   bottom: 10px;
@@ -353,8 +388,8 @@
 }
 
 .colorSwatchSmall {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1.5px solid #d0d0d0;
   cursor: pointer;

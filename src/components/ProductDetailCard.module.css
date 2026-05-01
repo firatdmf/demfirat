@@ -1114,6 +1114,21 @@
   margin-top: 0.25rem;
 }
 
+/* Additional info (small light gray text under product name) */
+.additionalInfo {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.4);
+  line-height: 1.5;
+  margin-top: 0.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.additionalInfo p { margin: 0; color: inherit; }
+.additionalInfo p + p { margin-top: 0.3rem; }
+.additionalInfo a { color: rgba(0, 0, 0, 0.55); text-decoration: underline; }
+.additionalInfo strong, .additionalInfo b { color: rgba(0, 0, 0, 0.65); }
+
 /* Shipping Info */
 .shippingInfo {
   display: flex;

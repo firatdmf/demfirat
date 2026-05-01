@@ -99,7 +99,7 @@ export default async function Page(props: Props) {
       const ignoredParams = [
         'fbclid', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign',
         'utm_term', 'utm_content', 'ref', 'mc_cid', 'mc_eid',
-        'intent', 'fabric_type', 'color', 'size', 'width', 'height',
+        'intent', 'fabric_type', 'curtain_filter', 'color', 'size', 'width', 'height',
         'texture', 'style', 'material', 'pattern', 'sheerness',
         'care', 'property', 'price_min', 'price_max'
       ];

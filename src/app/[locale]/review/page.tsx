@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { getLocalizedProductField } from '@/lib/productUtils';
 
 function ReviewForm() {
     const searchParams = useSearchParams();
@@ -49,6 +50,26 @@ function ReviewForm() {
     type ImgItem = { id: string; url: string | null; preview: string; status: 'uploading' | 'done' | 'error' };
     const [images, setImages] = useState<ImgItem[]>([]);
     const isUploading = images.some(img => img.status === 'uploading');
+
+    // Fetch product info to show primary image
+    const [product, setProduct] = useState<{ title: string; image: string } | null>(null);
+    useEffect(() => {
+        if (!sku) return;
+        fetch(`/api/cart/get-product?product_sku=${sku}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(data => {
+                if (data?.product) {
+                    // Title sits inside description JSON: { translations: { tr: { title }, en: { title } } }
+                    // Fall back to product.title (which may be the SKU) if not present.
+                    const localizedTitle = getLocalizedProductField(data.product, 'title', locale);
+                    setProduct({
+                        title: localizedTitle || '',
+                        image: data.product.primary_image || data.primary_image || '',
+                    });
+                }
+            })
+            .catch(() => { /* ignore */ });
+    }, [sku, locale]);
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -159,6 +180,13 @@ function ReviewForm() {
             <div style={styles.container}>
                 <div style={styles.card}>
                     <div style={styles.logo}>DEMFIRAT</div>
+                    {product?.image && (
+                        <div style={styles.productPreview}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={product.image} alt={product.title} style={styles.productImage} />
+                            {product.title && <span style={styles.productTitle}>{product.title}</span>}
+                        </div>
+                    )}
                     <div style={{ textAlign: 'center' as const }}>
                         <div style={{ width: 60, height: 60, background: '#27ae60', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
                             <span style={{ color: 'white', fontSize: 28 }}>✓</span>
@@ -257,6 +285,13 @@ function ReviewForm() {
 
             <div style={styles.card}>
                 <div style={styles.logo}>DEMFIRAT</div>
+                {product?.image && (
+                    <div style={styles.productPreview}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={product.image} alt={product.title} style={styles.productImage} />
+                        {product.title && <span style={styles.productTitle}>{product.title}</span>}
+                    </div>
+                )}
                 <h1 style={styles.title}>{t.title}</h1>
                 <p style={styles.subtitle}>{t.subtitle}</p>
 
@@ -419,6 +454,9 @@ const styles: Record<string, React.CSSProperties> = {
     checkboxRow: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, cursor: 'pointer' },
     submitBtn: { width: '100%', padding: '0.85rem', background: 'linear-gradient(135deg, #c9a961, #b8956a)', color: 'white', border: 'none', borderRadius: 30, fontFamily: "'Montserrat', sans-serif", fontSize: '0.9rem', fontWeight: 600, letterSpacing: '0.02em' },
     homeBtn: { display: 'inline-block', marginTop: 20, padding: '0.75rem 2rem', background: 'linear-gradient(135deg, #c9a961, #b8956a)', color: 'white', textDecoration: 'none', borderRadius: 30, fontFamily: "'Montserrat', sans-serif", fontSize: '0.85rem', fontWeight: 600 },
+    productPreview: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '20px 16px', background: '#faf8f3', borderRadius: 12, marginBottom: 20, textAlign: 'center' },
+    productImage: { width: 160, height: 160, objectFit: 'cover', borderRadius: 12, flexShrink: 0 },
+    productTitle: { fontFamily: "'Montserrat', sans-serif", fontSize: '0.95rem', fontWeight: 600, color: '#333', lineHeight: 1.4, textAlign: 'center' },
 };
 
 export default function ReviewPage() {

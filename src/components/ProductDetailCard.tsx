@@ -190,6 +190,8 @@ function ProductDetailCard({
   const hasStandardCartOptions = !isCustomCurtainIntent;
   const [showWizard, setShowWizard] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [showBedSizeGuide, setShowBedSizeGuide] = useState(false);
+  const [bedGuideUnit, setBedGuideUnit] = useState<'cm' | 'in'>('cm');
   const [sizeUnit, setSizeUnit] = useState<'cm' | 'in'>('cm');
   const cmToInch = (cm: number) => (cm / 2.54).toFixed(1);
   const [showPleatGuide, setShowPleatGuide] = useState(false);
@@ -586,7 +588,7 @@ function ProductDetailCard({
     if (isAdding) return;
     setIsAdding(true);
 
-    const price = 0; // Samples are usually free or predefined price
+    const SAMPLE_UNIT_PRICE = 0.10; // $0.10 per sample → 10 samples = $1
     try {
       if (isGuest) {
         addToGuestCart({
@@ -596,13 +598,13 @@ function ProductDetailCard({
           product_category: product_category || undefined,
           product: {
             title: `${product.title} (${t('requestSample')})`,
-            price: 0,
+            price: SAMPLE_UNIT_PRICE,
             primary_image: product.primary_image || placeholder_image_link,
             category: product_category || undefined,
           },
           // Sample specific flags
           is_sample: true,
-          custom_price: 0,
+          custom_price: SAMPLE_UNIT_PRICE,
           custom_attributes: {
             type: 'sample'
           }
@@ -623,7 +625,7 @@ function ProductDetailCard({
               variant_sku: selectedVariant?.variant_sku || null,
               quantity: 1,
               is_sample: true,
-              custom_price: 0,
+              custom_price: SAMPLE_UNIT_PRICE,
               custom_attributes: {
                 type: 'sample'
               }
@@ -1085,7 +1087,7 @@ function ProductDetailCard({
     if (n === 'number_of_panels' || n === 'number_of_panel') return getNumberOfPanelsLabel(value, short);
     if (n === 'care' && value.toLowerCase().includes('none iron')) return locale === 'tr' ? 'Ütü Gerektirmez' : locale === 'ru' ? 'Не требует глажки' : locale === 'pl' ? 'Nie wymaga prasowania' : 'No Iron Needed';
     if (n === 'wrinkle_resistance') return locale === 'tr' ? 'Kırışmaz' : locale === 'ru' ? 'Не мнётся' : locale === 'pl' ? 'Nie gniecie się' : 'Wrinkle Free';
-    if (n === 'fast_shipping') return locale === 'tr' ? '24 Saatte Kargoda' : locale === 'ru' ? 'Отправка за 24 часа' : locale === 'pl' ? 'Wysyłka w 24h' : 'Ships in 24h';
+    if (n === 'fast_shipping') return locale === 'tr' ? 'Ertesi Gün Kargoda' : locale === 'ru' ? 'Отправка за 24 часа' : locale === 'pl' ? 'Wysyłka w 24h' : 'Ships in 24h';
     if (n === 'warranty') return locale === 'tr' ? '2 Yıl Garanti' : locale === 'ru' ? '2 года гарантии' : locale === 'pl' ? '2 lata gwarancji' : '2 Year Warranty';
     return value;
   };
@@ -1247,6 +1249,18 @@ function ProductDetailCard({
               </button>
             </div>
           </div>
+          {/* Additional info (small text under product name) */}
+          {(() => {
+            const extra = getLocalizedProductField(product, 'additional_info', locale);
+            if (!extra) return null;
+            return (
+              <div
+                className={classes.additionalInfo}
+                dangerouslySetInnerHTML={{ __html: extra }}
+              />
+            );
+          })()}
+
           {/* SKU under product name */}
           <div className={classes.skuCode}>
             {locale === 'tr' ? 'Ürün Kodu' :
@@ -1354,6 +1368,25 @@ function ProductDetailCard({
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
                             const isTwoTone = isTwoToneColor(value);
 
+                            // Backend may provide a per-product swatch image map: { attr_name: { value: { name, url } } }
+                            // Lookup is normalized on both attribute name and value (lowercase + spaces→underscores)
+                            const swatchImageUrl = (() => {
+                              const map = product?.attribute_value_images;
+                              if (!map) return null;
+                              const norm = (s: string) => (s || '').toLowerCase().trim().replace(/\s+/g, '_');
+                              const attrKey = Object.keys(map).find(k => norm(k) === norm(attribute.name || ''));
+                              if (!attrKey) return null;
+                              const valueMap = map[attrKey];
+                              const valKey = Object.keys(valueMap).find(k => norm(k) === norm(value));
+                              return valKey ? valueMap[valKey]?.url || null : null;
+                            })();
+
+                            const swatchStyle: React.CSSProperties = swatchImageUrl
+                              ? { backgroundImage: `url(${swatchImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                              : isTwoTone
+                                ? {}
+                                : { backgroundColor: getColorCode(value) };
+
                             return (
                               <div key={value} className={classes.color_swatch_container}>
                                 <Link
@@ -1364,10 +1397,10 @@ function ProductDetailCard({
                                     e.preventDefault();
                                     handleAttributeChange(attribute.name ?? '', value);
                                   }}
-                                  style={isTwoTone ? {} : { backgroundColor: getColorCode(value) }}
+                                  style={swatchStyle}
                                   title={translateAttributeName(value)}
                                 >
-                                  {isTwoTone ? (
+                                  {!swatchImageUrl && isTwoTone ? (
                                     <>
                                       <span
                                         className={classes.half_circle_left}
@@ -1428,22 +1461,44 @@ function ProductDetailCard({
                 })}
               </ul>
               {/* CM / IN toggle + Size Guide below variants */}
-              {(groupedAttributeValues?.some(({ attribute }) => ['size', 'boyut', 'beden', 'ölçü', 'size per panel', 'width', 'height', 'genişlik', 'yükseklik', 'boy', 'en', 'dimension', 'dimensions', 'ebat'].includes(attribute.name?.toLowerCase() || '')) || isCustomCurtainIntent) && (
-                <div className={classes.unitToggleRow}>
-                  {product_category?.toLowerCase() !== 'bed' ? (
-                    <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
-                      {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : 'Size Guide'}
-                    </div>
-                  ) : <span />}
-                  <div className={classes.unitToggle} onClick={() => setSizeUnit(sizeUnit === 'cm' ? 'in' : 'cm')}>
-                    <span className={`${classes.unitLabel} ${sizeUnit === 'in' ? classes.unitLabelActive : ''}`}>IN</span>
-                    <div className={classes.toggleTrack}>
-                      <div className={`${classes.toggleThumb} ${sizeUnit === 'cm' ? classes.toggleThumbRight : ''}`} />
-                    </div>
-                    <span className={`${classes.unitLabel} ${sizeUnit === 'cm' ? classes.unitLabelActive : ''}`}>CM</span>
+              {(() => {
+                const isBed = product_category?.toLowerCase() === 'bed';
+                const hasSizeVariant = groupedAttributeValues?.some(({ attribute }) =>
+                  ['size', 'boyut', 'beden', 'ölçü', 'size per panel', 'width', 'height', 'genişlik', 'yükseklik', 'boy', 'en', 'dimension', 'dimensions', 'ebat']
+                    .includes(attribute.name?.toLowerCase() || '')
+                );
+                // Bed: show size guide link if any of the bed size attributes exist on product/variant
+                const bedSizeAttrs = ['quilt_cover_size', 'sheet_size', 'pillow_case_size', 'oxford_pillow_case_size',
+                  'single_quilt_cover_size', 'single_sheet_size', 'single_pillow_case_size', 'single_oxford_pillow_case_size'];
+                const hasBedSizeAttr = isBed && [...(product_attributes || []), ...(variant_attributes || [])]
+                  .some(a => bedSizeAttrs.includes((a.name || '').toLowerCase()));
+                const shouldRender = hasSizeVariant || isCustomCurtainIntent || hasBedSizeAttr;
+                if (!shouldRender) return null;
+                return (
+                  <div className={classes.unitToggleRow}>
+                    {isBed ? (
+                      hasBedSizeAttr ? (
+                        <div className={classes.sizeGuideLink} onClick={() => setShowBedSizeGuide(true)}>
+                          {locale === 'tr' ? 'Ölçü Rehberi' : 'Size Guide'}
+                        </div>
+                      ) : <span />
+                    ) : (
+                      <div className={classes.sizeGuideLink} onClick={() => setShowSizeGuide(true)}>
+                        {locale === 'tr' ? 'Nasıl Ölçü Alırım?' : locale === 'ru' ? 'Как снять мерки?' : locale === 'pl' ? 'Jak zmierzyć?' : 'Size Guide'}
+                      </div>
+                    )}
+                    {hasSizeVariant || isCustomCurtainIntent ? (
+                      <div className={classes.unitToggle} onClick={() => setSizeUnit(sizeUnit === 'cm' ? 'in' : 'cm')}>
+                        <span className={`${classes.unitLabel} ${sizeUnit === 'in' ? classes.unitLabelActive : ''}`}>IN</span>
+                        <div className={classes.toggleTrack}>
+                          <div className={`${classes.toggleThumb} ${sizeUnit === 'cm' ? classes.toggleThumbRight : ''}`} />
+                        </div>
+                        <span className={`${classes.unitLabel} ${sizeUnit === 'cm' ? classes.unitLabelActive : ''}`}>CM</span>
+                      </div>
+                    ) : <span />}
                   </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
           ) :
             <div className={classes.parent_product_info}>
@@ -1765,7 +1820,7 @@ function ProductDetailCard({
                               const n = (attr.name || '').toLowerCase();
                               if (['sheerness_level', 'panel_type', 'header', 'number_of_panels', 'number_of_panel'].includes(n)) return getFeatureLabel(attr.name || '', attr.value);
                               if (n === 'warranty') return locale === 'tr' ? `${attr.value} Yıl` : locale === 'ru' ? `${attr.value} года` : locale === 'pl' ? `${attr.value} lata` : `${attr.value} Year${attr.value === '1' ? '' : 's'}`;
-                              if (n === 'fast_shipping' && attr.value.toLowerCase() === 'yes') return locale === 'tr' ? '24 Saatte Kargoda' : locale === 'ru' ? 'Отправка за 24 часа' : locale === 'pl' ? 'Wysyłka w 24h' : 'Ships in 24h';
+                              if (n === 'fast_shipping' && attr.value.toLowerCase() === 'yes') return locale === 'tr' ? 'Ertesi Gün Kargoda' : locale === 'ru' ? 'Отправка за 24 часа' : locale === 'pl' ? 'Wysyłka w 24h' : 'Ships in 24h';
                               if (n === 'wrinkle_resistance' && attr.value.toLowerCase() === 'yes') return locale === 'tr' ? 'Kırışmaz' : locale === 'ru' ? 'Не мнётся' : locale === 'pl' ? 'Nie gniecie się' : 'Wrinkle Free';
                               return translateAttributeName(attr.value);
                             })()}</td>
@@ -1911,6 +1966,164 @@ function ProductDetailCard({
               e.currentTarget.src = "/media/woocommerce-placeholder.svg";
             }}
           />
+        </div>
+      </div>
+
+      {/* Bed Size Guide Sidebar / Drawer */}
+      <div
+        className={classes.sizeGuideOverlay}
+        style={{ opacity: showBedSizeGuide ? 1 : 0, pointerEvents: showBedSizeGuide ? 'auto' : 'none' }}
+        onClick={() => setShowBedSizeGuide(false)}
+      />
+      <div
+        className={classes.sizeGuideDrawer}
+        style={{ right: showBedSizeGuide ? 0 : '-500px' }}>
+        <div className={classes.drawerHeader}>
+          <h3>{locale === 'tr' ? 'Ölçü Rehberi' : 'Size Guide'}</h3>
+          <button className={classes.closeDrawerBtn} onClick={() => setShowBedSizeGuide(false)}>×</button>
+        </div>
+        <div className={classes.drawerContent}>
+          {(() => {
+            // Read attribute value from variant_attributes first, then product_attributes
+            const getAttr = (name: string): string => {
+              const lname = name.toLowerCase();
+              const fromVariant = variant_attributes?.find(a => a.name?.toLowerCase() === lname)?.value;
+              if (fromVariant) return String(fromVariant).trim();
+              const fromProduct = product_attributes?.find(a => a.name?.toLowerCase() === lname)?.value;
+              return fromProduct ? String(fromProduct).trim() : '';
+            };
+
+            // Convert raw stored value (assumed cm e.g. "100x200x30" / "160 x 240") to display string
+            const formatSize = (raw: string): string => {
+              if (!raw) return '';
+              const numbers = raw.match(/\d+(\.\d+)?/g);
+              if (!numbers || numbers.length === 0) return raw;
+              if (bedGuideUnit === 'cm') {
+                return `${numbers.join(' x ')} cm`;
+              }
+              return numbers.map(n => `${Math.round(parseFloat(n) / 2.54)}"`).join(' x ');
+            };
+
+            const single = {
+              quilt: getAttr('single_quilt_cover_size'),
+              sheet: getAttr('single_sheet_size'),
+              pillow: getAttr('single_pillow_case_size'),
+              oxford: getAttr('single_oxford_pillow_case_size'),
+            };
+            const double = {
+              quilt: getAttr('quilt_cover_size'),
+              sheet: getAttr('sheet_size'),
+              pillow: getAttr('pillow_case_size'),
+              oxford: getAttr('oxford_pillow_case_size'),
+            };
+
+            const hasSingle = !!(single.quilt || single.sheet || single.pillow || single.oxford);
+            const hasDouble = !!(double.quilt || double.sheet || double.pillow || double.oxford);
+            const hasQuilt = !!(single.quilt || double.quilt);
+            const hasSheet = !!(single.sheet || double.sheet);
+            const hasPillow = !!(single.pillow || double.pillow);
+            const hasOxford = !!(single.oxford || double.oxford);
+
+            const rows: { label: string; quilt: string; sheet: string; pillow: string; oxford: string }[] = [];
+            if (hasSingle) {
+              rows.push({
+                label: locale === 'tr' ? 'Tek Kişilik' : 'Single',
+                quilt: formatSize(single.quilt),
+                sheet: formatSize(single.sheet),
+                pillow: formatSize(single.pillow),
+                oxford: formatSize(single.oxford),
+              });
+            }
+            if (hasDouble) {
+              rows.push({
+                label: locale === 'tr' ? 'Çift Kişilik' : 'Double',
+                quilt: formatSize(double.quilt),
+                sheet: formatSize(double.sheet),
+                pillow: formatSize(double.pillow),
+                oxford: formatSize(double.oxford),
+              });
+            }
+
+            if (rows.length === 0) {
+              return (
+                <p style={{ color: '#888', fontFamily: "'Montserrat', sans-serif", fontSize: '0.9rem' }}>
+                  {locale === 'tr' ? 'Bu ürün için ölçü bilgisi henüz eklenmemiştir.' : 'Size information is not yet available for this product.'}
+                </p>
+              );
+            }
+
+            const headerLabel = (en: string, tr: string) => locale === 'tr' ? tr : en;
+            return (
+              <div style={{ background: '#f5efe4', borderRadius: 16, padding: '1.5rem 1rem' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: "'Montserrat', sans-serif" }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #d9cfb9' }}>
+                      <th style={{ padding: '0.75rem 0.5rem', fontSize: '0.7rem', fontWeight: 600, color: '#1a2236', textAlign: 'center' }}></th>
+                      {hasQuilt && (
+                        <th style={{ padding: '0.75rem 0.5rem', fontSize: '0.72rem', fontWeight: 700, color: '#1a2236', textAlign: 'center' }}>
+                          {headerLabel('Quilt Cover', 'Nevresim')}<br/>
+                          <span style={{ fontWeight: 500, fontSize: '0.68rem' }}>(W x L)</span>
+                        </th>
+                      )}
+                      {hasSheet && (
+                        <th style={{ padding: '0.75rem 0.5rem', fontSize: '0.72rem', fontWeight: 700, color: '#1a2236', textAlign: 'center' }}>
+                          {headerLabel('Sheet', 'Çarşaf')}<br/>
+                          <span style={{ fontWeight: 500, fontSize: '0.68rem' }}>(W x L)</span>
+                        </th>
+                      )}
+                      {hasPillow && (
+                        <th style={{ padding: '0.75rem 0.5rem', fontSize: '0.72rem', fontWeight: 700, color: '#1a2236', textAlign: 'center' }}>
+                          {headerLabel('Pillowcase', 'Yastık Kılıfı')}<br/>
+                          <span style={{ fontWeight: 500, fontSize: '0.68rem' }}>(W x L)</span>
+                        </th>
+                      )}
+                      {hasOxford && (
+                        <th style={{ padding: '0.75rem 0.5rem', fontSize: '0.72rem', fontWeight: 700, color: '#1a2236', textAlign: 'center' }}>
+                          {headerLabel('Oxford Pillowcase', 'Oxford Yastık Kılıfı')}<br/>
+                          <span style={{ fontWeight: 500, fontSize: '0.68rem' }}>(W x L)</span>
+                        </th>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((r, idx) => (
+                      <tr key={r.label} style={{ borderBottom: idx < rows.length - 1 ? '1px solid #d9cfb9' : 'none' }}>
+                        <td style={{ padding: '1.1rem 0.5rem', fontSize: '0.82rem', fontWeight: 700, color: '#1a2236', textAlign: 'center' }}>{r.label}</td>
+                        {hasQuilt && (
+                          <td style={{ padding: '1.1rem 0.5rem', fontSize: '0.78rem', color: '#1a2236', textAlign: 'center' }}>{r.quilt}</td>
+                        )}
+                        {hasSheet && (
+                          <td style={{ padding: '1.1rem 0.5rem', fontSize: '0.78rem', color: '#1a2236', textAlign: 'center' }}>{r.sheet}</td>
+                        )}
+                        {hasPillow && (
+                          <td style={{ padding: '1.1rem 0.5rem', fontSize: '0.78rem', color: '#1a2236', textAlign: 'center' }}>{r.pillow}</td>
+                        )}
+                        {hasOxford && (
+                          <td style={{ padding: '1.1rem 0.5rem', fontSize: '0.78rem', color: '#1a2236', textAlign: 'center' }}>{r.oxford}</td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '1.5rem', paddingLeft: '0.5rem' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: bedGuideUnit === 'cm' ? '#1a2236' : '#9a9a9a', fontFamily: "'Montserrat', sans-serif" }}>CM</span>
+                  <div
+                    onClick={() => setBedGuideUnit(bedGuideUnit === 'cm' ? 'in' : 'cm')}
+                    style={{
+                      width: 40, height: 22, borderRadius: 11, background: '#1a2236',
+                      position: 'relative', cursor: 'pointer', transition: 'background 0.2s',
+                    }}>
+                    <div style={{
+                      position: 'absolute', top: 2, left: bedGuideUnit === 'cm' ? 2 : 20,
+                      width: 18, height: 18, borderRadius: '50%', background: 'white',
+                      transition: 'left 0.2s',
+                    }} />
+                  </div>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: bedGuideUnit === 'in' ? '#1a2236' : '#9a9a9a', fontFamily: "'Montserrat', sans-serif" }}>IN</span>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
 

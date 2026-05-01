@@ -235,9 +235,19 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   // If needed, these should be included in the main product API response
 
   const pathname = usePathname();
-  let product_category_name = pathname.split("/").at(-1);
-  const isReadyMadeCurtain = pathname.includes('ready-made_curtain') || (product as any).product_category === 'ready-made_curtain';
-  const isBedCategory = pathname.includes('/product/bed') || (product as any).product_category === 'bed';
+  const urlCategoryName = pathname.split("/").at(-1);
+  const productOwnCategory = (product as any).product_category as string | undefined;
+  // Use product's own category when on a multi-category page (e.g. /product/all)
+  // so links go to the correct /product/<actualCategory>/<sku> path.
+  const actualCategory = (urlCategoryName === 'all' || urlCategoryName === 'search')
+    ? (productOwnCategory || urlCategoryName)
+    : urlCategoryName;
+  let product_category_name = actualCategory;
+  const isReadyMadeCurtain = pathname.includes('ready-made_curtain') || productOwnCategory === 'ready-made_curtain';
+  const isFabricProduct = productOwnCategory === 'fabric' || pathname.includes('/product/fabric');
+  // Fabric products are sold only as custom (made-to-measure) curtains, never by-the-meter
+  const isCustomCurtain = intent === 'custom_curtain' || isFabricProduct;
+  const isBedCategory = pathname.includes('/product/bed') || productOwnCategory === 'bed';
   const isPerPiece = isReadyMadeCurtain || isBedCategory;
 
   // Format price with currency (using global context)
@@ -421,9 +431,9 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         {/* Product Image Container */}
         <div className={classes.imageContainer}>
           <Link
-            href={intent === 'custom_curtain'
-              ? `${product_category_name}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
-              : `${product_category_name}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+            href={isCustomCurtain
+              ? `/${locale}/product/${actualCategory}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+              : `/${locale}/product/${actualCategory}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
             }
             className={classes.imageLink}
           >
@@ -511,9 +521,9 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         {/* Product Info */}
         <div className={classes.productInfo}>
           <Link
-            href={intent === 'custom_curtain'
-              ? `${product_category_name}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
-              : `${product_category_name}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+            href={isCustomCurtain
+              ? `/${locale}/product/${actualCategory}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+              : `/${locale}/product/${actualCategory}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
             }
             className={classes.productLink}
           >
@@ -561,15 +571,33 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                   {colorValues.slice(0, 4).map((color: string, index: number) => {
                     const isTwoTone = isTwoToneColor(color);
 
+                    // Look up custom swatch image from product.attribute_value_images.color.<value>
+                    const swatchImageUrl = (() => {
+                      const map = (product as any)?.attribute_value_images;
+                      if (!map) return null;
+                      const norm = (s: string) => (s || '').toLowerCase().trim().replace(/\s+/g, '_');
+                      const attrKey = Object.keys(map).find(k => norm(k) === 'color');
+                      if (!attrKey) return null;
+                      const valueMap = map[attrKey];
+                      const valKey = Object.keys(valueMap).find(k => norm(k) === norm(color));
+                      return valKey ? valueMap[valKey]?.url || null : null;
+                    })();
+
+                    const swatchStyle: React.CSSProperties = swatchImageUrl
+                      ? { backgroundImage: `url(${swatchImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                      : isTwoTone
+                        ? {}
+                        : { backgroundColor: getColorCode(color) };
+
                     return (
                       <div
                         key={`${color}-${index}`}
                         className={classes.colorSwatchSmall}
                         title={color}
                         onClick={(e) => handleColorSwatchClick(e, color)}
-                        style={!isTwoTone ? { backgroundColor: getColorCode(color) } : {}}
+                        style={swatchStyle}
                       >
-                        {isTwoTone ? (
+                        {!swatchImageUrl && isTwoTone ? (
                           <>
                             <span
                               style={{
@@ -725,6 +753,30 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
               </div>
             )}
           </Link>
+
+          {/* Ready Made Curtain Badge - bottom-right of card */}
+          {isReadyMadeCurtain && (
+            <div className={classes.readyMadeBadge} title={locale === 'tr' ? 'Hazır Perde' : 'Ready Made'}>
+              <span className={classes.readyMadeDot} aria-hidden="true" />
+              <span className={classes.readyMadeText}>
+                {locale === 'tr' ? 'Hazır Perde' :
+                 locale === 'ru' ? 'Готовая' :
+                 locale === 'pl' ? 'Gotowa' : 'Ready Made'}
+              </span>
+            </div>
+          )}
+
+          {/* Custom Curtain Badge - bottom-right of card */}
+          {isCustomCurtain && !isReadyMadeCurtain && (
+            <div className={classes.readyMadeBadge} title={locale === 'tr' ? 'Özel Ölçü' : 'Made to Measure'}>
+              <span className={classes.readyMadeDot} aria-hidden="true" />
+              <span className={classes.readyMadeText}>
+                {locale === 'tr' ? 'Özel Ölçü' :
+                 locale === 'ru' ? 'Пошив на заказ' :
+                 locale === 'pl' ? 'Na wymiar' : 'Made to Measure'}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>

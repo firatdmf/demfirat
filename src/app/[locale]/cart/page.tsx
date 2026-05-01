@@ -101,9 +101,12 @@ export default function CartPage() {
     }
   }, [session, isInitialLoad, status, isGuest, guestCart]);
 
+  // Sample pricing: $0.10 per unit → 10 samples = $1
+  const SAMPLE_UNIT_PRICE = 0.10;
+
   // Helper to determine the correct price for an item
   const getItemPrice = (item: any, productPrice: any, variantPrice: any) => {
-    if (item.is_sample) return 0;
+    if (item.is_sample) return SAMPLE_UNIT_PRICE;
     if (item.is_custom_curtain && item.custom_price !== undefined && item.custom_price !== null) {
       return item.custom_price;
     }
@@ -162,7 +165,7 @@ export default function CartPage() {
         setCartItems(guestCart.map(item => ({
           ...item,
           id: item.id as any,
-          product: { title: item.product_sku, price: item.is_sample ? 0 : null, primary_image: '/media/woocommerce-placeholder.svg' },
+          product: { title: item.product_sku, price: item.is_sample ? SAMPLE_UNIT_PRICE : null, primary_image: '/media/woocommerce-placeholder.svg' },
         })) as CartItem[]);
       }
     } catch (error) {
@@ -333,7 +336,7 @@ export default function CartPage() {
     return cartItems.reduce((sum, item) => {
       let price = 0;
       if (item.is_sample) {
-        price = 0;
+        price = SAMPLE_UNIT_PRICE;
       } else if (item.is_custom_curtain && item.custom_price) {
         price = parseFloat(String(item.custom_price));
       } else if (item.product?.price) {
@@ -582,9 +585,7 @@ export default function CartPage() {
                   </div>
                   <div className={classes.priceValue}>
                     {item.is_sample ? (
-                      <span style={{ color: '#4CAF50', fontWeight: 'bold' }}>
-                        {t('sample')}
-                      </span>
+                      formatPrice(SAMPLE_UNIT_PRICE)
                     ) : item.is_custom_curtain && item.custom_price ? (
                       formatPrice(item.custom_price)
                     ) : formatPrice(item.product?.price) ? (
@@ -607,9 +608,7 @@ export default function CartPage() {
                   </div>
                   <div className={classes.priceValue}>
                     {item.is_sample ? (
-                      <span style={{ color: '#4CAF50', fontWeight: 'bold' }}>
-                        {t('sample')}
-                      </span>
+                      formatPrice(SAMPLE_UNIT_PRICE * (parseInt(String(item.quantity)) || 1))
                     ) : (() => {
                       let price = 0;
                       if (item.is_custom_curtain && item.custom_price) {

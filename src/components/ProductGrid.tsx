@@ -82,18 +82,22 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
   // ── Tab Counts Calculation (From original products prop) ──
   const tabCounts = useMemo(() => {
-    if (!products) return { all: 0, embroidery: 0, solid: 0, blackout: 0 };
+    if (!products) return { all: 0, tulle: 0, embroidery: 0, solid: 0, blackout: 0, rustic: 0 };
+    const isFabric = (p: any) => (p.product_category || '').toLowerCase() === 'fabric';
+    const isReadyMade = (p: any) => (p.product_category || '').toLowerCase() === 'ready-made_curtain';
     return {
       all: products.length,
+      tulle: products.filter(isFabric).length,
       embroidery: products.filter(p =>
-        p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'embroidery')
+        isFabric(p) && p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'embroidery')
       ).length,
       solid: products.filter(p =>
-        p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'solid')
+        isFabric(p) && p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'solid')
       ).length,
       blackout: products.filter(p =>
-        p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'blackout')
-      ).length
+        isFabric(p) && p.product_attributes?.some(a => a.name?.toLowerCase() === 'fabric_type' && a.value?.toLowerCase() === 'blackout')
+      ).length,
+      rustic: products.filter(isReadyMade).length,
     };
   }, [products]);
   // ── Optimization: Pre-calculate Maps for O(1) lookups ──
@@ -363,6 +367,18 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     });
   }
 
+  // ── Curtain view filter (used on /product/all page) ──
+  // Values: 'tulle' (fabric only), 'rustic' (ready-made only)
+  const activeCurtainFilter = (searchParams?.curtain_filter as string) || '';
+  if (activeCurtainFilter && filteredProducts) {
+    filteredProducts = filteredProducts.filter((product: any) => {
+      const cat = (product.product_category || '').toLowerCase();
+      if (activeCurtainFilter === 'tulle') return cat === 'fabric';
+      if (activeCurtainFilter === 'rustic') return cat === 'ready-made_curtain';
+      return true;
+    });
+  }
+
   // ── Price range filtering ──
   const getProductPrice = (product: Product): number | null => {
     // Use the active currency's pre-converted price
@@ -489,7 +505,59 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
        
               */
   }
-        {product_category?.toLowerCase().includes('fabric') && (
+        {product_category?.toLowerCase() === 'all' ? (
+          <div className={classes.categoryTabs}>
+            <Link
+              href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.set('curtain_filter', 'tulle'); p.delete('fabric_type'); return p.toString(); })()}`}
+              replace={true}
+              scroll={false}
+              className={`${classes.categoryTab} ${activeCurtainFilter === 'tulle' && !activeFabricType ? classes.categoryTabActive : ''}`}
+            >
+              {locale === 'tr' ? 'Tüm Tül Perdeler' : 'All Tulle Curtains'}
+              <span className={classes.tabCount}>{tabCounts.tulle}</span>
+            </Link>
+            <Link
+              href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.set('fabric_type', 'embroidery'); p.delete('curtain_filter'); return p.toString(); })()}`}
+              replace={true}
+              scroll={false}
+              className={`${classes.categoryTab} ${activeFabricType === 'embroidery' ? classes.categoryTabActive : ''}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg>
+              {locale === 'tr' ? 'Nakışlı Tül Perdeler' : 'Embroidered Tulle'}
+              <span className={classes.tabCount}>{tabCounts.embroidery}</span>
+            </Link>
+            <Link
+              href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.set('fabric_type', 'solid'); p.delete('curtain_filter'); return p.toString(); })()}`}
+              replace={true}
+              scroll={false}
+              className={`${classes.categoryTab} ${activeFabricType === 'solid' ? classes.categoryTabActive : ''}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="3" y1="12" x2="21" y2="12" /></svg>
+              {locale === 'tr' ? 'Düz Modeller' : 'Solid Patterns'}
+              <span className={classes.tabCount}>{tabCounts.solid}</span>
+            </Link>
+            <Link
+              href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.set('fabric_type', 'blackout'); p.delete('curtain_filter'); return p.toString(); })()}`}
+              replace={true}
+              scroll={false}
+              className={`${classes.categoryTab} ${activeFabricType === 'blackout' ? classes.categoryTabActive : ''}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 010 18" fill="currentColor" opacity="0.3" /></svg>
+              {locale === 'tr' ? 'Fon Perdeler' : 'Blackout'}
+              <span className={classes.tabCount}>{tabCounts.blackout}</span>
+            </Link>
+            <Link
+              href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.set('curtain_filter', 'rustic'); p.delete('fabric_type'); return p.toString(); })()}`}
+              replace={true}
+              scroll={false}
+              className={`${classes.categoryTab} ${activeCurtainFilter === 'rustic' ? classes.categoryTabActive : ''}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 6h18M5 6v12a2 2 0 002 2h10a2 2 0 002-2V6M9 10v6M12 10v6M15 10v6" /></svg>
+              {locale === 'tr' ? 'Rustik Perdeler' : 'Rustic Curtains'}
+              <span className={classes.tabCount}>{tabCounts.rustic}</span>
+            </Link>
+          </div>
+        ) : product_category?.toLowerCase().includes('fabric') && (
           <div className={classes.categoryTabs}>
             <Link
               href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.delete('fabric_type'); return p.toString(); })()}`}

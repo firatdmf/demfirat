@@ -30,6 +30,8 @@ export type Product = {
   product_attributes?: ProductAttribute[] | null;  // Product-level attributes including discount_rate
   /** Pre-converted prices from backend (USD base) */
   prices?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null;
+  /** Per-attribute swatch images: { attribute_name: { value: { name: string, url: string } } } */
+  attribute_value_images?: { [attrName: string]: { [value: string]: { name: string; url: string } } } | null;
 
 }
 
