@@ -13,8 +13,6 @@ function ReviewForm() {
     const isEn = locale === 'en';
 
     const t = {
-        uploadTrackerTitle: isEn ? 'Uploading photos' : 'Fotoğraflar yükleniyor',
-        uploadTrackerDone: isEn ? 'All photos uploaded' : 'Tüm fotoğraflar yüklendi',
         title: isEn ? 'Product Review' : 'Ürün Değerlendirmesi',
         subtitle: isEn ? 'Share your experience with us' : 'Deneyiminizi bizimle paylaşın',
         firstName: isEn ? 'First Name' : 'Ad',
@@ -47,9 +45,10 @@ function ReviewForm() {
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const [comment, setComment] = useState('');
-    type ImgItem = { id: string; url: string | null; preview: string; status: 'uploading' | 'done' | 'error' };
+    // Photos are kept locally as File objects until the review is submitted.
+    // We only upload them to Bunny CDN at submit time (not while the user is filling the form).
+    type ImgItem = { id: string; file: File; preview: string };
     const [images, setImages] = useState<ImgItem[]>([]);
-    const isUploading = images.some(img => img.status === 'uploading');
 
     // Fetch product info to show primary image
     const [product, setProduct] = useState<{ title: string; image: string } | null>(null);
@@ -74,48 +73,29 @@ function ReviewForm() {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (!files || images.length >= 5) return;
 
         const remaining = 5 - images.length;
-        const filesToUpload = Array.from(files).slice(0, remaining);
+        const filesToAdd = Array.from(files).slice(0, remaining);
 
-        // Create placeholders with local previews immediately
-        const newItems: ImgItem[] = filesToUpload.map(f => ({
+        const newItems: ImgItem[] = filesToAdd.map(f => ({
             id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-            url: null,
+            file: f,
             preview: URL.createObjectURL(f),
-            status: 'uploading',
         }));
         setImages(prev => [...prev, ...newItems]);
-
-        // Upload all files in parallel
-        await Promise.all(filesToUpload.map(async (file, idx) => {
-            const id = newItems[idx].id;
-            const formData = new FormData();
-            formData.append('file', file);
-            try {
-                const res = await fetch('/api/upload-image', { method: 'POST', body: formData });
-                const data = await res.json();
-                if (data.url) {
-                    setImages(prev => prev.map(img => img.id === id ? { ...img, url: data.url, status: 'done' } : img));
-                } else {
-                    console.error('Upload failed:', data.error);
-                    if (data.error) setError(data.error);
-                    setImages(prev => prev.map(img => img.id === id ? { ...img, status: 'error' } : img));
-                }
-            } catch (err) {
-                console.error('Upload exception:', err);
-                setImages(prev => prev.map(img => img.id === id ? { ...img, status: 'error' } : img));
-            }
-        }));
 
         e.target.value = '';
     };
 
     const removeImage = (id: string) => {
-        setImages(prev => prev.filter(img => img.id !== id));
+        setImages(prev => {
+            const removed = prev.find(img => img.id === id);
+            if (removed) URL.revokeObjectURL(removed.preview);
+            return prev.filter(img => img.id !== id);
+        });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -137,6 +117,24 @@ function ReviewForm() {
 
         setSubmitting(true);
         try {
+            // Step 1: Upload all photos to Bunny in parallel (only at submit time)
+            const uploadedUrls: string[] = [];
+            if (images.length > 0) {
+                const uploadResults = await Promise.all(images.map(async (img) => {
+                    const formData = new FormData();
+                    formData.append('file', img.file);
+                    try {
+                        const res = await fetch('/api/upload-image', { method: 'POST', body: formData });
+                        const data = await res.json();
+                        return data.url || null;
+                    } catch {
+                        return null;
+                    }
+                }));
+                uploadResults.forEach(url => { if (url) uploadedUrls.push(url); });
+            }
+
+            // Step 2: Submit the review with the uploaded URLs
             const res = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/guest_review/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -147,7 +145,7 @@ function ReviewForm() {
                     hide_name: hideName,
                     rating,
                     comment: comment.trim(),
-                    image_urls: images.filter(img => img.status === 'done' && img.url).map(img => img.url!),
+                    image_urls: uploadedUrls,
                 }),
             });
             const data = await res.json();
@@ -208,80 +206,7 @@ function ReviewForm() {
         <div style={styles.container}>
             <style>{`
                 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-                @keyframes trackerSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-                @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
             `}</style>
-
-            {/* Floating Upload Tracker (Google Drive style) */}
-            {images.length > 0 && (isUploading || images.some(i => i.status === 'done' || i.status === 'error')) && (
-                <div style={{
-                    position: 'fixed', bottom: 24, right: 24, width: 320,
-                    background: 'white', borderRadius: 12,
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-                    overflow: 'hidden', zIndex: 9999,
-                    animation: 'trackerSlide 0.3s ease-out',
-                    fontFamily: "'Montserrat', sans-serif",
-                }}>
-                    <div style={{
-                        background: '#1a1a2e', color: 'white',
-                        padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        fontSize: '0.85rem', fontWeight: 600,
-                    }}>
-                        <span>
-                            {isUploading ? t.uploadTrackerTitle : t.uploadTrackerDone}
-                            {' '}
-                            <span style={{ opacity: 0.7, fontWeight: 500 }}>
-                                ({images.filter(i => i.status === 'done').length}/{images.length})
-                            </span>
-                        </span>
-                    </div>
-                    <div style={{ height: 3, background: '#e2e8f0' }}>
-                        <div style={{
-                            height: '100%',
-                            width: `${(images.filter(i => i.status !== 'uploading').length / images.length) * 100}%`,
-                            background: 'linear-gradient(90deg, #c9a961, #b8956a)',
-                            transition: 'width 0.4s ease',
-                        }} />
-                    </div>
-                    <div style={{ maxHeight: 280, overflowY: 'auto', padding: '4px 0' }}>
-                        {images.map((img, idx) => (
-                            <div key={img.id} style={{
-                                display: 'flex', alignItems: 'center', gap: 10,
-                                padding: '8px 14px',
-                                borderBottom: idx < images.length - 1 ? '1px solid #f1f5f9' : 'none',
-                            }}>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={img.preview} alt="" style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }} />
-                                <span style={{ flex: 1, fontSize: '0.78rem', color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    {isEn ? `Photo ${idx + 1}` : `Fotoğraf ${idx + 1}`}
-                                </span>
-                                {img.status === 'uploading' && (
-                                    <div style={{
-                                        width: 18, height: 18, border: '2px solid #e2e8f0',
-                                        borderTopColor: '#c9a961', borderRadius: '50%',
-                                        animation: 'spin 0.7s linear infinite', flexShrink: 0,
-                                    }} />
-                                )}
-                                {img.status === 'done' && (
-                                    <div style={{
-                                        width: 18, height: 18, background: '#22c55e',
-                                        borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        color: 'white', fontSize: 11, animation: 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                        flexShrink: 0,
-                                    }}>✓</div>
-                                )}
-                                {img.status === 'error' && (
-                                    <div style={{
-                                        width: 18, height: 18, background: '#ef4444',
-                                        borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        color: 'white', fontSize: 11, fontWeight: 700, flexShrink: 0,
-                                    }}>!</div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
 
             <div style={styles.card}>
                 <div style={styles.logo}>DEMFIRAT</div>
@@ -377,8 +302,8 @@ function ReviewForm() {
                             {images.map((img, i) => (
                                 <div key={img.id} style={{ position: 'relative' as const, width: 72, height: 72, borderRadius: 8, overflow: 'hidden', border: '1px solid #e0e0e0' }}>
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={img.preview} alt={`Review ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' as const, opacity: img.status === 'done' ? 1 : 0.5 }} />
-                                    {img.status === 'uploading' && (
+                                    <img src={img.preview} alt={`Review ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' as const, opacity: submitting ? 0.5 : 1 }} />
+                                    {submitting && (
                                         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.35)' }}>
                                             <div style={{
                                                 width: 22, height: 22, border: '2.5px solid rgba(255,255,255,0.3)',
@@ -387,19 +312,18 @@ function ReviewForm() {
                                             }} />
                                         </div>
                                     )}
-                                    {img.status === 'error' && (
-                                        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(231,76,60,0.6)', color: 'white', fontSize: '1.2rem', fontWeight: 700 }}>!</div>
+                                    {!submitting && (
+                                        <button
+                                            type="button"
+                                            onClick={() => removeImage(img.id)}
+                                            style={{ position: 'absolute' as const, top: 2, right: 2, background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        >
+                                            ×
+                                        </button>
                                     )}
-                                    <button
-                                        type="button"
-                                        onClick={() => removeImage(img.id)}
-                                        style={{ position: 'absolute' as const, top: 2, right: 2, background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                    >
-                                        ×
-                                    </button>
                                 </div>
                             ))}
-                            {images.length < 5 && (
+                            {images.length < 5 && !submitting && (
                                 <label style={{ width: 72, height: 72, borderRadius: 8, border: '2px dashed #d0d0d0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#aaa', fontSize: 24, transition: 'border-color 0.2s' }}>
                                     +
                                     <input
@@ -412,9 +336,9 @@ function ReviewForm() {
                                 </label>
                             )}
                         </div>
-                        {isUploading && (
+                        {submitting && images.length > 0 && (
                             <p style={{ fontSize: '0.75rem', color: '#c9a961', margin: '4px 0 0' }}>
-                                {t.uploading} ({images.filter(i => i.status === 'done').length}/{images.length})
+                                {t.uploading}
                             </p>
                         )}
                     </div>
@@ -425,11 +349,11 @@ function ReviewForm() {
                     {/* Submit */}
                     <button
                         type="submit"
-                        disabled={submitting || isUploading}
+                        disabled={submitting}
                         style={{
                             ...styles.submitBtn,
-                            opacity: (submitting || isUploading) ? 0.5 : 1,
-                            cursor: (submitting || isUploading) ? 'not-allowed' : 'pointer',
+                            opacity: submitting ? 0.5 : 1,
+                            cursor: submitting ? 'not-allowed' : 'pointer',
                         }}
                     >
                         {submitting ? t.submitting : t.submit}

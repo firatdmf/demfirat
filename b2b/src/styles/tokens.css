@@ -1,0 +1,269 @@
+/* =========================================================
+   DEMFIRAT B2B DESIGN SYSTEM — Foundations
+   Premium & minimal · Brooklinen-inspired editorial typography
+   (Inherited from Belino B2B; rebranded for DEMFIRAT.)
+   ========================================================= */
+
+/* -------- Fonts (Google Fonts substitutes; flagged in README) -------- */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ---------- Color · Neutral (warm off-white core) ---------- */
+  --bel-paper:        #FAF8F4;   /* page background, warm cream */
+  --bel-paper-2:      #F4F0E8;   /* alt section bg, soft sand */
+  --bel-paper-3:      #ECE6DA;   /* surfaces / hover */
+  --bel-line:         #E0D9CA;   /* hairline borders on paper */
+  --bel-line-strong:  #C9BFA9;   /* stronger dividers */
+
+  --bel-ink:          #0E0E0C;   /* primary text, near-black ink */
+  --bel-ink-2:        #2C2A26;   /* secondary text */
+  --bel-ink-3:        #6E685D;   /* tertiary / muted */
+  --bel-ink-4:        #9A9281;   /* hint / placeholder */
+
+  --bel-white:        #FFFFFF;
+  --bel-black:        #000000;
+
+  /* ---------- Color · Brand accents ---------- */
+  --bel-accent:       #B8654A;   /* terracotta — warm primary accent */
+  --bel-accent-deep:  #8C4A33;   /* hover/press */
+  --bel-accent-soft:  #E9C7B8;   /* tint, badge bg */
+
+  --bel-sage:         #5C7C6F;   /* secondary accent (cool) */
+  --bel-sage-soft:    #C7D4CC;
+
+  /* ---------- Color · Semantic ---------- */
+  --bel-success:      #2F7D5F;
+  --bel-success-soft: #D6E8DD;
+  --bel-warning:      #B07A1A;
+  --bel-warning-soft: #F2E4C2;
+  --bel-danger:       #B0382F;
+  --bel-danger-soft:  #F1D6D2;
+  --bel-info:         #3B6B8C;
+  --bel-info-soft:    #D2E0EA;
+
+  /* ---------- Color · Stock indicators ---------- */
+  --bel-stock-high:   #2F7D5F;
+  --bel-stock-mid:    #B07A1A;
+  --bel-stock-low:    #B0382F;
+
+  /* ---------- Type families ---------- */
+  --bel-font-display: 'Fraunces', 'Tiempos Headline', 'Cormorant Garamond', Georgia, serif;
+  --bel-font-body:    'Inter', 'Söhne', 'Helvetica Neue', system-ui, sans-serif;
+  --bel-font-mono:    'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* ---------- Type scale (modular, Brooklinen-ish) ---------- */
+  --bel-fs-12: 0.75rem;     /* 12px — micro caps */
+  --bel-fs-13: 0.8125rem;   /* 13px — meta */
+  --bel-fs-14: 0.875rem;    /* 14px — small body */
+  --bel-fs-16: 1rem;        /* 16px — body */
+  --bel-fs-18: 1.125rem;    /* 18px — lede */
+  --bel-fs-20: 1.25rem;     /* 20px — h5 */
+  --bel-fs-24: 1.5rem;      /* 24px — h4 */
+  --bel-fs-32: 2rem;        /* 32px — h3 */
+  --bel-fs-44: 2.75rem;     /* 44px — h2 */
+  --bel-fs-64: 4rem;        /* 64px — h1 / hero */
+  --bel-fs-88: 5.5rem;      /* 88px — display */
+
+  /* ---------- Line heights ---------- */
+  --bel-lh-tight:   1.05;
+  --bel-lh-snug:    1.18;
+  --bel-lh-normal:  1.45;
+  --bel-lh-relaxed: 1.65;
+
+  /* ---------- Tracking ---------- */
+  --bel-tr-display: -0.02em;
+  --bel-tr-tight:   -0.01em;
+  --bel-tr-normal:  0;
+  --bel-tr-wide:    0.06em;
+  --bel-tr-caps:    0.14em;   /* eyebrow / micro caps */
+
+  /* ---------- Spacing (4px base) ---------- */
+  --bel-sp-1:  4px;
+  --bel-sp-2:  8px;
+  --bel-sp-3:  12px;
+  --bel-sp-4:  16px;
+  --bel-sp-5:  20px;
+  --bel-sp-6:  24px;
+  --bel-sp-8:  32px;
+  --bel-sp-10: 40px;
+  --bel-sp-12: 48px;
+  --bel-sp-16: 64px;
+  --bel-sp-20: 80px;
+  --bel-sp-24: 96px;
+  --bel-sp-32: 128px;
+
+  /* ---------- Radii ---------- */
+  --bel-r-0:  0;
+  --bel-r-1:  2px;
+  --bel-r-2:  4px;
+  --bel-r-3:  8px;
+  --bel-r-4:  12px;
+  --bel-r-pill: 999px;
+
+  /* ---------- Borders ---------- */
+  --bel-bw-1: 1px;
+  --bel-bw-2: 1.5px;
+
+  /* ---------- Shadows (soft, papery) ---------- */
+  --bel-sh-0: 0 0 0 0 rgba(0,0,0,0);
+  --bel-sh-1: 0 1px 2px rgba(20,16,8,0.04), 0 1px 1px rgba(20,16,8,0.03);
+  --bel-sh-2: 0 4px 12px rgba(20,16,8,0.06), 0 1px 2px rgba(20,16,8,0.04);
+  --bel-sh-3: 0 12px 32px rgba(20,16,8,0.10), 0 2px 6px rgba(20,16,8,0.05);
+  --bel-sh-4: 0 24px 60px rgba(20,16,8,0.16), 0 4px 12px rgba(20,16,8,0.08);
+  --bel-sh-inset: inset 0 0 0 1px var(--bel-line);
+
+  /* ---------- Motion ---------- */
+  --bel-ease-out:   cubic-bezier(.22,.61,.36,1);
+  --bel-ease-in:    cubic-bezier(.55,.06,.68,.19);
+  --bel-ease-inout: cubic-bezier(.65,.05,.36,1);
+  --bel-dur-fast:   140ms;
+  --bel-dur-base:   220ms;
+  --bel-dur-slow:   420ms;
+
+  /* ---------- Layout ---------- */
+  --bel-container: 1440px;
+  --bel-container-wide: 1600px;
+  --bel-gutter: 32px;
+  --bel-header-h: 96px;
+  --bel-header-h-scrolled: 64px;
+}
+
+/* -------- Dark mode -------- */
+[data-theme="dark"] {
+  --bel-paper:        #131210;
+  --bel-paper-2:      #1B1A17;
+  --bel-paper-3:      #232120;
+  --bel-line:         #2E2B27;
+  --bel-line-strong:  #423E37;
+
+  --bel-ink:          #F4EFE5;
+  --bel-ink-2:        #D8D2C4;
+  --bel-ink-3:        #948C7C;
+  --bel-ink-4:        #6B6457;
+
+  --bel-accent:       #D08869;
+  --bel-accent-deep:  #B8654A;
+  --bel-accent-soft:  #3A251D;
+}
+
+/* =========================================================
+   Semantic typography — apply on raw HTML or via utility classes
+   ========================================================= */
+
+html, body {
+  font-family: var(--bel-font-body);
+  font-size: var(--bel-fs-16);
+  line-height: var(--bel-lh-normal);
+  color: var(--bel-ink);
+  background: var(--bel-paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, .bel-h1 {
+  font-family: var(--bel-font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, var(--bel-fs-64));
+  line-height: var(--bel-lh-tight);
+  letter-spacing: var(--bel-tr-display);
+  color: var(--bel-ink);
+  font-variation-settings: "opsz" 144;
+}
+
+h2, .bel-h2 {
+  font-family: var(--bel-font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.5vw, var(--bel-fs-44));
+  line-height: var(--bel-lh-snug);
+  letter-spacing: var(--bel-tr-tight);
+  font-variation-settings: "opsz" 96;
+}
+
+h3, .bel-h3 {
+  font-family: var(--bel-font-display);
+  font-weight: 400;
+  font-size: var(--bel-fs-32);
+  line-height: var(--bel-lh-snug);
+  letter-spacing: var(--bel-tr-tight);
+  font-variation-settings: "opsz" 48;
+}
+
+h4, .bel-h4 {
+  font-family: var(--bel-font-body);
+  font-weight: 500;
+  font-size: var(--bel-fs-24);
+  line-height: var(--bel-lh-snug);
+  letter-spacing: var(--bel-tr-tight);
+}
+
+h5, .bel-h5 {
+  font-family: var(--bel-font-body);
+  font-weight: 500;
+  font-size: var(--bel-fs-20);
+  line-height: 1.3;
+}
+
+p, .bel-body {
+  font-size: var(--bel-fs-16);
+  line-height: var(--bel-lh-relaxed);
+  color: var(--bel-ink-2);
+}
+
+.bel-lede {
+  font-size: var(--bel-fs-18);
+  line-height: var(--bel-lh-relaxed);
+  color: var(--bel-ink-2);
+}
+
+.bel-small {
+  font-size: var(--bel-fs-14);
+  line-height: var(--bel-lh-normal);
+}
+
+.bel-meta {
+  font-size: var(--bel-fs-13);
+  color: var(--bel-ink-3);
+  line-height: var(--bel-lh-normal);
+}
+
+.bel-eyebrow {
+  font-family: var(--bel-font-body);
+  font-size: var(--bel-fs-12);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--bel-tr-caps);
+  color: var(--bel-ink-3);
+}
+
+.bel-mono {
+  font-family: var(--bel-font-mono);
+  font-size: var(--bel-fs-13);
+  letter-spacing: 0;
+}
+
+.bel-display {
+  font-family: var(--bel-font-display);
+  font-weight: 300;
+  font-size: clamp(3.5rem, 8vw, var(--bel-fs-88));
+  line-height: 0.95;
+  letter-spacing: var(--bel-tr-display);
+  font-variation-settings: "opsz" 144;
+}
+
+/* Italic display — Fraunces SOFT optical italic, very Brooklinen */
+.bel-display-italic,
+.bel-h1-italic,
+.bel-h2-italic {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+
+/* Reset */
+* { box-sizing: border-box; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* Selection */
+::selection { background: var(--bel-ink); color: var(--bel-paper); }

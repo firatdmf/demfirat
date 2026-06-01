@@ -206,8 +206,6 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             // Format based on currency
             let locale = 'en-US';
             if (currency === 'EUR') locale = 'de-DE';
-            if (currency === 'RUB') locale = 'ru-RU';
-            if (currency === 'PLN') locale = 'pl-PL';
             if (currency === 'TRY') locale = 'tr-TR';
 
             return new Intl.NumberFormat(locale, {
@@ -241,8 +239,6 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             const num = Number(value);
             let locale = 'en-US';
             if (currency === 'EUR') locale = 'de-DE';
-            if (currency === 'RUB') locale = 'ru-RU';
-            if (currency === 'PLN') locale = 'pl-PL';
             if (currency === 'TRY') locale = 'tr-TR';
             return new Intl.NumberFormat(locale, {
                 style: 'currency',

@@ -10,7 +10,18 @@
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(npx next build)",
-      "Bash(taskkill //F //IM node.exe)"
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(sed -i 's|Belino+ Wholesale|DEMFIRAT Wholesale|g' tr.json en.json)",
+      "Bash(sed -i 's|Toptan çorap ve iç giyim. Belino+ B2B portal · Türkiye merkezli.|Toptan perde, tül ve ev tekstili. DEMFIRAT B2B portal · Türkiye merkezli.|g' tr.json)",
+      "Bash(sed -i 's|Wholesale socks & innerwear. Belino+ B2B portal · Turkey based.|Wholesale curtains, tulle & home textile. DEMFIRAT B2B portal · Turkey based.|g' en.json)",
+      "Bash(npm install *)",
+      "Bash(grep -n \"renderVariantTable\\\\|variant_price_\\\\${idx}\\\\|variant_b2b_price\\\\|variant.variant_price\" \"C:/Users/enes3/erp/erp/marketing/static/marketing/js/variant_form_modern.js\")",
+      "Bash(grep -n \"f\\\\\"variant_price_\\\\|variant_price_'\\\\|variant_price_\\\\${\" \"C:/Users/enes3/erp/erp/marketing/views.py\")",
+      "Bash(netstat -ano)",
+      "Bash(powershell -Command \"Get-CimInstance Win32_Process -Filter \\\\\"ProcessId = 23860\\\\\" | Select-Object CommandLine | Format-List\")",
+      "Bash(powershell -Command \"Stop-Process -Id 23860 -Force -ErrorAction SilentlyContinue\")",
+      "Bash(python -c \"import sys, json; d=json.loads\\(sys.stdin.read\\(\\)\\); print\\('products count:', len\\(d.get\\('products', []\\)\\)\\); print\\('first product keys:', list\\(d['products'][0].keys\\(\\)\\) if d.get\\('products'\\) else 'NO PRODUCTS'\\)\")",
+      "Bash(python -c ' *)"
     ]
   }
 }

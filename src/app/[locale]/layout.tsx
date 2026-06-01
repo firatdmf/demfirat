@@ -13,6 +13,9 @@ import GoogleAnalytics from "@/lib/googleAnalytics";
 import ScrollToTop from "@/components/ScrollToTop";
 import ScrollSmoother from "@/components/ScrollSmoother";
 import NewsletterPopup from "@/components/NewsletterPopup";
+import { Suspense } from "react";
+import EditorOverlay from "@/components/EditorOverlay";
+import { getStorefrontNav } from "@/lib/storefrontApi";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -37,6 +40,11 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
   const menuT = await getTranslations({ locale, namespace: "Menu" });
   // let headerT = useTranslations("Header");
   const headerT = await getTranslations({ locale, namespace: "Header" });
+
+  // Storefront CMS nav (Belino-style). Fail-soft: when the ERP is
+  // unreachable we get null and the Header falls back to its hardcoded
+  // categories untouched.
+  const initialNav = await getStorefrontNav();
   // console.log(typeof headerT("ShippingText"));
   // console.log(headerT.raw);
 
@@ -143,7 +151,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         <Providers messages={messages} locale={locale}>
           <ScrollToTop />
           {/* <ScrollSmoother /> - Temporarily disabled */}
-          <Header menuTArray={menuTArray} />
+          <Header menuTArray={menuTArray} initialNav={initialNav} />
           {/* Spacer: pushes content below the fixed header */}
           <div style={{ height: 'var(--header-height, 96px)' }} aria-hidden="true" />
           {children}
@@ -162,6 +170,10 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
           <MobileBottomNav />
           <NewsletterPopup locale={locale} />
           {/* <HelpWidget /> */}
+          {/* Storefront visual editor — only renders when ?edit=1 (ERP iframe). */}
+          <Suspense fallback={null}>
+            <EditorOverlay />
+          </Suspense>
         </Providers>
       </body>
     </html>

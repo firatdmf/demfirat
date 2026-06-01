@@ -7,9 +7,12 @@ import Link from "next/link";
 interface ProductShowcaseProps {
   title: string;
   locale: string;
+  /** Storefront HomeSection.id — when supplied, brand/slogan/title become inline-editable in ?edit=1 mode. */
+  editId?: number;
 }
 
-export default function ProductShowcase({ title, locale }: ProductShowcaseProps) {
+export default function ProductShowcase({ title, locale, editId }: ProductShowcaseProps) {
+  const fieldLocale = locale === 'tr' ? 'tr' : 'en';
   const slogan = locale === 'en' ? 'Elegance in every detail, comfort in every touch' :
     locale === 'ru' ? 'Изящество в каждой детали, комфорт в каждом прикосновении' :
       locale === 'pl' ? 'Elegancja w każdym detalu, komfort w każdym dotyku' :
@@ -20,8 +23,14 @@ export default function ProductShowcase({ title, locale }: ProductShowcaseProps)
       <div className={classes.container}>
         <div className={classes.content}>
           <div className={classes.header}>
-            <div className={classes.brand}>Karven</div>
-            <div className={classes.slogan}>{slogan}</div>
+            <div
+              className={classes.brand}
+              data-edit-text={editId ? `homesection:${editId}:eyebrow_${fieldLocale}` : undefined}
+            >{title || 'Karven'}</div>
+            <div
+              className={classes.slogan}
+              data-edit-text={editId ? `homesection:${editId}:body_${fieldLocale}` : undefined}
+            >{slogan}</div>
           </div>
 
           <div className={classes.gallery}>

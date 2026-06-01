@@ -8,6 +8,7 @@ import ProductShowcase from "@/components/ProductShowcase";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
 import CustomCurtainPromo from "@/components/CustomCurtainPromo";
 import InstagramFeed from "@/components/InstagramFeed";
+import { getStorefrontHome } from "@/lib/storefrontApi";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
 // import { useTranslations } from "next-intl";
@@ -23,6 +24,16 @@ export default async function Home(props: PageProps<'/[locale]'>) {
 
   const sliderLocale = await getTranslations({ locale, namespace: "Slider" });
   const productsLocale = await getTranslations({ locale, namespace: "Products" });
+
+  // Storefront CMS sections — used to assign `editId` on each home
+  // component so the visual editor can rename text + swap images
+  // in place (Belino-style). Fail-soft: when the API is down the
+  // values are undefined and components fall back to hardcoded copy.
+  const homeSections = await getStorefrontHome();
+  const heroSection = homeSections?.find((s) => s.kind === 'hero');
+  const trustSection = homeSections?.find((s) => s.kind === 'trust');
+  const featuredSection = homeSections?.find((s) => s.kind === 'featured');
+  const seasonsSection = homeSections?.find((s) => s.kind === 'seasons');
 
   // This is for fetching product categories from Backend API
   const get_product_categories_API_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_categories`);
@@ -122,33 +133,50 @@ export default async function Home(props: PageProps<'/[locale]'>) {
   return (
     <main>
       <div className="HomePage">
-        <HeroVideo
-          videoSrc="https://demfiratkarven.b-cdn.net/website-videos/hero-video.mp4"
-          subtitle={locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
-            locale === 'ru' ? 'Премиальная текстильная коллекция' :
-              locale === 'pl' ? 'Kolekcja Premium Tekstyliów' :
-                'Premium Textile Collection'}
-          title={locale === 'tr' ? 'Zarafet Nakışla Buluşuyor' :
-            locale === 'ru' ? 'Где элегантность встречается с вышивкой' :
-              locale === 'pl' ? 'Gdzie elegancja spotyka haft' :
-                'Where Elegance Meets Embroidery'}
-          locale={locale}
-          showCatalogButton={false}
-          primaryCta={{
-            text: locale === 'tr' ? 'Perdeni Tasarla (Özel Dikim)' :
-              locale === 'ru' ? 'Создай свои шторы' :
-                locale === 'pl' ? 'Zaprojektuj swoje zasłony' :
-                  'Design Your Curtain',
-            link: `/${locale}/product/fabric?intent=custom_curtain`
-          }}
-        />
-        <CustomCurtainPromo locale={locale} />
-        <ProductShowcase
-          title={productsLocale("Headline")}
-          locale={locale}
-        />
-        <DraggableTestimonials reviews={reviews} locale={locale} />
-        <InstagramFeed locale={locale} />
+        {/* Editable section wrappers — clicked in ?edit=1 mode they
+            dispatch a `select` postMessage; the ERP CMS receives it and
+            opens that section's edit form. */}
+        <div data-edit-zone="hero">
+          <HeroVideo
+            videoSrc="https://demfiratkarven.b-cdn.net/website-videos/hero-video.mp4"
+            subtitle={heroSection?.eyebrow?.[locale === 'tr' ? 'tr' : 'en']
+              || (locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
+                  locale === 'ru' ? 'Премиальная текстильная коллекция' :
+                    locale === 'pl' ? 'Kolekcja Premium Tekstyliów' :
+                      'Premium Textile Collection')}
+            title={heroSection?.title?.[locale === 'tr' ? 'tr' : 'en']
+              || (locale === 'tr' ? 'Zarafet Nakışla Buluşuyor' :
+                  locale === 'ru' ? 'Где элегантность встречается с вышивкой' :
+                    locale === 'pl' ? 'Gdzie elegancja spotyka haft' :
+                      'Where Elegance Meets Embroidery')}
+            locale={locale}
+            showCatalogButton={false}
+            primaryCta={{
+              text: locale === 'tr' ? 'Perdeni Tasarla (Özel Dikim)' :
+                locale === 'ru' ? 'Создай свои шторы' :
+                  locale === 'pl' ? 'Zaprojektuj swoje zasłony' :
+                    'Design Your Curtain',
+              link: `/${locale}/product/fabric?intent=custom_curtain`
+            }}
+            editId={heroSection?.id}
+          />
+        </div>
+        <div data-edit-zone="trust">
+          <CustomCurtainPromo locale={locale} editId={trustSection?.id} />
+        </div>
+        <div data-edit-zone="featured">
+          <ProductShowcase
+            title={featuredSection?.title?.[locale === 'tr' ? 'tr' : 'en'] || productsLocale("Headline")}
+            locale={locale}
+            editId={featuredSection?.id}
+          />
+        </div>
+        <div data-edit-zone="seasons">
+          <DraggableTestimonials reviews={reviews} locale={locale} />
+        </div>
+        <div data-edit-zone="instagram">
+          <InstagramFeed locale={locale} />
+        </div>
       </div>
     </main>
   );

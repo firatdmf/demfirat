@@ -22,7 +22,19 @@
       "Bash(grep -l \"f_auto\\\\|q_auto\\\\|/upload/\" c:Usersenes3demfiratsrccomponents*.tsx)",
       "Bash(grep -E \"import.*from ''@react-pdf|import.*jspdf|import.*pdf-lib|import.*sharp|dynamic|React.lazy\" /c/Users/enes3/demfirat/src/components/ProductDetailCard.tsx)",
       "Bash(wc -l /c/Users/enes3/demfirat/src/app/[locale]/globals.css)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(sort -t: -k2 -rn)",
+      "Bash(mkdir -p \"C:/Users/enes3/demfirat/b2b\")",
+      "Bash(cp -r --no-preserve=ownership src messages public \"C:/Users/enes3/demfirat/b2b/\")",
+      "Bash(cp package.json package-lock.json next.config.js postcss.config.js tailwind.config.ts tsconfig.json next-env.d.ts \"C:/Users/enes3/demfirat/b2b/\")",
+      "Bash(cp \"C:/Users/enes3/b2bdemo/.gitignore\" \"C:/Users/enes3/demfirat/b2b/.gitignore\")",
+      "Bash(cp \"C:/Users/enes3/b2bdemo/.eslintrc.json\" \"C:/Users/enes3/demfirat/b2b/.eslintrc.json\")",
+      "Bash(awk '{print $NF}')",
+      "Bash(sed -i \"s|brand: 'Belino'|brand: 'DEMFIRAT'|g\" data/products.ts)",
+      "Bash(sed -i \"s|brand: 'Belino'|brand: 'DEMFIRAT'|g\" lib/mapper.ts)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\enes3\\erp\\erp\\operating\\templates\\operating"
     ]
   }
 }

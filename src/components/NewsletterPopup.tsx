@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { FaTimes } from 'react-icons/fa';
 import classes from './NewsletterPopup.module.css';
 
@@ -84,8 +85,13 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
     const [discountCode, setDiscountCode] = useState('');
 
     const t = translations[locale as keyof typeof translations] || translations.tr;
+    const pathname = usePathname();
+    // Skip popup on standalone pages where it's distracting (e.g. guest review form)
+    const skipPopup = !!pathname && /\/review(\/|$|\?)/.test(pathname);
 
     useEffect(() => {
+        if (skipPopup) return;
+
         // Check if popup was already shown (persistent check with 30-day expiry)
         const popupData = localStorage.getItem('newsletterPopup');
         if (popupData) {
@@ -106,7 +112,7 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
             setIsVisible(true);
         }, 3000);
         return () => clearTimeout(timer);
-    }, []);
+    }, [skipPopup]);
 
     const handleClose = () => {
         setIsVisible(false);

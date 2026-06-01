@@ -1864,8 +1864,6 @@ export default function ProfilePage() {
                       <option value="TRY">TRY (₺)</option>
                       <option value="USD">USD ($)</option>
                       <option value="EUR">EUR (€)</option>
-                      <option value="RUB">RUB (₽)</option>
-                      <option value="PLN">PLN (zł)</option>
                     </select>
                     {settings.currency !== 'USD' && (
                       <div className={classes.rateInfo} style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
