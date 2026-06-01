@@ -14,10 +14,16 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
-  // Reduce memory usage
-  experimental: {
-    // Limit ISR memory cache
-    isrMemoryCacheSize: 0,
+  // Skip the b2b/ workspace — it's a separate Next.js project that
+  // ships independently to b2b.demfirat.com. Without this, Next picks
+  // it up via tsconfig's broad include and fails on @/-aliased imports
+  // that resolve relative to the b2b/ src tree, not this one.
+  webpack: (config) => {
+    config.watchOptions = {
+      ...(config.watchOptions || {}),
+      ignored: ['**/node_modules', '**/b2b/**'],
+    };
+    return config;
   },
 
   // I added these below myself. These prisma and bcrpyt are two libraries that we do not want to add
