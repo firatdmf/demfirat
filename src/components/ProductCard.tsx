@@ -250,6 +250,15 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const isBedCategory = pathname.includes('/product/bed') || productOwnCategory === 'bed';
   const isPerPiece = isReadyMadeCurtain || isBedCategory;
 
+  const isEmbroidery = actualCategory === 'embroidery' || pathname.includes('/product/fabrics/embroidery') || productOwnCategory === 'embroidery';
+
+  const productHref = isEmbroidery
+    ? `/${locale}/product/fabrics/embroidery/${product.sku}#ProductDetailCardPage`
+    : (isCustomCurtain
+        ? `/${locale}/product/${actualCategory}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+        : `/${locale}/product/${actualCategory}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
+      );
+
   // Format price with currency (using global context)
   // Prefers backend pre-converted prices dict when available.
   const formatPrice = (price: string | number, pricesDict?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null) => {
@@ -431,10 +440,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         {/* Product Image Container */}
         <div className={classes.imageContainer}>
           <Link
-            href={isCustomCurtain
-              ? `/${locale}/product/${actualCategory}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
-              : `/${locale}/product/${actualCategory}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
-            }
+            href={productHref}
             className={classes.imageLink}
           >
             <div
@@ -521,10 +527,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
         {/* Product Info */}
         <div className={classes.productInfo}>
           <Link
-            href={isCustomCurtain
-              ? `/${locale}/product/${actualCategory}/${product.sku}/curtain${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
-              : `/${locale}/product/${actualCategory}/${product.sku}${selectedVariantId ? `?variant=${selectedVariantId}#ProductDetailCard` : '#ProductDetailCard'}`
-            }
+            href={productHref}
             className={classes.productLink}
           >
             <div className={classes.productTitle}>{getLocalizedProductField(product, 'title', locale)}</div>
