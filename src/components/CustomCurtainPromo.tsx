@@ -5,6 +5,8 @@ import Link from 'next/link';
 import classes from './CustomCurtainPromo.module.css';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { getLocalizedProductField } from '@/lib/productUtils';
+import { FiLayers, FiSliders, FiPackage } from 'react-icons/fi';
+import { FaRuler } from 'react-icons/fa';
 
 interface Product {
     id: number;
@@ -203,22 +205,30 @@ export default function CustomCurtainPromo({ locale, editId }: CustomCurtainProm
                     {/* Steps Icons */}
                     <div className={classes.stepsRow}>
                         <div className={classes.stepItem}>
-                            <div className={classes.stepIcon}>🎨</div>
+                            <div className={classes.stepIcon}>
+                                <FiLayers className={classes.stepSvg} />
+                            </div>
                             <span className={classes.stepText}>{t.step1[lang]}</span>
                         </div>
                         <div className={classes.stepDivider}></div>
                         <div className={classes.stepItem}>
-                            <div className={classes.stepIcon}>📐</div>
+                            <div className={classes.stepIcon}>
+                                <FaRuler className={classes.stepSvg} />
+                            </div>
                             <span className={classes.stepText}>{t.step2[lang]}</span>
                         </div>
                         <div className={classes.stepDivider}></div>
                         <div className={classes.stepItem}>
-                            <div className={classes.stepIcon}>✨</div>
+                            <div className={classes.stepIcon}>
+                                <FiSliders className={classes.stepSvg} />
+                            </div>
                             <span className={classes.stepText}>{t.step3[lang]}</span>
                         </div>
                         <div className={classes.stepDivider}></div>
                         <div className={classes.stepItem}>
-                            <div className={classes.stepIcon}>📦</div>
+                            <div className={classes.stepIcon}>
+                                <FiPackage className={classes.stepSvg} />
+                            </div>
                             <span className={classes.stepText}>{t.step4[lang]}</span>
                         </div>
                     </div>
@@ -246,7 +256,8 @@ export default function CustomCurtainPromo({ locale, editId }: CustomCurtainProm
                             href={`/${locale}/blog/dogru-olcu-nasil-alinir`}
                             className={classes.guideLink}
                         >
-                            📐 {t.measureGuide[lang]}
+                            <FaRuler className={classes.guideIcon} />
+                            {t.measureGuide[lang]}
                         </Link>
                     </div>
                 </div>

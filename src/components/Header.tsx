@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
 import Image from 'next/image';
-import { FaUser, FaHeart, FaShoppingCart, FaSearch, FaTimes, FaBox, FaHeadset } from "react-icons/fa";
+import { FiUser, FiHeart, FiShoppingBag, FiSearch, FiX, FiBox, FiHeadphones } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { getCurtainSections, getTopNavItems } from "@/lib/navMenu";
@@ -379,17 +379,17 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
               {/* Right Icons */}
               <div className={classes.actionIcons}>
                 <button onClick={openSearch} className={classes.iconButton} title="Search" aria-label="Search">
-                  <FaSearch />
+                  <FiSearch />
                 </button>
 
                 <Link href={`/${locale}/favorites`} className={classes.iconButton} title="Favorites">
-                  <FaHeart />
+                  <FiHeart />
                 </Link>
 
                 {hasMounted && session?.user ? (
                   <div className={classes.userDropdown}>
                     <button className={classes.iconButton} title="Account">
-                      <FaUser />
+                      <FiUser />
                     </button>
                     <div className={classes.userDropdownMenu}>
                       <Link href={`/${locale}/account/profile`} className={classes.userDropdownItem}>
@@ -405,12 +405,12 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
                   </div>
                 ) : (
                   <button onClick={() => setShowLoginModal(true)} className={classes.iconButton} title={t('login')}>
-                    <FaUser />
+                    <FiUser />
                   </button>
                 )}
 
                 <Link href={`/${locale}/cart`} className={classes.cartButton} title="Cart">
-                  <FaShoppingCart />
+                  <FiShoppingBag />
                   {hasMounted && cartCount > 0 && (
                     <span className={classes.cartBadge}>{cartCount}</span>
                   )}
@@ -448,7 +448,7 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
             /* ── Search Mode: replaces header content inline ── */
             <div className={classes.searchBar}>
               <form onSubmit={handleSearchSubmit} className={classes.searchForm}>
-                <FaSearch className={classes.searchIcon} />
+                <FiSearch className={classes.searchIcon} />
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -460,7 +460,7 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
                 />
               </form>
               <button onClick={closeSearch} className={classes.searchCloseBtn} aria-label="Close search">
-                <FaTimes />
+                <FiX />
               </button>
             </div>
           )}
@@ -581,16 +581,16 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
             </div>
 
             <Link href={`/${locale}/order-tracking`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              <FaBox className={classes.mobileIcon} /> {t('trackOrder')}
+              <FiBox className={classes.mobileIcon} /> {t('trackOrder')}
             </Link>
             <Link href={`/${locale}/help`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              <FaHeadset className={classes.mobileIcon} /> {t('helpSupport')}
+              <FiHeadphones className={classes.mobileIcon} /> {t('helpSupport')}
             </Link>
 
             <hr className={classes.mobileDivider} />
 
             <Link href={`/${locale}/favorites`} className={classes.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-              <FaHeart className={classes.mobileIcon} /> {locale === 'tr' ? 'Favorilerim' : locale === 'ru' ? 'Избранное' : locale === 'pl' ? 'Ulubione' : 'Favorites'}
+              <FiHeart className={classes.mobileIcon} /> {locale === 'tr' ? 'Favorilerim' : locale === 'ru' ? 'Избранное' : locale === 'pl' ? 'Ulubione' : 'Favorites'}
             </Link>
 
             {session?.user && (

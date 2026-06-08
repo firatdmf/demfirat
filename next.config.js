@@ -8,6 +8,7 @@ const nextConfig = {
   // below is added for language localizations
   // basePath:process.env.NODE_PATH || '',
   reactStrictMode: true,
+  outputFileTracingRoot: __dirname,
   // -----
 
   // Performance optimizations

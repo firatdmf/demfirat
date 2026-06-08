@@ -1,0 +1,209 @@
+.historySection {
+  background: linear-gradient(180deg, #ede3d5 0%, #faf8f5 100%);
+  padding: var(--section-py, 5.5rem) var(--section-px, 2rem);
+  overflow: hidden;
+  border-top: 1px solid rgba(148, 79, 5, 0.08);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max, 1280px);
+  margin: 0 auto;
+  padding: 0 var(--section-px, 2rem);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+/* ── Left side: Text Content ── */
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.subtitle {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #7a6353;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  position: relative;
+  display: inline-block;
+}
+
+.logoTitle {
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: #944f05; /* DEMFIRAT brand logo color */
+  text-transform: uppercase;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  position: relative;
+}
+
+.description {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  font-weight: 300;
+  color: #5c4738;
+  line-height: 1.75;
+  margin: 0 0 2.5rem 0;
+  letter-spacing: 0.02em;
+}
+
+.ctaWrapper {
+  display: flex;
+  gap: 1rem;
+}
+
+.storyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 2.2rem;
+  background: #4a3525;
+  color: #fdf6ee;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(74, 53, 37, 0.15);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.storyButton:hover {
+  background: #944f05;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(148, 79, 5, 0.25);
+  color: #fdf6ee;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+.storyButton:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* ── Right side: Staggered Side-by-Side Image Gallery (Non-overlapping) ── */
+.imageBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  position: relative;
+  width: 100%;
+  padding: 2rem 0; /* Vertical breathing room for stagger offset */
+}
+
+.imageContainerLeft, .imageContainerRight {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/5;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(90, 55, 30, 0.1);
+}
+
+/* Premium Staggering vertical offsets */
+.imageContainerLeft {
+  transform: translateY(-20px);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+}
+
+.imageContainerLeft:hover {
+  transform: translateY(-26px);
+  box-shadow: 0 14px 35px rgba(90, 55, 30, 0.18);
+}
+
+.imageContainerRight {
+  transform: translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+}
+
+.imageContainerRight:hover {
+  transform: translateY(14px);
+  box-shadow: 0 14px 35px rgba(90, 55, 30, 0.18);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .logoTitle {
+    font-size: 2.75rem;
+  }
+  
+  .grid {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .historySection {
+    padding: var(--section-py, 4rem) var(--section-px, 1.5rem);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  .textBlock {
+    align-items: center;
+    text-align: center;
+  }
+
+  .imageBlock {
+    gap: 1.5rem;
+    padding: 0; /* Remove padding since stagger is disabled on mobile */
+  }
+
+  .imageContainerLeft, .imageContainerRight {
+    transform: none !important; /* Disable stagger on mobile */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .imageContainerLeft:hover, .imageContainerRight:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 28px rgba(90, 55, 30, 0.15);
+  }
+
+  .logoTitle {
+    font-size: 2.5rem;
+  }
+  
+  .description {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoTitle {
+    font-size: 2.1rem;
+    letter-spacing: 0.1em;
+  }
+
+  .storyButton {
+    padding: 0.8rem 1.6rem;
+    font-size: 0.8rem;
+  }
+}

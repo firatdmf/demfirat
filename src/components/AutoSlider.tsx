@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import classes from "./AutoSlider.module.css";
 
 interface Slide {
@@ -14,11 +14,12 @@ interface AutoSliderProps {
 
 export default function AutoSlider({ locale }: AutoSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const slides: Slide[] = [
     {
       image: "/media/slider/slide-1.jpg",
-      title: locale === 'en' ? 'Luxury Fabrics' : 
+      title: locale === 'en' ? 'Luxury Fabrics' :
              locale === 'ru' ? 'Роскошные ткани' :
              locale === 'pl' ? 'Luksusowe tkaniny' :
              'Lüks Kumaşlar',
@@ -62,41 +63,78 @@ export default function AutoSlider({ locale }: AutoSliderProps) {
     }
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 3000); // 3 saniyede bir değişir
-
-    return () => clearInterval(interval);
+  const next = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
+  const prev = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  }, [slides.length]);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(next, 4000);
+    return () => clearInterval(interval);
+  }, [isPaused, next]);
 
   return (
-    <div className={classes.sliderContainer}>
-        <div className={classes.slides}>
-          {slides.map((slide, index) => (
-            <div
+    <div
+      className={classes.sliderWrapper}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Resim alanı — overlay YOK */}
+      <div className={classes.imageArea}>
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`${classes.slide} ${index === currentSlide ? classes.active : ""}`}
+          >
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className={classes.slideImage}
+            />
+          </div>
+        ))}
+
+        {/* Sol / Sağ Butonlar */}
+        <button className={`${classes.navBtn} ${classes.navLeft}`} onClick={prev} aria-label="Önceki">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <button className={`${classes.navBtn} ${classes.navRight}`} onClick={next} aria-label="Sonraki">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+
+        {/* Nokta göstergeleri */}
+        <div className={classes.dots}>
+          {slides.map((_, index) => (
+            <button
               key={index}
-              className={`${classes.slide} ${
-                index === currentSlide ? classes.active : ""
-              }`}
-            >
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className={classes.slideImage}
-              />
-              <div className={classes.overlay}></div>
-              <div className={classes.content}>
-                <h2 className={classes.title}>{slide.title}</h2>
-                <p className={classes.subtitle}>{slide.subtitle}</p>
-              </div>
-            </div>
+              className={`${classes.dot} ${index === currentSlide ? classes.activeDot : ""}`}
+              onClick={() => setCurrentSlide(index)}
+              aria-label={`Slayt ${index + 1}`}
+            />
           ))}
         </div>
       </div>
+
+      {/* Yazılar resmin DIŞINDA, altında */}
+      <div className={classes.textArea}>
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`${classes.textSlide} ${index === currentSlide ? classes.textActive : ""}`}
+          >
+            <h3 className={classes.title}>{slide.title}</h3>
+            <p className={classes.subtitle}>{slide.subtitle}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

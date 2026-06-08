@@ -18,7 +18,7 @@
 
 /* ── Announcement Bar (Marquee) ── */
 .announcementBar {
-  background: #2c2c2c;
+  background: #3a2518;
   overflow: hidden;
   white-space: nowrap;
   max-height: 34px;
@@ -303,7 +303,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2c2c2c;
+  color: #4a3525;
   font-size: 1.1rem;
   border-radius: 50%;
   transition: all 0.25s ease;
@@ -314,8 +314,8 @@
 }
 
 .iconButton:hover {
-  color: #c9a961;
-  background: rgba(201, 169, 97, 0.1);
+  color: #944f05;
+  background: rgba(148, 79, 5, 0.08);
 }
 
 .cartButton {
@@ -325,7 +325,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2c2c2c;
+  color: #4a3525;
   font-size: 1.1rem;
   border-radius: 50%;
   transition: all 0.25s ease;
@@ -333,8 +333,8 @@
 }
 
 .cartButton:hover {
-  color: #c9a961;
-  background: rgba(201, 169, 97, 0.1);
+  color: #944f05;
+  background: rgba(148, 79, 5, 0.08);
 }
 
 .cartBadge {
@@ -655,7 +655,7 @@
 .mobileMenuToggle span {
   width: 22px;
   height: 2px;
-  background: #2c2c2c;
+  background: #4a3525;
   transition: all 0.3s ease;
   border-radius: 2px;
 }
@@ -766,22 +766,22 @@
   align-items: center;
   gap: 5px;
   background: none;
-  border: 1.5px solid rgba(201, 169, 97, 0.35);
+  border: 1.5px solid rgba(148, 79, 5, 0.25);
   border-radius: 20px;
   padding: 5px 12px;
   cursor: pointer;
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 0.85rem;
   font-weight: 600;
-  color: #2c2c2c;
+  color: #4a3525;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .currencyBtn:hover {
-  border-color: #c9a961;
-  color: #c9a961;
-  background: rgba(201, 169, 97, 0.06);
+  border-color: #944f05;
+  color: #944f05;
+  background: rgba(148, 79, 5, 0.06);
 }
 
 .currencySymbol {

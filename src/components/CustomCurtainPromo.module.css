@@ -10,7 +10,7 @@
     text-align: center;
     padding: var(--section-py, 5rem) var(--section-px, 2rem);
     margin-bottom: 0;
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    background: linear-gradient(160deg, #ede3d5 0%, #e4d8c6 50%, #ede3d5 100%);
     overflow: hidden;
 }
 
@@ -23,8 +23,8 @@
     right: 0;
     bottom: 0;
     background-image:
-        radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(201, 169, 97, 0.08) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(201, 169, 97, 0.04) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -35,8 +35,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, transparent 10%, var(--gold, #c9a961) 50%, transparent 90%);
+    height: 1px;
+    background: rgba(154, 92, 58, 0.18);
 }
 
 .promoContent {
@@ -61,54 +61,78 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    cursor: default;
 }
 
 .stepIcon {
     width: 60px;
     height: 60px;
-    background: rgba(201, 169, 97, 0.15);
-    border: 2px solid var(--gold, #c9a961);
+    background: rgba(181, 115, 90, 0.08); /* Warm terracotta/cream tint */
+    border: 2px solid var(--earth-terracotta, #b5735a);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepSvg {
+    font-size: 1.35rem;
+    color: var(--earth-bark, #7a5c44);
+    stroke-width: 1.8px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.stepItem:hover .stepIcon {
+    border-color: var(--earth-bark, #7a5c44);
+    background: rgba(122, 92, 68, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(122, 92, 68, 0.1);
+}
+
+.stepItem:hover .stepSvg {
+    color: var(--earth-bark, #3d2e22);
+    transform: scale(1.1);
 }
 
 .stepText {
     font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--earth-muted, #8a7060);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    transition: color 0.3s ease;
+}
+
+.stepItem:hover .stepText {
+    color: var(--earth-bark, #3d2e22);
 }
 
 .stepDivider {
     width: 40px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--gold, #c9a961), transparent);
-    opacity: 0.5;
+    height: 1.5px;
+    background: linear-gradient(90deg, var(--earth-terracotta, #b5735a), transparent);
+    opacity: 0.4;
 }
 
 .promoTitle {
     font-family: var(--font-heading, 'Cormorant Garamond', serif);
     font-size: var(--h2-size, 2.25rem);
     font-weight: 400;
-    color: white;
+    color: #3a2518;
     margin: 0 0 1rem 0;
     line-height: 1.2;
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
 .promoTitleAccent {
-    color: var(--gold, #c9a961);
+    color: #b07850;
 }
 
 .promoSubtitle {
     font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: #5c4738;
     margin: 0 0 2.5rem 0;
     letter-spacing: 0.03em;
     line-height: 1.6;
@@ -160,7 +184,7 @@
     font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.9rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--earth-muted, #8a7060);
     text-decoration: none;
     transition: all 0.2s ease;
     display: inline-flex;
@@ -168,8 +192,18 @@
     gap: 0.5rem;
 }
 
+.guideIcon {
+    font-size: 1rem;
+    color: var(--earth-terracotta, #b5735a);
+    transition: transform 0.2s ease;
+}
+
 .guideLink:hover {
-    color: var(--gold, #c9a961);
+    color: var(--earth-bark, #3d2e22);
+}
+
+.guideLink:hover .guideIcon {
+    transform: rotate(-12deg) scale(1.1);
 }
 
 /* Carousel Section */

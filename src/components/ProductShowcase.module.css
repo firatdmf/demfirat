@@ -1,7 +1,16 @@
-.showcaseSection {
-  background: linear-gradient(135deg, #5a5a52 0%, #4a4a42 100%);
+/* ══════════════════════════════════════
+   BÖLÜM 1 — Fotoğraf Galerisi
+   Arka plan: sıcak krem / keten tonu
+════════════════════════════════════════ */
+.gallerySection {
+  background: linear-gradient(160deg, #ede3d5 0%, #e4d8c6 50%, #ede3d5 100%);
   padding: var(--section-py, 5rem) var(--section-px, 2rem);
-  position: relative;
+}
+
+/* ── Eski alias — aynı bölüme işaret eder ── */
+.showcaseSection {
+  background: linear-gradient(160deg, #ede3d5 0%, #e4d8c6 50%, #ede3d5 100%);
+  padding: var(--section-py, 5rem) var(--section-px, 2rem);
 }
 
 .container {
@@ -9,61 +18,55 @@
   margin: 0 auto;
 }
 
-.content {
-  text-align: center;
-}
-
+/* ── Başlık Bloğu ── */
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
-  padding: 0 1rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.brand {
-  font-family: var(--font-heading, 'Cormorant Garamond', serif);
-  font-size: var(--h2-size, 2.25rem);
-  font-weight: 300;
-  color: #ffffff;
-  letter-spacing: 0.1em;
-  text-align: left;
-  flex: 1 1 auto;
+  margin-bottom: 2.5rem;
+  padding: 0 0.25rem;
 }
 
 .slogan {
-  font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 1.5rem;
-  font-weight: 300;
-  color: #ffffff;
-  letter-spacing: 0.05em;
-  text-align: right;
-  text-transform: uppercase;
-  flex: 1 1 auto;
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 2.25rem;
+  font-weight: 400;
+  color: #3a2518;
+  letter-spacing: 0.02em;
+  text-align: left;
+  line-height: 1.25;
+  margin: 0;
+  position: relative;
+  padding-bottom: 0.75rem;
 }
 
-/* Gallery Grid — Sol büyük + sağda 2 küçük üst, 1 geniş alt */
+.slogan::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background-color: #b07850;
+  border-radius: 2px;
+}
+
+/* ── Gallery Grid ── */
 .gallery {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 16px;
-  margin: 3rem 0 0;
-  aspect-ratio: 2.4 / 1;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-rows: 300px 300px;
+  gap: 12px;
 }
 
 .galleryItem {
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-  transition: box-shadow 0.3s ease;
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(90, 55, 30, 0.13);
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
 }
 
 .galleryItem:hover {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 30px rgba(90, 55, 30, 0.22);
+  transform: translateY(-3px);
 }
 
 .galleryItem.large {
@@ -80,15 +83,51 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s ease;
 }
 
 .galleryItem:hover .image {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
+/* ══════════════════════════════════════
+   BÖLÜM 2 — Slider
+   Arka plan: daha açık/farklı earthy ton
+   Üstte 60px boşluk / görsel ayraç
+════════════════════════════════════════ */
+.sliderSection {
+  background: #faf4ea;
+  padding: var(--section-py, 5rem) var(--section-px, 2rem);
+  border-top: 1px solid #e0cdb8;
+  margin-top: 0;
+  position: relative;
+}
+
+/* İnce dekoratif çizgi üstte */
+.sliderSection::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: #b07850;
+  margin: 0 auto 2.5rem;
+  border-radius: 2px;
+}
+
+.sliderLabel {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #9a5c3a;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
+/* ── CTA (varsa) ── */
 .sliderWrapper {
-  margin-top: 3rem;
+  margin-top: 3.5rem;
 }
 
 .ctaContainer {
@@ -97,74 +136,84 @@
 
 .ctaButton {
   display: inline-block;
-  color: #ffffff;
+  color: #9a5c3a;
   font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-decoration: none;
   text-transform: uppercase;
   transition: color 0.3s ease;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
 }
 
 .ctaButton:hover {
-  color: #c9a961;
+  color: #3a2518;
 }
 
-/* Responsive */
+/* ══════════════════════════════════════
+   Responsive
+════════════════════════════════════════ */
 @media (max-width: 1024px) {
+  .gallery {
+    grid-template-rows: 240px 240px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 991px) {
+  .gallerySection {
+    padding: var(--section-py, 4.5rem) var(--section-px, 1.5rem);
+  }
+
   .header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
   .slogan {
-    font-size: 1.2rem;
+    font-size: 1.85rem;
   }
 
   .gallery {
-    gap: 16px;
-    margin: 2.5rem 0 0;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    grid-template-rows: 200px 200px;
+    gap: 10px;
   }
 }
 
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
+  .gallerySection {
+    padding: var(--section-py, 3.5rem) var(--section-px, 1.5rem);
   }
 
-  .brand {
-    text-align: center;
+  .header {
+    margin-bottom: 1.5rem;
   }
 
   .slogan {
-    font-size: 0.9rem;
-    text-align: center;
+    font-size: 1.5rem;
   }
 
   .gallery {
-    gap: 12px;
-    margin: 2rem 0 0;
-  }
-
-  .ctaButton {
-    font-size: 1rem;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    grid-template-rows: 150px 150px;
+    gap: 8px;
   }
 }
 
 @media (max-width: 480px) {
+  .gallerySection {
+    padding: var(--section-py, 3rem) var(--section-px, 1rem);
+  }
+
   .slogan {
-    font-size: 0.75rem;
-    letter-spacing: 0.02em;
+    font-size: 1.3rem;
   }
 
   .gallery {
-    gap: 10px;
-  }
-
-  .ctaButton {
-    font-size: 0.9rem;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    grid-template-rows: 110px 110px;
+    gap: 6px;
   }
 }

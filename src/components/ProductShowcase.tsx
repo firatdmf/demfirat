@@ -2,12 +2,10 @@
 import React from "react";
 import classes from "./ProductShowcase.module.css";
 import AutoSlider from "./AutoSlider";
-import Link from "next/link";
 
 interface ProductShowcaseProps {
   title: string;
   locale: string;
-  /** Storefront HomeSection.id — when supplied, brand/slogan/title become inline-editable in ?edit=1 mode. */
   editId?: number;
 }
 
@@ -18,19 +16,21 @@ export default function ProductShowcase({ title, locale, editId }: ProductShowca
       locale === 'pl' ? 'Elegancja w każdym detalu, komfort w każdym dotyku' :
         'Her detayda incelik, her dokunuşta konfor';
 
+  const sliderLabel = locale === 'tr' ? 'Koleksiyondan' :
+    locale === 'ru' ? 'Из коллекции' :
+      locale === 'pl' ? 'Z kolekcji' :
+        'From the Collection';
+
   return (
-    <section className={classes.showcaseSection}>
-      <div className={classes.container}>
-        <div className={classes.content}>
+    <>
+      {/* ── BÖLÜM 1: Fotoğraf Galerisi ── */}
+      <section className={classes.gallerySection}>
+        <div className={classes.container}>
           <div className={classes.header}>
-            <div
-              className={classes.brand}
-              data-edit-text={editId ? `homesection:${editId}:eyebrow_${fieldLocale}` : undefined}
-            >{title || 'Karven'}</div>
-            <div
+            <h2
               className={classes.slogan}
               data-edit-text={editId ? `homesection:${editId}:body_${fieldLocale}` : undefined}
-            >{slogan}</div>
+            >{slogan}</h2>
           </div>
 
           <div className={classes.gallery}>
@@ -70,13 +70,16 @@ export default function ProductShowcase({ title, locale, editId }: ProductShowca
               />
             </div>
           </div>
-
-          <div className={classes.sliderWrapper}>
-            <AutoSlider locale={locale} />
-          </div>
-
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* ── BÖLÜM 2: Slider ── */}
+      <section className={classes.sliderSection}>
+        <div className={classes.container}>
+          <p className={classes.sliderLabel}>{sliderLabel}</p>
+          <AutoSlider locale={locale} />
+        </div>
+      </section>
+    </>
   );
 }

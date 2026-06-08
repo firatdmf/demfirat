@@ -7,6 +7,7 @@ import HeroVideo from "@/components/HeroVideo";
 import ProductShowcase from "@/components/ProductShowcase";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
 import CustomCurtainPromo from "@/components/CustomCurtainPromo";
+import BrandHistoryPromo from "@/components/BrandHistoryPromo";
 import InstagramFeed from "@/components/InstagramFeed";
 import { getStorefrontHome } from "@/lib/storefrontApi";
 // below is irrelevant
@@ -138,7 +139,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
             opens that section's edit form. */}
         <div data-edit-zone="hero">
           <HeroVideo
-            videoSrc="https://demfiratkarven.b-cdn.net/website-videos/hero-video.mp4"
+            videoSrc="https://demfiratkarven.b-cdn.net/website-videos/new_hero.mp4"
             subtitle={heroSection?.eyebrow?.[locale === 'tr' ? 'tr' : 'en']
               || (locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
                   locale === 'ru' ? 'Премиальная текстильная коллекция' :
@@ -163,6 +164,9 @@ export default async function Home(props: PageProps<'/[locale]'>) {
         </div>
         <div data-edit-zone="trust">
           <CustomCurtainPromo locale={locale} editId={trustSection?.id} />
+        </div>
+        <div data-edit-zone="history">
+          <BrandHistoryPromo locale={locale} />
         </div>
         <div data-edit-zone="featured">
           <ProductShowcase
