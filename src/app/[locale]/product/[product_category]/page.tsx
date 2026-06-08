@@ -26,7 +26,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { product_category, locale } = await props.params;
   const searchParams = await props.searchParams;
 
-  const baseUrl = `https://DEMFIRAT.com`;
+  const baseUrl = `https://www.demfirat.com`;
   const canonicalUrl = `${baseUrl}/${locale}/product/${product_category}`;
 
   // Define attributes that create filter permutations which shouldn't be indexed to avoid bloat
@@ -45,10 +45,28 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     categoryName = locale === 'tr' ? 'Kumaşlar & Tül Perdeler' : locale === 'ru' ? 'Ткани и Тюлевые Шторы' : locale === 'pl' ? 'Tkaniny i Firany' : 'Fabrics & Tulle Curtains';
   }
 
-  // SEO metadata block
+  // SEO metadata block — title format avoids competing with homepage for "Demfirat Karven" brand queries
+  const categoryDescriptions: Record<string, Record<string, string>> = {
+    fabric: {
+      tr: `Dem Fırat Karven'in özel kumaş ve tül perde koleksiyonunu keşfedin. Yüzlerce model, renk ve desen seçeneği ile hayalinizdeki perdeyi tasarlayın.`,
+      en: `Explore Dem Fırat Karven's exclusive fabric & tulle curtain collection. Hundreds of patterns, colors, and designs to create your dream curtain.`,
+      ru: `Откройте для себя эксклюзивную коллекцию тканей и тюлевых штор Dem Fırat Karven. Сотни узоров, цветов и дизайнов для создания штор вашей мечты.`,
+      pl: `Odkryj ekskluzywną kolekcję tkanin i firan Dem Fırat Karven. Setki wzorów, kolorów i projektów, aby stworzyć wymarzone zasłony.`,
+    },
+    'ready-made_curtain': {
+      tr: `Dem Fırat Karven hazır perde koleksiyonu. Kaliteli kumaşlar, zarif tasarımlar ve hızlı teslimat ile evinizi güzelleştirin.`,
+      en: `Dem Fırat Karven ready-made curtain collection. Quality fabrics, elegant designs, and fast delivery to beautify your home.`,
+      ru: `Коллекция готовых штор Dem Fırat Karven. Качественные ткани, элегантные дизайны и быстрая доставка для украшения вашего дома.`,
+      pl: `Kolekcja gotowych zasłon Dem Fırat Karven. Wysokiej jakości tkaniny, eleganckie wzory i szybka dostawa, by upiększyć Twój dom.`,
+    },
+  };
+
+  const descriptionText = categoryDescriptions[product_category]?.[locale]
+    || `Shop the finest collection of ${categoryName.toLowerCase()} at Dem Fırat Karven.`;
+
   return {
-    title: `${categoryName} | DEMFIRAT`,
-    description: `Shop the finest collection of ${categoryName.toLowerCase()} at DEMFIRAT.`,
+    title: `${categoryName} | DEMFIRAT® KARVEN`,
+    description: descriptionText,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -179,7 +197,7 @@ export default async function Page(props: Props) {
 
   const productVideoSKUs: string[] = [];
 
-  const baseUrl = `https://DEMFIRAT.com/${locale}`;
+  const baseUrl = `https://www.demfirat.com/${locale}`;
   const categoryUrl = `${baseUrl}/product/${product_category}`;
 
   let categoryName = 'Products';

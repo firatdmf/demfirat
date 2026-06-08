@@ -1,8 +1,74 @@
 import React from "react";
 import "./page.css";
+import { Metadata } from "next";
 
 // Revalidate homepage every 5 minutes to reduce SSR load
 export const revalidate = 300;
+
+export async function generateMetadata(props: PageProps<'/[locale]'>): Promise<Metadata> {
+  const { locale } = await props.params;
+  const baseUrl = `https://www.demfirat.com`;
+  const canonicalUrl = `${baseUrl}/${locale}`;
+
+  const titles: Record<string, string> = {
+    tr: 'DEMFIRAT® KARVEN | Lüks Ev Tekstili, Tül ve Perde Tasarımları',
+    en: 'DEMFIRAT® KARVEN | Luxury Home Textiles & Custom Curtain Designs',
+    ru: 'DEMFIRAT® KARVEN | Элитный домашний текстиль и дизайн штор',
+    pl: 'DEMFIRAT® KARVEN | Luksusowe tekstylia domowe i projekty zasłon',
+  };
+
+  const descriptions: Record<string, string> = {
+    tr: "1991'den beri Demfırat Karven kalitesiyle lüks ev tekstili, tül ve perde tasarımları. Koleksiyonlarımızı inceleyin ve hayalinizdeki perdeyi tasarlayın.",
+    en: 'Premium home textiles, tulle, and custom curtain designs by Demfırat Karven since 1991. Explore our collections and design your dream curtain.',
+    ru: 'Элитный домашний текстиль, тюль и индивидуальный дизайн штор от Demfırat Karven с 1991 года. Посетите наш сайт и создайте штору мечты.',
+    pl: 'Luksusowe tekstylia domowe, firany i projekty zasłon na wymiar od Demfırat Karven od 1991 roku. Zobacz naszą kolekcję i zaprojektuj wymarzoną zasłonę.',
+  };
+
+  const keywords: Record<string, string> = {
+    tr: 'Demfirat, Karven, Dem Fırat, perde, tül, kumaş, ev tekstili, lüks perde, özel dikim perde, hazır perde, Türk perde üreticisi, nakışlı perde',
+    en: 'Demfirat, Karven, Dem Firat, curtain, tulle, fabric, home textiles, luxury curtains, custom curtains, ready-made curtains, Turkish curtain manufacturer',
+    ru: 'Demfirat, Karven, Дем Фырат, шторы, тюль, ткани, домашний текстиль, роскошные шторы, шторы на заказ, турецкий производитель штор',
+    pl: 'Demfirat, Karven, Dem Firat, zasłony, firany, tkaniny, tekstylia domowe, luksusowe zasłony, zasłony na wymiar, turecki producent zasłon',
+  };
+
+  return {
+    title: titles[locale] || titles['en'],
+    description: descriptions[locale] || descriptions['en'],
+    keywords: keywords[locale] || keywords['en'],
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en': `${baseUrl}/en`,
+        'tr': `${baseUrl}/tr`,
+        'ru': `${baseUrl}/ru`,
+        'pl': `${baseUrl}/pl`,
+        'x-default': `${baseUrl}/tr`,
+      }
+    },
+    openGraph: {
+      title: titles[locale] || titles['en'],
+      description: descriptions[locale] || descriptions['en'],
+      url: canonicalUrl,
+      siteName: 'DEMFIRAT® KARVEN',
+      locale: locale === 'tr' ? 'tr_TR' : locale === 'ru' ? 'ru_RU' : locale === 'pl' ? 'pl_PL' : 'en_US',
+      type: 'website',
+      images: [
+        {
+          url: `${baseUrl}/media/karvenLogo.png`,
+          width: 512,
+          height: 512,
+          alt: 'DEMFIRAT KARVEN - Luxury Home Textiles',
+        }
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: titles[locale] || titles['en'],
+      description: descriptions[locale] || descriptions['en'],
+      images: [`${baseUrl}/media/karvenLogo.png`],
+    },
+  };
+}
 import HeroVideo from "@/components/HeroVideo";
 import ProductShowcase from "@/components/ProductShowcase";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
@@ -131,8 +197,94 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     },
   ];
 
+  // JSON-LD Structured Data for the Homepage
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/#organization`,
+    name: 'DEMFIRAT KARVEN',
+    alternateName: ['Dem Fırat', 'Demfirat Karven', 'Karven Home', 'Dem Fırat Karven', 'Karven Home Decor'],
+    url: 'https://www.demfirat.com',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://www.demfirat.com/media/karvenLogo.png',
+      width: 512,
+      height: 512,
+    },
+    image: 'https://www.demfirat.com/media/karvenLogo.png',
+    description: locale === 'tr'
+      ? "1991'den beri lüks ev tekstili, tül ve perde üretimi yapan Dem Fırat Karven."
+      : 'Dem Fırat Karven — luxury home textiles, tulle, and curtain manufacturer since 1991.',
+    foundingDate: '1991',
+    founder: {
+      '@type': 'Person',
+      name: 'Cuma Fırat',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Bursa',
+      addressCountry: 'TR',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+90-224-XXX-XXXX',
+      contactType: 'customer service',
+      availableLanguage: ['Turkish', 'English', 'Russian', 'Polish'],
+    },
+    sameAs: [
+      'https://www.instagram.com/karvenhomedecor',
+    ],
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/#website`,
+    name: 'DEMFIRAT KARVEN',
+    alternateName: 'Dem Fırat Karven',
+    url: 'https://www.demfirat.com',
+    publisher: {
+      '@id': `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/#organization`,
+    },
+    inLanguage: ['tr', 'en', 'ru', 'pl'],
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: 'https://www.demfirat.com/{locale}/product/all?search={search_term_string}',
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: locale === 'tr' ? 'Ana Sayfa' : 'Home',
+        item: `https://www.demfirat.com/${locale}`,
+      },
+    ],
+  };
+
   return (
     <main>
+      {/* JSON-LD Structured Data — tells Google this is the brand homepage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="HomePage">
         {/* Editable section wrappers — clicked in ?edit=1 mode they
             dispatch a `select` postMessage; the ERP CMS receives it and

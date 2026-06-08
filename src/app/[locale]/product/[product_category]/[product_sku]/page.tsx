@@ -33,7 +33,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
     const imageUrl = product.primary_image || "";
     const price = product.price;
 
-    const baseUrl = `https://DEMFIRAT.com`;
+    const baseUrl = `https://www.demfirat.com`;
     const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}`;
 
     return {
@@ -53,7 +53,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         title,
         description: description.substring(0, 100),
         images: [{ url: imageUrl }],
-        url: `https://DEMFIRAT.com/${locale}/product/${data.product_category}/${product_sku}`,
+        url: `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}`,
         type: 'website',
       },
       other: {
@@ -93,7 +93,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
   const displayTitle = getLocalizedProductField(product as Product, 'title', locale);
   const displayDescription = getLocalizedProductField(product as Product, 'description', locale) || "";
 
-  const baseUrl = `https://DEMFIRAT.com/${locale}`;
+  const baseUrl = `https://www.demfirat.com/${locale}`;
   const productUrl = `${baseUrl}/product/${product_category}/${product_sku}`;
   const categoryUrl = `${baseUrl}/product/${product_category}`;
   const categoryName = product_category === 'ready-made_curtain'

@@ -33,7 +33,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         const imageUrl = product.primary_image || "";
         const price = product.price;
 
-        const baseUrl = `https://DEMFIRAT.com`;
+        const baseUrl = `https://www.demfirat.com`;
         const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}/curtain`;
 
         return {
@@ -53,7 +53,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
                 title,
                 description: description.substring(0, 100),
                 images: [{ url: imageUrl }],
-                url: `https://DEMFIRAT.com/${locale}/product/${data.product_category}/${product_sku}/curtain`,
+                url: `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}/curtain`,
                 type: 'website',
             },
             other: {
@@ -102,7 +102,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         "brand": { "@type": "Brand", "name": "DEMFIRAT" },
         "offers": {
             "@type": "Offer",
-            "url": `https://DEMFIRAT.com/${locale}/product/${product_category}/${product_sku}/curtain`,
+            "url": `https://www.demfirat.com/${locale}/product/${product_category}/${product_sku}/curtain`,
             "priceCurrency": "USD",
             "price": product.price,
             "availability": Number(product.available_quantity || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
@@ -110,7 +110,7 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         }
     };
 
-    const baseUrl = `https://DEMFIRAT.com/${locale}`;
+    const baseUrl = `https://www.demfirat.com/${locale}`;
     const productUrl = `${baseUrl}/product/${product_category}/${product_sku}/curtain`;
     const categoryUrl = `${baseUrl}/product/${product_category}`;
     const categoryName = product_category === 'ready-made_curtain'

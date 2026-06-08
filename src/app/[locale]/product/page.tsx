@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 export async function generateMetadata(props: PageProps<'/[locale]/product'>): Promise<Metadata> {
   const { locale } = await props.params;
-  const baseUrl = `https://DEMFIRAT.com`;
+  const baseUrl = `https://www.demfirat.com`;
   const canonicalUrl = `${baseUrl}/${locale}/product`;
 
   const title = locale === 'tr' ? 'Tüm Ürünler | DEMFIRAT'

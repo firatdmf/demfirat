@@ -53,10 +53,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         return (post[key] as string) || (post[`${field}_tr` as keyof BlogPost] as string);
     };
 
-    const baseUrl = `https://karven.com/${locale}`;
+    const baseUrl = `https://www.demfirat.com/${locale}`;
     const blogUrl = `${baseUrl}/blog`;
     const postUrl = `${baseUrl}/blog/${slug}`;
-    const imageUrl = post.hero_image || post.cover_image || 'https://karven.com/media/blog/default-hero.jpg';
+    const imageUrl = post.hero_image || post.cover_image || 'https://www.demfirat.com/media/blog/default-hero.jpg';
 
     // JSON-LD Breadcrumb Schema for Blog post
     const breadcrumbJsonLd = {

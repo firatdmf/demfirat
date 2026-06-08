@@ -61,7 +61,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         return (post[key] as string) || (post[`${field}_tr` as keyof BlogPost] as string);
     };
 
-    const baseUrl = `https://karven.com/${locale}`;
+    const baseUrl = `https://www.demfirat.com/${locale}`;
     const blogUrl = `${baseUrl}/blog`;
 
     // JSON-LD Breadcrumb Schema for Blog Listing
