@@ -44,9 +44,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         languages: {
           'en': `${baseUrl}/en/product/${data.product_category}/${product_sku}`,
           'tr': `${baseUrl}/tr/product/${data.product_category}/${product_sku}`,
-          'ru': `${baseUrl}/ru/product/${data.product_category}/${product_sku}`,
-          'pl': `${baseUrl}/pl/product/${data.product_category}/${product_sku}`,
-          'x-default': `${baseUrl}/en/product/${data.product_category}/${product_sku}`,
+          'x-default': `${baseUrl}/tr/product/${data.product_category}/${product_sku}`,
         },
       },
       openGraph: {

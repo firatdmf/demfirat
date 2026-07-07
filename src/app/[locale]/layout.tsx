@@ -22,6 +22,7 @@ const inter = Inter({ subsets: ["latin"] });
 const jost = Jost({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: "--font-jost" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.demfirat.com'),
   title: "DEMFIRAT® KARVEN | Home Collection",
   description: "Your premium home textiles provider.",
 };

@@ -72,9 +72,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       languages: {
         'en': `${baseUrl}/en/product/${product_category}`,
         'tr': `${baseUrl}/tr/product/${product_category}`,
-        'ru': `${baseUrl}/ru/product/${product_category}`,
-        'pl': `${baseUrl}/pl/product/${product_category}`,
-        'x-default': `${baseUrl}/en/product/${product_category}`,
+        'x-default': `${baseUrl}/tr/product/${product_category}`,
       },
     },
     // If heavy filters are active, do not index the permutation, but follow the product links

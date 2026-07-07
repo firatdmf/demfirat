@@ -11,12 +11,21 @@ export default function robots(): MetadataRoute.Robots {
                 '/api/',
                 '/tr/api/',
                 '/en/api/',
-                '/ru/api/',
-                '/pl/api/',
-                '/*?intent=*',   // Optional query params
-                '/*?fabric_type=*', // Don't let search engines index every possible filter combination
+                // Filtered / faceted URLs — keep the canonical /curtain pages
+                // (path-based) indexable, but block the query-param variants
+                // so Google doesn't index every filter permutation as duplicates.
+                '/*?fabric_type=*',
+                '/*?color=*',
+                '/*?size=*',
+                // Account / cart / checkout are user-specific, never index.
+                '/*/cart',
+                '/*/checkout',
+                '/*/account',
+                '/*/favorites',
+                '/*/login',
             ],
         },
         sitemap: `${baseUrl}/sitemap.xml`,
+        host: baseUrl,
     };
 }
