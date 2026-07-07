@@ -1,53 +1,69 @@
 import { MetadataRoute } from 'next'
 
+// Categories the storefront actually serves. Each is fetched via the
+// real /marketing/api/get_products endpoint (the old sitemap called
+// /top_products which does NOT exist → sitemap never had any products).
+const CATEGORIES = ['fabric', 'ready-made_curtain', 'bed'];
+
+async function fetchCategoryProducts(baseApi: string, category: string): Promise<any[]> {
+    try {
+        const res = await fetch(`${baseApi}/marketing/api/get_products?product_category=${category}`, {
+            next: { revalidate: 3600 }, // 1 hour
+        });
+        if (!res.ok) return [];
+        const data = await res.json();
+        const products = Array.isArray(data) ? data : data.products || [];
+        // Tag each product with the category we queried so URLs are correct.
+        return products.map((p: any) => ({ ...p, _category: category }));
+    } catch (error) {
+        console.error(`Sitemap fetch error (${category}):`, error);
+        return [];
+    }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.demfirat.com';
-    // Only the locales the site actually serves. ru/pl were removed —
-    // generating URLs for them produced soft-404s that hurt crawling.
+    const baseApi = process.env.NEXT_PUBLIC_NEJUM_API_URL || '';
+    // Only the locales the site actually serves (ru/pl were removed).
     const locales = ['tr', 'en'];
 
-    let products: any[] = [];
-    try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/top_products`, {
-            next: { revalidate: 3600 } // Cache for 1 hour
-        });
-        if (response.ok) {
-            const data = await response.json();
-            products = Array.isArray(data) ? data : data.products || [];
-        }
-    } catch (error) {
-        console.error('Sitemap product fetch error:', error);
-    }
+    // Fetch every category in parallel.
+    const perCategory = await Promise.all(
+        CATEGORIES.map((c) => fetchCategoryProducts(baseApi, c))
+    );
+    const allProducts = perCategory.flat();
 
-    // Standard product detail URLs (one per locale)
-    const productEntries: MetadataRoute.Sitemap = products.flatMap((product: any) =>
-        locales.map((locale) => ({
-            url: `${baseUrl}/${locale}/product/${product.product_category || 'product'}/${product.sku || product.id}`,
+    // Standard product detail URLs (one per locale).
+    const productEntries: MetadataRoute.Sitemap = allProducts.flatMap((product: any) => {
+        const cat = product._category || product.product_category || 'product';
+        const sku = product.sku || product.id;
+        return locales.map((locale) => ({
+            url: `${baseUrl}/${locale}/product/${cat}/${sku}`,
             lastModified: new Date(),
             changeFrequency: 'weekly' as const,
             priority: 0.8,
-        }))
-    );
+        }));
+    });
 
-    // Custom-curtain (/curtain) detail pages — these are the "perde diktir"
-    // pages we want to rank for. Only fabric-category products have them.
-    const curtainEntries: MetadataRoute.Sitemap = products
+    // Custom-curtain (/curtain) detail pages — the "perde diktir" pages we
+    // want to rank for. Only fabric-category products have them.
+    const curtainEntries: MetadataRoute.Sitemap = allProducts
         .filter((product: any) => {
-            const cat = (product.product_category || '').toLowerCase();
+            const cat = (product._category || product.product_category || '').toLowerCase();
             return cat.includes('fabric') || cat.includes('kumaş');
         })
-        .flatMap((product: any) =>
-            locales.map((locale) => ({
-                url: `${baseUrl}/${locale}/product/${product.product_category || 'fabric'}/${product.sku || product.id}/curtain`,
+        .flatMap((product: any) => {
+            const cat = product._category || product.product_category || 'fabric';
+            const sku = product.sku || product.id;
+            return locales.map((locale) => ({
+                url: `${baseUrl}/${locale}/product/${cat}/${sku}/curtain`,
                 lastModified: new Date(),
                 changeFrequency: 'weekly' as const,
                 priority: 0.9, // custom curtains are a primary conversion path
-            }))
-        );
+            }));
+        });
 
-    // Static routes. Homepage first with priority 1.0. The custom-curtain
-    // landing (fabric listing with custom intent) gets a high priority so
-    // the "custom curtain / perde diktir" query has a clean page to rank.
+    // Static routes. Homepage first with priority 1.0.
     const coreRoutes = [
         '',                                   // homepage — highest priority
         '/product/fabric',                    // tulle / custom curtain listing
