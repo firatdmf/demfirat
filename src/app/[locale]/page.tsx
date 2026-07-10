@@ -100,6 +100,24 @@ export default async function Home(props: PageProps<'/[locale]'>) {
   const featuredSection = homeSections?.find((s) => s.kind === 'featured');
   const seasonsSection = homeSections?.find((s) => s.kind === 'seasons');
 
+  // The ERP CMS often has the English field filled with Turkish text
+  // (translations were never done). So for EN we only trust the CMS
+  // value when it actually differs from the Turkish one — otherwise we
+  // fall back to the hardcoded English copy. For TR we use the CMS value
+  // as-is. Returns undefined when there's nothing usable, so the caller's
+  // `|| fallback` still works.
+  const cmsText = (
+    field: { tr?: string; en?: string } | undefined,
+  ): string | undefined => {
+    if (!field) return undefined;
+    if (locale === 'tr') return field.tr || undefined;
+    const en = (field.en || '').trim();
+    const tr = (field.tr || '').trim();
+    // Empty, or English == Turkish (i.e. not really translated) → skip.
+    if (!en || en === tr) return undefined;
+    return en;
+  };
+
   // This is for fetching product categories from Backend API
   const get_product_categories_API_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_categories`);
   let product_categories: ProductCategory[] = [];
@@ -290,12 +308,12 @@ export default async function Home(props: PageProps<'/[locale]'>) {
         <div data-edit-zone="hero">
           <HeroVideo
             videoSrc="https://demfiratkarven.b-cdn.net/website-videos/new_hero.mp4"
-            subtitle={heroSection?.eyebrow?.[locale === 'tr' ? 'tr' : 'en']
+            subtitle={cmsText(heroSection?.eyebrow)
               || (locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
                   locale === 'ru' ? 'Премиальная текстильная коллекция' :
                     locale === 'pl' ? 'Kolekcja Premium Tekstyliów' :
                       'Premium Textile Collection')}
-            title={heroSection?.title?.[locale === 'tr' ? 'tr' : 'en']
+            title={cmsText(heroSection?.title)
               || (locale === 'tr' ? 'Zarafet Nakışla Buluşuyor' :
                   locale === 'ru' ? 'Где элегантность встречается с вышивкой' :
                     locale === 'pl' ? 'Gdzie elegancja spotyka haft' :
@@ -320,7 +338,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
         </div>
         <div data-edit-zone="featured">
           <ProductShowcase
-            title={featuredSection?.title?.[locale === 'tr' ? 'tr' : 'en'] || productsLocale("Headline")}
+            title={cmsText(featuredSection?.title) || productsLocale("Headline")}
             locale={locale}
             editId={featuredSection?.id}
           />
