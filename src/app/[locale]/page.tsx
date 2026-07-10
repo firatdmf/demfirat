@@ -113,8 +113,13 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     if (locale === 'tr') return field.tr || undefined;
     const en = (field.en || '').trim();
     const tr = (field.tr || '').trim();
-    // Empty, or English == Turkish (i.e. not really translated) → skip.
-    if (!en || en === tr) return undefined;
+    // Case/diacritic-insensitive compare so "Premium Tekstil Koleksiyonu"
+    // still counts as == "PREMİUM TEKSTİL KOLEKSİYONU" (English field left
+    // as Turkish, just re-cased). Fold Turkish İ/ı → i before comparing.
+    const norm = (s: string) =>
+      s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ı/g, 'i');
+    // Empty, or English is really just the Turkish text → skip → fallback.
+    if (!en || norm(en) === norm(tr)) return undefined;
     return en;
   };
 
