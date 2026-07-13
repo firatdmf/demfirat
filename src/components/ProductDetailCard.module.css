@@ -1448,31 +1448,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Certification line under the buy area */
-.certLine {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid #efece5;
-  font-family: var(--font-body, 'Montserrat', sans-serif);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--earth-muted, #8a7060);
-}
-
-.certLine svg {
-  flex-shrink: 0;
-}
-
-.certSep {
-  color: var(--gold, #c9a961);
-}
-
 .customCurtainBtn {
   flex: 1;
   min-width: 150px;

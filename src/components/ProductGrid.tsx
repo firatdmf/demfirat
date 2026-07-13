@@ -380,20 +380,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     });
   }
 
-  // ── Sheerness (light filtering) filter ──
-  // sheerness_level is a product attribute (1=sheer … 4=blackout), not a
-  // variant attribute, so it needs its own block like fabric_type above.
-  const activeSheerness = (searchParams?.sheerness as string) || '';
-  if (activeSheerness && filteredProducts) {
-    const wanted = String(activeSheerness).split(',');
-    filteredProducts = filteredProducts.filter((product) => {
-      const attr = product.product_attributes?.find(
-        (a) => a.name?.toLowerCase() === 'sheerness_level'
-      );
-      return attr ? wanted.includes(String(attr.value)) : false;
-    });
-  }
-
   // ── Price range filtering ──
   const getProductPrice = (product: Product): number | null => {
     // Use the active currency's pre-converted price
@@ -538,29 +524,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     });
   };
 
-  // The ERP contains duplicate attributes for the same concept ("size",
-  // "size per panel", "Size Per Panel"). Group filterable attributes by
-  // their display title and keep the one with the most options, dropping
-  // empty ones entirely.
-  const visibleFilterAttributes = (() => {
-    const byTitle = new Map<string, { attribute: ProductVariantAttribute; optionCount: number }>();
-    for (const attribute of product_variant_attributes) {
-      if (!isFilterableAttribute(attribute)) continue;
-      const optionCount = new Set(
-        product_variant_attribute_values
-          .filter(av => String(av.product_variant_attribute_id) === String(attribute.id))
-          .map(av => av.product_variant_attribute_value)
-      ).size;
-      if (optionCount === 0) continue;
-      const titleKey = formatFilterTitle(String(attribute.name || '')).toLowerCase();
-      const existing = byTitle.get(titleKey);
-      if (!existing || optionCount > existing.optionCount) {
-        byTitle.set(titleKey, { attribute, optionCount });
-      }
-    }
-    return Array.from(byTitle.values()).map(entry => entry.attribute);
-  })();
-
   // value id -> set of product ids, for per-option product counts
   const productIdsByValueId = useMemo(() => {
     const map = new Map<number, Set<number>>();
@@ -584,30 +547,31 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     return productIds.size;
   };
 
-  // Sheerness options present in this category, with product counts.
-  // Levels: 1=Sheer, 2=Semi-Sheer, 3=Light Filtering, 4=Blackout (same
-  // mapping the product detail page uses).
-  const sheernessOptions = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const product of products || []) {
-      const attr = product.product_attributes?.find(a => a.name?.toLowerCase() === 'sheerness_level');
-      if (attr?.value != null && String(attr.value).trim() !== '') {
-        const key = String(attr.value);
-        counts.set(key, (counts.get(key) || 0) + 1);
+  // The ERP contains duplicate attributes for the same concept ("size",
+  // "size per panel", "Size Per Panel") plus plenty of legacy variant
+  // values that no sellable product carries. Group filterable attributes
+  // by display title, count only options that at least one product in
+  // this category actually has, and keep the richest attribute per title.
+  const visibleFilterAttributes = (() => {
+    const byTitle = new Map<string, { attribute: ProductVariantAttribute; optionCount: number }>();
+    for (const attribute of product_variant_attributes) {
+      if (!isFilterableAttribute(attribute)) continue;
+      const valueStrings = new Set(
+        product_variant_attribute_values
+          .filter(av => String(av.product_variant_attribute_id) === String(attribute.id))
+          .map(av => String(av.product_variant_attribute_value))
+      );
+      let optionCount = 0;
+      valueStrings.forEach(v => { if (getOptionCount(attribute.id, v) > 0) optionCount++; });
+      if (optionCount === 0) continue;
+      const titleKey = formatFilterTitle(String(attribute.name || '')).toLowerCase();
+      const existing = byTitle.get(titleKey);
+      if (!existing || optionCount > existing.optionCount) {
+        byTitle.set(titleKey, { attribute, optionCount });
       }
     }
-    return Array.from(counts.entries())
-      .sort((a, b) => Number(a[0]) - Number(b[0]))
-      .map(([value, count]) => ({ value, count }));
-  }, [products]);
-
-  const getSheernessLabel = (value: string): string => {
-    const level = parseInt(value);
-    const key = level === 1 ? 'sheer' : level === 2 ? 'semi-sheer' : level === 3 ? 'light filtering' : level === 4 ? 'blackout' : null;
-    return key ? translateAttributeName(key, locale) : value;
-  };
-
-  const sheernessTitle = locale === 'tr' ? 'Işık Geçirgenliği' : locale === 'ru' ? 'Прозрачность' : locale === 'pl' ? 'Przepuszczalność światła' : 'Light Filtering';
+    return Array.from(byTitle.values()).map(entry => entry.attribute);
+  })();
 
   if (!products) {
     return <Spinner />;
@@ -869,7 +833,11 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                     const isExpanded = expandedSections.has(index);
                     const isColorAttr = (attribute.name?.toLowerCase() || '') === 'color';
 
-                    if (uniqueValues.length === 0) return null;
+                    // Hide legacy variant values no sellable product carries
+                    const availableValues = uniqueValues.filter(
+                      (v) => getOptionCount(attribute.id, String(v?.product_variant_attribute_value)) > 0
+                    );
+                    if (availableValues.length === 0) return null;
 
                     return (
                       <div key={index} className={classes.filterSection}>
@@ -892,7 +860,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                         </div>
                         {isExpanded && (
                           <div className={classes.filterSectionContent}>
-                            {uniqueValues.map((attribute_value) => {
+                            {availableValues.map((attribute_value) => {
                               const paramKey = String(attribute.name);
                               const paramValue = String(attribute_value?.product_variant_attribute_value);
                               const currentValues = tempMobileFilters[paramKey] || [];
@@ -926,42 +894,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                       </div>
                     );
                   })}
-
-                {/* Light Filtering (sheerness_level) — mobile */}
-                {sheernessOptions.length > 0 && (
-                  <div className={classes.filterSection}>
-                    <div className={classes.filterSectionHeader} onClick={() => toggleSection(50)}>
-                      <span>{sheernessTitle}</span>
-                      <svg
-                        className={`${classes.chevron} ${expandedSections.has(50) ? classes.chevronOpen : ''}`}
-                        width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      >
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </div>
-                    {expandedSections.has(50) && (
-                      <div className={classes.filterSectionContent}>
-                        {sheernessOptions.map((opt) => {
-                          const currentValues = tempMobileFilters['sheerness'] || [];
-                          const isChecked = currentValues.includes(opt.value);
-                          return (
-                            <button
-                              key={opt.value}
-                              className={classes.filterOption}
-                              onClick={() => toggleTempFilter('sheerness', opt.value)}
-                            >
-                              <div className={classes.checkbox}>
-                                {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
-                              </div>
-                              <span className={classes.filterLabel}>{getSheernessLabel(opt.value)}</span>
-                              <span className={classes.optionCount}>{opt.count}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Mobile Price Range Filter */}
                 <div className={classes.filterSection}>
@@ -1079,10 +1011,13 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                   const isExpanded = expandedSections.has(index);
                   const isColorAttr = (attribute.name?.toLowerCase() || '') === 'color';
 
-                  // The ERP has duplicate size attributes ("size",
-                  // "size per panel", "Size Per Panel") — most are empty for
-                  // any given category. Hide sections with no options.
-                  if (uniqueValues.length === 0) return null;
+                  // Hide legacy variant values no sellable product carries
+                  // (e.g. old fabric color names that only exist in the ERP),
+                  // and skip the section entirely if nothing remains.
+                  const availableValues = uniqueValues.filter(
+                    (v) => getOptionCount(attribute.id, String(v?.product_variant_attribute_value)) > 0
+                  );
+                  if (availableValues.length === 0) return null;
 
                   return (
                     <div key={index} className={classes.filterSection}>
@@ -1105,7 +1040,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                       </div>
                       {isExpanded && (
                         <div className={classes.filterSectionContent}>
-                          {uniqueValues.map((attribute_value) => {
+                          {availableValues.map((attribute_value) => {
                             const params = new URLSearchParams(searchParams as Record<string, string>);
                             const paramKey = String(attribute.name);
                             const paramValue = String(attribute_value?.product_variant_attribute_value);
@@ -1151,48 +1086,6 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                   );
                 })}
 
-              {/* Light Filtering (sheerness_level product attribute) */}
-              {sheernessOptions.length > 0 && (
-                <div className={classes.filterSection}>
-                  <div className={classes.filterSectionHeader} onClick={() => toggleSection(50)}>
-                    <span>{sheernessTitle}</span>
-                    <svg
-                      className={`${classes.chevron} ${expandedSections.has(50) ? classes.chevronOpen : ''}`}
-                      width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                    >
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </div>
-                  {expandedSections.has(50) && (
-                    <div className={classes.filterSectionContent}>
-                      {sheernessOptions.map((opt) => {
-                        const params = new URLSearchParams(searchParams as Record<string, string>);
-                        const currentValues = params.get('sheerness')?.split(',') || [];
-                        const isChecked = currentValues.includes(opt.value);
-                        if (isChecked) {
-                          const newValues = currentValues.filter((val) => val !== opt.value);
-                          if (newValues.length > 0) {
-                            params.set('sheerness', newValues.join(','));
-                          } else {
-                            params.delete('sheerness');
-                          }
-                        } else {
-                          params.set('sheerness', [...currentValues, opt.value].join(','));
-                        }
-                        return (
-                          <Link key={opt.value} className={classes.filterOption} href={`?${params.toString()}`} replace={true} scroll={false}>
-                            <div className={classes.checkbox}>
-                              {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
-                            </div>
-                            <span className={classes.filterLabel}>{getSheernessLabel(opt.value)}</span>
-                            <span className={classes.optionCount}>{opt.count}</span>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Price Range Filter - Desktop */}

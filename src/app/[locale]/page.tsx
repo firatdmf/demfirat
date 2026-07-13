@@ -68,7 +68,6 @@ export async function generateMetadata(props: PageProps<'/[locale]'>): Promise<M
   };
 }
 import HeroVideo from "@/components/HeroVideo";
-import TrustBand from "@/components/TrustBand";
 import ProductShowcase from "@/components/ProductShowcase";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
 import CustomCurtainPromo from "@/components/CustomCurtainPromo";
@@ -343,7 +342,6 @@ export default async function Home(props: PageProps<'/[locale]'>) {
             editId={heroSection?.id}
           />
         </div>
-        <TrustBand locale={locale} />
         <div data-edit-zone="trust">
           <CustomCurtainPromo locale={locale} editId={trustSection?.id} />
         </div>
