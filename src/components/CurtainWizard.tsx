@@ -297,7 +297,9 @@ export default function CurtainWizard({
                                 : (locale === 'tr' ? 'En Ölçüsü (cm)' : 'Width (cm)')}
                         </label>
                         <select className={`${classes.dimSelect} ${dimMissing && !width ? classes.dimInputError : ''}`} value={width} onChange={e => { setWidth(e.target.value); if (e.target.value) setDimMissing(false); }}>
-                            <option value="" disabled>{locale === 'tr' ? 'En Seçiniz' : t('width')}</option>
+                            <option value="" disabled>
+                                {locale === 'tr' ? 'En Seçiniz' : (unit === 'in' ? 'Select Width (in)' : 'Select Width (cm)')}
+                            </option>
                             {widthOptions.map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
@@ -315,7 +317,9 @@ export default function CurtainWizard({
                                 : (locale === 'tr' ? 'Boy Ölçüsü (cm)' : 'Height (cm)')}
                         </label>
                         <select className={`${classes.dimSelect} ${(heightError || (dimMissing && !height)) ? classes.dimInputError : ''}`} value={height} onChange={e => { setHeight(e.target.value); if (e.target.value) setDimMissing(false); }}>
-                            <option value="" disabled>{locale === 'tr' ? 'Boy Seçiniz' : t('height')}</option>
+                            <option value="" disabled>
+                                {locale === 'tr' ? 'Boy Seçiniz' : (unit === 'in' ? 'Select Height (in)' : 'Select Height (cm)')}
+                            </option>
                             {heightOptions.map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
