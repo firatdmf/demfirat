@@ -197,6 +197,23 @@ function ProductDetailCard({
   const defaultUnit: 'cm' | 'in' = locale === 'tr' ? 'cm' : 'in';
   const [bedGuideUnit, setBedGuideUnit] = useState<'cm' | 'in'>(defaultUnit);
   const [sizeUnit, setSizeUnit] = useState<'cm' | 'in'>(defaultUnit);
+
+  // Review summary (stars + count) shown right under the title; clicking it
+  // scrolls to the full review list at the bottom of the page.
+  const [reviewSummary, setReviewSummary] = useState<{ avg: number; count: number } | null>(null);
+  useEffect(() => {
+    if (!product?.sku) return;
+    const fetchSummary = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_reviews_summary/?skus=${product.sku}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const summary = data?.summaries?.[product.sku];
+        if (data?.success && summary && summary.count > 0) setReviewSummary(summary);
+      } catch { /* fail-soft: just no summary row */ }
+    };
+    fetchSummary();
+  }, [product?.sku]);
   const cmToInch = (cm: number) => (cm / 2.54).toFixed(1);
   const [showPleatGuide, setShowPleatGuide] = useState(false);
 
@@ -1272,6 +1289,24 @@ function ProductDetailCard({
                 locale === 'pl' ? 'Kod produktu' : 'SKU'}: {selectedVariant?.variant_sku ? `${selectedVariant.variant_sku}` : product.sku}
           </div>
 
+          {/* Review summary — links down to the full review list */}
+          {reviewSummary && (
+            <a href="#product-reviews" className={classes.reviewSummary}>
+              <span className={classes.reviewSummaryStars} aria-hidden="true">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <span
+                    key={i}
+                    className={i <= Math.round(reviewSummary.avg) ? classes.reviewStarFilled : classes.reviewStarEmpty}
+                  >★</span>
+                ))}
+              </span>
+              <span className={classes.reviewSummaryText}>
+                {reviewSummary.avg.toFixed(1)} · {reviewSummary.count}{' '}
+                {locale === 'tr' ? 'değerlendirme' : locale === 'ru' ? 'отзывов' : locale === 'pl' ? 'opinii' : reviewSummary.count === 1 ? 'review' : 'reviews'}
+              </span>
+            </a>
+          )}
+
           {/* Category + Attributes in one row */}
           {/* <div className={classes.categoryAndAttributes}>
             {product_category && <span className={classes.productCategory}>{translateCategory(product_category.toString())}</span>}
@@ -1744,6 +1779,7 @@ function ProductDetailCard({
                   hideHeader={true}
                   onSizeGuideClick={() => setShowSizeGuide(true)}
                   onPleatGuideClick={() => setShowPleatGuide(true)}
+                  sizeUnit={sizeUnit}
                 />
               </div>
             )}
@@ -1924,7 +1960,9 @@ function ProductDetailCard({
         locale={locale}
       />
 
-      <ProductReviewsList productSku={product.sku} />
+      <div id="product-reviews">
+        <ProductReviewsList productSku={product.sku} />
+      </div>
 
       {/* Similar Products Section */}
       {

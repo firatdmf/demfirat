@@ -59,12 +59,79 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     [variantAttributes]
   );
 
+  // Size (per panel) attributes — the ERP has several duplicates ("size",
+  // "size per panel", "Size Per Panel"), so match all of them.
+  const sizeAttributeIds = useMemo(() => {
+    const ids = new Set<string>();
+    variantAttributes.forEach(attr => {
+      if ((attr.name?.toLowerCase() || '').includes('size')) ids.add(String(attr.id));
+    });
+    return ids;
+  }, [variantAttributes]);
+
+  // Available sizes for THIS product's variants, shown as chips on the card
+  // so US shoppers see at a glance which lengths exist. Inches outside TR.
+  const sizeChips = useMemo(() => {
+    if (sizeAttributeIds.size === 0 || !productVariants.length) return [];
+    // Only sellable variants: not un-featured (exists in ERP but not offered)
+    // and not explicitly zero-stock — their colors/sizes must not appear.
+    const productSpecificVariants = productVariants.filter(v =>
+      v.product_id === product.id &&
+      v.variant_featured !== false &&
+      !(v.variant_quantity != null && Number(v.variant_quantity) <= 0)
+    );
+    if (!productSpecificVariants.length) return [];
+
+    const usedValueIds = new Set<number>();
+    productSpecificVariants.forEach(variant => {
+      (variant.product_variant_attribute_values || []).forEach((valueId: number) => {
+        usedValueIds.add(Number(valueId));
+      });
+    });
+
+    const sizes: string[] = [];
+    usedValueIds.forEach(id => {
+      const val = variantAttributeValuesMap ? variantAttributeValuesMap.get(Number(id)) : variantAttributeValues.find(v => Number(v.id) === Number(id));
+      if (val && sizeAttributeIds.has(String(val.product_variant_attribute_id))) {
+        const raw = String(val.product_variant_attribute_value || '').trim();
+        if (raw) sizes.push(raw);
+      }
+    });
+
+    const format = (value: string): string => {
+      const m = value.match(/(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)\s*cm/i);
+      if (!m) return value;
+      if (locale === 'tr') return `${m[1]}×${m[2]}`;
+      const toIn = (cm: string) => Math.round(parseFloat(cm.replace(',', '.')) / 2.54);
+      return `${toIn(m[1])}×${toIn(m[2])}″`;
+    };
+
+    const unique = Array.from(new Set(sizes));
+    // Sort by width, then height
+    unique.sort((a, b) => {
+      const num = (s: string) => {
+        const m = s.match(/(\d+)\s*[x×]\s*(\d+)/);
+        return m ? [parseInt(m[1]), parseInt(m[2])] : [Number.MAX_SAFE_INTEGER, 0];
+      };
+      const [aw, ah] = num(a);
+      const [bw, bh] = num(b);
+      return aw - bw || ah - bh;
+    });
+    return unique.map(format);
+  }, [sizeAttributeIds, productVariants, variantAttributeValues, variantAttributeValuesMap, product.id, locale]);
+
   // Renk değerlerini al - SADECE bu ürünün varyantlarında kullanılan renkleri
   const colorValues = useMemo(() => {
     if (!colorAttribute || !productVariants.length) return [];
 
     // Bu ürünün varyantlarını filtrele
-    const productSpecificVariants = productVariants.filter(v => v.product_id === product.id);
+    // Only sellable variants: not un-featured (exists in ERP but not offered)
+    // and not explicitly zero-stock — their colors/sizes must not appear.
+    const productSpecificVariants = productVariants.filter(v =>
+      v.product_id === product.id &&
+      v.variant_featured !== false &&
+      !(v.variant_quantity != null && Number(v.variant_quantity) <= 0)
+    );
     if (!productSpecificVariants.length) return [];
 
     // Bu varyantlarda kullanılan attribute value ID'lerini topla
@@ -95,7 +162,13 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     if (!fabricAttribute || !productVariants.length) return [];
 
     // Bu ürünün varyantlarını filtrele
-    const productSpecificVariants = productVariants.filter(v => v.product_id === product.id);
+    // Only sellable variants: not un-featured (exists in ERP but not offered)
+    // and not explicitly zero-stock — their colors/sizes must not appear.
+    const productSpecificVariants = productVariants.filter(v =>
+      v.product_id === product.id &&
+      v.variant_featured !== false &&
+      !(v.variant_quantity != null && Number(v.variant_quantity) <= 0)
+    );
     if (!productSpecificVariants.length) return [];
 
     // Bu varyantlarda kullanılan attribute value ID'lerini topla
@@ -126,7 +199,13 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     if (!widthAttribute || !productVariants.length) return [];
 
     // Bu ürünün varyantlarını filtrele
-    const productSpecificVariants = productVariants.filter(v => v.product_id === product.id);
+    // Only sellable variants: not un-featured (exists in ERP but not offered)
+    // and not explicitly zero-stock — their colors/sizes must not appear.
+    const productSpecificVariants = productVariants.filter(v =>
+      v.product_id === product.id &&
+      v.variant_featured !== false &&
+      !(v.variant_quantity != null && Number(v.variant_quantity) <= 0)
+    );
     if (!productSpecificVariants.length) return [];
 
     // Bu varyantlarda kullanılan attribute value ID'lerini topla
@@ -532,13 +611,19 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
           >
             <div className={classes.productTitle}>{getLocalizedProductField(product, 'title', locale)}</div>
 
-            {/* Attributes: Width and Fabric Type */}
+            {/* Attributes: Width, Fabric Type, available sizes */}
             <div className={classes.productAttributes}>
               {widthDisplayText && <span className={classes.attributeTag}>{widthDisplayText}</span>}
               {fabricValues.length > 0 && (
                 <span className={classes.attributeTag}>
                   {fabricValues.length === 1 ? fabricValues[0] : `${fabricValues.length} types`}
                 </span>
+              )}
+              {sizeChips.slice(0, 3).map((size) => (
+                <span key={size} className={classes.attributeTag}>{size}</span>
+              ))}
+              {sizeChips.length > 3 && (
+                <span className={classes.attributeTag}>+{sizeChips.length - 3}</span>
               )}
             </div>
 

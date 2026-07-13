@@ -147,7 +147,8 @@
   border-radius: 16px;
   overflow: visible;
   background: var(--ivory, #faf8f3);
-  aspect-ratio: 9 / 16;
+  /* 3:4 shows the fabric texture much better than the old ultra-tall 9:16 */
+  aspect-ratio: 3 / 4;
   max-height: 95vh;
   display: flex;
   align-items: flex-start;
@@ -1083,6 +1084,46 @@
   font-weight: 700;
   /* Price is information, not decoration — dark ink, not accent gold */
   color: var(--ink, #26221c);
+}
+
+/* Review summary under the title */
+.reviewSummary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  text-decoration: none;
+}
+
+.reviewSummaryStars {
+  display: inline-flex;
+  gap: 0.1rem;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.reviewStarFilled {
+  color: #f59e0b;
+}
+
+.reviewStarEmpty {
+  color: var(--light-gray, #e0dcd2);
+}
+
+.reviewSummaryText {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--earth-muted, #8a7060);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.reviewSummary:hover .reviewSummaryText {
+  text-decoration-color: currentColor;
+  color: var(--brand-brown, #944f05);
 }
 
 .priceWrapper {

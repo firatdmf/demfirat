@@ -29,6 +29,19 @@ export default function BrandHistoryPromo({ locale }: BrandHistoryPromoProps) {
       locale === 'pl' ? 'Nasza historia' :
         'Explore Our Story';
 
+  // Factual anchors only — founding year and years in production.
+  const yearsInBusiness = new Date().getFullYear() - 1991;
+  const stats = [
+    {
+      value: '1991',
+      label: locale === 'tr' ? 'Kuruluş' : locale === 'ru' ? 'Основание' : locale === 'pl' ? 'Założenie' : 'Established',
+    },
+    {
+      value: `${yearsInBusiness}+`,
+      label: locale === 'tr' ? 'Yıllık Üretim Deneyimi' : locale === 'ru' ? 'Лет производства' : locale === 'pl' ? 'Lat produkcji' : 'Years of Manufacturing',
+    },
+  ];
+
   return (
     <section className={classes.historySection}>
       <div className={classes.container}>
@@ -38,6 +51,14 @@ export default function BrandHistoryPromo({ locale }: BrandHistoryPromoProps) {
             <span className={classes.subtitle}>{subtitle}</span>
             <h2 className={classes.logoTitle}>{title}</h2>
             <p className={classes.description}>{description}</p>
+            <div className={classes.statsRow}>
+              {stats.map((stat) => (
+                <div key={stat.label} className={classes.statItem}>
+                  <span className={classes.statValue}>{stat.value}</span>
+                  <span className={classes.statLabel}>{stat.label}</span>
+                </div>
+              ))}
+            </div>
             <div className={classes.ctaWrapper}>
               <Link href={`/${locale}/about`} className={classes.storyButton}>
                 {ctaText}

@@ -324,10 +324,57 @@
   border-color: #c9a961;
 }
 
+/* ── Active filter chips (removable) ── */
+.ProductGrid .activeChips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: -0.5rem 0 1.25rem;
+}
+
+.ProductGrid .activeChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.32rem 0.75rem;
+  background: var(--secondary-beige, #e8e3d8);
+  border-radius: 999px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-dark, #2c2c2c);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.ProductGrid .activeChip:hover {
+  background: var(--light-gray, #e0dcd2);
+  color: var(--text-dark, #2c2c2c);
+}
+
+.ProductGrid .activeChipX {
+  font-weight: 700;
+  color: var(--brand-brown, #944f05);
+}
+
+.ProductGrid .clearAllChip {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--earth-muted, #8a7060);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ProductGrid .clearAllChip:hover {
+  color: var(--brand-brown, #944f05);
+}
+
 /* ── Filter option extras: color swatch dot + per-option product count ── */
 .ProductGrid .swatchDot {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.15);
   flex-shrink: 0;

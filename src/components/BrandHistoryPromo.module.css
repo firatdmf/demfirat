@@ -57,8 +57,38 @@
   font-weight: 300;
   color: #5c4738;
   line-height: 1.75;
-  margin: 0 0 2.5rem 0;
+  margin: 0 0 2rem 0;
   letter-spacing: 0.02em;
+}
+
+/* Factual stats (est. year, years of manufacturing) */
+.statsRow {
+  display: flex;
+  gap: 3rem;
+  margin: 0 0 2.25rem 0;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.statValue {
+  font-family: var(--font-heading, 'Cormorant Garamond', serif);
+  font-size: 2.1rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--brand-brown, #944f05);
+}
+
+.statLabel {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--earth-muted, #8a7060);
 }
 
 .ctaWrapper {

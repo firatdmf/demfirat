@@ -262,7 +262,7 @@ export default function CustomCurtainPromo({ locale, editId }: CustomCurtainProm
                             <span className={classes.ctaArrow}>→</span>
                         </Link>
                         <Link
-                            href={`/${locale}/blog/dogru-olcu-nasil-alinir`}
+                            href={`/${locale}/blog/How-to-Take-Accurate-Curtain-Measurements`}
                             className={classes.guideLink}
                         >
                             <FaRuler className={classes.guideIcon} />

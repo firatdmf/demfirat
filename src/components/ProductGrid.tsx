@@ -524,10 +524,22 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     });
   };
 
-  // value id -> set of product ids, for per-option product counts
+  // value id -> set of product ids, for per-option product counts.
+  // A variant only counts when it's actually sellable:
+  //  - variant_featured === false → exists in the ERP but isn't offered
+  //  - variant_quantity explicitly 0 (or less) → out of stock
+  // Values carried only by such variants (legacy colors like
+  // "altin_yarimat", zero-stock "darkorchid") must not surface as options.
+  const isSellableVariant = (variant: ProductVariant): boolean => {
+    if (variant.variant_featured === false) return false;
+    if (variant.variant_quantity != null && Number(variant.variant_quantity) <= 0) return false;
+    return true;
+  };
+
   const productIdsByValueId = useMemo(() => {
     const map = new Map<number, Set<number>>();
     for (const variant of product_variants) {
+      if (!isSellableVariant(variant)) continue;
       for (const valId of variant.product_variant_attribute_values || []) {
         let set = map.get(Number(valId));
         if (!set) { set = new Set<number>(); map.set(Number(valId), set); }
@@ -535,7 +547,39 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       }
     }
     return map;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product_variants]);
+
+  // Some categories (e.g. bedroom) upload color swatches as IMAGES —
+  // product.attribute_value_images.color.<value> — the same source the
+  // product cards use. The filter should show those instead of a flat dot.
+  const normalizeSwatchKey = (s: string) => (s || '').toLowerCase().trim().replace(/\s+/g, '_');
+  const colorSwatchImages = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const product of products || []) {
+      const attributeValueImages = (product as any)?.attribute_value_images;
+      if (!attributeValueImages) continue;
+      const attrKey = Object.keys(attributeValueImages).find(k => normalizeSwatchKey(k) === 'color');
+      if (!attrKey) continue;
+      const valueMap = attributeValueImages[attrKey] || {};
+      for (const valKey of Object.keys(valueMap)) {
+        const url = valueMap[valKey]?.url;
+        if (url && !map.has(normalizeSwatchKey(valKey))) {
+          map.set(normalizeSwatchKey(valKey), url);
+        }
+      }
+    }
+    return map;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products]);
+
+  const swatchStyleFor = (value: string): React.CSSProperties => {
+    const imageUrl = colorSwatchImages.get(normalizeSwatchKey(value));
+    if (imageUrl) {
+      return { backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' };
+    }
+    return { background: getColorCode(value) };
+  };
 
   const getOptionCount = (attributeId: unknown, valueString: string): number => {
     const productIds = new Set<number>();
@@ -878,7 +922,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                                   {isColorAttr && (
                                     <span
                                       className={classes.swatchDot}
-                                      style={{ background: getColorCode(paramValue) }}
+                                      style={swatchStyleFor(paramValue)}
                                       aria-hidden="true"
                                     />
                                   )}
@@ -1069,7 +1113,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                                 {isColorAttr && (
                                   <span
                                     className={classes.swatchDot}
-                                    style={{ background: getColorCode(paramValue) }}
+                                    style={swatchStyleFor(paramValue)}
                                     aria-hidden="true"
                                   />
                                 )}
@@ -1188,7 +1232,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
             <div className={classes.productsToolbar}>
               <span className={classes.resultCount}>
                 {filteredProducts?.length ?? 0}{' '}
-                {locale === 'tr' ? 'ürün' : locale === 'ru' ? 'товаров' : locale === 'pl' ? 'produktów' : 'products'}
+                {locale === 'tr' ? 'ürün' : locale === 'ru' ? 'товаров' : locale === 'pl' ? 'produktów' : (filteredProducts?.length === 1 ? 'product' : 'products')}
               </span>
               <label className={classes.sortControl}>
                 <span className={classes.sortLabel}>
@@ -1214,6 +1258,52 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                 </select>
               </label>
             </div>
+            {/* Active filter chips — removable, one per selected value */}
+            {(() => {
+              const chips: { key: string; value: string; label: string; href: string }[] = [];
+              for (const attribute of visibleFilterAttributes) {
+                const paramKey = String(attribute.name);
+                const raw = searchParams?.[paramKey];
+                if (!raw) continue;
+                const values = Array.isArray(raw) ? raw : String(raw).split(',');
+                for (const value of values) {
+                  if (!value) continue;
+                  const params = new URLSearchParams(searchParams as Record<string, string>);
+                  const remaining = values.filter((v) => v !== value);
+                  if (remaining.length > 0) {
+                    params.set(paramKey, remaining.join(','));
+                  } else {
+                    params.delete(paramKey);
+                  }
+                  chips.push({
+                    key: paramKey,
+                    value,
+                    label: formatFilterValue(paramKey, value),
+                    href: `?${params.toString()}`,
+                  });
+                }
+              }
+              if (chips.length === 0) return null;
+              return (
+                <div className={classes.activeChips}>
+                  {chips.map((chip) => (
+                    <Link
+                      key={`${chip.key}:${chip.value}`}
+                      href={chip.href}
+                      replace={true}
+                      scroll={false}
+                      className={classes.activeChip}
+                    >
+                      <span>{chip.label}</span>
+                      <span className={classes.activeChipX} aria-hidden="true">×</span>
+                    </Link>
+                  ))}
+                  <Link href="?" replace={true} scroll={false} className={classes.clearAllChip}>
+                    {locale === 'tr' ? 'Tümünü temizle' : locale === 'ru' ? 'Сбросить всё' : locale === 'pl' ? 'Wyczyść wszystko' : 'Clear all'}
+                  </Link>
+                </div>
+              );
+            })()}
           <div className={classes.products}>
             {(Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product, i: number) => {
               // Get all variant prices for this product using O(1) map

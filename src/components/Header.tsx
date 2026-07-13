@@ -126,11 +126,9 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
     return translations[key]?.[lang] || key;
   };
 
-  // The domestic free-shipping campaign only makes sense for Turkish
-  // visitors — international ones get quality/heritage messaging instead.
   const marqueeMessages = locale === 'tr'
     ? [t('freeShipping'), t('qualityGuarantee')]
-    : [t('qualityGuarantee'), t('heritage')];
+    : [t('qualityGuarantee'), t('freeShipping'), t('heritage')];
 
   // Client-side product cache for instant search
   const [allProducts, setAllProducts] = useState<Product[]>([]);

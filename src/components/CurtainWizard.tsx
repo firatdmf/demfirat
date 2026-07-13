@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { useLocale, useTranslations } from 'next-intl';
 import { Product, ProductVariant } from '@/lib/interfaces';
@@ -21,15 +21,23 @@ interface CurtainWizardProps {
     onToggleFavorite?: (e: React.MouseEvent) => void;
     onSizeGuideClick?: () => void;
     onPleatGuideClick?: () => void;
+    /** Display unit for the width/height dropdowns — driven by the same
+     *  IN/CM toggle shown above the wizard on the product page. Measurements
+     *  are always stored and priced in cm internally; only the dropdown
+     *  labels/steps change. Defaults by locale when not supplied. */
+    sizeUnit?: 'cm' | 'in';
 }
 
 export default function CurtainWizard({
     product, selectedVariant, unitPrice, onAddToCart, selectedAttributes = {},
-    isFavorite = false, onToggleFavorite, onSizeGuideClick, onPleatGuideClick
+    isFavorite = false, onToggleFavorite, onSizeGuideClick, onPleatGuideClick, sizeUnit
 }: CurtainWizardProps) {
     const locale = useLocale();
     const t = useTranslations('CustomCurtain');
     const { convertPrice } = useCurrency();
+    const unit: 'cm' | 'in' = sizeUnit ?? (locale === 'tr' ? 'cm' : 'in');
+    const cmToInch = (cm: number) => cm / 2.54;
+    const inchToCm = (inch: number) => inch * 2.54;
 
     const [width, setWidth] = useState('');
     const [height, setHeight] = useState('');
@@ -77,6 +85,62 @@ export default function CurtainWizard({
             ? t('maxHeightError', { max: maxHeight })
             : null);
     }, [height, maxHeight, t]);
+
+    // Width/height dropdown options — values are always cm (used for the
+    // fabric/price math below), only the displayed label + step changes
+    // between whole centimeters and whole inches.
+    const widthOptions = useMemo(() => {
+        if (unit === 'in') {
+            const minIn = Math.round(cmToInch(50));
+            const maxIn = Math.round(cmToInch(1000));
+            return Array.from({ length: maxIn - minIn + 1 }, (_, i) => minIn + i).map(inch => ({
+                value: inchToCm(inch).toFixed(1),
+                label: `${inch}″`,
+            }));
+        }
+        return Array.from({ length: 951 }, (_, i) => 50 + i).map(w => ({ value: String(w), label: `${w} cm` }));
+    }, [unit]);
+
+    const heightOptions = useMemo(() => {
+        if (unit === 'in') {
+            const minIn = Math.round(cmToInch(50));
+            const maxIn = Math.floor(cmToInch(maxHeight));
+            return Array.from({ length: Math.max(0, maxIn - minIn + 1) }, (_, i) => minIn + i).map(inch => ({
+                value: inchToCm(inch).toFixed(1),
+                label: `${inch}″`,
+            }));
+        }
+        return Array.from({ length: Math.max(0, maxHeight - 49) }, (_, i) => 50 + i)
+            .filter(h => h <= maxHeight)
+            .map(h => ({ value: String(h), label: `${h} cm` }));
+    }, [unit, maxHeight]);
+
+    // Toggling the unit changes the option strings (e.g. "127" cm vs "127.0"
+    // from an inch step), so a previously-picked value can stop matching any
+    // <option> and the <select> would appear to blank out. Snap the stored
+    // cm value to the nearest option in the new list so the pick survives
+    // the toggle. Deliberately keyed only on `unit` — not on maxHeight
+    // changes, which already surface as heightError instead of clamping.
+    const prevUnitRef = useRef(unit);
+    useEffect(() => {
+        if (prevUnitRef.current === unit) return;
+        prevUnitRef.current = unit;
+        const snapToNearest = (currentCm: string, options: { value: string }[]) => {
+            if (!currentCm || options.length === 0) return currentCm;
+            const current = parseFloat(currentCm);
+            if (isNaN(current)) return currentCm;
+            let best = options[0].value;
+            let bestDiff = Infinity;
+            for (const opt of options) {
+                const diff = Math.abs(parseFloat(opt.value) - current);
+                if (diff < bestDiff) { bestDiff = diff; best = opt.value; }
+            }
+            return best;
+        };
+        setWidth(w => snapToNearest(w, widthOptions));
+        setHeight(h => snapToNearest(h, heightOptions));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [unit]);
 
     // Price and Fabric Calculation (Mounting=Cornice, Wing=Single fixed implicitly)
     const densityMult = useMemo(() => {
@@ -228,12 +292,14 @@ export default function CurtainWizard({
                                 <polygon points="6,8 2,12 6,16"></polygon>
                                 <polygon points="18,8 22,12 18,16"></polygon>
                             </svg>
-                            {locale === 'tr' ? 'En Ölçüsü (cm)' : 'Width (cm)'}
+                            {unit === 'in'
+                                ? (locale === 'tr' ? 'En Ölçüsü (inç)' : 'Width (in)')
+                                : (locale === 'tr' ? 'En Ölçüsü (cm)' : 'Width (cm)')}
                         </label>
                         <select className={`${classes.dimSelect} ${dimMissing && !width ? classes.dimInputError : ''}`} value={width} onChange={e => { setWidth(e.target.value); if (e.target.value) setDimMissing(false); }}>
                             <option value="" disabled>{locale === 'tr' ? 'En Seçiniz' : t('width')}</option>
-                            {Array.from({ length: 951 }, (_, i) => 50 + i * 1).map(w => (
-                                <option key={w} value={w}>{w} cm</option>
+                            {widthOptions.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
                     </div>
@@ -244,12 +310,14 @@ export default function CurtainWizard({
                                 <polygon points="8,6 12,2 16,6"></polygon>
                                 <polygon points="8,18 12,22 16,18"></polygon>
                             </svg>
-                            {locale === 'tr' ? 'Boy Ölçüsü (cm)' : 'Height (cm)'}
+                            {unit === 'in'
+                                ? (locale === 'tr' ? 'Boy Ölçüsü (inç)' : 'Height (in)')
+                                : (locale === 'tr' ? 'Boy Ölçüsü (cm)' : 'Height (cm)')}
                         </label>
                         <select className={`${classes.dimSelect} ${(heightError || (dimMissing && !height)) ? classes.dimInputError : ''}`} value={height} onChange={e => { setHeight(e.target.value); if (e.target.value) setDimMissing(false); }}>
                             <option value="" disabled>{locale === 'tr' ? 'Boy Seçiniz' : t('height')}</option>
-                            {Array.from({ length: maxHeight - 49 }, (_, i) => 50 + i * 1).filter(h => h <= maxHeight).map(h => (
-                                <option key={h} value={h}>{h} cm</option>
+                            {heightOptions.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
                     </div>
