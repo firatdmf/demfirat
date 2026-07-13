@@ -275,6 +275,71 @@
   align-items: start;
 }
 
+/* ── Products column: toolbar (result count + sort) above the grid ── */
+.ProductGrid .FiratDisplay .productsArea {
+  flex: 1;
+  min-width: 0;
+}
+
+.ProductGrid .productsToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.ProductGrid .resultCount {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  color: #6b6459;
+}
+
+.ProductGrid .sortControl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ProductGrid .sortLabel {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  color: #6b6459;
+}
+
+.ProductGrid .sortSelect {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  color: var(--text-dark, #2c2c2c);
+  background: #ffffff;
+  border: 1px solid #e0dcd2;
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+}
+
+.ProductGrid .sortSelect:focus {
+  outline: none;
+  border-color: #c9a961;
+}
+
+/* ── Filter option extras: color swatch dot + per-option product count ── */
+.ProductGrid .swatchDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.ProductGrid .optionCount {
+  margin-left: auto;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.75rem;
+  color: #a99e88;
+}
+
 .ProductGrid .loadMoreButton {
   padding: 15px;
   background-color: #252525;

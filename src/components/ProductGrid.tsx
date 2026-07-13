@@ -12,6 +12,7 @@ import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
 // below are interfaces
 import { SearchParams, Product, ProductVariant, ProductVariantAttribute, ProductVariantAttributeValue } from "@/lib/interfaces"
 import { capitalizeFirstLetter } from "@/lib/functions"
+import { getColorCode } from "@/lib/colorMap"
 import { log } from "node:console";
 
 import { CatalogLeadModal } from "@/components/CatalogLeadModal";
@@ -379,6 +380,20 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     });
   }
 
+  // ── Sheerness (light filtering) filter ──
+  // sheerness_level is a product attribute (1=sheer … 4=blackout), not a
+  // variant attribute, so it needs its own block like fabric_type above.
+  const activeSheerness = (searchParams?.sheerness as string) || '';
+  if (activeSheerness && filteredProducts) {
+    const wanted = String(activeSheerness).split(',');
+    filteredProducts = filteredProducts.filter((product) => {
+      const attr = product.product_attributes?.find(
+        (a) => a.name?.toLowerCase() === 'sheerness_level'
+      );
+      return attr ? wanted.includes(String(attr.value)) : false;
+    });
+  }
+
   // ── Price range filtering ──
   const getProductPrice = (product: Product): number | null => {
     // Use the active currency's pre-converted price
@@ -417,6 +432,36 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     });
   }
 
+  // ── Sorting (?sort=price_asc | price_desc | newest) ──
+  const activeSort = (searchParams?.sort as string) || '';
+  if (filteredProducts && activeSort) {
+    const sorted = [...filteredProducts];
+    if (activeSort === 'price_asc' || activeSort === 'price_desc') {
+      sorted.sort((a, b) => {
+        const pa = getProductPrice(a);
+        const pb = getProductPrice(b);
+        // Products without a price sink to the end in both directions
+        if (pa === null && pb === null) return 0;
+        if (pa === null) return 1;
+        if (pb === null) return -1;
+        return activeSort === 'price_asc' ? pa - pb : pb - pa;
+      });
+    } else if (activeSort === 'newest') {
+      sorted.sort((a, b) => Number(b.id) - Number(a.id));
+    }
+    filteredProducts = sorted;
+  }
+
+  const handleSortChange = (value: string) => {
+    const params = new URLSearchParams(searchParams as Record<string, string>);
+    if (value) {
+      params.set('sort', value);
+    } else {
+      params.delete('sort');
+    }
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
   // Reset price filter when currency changes
   useEffect(() => {
     setPriceMin('');
@@ -440,6 +485,129 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       ? `${r.min} ${currencySymbol} ${locale === 'tr' ? 've üzeri' : locale === 'ru' ? 'и выше' : locale === 'pl' ? 'i więcej' : '+'}`
       : `${r.min} - ${r.max} ${currencySymbol}`,
   }));
+
+  // ── Filter section helpers ──
+  // Which variant attributes get a filter section. Historically only color;
+  // size and header exist in the data and are exactly what curtain shoppers
+  // filter by (US retailers: size + header type are standard facets).
+  const isFilterableAttribute = (attribute: ProductVariantAttribute): boolean => {
+    const name = attribute.name?.toLowerCase() || '';
+    return name === 'color' || name === 'header' || name.includes('size');
+  };
+
+  const formatFilterTitle = (name: string): string => {
+    const n = name.toLowerCase();
+    if (n === 'header') {
+      return locale === 'tr' ? 'Askı Tipi' : locale === 'ru' ? 'Тип крепления' : locale === 'pl' ? 'Typ zawieszenia' : 'Header Type';
+    }
+    if (n.includes('size')) {
+      return locale === 'tr' ? 'Boyut (Panel)' : locale === 'ru' ? 'Размер (панель)' : locale === 'pl' ? 'Rozmiar (panel)' : 'Size (Per Panel)';
+    }
+    return translateAttributeName(name, locale);
+  };
+
+  // "130 x 210 cm" reads as nothing to a US shopper — show inches outside TR.
+  const formatFilterValue = (attrName: string, value: string): string => {
+    const n = attrName.toLowerCase();
+    if (n === 'header') {
+      const v = value.toLowerCase();
+      if (v === 'grommet') return locale === 'tr' ? 'Halkalı (Grommet)' : locale === 'ru' ? 'Люверсы' : locale === 'pl' ? 'Oczka (Grommet)' : 'Grommet';
+      if (v === 'rod_pocket' || v === 'rod pocket') return locale === 'tr' ? 'Büzgülü (Rod Pocket)' : locale === 'ru' ? 'Кулиска' : locale === 'pl' ? 'Tunel (Rod Pocket)' : 'Rod Pocket';
+    }
+    if (n.includes('size') && locale !== 'tr') {
+      const m = value.match(/(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)\s*cm/i);
+      if (m) {
+        const toIn = (cm: string) => Math.round(parseFloat(cm.replace(',', '.')) / 2.54);
+        return `${toIn(m[1])}″ × ${toIn(m[2])}″ (${value})`;
+      }
+    }
+    return translateAttributeName(value, locale);
+  };
+
+  // Sizes sort numerically (width, then height); other values keep data order.
+  const sortFilterValues = (attrName: string, values: (ProductVariantAttributeValue | undefined)[]) => {
+    if (!attrName.toLowerCase().includes('size')) return values;
+    const numeric = (v?: ProductVariantAttributeValue) => {
+      const m = String(v?.product_variant_attribute_value || '').match(/(\d+)\s*[x×]\s*(\d+)/);
+      return m ? [parseInt(m[1]), parseInt(m[2])] : [Number.MAX_SAFE_INTEGER, 0];
+    };
+    return [...values].sort((a, b) => {
+      const [aw, ah] = numeric(a);
+      const [bw, bh] = numeric(b);
+      return aw - bw || ah - bh;
+    });
+  };
+
+  // The ERP contains duplicate attributes for the same concept ("size",
+  // "size per panel", "Size Per Panel"). Group filterable attributes by
+  // their display title and keep the one with the most options, dropping
+  // empty ones entirely.
+  const visibleFilterAttributes = (() => {
+    const byTitle = new Map<string, { attribute: ProductVariantAttribute; optionCount: number }>();
+    for (const attribute of product_variant_attributes) {
+      if (!isFilterableAttribute(attribute)) continue;
+      const optionCount = new Set(
+        product_variant_attribute_values
+          .filter(av => String(av.product_variant_attribute_id) === String(attribute.id))
+          .map(av => av.product_variant_attribute_value)
+      ).size;
+      if (optionCount === 0) continue;
+      const titleKey = formatFilterTitle(String(attribute.name || '')).toLowerCase();
+      const existing = byTitle.get(titleKey);
+      if (!existing || optionCount > existing.optionCount) {
+        byTitle.set(titleKey, { attribute, optionCount });
+      }
+    }
+    return Array.from(byTitle.values()).map(entry => entry.attribute);
+  })();
+
+  // value id -> set of product ids, for per-option product counts
+  const productIdsByValueId = useMemo(() => {
+    const map = new Map<number, Set<number>>();
+    for (const variant of product_variants) {
+      for (const valId of variant.product_variant_attribute_values || []) {
+        let set = map.get(Number(valId));
+        if (!set) { set = new Set<number>(); map.set(Number(valId), set); }
+        set.add(Number(variant.product_id));
+      }
+    }
+    return map;
+  }, [product_variants]);
+
+  const getOptionCount = (attributeId: unknown, valueString: string): number => {
+    const productIds = new Set<number>();
+    for (const av of product_variant_attribute_values) {
+      if (String(av.product_variant_attribute_id) === String(attributeId) && av.product_variant_attribute_value === valueString) {
+        productIdsByValueId.get(Number(av.id))?.forEach(id => productIds.add(id));
+      }
+    }
+    return productIds.size;
+  };
+
+  // Sheerness options present in this category, with product counts.
+  // Levels: 1=Sheer, 2=Semi-Sheer, 3=Light Filtering, 4=Blackout (same
+  // mapping the product detail page uses).
+  const sheernessOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const product of products || []) {
+      const attr = product.product_attributes?.find(a => a.name?.toLowerCase() === 'sheerness_level');
+      if (attr?.value != null && String(attr.value).trim() !== '') {
+        const key = String(attr.value);
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+    }
+    return Array.from(counts.entries())
+      .sort((a, b) => Number(a[0]) - Number(b[0]))
+      .map(([value, count]) => ({ value, count }));
+  }, [products]);
+
+  const getSheernessLabel = (value: string): string => {
+    const level = parseInt(value);
+    const key = level === 1 ? 'sheer' : level === 2 ? 'semi-sheer' : level === 3 ? 'light filtering' : level === 4 ? 'blackout' : null;
+    return key ? translateAttributeName(key, locale) : value;
+  };
+
+  const sheernessTitle = locale === 'tr' ? 'Işık Geçirgenliği' : locale === 'ru' ? 'Прозрачность' : locale === 'pl' ? 'Przepuszczalność światła' : 'Light Filtering';
 
   if (!products) {
     return <Spinner />;
@@ -687,20 +855,21 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
               {/* Mobile Drawer Content */}
               <div className={classes.filterDrawerContent}>
-                {product_variant_attributes
-                  .filter((attribute: ProductVariantAttribute) => {
-                    // Only show 'Color' attribute for fabric pages — Kumaş, Kristal etc are confusing
-                    const name = attribute.name?.toLowerCase() || '';
-                    return name === 'color';
-                  })
+                {visibleFilterAttributes
                   .map((attribute: ProductVariantAttribute, index: number) => {
                     const filteredValues = product_variant_attribute_values.filter(
                       (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
                     );
-                    const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
-                      .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
+                    const uniqueValues = sortFilterValues(
+                      String(attribute.name || ''),
+                      Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
+                        .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value))
+                    );
 
                     const isExpanded = expandedSections.has(index);
+                    const isColorAttr = (attribute.name?.toLowerCase() || '') === 'color';
+
+                    if (uniqueValues.length === 0) return null;
 
                     return (
                       <div key={index} className={classes.filterSection}>
@@ -708,7 +877,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                           className={classes.filterSectionHeader}
                           onClick={() => toggleSection(index)}
                         >
-                          <span>{translateAttributeName(attribute.name || '', locale)}</span>
+                          <span>{formatFilterTitle(String(attribute.name || ''))}</span>
                           <svg
                             className={`${classes.chevron} ${isExpanded ? classes.chevronOpen : ''}`}
                             width="16"
@@ -738,9 +907,17 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                                   <div className={classes.checkbox}>
                                     {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
                                   </div>
+                                  {isColorAttr && (
+                                    <span
+                                      className={classes.swatchDot}
+                                      style={{ background: getColorCode(paramValue) }}
+                                      aria-hidden="true"
+                                    />
+                                  )}
                                   <span className={classes.filterLabel}>
-                                    {translateAttributeName(attribute_value?.product_variant_attribute_value || '', locale)}
+                                    {formatFilterValue(String(attribute.name || ''), attribute_value?.product_variant_attribute_value || '')}
                                   </span>
+                                  <span className={classes.optionCount}>{getOptionCount(attribute.id, paramValue)}</span>
                                 </button>
                               );
                             })}
@@ -749,6 +926,42 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                       </div>
                     );
                   })}
+
+                {/* Light Filtering (sheerness_level) — mobile */}
+                {sheernessOptions.length > 0 && (
+                  <div className={classes.filterSection}>
+                    <div className={classes.filterSectionHeader} onClick={() => toggleSection(50)}>
+                      <span>{sheernessTitle}</span>
+                      <svg
+                        className={`${classes.chevron} ${expandedSections.has(50) ? classes.chevronOpen : ''}`}
+                        width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                      >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                    {expandedSections.has(50) && (
+                      <div className={classes.filterSectionContent}>
+                        {sheernessOptions.map((opt) => {
+                          const currentValues = tempMobileFilters['sheerness'] || [];
+                          const isChecked = currentValues.includes(opt.value);
+                          return (
+                            <button
+                              key={opt.value}
+                              className={classes.filterOption}
+                              onClick={() => toggleTempFilter('sheerness', opt.value)}
+                            >
+                              <div className={classes.checkbox}>
+                                {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
+                              </div>
+                              <span className={classes.filterLabel}>{getSheernessLabel(opt.value)}</span>
+                              <span className={classes.optionCount}>{opt.count}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Mobile Price Range Filter */}
                 <div className={classes.filterSection}>
@@ -852,20 +1065,24 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
             {/* Scrollable Filter Content */}
             <div className={classes.filterContent}>
-              {product_variant_attributes
-                .filter((attribute: ProductVariantAttribute) => {
-                  // Only show 'Color' attribute for fabric pages — Kumaş, Kristal etc are confusing
-                  const name = attribute.name?.toLowerCase() || '';
-                  return name === 'color';
-                })
+              {visibleFilterAttributes
                 .map((attribute: ProductVariantAttribute, index: number) => {
                   const filteredValues = product_variant_attribute_values.filter(
                     (attribute_value) => attribute_value.product_variant_attribute_id === attribute.id
                   );
-                  const uniqueValues = Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
-                    .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value));
+                  const uniqueValues = sortFilterValues(
+                    String(attribute.name || ''),
+                    Array.from(new Set(filteredValues.map(value => value.product_variant_attribute_value)))
+                      .map(value => filteredValues.find(attribute_value => attribute_value.product_variant_attribute_value === value))
+                  );
 
                   const isExpanded = expandedSections.has(index);
+                  const isColorAttr = (attribute.name?.toLowerCase() || '') === 'color';
+
+                  // The ERP has duplicate size attributes ("size",
+                  // "size per panel", "Size Per Panel") — most are empty for
+                  // any given category. Hide sections with no options.
+                  if (uniqueValues.length === 0) return null;
 
                   return (
                     <div key={index} className={classes.filterSection}>
@@ -873,7 +1090,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                         className={classes.filterSectionHeader}
                         onClick={() => toggleSection(index)}
                       >
-                        <span>{translateAttributeName(attribute.name || '', locale)}</span>
+                        <span>{formatFilterTitle(String(attribute.name || ''))}</span>
                         <svg
                           className={`${classes.chevron} ${isExpanded ? classes.chevronOpen : ''}`}
                           width="16"
@@ -914,9 +1131,17 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                                 <div className={classes.checkbox}>
                                   {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
                                 </div>
+                                {isColorAttr && (
+                                  <span
+                                    className={classes.swatchDot}
+                                    style={{ background: getColorCode(paramValue) }}
+                                    aria-hidden="true"
+                                  />
+                                )}
                                 <span className={classes.filterLabel}>
-                                  {translateAttributeName(attribute_value?.product_variant_attribute_value || '', locale)}
+                                  {formatFilterValue(String(attribute.name || ''), attribute_value?.product_variant_attribute_value || '')}
                                 </span>
+                                <span className={classes.optionCount}>{getOptionCount(attribute.id, paramValue)}</span>
                               </Link>
                             );
                           })}
@@ -925,6 +1150,49 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
                     </div>
                   );
                 })}
+
+              {/* Light Filtering (sheerness_level product attribute) */}
+              {sheernessOptions.length > 0 && (
+                <div className={classes.filterSection}>
+                  <div className={classes.filterSectionHeader} onClick={() => toggleSection(50)}>
+                    <span>{sheernessTitle}</span>
+                    <svg
+                      className={`${classes.chevron} ${expandedSections.has(50) ? classes.chevronOpen : ''}`}
+                      width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  {expandedSections.has(50) && (
+                    <div className={classes.filterSectionContent}>
+                      {sheernessOptions.map((opt) => {
+                        const params = new URLSearchParams(searchParams as Record<string, string>);
+                        const currentValues = params.get('sheerness')?.split(',') || [];
+                        const isChecked = currentValues.includes(opt.value);
+                        if (isChecked) {
+                          const newValues = currentValues.filter((val) => val !== opt.value);
+                          if (newValues.length > 0) {
+                            params.set('sheerness', newValues.join(','));
+                          } else {
+                            params.delete('sheerness');
+                          }
+                        } else {
+                          params.set('sheerness', [...currentValues, opt.value].join(','));
+                        }
+                        return (
+                          <Link key={opt.value} className={classes.filterOption} href={`?${params.toString()}`} replace={true} scroll={false}>
+                            <div className={classes.checkbox}>
+                              {isChecked ? <ImCheckboxChecked /> : <ImCheckboxUnchecked />}
+                            </div>
+                            <span className={classes.filterLabel}>{getSheernessLabel(opt.value)}</span>
+                            <span className={classes.optionCount}>{opt.count}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Price Range Filter - Desktop */}
@@ -1023,6 +1291,36 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
               </button>
             </div>
           </div>
+          <div className={classes.productsArea}>
+            <div className={classes.productsToolbar}>
+              <span className={classes.resultCount}>
+                {filteredProducts?.length ?? 0}{' '}
+                {locale === 'tr' ? 'ürün' : locale === 'ru' ? 'товаров' : locale === 'pl' ? 'produktów' : 'products'}
+              </span>
+              <label className={classes.sortControl}>
+                <span className={classes.sortLabel}>
+                  {locale === 'tr' ? 'Sırala:' : locale === 'ru' ? 'Сортировка:' : locale === 'pl' ? 'Sortuj:' : 'Sort:'}
+                </span>
+                <select
+                  className={classes.sortSelect}
+                  value={activeSort}
+                  onChange={(e) => handleSortChange(e.target.value)}
+                >
+                  <option value="">
+                    {locale === 'tr' ? 'Öne Çıkanlar' : locale === 'ru' ? 'Рекомендуемые' : locale === 'pl' ? 'Polecane' : 'Featured'}
+                  </option>
+                  <option value="price_asc">
+                    {locale === 'tr' ? 'Fiyat: Düşükten Yükseğe' : locale === 'ru' ? 'Цена: по возрастанию' : locale === 'pl' ? 'Cena: rosnąco' : 'Price: Low to High'}
+                  </option>
+                  <option value="price_desc">
+                    {locale === 'tr' ? 'Fiyat: Yüksekten Düşüğe' : locale === 'ru' ? 'Цена: по убыванию' : locale === 'pl' ? 'Cena: malejąco' : 'Price: High to Low'}
+                  </option>
+                  <option value="newest">
+                    {locale === 'tr' ? 'En Yeniler' : locale === 'ru' ? 'Новинки' : locale === 'pl' ? 'Najnowsze' : 'Newest'}
+                  </option>
+                </select>
+              </label>
+            </div>
           <div className={classes.products}>
             {(Array.isArray(filteredProducts) ? filteredProducts : [])?.slice(0, displayCount).map((product: Product, i: number) => {
               // Get all variant prices for this product using O(1) map
@@ -1038,6 +1336,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
 
               return <ProductCard key={product.id} product={product} locale={locale} variant_price={firstVariantPrice} allVariantPrices={allVariantPrices} variantAttributes={product_variant_attributes} variantAttributeValues={product_variant_attribute_values} variantAttributeValuesMap={variantAttributeValuesMap} productVariants={productVariants} fabricType={fabricType} hasVideo={videoSKUsSet.has(product.sku)} intent={intent} priority={i < 8} reviewData={reviewDataMap[product.sku] || null} />;
             })}
+          </div>
           </div>
         </div>
 

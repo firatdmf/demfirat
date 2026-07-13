@@ -1081,7 +1081,8 @@
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--gold, #c9a961);
+  /* Price is information, not decoration — dark ink, not accent gold */
+  color: var(--ink, #26221c);
 }
 
 .priceWrapper {
@@ -1415,39 +1416,61 @@
   outline: none;
 }
 
+/* Add to Cart is the PRIMARY action (dark, filled) — matches what US
+   shoppers expect; Buy Now is the express secondary (outline). */
 .addToCartBtn {
   flex: 1;
   min-width: 0;
-  background: white;
-  color: #18181b;
-  border: 1px solid #e4e4e7;
+  background: var(--ink, #26221c);
+  color: white;
+  border: 1px solid var(--ink, #26221c);
+  font-size: 1rem;
 }
 
 .addToCartBtn:hover {
-  background: #fafafa;
-  border-color: #c9a961;
-  /* Brand color */
-  color: #c9a961;
+  background: var(--ink-hover, #3a332a);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .buyNowBtn {
   flex: 1;
   min-width: 0;
-  background: #18181b;
-  color: white;
-  border: 1px solid #18181b;
-  height: 54px;
-  /* Increased height for premium feel */
-  font-size: 1.1rem;
-  /* Significantly larger font */
+  background: white;
+  color: var(--ink, #26221c);
+  border: 1px solid #d6d3cd;
 }
 
 .buyNowBtn:hover {
-  background: #27272a;
+  background: #fafafa;
+  border-color: var(--ink, #26221c);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Certification line under the buy area */
+.certLine {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #efece5;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--earth-muted, #8a7060);
+}
+
+.certLine svg {
+  flex-shrink: 0;
+}
+
+.certSep {
+  color: var(--gold, #c9a961);
 }
 
 .customCurtainBtn {

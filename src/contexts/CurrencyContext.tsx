@@ -39,15 +39,27 @@ function getInitialRates(): ExchangeRate[] {
     return [];
 }
 
-export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+/** Default currency for first-time visitors, based on the site locale. */
+function defaultCurrencyForLocale(locale?: string): string {
+    switch (locale) {
+        case 'tr': return 'TRY';
+        case 'ru': return 'RUB';
+        case 'pl': return 'PLN';
+        // EN and anything else: international visitors see USD
+        default: return 'USD';
+    }
+}
+
+export const CurrencyProvider: React.FC<{ children: React.ReactNode; locale?: string }> = ({ children, locale }) => {
     const { data: session } = useSession();
-    // Use an initializer function to quickly get the saved currency or default to TRY
+    // Use an initializer function to quickly get the saved currency,
+    // otherwise default by locale (EN visitors see USD, TR sees TRY).
     const [currency, setCurrencyState] = useState(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('preferredCurrency');
             if (saved) return saved;
         }
-        return 'TRY';
+        return defaultCurrencyForLocale(locale);
     });
     // Seed rates from localStorage immediately to avoid a flash
     const [rates, setRates] = useState<ExchangeRate[]>(getInitialRates);

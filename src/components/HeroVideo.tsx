@@ -100,6 +100,22 @@ export default function HeroVideo({ videoSrc, title, subtitle, locale = 'en', sh
               </div>
             )}
 
+            {/* Proof line: real certifications + heritage, no campaign copy */}
+            {(primaryCta || secondaryCta) && (
+              <p className={classes.heroProof}>
+                <span>OEKO-TEX®</span>
+                <span className={classes.heroProofDot} aria-hidden="true">·</span>
+                <span>NFPA 701</span>
+                <span className={classes.heroProofDot} aria-hidden="true">·</span>
+                <span>
+                  {locale === 'tr' ? "1991'den beri İstanbul" :
+                   locale === 'ru' ? 'Стамбул, с 1991 года' :
+                   locale === 'pl' ? 'Stambuł, od 1991' :
+                   'Crafted in Istanbul since 1991'}
+                </span>
+              </p>
+            )}
+
             {showCatalogButton && (
               <div className={classes.catalogButtonWrapper}>
                 <CatalogRequestForm locale={locale} />

@@ -1,7 +1,7 @@
 // import { use } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter, Jost } from "next/font/google";
+import { Jost, Cormorant_Garamond, Montserrat } from "next/font/google";
 import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -18,8 +18,12 @@ import EditorOverlay from "@/components/EditorOverlay";
 import { getStorefrontNav } from "@/lib/storefrontApi";
 
 
-const inter = Inter({ subsets: ["latin"] });
+// All fonts load through next/font (self-hosted, no render-blocking Google
+// Fonts @import). Montserrat is the body face — component CSS has assumed
+// it all along (the old Inter body class was shadowing it).
 const jost = Jost({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: "--font-jost" });
+const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-cormorant" });
+const montserrat = Montserrat({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-montserrat" });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.demfirat.com'),
@@ -135,7 +139,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         )}
         {/* End Klaviyo Tracking */}
       </head>
-      <body className={`${inter.className} ${jost.variable}`}>
+      <body className={`${montserrat.className} ${montserrat.variable} ${cormorant.variable} ${jost.variable}`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

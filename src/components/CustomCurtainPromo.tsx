@@ -120,7 +120,16 @@ export default function CustomCurtainPromo({ locale, editId }: CustomCurtainProm
                 );
                 if (response.ok) {
                     const data = await response.json();
-                    const prods = data.products || [];
+                    // Products whose "title" is really just their SKU (e.g.
+                    // "K24614") were never named in the ERP — don't showcase
+                    // them on the homepage.
+                    const looksLikeSku = (p: any) => {
+                        const title = String(p.title || '').trim();
+                        if (!title) return true;
+                        if (p.sku && title.toLowerCase() === String(p.sku).toLowerCase()) return true;
+                        return /^[A-Z]{1,4}[-_ ]?\d{3,}$/i.test(title);
+                    };
+                    const prods = (data.products || []).filter((p: any) => !looksLikeSku(p));
                     const variants = data.product_variants || [];
 
                     const productsWithPrices = prods.slice(0, 12).map((p: any) => {

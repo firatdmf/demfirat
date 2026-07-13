@@ -598,7 +598,8 @@
   font-family: var(--font-body, 'Montserrat', sans-serif);
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--gold, #c9a961);
+  /* Price is information, not decoration — dark ink, not accent gold */
+  color: var(--ink, #26221c);
   line-height: 1.2;
 }
 

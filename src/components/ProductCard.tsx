@@ -665,11 +665,26 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
             {/* Price Section with Discount Display */}
             <div className={classes.priceSection}>
               {(() => {
+                // Ready-made curtains are sold as a 2-panel set; say so next
+                // to the price the same way "/ meter" clarifies fabric pricing.
+                const isTwoPanelSet = isPerPiece && product.product_attributes?.some(
+                  (a) => (a.name?.toLowerCase() === 'number_of_panels' || a.name?.toLowerCase() === 'number_of_panel') && String(a.value) === '2'
+                );
+                const setLabel = locale === 'tr' ? '/ 2\'li takım' : locale === 'ru' ? '/ комплект из 2' : locale === 'pl' ? '/ kpl. 2 szt.' : '/ set of 2';
+                const unitSuffix = (extraSpace: boolean) => {
+                  if (!isPerPiece) {
+                    return <span className={classes.perMeter}>{extraSpace ? ' ' : ''}{locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>;
+                  }
+                  if (isTwoPanelSet) {
+                    return <span className={classes.perMeter}>{extraSpace ? ' ' : ''}{setLabel}</span>;
+                  }
+                  return null;
+                };
+
                 // Helper to render price with discount
                 const renderPriceWithDiscount = (price: number, pricesDict?: { USD: number; TRY: number; EUR: number; RUB: number; PLN: number } | null) => {
                   const discountInfo = getDiscountInfo(price);
                   if (discountInfo) {
-                    const meterLabel = locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter';
                     return (
                       <>
                         <div className={classes.discountRow}>
@@ -684,14 +699,14 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                         </div>
                         <div className={classes.currentPriceRow}>
                           <span className={classes.currentPrice}>{formatPrice(price, pricesDict)}</span>
-                          {!isPerPiece && <span className={classes.perMeter}>{meterLabel}</span>}
+                          {unitSuffix(false)}
                         </div>
                       </>
                     );
                   }
                   return (
                     <span className={classes.currentPrice}>
-                      {formatPrice(price, pricesDict)}{!isPerPiece && <span className={classes.perMeter}> {locale === 'tr' ? '/ metre' : locale === 'ru' ? '/ метр' : locale === 'pl' ? '/ metr' : locale === 'de' ? '/ Meter' : '/ meter'}</span>}
+                      {formatPrice(price, pricesDict)}{unitSuffix(true)}
                     </span>
                   );
                 };

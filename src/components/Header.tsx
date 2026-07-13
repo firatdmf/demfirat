@@ -119,16 +119,19 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
       helpSupport: { en: 'Help & Support', tr: 'Yardım & Destek', ru: 'Помощь', pl: 'Pomoc' },
       freeShipping: { en: 'Free Shipping on Domestic Orders Over 2000 TL', tr: 'Türkiye İçi 2000 TL ve Üzeri Siparişlerde Kargo Bedava', ru: 'Бесплатная доставка при заказе от 2000 TL', pl: 'Darmowa wysyłka powyżej 2000 TL' },
       qualityGuarantee: { en: '100% Quality Guarantee on All Products', tr: 'Tüm Ürünlerde %100 Kalite Garantisi', ru: '100% гарантия качества', pl: '100% gwarancja jakości' },
+      certifiedFabrics: { en: 'OEKO-TEX® Certified Fabrics', tr: 'OEKO-TEX® Sertifikalı Kumaşlar', ru: 'Ткани с сертификатом OEKO-TEX®', pl: 'Tkaniny z certyfikatem OEKO-TEX®' },
+      heritage: { en: 'Handcrafted in Istanbul Since 1991', tr: '1991\'den Beri İstanbul\'da El İşçiliği', ru: 'Ручная работа в Стамбуле с 1991 года', pl: 'Rękodzieło ze Stambułu od 1991 roku' },
       followUs: { en: 'Follow Us', tr: 'Takip Edin', ru: 'Подписаться', pl: 'Obserwuj' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
   };
 
-  const marqueeMessages = [
-    t('freeShipping'),
-    t('qualityGuarantee'),
-  ];
+  // The domestic free-shipping campaign only makes sense for Turkish
+  // visitors — international ones get quality/heritage messaging instead.
+  const marqueeMessages = locale === 'tr'
+    ? [t('freeShipping'), t('qualityGuarantee')]
+    : [t('qualityGuarantee'), t('certifiedFabrics'), t('heritage')];
 
   // Client-side product cache for instant search
   const [allProducts, setAllProducts] = useState<Product[]>([]);

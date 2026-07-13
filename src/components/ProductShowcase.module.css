@@ -3,13 +3,15 @@
    Arka plan: sıcak krem / keten tonu
 ════════════════════════════════════════ */
 .gallerySection {
-  background: linear-gradient(160deg, #ede3d5 0%, #e4d8c6 50%, #ede3d5 100%);
+  /* White ground so the section alternates with the ivory promo above —
+     the photo mosaic carries the color here. */
+  background: #ffffff;
   padding: var(--section-py, 5rem) var(--section-px, 2rem);
 }
 
 /* ── Eski alias — aynı bölüme işaret eder ── */
 .showcaseSection {
-  background: linear-gradient(160deg, #ede3d5 0%, #e4d8c6 50%, #ede3d5 100%);
+  background: #ffffff;
   padding: var(--section-py, 5rem) var(--section-px, 2rem);
 }
 

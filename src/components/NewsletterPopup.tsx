@@ -24,10 +24,12 @@ const translations = {
         successMessage: 'İndirim kodunuz e-posta adresinize gönderildi.',
         successNote: 'Lütfen gelen kutunuzu kontrol edin.',
         continueButton: 'Alışverişe Devam Et',
+        errorGeneric: 'Bir hata oluştu',
+        errorConnection: 'Bağlantı hatası. Lütfen tekrar deneyin.',
     },
     en: {
         title: 'Subscribe to Our Newsletter',
-        subtitle: 'Get an exclusive discount on your first order!',
+        subtitle: 'Get 10% off your first order!',
         discount: '10%',
         emailLabel: 'Your Email',
         emailPlaceholder: 'example@email.com',
@@ -40,6 +42,8 @@ const translations = {
         successMessage: 'Your discount code has been sent to your email.',
         successNote: 'Please check your inbox.',
         continueButton: 'Continue Shopping',
+        errorGeneric: 'Something went wrong',
+        errorConnection: 'Connection error. Please try again.',
     },
     ru: {
         title: 'Подпишитесь на рассылку',
@@ -56,6 +60,8 @@ const translations = {
         successMessage: 'Код скидки отправлен на вашу почту.',
         successNote: 'Пожалуйста, проверьте входящие.',
         continueButton: 'Продолжить покупки',
+        errorGeneric: 'Произошла ошибка',
+        errorConnection: 'Ошибка соединения. Попробуйте ещё раз.',
     },
     pl: {
         title: 'Zapisz się do newslettera',
@@ -72,6 +78,8 @@ const translations = {
         successMessage: 'Kod rabatowy został wysłany na Twój email.',
         successNote: 'Sprawdź swoją skrzynkę odbiorczą.',
         continueButton: 'Kontynuuj zakupy',
+        errorGeneric: 'Coś poszło nie tak',
+        errorConnection: 'Błąd połączenia. Spróbuj ponownie.',
     },
 };
 
@@ -85,6 +93,9 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
     const [discountCode, setDiscountCode] = useState('');
 
     const t = translations[locale as keyof typeof translations] || translations.tr;
+    // International visitors won't share a phone number in a popup —
+    // only ask for it on the Turkish site (where SMS campaigns use it).
+    const showPhoneField = locale === 'tr';
     const pathname = usePathname();
     // Skip popup on standalone pages where it's distracting (e.g. guest review form)
     const skipPopup = !!pathname && /\/review(\/|$|\?)/.test(pathname);
@@ -107,10 +118,11 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
             }
         }
 
-        // Show popup after 3 seconds
+        // Show popup after 30 seconds — early popups interrupt visitors
+        // before they've seen any product and inflate bounce rate.
         const timer = setTimeout(() => {
             setIsVisible(true);
-        }, 3000);
+        }, 30000);
         return () => clearTimeout(timer);
     }, [skipPopup]);
 
@@ -143,7 +155,10 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
             const response = await fetch('/api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, phone, recaptchaToken }),
+                // Phone is only collected on the TR site; the backend
+                // requires a value, so send the same placeholder the
+                // footer form uses.
+                body: JSON.stringify({ email, phone: showPhoneField ? phone : '0000000000', recaptchaToken }),
             });
 
             const data = await response.json();
@@ -157,10 +172,10 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
                     subscribed: true
                 }));
             } else {
-                setError(data.error || 'Bir hata oluştu');
+                setError(data.error || t.errorGeneric);
             }
         } catch (err) {
-            setError('Bağlantı hatası. Lütfen tekrar deneyin.');
+            setError(t.errorConnection);
         } finally {
             setIsSubmitting(false);
         }
@@ -197,16 +212,18 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
                                     />
                                 </div>
 
-                                <div className={classes.inputGroup}>
-                                    <label>{t.phoneLabel}</label>
-                                    <input
-                                        type="tel"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        placeholder={t.phonePlaceholder}
-                                        required
-                                    />
-                                </div>
+                                {showPhoneField && (
+                                    <div className={classes.inputGroup}>
+                                        <label>{t.phoneLabel}</label>
+                                        <input
+                                            type="tel"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            placeholder={t.phonePlaceholder}
+                                            required
+                                        />
+                                    </div>
+                                )}
 
                                 {error && <div className={classes.error}>{error}</div>}
 

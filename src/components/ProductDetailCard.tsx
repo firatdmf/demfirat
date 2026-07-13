@@ -191,8 +191,12 @@ function ProductDetailCard({
   const [showWizard, setShowWizard] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [showBedSizeGuide, setShowBedSizeGuide] = useState(false);
-  const [bedGuideUnit, setBedGuideUnit] = useState<'cm' | 'in'>('cm');
-  const [sizeUnit, setSizeUnit] = useState<'cm' | 'in'>('cm');
+  // Metric for the TR site, inches for international visitors — "W: 130 ×
+  // H: 210 cm" means nothing to a US shopper. The toggle still lets anyone
+  // switch.
+  const defaultUnit: 'cm' | 'in' = locale === 'tr' ? 'cm' : 'in';
+  const [bedGuideUnit, setBedGuideUnit] = useState<'cm' | 'in'>(defaultUnit);
+  const [sizeUnit, setSizeUnit] = useState<'cm' | 'in'>(defaultUnit);
   const cmToInch = (cm: number) => (cm / 2.54).toFixed(1);
   const [showPleatGuide, setShowPleatGuide] = useState(false);
 
@@ -1695,14 +1699,8 @@ function ProductDetailCard({
 
             {hasStandardCartOptions && (
               <>
-                <div className={classes.actionRowTop}>
-                  <button onClick={handleBuyNow} className={classes.buyNowBtn} disabled={isCurrentOutOfStock}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                    {t('buyNow')}
-                  </button>
-                </div>
+                {/* Add to Cart is the primary action (US e-commerce
+                    convention); Buy Now is the express secondary below. */}
                 <div className={classes.actionRowBottom}>
                   <div className={classes.quantityWrapper}>
                     <div className={classes.quantitySelector}>
@@ -1720,6 +1718,14 @@ function ProductDetailCard({
                       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
                     </svg>
                     {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t('addToCart')}
+                  </button>
+                </div>
+                <div className={classes.actionRowTop}>
+                  <button onClick={handleBuyNow} className={classes.buyNowBtn} disabled={isCurrentOutOfStock}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    {t('buyNow')}
                   </button>
                 </div>
               </>
@@ -1756,7 +1762,27 @@ function ProductDetailCard({
               </div>
             )}
 
-            {/* TRUST BAR REMOVED */}
+            {/* Certifications — real, verifiable trust signals placed where
+                the buying decision happens. NFPA 701 is a US fire-safety
+                standard; OEKO-TEX is widely recognized by US shoppers. */}
+            <div className={classes.certLine}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+              <span>OEKO-TEX®</span>
+              <span className={classes.certSep} aria-hidden="true">·</span>
+              <span>NFPA 701</span>
+              <span className={classes.certSep} aria-hidden="true">·</span>
+              <span>ISO 9001</span>
+              <span className={classes.certSep} aria-hidden="true">·</span>
+              <span>
+                {locale === 'tr' ? "1991'den beri" :
+                 locale === 'ru' ? 'С 1991 года' :
+                 locale === 'pl' ? 'Od 1991 roku' :
+                 'Since 1991'}
+              </span>
+            </div>
           </div>
 
           {/* Expandable Accordion Sections - Replaces Tabs */}

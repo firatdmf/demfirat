@@ -133,8 +133,9 @@
 }
 
 .navLink:hover {
-  color: #c9a961;
-  font-weight: 900;
+  /* No font-weight change on hover — a 500→900 jump reflows the whole
+     nav row; the color + underline animation is signal enough. */
+  color: var(--brand-brown, #944f05);
 }
 
 .navLink:hover::after {
