@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, username, password } = await request.json();
+    const { name, email, username, password, company_name, phone, country, tax_id } = await request.json();
 
     // Basic validation
     if (!name || !email || !username || !password) {
@@ -28,6 +28,10 @@ export async function POST(request: Request) {
           email,
           username,
           password,
+          company_name,
+          phone,
+          country,
+          tax_id,
         }),
       }
     );

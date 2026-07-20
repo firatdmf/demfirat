@@ -17,6 +17,7 @@ import { HiDocumentText } from "react-icons/hi2";
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
 import { getLocalizedProductField } from '@/lib/productUtils';
+import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
 
 interface ProductCardProps {
   product: Product;
@@ -324,8 +325,9 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   let product_category_name = actualCategory;
   const isReadyMadeCurtain = pathname.includes('ready-made_curtain') || productOwnCategory === 'ready-made_curtain';
   const isFabricProduct = productOwnCategory === 'fabric' || pathname.includes('/product/fabric');
-  // Fabric products are sold only as custom (made-to-measure) curtains, never by-the-meter
-  const isCustomCurtain = intent === 'custom_curtain' || isFabricProduct;
+  // Custom (made-to-measure) curtain flow is off for the B2B pivot — fabric
+  // cards link straight to the standard product page instead of /curtain.
+  const isCustomCurtain = CUSTOM_CURTAIN_ENABLED && (intent === 'custom_curtain' || isFabricProduct);
   const isBedCategory = pathname.includes('/product/bed') || productOwnCategory === 'bed';
   const isPerPiece = isReadyMadeCurtain || isBedCategory;
 

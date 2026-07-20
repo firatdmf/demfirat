@@ -338,6 +338,14 @@
       "time": "1-3 Business Days",
       "title": "Delivery Information"
     },
+    "fca": {
+      "title": "FCA (Free Carrier) Istanbul",
+      "highlight": "Free on wholesale orders over $500",
+      "text": "On wholesale orders over $500 USD, Demfirat hands off your goods free of charge — under FCA (Free Carrier), Incoterms® 2020 — to any carrier, freight forwarder, or consolidation warehouse of your choice within Istanbul. You're free to arrange the onward international leg with your own trusted logistics partner, at no handling cost from us.",
+      "noCarrierTitle": "No carrier yet?",
+      "noCarrierText": "If you don't already work with a carrier in Istanbul, our team is glad to recommend one based on our experience with international buyers.",
+      "disclaimer": "Please note that any such recommendation is offered purely as a courtesy. Demfirat is not a party to the agreement between you and the carrier, and accepts no liability or responsibility for that carrier's pricing, service quality, or performance — whether recommended by us or chosen independently. In line with FCA terms, risk and responsibility for the goods transfer to the buyer once they are handed over to the carrier at the agreed location in Istanbul."
+    },
     "disclaimer": "Consumer Arbitration Committees and Consumer Courts: In case of disputes arising from this contract, you can apply to the Consumer Arbitration Committee or Consumer Court in your place of residence or where the transaction took place, within the monetary limits announced annually by the Ministry of Trade.",
     "lastUpdate": "Last update: December 10, 2024",
     "section1": {

@@ -45,23 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }));
     });
 
-    // Custom-curtain (/curtain) detail pages — the "perde diktir" pages we
-    // want to rank for. Only fabric-category products have them.
-    const curtainEntries: MetadataRoute.Sitemap = allProducts
-        .filter((product: any) => {
-            const cat = (product._category || product.product_category || '').toLowerCase();
-            return cat.includes('fabric') || cat.includes('kumaş');
-        })
-        .flatMap((product: any) => {
-            const cat = product._category || product.product_category || 'fabric';
-            const sku = product.sku || product.id;
-            return locales.map((locale) => ({
-                url: `${baseUrl}/${locale}/product/${cat}/${sku}/curtain`,
-                lastModified: new Date(),
-                changeFrequency: 'weekly' as const,
-                priority: 0.9, // custom curtains are a primary conversion path
-            }));
-        });
+    // Custom-curtain (/curtain) detail pages are no longer listed — the
+    // made-to-measure wizard they exist for is off site-wide (B2B pivot,
+    // see CUSTOM_CURTAIN_ENABLED). The route still works (falls back to the
+    // standard product view), so leaving it out of the sitemap just avoids
+    // indexing it as a duplicate of the plain product URL.
+    const curtainEntries: MetadataRoute.Sitemap = [];
 
     // Static routes. Homepage first with priority 1.0.
     const coreRoutes = [

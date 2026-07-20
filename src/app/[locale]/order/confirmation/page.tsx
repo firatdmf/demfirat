@@ -232,7 +232,7 @@ export default function OrderConfirmationPage() {
           </Link>
 
           <Link
-            href={`/${locale}/product/fabric?intent=custom_curtain`}
+            href={`/${locale}/product/fabric`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',

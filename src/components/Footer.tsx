@@ -103,7 +103,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
             <h4 className={classes.columnTitle}>{t('products')}</h4>
             <ul className={classes.linkList}>
               <li>
-                <Link href={`/${locale}/product/fabric?intent=custom_curtain`}>
+                <Link href={`/${locale}/product/fabric`}>
                   {locale === 'tr' ? 'Tül Perdeler' :
                     locale === 'ru' ? 'Тюлевые шторы' :
                       locale === 'pl' ? 'Firany' :
@@ -111,7 +111,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`}>
+                <Link href={`/${locale}/product/fabric?fabric_type=embroidery`}>
                   {locale === 'tr' ? 'Nakışlı Tül Perdeler' :
                     locale === 'ru' ? 'Вышитый тюль' :
                       locale === 'pl' ? 'Haftowane firany' :
@@ -119,7 +119,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`}>
+                <Link href={`/${locale}/product/fabric?fabric_type=solid`}>
                   {locale === 'tr' ? 'Düz Tül Perdeler' :
                     locale === 'ru' ? 'Гладкий тюль' :
                       locale === 'pl' ? 'Gładkie firany' :
@@ -127,7 +127,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`}>
+                <Link href={`/${locale}/product/fabric?fabric_type=blackout`}>
                   {locale === 'tr' ? 'Fon Perdeler' :
                     locale === 'ru' ? 'Блэкаут шторы' :
                       locale === 'pl' ? 'Zasłony zaciemniające' :

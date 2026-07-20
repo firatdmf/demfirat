@@ -1,10 +1,10 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { FaShoppingCart, FaCreditCard, FaMapMarkerAlt, FaUser, FaCheck, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaShoppingCart, FaCreditCard, FaMapMarkerAlt, FaUser, FaCheck, FaPhone, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
@@ -60,13 +60,17 @@ interface Address {
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const locale = useLocale();
   const { refreshCart, guestCart, clearGuestCart, isGuest } = useCart();
   const { currency, convertPrice, rates } = useCurrency();
 
-  // Guest checkout mode
-  const isGuestCheckout = searchParams.get('guest') === 'true';
+  // Guest checkout is disabled — this is a B2B wholesale storefront, only
+  // registered accounts can place orders. Hardcoding this to false (instead
+  // of removing the ~20 `isGuestCheckout` branches below) routes every one
+  // of them to the member path without touching each individually; the
+  // ?guest=true URL param is now inert. See GuestCheckoutModal for the
+  // matching UI-side removal.
+  const isGuestCheckout = false;
 
   // Toast notification state
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' | 'info' } | null>(null);
@@ -88,7 +92,6 @@ export default function CheckoutPage() {
     country: 'Turkey',
     postal_code: '',
   });
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank_transfer'>('card');
   const [loading, setLoading] = useState(true);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [processingOrder, setProcessingOrder] = useState(false);
@@ -120,11 +123,6 @@ export default function CheckoutPage() {
   const [selectedCountry, setSelectedCountry] = useState('Turkey');
   const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
 
-  // Credit card form state
-  const [cardHolderName, setCardHolderName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
 
   const [userPhone, setUserPhone] = useState('');
 
@@ -164,9 +162,14 @@ export default function CheckoutPage() {
       deliveryAddress: { en: 'Delivery Address', tr: 'Teslimat Adresi', ru: 'Адрес доставки', pl: 'Adres dostawy' },
       billingAddress: { en: 'Billing Address', tr: 'Fatura Adresi', ru: 'Адрес выставления счета', pl: 'Adres rozliczeniowy' },
       sameAsDeliveryAddress: { en: 'Same as delivery address', tr: 'Teslimat adresi ile aynı', ru: 'Совпадает с адресом доставки', pl: 'Taki sam jak adres dostawy' },
-      paymentMethod: { en: 'Payment Method', tr: 'Ödeme Yöntemi', ru: 'Способ оплаты', pl: 'Metoda płatności' },
-      creditCard: { en: 'Credit/Debit Card', tr: 'Kredi/Banka Kartı', ru: 'Кредитная карта', pl: 'Karta kredytowa' },
-      bankTransfer: { en: 'Bank Transfer', tr: 'Havale/EFT', ru: 'Банковский перевод', pl: 'Przelew bankowy' },
+      paymentMethod: { en: 'Payment', tr: 'Ödeme', ru: 'Оплата', pl: 'Płatność' },
+      contactAfterOrderNotice: {
+        en: 'After you place your order, our team will contact you to confirm the details and arrange payment.',
+        tr: 'Siparişinizi oluşturduktan sonra ekibimiz sizinle iletişime geçerek detayları ve ödemeyi birlikte netleştirecek.',
+        ru: 'После оформления заказа наша команда свяжется с вами, чтобы уточнить детали и организовать оплату.',
+        pl: 'Po złożeniu zamówienia nasz zespół skontaktuje się z Tobą, aby ustalić szczegóły i płatność.',
+      },
+      chatOnWhatsapp: { en: 'Chat on WhatsApp', tr: "WhatsApp'tan Yazın", ru: 'Написать в WhatsApp', pl: 'Napisz na WhatsApp' },
       addNewAddress: { en: 'Add New Address', tr: 'Yeni Adres Ekle', ru: 'Добавить адрес', pl: 'Dodaj adres' },
       productsInCart: { en: 'Products in Cart', tr: 'Sepetteki Ürünler', ru: 'Товары в корзине', pl: 'Produkty w koszyku' },
       showProducts: { en: 'Show Products', tr: 'Ürünleri Göster', ru: 'Показать товары', pl: 'Pokaż produkty' },
@@ -699,26 +702,6 @@ export default function CheckoutPage() {
       }
     }
 
-    // Validate card information if payment method is card
-    if (paymentMethod === 'card') {
-      if (!cardHolderName.trim()) {
-        showToast(locale === 'tr' ? 'Kart üzerindeki ismi girin' : 'Enter cardholder name');
-        return;
-      }
-      if (!cardNumber.trim() || cardNumber.replace(/\s/g, '').length < 15) {
-        showToast(locale === 'tr' ? 'Geçerli bir kart numarası girin' : 'Enter a valid card number');
-        return;
-      }
-      if (!expiryDate.trim() || expiryDate.length < 5) {
-        showToast(locale === 'tr' ? 'Son kullanma tarihi girin (AA/YY)' : 'Enter expiry date (MM/YY)');
-        return;
-      }
-      if (!cvv.trim() || cvv.length < 3) {
-        showToast(locale === 'tr' ? 'CVV girin' : 'Enter CVV');
-        return;
-      }
-    }
-
     setProcessingOrder(true);
     try {
       const userId = isGuestCheckout ? `guest_${Date.now()}` : ((session?.user as any)?.id || session?.user?.email);
@@ -769,218 +752,49 @@ export default function CheckoutPage() {
         }
       }
 
-      // For bank transfer, create order directly
-      if (paymentMethod === 'bank_transfer') {
-        // TODO: Create order in Django backend with 'pending_payment' status
-        showToast(locale === 'tr'
-          ? 'Havale/EFT ödemesi için banka bilgileri e-posta ile gönderilecektir.'
-          : 'Bank transfer details will be sent via email.', 'info');
-        router.push(`/${locale}/order/confirmation`);
-        return;
-      }
-
-      // For card payment, initiate iyzico payment
-      const [expMonth, expYear] = expiryDate.split('/');
-
-      // Fetch IP and exchange rate in parallel
-      let buyerIp = '85.34.78.112';
-      let exchangeRate = 34.5;
-
-      const [ipResult, rateResult] = await Promise.allSettled([
-        fetch('https://api.ipify.org?format=json').then(r => r.json()),
-        fetch('/api/exchange-rate').then(r => r.json())
-      ]);
-
-      if (ipResult.status === 'fulfilled') {
-        buyerIp = ipResult.value.ip;
-      }
-      if (rateResult.status === 'fulfilled' && rateResult.value.success) {
-        exchangeRate = rateResult.value.rate;
-      }
-
-      // Convert USD to TRY for payment
-      const subtotalTRY = subtotal * exchangeRate;
-      const totalTRY = total * exchangeRate;
-
-      const paymentData = {
-        // Card information
-        cardHolderName: cardHolderName.trim(),
-        cardNumber: cardNumber.replace(/\s/g, ''),
-        expireMonth: expMonth.trim(),
-        expireYear: '20' + expYear.trim(),
-        cvc: cvv.trim(),
-
-        // Order information (converted to TRY)
-        price: subtotalTRY.toFixed(2),
-        paidPrice: totalTRY.toFixed(2),
-        currency: 'TRY',
-        basketId: `basket-${userId}-${Date.now()}`,
-        paymentGroup: 'PRODUCT',
-        exchangeRate: exchangeRate, // Store for order record
+      // No online payment — submit the order as a request. Our team
+      // contacts the customer afterward to confirm pricing and payment
+      // (see the notice in the Payment section). subtotal/total are USD,
+      // the site's base currency.
+      const orderPayload = {
+        userId,
+        isGuestCheckout,
+        guestInfo: isGuestCheckout ? {
+          email: userInfo.email,
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          phone: userInfo.phone
+        } : null,
+        paymentData: {
+          paymentId: null,
+          currency: 'USD',
+          paidPrice: total.toFixed(2),
+          email: isGuestCheckout ? userInfo.email : (session?.user?.email || ''),
+        },
+        cartItems,
+        deliveryAddress,
+        billingAddress,
         originalCurrency: 'USD',
         originalPrice: subtotal.toFixed(2),
-
-        // Buyer information
-        buyer: {
-          id: userId,
-          name: userInfo.firstName || cardHolderName.split(' ')[0] || 'Customer',
-          surname: userInfo.lastName || cardHolderName.split(' ').slice(1).join(' ') || 'User',
-          email: isGuestCheckout ? userInfo.email : (session?.user?.email || ''),
-          identityNumber: '11111111111', // Test identity number for sandbox
-          registrationAddress: deliveryAddress.address,
-          city: deliveryAddress.city,
-          country: deliveryAddress.country,
-          ip: buyerIp,
-          gsmNumber: userInfo.phone || userPhone || deliveryAddress.phone || '+905555555555'
-        },
-
-        // Shipping address
-        shippingAddress: {
-          contactName: cardHolderName.trim(),
-          city: deliveryAddress.city,
-          country: deliveryAddress.country,
-          address: deliveryAddress.address
-        },
-
-        // Billing address
-        billingAddress: {
-          contactName: cardHolderName.trim(),
-          city: billingAddress.city,
-          country: billingAddress.country,
-          address: billingAddress.address
-        },
-
-        // Basket items (convert to TRY)
-        basketItems: cartItems.map((item, index) => {
-          let itemTotalUSD = 0;
-          const quantity = parseFloat(item.quantity);
-
-          if (item.is_sample) {
-            itemTotalUSD = 0.10 * quantity;
-          } else if (item.is_custom_curtain) {
-            // Custom curtain: custom_price is price for 1 curtain, multiply by quantity
-            if (!item.custom_price) {
-              console.warn(`Custom curtain item ${index} has no custom_price!`);
-              // Fallback: use product price as minimum
-              itemTotalUSD = item.product?.price ? parseFloat(String(item.product.price)) * quantity : 0;
-            } else {
-              itemTotalUSD = parseFloat(String(item.custom_price)) * quantity;
-            }
-          } else {
-            // Regular product: calculate from product price and quantity
-            const priceUSD = item.product?.price ? parseFloat(String(item.product.price)) : 0;
-            itemTotalUSD = priceUSD * quantity;
-          }
-
-          const itemTotalTRY = (itemTotalUSD * exchangeRate).toFixed(2);
-
-          return {
-            id: `item-${index}`,
-            name: item.product?.title || item.product_sku,
-            category1: item.product_category || 'Product',
-            itemType: 'PHYSICAL',
-            price: itemTotalTRY
-          };
-        }),
-
-        callbackUrl: `${window.location.origin}/api/payment/callback`
       };
 
-      console.log('===== CHECKOUT PAYMENT DATA =====');
-      console.log('Basket Items:', JSON.stringify(paymentData.basketItems, null, 2));
-      console.log('Price (USD):', subtotal, '-> TRY:', subtotalTRY);
-      console.log('Total (USD):', total, '-> TRY:', totalTRY);
-      console.log('Full Payment Data:', JSON.stringify(paymentData, null, 2));
-
-      // Call iyzico payment API
-      const response = await fetch('/api/payment/iyzico', {
+      const response = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(paymentData)
+        body: JSON.stringify(orderPayload)
       });
 
       const result = await response.json();
-
-      console.log('===== IYZICO RESPONSE =====');
-      console.log('Success:', result.success);
-      console.log('Has threeDSHtmlContent:', !!result.threeDSHtmlContent);
-      console.log('Content length:', result.threeDSHtmlContent?.length);
-      console.log('Content preview:', result.threeDSHtmlContent?.substring(0, 200));
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Payment initialization failed');
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Order creation failed');
       }
 
-      if (result.success && result.threeDSHtmlContent) {
-        // Decode base64 HTML content
-        let decodedHtml = result.threeDSHtmlContent;
-        console.log('Raw threeDSHtmlContent:', result.threeDSHtmlContent);
-        console.log('Raw content type:', typeof result.threeDSHtmlContent);
-        console.log('Raw content length:', result.threeDSHtmlContent.length);
-
-        try {
-          // Check if it's base64 encoded
-          decodedHtml = atob(result.threeDSHtmlContent);
-          console.log('Successfully decoded from base64');
-          console.log('Decoded HTML preview:', decodedHtml.substring(0, 500));
-          console.log('Decoded HTML full length:', decodedHtml.length);
-        } catch (e) {
-          console.log('Content is not base64, using as-is');
-          console.log('Error:', e);
-        }
-
-        // Store 3D Secure HTML in localStorage
-        localStorage.setItem('threeDSHtmlContent', decodedHtml);
-
-        // Store checkout data for order creation after payment
-        localStorage.setItem('checkoutData', JSON.stringify({
-          userId: userId,
-          isGuestCheckout: isGuestCheckout,
-          guestInfo: isGuestCheckout ? {
-            email: userInfo.email,
-            firstName: userInfo.firstName,
-            lastName: userInfo.lastName,
-            phone: userInfo.phone
-          } : null,
-          cartItems: cartItems,
-          deliveryAddress: deliveryAddress,
-          billingAddress: billingAddress,
-          exchangeRate: exchangeRate,
-          originalCurrency: 'USD',
-          originalPrice: subtotal.toFixed(2)
-        }));
-
-        // Open 3DS in a centered popup window and write HTML into it
-        try {
-          const w = 480;
-          const h = 720;
-          const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : (window as any).screenX;
-          const dualScreenTop = window.screenTop !== undefined ? window.screenTop : (window as any).screenY;
-          const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-          const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-          const left = ((width - w) / 2) + dualScreenLeft;
-          const top = ((height - h) / 2) + dualScreenTop;
-          const features = `scrollbars=yes,resizable=yes,width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no,location=no,status=no`;
-          const popup = window.open('', 'iyzico_3ds_popup', features);
-          if (!popup) {
-            showToast(locale === 'tr' ? 'Lütfen açılır pencereyi (popup) engellemeyi kapatın.' : 'Please allow popups to continue.');
-          } else {
-            popup.document.open();
-            popup.document.write(decodedHtml);
-            popup.document.close();
-            popup.focus();
-          }
-        } catch (e) {
-          console.error('Could not open 3DS popup:', e);
-        }
-      } else {
-        throw new Error('3D Secure initialization failed');
-      }
+      router.push(`/${locale}/order/confirmation`);
     } catch (error) {
       console.error('Error creating order:', error);
       showToast(locale === 'tr'
-        ? 'Ödeme başlatılamadı. Lütfen bilgilerinizi kontrol edin.'
-        : 'Payment failed. Please check your information.');
+        ? 'Sipariş oluşturulamadı. Lütfen bilgilerinizi kontrol edin.'
+        : 'Could not create order. Please check your information.');
     } finally {
       setProcessingOrder(false);
     }
@@ -1211,10 +1025,10 @@ export default function CheckoutPage() {
   // Convert subtotal USD to TL
   const subtotalInTL = subtotal * exchangeRate;
 
-  // Calculate shipping: Free if >= 2000 TL, otherwise 70 TL (converted back to USD)
+  // Calculate shipping: Free if >= 2000 TL, otherwise 180 TL (converted back to USD)
   let shipping = 0;
   if (subtotalInTL < FREE_SHIPPING_THRESHOLD_TL) {
-    shipping = SHIPPING_COST_TL / exchangeRate; // Convert 70 TL to USD
+    shipping = SHIPPING_COST_TL / exchangeRate; // Convert 180 TL to USD
   }
 
   const total = subtotal + shipping;
@@ -1813,153 +1627,32 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          {/* Payment Method Section */}
+          {/* Payment Section — no online payment; a team member follows up
+              after the order is submitted to confirm pricing and payment. */}
           <div className={classes.section}>
             <div className={classes.sectionHeader}>
-              <FaCreditCard className={classes.sectionIcon} />
+              <FaPhone className={classes.sectionIcon} />
               <h2>{t('paymentMethod')}</h2>
             </div>
 
-            {/* Pay with iyzico Logo - Above payment options */}
-            <div className={classes.payWithIyzicoBadge}>
-              <img
-                src="/media/iyzico/checkout_iyzico_ile_ode/EN/En_Colored_horizontal/pay_with_iyzico_horizontal_colored.svg"
-                alt="Pay with iyzico"
-                className={classes.payWithIyzicoLogo}
-              />
-            </div>
-
-            <div className={classes.paymentMethods}>
-              <div
-                className={`${classes.paymentCard} ${paymentMethod === 'card' ? classes.selected : ''}`}
-                onClick={() => setPaymentMethod('card')}
-              >
-                <input
-                  type="radio"
-                  name="payment"
-                  checked={paymentMethod === 'card'}
-                  onChange={() => setPaymentMethod('card')}
-                  className={classes.radio}
-                />
-                <div className={classes.paymentContent}>
-                  <FaCreditCard className={classes.paymentIcon} />
-                  <span>{t('creditCard')}</span>
-                </div>
-                {/* iyzico Logo Badge - Centered */}
-                <div className={classes.iyzicoCardBadge}>
-                  <img
-                    src="/media/iyzico/footer_iyzico_ile_ode/Colored/logo_band_colored@1X.png"
-                    alt="iyzico"
-                    className={classes.iyzicoPaymentLogo}
-                  />
-                </div>
-                {paymentMethod === 'card' && (
-                  <div className={classes.checkmark}>
-                    <FaCheck />
-                  </div>
-                )}
-              </div>
-
-              <div
-                className={`${classes.paymentCard} ${paymentMethod === 'bank_transfer' ? classes.selected : ''}`}
-                onClick={() => setPaymentMethod('bank_transfer')}
-              >
-                <input
-                  type="radio"
-                  name="payment"
-                  checked={paymentMethod === 'bank_transfer'}
-                  onChange={() => setPaymentMethod('bank_transfer')}
-                  className={classes.radio}
-                />
-                <div className={classes.paymentContent}>
-                  <FaEnvelope className={classes.paymentIcon} />
-                  <span>{t('bankTransfer')}</span>
-                </div>
-                {paymentMethod === 'bank_transfer' && (
-                  <div className={classes.checkmark}>
-                    <FaCheck />
-                  </div>
-                )}
+            <div className={classes.contactAfterOrderNotice}>
+              <p className={classes.contactAfterOrderText}>{t('contactAfterOrderNotice')}</p>
+              <div className={classes.contactAfterOrderActions}>
+                <a href="tel:+905010571884" className={classes.contactPhoneLink}>
+                  <FaPhone />
+                  <span>+90 501 057 18 84</span>
+                </a>
+                <a
+                  href="https://wa.me/905010571884"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.contactWhatsappLink}
+                >
+                  <FaWhatsapp />
+                  <span>{t('chatOnWhatsapp')}</span>
+                </a>
               </div>
             </div>
-
-            {/* Credit Card Form - Show when card is selected */}
-            {paymentMethod === 'card' && (
-              <div className={classes.cardFormWrapper}>
-                <h3>
-                  {locale === 'tr' ? 'Kart Bilgileri' :
-                    locale === 'ru' ? 'Данные карты' :
-                      locale === 'pl' ? 'Dane karty' :
-                        'Card Details'}
-                </h3>
-                <p style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: '#27ae60', fontWeight: 500, margin: '0 0 0.75rem', fontFamily: "'Montserrat', sans-serif" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                  {locale === 'tr' ? 'Kredi Kartı Bilgileriniz 128 Bit SSL Sertifikası ile Korunmaktadır' :
-                    locale === 'ru' ? 'Данные вашей карты защищены 128-битным SSL сертификатом' :
-                      locale === 'pl' ? 'Dane karty są chronione 128-bitowym certyfikatem SSL' :
-                        'Your card details are protected with 128-Bit SSL Certificate'}
-                </p>
-                <div className={classes.formGrid}>
-                  <input
-                    type="text"
-                    value={cardHolderName}
-                    onChange={(e) => setCardHolderName(e.target.value.toUpperCase())}
-                    placeholder={
-                      locale === 'tr' ? 'Kart Üzerindeki İsim' :
-                        locale === 'ru' ? 'Имя на карте' :
-                          locale === 'pl' ? 'Imię na karcie' :
-                            'Cardholder Name'
-                    }
-                    className={`${classes.input} ${classes.fullWidth}`}
-                  />
-                  <input
-                    type="text"
-                    value={cardNumber}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '');
-                      const formatted = value.match(/.{1,4}/g)?.join(' ') || value;
-                      setCardNumber(formatted);
-                    }}
-                    placeholder={
-                      locale === 'tr' ? 'Kart Numarası' :
-                        locale === 'ru' ? 'Номер карты' :
-                          locale === 'pl' ? 'Numer karty' :
-                            'Card Number'
-                    }
-                    maxLength={19}
-                    className={`${classes.input} ${classes.fullWidth}`}
-                  />
-                  <input
-                    type="text"
-                    value={expiryDate}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '');
-                      if (value.length <= 2) {
-                        setExpiryDate(value);
-                      } else {
-                        setExpiryDate(value.slice(0, 2) + '/' + value.slice(2, 4));
-                      }
-                    }}
-                    placeholder={
-                      locale === 'tr' ? 'AA/YY' :
-                        locale === 'ru' ? 'ММ/ГГ' :
-                          locale === 'pl' ? 'MM/RR' :
-                            'MM/YY'
-                    }
-                    maxLength={5}
-                    className={classes.input}
-                  />
-                  <input
-                    type="text"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
-                    placeholder="CVV"
-                    maxLength={4}
-                    className={classes.input}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
 

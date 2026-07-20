@@ -52,17 +52,11 @@ export default function GuestCheckoutModal({ isOpen, onClose }: GuestCheckoutMod
                 ru: 'Уже есть аккаунт? Войдите для доступа',
                 pl: 'Masz już konto? Zaloguj się'
             },
-            guestCheckout: {
-                en: 'Continue as Guest',
-                tr: 'Üye Olmadan Devam Et',
-                ru: 'Продолжить как гость',
-                pl: 'Kontynuuj jako gość'
-            },
-            guestCheckoutDesc: {
-                en: 'No account needed - just enter your details at checkout',
-                tr: 'Hesap gerekmiyor - sadece bilgilerinizi girin',
-                ru: 'Аккаунт не нужен - просто введите свои данные',
-                pl: 'Bez konta - po prostu wprowadź swoje dane'
+            membersOnlyNote: {
+                en: 'Orders can only be placed by registered business accounts.',
+                tr: 'Sipariş verebilmek için üye olmanız gerekmektedir.',
+                ru: 'Заказы могут оформлять только зарегистрированные компании.',
+                pl: 'Zamówienia mogą składać tylko zarejestrowane firmy.'
             },
         };
         const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
@@ -106,16 +100,9 @@ export default function GuestCheckoutModal({ isOpen, onClose }: GuestCheckoutMod
                         <FaArrowRight className={styles.arrowIcon} />
                     </Link>
 
-                    {/* Divider */}
-                    <div className={styles.divider}>
-                        <span>{locale === 'tr' ? 'veya' : locale === 'ru' ? 'или' : locale === 'pl' ? 'lub' : 'or'}</span>
-                    </div>
-
-                    {/* Guest Checkout Option */}
-                    <Link href={`/${locale}/checkout?guest=true`} className={styles.optionGuest}>
-                        <span>{t('guestCheckout')}</span>
-                        <p>{t('guestCheckoutDesc')}</p>
-                    </Link>
+                    {/* No guest checkout — this is a B2B wholesale storefront,
+                        every order must be tied to a registered account. */}
+                    <p className={styles.membersOnlyNote}>{t('membersOnlyNote')}</p>
                 </div>
             </div>
         </div>

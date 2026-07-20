@@ -193,7 +193,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                     <p><strong>Способ оплаты:</strong> Кредитная/дебетовая карта или банковский перевод</p>
                     <p><strong>Безопасная оплата:</strong> Все платежи осуществляются через безопасную платежную инфраструктуру iyzico с использованием технологии 3D Secure.</p>
                     <p><strong>Доставка:</strong> Бесплатная доставка</p>
-                    <p><strong>Срок доставки:</strong> После подтверждения заказа доставка в течение 3-7 рабочих дней.</p>
+                    <p><strong>Срок доставки:</strong> После подтверждения заказа доставка в течение 1-3 рабочих дня.</p>
                     <p><strong>Адрес доставки:</strong> Доставка по адресу, указанному при заказе.</p>
                     <p><strong>Важное примечание:</strong> Сумма платежа отображается в долларах США. При оплате кредитной картой сумма конвертируется банком в TRY.</p>
                 </>
@@ -202,7 +202,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                     <p><strong>Metoda płatności:</strong> Karta kredytowa/debetowa lub przelew bankowy</p>
                     <p><strong>Bezpieczna płatność:</strong> Wszystkie płatności są realizowane przez bezpieczną infrastrukturę płatniczą iyzico z użyciem technologii 3D Secure.</p>
                     <p><strong>Wysyłka:</strong> Bezpłatna wysyłka</p>
-                    <p><strong>Czas dostawy:</strong> Po potwierdzeniu zamówienia wysyłka w ciągu 3-7 dni roboczych.</p>
+                    <p><strong>Czas dostawy:</strong> Po potwierdzeniu zamówienia wysyłka w ciągu 1-3 dni roboczych.</p>
                     <p><strong>Adres dostawy:</strong> Dostawa na adres podany podczas składania zamówienia.</p>
                     <p><strong>Ważna uwaga:</strong> Kwota płatności jest wyświetlana w USD. Przy płatności kartą kredytową kwota jest konwertowana przez bank na TRY.</p>
                 </>
@@ -211,7 +211,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                     <p><strong>Payment Method:</strong> Credit/Debit Card or Bank Transfer</p>
                     <p><strong>Secure Payment:</strong> All payments are made through iyzico secure payment infrastructure using 3D Secure technology.</p>
                     <p><strong>Shipping:</strong> Free shipping</p>
-                    <p><strong>Delivery Time:</strong> After order confirmation, shipped within 3-7 business days.</p>
+                    <p><strong>Delivery Time:</strong> After order confirmation, shipped within 1-3 business days.</p>
                     <p><strong>Delivery Address:</strong> Delivered to the address specified during order.</p>
                     <p><strong>Important Note:</strong> Payment amount is displayed in USD. Credit card payments are converted to TRY by the bank.</p>
                 </>

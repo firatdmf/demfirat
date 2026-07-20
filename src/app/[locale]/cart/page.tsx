@@ -321,13 +321,13 @@ export default function CartPage() {
     }
   };
 
-  // Handle checkout button click
+  // Handle checkout button click — only registered members can order;
+  // guests are prompted to sign in or create an account (no "continue as
+  // guest" option anymore, see GuestCheckoutModal).
   const handleCheckout = () => {
     if (isGuest) {
-      // Show guest checkout modal
       setShowGuestModal(true);
     } else {
-      // For authenticated users, go directly to checkout
       router.push(`/${locale}/checkout`);
     }
   };
@@ -401,7 +401,7 @@ export default function CartPage() {
         <div className={classes.emptyState}>
           <FaBox className={classes.emptyIcon} />
           <h2>{t('emptyCart')}</h2>
-          <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.startShoppingBtn}>
+          <Link href={`/${locale}/product/fabric`} className={classes.startShoppingBtn}>
             {t('startShopping')}
           </Link>
         </div>
@@ -673,7 +673,7 @@ export default function CartPage() {
               <FaArrowRight />
             </button>
 
-            <Link href={`/${locale}/product/fabric?intent=custom_curtain`} className={classes.continueBtn}>
+            <Link href={`/${locale}/product/fabric`} className={classes.continueBtn}>
               {t('continueShopping')}
             </Link>
           </div>

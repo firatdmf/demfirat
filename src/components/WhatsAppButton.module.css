@@ -1,0 +1,40 @@
+.button {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #25d366;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    z-index: 9998;
+    /* Stay under modal overlays (z-index 9999+) but above page content */
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3);
+}
+
+.icon {
+    font-size: 30px;
+    color: #ffffff;
+}
+
+/* Sit above the mobile bottom nav bar (65px tall) instead of behind it */
+@media (max-width: 1024px) {
+    .button {
+        right: 16px;
+        bottom: 84px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .icon {
+        font-size: 26px;
+    }
+}

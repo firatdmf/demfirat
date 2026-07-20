@@ -23,6 +23,13 @@ import { translateTextSync } from '@/lib/translate';
 import { getLocalizedProductField } from '@/lib/productUtils';
 import { trackViewItem, trackAddToCart, trackSelectFabric, trackRequestSample } from '@/lib/tracking';
 import { trackKlaviyoAddToCart } from '@/lib/klaviyo';
+import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
+
+// Wholesale fabric (kumaş) is ordered by the roll: 25m minimum, 25m steps.
+// Stock below the minimum — or zero — still goes through as a production
+// order rather than being blocked (see handleAddToCart).
+const FABRIC_MIN_ORDER = 25;
+const FABRIC_ORDER_STEP = 25;
 
 
 type ProductDetailCardPageProps = {
@@ -186,7 +193,10 @@ function ProductDetailCard({
   // The /curtain route forces intent=custom_curtain server-side, so this is always reliable.
   const isFabricProduct = product_category?.toLowerCase().includes('fabric') || product_category?.toLowerCase().includes('kumaş');
   const isReadyMadeCurtain = product_category?.toLowerCase().includes('ready-made') || product_category?.toLowerCase().includes('curtain') && !isFabricProduct;
-  const isCustomCurtainIntent = searchParams?.intent === 'custom_curtain';
+  // Gated by CUSTOM_CURTAIN_ENABLED (currently off for the B2B pivot) so this
+  // stays false even if a stray/bookmarked ?intent=custom_curtain URL or the
+  // /curtain route (which always injects that param) is visited directly.
+  const isCustomCurtainIntent = CUSTOM_CURTAIN_ENABLED && searchParams?.intent === 'custom_curtain';
   const hasStandardCartOptions = !isCustomCurtainIntent;
   const [showWizard, setShowWizard] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
@@ -242,7 +252,9 @@ function ProductDetailCard({
 
   const { isFavorite, toggleFavorite } = useFavorites();
   const { refreshCart, addToGuestCart, isGuest } = useCart();
-  const [quantity, setQuantity] = useState<string>('1');
+  // Wholesale fabric is ordered by the roll, not the meter — 25m minimum,
+  // 25m steps. Ready-made/bed products keep ordinary unit quantities.
+  const [quantity, setQuantity] = useState<string>(isFabricProduct ? String(FABRIC_MIN_ORDER) : '1');
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery' | 'returns' | 'care' | null>('description');
@@ -586,12 +598,19 @@ function ProductDetailCard({
 
   const handleIncrement = () => {
     const currentQty = parseInt(quantity) || 0;
-    setQuantity(String(currentQty + 1));
+    if (isFabricProduct) {
+      setQuantity(String(currentQty + FABRIC_ORDER_STEP));
+    } else {
+      setQuantity(String(currentQty + 1));
+    }
   };
 
   const handleDecrement = () => {
     const currentQty = parseInt(quantity) || 0;
-    if (currentQty > 1) {
+    if (isFabricProduct) {
+      const next = currentQty - FABRIC_ORDER_STEP;
+      setQuantity(String(next >= FABRIC_MIN_ORDER ? next : FABRIC_MIN_ORDER));
+    } else if (currentQty > 1) {
       setQuantity(String(currentQty - 1));
     }
   };
@@ -692,13 +711,24 @@ function ProductDetailCard({
       setIsAdding(false);
       return false;
     }
+    if (isFabricProduct && qty < FABRIC_MIN_ORDER) {
+      alert(
+        locale === 'tr'
+          ? `Minimum sipariş miktarı ${FABRIC_MIN_ORDER} metredir.`
+          : `Minimum order quantity is ${FABRIC_MIN_ORDER} meters.`
+      );
+      setIsAdding(false);
+      return false;
+    }
 
-    // Stock validation
+    // Stock validation — wholesale fabric is produced/imported to order, so
+    // low or zero stock doesn't block the order; it just becomes a
+    // production request our team follows up on (see the checkout notice).
     const availableQty = selectedVariant?.variant_quantity
       ? Number(selectedVariant.variant_quantity)
       : (product.available_quantity ? Number(product.available_quantity) : Number(product.quantity));
 
-    if (qty > availableQty) {
+    if (!isFabricProduct && qty > availableQty) {
       alert(
         locale === 'tr'
           ? `Yetersiz stok! Gerekli: ${qty}, Mevcut: ${availableQty}`
@@ -1714,9 +1744,13 @@ function ProductDetailCard({
                 const qty = variantQty ?? productQty;
 
                 if (isCurrentOutOfStock) {
+                  // Fabric is produced/imported to order — zero stock is a
+                  // lead-time note, not a purchase blocker (button stays live).
                   return (
                     <span className={classes.outOfStockBadge}>
-                      {locale === 'tr' ? 'Bu renk/seçenek şu an stokta yok' : locale === 'ru' ? 'Этот вариант сейчас нет в наличии' : locale === 'pl' ? 'Ten wariant jest obecnie niedostępny' : 'This option is currently out of stock'}
+                      {isFabricProduct
+                        ? (locale === 'tr' ? 'Bu renk şu an stokta yok — sipariş üretim/tedarik ile karşılanır' : locale === 'ru' ? 'Этот цвет сейчас нет на складе — заказ будет выполнен под заказ' : locale === 'pl' ? 'Ten kolor jest niedostępny — zamówienie zrealizujemy na zamówienie' : 'Out of stock — order will be fulfilled via production/import')
+                        : (locale === 'tr' ? 'Bu renk/seçenek şu an stokta yok' : locale === 'ru' ? 'Этот вариант сейчас нет в наличии' : locale === 'pl' ? 'Ten wariant jest obecnie niedostępny' : 'This option is currently out of stock')}
                     </span>
                   );
                 }
@@ -1742,13 +1776,18 @@ function ProductDetailCard({
                       <button type="button" onClick={handleDecrement} className={classes.quantityBtn} aria-label="Decrease quantity">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
                       </button>
-                      <input id="quantity" type="text" value={quantity} onChange={handleQuantityChange} className={classes.quantityInput} placeholder={isFabricProduct ? "1.0" : "1"} />
+                      <input id="quantity" type="text" value={quantity} onChange={handleQuantityChange} className={classes.quantityInput} placeholder={isFabricProduct ? String(FABRIC_MIN_ORDER) : "1"} />
                       <button type="button" onClick={handleIncrement} className={classes.quantityBtn} aria-label="Increase quantity">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
                       </button>
                     </div>
+                    {isFabricProduct && (
+                      <span className={classes.minOrderHint}>
+                        {locale === 'tr' ? `Min. ${FABRIC_MIN_ORDER}m, ${FABRIC_ORDER_STEP}m artışlarla` : `Min. ${FABRIC_MIN_ORDER}m, in steps of ${FABRIC_ORDER_STEP}m`}
+                      </span>
+                    )}
                   </div>
-                  <button onClick={handleAddToCart} className={classes.addToCartBtn} disabled={isAdding || isCurrentOutOfStock}>
+                  <button onClick={handleAddToCart} className={classes.addToCartBtn} disabled={isAdding || (isCurrentOutOfStock && !isFabricProduct)}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
                     </svg>
@@ -1756,7 +1795,7 @@ function ProductDetailCard({
                   </button>
                 </div>
                 <div className={classes.actionRowTop}>
-                  <button onClick={handleBuyNow} className={classes.buyNowBtn} disabled={isCurrentOutOfStock}>
+                  <button onClick={handleBuyNow} className={classes.buyNowBtn} disabled={isCurrentOutOfStock && !isFabricProduct}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>

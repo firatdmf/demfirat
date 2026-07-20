@@ -394,6 +394,62 @@ select.input:disabled {
   gap: 1rem;
 }
 
+/* Contact-After-Order Notice — replaces the old card/bank-transfer picker */
+.contactAfterOrderNotice {
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.contactAfterOrderText {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-dark, #2c2c2c);
+  margin: 0 0 1.1rem;
+}
+
+.contactAfterOrderActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.contactPhoneLink,
+.contactWhatsappLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.25rem;
+  border-radius: 30px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.contactPhoneLink {
+  background: white;
+  border: 1.5px solid var(--gold, #c9a961);
+  color: var(--text-dark, #2c2c2c);
+}
+
+.contactPhoneLink:hover {
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.contactWhatsappLink {
+  background: #25d366;
+  color: white;
+  border: 1.5px solid #25d366;
+}
+
+.contactWhatsappLink:hover {
+  background: #1fbd5a;
+}
+
 /* Card Form */
 .cardFormWrapper {
   margin-top: 1rem;

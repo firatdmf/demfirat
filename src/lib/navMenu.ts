@@ -10,23 +10,27 @@ export type NavSection = {
 };
 
 export function getCurtainSections(locale: string): NavSection[] {
+    // Fabric links no longer force ?intent=custom_curtain — the
+    // made-to-measure wizard is off for the B2B pivot (see
+    // CUSTOM_CURTAIN_ENABLED). Browsing fabric by the meter is still core
+    // to the business, so these links stay, just pointed at plain listings.
     return [
         {
             title: locale === 'tr' ? 'Tül Perdeler' : 'Tulle Curtains',
-            href: `/${locale}/product/fabric?intent=custom_curtain`,
+            href: `/${locale}/product/fabric`,
             image: '/media/header_pictures/curtain_solid.avif',
             links: [
-                { href: `/${locale}/product/fabric?intent=custom_curtain`, label: locale === 'tr' ? 'Tüm Tül Perdeler' : 'All Tulle Curtains' },
-                { href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`, label: locale === 'tr' ? 'Nakışlı Tül Perde' : 'Embroidered Tulle Curtains' },
-                { href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=solid`, label: locale === 'tr' ? 'Düz Tül Perdeler' : 'Solid Tulle Curtains' },
+                { href: `/${locale}/product/fabric`, label: locale === 'tr' ? 'Tüm Tül Perdeler' : 'All Tulle Curtains' },
+                { href: `/${locale}/product/fabric?fabric_type=embroidery`, label: locale === 'tr' ? 'Nakışlı Tül Perde' : 'Embroidered Tulle Curtains' },
+                { href: `/${locale}/product/fabric?fabric_type=solid`, label: locale === 'tr' ? 'Düz Tül Perdeler' : 'Solid Tulle Curtains' },
             ],
         },
         {
             title: locale === 'tr' ? 'Fon Perdeler' : 'Blackout Curtains',
-            href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`,
+            href: `/${locale}/product/fabric?fabric_type=blackout`,
             image: '/media/header_pictures/curtain_blackout.avif',
             links: [
-                { href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`, label: locale === 'tr' ? 'Tüm Fon Perdeler' : 'All Blackout Curtains' },
+                { href: `/${locale}/product/fabric?fabric_type=blackout`, label: locale === 'tr' ? 'Tüm Fon Perdeler' : 'All Blackout Curtains' },
             ],
         },
         {

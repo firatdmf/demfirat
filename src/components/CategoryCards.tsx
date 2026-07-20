@@ -32,17 +32,17 @@ export default function CategoryCards({ locale = 'en' }: CategoryCardsProps) {
         },
         {
             key: 'embroidered',
-            href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=embroidery`,
+            href: `/${locale}/product/fabric?fabric_type=embroidery`,
             image: 'https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/rk72010gw-08-white-sheer-floral-dandelion-embroidered-curtain-grommet-header-installation-top.avif',
         },
         {
             key: 'tulle',
-            href: `/${locale}/product/fabric?intent=custom_curtain`,
+            href: `/${locale}/product/fabric`,
             image: '/media/header_pictures/curtain_solid.avif',
         },
         {
             key: 'blackout',
-            href: `/${locale}/product/fabric?intent=custom_curtain&fabric_type=blackout`,
+            href: `/${locale}/product/fabric?fabric_type=blackout`,
             image: '/media/header_pictures/curtain_blackout.avif',
         },
         {

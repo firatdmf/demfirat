@@ -59,6 +59,21 @@ export default function IadeSartlari({ embedded = false, mode = 'all' }: IadeSar
                             <p>{t('delivery.text')}</p>
                         </div>
                     </section>
+
+                    {/* FCA (Free Carrier) Istanbul — wholesale freight terms */}
+                    <section className={classes.section}>
+                        <h2>{t('fca.title')}</h2>
+                        <div className={classes.deliveryBox}>
+                            <p className={classes.deliveryTime}>{t('fca.highlight')}</p>
+                            <p>{t('fca.text')}</p>
+                        </div>
+                        <div className={classes.note}>
+                            <strong>{t('fca.noCarrierTitle')}</strong> {t('fca.noCarrierText')}
+                        </div>
+                        <div className={classes.warning}>
+                            {t('fca.disclaimer')}
+                        </div>
+                    </section>
                 </>
             )}
 

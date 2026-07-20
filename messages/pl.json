@@ -338,6 +338,14 @@
       "time": "1-3 Dni Robocze",
       "title": "Informacje o dostawie"
     },
+    "fca": {
+      "title": "FCA (Free Carrier) Stambuł",
+      "highlight": "Bezpłatnie przy zamówieniach hurtowych powyżej 500 $",
+      "text": "Przy zamówieniach hurtowych powyżej 500 USD Demfirat bezpłatnie przekazuje towar — na warunkach FCA (Free Carrier), Incoterms® 2020 — dowolnej firmie spedycyjnej, przewoźnikowi lub magazynowi konsolidacyjnemu wybranemu przez Państwa w Stambule. Mogą Państwo zorganizować dalszy transport międzynarodowy z zaufanym partnerem logistycznym, bez żadnych dodatkowych kosztów obsługi z naszej strony.",
+      "noCarrierTitle": "Nie mają Państwo przewoźnika?",
+      "noCarrierText": "Jeśli nie współpracują Państwo jeszcze z przewoźnikiem w Stambule, nasz zespół chętnie poleci odpowiednią firmę na podstawie doświadczenia we współpracy z klientami międzynarodowymi.",
+      "disclaimer": "Prosimy pamiętać, że taka rekomendacja ma charakter wyłącznie pomocniczy. Demfirat nie jest stroną umowy między Państwem a przewoźnikiem i nie ponosi żadnej odpowiedzialności za ceny, jakość usług ani działania przewoźnika — niezależnie od tego, czy został on polecony przez nas, czy wybrany samodzielnie. Zgodnie z warunkami FCA ryzyko i odpowiedzialność za towar przechodzą na kupującego z chwilą przekazania go przewoźnikowi w uzgodnionym miejscu w Stambule."
+    },
     "disclaimer": "Komisje Arbitrażowe i Sądy Konsumenckie: W przypadku sporów wynikających z tej umowy, możesz skierować sprawę do Komisji Arbitrażowej ds. Konsumentów.",
     "lastUpdate": "Ostatnia aktualizacja: 10 grudnia 2024",
     "section1": {

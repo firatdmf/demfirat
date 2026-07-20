@@ -1057,6 +1057,15 @@
   margin-bottom: 0;
 }
 
+.minOrderHint {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.7rem;
+  color: #888;
+  white-space: nowrap;
+}
+
 .quantityWrapper label {
   display: block;
   font-family: var(--font-body, 'Montserrat', sans-serif);

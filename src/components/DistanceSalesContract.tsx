@@ -357,7 +357,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                 </>
             ) : (
                 <>
-                    <p><strong>Delivery Time:</strong> After order confirmation, shipped within 3-7 business days. Shipping time may vary depending on the region.</p>
+                    <p><strong>Delivery Time:</strong> After order confirmation, shipped within 1-3 business days. Shipping time may vary depending on the region.</p>
 
                     <p><strong>Delivery Address:</strong> Products will be delivered to the delivery address specified during order.</p>
 

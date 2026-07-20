@@ -75,6 +75,7 @@ import CustomCurtainPromo from "@/components/CustomCurtainPromo";
 import BrandHistoryPromo from "@/components/BrandHistoryPromo";
 import InstagramFeed from "@/components/InstagramFeed";
 import { getStorefrontHome } from "@/lib/storefrontApi";
+import { CUSTOM_CURTAIN_ENABLED } from "@/lib/featureFlags";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
 // import { useTranslations } from "next-intl";
@@ -334,19 +335,21 @@ export default async function Home(props: PageProps<'/[locale]'>) {
               link: `/${locale}/product/ready-made_curtain`
             }}
             secondaryCta={{
-              text: locale === 'tr' ? 'Özel Dikim Tasarla' :
-                locale === 'ru' ? 'Шторы на заказ' :
-                  locale === 'pl' ? 'Zaprojektuj na wymiar' :
-                    'Design Custom',
-              link: `/${locale}/product/fabric?intent=custom_curtain`
+              text: locale === 'tr' ? 'Kumaş Kataloğu' :
+                locale === 'ru' ? 'Каталог тканей' :
+                  locale === 'pl' ? 'Katalog tkanin' :
+                    'Fabric Catalog',
+              link: `/${locale}/product/fabric`
             }}
             editId={heroSection?.id}
           />
         </div>
         <CategoryCards locale={locale} />
-        <div data-edit-zone="trust">
-          <CustomCurtainPromo locale={locale} editId={trustSection?.id} />
-        </div>
+        {CUSTOM_CURTAIN_ENABLED && (
+          <div data-edit-zone="trust">
+            <CustomCurtainPromo locale={locale} editId={trustSection?.id} />
+          </div>
+        )}
         <div data-edit-zone="history">
           <BrandHistoryPromo locale={locale} />
         </div>

@@ -163,6 +163,19 @@
   width: 100%;
 }
 
+.inputRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .inputRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 .inputWrapper {
   position: relative;
   display: flex;

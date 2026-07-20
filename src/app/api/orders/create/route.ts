@@ -36,10 +36,13 @@ export async function POST(request: NextRequest) {
       guest_first_name: guestInfo?.firstName || null,
       guest_last_name: guestInfo?.lastName || null,
 
-      // Payment info
-      payment_id: paymentData?.paymentId,
-      payment_status: 'success',
-      payment_method: 'iyzico_card',
+      // Payment info — no online payment gateway is in use anymore.
+      // Orders with a real paymentId (legacy/future card flow) are marked
+      // paid; everything else is a request our team follows up on to
+      // arrange payment (see the checkout page's contact notice).
+      payment_id: paymentData?.paymentId || null,
+      payment_status: paymentData?.paymentId ? 'success' : 'pending',
+      payment_method: paymentData?.paymentId ? 'iyzico_card' : 'contact_after_order',
 
       // Pricing info
       original_currency: originalCurrency || 'USD',

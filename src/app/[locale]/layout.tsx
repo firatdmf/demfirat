@@ -13,6 +13,7 @@ import GoogleAnalytics from "@/lib/googleAnalytics";
 import ScrollToTop from "@/components/ScrollToTop";
 import ScrollSmoother from "@/components/ScrollSmoother";
 import NewsletterPopup from "@/components/NewsletterPopup";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { Suspense } from "react";
 import EditorOverlay from "@/components/EditorOverlay";
 import { getStorefrontNav } from "@/lib/storefrontApi";
@@ -174,6 +175,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
           ></Footer>
           <MobileBottomNav />
           <NewsletterPopup locale={locale} />
+          <WhatsAppButton />
           {/* <HelpWidget /> */}
           {/* Storefront visual editor — only renders when ?edit=1 (ERP iframe). */}
           <Suspense fallback={null}>
