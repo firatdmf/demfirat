@@ -84,16 +84,17 @@ export default function Contact() {
           <h2>{t('ManufacturingPlant')} (Tekirdağ, Türkiye)</h2>
           <h4>{t('Representative')}:</h4>
           <p>Cuma Öztürk</p>
+          <p>Muhammed Fırat Öztürk</p>
           <h4>{t('Phone')}:</h4>
-          <p>+90 (282) 675-1552 (Office)</p>
-          <p>+90 (533) 544-2525 (Mobile)</p>
+          <p>+90 (533) 544-2525 (Cuma)</p>
+          <p>+90 (501) 057-1884 (Muhammed)</p>
           <h4>{t('Email')}:</h4>
           <p>info@demfirat.com ({t('GeneralInquiries')})</p>
           <p>karvenmuhasebe@gmail.com ({t('AccountingInquiries')})</p>
           <h4>{t('WorkHours')}</h4>
           <p>{t('WorkHour1')}</p>
           <h4>{t('Address')}:</h4>
-          <p>         
+          <p>
             Vakıflar OSB Mah D100 Cad No 38 <br />
             Ergene, Tekirdağ 59930 <br />
             Türkiye
@@ -133,7 +134,8 @@ export default function Contact() {
           <h4>{t('Address')}:</h4>
           <p>
 
-            Kemalpaşa Mah Gençtürk Cad No 21A <br />
+            Kemalpaşa Mah Gümrük Emini Sk <br />
+            Serap Apt No 20 2. Kat <br />
             Fatih, İstanbul 34134 <br />
             Türkiye
           </p>
@@ -159,7 +161,7 @@ export default function Contact() {
           <p>
 
             Mesihpaşa Mah Hayriye Tüccarı Cad <br />
-            Fatih İstanbul, 34130 <br />
+            Fatih, İstanbul 34130 <br />
             Türkiye
           </p>
           <h4>{t('ProductLines')}:</h4>

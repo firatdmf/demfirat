@@ -43,7 +43,7 @@ function About() {
           year: '2020',
           title: 'GRATITUDE',
           description: 'Having started a successful company and being able take care of his family has made the dreams come true. Dem Fırat Karven started as a small family-run textile shop in Istanbul in 1991. Today we grew into a manufacturing plant that produces over 20 million yards of fabric every month and supplies all around the globe with its strong supply chain network. The growth has been an exciting and ever-changing journey. However, our core values have always stayed the same. Our growing family is what encourages us to continue providing high-quality products and exceptional customer service.',
-          image: '/media/russia_fair_pic.jpg'
+          image: '/media/demfirat-karven-hometex-may-2026.avif'
         }
       ]
     },
@@ -119,7 +119,7 @@ function About() {
           year: '2020',
           title: 'БЛАГОДАРНОСТЬ',
           description: 'Создание успешной компании и возможность заботиться о своей семье воплотили мечты в реальность. Dem Fırat Karven начинался как небольшой семейный текстильный магазин в Стамбуле в 1991 году. Сегодня мы выросли в производственное предприятие, которое производит более 20 миллионов метров ткани каждый месяц и поставляет продукцию по всему миру благодаря своей мощной сети поставок. Рост был захватывающим и постоянно меняющимся путешествием. Однако наши основные ценности всегда оставались неизменными. Наша растущая семья - это то, что побуждает нас продолжать предоставлять высококачественную продукцию и исключительное обслуживание клиентов.',
-          image: '/media/russia_fair_pic.jpg'
+          image: '/media/demfirat-karven-hometex-may-2026.avif'
         }
       ]
     },
@@ -157,7 +157,7 @@ function About() {
           year: '2020',
           title: 'WDZIĘCZNOŚĆ',
           description: 'Założenie udanej firmy i możliwość zaopiekowania się rodziną sprawiły, że marzenia się spełniły. Dem Fırat Karven zaczynał jako mały rodzinny sklep tekstylny w Stambule w 1991 roku. Dziś wyrosliśmy na zakład produkcyjny, który produkuje ponad 20 milionów metrów tkaniny miesięcznie i dostarcza produkty na cały świat dzięki silnej sieci dostaw. Wzrost był ekscytującą i stale zmieniającą się podróżą. Jednak nasze podstawowe wartości zawsze pozostawały takie same. Nasza rosnąca rodzina jest tym, co motywuje nas do dalszego dostarczania wysokiej jakości produktów i wyjątkowej obsługi klienta.',
-          image: '/media/russia_fair_pic.jpg'
+          image: '/media/demfirat-karven-hometex-may-2026.avif'
         }
       ]
     }
