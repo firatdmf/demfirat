@@ -121,11 +121,11 @@ export default function Contact() {
           <h4>{t('Representative')}:</h4>
           <p>Muhammed Fırat Öztürk</p>
           <p>Özcan Öztürk</p>
-          <p>Devrim Eraslan</p>
+          <p>Mirza Öztürk</p>
           <h4>{t('Phone')}:</h4>
           <p>+90 (501) 057-1884 (Muhammed Fırat)</p>
           <p>+90 (555) 087-5555 (Özcan)</p>
-          <p>+90 (543) 440-2157 (Devrim)</p>
+          <p>+90 (501) 007-0777 (Mirza)</p>
           <h4>{t('Email')}:</h4>
           <p>krvn.dmf@gmail.com</p>
           <p>info@demfirat.com</p>
