@@ -87,7 +87,6 @@ export default async function Home(props: PageProps<'/[locale]'>) {
   // const sliderLocale = await getTranslations("Slider");
   // const ProductsLocale = await getTranslations("Products");
   const { locale } = await props.params;
-  console.log("your locale is", locale);
 
   const sliderLocale = await getTranslations({ locale, namespace: "Slider" });
   const productsLocale = await getTranslations({ locale, namespace: "Products" });
