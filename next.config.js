@@ -31,26 +31,41 @@ const nextConfig = {
   // to our client bundle at all. Do not show them on the browser (no client side, only server side)
   serverExternalPackages: ["@prisma/client", "bcrypt", "iyzipay"],
 
-  // Cache headers for static assets
+  // Cache headers.
+  //
+  // The catch-all HTML rule must NOT match static assets. Next applies every
+  // matching rule, so a bare '/:path*' catch-all folded its s-maxage=300 into
+  // the asset rules as well. That capped Cloudflare's edge TTL at 5 minutes and
+  // made every PoP re-pull the full media payload from the origin twelve times
+  // an hour. The negative lookahead keeps the two classes apart.
   async headers() {
+    const ASSET_EXT = 'svg|jpg|jpeg|png|gif|ico|webp|avif|mp4|webm|woff|woff2|ttf|eot';
+    const HTML_CACHE = 'public, max-age=0, s-maxage=300, stale-while-revalidate=600';
     return [
       {
-        source: '/:all*(svg|jpg|jpeg|png|gif|ico|webp|avif|mp4|webm|woff|woff2|ttf|eot)',
+        // Files under public/ keep stable names across deploys, so they are
+        // cached long but not 'immutable' — replacing one still takes effect
+        // after a Cloudflare purge, which 'immutable' would ignore for a year.
+        source: `/:all*(${ASSET_EXT})`,
         headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'Cache-Control', value: 'public, max-age=604800, s-maxage=2592000, stale-while-revalidate=86400' },
         ],
       },
       {
+        // Content-hashed by the build — safe to pin forever.
         source: '/_next/static/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
       {
-        source: '/:path*',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=0, s-maxage=300, stale-while-revalidate=600' },
-        ],
+        // The bare root, which the parameterised pattern below cannot match.
+        source: '/',
+        headers: [{ key: 'Cache-Control', value: HTML_CACHE }],
+      },
+      {
+        source: `/:path((?!_next/static/)(?!.*\\.(?:${ASSET_EXT})$).*)`,
+        headers: [{ key: 'Cache-Control', value: HTML_CACHE }],
       },
     ];
   },
