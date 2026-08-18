@@ -8,6 +8,15 @@ interface BrandHistoryPromoProps {
   locale: string;
 }
 
+// The pair renders into a 4/5 box that is ~290px wide on desktop and ~45vw on
+// mobile, so 640w covers most screens and 1280w covers high-DPR. The .png
+// originals were 2816x1536 opaque-alpha files weighing 6.4MB each, served raw
+// from the origin because next/image optimisation is disabled.
+const IMG_SIZES = '(max-width: 768px) 45vw, 290px';
+
+const srcSet = (base: string, ext: 'avif' | 'webp') =>
+  [640, 1280].map((w) => `/media/brand-section/${base}-${w}.${ext} ${w}w`).join(', ');
+
 export default function BrandHistoryPromo({ locale }: BrandHistoryPromoProps) {
   const subtitle = locale === 'tr' ? "1991'DEN BERİ ÖZENLE" :
     locale === 'ru' ? 'С ЗАБОТОЙ С 1991 ГОДА' :
@@ -70,24 +79,40 @@ export default function BrandHistoryPromo({ locale }: BrandHistoryPromoProps) {
           {/* Sağ: İkili Görsel Vitrini */}
           <div className={classes.imageBlock}>
             <div className={classes.imageContainerLeft}>
-              <img 
-                src="/media/brand-section/image-1.png" 
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/media/young_Cuma_working.webp";
-                }}
-                alt="Dem Fırat craftsmanship history" 
-                className={classes.img}
-              />
+              <picture>
+                <source type="image/avif" sizes={IMG_SIZES} srcSet={srcSet('image-1', 'avif')} />
+                <source type="image/webp" sizes={IMG_SIZES} srcSet={srcSet('image-1', 'webp')} />
+                <img
+                  src="/media/brand-section/image-1-1280.jpg"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/media/young_Cuma_working.webp";
+                  }}
+                  alt="Dem Fırat craftsmanship history"
+                  className={classes.img}
+                  width={1280}
+                  height={698}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
             <div className={classes.imageContainerRight}>
-              <img 
-                src="/media/brand-section/image-2.png" 
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/media/oldStoreFrontPic.jpg";
-                }}
-                alt="Dem Fırat legacy" 
-                className={classes.img}
-              />
+              <picture>
+                <source type="image/avif" sizes={IMG_SIZES} srcSet={srcSet('image-2', 'avif')} />
+                <source type="image/webp" sizes={IMG_SIZES} srcSet={srcSet('image-2', 'webp')} />
+                <img
+                  src="/media/brand-section/image-2-1280.jpg"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/media/oldStoreFrontPic.jpg";
+                  }}
+                  alt="Dem Fırat legacy"
+                  className={classes.img}
+                  width={1280}
+                  height={698}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
           </div>
         </div>

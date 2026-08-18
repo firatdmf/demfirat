@@ -200,7 +200,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
       date: "2025-11-05",
     },
     {
-      image: "/media/client-images/maria.jpg",
+      image: "/media/client-images/maria.webp",
       name: "Maria",
       review: homeReviewsLocale("review_5_text"),
       date: "2025-12-22",
