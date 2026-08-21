@@ -532,6 +532,9 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   // "altin_yarimat", zero-stock "darkorchid") must not surface as options.
   const isSellableVariant = (variant: ProductVariant): boolean => {
     if (variant.variant_featured === false) return false;
+    // Made to order: the warehouse doesn't carry it, so its quantity says
+    // nothing about whether it can be bought.
+    if (variant.stock_tracked === false) return true;
     if (variant.variant_quantity != null && Number(variant.variant_quantity) <= 0) return false;
     return true;
   };

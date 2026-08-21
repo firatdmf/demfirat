@@ -738,6 +738,37 @@
 }
 
 
+/* In-stock line — the quantity actually held, for variants the warehouse
+   carries. Quiet green: it is information, not urgency (that is lowStock). */
+.inStockBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  color: #15803d;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Made to order — no quantity to quote, so it reads as a lead-time note. */
+.madeToOrderBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  color: #1d4ed8;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 /* Color Swatches - Refined */
 .color_swatches {
   display: flex;

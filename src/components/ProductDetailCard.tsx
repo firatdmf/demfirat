@@ -335,7 +335,8 @@ function ProductDetailCard({
         const matchingVariants = eligibleVariants.filter(variant =>
           variant.product_variant_attribute_values?.includes(attrValue.id)
         );
-        if (matchingVariants.length > 0 && matchingVariants.every(v => Number(v.variant_quantity ?? 0) <= 0)) {
+        if (matchingVariants.length > 0 && matchingVariants.every(
+              v => v.stock_tracked !== false && Number(v.variant_quantity ?? 0) <= 0)) {
           disabled.add(attrValue.product_variant_attribute_value);
         }
       }
@@ -366,8 +367,13 @@ function ProductDetailCard({
     });
   }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
 
-  // Check if currently selected variant is out of stock
-  const isCurrentOutOfStock = selectedVariant ? Number(selectedVariant.variant_quantity ?? 0) <= 0 : false;
+  // Check if currently selected variant is out of stock. A variant the
+  // warehouse does not carry (stock_tracked === false) has no quantity to be
+  // out of — it is manufactured on demand, so it is always orderable.
+  const isMadeToOrder = selectedVariant?.stock_tracked === false;
+  const isCurrentOutOfStock = selectedVariant && !isMadeToOrder
+    ? Number(selectedVariant.variant_quantity ?? 0) <= 0
+    : false;
 
   // Sayfa yüklenince en üste scroll yap
   useEffect(() => {
@@ -1743,6 +1749,17 @@ function ProductDetailCard({
                 const productQty = Number(product.quantity ?? 0);
                 const qty = variantQty ?? productQty;
 
+                if (isMadeToOrder) {
+                  return (
+                    <span className={classes.madeToOrderBadge}>
+                      {locale === 'tr' ? 'Siparişe özel üretilir'
+                        : locale === 'ru' ? 'Изготавливается на заказ'
+                        : locale === 'pl' ? 'Produkowane na zamówienie'
+                        : 'Manufactured on demand'}
+                    </span>
+                  );
+                }
+
                 if (isCurrentOutOfStock) {
                   // Fabric is produced/imported to order — zero stock is a
                   // lead-time note, not a purchase blocker (button stays live).
@@ -1754,11 +1771,26 @@ function ProductDetailCard({
                     </span>
                   );
                 }
-                const lowStockThreshold = product.unit_of_measurement?.toLowerCase() === 'meter' ? 30 : 5;
+                const isMeters = product.unit_of_measurement?.toLowerCase() === 'meter';
+                const lowStockThreshold = isMeters ? 30 : 5;
                 if (qty > 0 && qty <= lowStockThreshold) {
                   return (
                     <span className={classes.lowStockBadge}>
                       🔥 {locale === 'tr' ? 'Son stoklar! Tükenmeden sipariş verin.' : locale === 'ru' ? 'Последние штуки! Закажите пока есть в наличии.' : locale === 'pl' ? 'Ostatnie sztuki! Zamów zanim się skończą.' : 'Low stock! Order before it sells out.'}
+                    </span>
+                  );
+                }
+                // Healthy stock used to render nothing at all, so a variant the
+                // warehouse actually holds showed no quantity anywhere. Say how
+                // much there is — the number is now live from the rolls.
+                if (qty > 0) {
+                  const amount = `${Number.isInteger(qty) ? qty : qty.toFixed(2)}${isMeters ? ' m' : ''}`;
+                  return (
+                    <span className={classes.inStockBadge}>
+                      {locale === 'tr' ? `Stokta: ${amount}`
+                        : locale === 'ru' ? `В наличии: ${amount}`
+                        : locale === 'pl' ? `W magazynie: ${amount}`
+                        : `In stock: ${amount}`}
                     </span>
                   );
                 }

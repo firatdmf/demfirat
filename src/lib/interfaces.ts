@@ -50,6 +50,9 @@ export type ProductVariant = {
   variant_price: number | null;
   variant_cost: number | null;
   variant_featured: boolean | null;
+  /** False when the warehouse doesn't carry this variant, so there is no
+   *  quantity to quote — it is made to order. Absent on older payloads. */
+  stock_tracked?: boolean;
   product_id: bigint | null;
   primary_image?: string;
   product_variant_attribute_values: bigint[];

@@ -20,6 +20,8 @@ interface ApiVariant {
     variant_price: number | null;
     variant_prices: Record<string, number | null>;
     variant_quantity: number | null;
+    /** False = made to order (the warehouse doesn't carry it). */
+    stock_tracked?: boolean;
     product_variant_attribute_values: number[];
 }
 
@@ -237,7 +239,13 @@ export async function GET() {
                     const price = `${Number(tryPrice).toFixed(2)} TRY`;
 
                     const quantity = variant.variant_quantity ?? 0;
-                    const availability = quantity > 0 ? 'in stock' : 'out of stock';
+                    // Made-to-order colours have no stock to count but are
+                    // perfectly orderable. 'available for order' is the honest
+                    // signal — it says buyable-with-a-lead-time rather than
+                    // claiming stock we do not hold.
+                    const availability = variant.stock_tracked === false
+                        ? 'available for order'
+                        : quantity > 0 ? 'in stock' : 'out of stock';
                     // Ensure unique ID: if variant_sku equals product sku, append variant id
                     const rawVariantId = variant.variant_sku || `${product.sku}_${variant.id}`;
                     const itemId = rawVariantId === product.sku ? `${product.sku}_v${variant.id}` : rawVariantId;
