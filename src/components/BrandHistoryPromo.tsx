@@ -87,7 +87,7 @@ export default function BrandHistoryPromo({ locale }: BrandHistoryPromoProps) {
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "/media/young_Cuma_working.webp";
                   }}
-                  alt="Dem Fırat craftsmanship history"
+                  alt="Floor-to-ceiling sheer linen curtains filtering daylight in a sunlit living room with a grey sofa and wooden floors"
                   className={classes.img}
                   width={1280}
                   height={698}
@@ -105,7 +105,7 @@ export default function BrandHistoryPromo({ locale }: BrandHistoryPromoProps) {
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "/media/oldStoreFrontPic.jpg";
                   }}
-                  alt="Dem Fırat legacy"
+                  alt="A woman smiling as she draws back a white sheer curtain panel at a sunlit window"
                   className={classes.img}
                   width={1280}
                   height={698}
