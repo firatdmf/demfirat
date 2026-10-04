@@ -51,7 +51,7 @@ function About() {
           title: 'GRATITUDE',
           description:
             'Having started a successful company and being able take care of his family has made the dreams come true. Demfirat Karven started as a small family-run textile shop in Istanbul in 1991. Today we grew into a manufacturing plant that produces over 20 million yards of fabric every month and supplies all around the globe with its strong supply chain network. The growth has been an exciting and ever-changing journey. However, our core values have always stayed the same. Our growing family is what encourages us to continue providing high-quality products and exceptional customer service.',
-          image: '/media/russia_fair_pic.jpg',
+          image: '/media/moscow_fair_pic.jpg',
         },
       ],
     },
@@ -95,7 +95,7 @@ function About() {
           title: 'MİNNETTARLIK',
           description:
             "Başarılı bir şirket kurmak ve ailesine bakabilmek hayallerini gerçeğe dönüştürdü. Demfirat Karven, 1991 yılında İstanbul'da küçük bir aile tekstil dükkanı olarak başladı. Bugün her ay 20 milyon metreden fazla kumaş üreten ve güçlü tedarik zinciri ağıyla dünya geneline ürün sağlayan bir üretim tesisine dönüştük. Bu büyüme heyecan verici ve sürekli değişen bir yolculuk oldu. Ancak temel değerlerimiz her zaman aynı kaldı. Büyüyen ailemiz, yüksek kaliteli ürünler ve olağanüstü müşteri hizmeti sunmaya devam etmemiz için bizi motive ediyor.",
-          image: '/media/russia_fair_pic.jpg',
+          image: '/media/moscow_fair_pic.jpg',
         },
       ],
     },

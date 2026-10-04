@@ -12,7 +12,7 @@ const timelineImages: Record<string, string> = {
   '1997': '/media/oldStoreFrontPic.jpg',
   '2004': '/media/Cuma_in_Russian_Warehouse.webp',
   '2014': '/media/factory/karven-factory-building-exterior-resized.webp',
-  '2018': '/media/demfirat-karven-trade-fair-2018.avif',
+  '2018': '/media/moscow_fair_pic.avif',
   '2025': '/media/demfirat-karven-hometex-may-2025.avif'
 };
 
