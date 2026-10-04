@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
                 <h1 style="color: #2c2c2c; text-align: center; font-family: Georgia, serif; font-size: 28px; margin: 0 0 20px 0;">Kataloğunuz Hazır! 📖</h1>
                 
                 <p style="color: #666; font-size: 16px; line-height: 1.6; text-align: center;">
-                    Merhaba ${name}, Karven & Dem Fırat ürün kataloğumuz bu e-postanın ekinde yer almaktadır.
+                    Merhaba ${name}, Karven & Demfirat ürün kataloğumuz bu e-postanın ekinde yer almaktadır.
                 </p>
             </div>
             
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         const attachments = [];
         if (pdfBuffer) {
             attachments.push({
-                filename: `DemFirat-Katalog-${Date.now()}.pdf`,
+                filename: `Demfirat-Katalog-${Date.now()}.pdf`,
                 content: pdfBuffer,
                 contentType: 'application/pdf'
             });

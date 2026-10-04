@@ -22,7 +22,7 @@ const FALLBACK_POSTS: InstagramPost[] = [
         id: 'fallback-1',
         media_url: '/media/factory/schiffli-embroidery-3.webp',
         permalink: 'https://www.instagram.com/karvenhomedecor',
-        caption: 'Dem Fırat - Zarafet Nakışla Buluşuyor'
+        caption: 'Demfirat - Zarafet Nakışla Buluşuyor'
     },
     {
         id: 'fallback-2',
@@ -195,7 +195,7 @@ export default function InstagramFeed({ locale }: InstagramFeedProps) {
                             <div className={classes.imageWrapper}>
                                 <img
                                     src={post.media_type === 'VIDEO' ? (post.thumbnail_url || post.media_url) : post.media_url}
-                                    alt={post.caption || 'Dem Fırat Instagram Post'}
+                                    alt={post.caption || 'Demfirat Instagram Post'}
                                     className={classes.image}
                                     loading="lazy"
                                 />

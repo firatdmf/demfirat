@@ -689,7 +689,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <div className={classes.signatures}>
                         <div className={classes.signatureBlock}>
                             <p><strong>{locale === 'tr' ? 'SATICI' : locale === 'ru' ? 'ПРОДАВЕЦ' : locale === 'pl' ? 'SPRZEDAWCA' : 'SELLER'}</strong></p>
-                            <p>Dem Fırat Karven Tekstil</p>
+                            <p>Demfirat Karven Tekstil</p>
                         </div>
                         <div className={classes.signatureBlock}>
                             <p><strong>{locale === 'tr' ? 'ALICI' : locale === 'ru' ? 'ПОКУПАТЕЛЬ' : locale === 'pl' ? 'KUPUJĄCY' : 'BUYER'}</strong></p>

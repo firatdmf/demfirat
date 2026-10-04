@@ -26,12 +26,12 @@ export default function BrandHistoryPromo({ locale }: BrandHistoryPromoProps) {
   const title = "DEMFIRAT";
 
   const description = locale === 'tr' 
-    ? "Dem Fırat olarak, 1991 yılından bu yana evinizi zarafet ve konforla buluşturuyoruz. Seçkin kumaş koleksiyonlarımız ve titiz işçiliğimiz ile her yaşam alanına değer katıyoruz."
+    ? "Demfirat olarak, 1991 yılından bu yana evinizi zarafet ve konforla buluşturuyoruz. Seçkin kumaş koleksiyonlarımız ve titiz işçiliğimiz ile her yaşam alanına değer katıyoruz."
     : locale === 'ru'
-    ? "С 1991 года Dem Fırat наполняет ваш дом элегантностью и уютом. Наши изысканные ткани и безупречный пошив преображают любое жилое пространство."
+    ? "С 1991 года Demfirat наполняет ваш дом элегантностью и уютом. Наши изысканные ткани и безупречный пошив преображают любое жилое пространство."
     : locale === 'pl'
-    ? "Od 1991 roku Dem Fırat łączy elegancję i komfort w Twoim domu. Nasze starannie dobrane tkaniny i precyzyjne rzemiosło wnoszą wyjątkową wartość do każdej przestrzeni."
-    : "Since 1991, Dem Fırat has been bringing elegance and comfort to your home. With our exquisite fabric collections and precise craftsmanship, we elevate every living space.";
+    ? "Od 1991 roku Demfirat łączy elegancję i komfort w Twoim domu. Nasze starannie dobrane tkaniny i precyzyjne rzemiosło wnoszą wyjątkową wartość do każdej przestrzeni."
+    : "Since 1991, Demfirat has been bringing elegance and comfort to your home. With our exquisite fabric collections and precise craftsmanship, we elevate every living space.";
 
   const ctaText = locale === 'tr' ? 'Hikayemizi Keşfedin' :
     locale === 'ru' ? 'Наша история' :

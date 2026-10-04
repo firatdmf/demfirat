@@ -50,7 +50,7 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
 
                 <div className={styles.header}>
                     <h2>Kataloğunuzu İndirin</h2>
-                    <p>Bilgilerinizi girin, Karven & Dem Fırat PDF kataloğunu anında e-posta adresinize gönderelim.</p>
+                    <p>Bilgilerinizi girin, Karven & Demfirat PDF kataloğunu anında e-posta adresinize gönderelim.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className={styles.formContainer}>

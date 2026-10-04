@@ -25,10 +25,10 @@ export async function generateMetadata(props: PageProps<'/[locale]'>): Promise<M
   };
 
   const keywords: Record<string, string> = {
-    tr: 'Demfirat, Karven, Dem Fırat, perde, tül, kumaş, ev tekstili, lüks perde, özel dikim perde, hazır perde, Türk perde üreticisi, nakışlı perde',
-    en: 'Demfirat, Karven, Dem Firat, curtain, tulle, fabric, home textiles, luxury curtains, custom curtains, ready-made curtains, Turkish curtain manufacturer',
+    tr: 'Demfirat, Karven, Demfirat, perde, tül, kumaş, ev tekstili, lüks perde, özel dikim perde, hazır perde, Türk perde üreticisi, nakışlı perde',
+    en: 'Demfirat, Karven, Demfirat, curtain, tulle, fabric, home textiles, luxury curtains, custom curtains, ready-made curtains, Turkish curtain manufacturer',
     ru: 'Demfirat, Karven, Дем Фырат, шторы, тюль, ткани, домашний текстиль, роскошные шторы, шторы на заказ, турецкий производитель штор',
-    pl: 'Demfirat, Karven, Dem Firat, zasłony, firany, tkaniny, tekstylia domowe, luksusowe zasłony, zasłony na wymiar, turecki producent zasłon',
+    pl: 'Demfirat, Karven, Demfirat, zasłony, firany, tkaniny, tekstylia domowe, luksusowe zasłony, zasłony na wymiar, turecki producent zasłon',
   };
 
   return {
@@ -225,7 +225,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     '@type': 'Organization',
     '@id': `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/#organization`,
     name: 'DEMFIRAT KARVEN',
-    alternateName: ['Dem Fırat', 'Demfirat Karven', 'Karven Home', 'Dem Fırat Karven', 'Karven Home Decor'],
+    alternateName: ['Demfirat', 'Demfirat Karven', 'Karven Home', 'Demfirat Karven', 'Karven Home Decor'],
     url: 'https://www.demfirat.com',
     logo: {
       '@type': 'ImageObject',
@@ -235,8 +235,8 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     },
     image: 'https://www.demfirat.com/media/karvenLogo.png',
     description: locale === 'tr'
-      ? "1991'den beri lüks ev tekstili, tül ve perde üretimi yapan Dem Fırat Karven."
-      : 'Dem Fırat Karven — luxury home textiles, tulle, and curtain manufacturer since 1991.',
+      ? "1991'den beri lüks ev tekstili, tül ve perde üretimi yapan Demfirat Karven."
+      : 'Demfirat Karven — luxury home textiles, tulle, and curtain manufacturer since 1991.',
     foundingDate: '1991',
     founder: {
       '@type': 'Person',
@@ -263,7 +263,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     '@type': 'WebSite',
     '@id': `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/#website`,
     name: 'DEMFIRAT KARVEN',
-    alternateName: 'Dem Fırat Karven',
+    alternateName: 'Demfirat Karven',
     url: 'https://www.demfirat.com',
     publisher: {
       '@id': `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/#organization`,

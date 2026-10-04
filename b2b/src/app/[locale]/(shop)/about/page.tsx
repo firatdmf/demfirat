@@ -15,7 +15,7 @@ function About() {
       hero: {
         title: "FOUNDER'S STORY",
         subtitle:
-          'Our parent company, Dem Fırat Karven Tekstil, was established in 1991 in Istanbul by Cuma Ozturk. Cuma was the eldest child in his family. He grew up in the east, rural side of Turkey. Due to limited resources during his childhood, he decided to pursue an entrepreneurial journey to support his family.',
+          'Our parent company, Demfirat Karven Tekstil, was established in 1991 in Istanbul by Cuma Ozturk. Cuma was the eldest child in his family. He grew up in the east, rural side of Turkey. Due to limited resources during his childhood, he decided to pursue an entrepreneurial journey to support his family.',
       },
       timeline: [
         {
@@ -36,7 +36,7 @@ function About() {
           year: '2004',
           title: 'FIRST STEP TO OVERSEAS',
           description:
-            'Dem Fırat Karven opened its first abroad warehouse in Moscow and started supplying Turkish textiles to the Russian market, later expanding to Ukraine, Belarus, and Kazakhstan.',
+            'Demfirat Karven opened its first abroad warehouse in Moscow and started supplying Turkish textiles to the Russian market, later expanding to Ukraine, Belarus, and Kazakhstan.',
           image: '/media/Cuma_in_Russian_Warehouse.webp',
         },
         {
@@ -50,7 +50,7 @@ function About() {
           year: '2020',
           title: 'GRATITUDE',
           description:
-            'Having started a successful company and being able take care of his family has made the dreams come true. Dem Fırat Karven started as a small family-run textile shop in Istanbul in 1991. Today we grew into a manufacturing plant that produces over 20 million yards of fabric every month and supplies all around the globe with its strong supply chain network. The growth has been an exciting and ever-changing journey. However, our core values have always stayed the same. Our growing family is what encourages us to continue providing high-quality products and exceptional customer service.',
+            'Having started a successful company and being able take care of his family has made the dreams come true. Demfirat Karven started as a small family-run textile shop in Istanbul in 1991. Today we grew into a manufacturing plant that produces over 20 million yards of fabric every month and supplies all around the globe with its strong supply chain network. The growth has been an exciting and ever-changing journey. However, our core values have always stayed the same. Our growing family is what encourages us to continue providing high-quality products and exceptional customer service.',
           image: '/media/russia_fair_pic.jpg',
         },
       ],
@@ -59,7 +59,7 @@ function About() {
       hero: {
         title: 'KURUCUNUN HİKAYESİ',
         subtitle:
-          "Ana şirketimiz Dem Fırat Karven Tekstil, 1991 yılında İstanbul'da Cuma Öztürk tarafından kurulmuştur. Cuma, ailesinin en büyük çocuğuydu. Türkiye'nin doğusundaki kırsal kesimde büyüdü. Çocukluğundaki kısıtlı imkanlar nedeniyle, ailesini desteklemek için girişimcilik yolculuğuna çıkmaya karar verdi.",
+          "Ana şirketimiz Demfirat Karven Tekstil, 1991 yılında İstanbul'da Cuma Öztürk tarafından kurulmuştur. Cuma, ailesinin en büyük çocuğuydu. Türkiye'nin doğusundaki kırsal kesimde büyüdü. Çocukluğundaki kısıtlı imkanlar nedeniyle, ailesini desteklemek için girişimcilik yolculuğuna çıkmaya karar verdi.",
       },
       timeline: [
         {
@@ -80,7 +80,7 @@ function About() {
           year: '2004',
           title: 'YURT DIŞINA İLK ADIM',
           description:
-            "Dem Fırat Karven, Moskova'da ilk yurt dışı deposunu açtı ve Türk tekstillerini Rusya pazarına sunmaya başladı; daha sonra Ukrayna, Belarus ve Kazakistan'a genişledi.",
+            "Demfirat Karven, Moskova'da ilk yurt dışı deposunu açtı ve Türk tekstillerini Rusya pazarına sunmaya başladı; daha sonra Ukrayna, Belarus ve Kazakistan'a genişledi.",
           image: '/media/Cuma_in_Russian_Warehouse.webp',
         },
         {
@@ -94,7 +94,7 @@ function About() {
           year: '2020',
           title: 'MİNNETTARLIK',
           description:
-            "Başarılı bir şirket kurmak ve ailesine bakabilmek hayallerini gerçeğe dönüştürdü. Dem Fırat Karven, 1991 yılında İstanbul'da küçük bir aile tekstil dükkanı olarak başladı. Bugün her ay 20 milyon metreden fazla kumaş üreten ve güçlü tedarik zinciri ağıyla dünya geneline ürün sağlayan bir üretim tesisine dönüştük. Bu büyüme heyecan verici ve sürekli değişen bir yolculuk oldu. Ancak temel değerlerimiz her zaman aynı kaldı. Büyüyen ailemiz, yüksek kaliteli ürünler ve olağanüstü müşteri hizmeti sunmaya devam etmemiz için bizi motive ediyor.",
+            "Başarılı bir şirket kurmak ve ailesine bakabilmek hayallerini gerçeğe dönüştürdü. Demfirat Karven, 1991 yılında İstanbul'da küçük bir aile tekstil dükkanı olarak başladı. Bugün her ay 20 milyon metreden fazla kumaş üreten ve güçlü tedarik zinciri ağıyla dünya geneline ürün sağlayan bir üretim tesisine dönüştük. Bu büyüme heyecan verici ve sürekli değişen bir yolculuk oldu. Ancak temel değerlerimiz her zaman aynı kaldı. Büyüyen ailemiz, yüksek kaliteli ürünler ve olağanüstü müşteri hizmeti sunmaya devam etmemiz için bizi motive ediyor.",
           image: '/media/russia_fair_pic.jpg',
         },
       ],
