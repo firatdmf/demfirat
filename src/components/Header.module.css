@@ -37,7 +37,14 @@
 
 .marqueeContent {
   display: flex;
-  animation: marqueeScroll 60s linear infinite;
+  animation: marqueeScroll 90s linear infinite;
+  /* translate3d in the keyframes keeps this on its own compositor layer, so the
+     scroll is driven off the main thread and survives a busy render or a
+     scroll handler firing. backface-visibility stops Chrome re-rasterising the
+     text at every fractional offset, which reads as shimmer. */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
   will-change: transform;
 }
 
@@ -60,8 +67,16 @@
 }
 
 @keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Honour the OS setting — a permanently moving strip is a problem for some
+   readers. Park it at the start rather than hiding the messages. */
+@media (prefers-reduced-motion: reduce) {
+  .marqueeContent {
+    animation: none;
+  }
 }
 
 /* ── Main Bar (Single Line: logo + nav + icons) ── */
