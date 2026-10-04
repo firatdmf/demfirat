@@ -41,6 +41,7 @@ const nextConfig = {
   async headers() {
     const ASSET_EXT = 'svg|jpg|jpeg|png|gif|ico|webp|avif|mp4|webm|woff|woff2|ttf|eot';
     const HTML_CACHE = 'public, max-age=0, s-maxage=300, stale-while-revalidate=600';
+    const isProd = process.env.NODE_ENV === 'production';
     return [
       {
         // Files under public/ keep stable names across deploys, so they are
@@ -52,10 +53,17 @@ const nextConfig = {
         ],
       },
       {
-        // Content-hashed by the build — safe to pin forever.
+        // Content-hashed by the build — safe to pin forever. Only in production:
+        // 'immutable' tells the browser never to revalidate, and dev chunk URLs
+        // are reused as you edit, so a cached copy survives even a hard refresh
+        // (Turbopack injects the stylesheet link from JS, which a hard reload
+        // does not force-revalidate). no-store keeps dev edits visible.
         source: '/_next/static/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          {
+            key: 'Cache-Control',
+            value: isProd ? 'public, max-age=31536000, immutable' : 'no-store, must-revalidate',
+          },
         ],
       },
       {
