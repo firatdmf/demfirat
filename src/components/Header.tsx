@@ -15,14 +15,9 @@ import { useRouter, usePathname } from "next/navigation";
 import { getColorCode } from "@/lib/colorMap";
 import { getLocalizedProductField } from "@/lib/productUtils";
 import LoginModal from "./LoginModal";
-import type { NavItemDTO } from "@/lib/storefrontApi";
 
 interface HeaderProps {
   menuTArray: string[];
-  /** Storefront CMS nav items (optional). When provided, the editor
-   *  overlay can hover/select them; the existing hardcoded categories
-   *  still render so the live UI never goes blank if the API is down. */
-  initialNav?: NavItemDTO[] | null;
 }
 
 interface Product {
@@ -40,23 +35,9 @@ interface Product {
   description?: string;
 }
 
-function Header({ menuTArray, initialNav }: HeaderProps) {
+function Header({ menuTArray }: HeaderProps) {
   const { data: session, status } = useSession();
   const locale = useLocale();
-  // Bridge between Demfirat's hardcoded top-level nav and the ERP CMS:
-  // each nav slot looks up its DB record by href so the operator can
-  // rename it from the storefront panel.
-  const fieldLocale = locale === 'tr' ? 'tr' : 'en';
-  const navByHref = new Map<string, NavItemDTO>(
-    (initialNav ?? []).map((n) => [n.href, n]),
-  );
-  const navProps = (href: string, fallback: string) => {
-    const rec = navByHref.get(href);
-    return {
-      label: rec ? (fieldLocale === 'tr' ? rec.label.tr : rec.label.en) || fallback : fallback,
-      editAttr: rec ? `navmenu:${rec.id}:label_${fieldLocale}` : undefined,
-    };
-  };
   const { cartCount } = useCart();
   const { convertPrice, currency, setCurrency, symbol } = useCurrency();
   const router = useRouter();
@@ -291,18 +272,12 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
 
                 {/* PERDELER Dropdown */}
                 <div className={classes.navDropdown}>
-                  {(() => {
-                    const np = navProps('/product/all',
-                      locale === 'tr' ? 'Perdeler' : locale === 'ru' ? 'Шторы' : locale === 'pl' ? 'Zasłony' : 'Curtains');
-                    return (
-                      <Link href={`/${locale}/product/all`} className={classes.navLink} data-edit-text={np.editAttr}>
-                        {np.label}
-                        <svg className={classes.dropdownArrow} width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
-                          <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                        </svg>
-                      </Link>
-                    );
-                  })()}
+                  <Link href={`/${locale}/product/all`} className={classes.navLink}>
+                    {locale === 'tr' ? 'Perdeler' : locale === 'ru' ? 'Шторы' : locale === 'pl' ? 'Zasłony' : 'Curtains'}
+                    <svg className={classes.dropdownArrow} width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+                      <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    </svg>
+                  </Link>
                   <div className={classes.megaMenu}>
                     <div className={classes.megaMenuContent}>
                       <div className={classes.megaMenuCategories}>
@@ -326,55 +301,15 @@ function Header({ menuTArray, initialNav }: HeaderProps) {
                 {getTopNavItems(locale).map((item, idx) => (
                   <Link key={idx} href={item.href} className={classes.navLink}>{item.label}</Link>
                 ))}
-                {(() => {
-                  const np = navProps('/about', menuTArray[3]);
-                  return (
-                    <Link href={`/${locale}/about`} className={classes.navLink} data-edit-text={np.editAttr}>
-                      {np.label}
-                    </Link>
-                  );
-                })()}
-                {(() => {
-                  const np = navProps('/contact', menuTArray[4]);
-                  return (
-                    <Link href={`/${locale}/contact`} className={classes.navLink} data-edit-text={np.editAttr}>
-                      {np.label}
-                    </Link>
-                  );
-                })()}
-                {(() => {
-                  const np = navProps('/blog', t('blog'));
-                  return (
-                    <Link href={`/${locale}/blog`} className={classes.navLink} data-edit-text={np.editAttr}>
-                      {np.label}
-                    </Link>
-                  );
-                })()}
-                {/* Extra CMS nav items — anything the operator adds in
-                    ERP /storefront/menu/ that isn't one of the four
-                    hardcoded slots above (Perdeler/Hakkımızda/İletişim/
-                    Blog) is appended here, inline-editable + drag-
-                    reorderable. */}
-                {(() => {
-                  const reservedHrefs = new Set(['/product/all', '/about', '/contact', '/blog']);
-                  const extras = (initialNav ?? []).filter((it) => !reservedHrefs.has(it.href));
-                  if (extras.length === 0) return null;
-                  return (
-                    <span data-edit-sort-list="navmenu" style={{ display: 'inline-flex', gap: 'inherit' }}>
-                      {extras.map((it) => (
-                        <Link
-                          key={it.id}
-                          href={`/${locale}${it.href || '/products'}`}
-                          className={classes.navLink}
-                          data-edit-sort-id={it.id}
-                          data-edit-text={`navmenu:${it.id}:label_${fieldLocale}`}
-                        >
-                          {fieldLocale === 'tr' ? it.label.tr : it.label.en}
-                        </Link>
-                      ))}
-                    </span>
-                  );
-                })()}
+                <Link href={`/${locale}/about`} className={classes.navLink}>
+                  {menuTArray[3]}
+                </Link>
+                <Link href={`/${locale}/contact`} className={classes.navLink}>
+                  {menuTArray[4]}
+                </Link>
+                <Link href={`/${locale}/blog`} className={classes.navLink}>
+                  {t('blog')}
+                </Link>
               </nav>
 
               {/* Right Icons */}

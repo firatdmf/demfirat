@@ -306,7 +306,7 @@ export function mapDjangoToProducts(resp: DjangoApiResponse): Product[] {
     // localized description inside `p.description` as JSON:
     //   {"translations": {"tr": {"title": "...", "description": "..."}, "en": {...}}}
     // `p.title` itself is just the legacy plain-text fallback (often a
-    // dev placeholder like "BelinoPlus Erkek sdsds"), so the bilingual
+    // dev placeholder), so the bilingual
     // display name has to be parsed out of `p.description`.
     const titleBilingual = parseTranslated(p.description, 'title', p.title);
     const longDescHtml = parseTranslated(p.description, 'description', '');

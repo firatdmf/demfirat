@@ -1,5 +1,5 @@
 /* ============================================
-   Belino B2B Web — UI Kit styles
+   DEMFIRAT B2B Web — UI Kit styles
    ============================================ */
 
 .b2b-app { min-height: 100vh; background: var(--bel-paper); }
@@ -1663,7 +1663,7 @@
   .bel-qa-name { font-size: 17px; }
 }
 
-/* ============ ACCORDION (Belino editorial — exact match) ============ */
+/* ============ ACCORDION (editorial) ============ */
 .bel-accordion,
 .detail-accordion { border-top: 1px solid var(--bel-line-strong); }
 .acc-item { border-bottom: 1px solid var(--bel-line-strong); }

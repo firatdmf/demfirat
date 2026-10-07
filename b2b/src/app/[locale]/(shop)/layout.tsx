@@ -26,5 +26,5 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
       (p as any).fabric_type === 'blackout' || p.tags?.includes('blackout'),
     ).length,
   };
-  return <SiteShell initialNav={null} categoryCounts={categoryCounts}>{children}</SiteShell>;
+  return <SiteShell categoryCounts={categoryCounts}>{children}</SiteShell>;
 }

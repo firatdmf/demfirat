@@ -14,9 +14,6 @@ import ScrollToTop from "@/components/ScrollToTop";
 import ScrollSmoother from "@/components/ScrollSmoother";
 import NewsletterPopup from "@/components/NewsletterPopup";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import { Suspense } from "react";
-import EditorOverlay from "@/components/EditorOverlay";
-import { getStorefrontNav } from "@/lib/storefrontApi";
 
 
 // All fonts load through next/font (self-hosted, no render-blocking Google
@@ -47,10 +44,6 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
   // let headerT = useTranslations("Header");
   const headerT = await getTranslations({ locale, namespace: "Header" });
 
-  // Storefront CMS nav (Belino-style). Fail-soft: when the ERP is
-  // unreachable we get null and the Header falls back to its hardcoded
-  // categories untouched.
-  const initialNav = await getStorefrontNav();
   // console.log(typeof headerT("ShippingText"));
   // console.log(headerT.raw);
 
@@ -157,7 +150,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
         <Providers messages={messages} locale={locale}>
           <ScrollToTop />
           {/* <ScrollSmoother /> - Temporarily disabled */}
-          <Header menuTArray={menuTArray} initialNav={initialNav} />
+          <Header menuTArray={menuTArray} />
           {/* Spacer: pushes content below the fixed header */}
           <div style={{ height: 'var(--header-height, 96px)' }} aria-hidden="true" />
           {children}
@@ -177,10 +170,6 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
           <NewsletterPopup locale={locale} />
           <WhatsAppButton />
           {/* <HelpWidget /> */}
-          {/* Storefront visual editor — only renders when ?edit=1 (ERP iframe). */}
-          <Suspense fallback={null}>
-            <EditorOverlay />
-          </Suspense>
         </Providers>
       </body>
     </html>

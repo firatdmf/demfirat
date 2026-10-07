@@ -15,11 +15,9 @@ interface HeroVideoProps {
   /** Storefront HomeSection.id — when supplied, the visual editor
    *  (?edit=1) treats title/subtitle as inline-editable and the video
    *  region as a swappable image. */
-  editId?: number;
 }
 
-export default function HeroVideo({ videoSrc, title, subtitle, locale = 'en', showCatalogButton = false, primaryCta, secondaryCta, editId }: HeroVideoProps) {
-  const fieldLocale = locale === 'tr' ? 'tr' : 'en';
+export default function HeroVideo({ videoSrc, title, subtitle, locale = 'en', showCatalogButton = false, primaryCta, secondaryCta }: HeroVideoProps) {
   return (
     <div className={classes.heroVideoContainer}>
       <video
@@ -28,7 +26,6 @@ export default function HeroVideo({ videoSrc, title, subtitle, locale = 'en', sh
         loop
         muted
         playsInline
-        data-edit-image={editId ? `homesection:${editId}:image_url` : undefined}
       >
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.
@@ -55,13 +52,11 @@ export default function HeroVideo({ videoSrc, title, subtitle, locale = 'en', sh
             {subtitle && (
               <p
                 className={classes.heroSubtitle}
-                data-edit-text={editId ? `homesection:${editId}:eyebrow_${fieldLocale}` : undefined}
               >{subtitle}</p>
             )}
             {title && (
               <h1
                 className={classes.heroTitle}
-                data-edit-text={editId ? `homesection:${editId}:title_${fieldLocale}` : undefined}
               >{title}</h1>
             )}
 

@@ -74,7 +74,6 @@ import DraggableTestimonials from "@/components/DraggableTestimonials";
 import CustomCurtainPromo from "@/components/CustomCurtainPromo";
 import BrandHistoryPromo from "@/components/BrandHistoryPromo";
 import InstagramFeed from "@/components/InstagramFeed";
-import { getStorefrontHome } from "@/lib/storefrontApi";
 import { CUSTOM_CURTAIN_ENABLED } from "@/lib/featureFlags";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
@@ -90,39 +89,6 @@ export default async function Home(props: PageProps<'/[locale]'>) {
 
   const sliderLocale = await getTranslations({ locale, namespace: "Slider" });
   const productsLocale = await getTranslations({ locale, namespace: "Products" });
-
-  // Storefront CMS sections — used to assign `editId` on each home
-  // component so the visual editor can rename text + swap images
-  // in place (Belino-style). Fail-soft: when the API is down the
-  // values are undefined and components fall back to hardcoded copy.
-  const homeSections = await getStorefrontHome();
-  const heroSection = homeSections?.find((s) => s.kind === 'hero');
-  const trustSection = homeSections?.find((s) => s.kind === 'trust');
-  const featuredSection = homeSections?.find((s) => s.kind === 'featured');
-  const seasonsSection = homeSections?.find((s) => s.kind === 'seasons');
-
-  // The ERP CMS often has the English field filled with Turkish text
-  // (translations were never done). So for EN we only trust the CMS
-  // value when it actually differs from the Turkish one — otherwise we
-  // fall back to the hardcoded English copy. For TR we use the CMS value
-  // as-is. Returns undefined when there's nothing usable, so the caller's
-  // `|| fallback` still works.
-  const cmsText = (
-    field: { tr?: string; en?: string } | undefined,
-  ): string | undefined => {
-    if (!field) return undefined;
-    if (locale === 'tr') return field.tr || undefined;
-    const en = (field.en || '').trim();
-    const tr = (field.tr || '').trim();
-    // Case/diacritic-insensitive compare so "Premium Tekstil Koleksiyonu"
-    // still counts as == "PREMİUM TEKSTİL KOLEKSİYONU" (English field left
-    // as Turkish, just re-cased). Fold Turkish İ/ı → i before comparing.
-    const norm = (s: string) =>
-      s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ı/g, 'i');
-    // Empty, or English is really just the Turkish text → skip → fallback.
-    if (!en || norm(en) === norm(tr)) return undefined;
-    return en;
-  };
 
   // This is for fetching product categories from Backend API
   const get_product_categories_API_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product_categories`);
@@ -308,22 +274,17 @@ export default async function Home(props: PageProps<'/[locale]'>) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <div className="HomePage">
-        {/* Editable section wrappers — clicked in ?edit=1 mode they
-            dispatch a `select` postMessage; the ERP CMS receives it and
-            opens that section's edit form. */}
-        <div data-edit-zone="hero">
+        <div>
           <HeroVideo
             videoSrc="https://demfiratkarven.b-cdn.net/website-videos/new_hero.mp4"
-            subtitle={cmsText(heroSection?.eyebrow)
-              || (locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
-                  locale === 'ru' ? 'Премиальная текстильная коллекция' :
-                    locale === 'pl' ? 'Kolekcja Premium Tekstyliów' :
-                      'Premium Textile Collection')}
-            title={cmsText(heroSection?.title)
-              || (locale === 'tr' ? 'Zarafet Nakışla Buluşuyor' :
-                  locale === 'ru' ? 'Где элегантность встречается с вышивкой' :
-                    locale === 'pl' ? 'Gdzie elegancja spotyka haft' :
-                      'Where Elegance Meets Embroidery')}
+            subtitle={locale === 'tr' ? 'Premium Tekstil Koleksiyonu' :
+              locale === 'ru' ? 'Премиальная текстильная коллекция' :
+                locale === 'pl' ? 'Kolekcja Premium Tekstyliów' :
+                  'Premium Textile Collection'}
+            title={locale === 'tr' ? 'Zarafet Nakışla Buluşuyor' :
+              locale === 'ru' ? 'Где элегантность встречается с вышивкой' :
+                locale === 'pl' ? 'Gdzie elegancja spotyka haft' :
+                  'Where Elegance Meets Embroidery'}
             locale={locale}
             showCatalogButton={false}
             primaryCta={{
@@ -340,29 +301,27 @@ export default async function Home(props: PageProps<'/[locale]'>) {
                     'Fabric Catalog',
               link: `/${locale}/product/fabric`
             }}
-            editId={heroSection?.id}
           />
         </div>
         <CategoryCards locale={locale} />
         {CUSTOM_CURTAIN_ENABLED && (
-          <div data-edit-zone="trust">
-            <CustomCurtainPromo locale={locale} editId={trustSection?.id} />
+          <div>
+            <CustomCurtainPromo locale={locale} />
           </div>
         )}
-        <div data-edit-zone="history">
+        <div>
           <BrandHistoryPromo locale={locale} />
         </div>
-        <div data-edit-zone="featured">
+        <div>
           <ProductShowcase
-            title={cmsText(featuredSection?.title) || productsLocale("Headline")}
+            title={productsLocale("Headline")}
             locale={locale}
-            editId={featuredSection?.id}
           />
         </div>
-        <div data-edit-zone="seasons">
+        <div>
           <DraggableTestimonials reviews={reviews} locale={locale} />
         </div>
-        <div data-edit-zone="instagram">
+        <div>
           <InstagramFeed locale={locale} />
         </div>
       </div>

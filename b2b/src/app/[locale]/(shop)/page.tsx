@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getProducts, getSeasons, getStorefrontHome } from '@/lib/api';
+import { getProducts, getSeasons } from '@/lib/api';
 import ProductCard from '@/components/ProductCard';
 import CarouselScrollProgress from '@/components/CarouselScrollProgress';
 import type { Locale } from '@/i18n';
@@ -22,55 +22,28 @@ export default async function HomePage({ params }: Props) {
   // Fetch DEMFIRAT categories explicitly. The no-filter ERP call takes
   // 15+ seconds (whole catalog) — querying by category is much faster
   // and keeps the B2B home strictly on-brand (curtains + bedroom only).
-  // The Belino mock catalogue (socks/innerwear) is intentionally not used.
-  const [t, tCommon, fabricProducts, readyMadeProducts, bedProducts, homeSections] = await Promise.all([
+  const [t, tCommon, fabricProducts, readyMadeProducts, bedProducts] = await Promise.all([
     getTranslations({ locale, namespace: 'home' }),
     getTranslations({ locale, namespace: 'common' }),
     getProducts({ categoryKey: 'fabric' }),
     getProducts({ categoryKey: 'ready-made_curtain' }),
     getProducts({ categoryKey: 'bed' }),
-    getStorefrontHome(),
   ]);
   // Merged catalog for sections that want a single product list.
   const products = [...fabricProducts, ...readyMadeProducts, ...bedProducts];
   const localePrefix = locale === 'tr' ? '' : `/${locale}`;
 
-  // Pull section-bound data from storefront API when available; fall
-  // back to the bundled defaults so the page never goes blank.
-  const heroSection = homeSections?.find((s) => s.kind === 'hero');
-  const trustSection = homeSections?.find((s) => s.kind === 'trust');
-  const seasonsSection = homeSections?.find((s) => s.kind === 'seasons');
-  const featuredSection = homeSections?.find((s) => s.kind === 'featured');
+  const seasons = (await getSeasons()).map((s) => ({
+    key: s.key,
+    label: s.label,
+    bg: s.bg,
+    count: s.count,
+    image: undefined as string | undefined,
+    href: undefined as string | undefined,
+  }));
 
-  const seasons = seasonsSection?.cards?.length
-    ? seasonsSection.cards.map((c) => ({
-        key: c.key,
-        label: c.label,
-        bg: '',
-        count: c.count,
-        image: c.image,
-        href: c.href,
-      }))
-    : (await getSeasons()).map((s) => ({
-        key: s.key,
-        label: s.label,
-        bg: s.bg,
-        count: s.count,
-        image: undefined as string | undefined,
-        href: undefined as string | undefined,
-      }));
-
-  // Featured products: prefer storefront-curated SKUs, fall back to the
-  // last 4 from the catalogue (the original behaviour).
-  let featuredProducts = products.slice(-4).reverse();
-  if (featuredSection?.products?.length) {
-    const skus = featuredSection.products.map((p) => p.sku);
-    const indexed = new Map(products.map((p) => [p.sku, p]));
-    featuredProducts = skus.map((sku) => indexed.get(sku)).filter(Boolean) as typeof products;
-    // If lookup misses everything, keep the fallback so the section
-    // doesn't render empty.
-    if (featuredProducts.length === 0) featuredProducts = products.slice(-4).reverse();
-  }
+  // Featured products: the last 4 from the catalogue.
+  const featuredProducts = products.slice(-4).reverse();
 
   return (
     <>
@@ -78,7 +51,7 @@ export default async function HomePage({ params }: Props) {
           dark vignette overlay; minimal text content overlaid bottom-left;
           editorial markers in the corners. Slow zoom on the bg image
           gives the page a "film" feel from the moment it loads. */}
-      <section className="bel-hero-c" aria-label="Hero" data-edit-zone="hero">
+      <section className="bel-hero-c" aria-label="Hero">
         <div className="hero-c-bg">
           {/* DEMFIRAT brand hero video — served from BunnyCDN.
               Falls back to a poster image while the video loads / on
@@ -93,7 +66,7 @@ export default async function HomePage({ params }: Props) {
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           >
             <source
-              src={heroSection?.image || 'https://demfiratkarven.b-cdn.net/website-videos/hero-video.mp4'}
+              src="https://demfiratkarven.b-cdn.net/website-videos/hero-video.mp4"
               type="video/mp4"
             />
           </video>
@@ -108,53 +81,16 @@ export default async function HomePage({ params }: Props) {
             }}
           />
         </div>
-        {/* Floating image-edit handle for the hero — the bg div sits
-            below all content (z-index 0) so a normal data-edit-image
-            on it never receives clicks. This handle floats top-right
-            with z-index high enough to escape the content layer. */}
-        {heroSection && (
-          <div
-            className="sf-hero-image-handle"
-            data-edit-image={`homesection:${heroSection.id}:image_url`}
-            aria-label="Hero görselini değiştir"
-          />
-        )}
-
         <div className="bel-container hero-c-content">
-          <div
-            className="hero-c-eyebrow"
-            data-edit-text={heroSection ? `homesection:${heroSection.id}:eyebrow_${locale}` : undefined}
-          >
-            {heroSection?.eyebrow?.[locale] || t('eyebrow')}
-          </div>
-          <h1
-            className="hero-c-display"
-            data-edit-text={heroSection ? `homesection:${heroSection.id}:title_${locale}` : undefined}
-          >
-            {heroSection?.title?.[locale] || (
-              <>
-                {t('displayLine1')} <em>{t('displayLine2').replace(/\.$/, '')}.</em>
-              </>
-            )}
+          <div className="hero-c-eyebrow">{t('eyebrow')}</div>
+          <h1 className="hero-c-display">
+            {t('displayLine1')} <em>{t('displayLine2').replace(/\.$/, '')}.</em>
           </h1>
-          <p
-            className="hero-c-lede"
-            data-edit-text={heroSection ? `homesection:${heroSection.id}:body_${locale}` : undefined}
-          >
-            {heroSection?.body?.[locale] || t('lede')}
-          </p>
+          <p className="hero-c-lede">{t('lede')}</p>
 
           <div className="hero-c-cta">
-            <Link
-              href={heroSection?.cta?.href || `${localePrefix}/products`}
-              className="hero-c-btn-primary"
-            >
-              <span
-                data-edit-text={heroSection ? `homesection:${heroSection.id}:cta_label_${locale}` : undefined}
-              >
-                {heroSection?.cta?.label?.[locale] ||
-                  (locale === 'tr' ? 'Koleksiyonu Keşfet' : 'Explore Collection')}
-              </span>
+            <Link href={`${localePrefix}/products`} className="hero-c-btn-primary">
+              <span>{locale === 'tr' ? 'Koleksiyonu Keşfet' : 'Explore Collection'}</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M5 12h14M13 5l7 7-7 7"/>
               </svg>
@@ -170,35 +106,17 @@ export default async function HomePage({ params }: Props) {
 
       </section>
 
-      {/* Trust strip — uses storefront API badges if available; falls
-          back to hardcoded defaults. SVG icons live here (complex inline
-          markup) — DB only stores text + an icon_key for swapping. */}
-      <section className="trust-strip" aria-label="DEMFIRAT trust badges" data-edit-zone="trust">
-        <div
-          className="bel-container trust-strip-grid"
-          data-edit-sort-list="trustbadge"
-          data-edit-sort-section={trustSection?.id ?? ''}
-        >
-          {(trustSection?.badges?.length
-            ? trustSection.badges.map((b) => ({
-                id: b.id,
-                icon: b.icon,
-                title: b.title[locale],
-                sub: b.sub[locale],
-              }))
-            : ([
-                { id: 0, icon: 'shield',  title: locale === 'tr' ? 'Güvenli Alışveriş'   : 'Secure Checkout', sub: 'SSL · 3D Secure' },
-                { id: 0, icon: 'percent', title: locale === 'tr' ? 'Toplu Alım İndirimi' : 'Bulk Discount',   sub: locale === 'tr' ? 'Adete göre kademeli' : 'Tiered by quantity' },
-                { id: 0, icon: 'truck',   title: locale === 'tr' ? 'Ücretsiz Kargo'      : 'Free Shipping',   sub: locale === 'tr' ? '5.000 TL üzeri' : 'Over 5,000 TRY' },
-                { id: 0, icon: 'card',    title: locale === 'tr' ? 'Taksit İmkanı'       : 'Installments',    sub: locale === 'tr' ? '12 aya varan' : 'Up to 12 months' },
-                { id: 0, icon: 'bolt',    title: locale === 'tr' ? '24 Saatte Kargo'     : '24h Shipping',    sub: locale === 'tr' ? 'Aynı gün hazırlık' : 'Same-day prep' },
-              ])
-          ).map((b, i) => (
-            <div
-              key={`${b.id || i}`}
-              className="trust-strip-item"
-              data-edit-sort-id={b.id || undefined}
-            >
+      {/* Trust strip. */}
+      <section className="trust-strip" aria-label="DEMFIRAT trust badges">
+        <div className="bel-container trust-strip-grid">
+          {[
+            { icon: 'shield',  title: locale === 'tr' ? 'Güvenli Alışveriş'   : 'Secure Checkout', sub: 'SSL · 3D Secure' },
+            { icon: 'percent', title: locale === 'tr' ? 'Toplu Alım İndirimi' : 'Bulk Discount',   sub: locale === 'tr' ? 'Adete göre kademeli' : 'Tiered by quantity' },
+            { icon: 'truck',   title: locale === 'tr' ? 'Ücretsiz Kargo'      : 'Free Shipping',   sub: locale === 'tr' ? '5.000 TL üzeri' : 'Over 5,000 TRY' },
+            { icon: 'card',    title: locale === 'tr' ? 'Taksit İmkanı'       : 'Installments',    sub: locale === 'tr' ? '12 aya varan' : 'Up to 12 months' },
+            { icon: 'bolt',    title: locale === 'tr' ? '24 Saatte Kargo'     : '24h Shipping',    sub: locale === 'tr' ? 'Aynı gün hazırlık' : 'Same-day prep' },
+          ].map((b) => (
+            <div key={b.icon} className="trust-strip-item">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 {b.icon === 'shield' && (<>
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -225,14 +143,8 @@ export default async function HomePage({ params }: Props) {
                 )}
               </svg>
               <div className="trust-strip-text">
-                <span
-                  className="trust-strip-title"
-                  data-edit-text={b.id ? `trustbadge:${b.id}:title_${locale}` : undefined}
-                >{b.title}</span>
-                <span
-                  className="trust-strip-sub"
-                  data-edit-text={b.id ? `trustbadge:${b.id}:sub_${locale}` : undefined}
-                >{b.sub}</span>
+                <span className="trust-strip-title">{b.title}</span>
+                <span className="trust-strip-sub">{b.sub}</span>
               </div>
             </div>
           ))}

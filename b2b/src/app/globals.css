@@ -702,7 +702,7 @@ html {
   color: var(--bel-paper);
 }
 
-/* ============ FOOTER (Belino premium) ============ */
+/* ============ FOOTER (premium) ============ */
 .bel-footer {
   background: var(--bel-paper-2);
   border-top: 1px solid var(--bel-line);
@@ -955,7 +955,7 @@ html {
   .detail-desc { padding: 24px 0 28px; }
   .detail-desc-text { font-size: 14px; }
 }
-/* Accordion styles moved to ui-kit.css (.bel-accordion) — Belino editorial spec.
+/* Accordion styles moved to ui-kit.css (.bel-accordion) — editorial spec.
    The previous Brooklinen-style block here was overriding the design-system
    styles, so it's been removed. */
 

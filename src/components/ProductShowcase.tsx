@@ -6,11 +6,9 @@ import AutoSlider from "./AutoSlider";
 interface ProductShowcaseProps {
   title: string;
   locale: string;
-  editId?: number;
 }
 
-export default function ProductShowcase({ title, locale, editId }: ProductShowcaseProps) {
-  const fieldLocale = locale === 'tr' ? 'tr' : 'en';
+export default function ProductShowcase({ title, locale }: ProductShowcaseProps) {
   const slogan = locale === 'en' ? 'Elegance in every detail, comfort in every touch' :
     locale === 'ru' ? 'Изящество в каждой детали, комфорт в каждом прикосновении' :
       locale === 'pl' ? 'Elegancja w każdym detalu, komfort w każdym dotyku' :
@@ -29,7 +27,6 @@ export default function ProductShowcase({ title, locale, editId }: ProductShowca
           <div className={classes.header}>
             <h2
               className={classes.slogan}
-              data-edit-text={editId ? `homesection:${editId}:body_${fieldLocale}` : undefined}
             >{slogan}</h2>
           </div>
 

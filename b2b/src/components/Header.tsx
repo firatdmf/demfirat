@@ -9,15 +9,10 @@ import Icon from './Icon';
 import { useCart } from '@/contexts/CartContext';
 import { useCurrency, type CurrencyCode } from '@/contexts/CurrencyContext';
 import { useAuth } from '@/contexts/AuthContext';
-import type { NavItemDTO } from '@/lib/api';
 
-type SubItem = { id?: number; label: string; en: string; count: number; swatch: string; href: string };
+type SubItem = { label: string; en: string; count: number; swatch: string; href: string };
 type NavItem = {
   key: string;
-  /** Storefront DB id (NavMenu.pk) when source is the API. Used by
-   *  the visual editor to drag-reorder + inline-rename. Undefined for
-   *  the bundled fallback NAV (legacy hardcoded list). */
-  dbId?: number;
   label: string;
   labelEn: string;
   href?: string;
@@ -51,56 +46,17 @@ const NAV: NavItem[] = [
   { key: 'blog', label: 'Blog', labelEn: 'Blog', href: '/blog' },
 ];
 
-/**
- * Adapter — accept either the bundled hardcoded NAV array (legacy)
- * or the storefront API DTO and normalise to a single shape the
- * existing render code already understands. Storefront entries can
- * be missing fields, so we fill in safe defaults.
- */
-function navFromStorefront(items: NavItemDTO[]): NavItem[] {
-  return items.map((it) => ({
-    key: `sf-${it.id}`,
-    dbId: it.id,
-    label: it.label.tr || it.label.en,
-    labelEn: it.label.en || it.label.tr,
-    href: it.href || undefined,
-    sub: it.children.length
-      ? it.children.map((c) => ({
-          id: c.id,
-          label: c.label.tr || c.label.en,
-          en: c.label.en || c.label.tr,
-          count: c.count ?? 0,
-          swatch: c.swatch || '#0E0E0C',
-          href: c.href || '/products',
-        }))
-      : undefined,
-    feature: it.feature
-      ? {
-          title: it.feature.title,
-          meta: it.feature.meta,
-          tone: '#C9BFA9',
-          image: it.feature.image || undefined,
-        }
-      : undefined,
-  }));
-}
-
 export default function Header({
   onOpenSearch,
-  initialNav,
   categoryCounts,
 }: {
   onOpenSearch: () => void;
-  initialNav?: NavItemDTO[] | null;
   categoryCounts?: Record<string, number>;
 }) {
-  // Storefront API is the source of truth when reachable; otherwise
-  // the bundled NAV array keeps the live site working. ERP edits show
-  // up on the next request because next/dynamic re-renders the layout.
   const counts = categoryCounts ?? {};
   // Inject live counts into the hardcoded NAV sub-items so the mega
   // menu reads "Tüm Tül Perdeler · 12 ürün" instead of "0 ürün".
-  const NAV_WITH_COUNTS: NavItem[] = NAV.map((item) => {
+  const navItems: NavItem[] = NAV.map((item) => {
     if (!item.sub) return item;
     return {
       ...item,
@@ -124,9 +80,6 @@ export default function Header({
       }),
     };
   });
-  const navItems: NavItem[] = initialNav && initialNav.length > 0
-    ? navFromStorefront(initialNav)
-    : NAV_WITH_COUNTS;
   const locale = useLocale();
   const tCommon = useTranslations('common');
   const pathname = usePathname();
@@ -286,33 +239,25 @@ export default function Header({
           <span className="logo-tag">Wholesale</span>
         </Link>
 
-        <nav
-          className="bel-nav"
-          data-edit-sort-list="navmenu"
-        >
+        <nav className="bel-nav">
           {navItems.map((item) => (
             <div
               key={item.key}
               className={`bel-nav-item ${openMenu === item.key ? 'open' : ''}`}
               onMouseEnter={() => item.sub && open(item.key)}
-              data-edit-sort-id={item.dbId ?? undefined}
             >
               {item.href ? (
                 // Items with href are clickable (navigate); if they also have
                 // sub, hover still opens the mega menu.
                 <Link href={`${localePrefix}${item.href}`}>
-                  <button
-                    data-edit-text={item.dbId ? `navmenu:${item.dbId}:label_${locale}` : undefined}
-                  >
+                  <button>
                     {locale === 'tr' ? item.label : item.labelEn}
                     {item.sub && <Icon name="chevronDown" size={10} />}
                   </button>
                 </Link>
               ) : (
                 <button onClick={() => item.sub && open(item.key)}>
-                  <span
-                    data-edit-text={item.dbId ? `navmenu:${item.dbId}:label_${locale}` : undefined}
-                  >
+                  <span>
                     {locale === 'tr' ? item.label : item.labelEn}
                   </span>
                   {item.sub && <Icon name="chevronDown" size={10} />}
@@ -500,10 +445,7 @@ export default function Header({
                       >
                         <span className="mega-sw" style={{ background: s.swatch }} />
                         <span className="mega-label">
-                          <span
-                            className="mega-tr"
-                            data-edit-text={s.id ? `navmenu:${s.id}:label_${locale}` : undefined}
-                          >
+                          <span className="mega-tr">
                             {locale === 'tr' ? s.label : s.en}
                           </span>
                           <span className="mega-count">

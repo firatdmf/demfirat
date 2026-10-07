@@ -22,11 +22,9 @@ interface Product {
 interface CustomCurtainPromoProps {
     locale: string;
     /** Storefront HomeSection.id — when supplied, title + subtitle become inline-editable in ?edit=1 mode. */
-    editId?: number;
 }
 
-export default function CustomCurtainPromo({ locale, editId }: CustomCurtainPromoProps) {
-    const fieldLocale = locale === 'tr' ? 'tr' : 'en';
+export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) {
     const { convertPrice } = useCurrency();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
@@ -244,13 +242,11 @@ export default function CustomCurtainPromo({ locale, editId }: CustomCurtainProm
 
                     <h2
                         className={classes.promoTitle}
-                        data-edit-text={editId ? `homesection:${editId}:title_${fieldLocale}` : undefined}
                     >
                         {t.title[lang]} <span className={classes.promoTitleAccent}>{t.titleAccent[lang]}</span>
                     </h2>
                     <p
                         className={classes.promoSubtitle}
-                        data-edit-text={editId ? `homesection:${editId}:body_${fieldLocale}` : undefined}
                     >{t.subtitle[lang]}</p>
 
                     <div className={classes.buttonRow}>
