@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getRequestConfig } from "next-intl/server";
 
-const locales = ['en.json', 'tr.json']
+const locales = ['en.json', 'tr.json', 'ru.json']
 
 export default getRequestConfig(async ({ locale }) => {
     // No logging in here. This callback runs once per request for every

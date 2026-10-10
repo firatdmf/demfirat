@@ -29,6 +29,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product'>): P
       languages: {
         'en': `${baseUrl}/en/product`,
         'tr': `${baseUrl}/tr/product`,
+        'ru': `${baseUrl}/ru/product`,
         'x-default': `${baseUrl}/tr/product`,
       }
     }

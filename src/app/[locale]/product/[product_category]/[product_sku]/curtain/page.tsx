@@ -44,6 +44,7 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
                 languages: {
                     'en': `${baseUrl}/en/product/${data.product_category}/${product_sku}/curtain`,
                     'tr': `${baseUrl}/tr/product/${data.product_category}/${product_sku}/curtain`,
+                    'ru': `${baseUrl}/ru/product/${data.product_category}/${product_sku}/curtain`,
                     'x-default': `${baseUrl}/tr/product/${data.product_category}/${product_sku}/curtain`,
                 },
             },

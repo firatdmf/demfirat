@@ -16,29 +16,29 @@ export function getCurtainSections(locale: string): NavSection[] {
     // to the business, so these links stay, just pointed at plain listings.
     return [
         {
-            title: locale === 'tr' ? 'Tül Perdeler' : 'Tulle Curtains',
+            title: locale === 'tr' ? 'Tül Perdeler' : locale === 'ru' ? 'Тюль' : 'Tulle Curtains',
             href: `/${locale}/product/fabric`,
             image: '/media/header_pictures/curtain_solid.avif',
             links: [
-                { href: `/${locale}/product/fabric`, label: locale === 'tr' ? 'Tüm Tül Perdeler' : 'All Tulle Curtains' },
-                { href: `/${locale}/product/fabric?fabric_type=embroidery`, label: locale === 'tr' ? 'Nakışlı Tül Perde' : 'Embroidered Tulle Curtains' },
-                { href: `/${locale}/product/fabric?fabric_type=solid`, label: locale === 'tr' ? 'Düz Tül Perdeler' : 'Solid Tulle Curtains' },
+                { href: `/${locale}/product/fabric`, label: locale === 'tr' ? 'Tüm Tül Perdeler' : locale === 'ru' ? 'Весь тюль' : 'All Tulle Curtains' },
+                { href: `/${locale}/product/fabric?fabric_type=embroidery`, label: locale === 'tr' ? 'Nakışlı Tül Perde' : locale === 'ru' ? 'Вышитый тюль' : 'Embroidered Tulle Curtains' },
+                { href: `/${locale}/product/fabric?fabric_type=solid`, label: locale === 'tr' ? 'Düz Tül Perdeler' : locale === 'ru' ? 'Гладкий тюль' : 'Solid Tulle Curtains' },
             ],
         },
         {
-            title: locale === 'tr' ? 'Fon Perdeler' : 'Blackout Curtains',
+            title: locale === 'tr' ? 'Fon Perdeler' : locale === 'ru' ? 'Шторы блэкаут' : 'Blackout Curtains',
             href: `/${locale}/product/fabric?fabric_type=blackout`,
             image: '/media/header_pictures/curtain_blackout.avif',
             links: [
-                { href: `/${locale}/product/fabric?fabric_type=blackout`, label: locale === 'tr' ? 'Tüm Fon Perdeler' : 'All Blackout Curtains' },
+                { href: `/${locale}/product/fabric?fabric_type=blackout`, label: locale === 'tr' ? 'Tüm Fon Perdeler' : locale === 'ru' ? 'Все шторы блэкаут' : 'All Blackout Curtains' },
             ],
         },
         {
-            title: locale === 'tr' ? 'Rustik Perdeler' : 'Rustic Curtains',
+            title: locale === 'tr' ? 'Rustik Perdeler' : locale === 'ru' ? 'Рустикальные шторы' : 'Rustic Curtains',
             href: `/${locale}/product/ready-made_curtain`,
             image: 'https://demfiratkarven.b-cdn.net/media/product_images/product_RK72010/rk72010gw-08-white-sheer-floral-dandelion-embroidered-curtain-grommet-header-installation-top.avif',
             links: [
-                { href: `/${locale}/product/ready-made_curtain`, label: locale === 'tr' ? 'Tüm Rustik Perdeler' : 'All Rustic Curtains' },
+                { href: `/${locale}/product/ready-made_curtain`, label: locale === 'tr' ? 'Tüm Rustik Perdeler' : locale === 'ru' ? 'Все рустикальные шторы' : 'All Rustic Curtains' },
             ],
         },
     ];
@@ -48,6 +48,6 @@ export type TopNavItem = { href: string; label: string };
 
 export function getTopNavItems(locale: string): TopNavItem[] {
     return [
-        { href: `/${locale}/product/bed`, label: locale === 'tr' ? 'Yatak Odası' : 'Bedroom' },
+        { href: `/${locale}/product/bed`, label: locale === 'tr' ? 'Yatak Odası' : locale === 'ru' ? 'Спальня' : 'Bedroom' },
     ];
 }

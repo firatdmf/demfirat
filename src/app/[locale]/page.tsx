@@ -40,6 +40,7 @@ export async function generateMetadata(props: PageProps<'/[locale]'>): Promise<M
       languages: {
         'en': `${baseUrl}/en`,
         'tr': `${baseUrl}/tr`,
+        'ru': `${baseUrl}/ru`,
         'x-default': `${baseUrl}/tr`,
       }
     },

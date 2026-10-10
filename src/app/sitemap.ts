@@ -24,8 +24,8 @@ async function fetchCategoryProducts(baseApi: string, category: string): Promise
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.demfirat.com';
     const baseApi = process.env.NEXT_PUBLIC_NEJUM_API_URL || '';
-    // Only the locales the site actually serves (ru/pl were removed).
-    const locales = ['tr', 'en'];
+    // Only the locales the site actually serves (pl is still off).
+    const locales = ['tr', 'en', 'ru'];
 
     // Fetch every category in parallel.
     const perCategory = await Promise.all(

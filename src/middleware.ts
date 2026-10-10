@@ -4,7 +4,7 @@ import createMiddleware from 'next-intl/middleware';
 
 export default createMiddleware({
     // A list of all locales that are supported
-    locales: ['en','tr'],
+    locales: ['en','tr','ru'],
 
     // Used when no locale matches
     defaultLocale: 'en',
@@ -22,5 +22,5 @@ export const config  = {matcher:[
     
     // below is for locale, above is for next auth
     '/((?!api|static|.*\\..*|_next).*)',
-    '/(tr|en)/:path*'
+    '/(tr|en|ru)/:path*'
 ]}
