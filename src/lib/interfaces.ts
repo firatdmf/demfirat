@@ -174,4 +174,5 @@ export type BlogPost = {
   author: string;
   header_content?: string;
   footer_content?: string;
+  is_published?: boolean;
 }

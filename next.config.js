@@ -75,6 +75,19 @@ const nextConfig = {
         source: `/:path((?!_next/static/)(?!.*\\.(?:${ASSET_EXT})$).*)`,
         headers: [{ key: 'Cache-Control', value: HTML_CACHE }],
       },
+      {
+        // A draft's preview link must show the draft as it is now, to the
+        // editor only — never a copy held at the edge. Last rule wins.
+        source: '/:locale/blog/:slug',
+        has: [{ type: 'query', key: 'preview' }],
+        headers: [{ key: 'Cache-Control', value: 'private, no-store' }],
+      },
+      {
+        // The same, for the default language, which carries no prefix.
+        source: '/blog/:slug',
+        has: [{ type: 'query', key: 'preview' }],
+        headers: [{ key: 'Cache-Control', value: 'private, no-store' }],
+      },
     ];
   },
   images: {

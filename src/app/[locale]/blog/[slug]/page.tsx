@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import classes from './page.module.css';
@@ -6,14 +7,17 @@ import ScriptInjector from '@/components/ScriptInjector';
 
 interface BlogPostPageProps {
     params: Promise<{ locale: string; slug: string }>;
+    searchParams: Promise<{ preview?: string | string[] }>;
 }
 
-async function getBlogPost(slug: string): Promise<BlogPost | null> {
+// A draft is answered only to a request carrying its preview token (the
+// ERP's blog pages hand out the link), and is never cached.
+async function getBlogPost(slug: string, preview?: string): Promise<BlogPost | null> {
     try {
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_blog_post/${slug}/`,
-            { next: { revalidate: 300 } }
-        );
+        const url = `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_blog_post/${slug}/`;
+        const response = preview
+            ? await fetch(`${url}?preview=${encodeURIComponent(preview)}`, { cache: 'no-store' })
+            : await fetch(url, { next: { revalidate: 300 } });
         if (response.ok) {
             return await response.json();
         }
@@ -23,11 +27,19 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
     return null;
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+// A preview link is for whoever is editing the post, not for search engines.
+export async function generateMetadata({ searchParams }: BlogPostPageProps): Promise<Metadata> {
+    const { preview } = await searchParams;
+    return preview ? { robots: { index: false, follow: false } } : {};
+}
+
+export default async function BlogPostPage({ params, searchParams }: BlogPostPageProps) {
     const { locale, slug } = await params;
+    const { preview } = await searchParams;
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
 
-    const post = await getBlogPost(slug);
+    const post = await getBlogPost(slug, Array.isArray(preview) ? preview[0] : preview);
+    const isDraft = post?.is_published === false;
 
     if (!post) {
         notFound();
@@ -45,6 +57,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             en: 'Share',
             ru: 'Поделиться',
             pl: 'Udostępnij'
+        },
+        draftPreview: {
+            tr: 'Taslak önizlemesi — bu yazı henüz yayınlanmadı.',
+            en: 'Draft preview — this post is not published yet.',
+            ru: 'Предпросмотр черновика — эта статья ещё не опубликована.',
+            pl: 'Podgląd wersji roboczej — ten wpis nie został jeszcze opublikowany.'
         }
     };
 
@@ -108,14 +126,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     return (
         <main className={classes.blogPost}>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-            />
+            {isDraft ? (
+                <div style={{ background: '#fef3c7', color: '#92400e', textAlign: 'center', padding: '0.75rem 1rem', fontSize: '0.9rem' }}>
+                    {t.draftPreview[lang]}
+                </div>
+            ) : (
+                <>
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+                    />
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+                    />
+                </>
+            )}
             {/* Custom Header Content (Styles, etc) */}
             {post.header_content && (
                 <div dangerouslySetInnerHTML={{ __html: post.header_content }} />
