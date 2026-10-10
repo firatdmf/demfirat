@@ -170,6 +170,8 @@ export type BlogPost = {
   category_pl?: string;
   cover_image: string;
   hero_image?: string;
+  cover_image_alt?: string;
+  hero_image_alt?: string;
   published_at: string;
   author: string;
   header_content?: string;

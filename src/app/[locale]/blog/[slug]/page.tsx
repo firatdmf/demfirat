@@ -151,7 +151,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
             <div className={classes.heroImage}>
                 <img
                     src={post.hero_image || post.cover_image || '/media/blog/default-hero.jpg'}
-                    alt={getLocalized('title')}
+                    alt={(post.hero_image ? post.hero_image_alt : post.cover_image_alt) || getLocalized('title')}
                 />
                 <div className={classes.heroOverlay}></div>
                 <div className={classes.heroContent}>

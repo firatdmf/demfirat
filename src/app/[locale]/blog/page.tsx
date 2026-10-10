@@ -116,7 +116,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                                     <div className={classes.cardImage}>
                                         <img
                                             src={post.cover_image || '/media/blog/default.jpg'}
-                                            alt={getLocalized(post, 'title')}
+                                            alt={post.cover_image_alt || getLocalized(post, 'title')}
                                         />
                                         <span className={classes.category}>{getLocalized(post, 'category')}</span>
                                     </div>
