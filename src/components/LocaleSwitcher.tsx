@@ -1,25 +1,31 @@
 "use client";
-import React, { useTransition, ChangeEvent } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, ChangeEvent } from "react";
 import { useLocale } from "next-intl";
+
+const LOCALES = ["en", "tr", "ru"];
+const DEFAULT_LOCALE = "en";
+
 export default function LocaleSwitcher() {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const [isPending, setIsPending] = useState(false);
   const localActive = useLocale();
 
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const nextLocale = e.target.value;
-    const currentPath = window.location.pathname;
+    const { pathname, search, hash } = window.location;
 
-    const segments = currentPath.split("/");
-    const hasLocale = ["en", "tr", "ru"].includes(segments[1]);
-    const updatedPath = hasLocale
-      ? currentPath.replace(`/${segments[1]}`, `/${nextLocale}`)
-      : `/${nextLocale}${currentPath}`;
+    const segments = pathname.split("/");
+    const rest = LOCALES.includes(segments[1]) ? "/" + segments.slice(2).join("/") : pathname;
+    // The default language is served without a prefix.
+    const prefix = nextLocale === DEFAULT_LOCALE ? "" : `/${nextLocale}`;
+    const target = rest === "/" ? prefix || "/" : `${prefix}${rest}`;
 
-    startTransition(() => {
-      router.push(updatedPath);
-    });
+    // An address without a prefix is answered in the language this cookie
+    // names, so it has to change before the page is asked for. And the page
+    // is loaded afresh: the router keeps an earlier answer for the same
+    // address, which could land the visitor back in the language they left.
+    document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=31536000; samesite=lax`;
+    setIsPending(true);
+    window.location.assign(`${target}${search}${hash}`);
   };
   return (
     <div className="locale-switcher">
@@ -29,7 +35,7 @@ export default function LocaleSwitcher() {
         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
       </svg>
       <select
-        defaultValue={localActive || "en"}
+        value={localActive || DEFAULT_LOCALE}
         onChange={onSelectChange}
         disabled={isPending}
         className="locale-select"
