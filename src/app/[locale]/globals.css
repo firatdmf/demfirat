@@ -33,6 +33,9 @@
   /* Typography */
   --font-heading: var(--font-cormorant, 'Cormorant Garamond'), Georgia, serif;
   --font-body: var(--font-montserrat, 'Montserrat'), system-ui, sans-serif;
+  /* Blog-only body face; every other surface stays on --font-body. */
+  --font-blog-body: var(--font-lora, 'Lora'), Georgia, serif;
+  --font-blog-heading: var(--font-lora, 'Lora'), Georgia, serif;
   --h1-size: 3.5rem;
   --h2-size: 2.25rem;
   --body-size: 1rem;

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import classes from './page.module.css';
 import { BlogPost } from '@/lib/interfaces';
 import ScriptInjector from '@/components/ScriptInjector';
+import BlogSubscribe from './BlogSubscribe';
 
 interface BlogPostPageProps {
     params: Promise<{ locale: string; slug: string }>;
@@ -58,6 +59,42 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
             ru: 'Поделиться',
             pl: 'Udostępnij'
         },
+        ctaHeading: {
+            tr: 'İşletmeniz için ev tekstili mi arıyorsunuz?',
+            en: 'Sourcing home textiles for your business?',
+            ru: 'Ищете домашний текстиль для своего бизнеса?',
+            pl: 'Szukasz tekstyliów domowych dla swojej firmy?'
+        },
+        ctaText: {
+            tr: 'Demfirat 1991\'den beri perde, banyo ve yatak tekstili üretiyor. Ürünlerimize göz atın ya da neye ihtiyacınız olduğunu bize yazın.',
+            en: 'Demfirat has been making curtain, bath and bedding textiles since 1991. Browse the range, or tell us what you need.',
+            ru: 'Demfirat производит текстиль для окон, ванной и спальни с 1991 года. Посмотрите ассортимент или напишите нам, что вам нужно.',
+            pl: 'Demfirat produkuje tekstylia okienne, łazienkowe i pościelowe od 1991 roku. Zobacz ofertę lub napisz, czego potrzebujesz.'
+        },
+        ctaProducts: {
+            tr: 'Ürünleri gör',
+            en: 'See our products',
+            ru: 'Смотреть товары',
+            pl: 'Zobacz produkty'
+        },
+        ctaContact: {
+            tr: 'Bize ulaşın',
+            en: 'Contact us',
+            ru: 'Связаться с нами',
+            pl: 'Skontaktuj się'
+        },
+        author: {
+            tr: 'Yazar',
+            en: 'Author',
+            ru: 'Автор',
+            pl: 'Autor'
+        },
+        readingTime: {
+            tr: 'Okuma süresi: {n} dk',
+            en: 'Reading time: {n} min',
+            ru: 'Время чтения: {n} мин',
+            pl: 'Czas czytania: {n} min'
+        },
         draftPreview: {
             tr: 'Taslak önizlemesi — bu yazı henüz yayınlanmadı.',
             en: 'Draft preview — this post is not published yet.',
@@ -74,7 +111,13 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
     const baseUrl = `https://www.demfirat.com/${locale}`;
     const blogUrl = `${baseUrl}/blog`;
     const postUrl = `${baseUrl}/blog/${slug}`;
-    const imageUrl = post.hero_image || post.cover_image || 'https://www.demfirat.com/media/blog/default-hero.jpg';
+    const authorUrl = authorProfile(post.author);
+    const coverImage = post.hero_image || post.cover_image;
+    const contentHtml = formatMarkdown(getLocalized('content') || '');
+    // About 200 words a minute, counted on the text without its markup.
+    const wordCount = contentHtml.replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const readingMinutes = Math.max(1, Math.round(wordCount / 200));
+    const imageUrl = coverImage || 'https://www.demfirat.com/media/blog/default-hero.jpg';
 
     // JSON-LD Breadcrumb Schema for Blog post
     const breadcrumbJsonLd = {
@@ -112,7 +155,8 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
         "dateModified": post.published_at,
         "author": {
             "@type": "Person",
-            "name": post.author || "Karven"
+            "name": post.author || "Karven",
+            ...(authorUrl ? { "url": authorUrl } : {})
         },
         "publisher": {
             "@type": "Organization",
@@ -147,47 +191,90 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                 <div dangerouslySetInnerHTML={{ __html: post.header_content }} />
             )}
 
-            {/* Hero Image */}
-            <div className={classes.heroImage}>
-                <img
-                    src={post.hero_image || post.cover_image || '/media/blog/default-hero.jpg'}
-                    alt={(post.hero_image ? post.hero_image_alt : post.cover_image_alt) || getLocalized('title')}
-                />
-                <div className={classes.heroOverlay}></div>
-                <div className={classes.heroContent}>
-                    <h1>{getLocalized('title')}</h1>
-                    <div className={classes.meta}>
-                        <span>{post.author}</span>
-                        <span>•</span>
-                        <span>
-                            {new Date(post.published_at).toLocaleDateString(locale === 'tr' ? 'tr-TR' : locale === 'ru' ? 'ru-RU' : locale === 'pl' ? 'pl-PL' : 'en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            })}
-                        </span>
-                    </div>
-                </div>
-            </div>
+            <div className={classes.layout}>
+                <article className={classes.article}>
+                    <header className={classes.header}>
+                        <Link href={`/${locale}/blog`} className={classes.backLink}>
+                            {t.backToBlog[lang]}
+                        </Link>
+                        <div className={classes.meta}>
+                            <span className={classes.byline}>
+                                <time dateTime={post.published_at}>
+                                    {new Date(post.published_at).toLocaleDateString(locale === 'tr' ? 'tr-TR' : locale === 'ru' ? 'ru-RU' : locale === 'pl' ? 'pl-PL' : 'en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}
+                                </time>
+                                <span aria-hidden="true">·</span>
+                                <span className={classes.author}>
+                                    {t.author[lang]}:{' '}
+                                    {authorUrl ? (
+                                        <a href={authorUrl} target="_blank" rel="noopener noreferrer">{post.author}</a>
+                                    ) : (
+                                        post.author
+                                    )}
+                                </span>
+                            </span>
+                            <span>{t.readingTime[lang].replace('{n}', String(readingMinutes))}</span>
+                        </div>
+                        <h1 className={classes.title}>{getLocalized('title')}</h1>
+                        {getLocalized('excerpt') && (
+                            <p className={classes.lead}>{getLocalized('excerpt')}</p>
+                        )}
+                    </header>
 
-            {/* Content */}
-            <article className={classes.article}>
-                <div className={classes.container}>
-                    <Link href={`/${locale}/blog`} className={classes.backLink}>
-                        {t.backToBlog[lang]}
-                    </Link>
+                    {/* The picture sits in the reading column — no text on it. */}
+                    {coverImage && (
+                        <figure className={classes.cover}>
+                            <img
+                                src={coverImage}
+                                alt={(post.hero_image ? post.hero_image_alt : post.cover_image_alt) || getLocalized('title')}
+                            />
+                        </figure>
+                    )}
 
                     <div
                         className={classes.content}
-                        dangerouslySetInnerHTML={{ __html: formatMarkdown(getLocalized('content') || '') }}
+                        dangerouslySetInnerHTML={{ __html: contentHtml }}
                     />
-                </div>
-            </article>
+
+                    {/* Every post ends by pointing the reader at the goods. */}
+                    <section className={classes.cta}>
+                        <h2>{t.ctaHeading[lang]}</h2>
+                        <p>{t.ctaText[lang]}</p>
+                        <div className={classes.ctaActions}>
+                            <Link href={`/${locale}/product`} className={classes.ctaPrimary}>
+                                {t.ctaProducts[lang]}
+                            </Link>
+                            <Link href={`/${locale}/contact`} className={classes.ctaSecondary}>
+                                {t.ctaContact[lang]}
+                            </Link>
+                        </div>
+                    </section>
+                </article>
+
+                <aside className={classes.aside}>
+                    <BlogSubscribe locale={lang} />
+                </aside>
+            </div>
 
             {/* Custom Footer Content (Scripts) */}
             {post.footer_content && <ScriptInjector html={post.footer_content} />}
         </main>
     );
+}
+
+// Where an author's name links to. A post stores its author as plain text,
+// so the profile is found by name; an author not listed here is not linked.
+const AUTHOR_PROFILES: [RegExp, string][] = [
+    [/^muhamme[dt]\s+f[ıi]rat\s+öztürk/i, 'https://www.linkedin.com/in/muhammed-firat'],
+];
+
+function authorProfile(author: string): string | null {
+    const name = (author || '').trim();
+    const match = AUTHOR_PROFILES.find(([pattern]) => pattern.test(name));
+    return match ? match[1] : null;
 }
 
 // Simple markdown to HTML converter - preserves raw HTML
