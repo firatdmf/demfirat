@@ -100,7 +100,7 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
                 {/* Slide 1 */}
                 <div className={classes.slide}>
                   <Image
-                    src="/media/showcase/products-hero.jpg"
+                    src="/media/showcase/products-hero.avif"
                     alt="DEMFIRAT textile collection"
                     className={classes.showcaseImage}
                     fill
@@ -112,7 +112,7 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
                 {/* Slide 2 */}
                 <div className={classes.slide}>
                   <Image
-                    src="/media/showcase/slide-2.jpg"
+                    src="/media/showcase/slide-2.avif"
                     alt="DEMFIRAT collection slide 2"
                     className={classes.showcaseImage}
                     fill
@@ -124,7 +124,7 @@ export default async function Products(props: PageProps<'/[locale]/product'>) {
                 {/* Slide 3 */}
                 <div className={classes.slide}>
                   <Image
-                    src="/media/showcase/slide-3.jpg"
+                    src="/media/showcase/slide-3.avif"
                     alt="DEMFIRAT collection slide 3"
                     className={classes.showcaseImage}
                     fill
