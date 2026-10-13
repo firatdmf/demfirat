@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { sendEmail } from '@/lib/email';
 import { welcomeEmail } from '@/lib/welcomeEmail';
 import { discountEmail } from '@/lib/discountEmail';
@@ -60,15 +60,14 @@ export async function POST(request: NextRequest) {
         // Footer and blog subscriptions: no discount code, a short welcome.
         if (isFooter && data.success) {
             // Someone who left a phone number has no inbox to welcome.
+            // The email goes out after the answer: talking to the mail
+            // server takes seconds, and the visitor is waiting on "Subscribed".
             if (contactEmail) {
-                try {
-                    const welcome = welcomeEmail(contactEmail, body.locale, body.source === 'blog' ? 'blog' : 'footer');
-                    await sendEmail(contactEmail, welcome.subject, welcome.html);
-                    console.log('[Subscribe] Welcome email sent to:', contactEmail);
-                } catch (emailError) {
-                    console.error('[Subscribe] Welcome email failed:', emailError);
-                    // Don't fail the subscription if email fails
-                }
+                const welcome = welcomeEmail(contactEmail, body.locale, body.source === 'blog' ? 'blog' : 'footer');
+                after(async () => {
+                    const sent = await sendEmail(contactEmail, welcome.subject, welcome.html);
+                    console.log('[Subscribe] Welcome email', sent.success ? 'sent to:' : 'failed for:', contactEmail);
+                });
             }
             return NextResponse.json({ success: true });
         }
@@ -80,13 +79,11 @@ export async function POST(request: NextRequest) {
 
             const message = discountEmail(email, body.locale, discountCode);
 
-            try {
-                await sendEmail(email, message.subject, message.html);
-                console.log('[Subscribe] Email sent successfully to:', email);
-            } catch (emailError) {
-                console.error('[Subscribe] Email sending failed:', emailError);
-                // Don't fail the subscription if email fails
-            }
+            // Sent after the answer, like the welcome email above.
+            after(async () => {
+                const sent = await sendEmail(email, message.subject, message.html);
+                console.log('[Subscribe] Discount email', sent.success ? 'sent to:' : 'failed for:', email);
+            });
         }
 
         return NextResponse.json(data, { status: response.status });
