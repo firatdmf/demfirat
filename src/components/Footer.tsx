@@ -39,7 +39,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newsletterEmail, source: 'footer', recaptchaToken }),
+        body: JSON.stringify({ email: newsletterEmail, source: 'footer', locale, recaptchaToken }),
       });
       const data = await res.json();
       if (data.success) {

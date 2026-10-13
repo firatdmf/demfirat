@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email';
+import { welcomeEmail } from '@/lib/welcomeEmail';
 
 const BACKEND_URL = process.env.NEJUM_API_URL || 'http://127.0.0.1:8000';
 
@@ -32,7 +33,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const isFooter = body.source === 'footer';
+        // The footer form and the blog's subscribe box ask for an email only.
+        const isFooter = body.source === 'footer' || body.source === 'blog';
 
         // For footer: only email required, no phone needed
         // For popup: email + phone required
@@ -51,8 +53,16 @@ export async function POST(request: NextRequest) {
 
         const data = await response.json();
 
-        // Footer subscriptions: no discount email, just confirm
+        // Footer and blog subscriptions: no discount code, a short welcome.
         if (isFooter && data.success) {
+            try {
+                const welcome = welcomeEmail(body.email, body.locale, body.source === 'blog' ? 'blog' : 'footer');
+                await sendEmail(body.email, welcome.subject, welcome.html);
+                console.log('[Subscribe] Welcome email sent to:', body.email);
+            } catch (emailError) {
+                console.error('[Subscribe] Welcome email failed:', emailError);
+                // Don't fail the subscription if email fails
+            }
             return NextResponse.json({ success: true });
         }
 
@@ -87,12 +97,12 @@ export async function POST(request: NextRequest) {
             </p>
 
             <div style="background:linear-gradient(135deg,#c9a961 0%,#b8956a 100%);padding:30px;border-radius:12px;text-align:center;margin:0 0 24px;">
-              <p style="color:white;margin:0 0 10px;font-size:14px;">Size özel %10 indirim kodunuz:</p>
+              <p style="color:white;margin:0 0 10px;font-size:14px;">Size özel %15 indirim kodunuz:</p>
               <p style="color:white;font-size:32px;font-weight:bold;margin:0;letter-spacing:3px;">${discountCode}</p>
             </div>
 
             <p style="color:#666;font-size:14px;line-height:1.6;text-align:center;margin:0 0 8px;">
-              Bu kodu ödeme sayfasında kullanarak ilk siparişinizde <strong>%10 indirim</strong> kazanabilirsiniz.
+              Bu kodu ödeme sayfasında kullanarak ilk siparişinizde <strong>%15 indirim</strong> kazanabilirsiniz.
             </p>
 
             <p style="color:#999;font-size:12px;text-align:center;margin:24px 0 0;">
@@ -144,7 +154,7 @@ export async function POST(request: NextRequest) {
             try {
                 await sendEmail(
                     email,
-                    'Hoş Geldiniz! %10 İndirim Kodunuz 🎉',
+                    'Hoş Geldiniz! %15 İndirim Kodunuz 🎉',
                     htmlContent
                 );
                 console.log('[Subscribe] Email sent successfully to:', email);

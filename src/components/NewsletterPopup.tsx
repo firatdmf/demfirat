@@ -11,8 +11,8 @@ interface NewsletterPopupProps {
 const translations = {
     tr: {
         title: 'Bültenimize Abone Olun',
-        subtitle: 'İlk siparişinize özel %10 indirim kazanın!',
-        discount: '%10',
+        subtitle: 'İlk siparişinize özel %15 indirim kazanın!',
+        discount: '%15',
         emailLabel: 'E-posta Adresiniz',
         emailPlaceholder: 'ornek@email.com',
         phoneLabel: 'Telefon Numaranız',
@@ -29,8 +29,8 @@ const translations = {
     },
     en: {
         title: 'Subscribe to Our Newsletter',
-        subtitle: 'Get 10% off your first order!',
-        discount: '10%',
+        subtitle: 'Get 15% off your first order!',
+        discount: '15%',
         emailLabel: 'Your Email',
         emailPlaceholder: 'example@email.com',
         phoneLabel: 'Your Phone Number',
@@ -48,7 +48,7 @@ const translations = {
     ru: {
         title: 'Подпишитесь на рассылку',
         subtitle: 'Получите эксклюзивную скидку на первый заказ!',
-        discount: '10%',
+        discount: '15%',
         emailLabel: 'Ваш Email',
         emailPlaceholder: 'example@email.com',
         phoneLabel: 'Ваш номер телефона',
@@ -66,7 +66,7 @@ const translations = {
     pl: {
         title: 'Zapisz się do newslettera',
         subtitle: 'Odbierz ekskluzywny rabat na pierwsze zamówienie!',
-        discount: '10%',
+        discount: '15%',
         emailLabel: 'Twój Email',
         emailPlaceholder: 'przyklad@email.com',
         phoneLabel: 'Twój numer telefonu',

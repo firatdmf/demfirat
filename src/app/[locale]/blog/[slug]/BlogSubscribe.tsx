@@ -35,6 +35,7 @@ const text = {
 };
 
 // The same list the footer signs people up to, asked for beside the post.
+// A new subscriber is sent a short welcome email in the page's language.
 export default function BlogSubscribe({ locale }: { locale: Lang }) {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -59,7 +60,7 @@ export default function BlogSubscribe({ locale }: { locale: Lang }) {
             const res = await fetch('/api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, source: 'footer', recaptchaToken }),
+                body: JSON.stringify({ email, source: 'blog', locale, recaptchaToken }),
             });
             const data = await res.json();
             if (data.success) {
