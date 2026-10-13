@@ -9,6 +9,14 @@ import { useLocale } from 'next-intl';
 type Lang = 'en' | 'tr' | 'ru' | 'pl';
 
 const text = {
+    confirmTitle: { en: 'Unsubscribe?', tr: 'Abonelikten çıkılsın mı?', ru: 'Отписаться?', pl: 'Wypisać z listy?' },
+    confirmText: {
+        en: 'We will stop sending emails to:',
+        tr: 'Şu adrese e-posta göndermeyi bırakacağız:',
+        ru: 'Мы перестанем отправлять письма на адрес:',
+        pl: 'Przestaniemy wysyłać wiadomości na adres:',
+    },
+    confirmButton: { en: 'Confirm unsubscribe', tr: 'Abonelikten çık', ru: 'Подтвердить отписку', pl: 'Potwierdź wypisanie' },
     working: { en: 'Unsubscribing…', tr: 'Abonelikten çıkarılıyor…', ru: 'Отменяем подписку…', pl: 'Wypisywanie…' },
     doneTitle: { en: 'You are unsubscribed', tr: 'Abonelikten çıkıldı', ru: 'Вы отписались', pl: 'Wypisano z listy' },
     doneText: {
@@ -39,14 +47,16 @@ function UnsubscribeContent() {
     const searchParams = useSearchParams();
     const email = searchParams.get('email');
     const lang = useLang();
-    const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'no-email'>('loading');
+    const [status, setStatus] = useState<'confirm' | 'loading' | 'success' | 'error' | 'no-email'>('confirm');
 
     useEffect(() => {
-        if (!email) {
-            setStatus('no-email');
-            return;
-        }
+        if (!email) setStatus('no-email');
+    }, [email]);
 
+    // Opening the link does nothing by itself: mail scanners open links too,
+    // and would unsubscribe people who never asked. The button does it.
+    const unsubscribe = () => {
+        setStatus('loading');
         fetch('/api/unsubscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -57,7 +67,7 @@ function UnsubscribeContent() {
                 setStatus(data.success ? 'success' : 'error');
             })
             .catch(() => setStatus('error'));
-    }, [email]);
+    };
 
     return (
         <div style={{
@@ -87,6 +97,31 @@ function UnsubscribeContent() {
                 }}>
                     DEMFIRAT
                 </div>
+
+                {status === 'confirm' && (
+                    <>
+                        <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '1.3rem', color: '#1a1a1a', marginBottom: '0.75rem' }}>
+                            {text.confirmTitle[lang]}
+                        </h2>
+                        <p style={{ color: '#888', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                            {text.confirmText[lang]}<br />
+                            <strong style={{ color: '#1a1a1a', wordBreak: 'break-all' }}>{email}</strong>
+                        </p>
+                        <button type="button" onClick={unsubscribe} style={{
+                            padding: '0.8rem 2rem',
+                            background: '#944f05',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '6px',
+                            fontFamily: "'Montserrat', sans-serif",
+                            fontSize: '0.9rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                        }}>
+                            {text.confirmButton[lang]}
+                        </button>
+                    </>
+                )}
 
                 {status === 'loading' && (
                     <p style={{ color: '#666', fontSize: '1rem' }}>{text.working[lang]}</p>
@@ -128,14 +163,11 @@ function UnsubscribeContent() {
                 <Link href={lang === 'en' ? '/' : `/${lang}`} style={{
                     display: 'inline-block',
                     marginTop: '2rem',
-                    padding: '0.75rem 2rem',
-                    background: '#944f05',
-                    color: 'white',
-                    textDecoration: 'none',
-                    borderRadius: '6px',
+                    color: '#944f05',
+                    textDecoration: 'underline',
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: '0.85rem',
-                    fontWeight: 600,
+                    fontWeight: 500,
                 }}>
                     {text.home[lang]}
                 </Link>
