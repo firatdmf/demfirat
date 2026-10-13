@@ -161,8 +161,8 @@ function UnsubscribeContent() {
                 )}
 
                 <Link href={lang === 'en' ? '/' : `/${lang}`} style={{
-                    display: 'inline-block',
-                    marginTop: '2rem',
+                    display: 'block',
+                    marginTop: '1.75rem',
                     color: '#944f05',
                     textDecoration: 'underline',
                     fontFamily: "'Montserrat', sans-serif",
