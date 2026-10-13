@@ -12,7 +12,7 @@ const text = {
         ru: 'Не пропустите следующую статью.',
         pl: 'Nie przegap kolejnego wpisu.',
     },
-    placeholder: { en: 'Email address', tr: 'E-posta adresi', ru: 'Электронная почта', pl: 'Adres e-mail' },
+    placeholder: { en: 'Email or phone number', tr: 'E-posta veya telefon', ru: 'Email или телефон', pl: 'E-mail lub telefon' },
     button: { en: 'Subscribe', tr: 'Abone ol', ru: 'Подписаться', pl: 'Subskrybuj' },
     note: {
         en: 'No ads. Unsubscribe anytime.',
@@ -35,7 +35,8 @@ const text = {
 };
 
 // The same list the footer signs people up to, asked for beside the post.
-// A new subscriber is sent a short welcome email in the page's language.
+// They leave an email or a phone number; an email gets a short welcome in
+// the page's language.
 export default function BlogSubscribe({ locale }: { locale: Lang }) {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -60,7 +61,7 @@ export default function BlogSubscribe({ locale }: { locale: Lang }) {
             const res = await fetch('/api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, source: 'blog', locale, recaptchaToken }),
+                body: JSON.stringify({ contact: email, source: 'blog', locale, recaptchaToken }),
             });
             const data = await res.json();
             if (data.success) {
@@ -85,7 +86,9 @@ export default function BlogSubscribe({ locale }: { locale: Lang }) {
             ) : (
                 <form onSubmit={handleSubmit}>
                     <input
-                        type="email"
+                        type="text"
+                        inputMode="email"
+                        autoComplete="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}

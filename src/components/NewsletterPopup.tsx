@@ -155,10 +155,9 @@ export default function NewsletterPopup({ locale = 'tr' }: NewsletterPopupProps)
             const response = await fetch('/api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                // Phone is only collected on the TR site; the backend
-                // requires a value, so send the same placeholder the
-                // footer form uses.
-                body: JSON.stringify({ email, phone: showPhoneField ? phone : '0000000000', recaptchaToken }),
+                // Phone is only collected on the TR site; elsewhere there
+                // is none to send.
+                body: JSON.stringify({ email, phone: showPhoneField ? phone : '', locale, recaptchaToken }),
             });
 
             const data = await response.json();

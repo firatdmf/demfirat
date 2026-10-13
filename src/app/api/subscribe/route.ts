@@ -33,14 +33,17 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // The footer form and the blog's subscribe box ask for an email only.
+        // The footer form and the blog's subscribe box take one way to reach
+        // the person: an email address or a phone number.
         const isFooter = body.source === 'footer' || body.source === 'blog';
+        const contact = String(body.contact ?? body.email ?? '').trim();
+        const contactEmail = contact.includes('@') ? contact : '';
+        const contactPhone = contactEmail ? '' : contact;
 
-        // For footer: only email required, no phone needed
-        // For popup: email + phone required
+        // The pop-up asks for an email, and for a phone on the Turkish site.
         const subscribeBody = isFooter
-            ? { email: body.email, phone: body.phone || '0000000000', skip_discount: true }
-            : { email: body.email, phone: body.phone };
+            ? { email: contactEmail, phone: contactPhone, skip_discount: true, language: body.locale }
+            : { email: body.email, phone: body.phone, language: body.locale };
 
         // Call Django backend to validate and create subscription
         const response = await fetch(`${BACKEND_URL}/marketing/api/subscribe/`, {
@@ -55,13 +58,16 @@ export async function POST(request: NextRequest) {
 
         // Footer and blog subscriptions: no discount code, a short welcome.
         if (isFooter && data.success) {
-            try {
-                const welcome = welcomeEmail(body.email, body.locale, body.source === 'blog' ? 'blog' : 'footer');
-                await sendEmail(body.email, welcome.subject, welcome.html);
-                console.log('[Subscribe] Welcome email sent to:', body.email);
-            } catch (emailError) {
-                console.error('[Subscribe] Welcome email failed:', emailError);
-                // Don't fail the subscription if email fails
+            // Someone who left a phone number has no inbox to welcome.
+            if (contactEmail) {
+                try {
+                    const welcome = welcomeEmail(contactEmail, body.locale, body.source === 'blog' ? 'blog' : 'footer');
+                    await sendEmail(contactEmail, welcome.subject, welcome.html);
+                    console.log('[Subscribe] Welcome email sent to:', contactEmail);
+                } catch (emailError) {
+                    console.error('[Subscribe] Welcome email failed:', emailError);
+                    // Don't fail the subscription if email fails
+                }
             }
             return NextResponse.json({ success: true });
         }

@@ -39,7 +39,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newsletterEmail, source: 'footer', locale, recaptchaToken }),
+        body: JSON.stringify({ contact: newsletterEmail, source: 'footer', locale, recaptchaToken }),
       });
       const data = await res.json();
       if (data.success) {
@@ -72,7 +72,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       followUs: { en: 'Follow Us', tr: 'Bizi Takip Edin', ru: 'Подписывайтесь', pl: 'Obserwuj nas' },
       newsletter: { en: 'Stay updated with our latest collections', tr: 'En son koleksiyonlarımızdan haberdar olun', ru: 'Будьте в курсе наших новинок', pl: 'Bądź na bieżąco z nowościami' },
       subscribe: { en: 'Subscribe', tr: 'Kaydol', ru: 'Подписаться', pl: 'Subskrybuj' },
-      emailPlaceholder: { en: 'Your email', tr: 'E-posta adresiniz', ru: 'Ваш email', pl: 'Twój e-mail' },
+      emailPlaceholder: { en: 'Email or phone', tr: 'E-posta veya telefon', ru: 'Email или телефон', pl: 'E-mail lub telefon' },
       getOnList: { en: 'Get on the List', tr: 'Listede Yerinizi Alın', ru: 'Подпишитесь', pl: 'Zapisz się' },
       signUpText: { en: 'Sign up to know when we launch new products.', tr: 'Yeni ürünlerimizden haberdar olun.', ru: 'Узнавайте первыми о новинках.', pl: 'Bądź na bieżąco z nowymi produktami.' },
       contactUs: { en: 'Contact Us', tr: 'Bize Ulaşın', ru: 'Свяжитесь с нами', pl: 'Skontaktuj się' },
@@ -182,7 +182,9 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
             <p className={classes.newsletterDesc}>{t('signUpText')}</p>
             <form className={classes.newsletterForm} onSubmit={handleNewsletterSubmit}>
               <input
-                type="email"
+                type="text"
+                inputMode="email"
+                autoComplete="email"
                 placeholder={t('emailPlaceholder')}
                 className={classes.newsletterInput}
                 value={newsletterEmail}
