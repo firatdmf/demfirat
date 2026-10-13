@@ -1,269 +1,79 @@
-// Translation utility with local cache and Google Translate API integration
+// How catalog terms — attribute names, their values, product group names —
+// read in each language.
+//
+// The wordings are kept in the ERP (Marketing → Attribute wording) and asked
+// for here; this file used to carry them as a hand-written table, which meant
+// a new colour read in English on the Turkish site until somebody edited the
+// code. A term nobody has worded is shown from its stored English key
+// ("dark_cream" → "Dark cream").
 
-// Local cache to avoid repeated API calls in the same session
-const localCache: Map<string, string> = new Map();
-
-// Manual translations for common terms (fallback when API is not available)
-const manualTranslations: { [key: string]: { [key: string]: string } } = {
-    // Attribute Names
-    'color': { 'tr': 'Renk', 'ru': 'Цвет', 'pl': 'Kolor', 'en': 'Color' },
-    'width': { 'tr': 'Genişlik', 'ru': 'Ширина', 'pl': 'Szerokość', 'en': 'Width' },
-    'height': { 'tr': 'Yükseklik', 'ru': 'Высота', 'pl': 'Wysokość', 'en': 'Height' },
-    'fabric': { 'tr': 'Kumaş', 'ru': 'Ткань', 'pl': 'Tkanina', 'en': 'Fabric' },
-    'fabric_type': { 'tr': 'Kumaş Tipi', 'ru': 'Тип ткани', 'pl': 'Rodzaj tkaniny', 'en': 'Fabric Type' },
-    'size': { 'tr': 'Boyut', 'ru': 'Размер', 'pl': 'Rozmiar', 'en': 'Size' },
-    'size per panel': { 'tr': 'Kanat Başına Boyut', 'ru': 'Размер на панель', 'pl': 'Rozmiar na panel', 'en': 'Size Per Panel' },
-    'material': { 'tr': 'Malzeme', 'ru': 'Материал', 'pl': 'Materiał', 'en': 'Material' },
-    'pattern': { 'tr': 'Desen', 'ru': 'Узор', 'pl': 'Wzór', 'en': 'Pattern' },
-    'style': { 'tr': 'Stil', 'ru': 'Стиль', 'pl': 'Styl', 'en': 'Style' },
-    'type': { 'tr': 'Tip', 'ru': 'Тип', 'pl': 'Typ', 'en': 'Type' },
-    'category': { 'tr': 'Kategori', 'ru': 'Категория', 'pl': 'Kategoria', 'en': 'Category' },
-    'collection': { 'tr': 'Koleksiyon', 'ru': 'Коллекция', 'pl': 'Kolekcja', 'en': 'Collection' },
-    'opacity': { 'tr': 'Opaklık', 'ru': 'Непрозрачность', 'pl': 'Przezroczystość', 'en': 'Opacity' },
-    'weight': { 'tr': 'Ağırlık', 'ru': 'Вес', 'pl': 'Waga', 'en': 'Weight' },
-    'cristal': { 'tr': 'Kristal', 'ru': 'Кристалл', 'pl': 'Kryształ', 'en': 'Crystal' },
-    'pearl': { 'tr': 'İnci Detaylı', 'ru': 'С жемчугом', 'pl': 'Z perłami', 'en': 'Pearl' },
-
-    // Categories
-    'curtain': { 'tr': 'Perde', 'ru': 'Штора', 'pl': 'Zasłona', 'en': 'Curtain' },
-    'ready-made_curtain': { 'tr': 'Hazır Perde', 'ru': 'Готовые шторы', 'pl': 'Gotowe zasłony', 'en': 'Ready-Made Curtain' },
-
-    // Fabric Type Values
-    'solid': { 'tr': 'Düz', 'ru': 'Однотонный', 'pl': 'Jednolity', 'en': 'Solid' },
-    'embroidery': { 'tr': 'Nakışlı', 'ru': 'Вышивка', 'pl': 'Haft', 'en': 'Embroidery' },
-    'patterned': { 'tr': 'Desenli', 'ru': 'Узорчатый', 'pl': 'Wzorzysty', 'en': 'Patterned' },
-
-    // Yes/No Values
-    'yes': { 'tr': 'Evet', 'ru': 'Да', 'pl': 'Tak', 'en': 'Yes' },
-    'no': { 'tr': 'Hayır', 'ru': 'Нет', 'pl': 'Nie', 'en': 'No' },
-    'true': { 'tr': 'Evet', 'ru': 'Да', 'pl': 'Tak', 'en': 'Yes' },
-    'false': { 'tr': 'Hayır', 'ru': 'Нет', 'pl': 'Nie', 'en': 'No' },
-
-    // Basic Colors
-    'ecru': { 'tr': 'Ekru', 'ru': 'Экрю', 'pl': 'Ecru', 'en': 'Ecru' },
-    'whitesmoke': { 'tr': 'Duman Beyazı', 'ru': 'Дымчато-белый', 'pl': 'Biały dymny', 'en': 'White Smoke' },
-    'white': { 'tr': 'Beyaz', 'ru': 'Белый', 'pl': 'Biały', 'en': 'White' },
-    'black': { 'tr': 'Siyah', 'ru': 'Черный', 'pl': 'Czarny', 'en': 'Black' },
-    'beige': { 'tr': 'Bej', 'ru': 'Бежевый', 'pl': 'Beżowy', 'en': 'Beige' },
-    'cream': { 'tr': 'Krem', 'ru': 'Кремовый', 'pl': 'Kremowy', 'en': 'Cream' },
-    'grey': { 'tr': 'Gri', 'ru': 'Серый', 'pl': 'Szary', 'en': 'Grey' },
-    'gray': { 'tr': 'Gri', 'ru': 'Серый', 'pl': 'Szary', 'en': 'Gray' },
-    'brown': { 'tr': 'Kahverengi', 'ru': 'Коричневый', 'pl': 'Brązowy', 'en': 'Brown' },
-    'red': { 'tr': 'Kırmızı', 'ru': 'Красный', 'pl': 'Czerwony', 'en': 'Red' },
-    'blue': { 'tr': 'Mavi', 'ru': 'Синий', 'pl': 'Niebieski', 'en': 'Blue' },
-    'green': { 'tr': 'Yeşil', 'ru': 'Зеленый', 'pl': 'Zielony', 'en': 'Green' },
-    'yellow': { 'tr': 'Sarı', 'ru': 'Желтый', 'pl': 'Żółty', 'en': 'Yellow' },
-    'orange': { 'tr': 'Turuncu', 'ru': 'Оранжевый', 'pl': 'Pomarańczowy', 'en': 'Orange' },
-    'pink': { 'tr': 'Pembe', 'ru': 'Розовый', 'pl': 'Różowy', 'en': 'Pink' },
-    'purple': { 'tr': 'Mor', 'ru': 'Фиолетовый', 'pl': 'Fioletowy', 'en': 'Purple' },
-    'gold': { 'tr': 'Altın', 'ru': 'Золотой', 'pl': 'Złoty', 'en': 'Gold' },
-    'silver': { 'tr': 'Gümüş', 'ru': 'Серебряный', 'pl': 'Srebrny', 'en': 'Silver' },
-    'navy': { 'tr': 'Lacivert', 'ru': 'Темно-синий', 'pl': 'Granatowy', 'en': 'Navy' },
-    'ivory': { 'tr': 'Fildişi', 'ru': 'Слоновая кость', 'pl': 'Kość słoniowa', 'en': 'Ivory' },
-    'wheat': { 'tr': 'Buğday', 'ru': 'Пшеничный', 'pl': 'Pszeniczny', 'en': 'Wheat' },
-    'mint': { 'tr': 'Nane', 'ru': 'Мятный', 'pl': 'Miętowy', 'en': 'Mint' },
-    'deeppink': { 'tr': 'Koyu Pembe', 'ru': 'Темно-розовый', 'pl': 'Głęboki róż', 'en': 'Deep Pink' },
-
-    // Two-tone Colors
-    'grey-white': { 'tr': 'Gri-Beyaz', 'ru': 'Серо-белый', 'pl': 'Szaro-biały', 'en': 'Grey-White' },
-    'grey-ecru': { 'tr': 'Gri-Ekru', 'ru': 'Серо-экрю', 'pl': 'Szaro-ecru', 'en': 'Grey-Ecru' },
-    'gold-beige': { 'tr': 'Altın-Bej', 'ru': 'Золотисто-бежевый', 'pl': 'Złoto-beżowy', 'en': 'Gold-Beige' },
-    'gold-silver': { 'tr': 'Altın-Gümüş', 'ru': 'Золотисто-серебряный', 'pl': 'Złoto-srebrny', 'en': 'Gold-Silver' },
-    'pink-white': { 'tr': 'Pembe-Beyaz', 'ru': 'Розово-белый', 'pl': 'Różowo-biały', 'en': 'Pink-White' },
-    'pink-ecru': { 'tr': 'Pembe-Ekru', 'ru': 'Розово-экрю', 'pl': 'Różowo-ecru', 'en': 'Pink-Ecru' },
-    'navy-gold': { 'tr': 'Lacivert-Altın', 'ru': 'Темно-сине-золотой', 'pl': 'Granatowo-złoty', 'en': 'Navy-Gold' },
-    'gold-white': { 'tr': 'Altın-Beyaz', 'ru': 'Золотисто-белый', 'pl': 'Złoto-biały', 'en': 'Gold-White' },
-    'gold-ecru': { 'tr': 'Altın-Ekru', 'ru': 'Золотисто-экрю', 'pl': 'Złoto-ecru', 'en': 'Gold-Ecru' },
-    'teal': { 'tr': 'Çam Yeşili', 'ru': 'Бирюзовый', 'pl': 'Morski', 'en': 'Teal' },
-    'off-white': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },
-    'offwhite': { 'tr': 'Kırık Beyaz', 'ru': 'Молочно-белый', 'pl': 'Złamana biel', 'en': 'Off-White' },
-    'ecru-gold': { 'tr': 'Ekru-Altın', 'ru': 'Экрю-золотой', 'pl': 'Ecru-złoty', 'en': 'Ecru-Gold' },
-    'silver-gold': { 'tr': 'Gümüş-Altın', 'ru': 'Серебристо-золотой', 'pl': 'Srebrno-złoty', 'en': 'Silver-Gold' },
-    'cream-gold': { 'tr': 'Krem-Altın', 'ru': 'Кремово-золотой', 'pl': 'Kremowo-złoty', 'en': 'Cream-Gold' },
-    'silver-white': { 'tr': 'Gümüş-Beyaz', 'ru': 'Серебристо-белый', 'pl': 'Srebrno-biały', 'en': 'Silver-White' },
-    'cream-white': { 'tr': 'Krem-Beyaz', 'ru': 'Кремово-белый', 'pl': 'Kremowo-biały', 'en': 'Cream-White' },
-    'mink': { 'tr': 'Vizon', 'ru': 'Норковый', 'pl': 'Norkowy', 'en': 'Mink' },
-    'cappucino': { 'tr': 'Kapuçino', 'ru': 'Капучино', 'pl': 'Cappuccino', 'en': 'Cappuccino' },
-    'cappuccino': { 'tr': 'Kapuçino', 'ru': 'Капучино', 'pl': 'Cappuccino', 'en': 'Cappuccino' },
-
-    // Curtain Styles / Pile Types
-    'header': { 'tr': 'Başlık', 'ru': 'Верхняя часть', 'pl': 'Główka', 'en': 'Header' },
-    'rod_pocket': { 'tr': 'Büzgülü', 'ru': 'Карман для карниза', 'pl': 'Tunelowy', 'en': 'Rod Pocket' },
-    'rod pocket': { 'tr': 'Büzgülü', 'ru': 'Карман для карниза', 'pl': 'Tunelowy', 'en': 'Rod Pocket' },
-    'grommet': { 'tr': 'Halkalı', 'ru': 'С люверсами', 'pl': 'Z oczkami', 'en': 'Grommet' },
-    'eyelet': { 'tr': 'Halkalı', 'ru': 'С люверсами', 'pl': 'Z oczkami', 'en': 'Eyelet' },
-    'pencil pleat': { 'tr': 'Sık Pile', 'ru': 'Карандашная складка', 'pl': 'Fałda ołówkowa', 'en': 'Pencil Pleat' },
-    'pencil_pleat': { 'tr': 'Sık Pile', 'ru': 'Карандашная складка', 'pl': 'Fałda ołówkowa', 'en': 'Pencil Pleat' },
-    'pinch pleat': { 'tr': 'Tutam Pile', 'ru': 'Тройная складка', 'pl': 'Fałda szczypana', 'en': 'Pinch Pleat' },
-    'pinch_pleat': { 'tr': 'Tutam Pile', 'ru': 'Тройная складка', 'pl': 'Fałda szczypana', 'en': 'Pinch Pleat' },
-    'wave': { 'tr': 'Dalga Pile', 'ru': 'Волнообразная складка', 'pl': 'Fałda falista', 'en': 'Wave' },
-    'wave pleat': { 'tr': 'Dalga Pile', 'ru': 'Волнообразная складка', 'pl': 'Fałda falista', 'en': 'Wave Pleat' },
-    'wave_pleat': { 'tr': 'Dalga Pile', 'ru': 'Волнообразная складка', 'pl': 'Fałda falista', 'en': 'Wave Pleat' },
-    'goblet pleat': { 'tr': 'Kadeh Pile', 'ru': 'Бокальная складка', 'pl': 'Fałda pucharowa', 'en': 'Goblet Pleat' },
-    'goblet_pleat': { 'tr': 'Kadeh Pile', 'ru': 'Бокальная складка', 'pl': 'Fałda pucharowa', 'en': 'Goblet Pleat' },
-    'flat': { 'tr': 'Düz', 'ru': 'Плоский', 'pl': 'Płaski', 'en': 'Flat' },
-    'pleat': { 'tr': 'Pile', 'ru': 'Складка', 'pl': 'Fałda', 'en': 'Pleat' },
-    'pleat_type': { 'tr': 'Pile Tipi', 'ru': 'Тип складки', 'pl': 'Typ fałdy', 'en': 'Pleat Type' },
-    '1x2': { 'tr': '1x2 (Normal Pile)', 'ru': '1x2 (Обычная складка)', 'pl': '1x2 (Normalna fałda)', 'en': '1x2 (Normal Pleat)' },
-    '1x2.5': { 'tr': '1x2.5 (Sık Pile)', 'ru': '1x2.5 (Плотная складка)', 'pl': '1x2.5 (Gęsta fałda)', 'en': '1x2.5 (Dense Pleat)' },
-    '1x3': { 'tr': '1x3 (Çok Sık Pile)', 'ru': '1x3 (Очень плотная складка)', 'pl': '1x3 (Bardzo gęsta fałda)', 'en': '1x3 (Very Dense Pleat)' },
-    'single': { 'tr': 'Tek Kanat', 'ru': 'Одинарное', 'pl': 'Pojedyncze', 'en': 'Single' },
-    'double': { 'tr': 'Çift Kanat', 'ru': 'Двойное', 'pl': 'Podwójne', 'en': 'Double' },
-
-    // Additional Attributes
-    'high gsm': { 'tr': 'Ağır Gramajlı', 'ru': 'Высокая плотность', 'pl': 'Wysoka gramatura', 'en': 'High GSM' },
-    'high_gsm': { 'tr': 'Ağır Gramajlı', 'ru': 'Высокая плотность', 'pl': 'Wysoka gramatura', 'en': 'High GSM' },
-    'none iron': { 'tr': 'Ütü İstemez', 'ru': 'Не требует глажки', 'pl': 'Bez prasowania', 'en': 'None Iron' },
-    'none-iron': { 'tr': 'Ütü İstemez', 'ru': 'Не требует глажки', 'pl': 'Bez prasowania', 'en': 'None Iron' },
-    'texture': { 'tr': 'Doku', 'ru': 'Текстура', 'pl': 'Tekstura', 'en': 'Texture' },
-    'linen texture': { 'tr': 'Keten Dokusu', 'ru': 'Льняная текстура', 'pl': 'Tekstura lnu', 'en': 'Linen Texture' },
-    'linen_texture': { 'tr': 'Keten Dokusu', 'ru': 'Льняная текстура', 'pl': 'Tekstura lnu', 'en': 'Linen Texture' },
-    'linen': { 'tr': 'Keten', 'ru': 'Лён', 'pl': 'Len', 'en': 'Linen' },
-    'sheerness': { 'tr': 'Işık geçirgenliği', 'ru': 'Прозрачность', 'pl': 'Przezroczystość', 'en': 'Sheerness' },
-    'sheerness level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
-    'sheerness_level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
-    'sherness level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' }, // fix typo in DB
-    'sherness_level': { 'tr': 'Işık geçirgenliği', 'ru': 'Уровень прозрачности', 'pl': 'Poziom przezroczystości', 'en': 'Sheerness Level' },
-    'semi sheer': { 'tr': 'Yarı Şeffaf', 'ru': 'Полупрозрачный', 'pl': 'Półprzezroczysty', 'en': 'Semi Sheer' },
-    'semi-sheer': { 'tr': 'Yarı Şeffaf', 'ru': 'Полупрозрачный', 'pl': 'Półprzezroczysty', 'en': 'Semi Sheer' },
-    'sheer': { 'tr': 'Şeffaf', 'ru': 'Прозрачный', 'pl': 'Przezroczysty', 'en': 'Sheer' },
-    'opaque': { 'tr': 'Opak', 'ru': 'Непрозрачный', 'pl': 'Nieprzezroczysty', 'en': 'Opaque' },
-    'light filtering': { 'tr': 'Filtreli Işık', 'ru': 'Светофильтрующая', 'pl': 'Filtrująca światło', 'en': 'Light Filtering' },
-    'blackout': { 'tr': 'Işık Geçirmez', 'ru': 'Блэкаут', 'pl': 'Zaciemniająca', 'en': 'Blackout' },
-    'care': { 'tr': 'Bakım', 'ru': 'Уход', 'pl': 'Pielęgnacja', 'en': 'Care' },
-    'property': { 'tr': 'Özellik', 'ru': 'Свойство', 'pl': 'Właściwość', 'en': 'Property' },
-
-    // Bedding attributes
-    'cotton-sateen': { 'tr': 'Pamuk-Saten', 'ru': 'Хлопок-Сатин', 'pl': 'Bawełna-Satyna', 'en': 'Cotton-Sateen' },
-    'cotton sateen': { 'tr': 'Pamuk-Saten', 'ru': 'Хлопок-Сатин', 'pl': 'Bawełna-Satyna', 'en': 'Cotton-Sateen' },
-    'cotton': { 'tr': 'Pamuk', 'ru': 'Хлопок', 'pl': 'Bawełna', 'en': 'Cotton' },
-    'sateen': { 'tr': 'Saten', 'ru': 'Сатин', 'pl': 'Satyna', 'en': 'Sateen' },
-    'polyester': { 'tr': 'Polyester', 'ru': 'Полиэстер', 'pl': 'Poliester', 'en': 'Polyester' },
-
-    // Sheet type
-    'sheet_type': { 'tr': 'Çarşaf Türü', 'ru': 'Тип простыни', 'pl': 'Typ prześcieradła', 'en': 'Sheet Type' },
-    'sheet type': { 'tr': 'Çarşaf Türü', 'ru': 'Тип простыни', 'pl': 'Typ prześcieradła', 'en': 'Sheet Type' },
-    'fitted': { 'tr': 'Lastikli', 'ru': 'На резинке', 'pl': 'Z gumką', 'en': 'Fitted' },
-    'non-fitted': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Non-Fitted' },
-    'non_fitted': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Non-Fitted' },
-    'flat sheet (non-elastic)': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Flat Sheet (Non-Elastic)' },
-    'flat sheet': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Flat Sheet' },
-    'non-elastic': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Non-Elastic' },
-    'non elastic': { 'tr': 'Lastiksiz', 'ru': 'Без резинки', 'pl': 'Bez gumki', 'en': 'Non-Elastic' },
-    'elastic': { 'tr': 'Lastikli', 'ru': 'На резинке', 'pl': 'Z gumką', 'en': 'Elastic' },
-    'fitted sheet': { 'tr': 'Lastikli', 'ru': 'На резинке', 'pl': 'Z gumką', 'en': 'Fitted Sheet' },
-    'fitted sheet (elastic)': { 'tr': 'Lastikli', 'ru': 'На резинке', 'pl': 'Z gumką', 'en': 'Fitted Sheet (Elastic)' },
-
-    // Bed sizes
-    'queen': { 'tr': 'Queen', 'ru': 'Queen', 'pl': 'Queen', 'en': 'Queen' },
-    'king': { 'tr': 'King', 'ru': 'King', 'pl': 'King', 'en': 'King' },
-
-    // Dimensions / Ebat
-    'dimension': { 'tr': 'Boyut/Ebat', 'ru': 'Размер', 'pl': 'Wymiar', 'en': 'Dimension' },
-    'dimensions': { 'tr': 'Boyut/Ebat', 'ru': 'Размеры', 'pl': 'Wymiary', 'en': 'Dimensions' },
-    'ebat': { 'tr': 'Boyut/Ebat', 'ru': 'Размер', 'pl': 'Wymiar', 'en': 'Size' },
-    'number_of_panels': { 'tr': 'Kanat Sayısı', 'ru': 'Количество панелей', 'pl': 'Liczba paneli', 'en': 'Number of Panels' },
-    'number of panels': { 'tr': 'Kanat Sayısı', 'ru': 'Количество панелей', 'pl': 'Liczba paneli', 'en': 'Number of Panels' },
-    'number_of_panel': { 'tr': 'Kanat Sayısı', 'ru': 'Количество панелей', 'pl': 'Liczba paneli', 'en': 'Number of Panels' },
-    'wrinkle_resistance': { 'tr': 'Kırışmaz', 'ru': 'Не мнётся', 'pl': 'Nie gniecie się', 'en': 'Wrinkle Resistance' },
-    'wrinkle resistance': { 'tr': 'Kırışmaz', 'ru': 'Не мнётся', 'pl': 'Nie gniecie się', 'en': 'Wrinkle Resistance' },
-    'fast_shipping': { 'tr': 'Ertesi Gün Kargoda', 'ru': 'Отправка за 24 часа', 'pl': 'Wysyłka w 24h', 'en': 'Fast Shipping' },
-    'fast shipping': { 'tr': 'Ertesi Gün Kargoda', 'ru': 'Отправка за 24 часа', 'pl': 'Wysyłka w 24h', 'en': 'Fast Shipping' },
-    'warranty': { 'tr': 'Garanti', 'ru': 'Гарантия', 'pl': 'Gwarancja', 'en': 'Warranty' },
-    'quilt_cover_size': { 'tr': 'Nevresim Ölçüsü', 'ru': 'Размер пододеяльника', 'pl': 'Rozmiar poszwy', 'en': 'Quilt Cover Size' },
-    'quilt cover size': { 'tr': 'Nevresim Ölçüsü', 'ru': 'Размер пододеяльника', 'pl': 'Rozmiar poszwy', 'en': 'Quilt Cover Size' },
-    'single_quilt_cover_size': { 'tr': 'Tek Kişilik Nevresim Ölçüsü', 'ru': 'Размер пододеяльника (односпальный)', 'pl': 'Rozmiar poszwy (pojedyncza)', 'en': 'Single Quilt Cover Size' },
-    'sheet_size': { 'tr': 'Çarşaf Ölçüsü', 'ru': 'Размер простыни', 'pl': 'Rozmiar prześcieradła', 'en': 'Sheet Size' },
-    'sheet size': { 'tr': 'Çarşaf Ölçüsü', 'ru': 'Размер простыни', 'pl': 'Rozmiar prześcieradła', 'en': 'Sheet Size' },
-    'single_sheet_size': { 'tr': 'Tek Kişilik Çarşaf Ölçüsü', 'ru': 'Размер простыни (односпальный)', 'pl': 'Rozmiar prześcieradła (pojedyncza)', 'en': 'Single Sheet Size' },
-    'pillow_case_size': { 'tr': 'Yastık Kılıfı Ölçüsü', 'ru': 'Размер наволочки', 'pl': 'Rozmiar poszewki', 'en': 'Pillow Case Size' },
-    'pillow case size': { 'tr': 'Yastık Kılıfı Ölçüsü', 'ru': 'Размер наволочки', 'pl': 'Rozmiar poszewki', 'en': 'Pillow Case Size' },
-    'single_pillow_case_size': { 'tr': 'Tek Kişilik Yastık Kılıfı Ölçüsü', 'ru': 'Размер наволочки (односпальный)', 'pl': 'Rozmiar poszewki (pojedyncza)', 'en': 'Single Pillow Case Size' },
-    'oxford_pillow_case_size': { 'tr': 'Oxford Yastık Kılıfı Ölçüsü', 'ru': 'Размер оксфордской наволочки', 'pl': 'Rozmiar poszewki oxford', 'en': 'Oxford Pillow Case Size' },
-    'oxford pillow case size': { 'tr': 'Oxford Yastık Kılıfı Ölçüsü', 'ru': 'Размер оксфордской наволочки', 'pl': 'Rozmiar poszewki oxford', 'en': 'Oxford Pillow Case Size' },
-    'single_oxford_pillow_case_size': { 'tr': 'Tek Kişilik Oxford Yastık Kılıfı Ölçüsü', 'ru': 'Размер оксфордской наволочки (односпальный)', 'pl': 'Rozmiar poszewki oxford (pojedyncza)', 'en': 'Single Oxford Pillow Case Size' },
-    'panel_type': { 'tr': 'Başlık Tipi', 'ru': 'Тип панели', 'pl': 'Typ panelu', 'en': 'Panel Type' },
-    'panel type': { 'tr': 'Başlık Tipi', 'ru': 'Тип панели', 'pl': 'Typ panelu', 'en': 'Panel Type' },
-    'gold glitter': { 'tr': 'Altın Simli', 'ru': 'Золотые блестки', 'pl': 'Złoty brokat', 'en': 'Gold Glitter' },
-    'gold_glitter': { 'tr': 'Altın Simli', 'ru': 'Золотые блестки', 'pl': 'Złoty brokat', 'en': 'Gold Glitter' },
-    'smoky quartz': { 'tr': 'Puslu Kuvartz', 'ru': 'Дымчатый кварц', 'pl': 'Kwarc dymny', 'en': 'Smoky Quartz' },
-    'smoky_quartz': { 'tr': 'Puslu Kuvartz', 'ru': 'Дымчатый кварц', 'pl': 'Kwarc dymny', 'en': 'Smoky Quartz' },
-    // Mounting / Installation Types
-    'mounting_type': { 'tr': 'Montaj Tipi', 'ru': 'Тип монтажа', 'pl': 'Typ montażu', 'en': 'Mounting Type' },
-    'wing_type': { 'tr': 'Montaj Tipi', 'ru': 'Тип монтажа', 'pl': 'Typ montażu', 'en': 'Mounting Type' },
-    'ceiling': { 'tr': 'Tavan Montaj', 'ru': 'Потолочный монтаж', 'pl': 'Montaż sufitowy', 'en': 'Ceiling Mount' },
-    'wall': { 'tr': 'Duvar Montaj', 'ru': 'Настенный монтаж', 'pl': 'Montaż ścienny', 'en': 'Wall Mount' },
-
-    // UI Text
-    'loading': { 'tr': 'Yükleniyor', 'ru': 'Загрузка', 'pl': 'Ładowanie', 'en': 'Loading' },
-    'loading...': { 'tr': 'Yükleniyor...', 'ru': 'Загрузка...', 'pl': 'Ładowanie...', 'en': 'Loading...' },
+export type ErpWordings = {
+    names?: { [attribute: string]: { [lang: string]: string } };
+    // values[""] holds the values worded for any attribute ("yes").
+    values?: { [attribute: string]: { [value: string]: { [lang: string]: string } } };
+    groups?: { [group: string]: { [lang: string]: string } };
 };
 
-/**
- * Synchronous translation - checks manual translations only (API disabled)
- */
+type ByLanguage = { [lang: string]: string };
+
+let wordings: { [term: string]: ByLanguage } = {};
+
+/** A term as the ERP spells it for matching: lower case, underscores as
+ *  spaces, single spaces. */
+function termKey(text: string): string {
+    return text.toLowerCase().replace(/_/g, ' ').split(/\s+/).filter(Boolean).join(' ');
+}
+
+/** Take the ERP's answer. A term is looked up by its own word alone here, so
+ *  where two attributes word the same value differently the first is kept;
+ *  a value worded under its own attribute wins over one worded for any, and
+ *  a name or a group over both. */
+export function setErpWordings(data: ErpWordings | null | undefined) {
+    const flat: { [term: string]: ByLanguage } = {};
+    if (data) {
+        const values = data.values || {};
+        const scopes = Object.keys(values).sort((a, b) => (a === '' ? 1 : 0) - (b === '' ? 1 : 0));
+        for (const scope of scopes) {
+            for (const [value, byLang] of Object.entries(values[scope])) {
+                const key = termKey(value);
+                if (!flat[key]) flat[key] = byLang;
+            }
+        }
+        for (const [name, byLang] of Object.entries(data.groups || {})) {
+            flat[termKey(name)] = byLang;
+        }
+        for (const [name, byLang] of Object.entries(data.names || {})) {
+            flat[termKey(name)] = byLang;
+        }
+    }
+    wordings = flat;
+}
+
+/** Ask the ERP for its wordings. Server side only; kept for five minutes.
+ *  Any failure answers null, and terms read from their keys. */
+export async function fetchErpWordings(): Promise<ErpWordings | null> {
+    const base = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
+    if (!base) return null;
+    try {
+        const response = await fetch(`${base}/marketing/api/attribute_translations/`, {
+            next: { revalidate: 300 },
+        });
+        if (!response.ok) return null;
+        return (await response.json()) as ErpWordings;
+    } catch {
+        return null;
+    }
+}
+
+/** How a term reads in `targetLang`: its wording, else its key tidied up. */
 export function translateTextSync(text: string, targetLang: string): string {
     if (!text) return '';
-
-    // If target is English, just format and return
-    if (targetLang.toLowerCase() === 'en') {
-        return text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
-    }
-
-    const cacheKey = `${text.toLowerCase()}_${targetLang}`;
-
-    // Check local cache first
-    if (localCache.has(cacheKey)) {
-        return localCache.get(cacheKey)!;
-    }
-
-    // Check manual translations
-    const lowerText = text.toLowerCase();
-    if (manualTranslations[lowerText]?.[targetLang]) {
-        const translated = manualTranslations[lowerText][targetLang];
-        localCache.set(cacheKey, translated);
-        return translated;
-    }
-
-    // Fallback text (no API call - it's blocked and causes lag)
-    const fallback = text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
-    localCache.set(cacheKey, fallback);
-    return fallback;
+    const worded = wordings[termKey(text)]?.[targetLang.toLowerCase()];
+    if (worded) return worded;
+    return text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
 }
 
-/**
- * Async translation - uses manual translations only (API disabled)
- */
+/** The same answer for callers that await it. */
 export async function translateText(text: string, targetLang: string): Promise<string> {
-    if (!text) return '';
-
-    if (targetLang.toLowerCase() === 'en') {
-        return text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
-    }
-
-    const cacheKey = `${text.toLowerCase()}_${targetLang}`;
-
-    if (localCache.has(cacheKey)) {
-        return localCache.get(cacheKey)!;
-    }
-
-    const lowerText = text.toLowerCase();
-    if (manualTranslations[lowerText]?.[targetLang]) {
-        const result = manualTranslations[lowerText][targetLang];
-        localCache.set(cacheKey, result);
-        return result;
-    }
-
-    // Fallback text (no API call - it's blocked and causes lag)
-    const fallback = text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, ' ');
-    localCache.set(cacheKey, fallback);
-    return fallback;
-}
-
-export function addManualTranslation(key: string, translations: { [lang: string]: string }) {
-    manualTranslations[key.toLowerCase()] = { ...manualTranslations[key.toLowerCase()], ...translations };
-}
-
-export function clearTranslationCache() {
-    localCache.clear();
+    return translateTextSync(text, targetLang);
 }

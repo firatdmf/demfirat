@@ -11,6 +11,8 @@ import { Providers } from "./providers";
 import { getTranslations, getMessages } from "next-intl/server";
 import GoogleAnalytics from "@/lib/googleAnalytics";
 import ScrollToTop from "@/components/ScrollToTop";
+import ErpWordings from "@/components/ErpWordings";
+import { fetchErpWordings } from "@/lib/translate";
 import ScrollSmoother from "@/components/ScrollSmoother";
 import NewsletterPopup from "@/components/NewsletterPopup";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -59,6 +61,8 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
   // const FooterT = useTranslations("FooterPage");
   const footerT = await getTranslations({ locale, namespace: "FooterPage" });
   const messages = await getMessages({ locale });
+  // How catalog attribute names and values read in each language, kept in the ERP.
+  const wordings = await fetchErpWordings();
 
   return (
     <html lang={locale}>
@@ -149,6 +153,7 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
 
         <GoogleAnalytics />
         {/* Provider component wraps the application and passes the props of session information (from the user) */}
+        <ErpWordings data={wordings} />
         <Providers messages={messages} locale={locale}>
           <ScrollToTop />
           {/* <ScrollSmoother /> - Temporarily disabled */}

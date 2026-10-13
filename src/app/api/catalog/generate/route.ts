@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import jsPDF from 'jspdf';
 import sharp from 'sharp';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
-import { translateTextSync } from '@/lib/translate';
+import { translateTextSync, fetchErpWordings, setErpWordings } from '@/lib/translate';
 
 const USD_TO_TRY = 35.0;
 const NEJUM_API_URL = process.env.NEXT_PUBLIC_NEJUM_API_URL || '';
@@ -213,6 +213,9 @@ const translations: { [key: string]: { [lang: string]: string } } = {
 export async function POST(request: NextRequest) {
     try {
         const { products, locale = 'en' } = await request.json();
+        // The catalog's attribute wordings come from the ERP; this route
+        // runs outside the layout that loads them for pages.
+        setErpWordings(await fetchErpWordings());
 
         if (!products || !Array.isArray(products) || products.length === 0) {
             return NextResponse.json({ success: false, error: 'No products' }, { status: 400 });
