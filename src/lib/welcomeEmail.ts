@@ -14,11 +14,17 @@ const text = {
             ru: 'Вы подписались на блог Demfirat',
             pl: 'Subskrybujesz blog Demfirat',
         },
+        heading: {
+            en: 'Welcome to the Demfirat blog',
+            tr: 'Demfirat bloguna hoş geldiniz',
+            ru: 'Добро пожаловать в блог Demfirat',
+            pl: 'Witamy na blogu Demfirat',
+        },
         body: {
-            en: 'You are now on the list for the Demfirat blog. We will write to you when a new post is out: fabrics, how they are made and how to look after them.',
-            tr: 'Artık Demfirat blog listesindesiniz. Yeni bir yazı yayınlandığında size haber vereceğiz: kumaşlar, nasıl üretildikleri ve nasıl bakılacakları.',
-            ru: 'Теперь вы в списке рассылки блога Demfirat. Мы напишем вам, когда выйдет новая статья: о тканях, о том, как их делают и как за ними ухаживать.',
-            pl: 'Jesteś na liście bloga Demfirat. Napiszemy, gdy pojawi się nowy wpis: o tkaninach, ich produkcji i pielęgnacji.',
+            en: "We've been making home textiles since 1991, and the blog is where we share what that has taught us: how to choose a fabric, how it is made and how to make it last. We'll only email you when a new post is out.",
+            tr: "1991'den beri ev tekstili üretiyoruz. Blog, bu yılların bize öğrettiklerini paylaştığımız yer: kumaş nasıl seçilir, nasıl üretilir ve nasıl uzun ömürlü olur. Size yalnızca yeni bir yazı yayınlandığında e-posta göndereceğiz.",
+            ru: 'Мы производим домашний текстиль с 1991 года, и в блоге делимся тем, чему нас научили эти годы: как выбрать ткань, как её делают и как продлить ей жизнь. Мы будем писать вам, только когда выйдет новая статья.',
+            pl: 'Produkujemy tekstylia domowe od 1991 roku, a na blogu dzielimy się tym, czego nas to nauczyło: jak wybrać tkaninę, jak powstaje i jak sprawić, by służyła długo. Napiszemy tylko wtedy, gdy pojawi się nowy wpis.',
         },
         button: { en: 'Read the blog', tr: 'Blogu oku', ru: 'Читать блог', pl: 'Czytaj blog' },
         path: '/blog',
@@ -30,20 +36,20 @@ const text = {
             ru: 'Вы подписались на новости Demfirat',
             pl: 'Jesteś na liście Demfirat',
         },
+        heading: {
+            en: 'Welcome to Demfirat',
+            tr: "Demfirat'a hoş geldiniz",
+            ru: 'Добро пожаловать в Demfirat',
+            pl: 'Witamy w Demfirat',
+        },
         body: {
-            en: 'You are now on the Demfirat list. We will write to you about new collections and new posts on our blog.',
-            tr: 'Artık Demfirat listesindesiniz. Yeni koleksiyonlarımız ve blogumuzdaki yeni yazılar hakkında size haber vereceğiz.',
-            ru: 'Теперь вы в списке рассылки Demfirat. Мы будем писать вам о новых коллекциях и новых статьях в нашем блоге.',
-            pl: 'Jesteś na liście Demfirat. Napiszemy o nowych kolekcjach i nowych wpisach na blogu.',
+            en: "We've been making home textiles since 1991. We'll write to you when there is a new collection to see or a new post on our blog, and not otherwise.",
+            tr: "1991'den beri ev tekstili üretiyoruz. Size yalnızca görülecek yeni bir koleksiyon ya da blogumuzda yeni bir yazı olduğunda yazacağız.",
+            ru: 'Мы производим домашний текстиль с 1991 года. Мы будем писать вам, только когда появится новая коллекция или новая статья в нашем блоге.',
+            pl: 'Produkujemy tekstylia domowe od 1991 roku. Napiszemy tylko wtedy, gdy pojawi się nowa kolekcja lub nowy wpis na blogu.',
         },
         button: { en: 'See our products', tr: 'Ürünleri gör', ru: 'Смотреть товары', pl: 'Zobacz produkty' },
         path: '/product',
-    },
-    heading: {
-        en: 'Thank you for subscribing',
-        tr: 'Abone olduğunuz için teşekkürler',
-        ru: 'Спасибо за подписку',
-        pl: 'Dziękujemy za subskrypcję',
     },
     signoff: { en: 'Warm regards,', tr: 'Sevgilerle,', ru: 'С уважением,', pl: 'Pozdrawiamy,' },
     why: {
@@ -87,7 +93,7 @@ export function welcomeEmail(email: string, locale: unknown, source: WelcomeSour
         </tr>
         <tr>
           <td style="padding:40px 40px 28px;">
-            <h1 style="color:#2c2c2c;text-align:center;font-family:'Jost',${sans};font-size:24px;margin:0 0 18px;">${text.heading[lang]}</h1>
+            <h1 style="color:#2c2c2c;text-align:center;font-family:'Jost',${sans};font-size:24px;margin:0 0 18px;">${copy.heading[lang]}</h1>
             <p style="color:#555;font-size:15px;line-height:1.6;text-align:center;margin:0;">${copy.body[lang]}</p>
           </td>
         </tr>
