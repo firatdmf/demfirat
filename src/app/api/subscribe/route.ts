@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
         <tr>
           <td style="background:rgb(250,245,235);padding:14px 40px;text-align:center;">
             <p style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;margin:0 0 8px;">&copy; ${new Date().getFullYear()} DEMFIRAT. Tüm hakları saklıdır.</p>
-            <a href="https://www.demfirat.com/tr/unsubscribe?email=${encodeURIComponent(email)}" style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;text-decoration:underline;">Abonelikten cik</a>
+            <a href="https://www.demfirat.com/tr/unsubscribe?email=${encodeURIComponent(email)}" style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;color:#aaa;text-decoration:underline;">Abonelikten çık</a>
           </td>
         </tr>
 

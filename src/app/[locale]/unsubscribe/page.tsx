@@ -4,10 +4,41 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { useLocale } from 'next-intl';
+
+type Lang = 'en' | 'tr' | 'ru' | 'pl';
+
+const text = {
+    working: { en: 'Unsubscribing…', tr: 'Abonelikten çıkarılıyor…', ru: 'Отменяем подписку…', pl: 'Wypisywanie…' },
+    doneTitle: { en: 'You are unsubscribed', tr: 'Abonelikten çıkıldı', ru: 'Вы отписались', pl: 'Wypisano z listy' },
+    doneText: {
+        en: 'Your subscription has been cancelled. You will not receive any more emails from us.',
+        tr: 'Bülten aboneliğiniz iptal edilmiştir. Artık bizden e-posta almayacaksınız.',
+        ru: 'Ваша подписка отменена. Вы больше не будете получать от нас письма.',
+        pl: 'Subskrypcja została anulowana. Nie będziesz już otrzymywać od nas wiadomości.',
+    },
+    errorTitle: { en: 'Something went wrong', tr: 'Bir hata oluştu', ru: 'Что-то пошло не так', pl: 'Coś poszło nie tak' },
+    errorText: {
+        en: 'We could not cancel the subscription. Please try again later.',
+        tr: 'Abonelik iptal edilemedi. Lütfen daha sonra tekrar deneyin.',
+        ru: 'Не удалось отменить подписку. Пожалуйста, попробуйте позже.',
+        pl: 'Nie udało się anulować subskrypcji. Spróbuj ponownie później.',
+    },
+    badLink: { en: 'This link is not valid.', tr: 'Geçersiz bağlantı.', ru: 'Ссылка недействительна.', pl: 'Nieprawidłowy link.' },
+    home: { en: 'Back to the home page', tr: 'Ana sayfaya dön', ru: 'На главную', pl: 'Wróć na stronę główną' },
+    loading: { en: 'Loading…', tr: 'Yükleniyor…', ru: 'Загрузка…', pl: 'Ładowanie…' },
+};
+
+// The page answers in the language of its address, like the rest of the site.
+function useLang(): Lang {
+    const locale = useLocale();
+    return locale === 'tr' || locale === 'ru' || locale === 'pl' ? locale : 'en';
+}
 
 function UnsubscribeContent() {
     const searchParams = useSearchParams();
     const email = searchParams.get('email');
+    const lang = useLang();
     const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'no-email'>('loading');
 
     useEffect(() => {
@@ -58,7 +89,7 @@ function UnsubscribeContent() {
                 </div>
 
                 {status === 'loading' && (
-                    <p style={{ color: '#666', fontSize: '1rem' }}>Abonelikten cikariliyor...</p>
+                    <p style={{ color: '#666', fontSize: '1rem' }}>{text.working[lang]}</p>
                 )}
 
                 {status === 'success' && (
@@ -71,10 +102,10 @@ function UnsubscribeContent() {
                             &#10003;
                         </div>
                         <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '1.3rem', color: '#1a1a1a', marginBottom: '0.75rem' }}>
-                            Abonelikten Cikildi
+                            {text.doneTitle[lang]}
                         </h2>
                         <p style={{ color: '#888', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                            Bulten aboneliginiz iptal edilmistir. Artik promosyon e-postalari almayacaksiniz.
+                            {text.doneText[lang]}
                         </p>
                     </>
                 )}
@@ -82,31 +113,31 @@ function UnsubscribeContent() {
                 {status === 'error' && (
                     <>
                         <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '1.3rem', color: '#e74c3c', marginBottom: '0.75rem' }}>
-                            Bir hata olustu
+                            {text.errorTitle[lang]}
                         </h2>
                         <p style={{ color: '#888', fontSize: '0.9rem' }}>
-                            Abonelik iptal edilemedi. Lutfen daha sonra tekrar deneyin.
+                            {text.errorText[lang]}
                         </p>
                     </>
                 )}
 
                 {status === 'no-email' && (
-                    <p style={{ color: '#888', fontSize: '0.9rem' }}>Gecersiz link.</p>
+                    <p style={{ color: '#888', fontSize: '0.9rem' }}>{text.badLink[lang]}</p>
                 )}
 
-                <Link href="/" style={{
+                <Link href={lang === 'en' ? '/' : `/${lang}`} style={{
                     display: 'inline-block',
                     marginTop: '2rem',
                     padding: '0.75rem 2rem',
-                    background: 'linear-gradient(135deg, #c9a961, #b8956a)',
+                    background: '#944f05',
                     color: 'white',
                     textDecoration: 'none',
-                    borderRadius: '30px',
+                    borderRadius: '6px',
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: '0.85rem',
                     fontWeight: 600,
                 }}>
-                    Ana Sayfaya Don
+                    {text.home[lang]}
                 </Link>
             </div>
         </div>
@@ -114,8 +145,9 @@ function UnsubscribeContent() {
 }
 
 export default function UnsubscribePage() {
+    const lang = useLang();
     return (
-        <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Yukleniyor...</div>}>
+        <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{text.loading[lang]}</div>}>
             <UnsubscribeContent />
         </Suspense>
     );
