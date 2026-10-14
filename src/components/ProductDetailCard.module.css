@@ -1314,10 +1314,11 @@
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
+/* Opens beside the swatch, so the options above it stay in view. */
 .fabric_preview {
   position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
+  left: calc(100% + 14px);
+  top: 20px;
   width: 180px;
   height: 180px;
   border-radius: 12px;
@@ -1326,8 +1327,8 @@
   background-position: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
   opacity: 0;
-  transform: translateX(-50%) scale(0.92);
-  transform-origin: bottom center;
+  transform: translateY(-50%) scale(0.92);
+  transform-origin: left center;
   transition: opacity 0.18s ease, transform 0.18s ease;
   pointer-events: none;
   z-index: 30;
@@ -1335,7 +1336,7 @@
 @media (hover: hover) {
   .fabric_swatch_container:hover .fabric_preview {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: translateY(-50%) scale(1);
   }
 }
 .checked_fabric_swatch {
