@@ -5,9 +5,34 @@ import { discountEmail } from '@/lib/discountEmail';
 
 const BACKEND_URL = process.env.NEJUM_API_URL || 'http://127.0.0.1:8000';
 
+// What this route says itself, in the language of the page that called it.
+const messages = {
+    bot: {
+        en: 'This looked like automated activity. Please try again.',
+        tr: 'Bot aktivitesi tespit edildi. Lütfen tekrar deneyin.',
+        ru: 'Запрос похож на автоматический. Пожалуйста, попробуйте ещё раз.',
+    },
+    unverified: {
+        en: 'We could not verify the request. Please refresh the page and try again.',
+        tr: 'Doğrulama başarısız. Sayfayı yenileyip tekrar deneyin.',
+        ru: 'Не удалось проверить запрос. Обновите страницу и попробуйте ещё раз.',
+    },
+    server: {
+        en: 'Something went wrong on our side. Please try again.',
+        tr: 'Sunucu hatası. Lütfen tekrar deneyin.',
+        ru: 'Произошла ошибка на нашей стороне. Пожалуйста, попробуйте ещё раз.',
+    },
+};
+
+function langOf(locale: unknown): 'en' | 'tr' | 'ru' {
+    return locale === 'tr' || locale === 'ru' ? locale : 'en';
+}
+
 export async function POST(request: NextRequest) {
+    let lang: 'en' | 'tr' | 'ru' = 'en';
     try {
         const body = await request.json();
+        lang = langOf(body.locale);
 
         // Verify reCAPTCHA v3 token
         const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
@@ -22,14 +47,14 @@ export async function POST(request: NextRequest) {
             if (!recaptchaData.success || recaptchaData.score < 0.3) {
                 console.log('[Subscribe] reCAPTCHA failed:', recaptchaData);
                 return NextResponse.json(
-                    { success: false, error: 'Bot aktivitesi tespit edildi. Lütfen tekrar deneyin.' },
+                    { success: false, error: messages.bot[lang] },
                     { status: 403 }
                 );
             }
             console.log('[Subscribe] reCAPTCHA score:', recaptchaData.score);
         } else if (recaptchaSecret && !body.recaptchaToken) {
             return NextResponse.json(
-                { success: false, error: 'Doğrulama başarısız. Sayfayı yenileyip tekrar deneyin.' },
+                { success: false, error: messages.unverified[lang] },
                 { status: 403 }
             );
         }
@@ -90,7 +115,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('[Subscribe API] Error:', error);
         return NextResponse.json(
-            { success: false, error: 'Sunucu hatası. Lütfen tekrar deneyin.' },
+            { success: false, error: messages.server[lang] },
             { status: 500 }
         );
     }
