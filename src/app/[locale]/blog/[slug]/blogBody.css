@@ -1,0 +1,196 @@
+/* Pieces a post's body may use, styled here so that no post has to carry
+   CSS or script of its own. Global (not a CSS module) because the body is
+   HTML from the ERP, and scoped under .blog-body so it stays in the post. */
+
+/* ── Before/after comparison ─────────────────────────────────────────
+   In a post:
+     <figure class="compare" data-compare>
+       <img src="before.avif" alt="Before">
+       <img src="after.avif" alt="After">
+     </figure>
+   CompareSliders.tsx adds the handle and the two labels (the alt texts). */
+.blog-body .compare {
+    --pos: 50%;
+    position: relative;
+    margin: 2rem 0;
+    overflow: hidden;
+    border-radius: 10px;
+    user-select: none;
+    touch-action: pan-y;
+}
+
+.blog-body .compare img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+}
+
+.blog-body .compare img:nth-of-type(2) {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    object-fit: cover;
+    clip-path: inset(0 0 0 var(--pos));
+}
+
+.blog-body .compare-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 2px;
+    margin-left: -1px;
+    background: white;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+}
+
+.blog-body .compare-line::after {
+    content: '‹ ›';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    color: #1a1a1a;
+    font: 600 15px/40px var(--font-body, 'Montserrat', sans-serif);
+    text-align: center;
+}
+
+.blog-body .compare-label {
+    position: absolute;
+    top: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.55);
+    color: white;
+    font: 600 12px/1.4 var(--font-body, 'Montserrat', sans-serif);
+    letter-spacing: 0.04em;
+    pointer-events: none;
+}
+
+.blog-body .compare-label.is-before { left: 12px; }
+.blog-body .compare-label.is-after { right: 12px; }
+
+/* The control is a real range input laid over the pictures: it drags with
+   a mouse or a finger and moves with the arrow keys. */
+.blog-body .compare-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.blog-body .compare-range:focus-visible + .compare-line::after {
+    outline: 2px solid var(--brand-brown, #944f05);
+    outline-offset: 2px;
+}
+
+/* Animated line drawings a post can use (the Slow Morning post does).
+   Moved out of that post's own stylesheet so its body carries no CSS;
+   names are prefixed so they cannot meet anything else on the site. */
+.blog-body .section-icon {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 3rem auto 1.25rem;
+    opacity: 0.9;
+}
+
+@keyframes blog-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+}
+
+@keyframes blog-twinkle {
+    0%, 100% { transform: scale(0.7); opacity: 0.4; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes blog-sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+@keyframes blog-pulse-sun {
+    0%, 100% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes blog-rock {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+}
+
+@keyframes blog-focus-moon {
+    0%, 40% { opacity: 1; transform: scale(1.05); }
+    60%, 100% { opacity: 0.3; transform: scale(0.9); }
+}
+
+@keyframes blog-focus-sun {
+    0%, 40% { opacity: 0.3; transform: scale(0.9); }
+    60%, 100% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes blog-arrow-flow {
+    0% { opacity: 0; transform: translateX(-5px); }
+    50% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(5px); }
+}
+
+@keyframes blog-flicker {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 0.3; }
+    75% { opacity: 0.7; }
+}
+
+@keyframes blog-spin {
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes blog-pulse-wave {
+    0%, 100% { opacity: 0.2; transform: translateX(-2px); }
+    50% { opacity: 1; transform: translateX(2px); }
+}
+
+@keyframes blog-fade-slide {
+    0% { opacity: 0; transform: translate(5px, -5px); }
+    50% { opacity: 1; transform: translate(0, 0); }
+    100% { opacity: 0; transform: translate(-5px, 5px); }
+}
+
+.blog-body .anim-float { animation: blog-float 4s ease-in-out infinite; }
+.blog-body .anim-twinkle1 { animation: blog-twinkle 3s ease-in-out infinite; }
+.blog-body .anim-twinkle2 { animation: blog-twinkle 4s ease-in-out infinite 1.5s; }
+.blog-body .anim-sway { animation: blog-sway 5s ease-in-out infinite; }
+.blog-body .anim-sun { animation: blog-pulse-sun 3.5s ease-in-out infinite; }
+.blog-body .anim-rock { animation: blog-rock 6s ease-in-out infinite; }
+.blog-body .anim-curtain-left { animation: blog-sway 5s ease-in-out infinite; }
+.blog-body .anim-curtain-right { animation: blog-sway 5.5s ease-in-out infinite reverse; }
+.blog-body .anim-focus-moon { animation: blog-focus-moon 6s infinite ease-in-out; transform-origin: 50px 60px; }
+.blog-body .anim-focus-sun { animation: blog-focus-sun 6s infinite ease-in-out; transform-origin: 190px 60px; }
+.blog-body .anim-arrow1 { animation: blog-arrow-flow 1.5s infinite; }
+.blog-body .anim-arrow2 { animation: blog-arrow-flow 1.5s infinite 0.2s; }
+.blog-body .anim-arrow3 { animation: blog-arrow-flow 1.5s infinite 0.4s; }
+.blog-body .anim-flicker { animation: blog-flicker 0.6s infinite alternate; }
+.blog-body .anim-spin-slow { animation: blog-spin 20s linear infinite; }
+.blog-body .anim-wave1 { animation: blog-pulse-wave 2s ease-in-out infinite; }
+.blog-body .anim-wave2 { animation: blog-pulse-wave 2s ease-in-out infinite 1s; }
+.blog-body .anim-beam { animation: blog-fade-slide 3s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+    .blog-body [class*="anim-"] {
+        animation: none !important;
+    }
+}

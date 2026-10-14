@@ -174,7 +174,5 @@ export type BlogPost = {
   hero_image_alt?: string;
   published_at: string;
   author: string;
-  header_content?: string;
-  footer_content?: string;
   is_published?: boolean;
 }

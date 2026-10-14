@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import classes from './page.module.css';
 import { BlogPost } from '@/lib/interfaces';
-import ScriptInjector from '@/components/ScriptInjector';
+import CompareSliders from './CompareSliders';
+import './blogBody.css';
 import BlogSubscribe from './BlogSubscribe';
 
 interface BlogPostPageProps {
@@ -88,6 +89,12 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
             en: 'Author',
             ru: 'Автор',
             pl: 'Autor'
+        },
+        compareLabel: {
+            tr: 'Karşılaştırmak için kaydırın',
+            en: 'Slide to compare',
+            ru: 'Сдвиньте, чтобы сравнить',
+            pl: 'Przesuń, aby porównać'
         },
         readingTime: {
             tr: 'Okuma süresi: {n} dk',
@@ -186,10 +193,6 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                     />
                 </>
             )}
-            {/* Custom Header Content (Styles, etc) */}
-            {post.header_content && (
-                <div dangerouslySetInnerHTML={{ __html: post.header_content }} />
-            )}
 
             <div className={classes.layout}>
                 <article className={classes.article}>
@@ -235,7 +238,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                     )}
 
                     <div
-                        className={classes.content}
+                        className={`${classes.content} blog-body`}
                         dangerouslySetInnerHTML={{ __html: contentHtml }}
                     />
 
@@ -259,8 +262,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                 </aside>
             </div>
 
-            {/* Custom Footer Content (Scripts) */}
-            {post.footer_content && <ScriptInjector html={post.footer_content} />}
+            <CompareSliders label={t.compareLabel[lang]} />
         </main>
     );
 }
