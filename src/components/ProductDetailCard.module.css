@@ -1314,10 +1314,10 @@
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
-/* Opens beside the swatch, so the options above it stay in view. */
+/* Opens to the left of the swatch, over the product photo, so no option is covered. */
 .fabric_preview {
   position: absolute;
-  left: calc(100% + 14px);
+  right: calc(100% + 14px);
   top: 20px;
   width: 180px;
   height: 180px;
@@ -1328,7 +1328,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
   opacity: 0;
   transform: translateY(-50%) scale(0.92);
-  transform-origin: left center;
+  transform-origin: right center;
   transition: opacity 0.18s ease, transform 0.18s ease;
   pointer-events: none;
   z-index: 30;
