@@ -50,6 +50,9 @@ type ProductDetailCardPageProps = {
 // with one shows it in its swatch, and larger while the pointer is on it; one
 // without is drawn as a plain weave, with no enlargement to show.
 const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'greek_tulle', 'square_virtual', 'virtual']);
+// The photos are cached for a month under their address, so a replaced photo
+// is only seen once this number goes up.
+const FABRIC_PHOTOS_VERSION = 2;
 
 function ProductDetailCard({
   product,
@@ -1419,7 +1422,7 @@ function ProductDetailCard({
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
                             // The swatch photo is named after the value: /media/fabrics/greek_tulle.avif
                             const bgImage = FABRIC_PHOTOS.has(value.toLowerCase())
-                              ? `/media/fabrics/${value.toLowerCase()}.avif` : null;
+                              ? `/media/fabrics/${value.toLowerCase()}.avif?v=${FABRIC_PHOTOS_VERSION}` : null;
 
                             return (
                               <div key={value} className={classes.fabric_swatch_container}>
