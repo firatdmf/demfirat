@@ -52,7 +52,7 @@ type ProductDetailCardPageProps = {
 const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'greek_tulle', 'square_virtual', 'virtual']);
 // The photos are cached for a month under their address, so a replaced photo
 // is only seen once this number goes up.
-const FABRIC_PHOTOS_VERSION = 2;
+const FABRIC_PHOTOS_VERSION = 20261014;
 
 function ProductDetailCard({
   product,
