@@ -1338,6 +1338,12 @@
     opacity: 1;
     transform: translateY(-50%) scale(1);
   }
+  /* The gallery beside this column is stacked above it (.productMedia,
+     z-index 10), which hid the photo behind the product picture. The column
+     comes forward only while a fabric swatch is pointed at. */
+  .productHero:has(.fabric_swatch_container:hover) {
+    z-index: 11;
+  }
 }
 .checked_fabric_swatch {
   border: 3px solid white;
