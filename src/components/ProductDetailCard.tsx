@@ -49,7 +49,7 @@ type ProductDetailCardPageProps = {
 // The fabrics there is a swatch photo of, in public/media/fabrics. A fabric
 // with one shows it in its swatch, and larger while the pointer is on it; one
 // without is drawn as a plain weave, with no enlargement to show.
-const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'greek_tulle']);
+const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'greek_tulle', 'square_virtual']);
 
 function ProductDetailCard({
   product,
