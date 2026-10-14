@@ -45,6 +45,12 @@ type ProductDetailCardPageProps = {
   locale?: string;
 };
 
+
+// The fabrics there is a swatch photo of, in public/media/fabrics. A fabric
+// with one shows it in its swatch, and larger while the pointer is on it; one
+// without is drawn as a plain weave, with no enlargement to show.
+const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'greek_tulle']);
+
 function ProductDetailCard({
   product,
   product_category,
@@ -1411,25 +1417,28 @@ function ProductDetailCard({
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
-                            // Image path: /media/fabrics/{value}.jpg (assuming jpg, can be adjusted)
-                            // value usually comes as "bamboo", "grek" etc.
-                            const bgImage = `/media/fabrics/${value.toLowerCase()}.avif`;
+                            // The swatch photo is named after the value: /media/fabrics/greek_tulle.avif
+                            const bgImage = FABRIC_PHOTOS.has(value.toLowerCase())
+                              ? `/media/fabrics/${value.toLowerCase()}.avif` : null;
 
                             return (
                               <div key={value} className={classes.fabric_swatch_container}>
                                 <Link
                                   href={href}
                                   replace
-                                  className={`${classes.fabric_swatch} ${isChecked ? classes.checked_fabric_swatch : ""} ${isDisabled ? classes.oos_swatch : ""}`}
+                                  className={`${classes.fabric_swatch} ${bgImage ? "" : classes.fabric_swatch_plain} ${isChecked ? classes.checked_fabric_swatch : ""} ${isDisabled ? classes.oos_swatch : ""}`}
                                   onClick={e => {
                                     e.preventDefault();
                                     handleAttributeChange(attribute.name ?? '', value);
                                   }}
-                                  style={{ backgroundImage: `url(${bgImage})` }}
+                                  style={bgImage ? { backgroundImage: `url(${bgImage})` } : undefined}
                                   title={translateAttributeName(value)}
                                 >
                                   <span className={classes.sr_only}>{translateAttributeName(value)}</span>
                                 </Link>
+                                {bgImage && (
+                                  <span className={classes.fabric_preview} style={{ backgroundImage: `url(${bgImage})` }} aria-hidden="true" />
+                                )}
                                 <span className={classes.color_label}>{translateAttributeName(value)}</span>
                               </div>
                             );
