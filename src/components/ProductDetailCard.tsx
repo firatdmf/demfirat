@@ -101,6 +101,22 @@ function ProductDetailCard({
     return translateTextSync(name, locale);
   };
 
+  // How one attribute value reads on the page: sizes as W × H, widths in the
+  // chosen unit, everything else through the ERP's wordings.
+  const valueLabel = (attributeName: string, value: string): string => {
+    const sizeMatch = value.match(/(\d+)\s*x\s*(\d+)/i);
+    if (sizeMatch && ['size', 'boyut', 'beden', 'ölçü', 'size per panel'].includes(attributeName.toLowerCase())) {
+      const wL = locale === 'tr' ? 'En' : 'W';
+      const hL = locale === 'tr' ? 'Boy' : 'H';
+      if (sizeUnit === 'in') {
+        return `${wL}: ${cmToInch(Number(sizeMatch[1]))}″ × ${hL}: ${cmToInch(Number(sizeMatch[2]))}″`;
+      }
+      return `${wL}: ${sizeMatch[1]} × ${hL}: ${sizeMatch[2]} cm`;
+    }
+    const display = translateAttributeName(value);
+    return display.replace('(each)', locale === 'tr' ? '(Tek Parça Boyutu)' : locale === 'ru' ? '(Размер одной панели)' : locale === 'pl' ? '(Rozmiar jednego panelu)' : '(Per Panel)');
+  };
+
 
   // Translation helper for category names (uses same utility)
   const translateCategory = (category: string): string => {
@@ -121,7 +137,9 @@ function ProductDetailCard({
     // 1. Check if a specific variant ID was passed in URL (e.g. from ProductCard)
     const variantIdParam = searchParams['variant'];
     if (variantIdParam && typeof variantIdParam === 'string' && product_variants) {
-      const targetVariant = product_variants.find(v => String(v.id) === variantIdParam);
+      const wanted = variantIdParam.toLowerCase();
+      const targetVariant = product_variants.find(v =>
+        String(v.variant_sku ?? '').toLowerCase() === wanted || String(v.id) === variantIdParam);
       if (targetVariant && targetVariant.product_variant_attribute_values && product_variant_attribute_values && product_variant_attributes) {
         targetVariant.product_variant_attribute_values.forEach((valId: any) => {
           const valObj = product_variant_attribute_values.find(v => String(v.id) === String(valId));
@@ -376,6 +394,26 @@ function ProductDetailCard({
     });
   }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
 
+  // The address names the chosen variant by its SKU (?variant=N1466T.G126)
+  // rather than spelling out every attribute. Parameters that aren't
+  // attributes (intent, …) are kept. With no single variant chosen yet the
+  // attributes stand in, as before.
+  useEffect(() => {
+    const attributeNames = new Set((product_variant_attributes ?? []).map(a => a.name ?? ''));
+    const newParams = new URLSearchParams();
+    new URLSearchParams(window.location.search).forEach((value, key) => {
+      if (key !== 'variant' && !attributeNames.has(key)) newParams.set(key, value);
+    });
+    if (selectedVariant?.variant_sku) {
+      newParams.set('variant', selectedVariant.variant_sku);
+    } else {
+      Object.keys(selectedAttributes).forEach(key => {
+        newParams.set(key, selectedAttributes[key]);
+      });
+    }
+    window.history.replaceState({}, '', `?${newParams.toString()}`);
+  }, [selectedAttributes, selectedVariant, product_variant_attributes]);
+
   // Check if currently selected variant is out of stock. A variant the
   // warehouse does not carry (stock_tracked === false) has no quantity to be
   // out of — it is manufactured on demand, so it is always orderable.
@@ -411,14 +449,7 @@ function ProductDetailCard({
     }
   }, [product.sku, currency, rates, loading]); // Wait for currency data to load
 
-  // URL parametrelerini güncelle
-  useEffect(() => {
-    const newParams = new URLSearchParams();
-    Object.keys(selectedAttributes).forEach(key => {
-      newParams.set(key, selectedAttributes[key]);
-    });
-    window.history.replaceState({}, '', `?${newParams.toString()}`);
-  }, [selectedAttributes]);
+
 
 
 
@@ -511,6 +542,32 @@ function ProductDetailCard({
       return aIdx - bIdx;
     });
   }, [product_variant_attributes, product_variant_attribute_values, product_variants, selectedAttributes, precedingAttributes]);
+
+  // Attributes with one value across the whole product (every variant 320
+  // wide, say) offer no choice: they are listed as plain facts, not buttons.
+  const fixedAttributeValues = useMemo(() => {
+    const fixed: { [name: string]: string } = {};
+    product_variant_attributes?.forEach(attribute => {
+      const ids = new Set(
+        (product_variant_attribute_values ?? [])
+          .filter(v => v.product_variant_attribute_id === attribute.id)
+          .map(v => v.id)
+      );
+      const used = new Set<string>();
+      let everyVariant = true;
+      (product_variants ?? []).forEach(variant => {
+        const own = (product_variant_attribute_values ?? []).filter(
+          v => ids.has(v.id) && variant.product_variant_attribute_values?.includes(v.id)
+        );
+        if (own.length === 0) everyVariant = false;
+        own.forEach(v => used.add(v.product_variant_attribute_value ?? ''));
+      });
+      if (everyVariant && used.size === 1 && attribute.name) {
+        fixed[attribute.name] = Array.from(used)[0];
+      }
+    });
+    return fixed;
+  }, [product_variant_attributes, product_variant_attribute_values, product_variants]);
 
   // Tek değerli attribute'ları otomatik olarak seç
   // VE seçili değer artık mevcut değilse, ilk mevcut değere geç
@@ -1399,7 +1456,15 @@ function ProductDetailCard({
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
-                {groupedAttributeValues?.filter(({ values }) => values.length > 0).map(({ attribute, values }) => {
+                {Object.entries(fixedAttributeValues).map(([name, value]) => (
+                  <li key={`fixed-${name}`} className={classes.fixed_attribute}>
+                    <h3>{translateAttributeName(name)}</h3>
+                    <span>{valueLabel(name, value)}</span>
+                  </li>
+                ))}
+                {groupedAttributeValues?.filter(({ attribute, values }) =>
+                  values.length > 0 && !(attribute.name && attribute.name in fixedAttributeValues)
+                ).map(({ attribute, values }) => {
                   const isSizeAttribute = ['width', 'genişlik', 'beden', 'ölçü', 'size', 'size per panel'].includes(attribute.name?.toLowerCase() || '');
                   return (
                     <li key={attribute.id.toString()}>
@@ -1531,20 +1596,7 @@ function ProductDetailCard({
                                     handleAttributeChange(attribute.name ?? '', value);
                                   }}
                                 >
-                                  {(() => {
-                                    const sizeMatch = value.match(/(\d+)\s*x\s*(\d+)/i);
-                                    if (sizeMatch && ['size', 'boyut', 'beden', 'ölçü', 'size per panel'].includes(attribute.name?.toLowerCase() || '')) {
-                                      const wL = locale === 'tr' ? 'En' : 'W';
-                                      const hL = locale === 'tr' ? 'Boy' : 'H';
-                                      if (sizeUnit === 'in') {
-                                        return `${wL}: ${cmToInch(Number(sizeMatch[1]))}″ × ${hL}: ${cmToInch(Number(sizeMatch[2]))}″`;
-                                      }
-                                      return `${wL}: ${sizeMatch[1]} × ${hL}: ${sizeMatch[2]} cm`;
-                                    }
-                                    let display = translateAttributeName(value);
-                                    display = display.replace('(each)', locale === 'tr' ? '(Tek Parça Boyutu)' : locale === 'ru' ? '(Размер одной панели)' : locale === 'pl' ? '(Rozmiar jednego panelu)' : '(Per Panel)');
-                                    return display;
-                                  })()}
+                                  {valueLabel(attribute.name || '', value)}
                                 </Link>
                               </div>
                             );
