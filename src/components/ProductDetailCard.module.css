@@ -3204,13 +3204,26 @@
   color: var(--gold, #c9a961);
 }
 
-/* An attribute every variant shares, listed as a fact rather than a choice. */
-.variant_menu .fixed_attribute {
+/* Attributes every variant shares: one line of facts, not choices. */
+.variant_menu .fixed_attributes {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.15rem 0;
+  font-size: 0.8rem;
+  color: #333;
+  line-height: 1.4;
 }
 
-.variant_menu .fixed_attribute span {
-  color: #333;
+.variant_menu .fixed_attributes span + span::before {
+  content: '·';
+  margin: 0 0.5rem;
+  color: #94a3b8;
+}
+
+.variant_menu .fixed_attributes b {
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: #475569;
+  margin-right: 0.25rem;
 }

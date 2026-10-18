@@ -1456,12 +1456,15 @@ function ProductDetailCard({
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
-                {Object.entries(fixedAttributeValues).map(([name, value]) => (
-                  <li key={`fixed-${name}`} className={classes.fixed_attribute}>
-                    <h3>{translateAttributeName(name)}</h3>
-                    <span>{valueLabel(name, value)}</span>
+                {Object.keys(fixedAttributeValues).length > 0 && (
+                  <li className={classes.fixed_attributes}>
+                    {Object.entries(fixedAttributeValues).map(([name, value]) => (
+                      <span key={name}>
+                        <b>{translateAttributeName(name)}</b> {valueLabel(name, value)}
+                      </span>
+                    ))}
                   </li>
-                ))}
+                )}
                 {groupedAttributeValues?.filter(({ attribute, values }) =>
                   values.length > 0 && !(attribute.name && attribute.name in fixedAttributeValues)
                 ).map(({ attribute, values }) => {
