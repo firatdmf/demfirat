@@ -3285,3 +3285,63 @@
 .oos_swatch::after {
   z-index: 2;
 }
+
+/* Swatch and name start at the left: a long name no longer pushes its
+   swatch sideways, and the row doesn't shift as the options change. A long
+   name wraps onto a second line instead of being cut short. */
+.color_swatch_container,
+.fabric_swatch_container {
+  align-items: flex-start;
+  width: 4.5rem;
+}
+
+.color_label {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  text-align: left;
+  max-width: 100%;
+  line-height: 1.25;
+}
+
+/* A fabric every variant shares, in the facts line: a small pinked swatch
+   beside its name, and the larger photo on hover as among the choices. */
+.fixed_attributes .fabric_fact {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: zoom-in;
+}
+
+.fabric_fact_swatch {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-size: cover;
+  background-position: center;
+  --pinked-small:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 4px 100% round,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 4px 100% round,
+    conic-gradient(from 45deg at left, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 100% 4px round,
+    conic-gradient(from -135deg at right, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 100% 4px round;
+  -webkit-mask: var(--pinked-small);
+  -webkit-mask-composite: source-in;
+  mask: var(--pinked-small);
+  mask-composite: intersect;
+}
+
+.fixed_attributes .fabric_fact .fabric_preview {
+  top: 50%;
+}
+
+@media (hover: hover) {
+  .fixed_attributes .fabric_fact:hover .fabric_preview {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+
+  .productHero:has(.fabric_fact:hover) {
+    z-index: 11;
+  }
+}

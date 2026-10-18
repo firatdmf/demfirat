@@ -53,6 +53,18 @@ const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'greek_tulle', 'square
 // The photos are cached for a month under their address, so a replaced photo
 // is only seen once this number goes up.
 const FABRIC_PHOTOS_VERSION = 20261014;
+// A fabric that looks like one there is a photo of shows that photo:
+// Greek tulle with an interlining (GREK+TELA) is Greek tulle to the eye.
+const FABRIC_PHOTO_OF: { [fabric: string]: string } = {
+  'greek+interlining': 'greek_tulle',
+};
+
+/** The swatch photo of a fabric value, or null if there is none. */
+function fabricPhotoUrl(value: string): string | null {
+  const key = value.toLowerCase();
+  const photo = FABRIC_PHOTO_OF[key] ?? key;
+  return FABRIC_PHOTOS.has(photo) ? `/media/fabrics/${photo}.avif?v=${FABRIC_PHOTOS_VERSION}` : null;
+}
 
 function ProductDetailCard({
   product,
@@ -1458,11 +1470,24 @@ function ProductDetailCard({
               <ul>
                 {Object.keys(fixedAttributeValues).length > 0 && (
                   <li className={classes.fixed_attributes}>
-                    {Object.entries(fixedAttributeValues).map(([name, value]) => (
-                      <span key={name}>
-                        <b>{translateAttributeName(name)}</b> {valueLabel(name, value)}
-                      </span>
-                    ))}
+                    {Object.entries(fixedAttributeValues).map(([name, value]) => {
+                      // A fabric with a photo keeps its swatch here, and the
+                      // larger photo on hover, as it has among the choices.
+                      const isFabric = ['fabric', 'kumaş'].includes(name.toLowerCase());
+                      const photo = isFabric ? fabricPhotoUrl(value) : null;
+                      return (
+                        <span key={name} className={photo ? classes.fabric_fact : undefined}>
+                          <b>{translateAttributeName(name)}</b>
+                          {photo && (
+                            <span className={classes.fabric_fact_swatch} style={{ backgroundImage: `url(${photo})` }} aria-hidden="true" />
+                          )}
+                          {valueLabel(name, value)}
+                          {photo && (
+                            <span className={classes.fabric_preview} style={{ backgroundImage: `url(${photo})` }} aria-hidden="true" />
+                          )}
+                        </span>
+                      );
+                    })}
                   </li>
                 )}
                 {groupedAttributeValues?.filter(({ attribute, values }) =>
@@ -1497,8 +1522,7 @@ function ProductDetailCard({
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
                             // The swatch photo is named after the value: /media/fabrics/greek_tulle.avif
-                            const bgImage = FABRIC_PHOTOS.has(value.toLowerCase())
-                              ? `/media/fabrics/${value.toLowerCase()}.avif?v=${FABRIC_PHOTOS_VERSION}` : null;
+                            const bgImage = fabricPhotoUrl(value);
 
                             return (
                               <div key={value} className={classes.fabric_swatch_container}>
