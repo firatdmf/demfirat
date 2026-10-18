@@ -1874,14 +1874,13 @@ function ProductDetailCard({
                     </span>
                   );
                 }
-                // The ERP sends its own unit: "mt", "kg", or "units" for pieces
-                // and packs. ("meter" was looked for, so no fabric said "m".)
+                // The ERP sends its own unit: "m" (formerly "mt"), "kg", or
+                // "units" for pieces and packs.
                 const unit = (product.unit_of_measurement ?? '').toLowerCase();
-                const isMeters = unit === 'mt' || unit === 'meter';
+                const isMeters = unit === 'm' || unit === 'mt' || unit === 'meter';
                 const unitSuffix = isMeters ? ' m'
                   : unit === 'kg' ? ' kg'
-                  : unit === 'units' ? (locale === 'tr' ? ' adet' : locale === 'ru' ? ' шт.' : ' pcs')
-                  : '';
+                  : unit === 'units' ? (locale === 'tr' ? ' adet' : locale === 'ru' ? ' шт.' : ' pcs')                  : '';
                 const lowStockThreshold = isMeters ? 30 : 5;
                 if (qty > 0 && qty <= lowStockThreshold) {
                   return (
