@@ -1,5 +1,6 @@
 import React from 'react';
 import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer';
+import { withoutRecipeCode } from '@/lib/colorMap';
 
 // Styles for PDF - using default fonts to avoid network issues
 const styles = StyleSheet.create({
@@ -171,13 +172,16 @@ const colorMap: { [key: string]: string } = {
     'cream': '#fffdd0',
     'ecru': '#cdb891',
     'ivory': '#fffff0',
+    'undyed': '#fffff0',
+    'lightcream': '#fff8dc',
+    'darkcream': '#f3e5ab',
     'navy': '#001f3f',
     'burgundy': '#800020',
 };
 
 function getColorHex(colorName: string): string {
     if (!colorName) return '#cccccc';
-    const normalized = colorName.toLowerCase().replace(/[_-]/g, '');
+    const normalized = withoutRecipeCode(colorName.toLowerCase()).replace(/[_-]/g, '');
     return colorMap[normalized] || '#cccccc';
 }
 

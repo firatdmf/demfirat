@@ -14,6 +14,10 @@ export const COLOR_MAP: { [key: string]: string } = {
   'cream': '#FFFDD0',
   'fildişi': '#FFFFF0',
   'ivory': '#FFFFF0',
+  // The mill's undyed (FİXE) ground: between white and cream.
+  'undyed': '#FFFFF0',
+  'light_cream': '#FFF8DC',
+  'dark_cream': '#F3E5AB',
   'beyaz': '#FFFFFF',
   'white': '#FFFFFF',
 
@@ -185,6 +189,20 @@ export const COLOR_MAP: { [key: string]: string } = {
 };
 
 /**
+ * An embroidered fabric's colour leads with the mill's dye recipe code
+ * ("r10287_white", "1512-753_dark_cream", "b43_cream"); the swatch is the
+ * colour after it. A name that is only a code ("52") is left as it is.
+ */
+export const withoutRecipeCode = (colorName: string): string =>
+  colorName.replace(/^[a-z]{0,2}\d[\d.\-]*[_\s]+(?=[a-z])/i, '');
+
+/** The map's HEX for a name, recipe code ignored; undefined if unknown. */
+const knownColorCode = (colorName: string): string | undefined => {
+  const normalized = withoutRecipeCode(colorName.toLowerCase().trim());
+  return COLOR_MAP[normalized] ?? COLOR_MAP[normalized.replace(/[-\s]/g, '_')];
+};
+
+/**
  * Renk ismini HEX koda çevirir
  * @param colorName - Renk ismi (ör: "ekru", "kırık_beyaz", "ivory")
  * @returns HEX renk kodu (ör: "#F5F5DC")
@@ -200,7 +218,7 @@ export const getColorCode = (colorName: string): string => {
   }
 
   // Mapping'den bul
-  const hexCode = COLOR_MAP[normalized];
+  const hexCode = knownColorCode(normalized);
 
   if (hexCode) {
     return hexCode;
@@ -238,6 +256,8 @@ export const isLightColor = (hexColor: string): boolean => {
  */
 export const isTwoToneColor = (colorName: string): boolean => {
   if (!colorName) return false;
+  // "dark_cream" and "r10287_white" are one colour, not two.
+  if (knownColorCode(colorName)) return false;
   return colorName.includes('-') || colorName.includes('_');
 };
 
