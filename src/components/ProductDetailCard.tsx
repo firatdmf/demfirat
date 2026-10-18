@@ -1874,7 +1874,14 @@ function ProductDetailCard({
                     </span>
                   );
                 }
-                const isMeters = product.unit_of_measurement?.toLowerCase() === 'meter';
+                // The ERP sends its own unit: "mt", "kg", or "units" for pieces
+                // and packs. ("meter" was looked for, so no fabric said "m".)
+                const unit = (product.unit_of_measurement ?? '').toLowerCase();
+                const isMeters = unit === 'mt' || unit === 'meter';
+                const unitSuffix = isMeters ? ' m'
+                  : unit === 'kg' ? ' kg'
+                  : unit === 'units' ? (locale === 'tr' ? ' adet' : locale === 'ru' ? ' шт.' : ' pcs')
+                  : '';
                 const lowStockThreshold = isMeters ? 30 : 5;
                 if (qty > 0 && qty <= lowStockThreshold) {
                   return (
@@ -1887,7 +1894,7 @@ function ProductDetailCard({
                 // warehouse actually holds showed no quantity anywhere. Say how
                 // much there is — the number is now live from the rolls.
                 if (qty > 0) {
-                  const amount = `${Number.isInteger(qty) ? qty : qty.toFixed(2)}${isMeters ? ' m' : ''}`;
+                  const amount = `${Number.isInteger(qty) ? qty : qty.toFixed(2)}${unitSuffix}`;
                   return (
                     <span className={classes.inStockBadge}>
                       {locale === 'tr' ? `Stokta: ${amount}`
