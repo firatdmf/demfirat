@@ -538,6 +538,14 @@ function ProductDetailCard({
         hasChanges = true;
       }
 
+      // An attribute none of the remaining variants carries (one variant's
+      // leftover, say) can't stay selected: no variant would ever match it,
+      // and the page would stop following the other choices.
+      if (values.length === 0 && updatedAttributes[attrName]) {
+        delete updatedAttributes[attrName];
+        hasChanges = true;
+      }
+
       // Out of stock items are now selectable — don't auto-switch away from them
     });
 
