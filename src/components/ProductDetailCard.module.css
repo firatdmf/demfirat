@@ -3226,3 +3226,54 @@
   color: #475569;
   margin-right: 0.25rem;
 }
+
+/* Swatches drawn as cut fabric samples, as in a swatch book: a portrait
+   piece with a pinked (zigzag) lower edge, and over a plain colour a fine
+   weave with a little sheen. The zigzag is a mask, which would also clip an
+   outline, so the chosen swatch is lifted and its label carries the gold. */
+.color_swatch,
+.fabric_swatch {
+  height: auto;
+  aspect-ratio: 5 / 6;
+  border-radius: 3px 3px 0 0;
+  border-color: #e2e2e2;
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 6px 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 6px 100%;
+}
+
+.color_swatch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.035) 0 1px, transparent 1px 2px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.035) 0 1px, transparent 1px 2px),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.30), rgba(0, 0, 0, 0.08));
+}
+
+.checked_color_swatch,
+.checked_fabric_swatch {
+  border: 1px solid #e2e2e2;
+  outline: none;
+  transform: translateY(-3px);
+}
+
+.color_swatch:hover,
+.fabric_swatch:hover {
+  transform: translateY(-3px);
+}
+
+.checked_color_swatch ~ .color_label,
+.checked_fabric_swatch ~ .color_label {
+  color: #8a6d2f;
+  font-weight: 700;
+  border-top: 2px solid var(--gold, #c9a961);
+  padding-top: 2px;
+}
+
+/* An unavailable swatch's strike line stays above the weave. */
+.oos_swatch::after {
+  z-index: 2;
+}
