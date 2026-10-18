@@ -1468,9 +1468,13 @@ function ProductDetailCard({
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
-                {Object.keys(fixedAttributeValues).length > 0 && (
+                {Object.entries(fixedAttributeValues).some(([name, value]) =>
+                  !(name.toLowerCase() === 'embellishment' && value.toLowerCase() === 'none')) && (
                   <li className={classes.fixed_attributes}>
-                    {Object.entries(fixedAttributeValues).map(([name, value]) => {
+                    {Object.entries(fixedAttributeValues)
+                      // A design with no embellishment says nothing about it.
+                      .filter(([name, value]) => !(name.toLowerCase() === 'embellishment' && value.toLowerCase() === 'none'))
+                      .map(([name, value]) => {
                       // A fabric with a photo keeps its swatch here, and the
                       // larger photo on hover, as it has among the choices.
                       const isFabric = ['fabric', 'kumaş'].includes(name.toLowerCase());
