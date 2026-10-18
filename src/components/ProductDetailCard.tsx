@@ -1880,7 +1880,8 @@ function ProductDetailCard({
                 const isMeters = unit === 'm' || unit === 'mt' || unit === 'meter';
                 const unitSuffix = isMeters ? ' m'
                   : unit === 'kg' ? ' kg'
-                  : unit === 'units' ? (locale === 'tr' ? ' adet' : locale === 'ru' ? ' шт.' : ' pcs')                  : '';
+                  : unit === 'units' ? (locale === 'tr' ? ' adet' : locale === 'ru' ? ' шт.' : ' pcs')
+                  : '';
                 const lowStockThreshold = isMeters ? 30 : 5;
                 if (qty > 0 && qty <= lowStockThreshold) {
                   return (
