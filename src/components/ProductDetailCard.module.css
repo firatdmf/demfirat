@@ -3228,17 +3228,25 @@
 }
 
 /* Swatches drawn as cut fabric samples, as in a swatch book: a portrait
-   piece with a pinked (zigzag) lower edge, and over a plain colour a fine
+   piece pinked (zigzag) on all four edges, and over a plain colour a fine
    weave with a little sheen. The zigzag is a mask, which would also clip an
    outline, so the chosen swatch is lifted and its label carries the gold. */
 .color_swatch,
 .fabric_swatch {
   height: auto;
   aspect-ratio: 5 / 6;
-  border-radius: 3px 3px 0 0;
   border-color: #e2e2e2;
-  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 6px 100%;
-  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 6px 100%;
+  /* One zigzag per side, kept where all four agree: pinked all round. */
+  --pinked:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 6px 100% round,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 6px 100% round,
+    conic-gradient(from 45deg at left, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 100% 6px round,
+    conic-gradient(from -135deg at right, #0000, #000 1deg 89deg, #0000 90deg) 50% 50% / 100% 6px round;
+  -webkit-mask: var(--pinked);
+  -webkit-mask-composite: source-in;
+  mask: var(--pinked);
+  mask-composite: intersect;
+  border-radius: 0;
 }
 
 .color_swatch::before {
