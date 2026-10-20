@@ -20,7 +20,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 import ProductReviewsList from './ProductReviewsList';
 import SimilarProducts from './SimilarProducts';
 import { translateTextSync } from '@/lib/translate';
-import { getLocalizedProductField } from '@/lib/productUtils';
+import { getLocalizedProductField, imageAltText } from '@/lib/productUtils';
 import { trackViewItem, trackAddToCart, trackSelectFabric, trackRequestSample } from '@/lib/tracking';
 import { trackKlaviyoAddToCart } from '@/lib/klaviyo';
 import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
@@ -1116,7 +1116,7 @@ function ProductDetailCard({
 
     // 1. Add first image
     if (filteredImages.length > 0) {
-      items.push({ type: 'image', url: filteredImages[0].file, alt_text: filteredImages[0].alt_text || '' });
+      items.push({ type: 'image', url: filteredImages[0].file, alt_text: imageAltText(filteredImages[0], locale) });
     }
 
     const normalizeUrl = (url: string | null) => {
@@ -1129,16 +1129,16 @@ function ProductDetailCard({
     // 2. Add videos at 2nd position
     const uniqueVideos = Array.from(new Map(videoFiles.filter(v => v.file).map(v => [normalizeUrl(v.file), v])).values());
     uniqueVideos.forEach(video => {
-      items.push({ type: 'video', url: video.file, alt_text: video.alt_text || '' });
+      items.push({ type: 'video', url: video.file, alt_text: imageAltText(video, locale) });
     });
 
     // 3. Add remaining images
     filteredImages.slice(1).forEach(img => {
-      items.push({ type: 'image', url: img.file, alt_text: img.alt_text || '' });
+      items.push({ type: 'image', url: img.file, alt_text: imageAltText(img, locale) });
     });
 
     return items;
-  }, [imageFiles, filteredImages, product_files, selectedVariant]);
+  }, [imageFiles, filteredImages, product_files, selectedVariant, locale]);
 
   // Thumbnail/image navigation
   const selectThumb = (index: number) => setSelectedThumbIndex(index);

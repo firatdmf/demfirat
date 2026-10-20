@@ -1,5 +1,15 @@
 
-import { Product } from "./interfaces";
+import { Product, ProductFile } from "./interfaces";
+
+/**
+ * What a product photo says to someone who cannot see it: the alt text typed
+ * for it in the ERP, else the one the ERP builds from what it shows (title,
+ * group, the variant's attributes) in this language, else in English.
+ */
+export const imageAltText = (file: Pick<ProductFile, 'alt_text' | 'alt_texts'> | null | undefined, locale: string = 'en'): string => {
+    if (!file) return '';
+    return file.alt_text || file.alt_texts?.[locale] || file.alt_texts?.en || '';
+};
 
 /**
  * Helper to get localized field (title or description) from JSON format in product description

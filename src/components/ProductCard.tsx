@@ -16,7 +16,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { HiDocumentText } from "react-icons/hi2";
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
-import { getLocalizedProductField } from '@/lib/productUtils';
+import { getLocalizedProductField, imageAltText } from '@/lib/productUtils';
 import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
 
 interface ProductCardProps {
@@ -476,8 +476,8 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     };
     const currentNorm = normalize(imageSrc);
     const match = product.product_files.find(f => normalize(f.file) === currentNorm);
-    return match?.alt_text || '';
-  }, [product.product_files, imageSrc]);
+    return imageAltText(match, locale);
+  }, [product.product_files, imageSrc, locale]);
 
   const secondImage = useMemo((): { url: string; alt_text: string } | null => {
     if (!product.product_files || product.product_files.length === 0) return null;
@@ -506,14 +506,14 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
       const currentIdx = variantImages.findIndex(f => normalize(f.file) === currentNorm);
       if (variantImages.length >= 2) {
         const nextIdx = currentIdx >= 0 ? (currentIdx + 1) % variantImages.length : 1;
-        if (nextIdx !== currentIdx) return { url: variantImages[nextIdx].file, alt_text: variantImages[nextIdx].alt_text || '' };
+        if (nextIdx !== currentIdx) return { url: variantImages[nextIdx].file, alt_text: imageAltText(variantImages[nextIdx], locale) };
       }
     }
 
     // Fallback: any non-current image
     const fallback = sorted.find(f => normalize(f.file) !== currentNorm && normalize(f.file) !== '');
-    return fallback ? { url: fallback.file, alt_text: fallback.alt_text || '' } : null;
-  }, [product.product_files, imageSrc, product.primary_image, selectedVariantId, productVariants, variantAttributes, variantAttributeValues]);
+    return fallback ? { url: fallback.file, alt_text: imageAltText(fallback, locale) } : null;
+  }, [product.product_files, imageSrc, product.primary_image, selectedVariantId, productVariants, variantAttributes, variantAttributeValues, locale]);
 
   return (
     <div className={classes.productCard}>

@@ -92,6 +92,8 @@ export type ProductFile = {
   product_variant_id?: bigint | null;
   sequence?: number | null;
   alt_text?: string | null;
+  // Built by the ERP from what the photo shows, per language (en/tr/ru).
+  alt_texts?: Record<string, string> | null;
 }
 
 
