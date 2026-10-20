@@ -55,7 +55,7 @@ export async function fetchErpWordings(): Promise<ErpWordings | null> {
     const base = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
     if (!base) return null;
     try {
-        const response = await fetch(`${base}/marketing/api/attribute_translations/`, {
+        const response = await fetch(`${base}/marketing/api/catalog_wording/`, {
             next: { revalidate: 300 },
         });
         if (!response.ok) return null;
