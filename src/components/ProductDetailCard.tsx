@@ -20,6 +20,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 import ProductReviewsList from './ProductReviewsList';
 import SimilarProducts from './SimilarProducts';
 import { translateTextSync } from '@/lib/translate';
+import { visitorCountry } from '@/lib/visitorCountry';
 import { getLocalizedProductField, imageAltText } from '@/lib/productUtils';
 import { trackViewItem, trackAddToCart, trackSelectFabric, trackRequestSample } from '@/lib/tracking';
 import { trackKlaviyoAddToCart } from '@/lib/klaviyo';
@@ -125,6 +126,8 @@ function ProductDetailCard({
       }
       return `${wL}: ${sizeMatch[1]} × ${hL}: ${sizeMatch[2]} cm`;
     }
+    const width = isWidthAttribute(attributeName) ? widthLabel(value) : null;
+    if (width) return width;
     const display = translateAttributeName(value);
     return display.replace('(each)', locale === 'tr' ? '(Tek Parça Boyutu)' : locale === 'ru' ? '(Размер одной панели)' : locale === 'pl' ? '(Rozmiar jednego panelu)' : '(Per Panel)');
   };
@@ -240,12 +243,15 @@ function ProductDetailCard({
   const [showWizard, setShowWizard] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [showBedSizeGuide, setShowBedSizeGuide] = useState(false);
-  // Metric for the TR site, inches for international visitors — "W: 130 ×
-  // H: 210 cm" means nothing to a US shopper. The toggle still lets anyone
-  // switch.
-  const defaultUnit: 'cm' | 'in' = locale === 'tr' ? 'cm' : 'in';
-  const [bedGuideUnit, setBedGuideUnit] = useState<'cm' | 'in'>(defaultUnit);
-  const [sizeUnit, setSizeUnit] = useState<'cm' | 'in'>(defaultUnit);
+  // Metric for everyone but a visitor in the US — "W: 130 × H: 210 cm"
+  // means nothing to a US shopper. Where they are is only known in the
+  // browser (the page itself is cached for all visitors), so it starts
+  // metric and turns once it knows. The toggle still lets anyone switch.
+  const [bedGuideUnit, setBedGuideUnit] = useState<'cm' | 'in'>('cm');
+  const [sizeUnit, setSizeUnit] = useState<'cm' | 'in'>('cm');
+  useEffect(() => {
+    if (visitorCountry() === 'US') { setBedGuideUnit('in'); setSizeUnit('in'); }
+  }, []);
 
   // Review summary (stars + count) shown right under the title; clicking it
   // scrolls to the full review list at the bottom of the page.
@@ -264,6 +270,14 @@ function ProductDetailCard({
     fetchSummary();
   }, [product?.sku]);
   const cmToInch = (cm: number) => (cm / 2.54).toFixed(1);
+  // A fabric's width is stored as a bare number of centimetres ("320"), so
+  // it is given its unit here, in whichever one the toggle is on.
+  const isWidthAttribute = (name: string) => ['width', 'genişlik', 'en'].includes((name || '').toLowerCase());
+  const widthLabel = (value: string): string | null => {
+    const cm = Number(value);
+    if (!/^\d+([.,]\d+)?$/.test((value || '').trim()) || !cm) return null;
+    return sizeUnit === 'in' ? `${Math.round(cm / 2.54)}″` : `${value} cm`;
+  };
   const [showPleatGuide, setShowPleatGuide] = useState(false);
 
   // Initialize selectedAttributes synchronously with initialAttributes 
@@ -2013,7 +2027,7 @@ function ProductDetailCard({
                         <tr><td className={classes.detailTableLabel}>{locale === 'tr' ? 'Barkod' : 'Barcode'}</td><td className={classes.detailTableValue}>{selectedVariant?.variant_barcode || product.barcode}</td></tr>
                       )}
                       {Object.entries(selectedAttributes).map(([attrName, attrValue]) => (
-                        <tr key={attrName}><td className={classes.detailTableLabel}>{translateAttributeName(attrName)}</td><td className={classes.detailTableValue}>{translateAttributeName(attrValue)}</td></tr>
+                        <tr key={attrName}><td className={classes.detailTableLabel}>{translateAttributeName(attrName)}</td><td className={classes.detailTableValue}>{(isWidthAttribute(attrName) && widthLabel(attrValue)) || translateAttributeName(attrValue)}</td></tr>
                       ))}
                       {(() => {
                         // Show variant-specific product attributes, avoid duplicates with selectedAttributes
