@@ -1482,12 +1482,9 @@ function ProductDetailCard({
           {product_variant_attributes && product_variant_attributes.length > 0 ? (
             <div className={classes.variant_menu}>
               <ul>
-                {Object.entries(fixedAttributeValues).some(([name, value]) =>
-                  !(name.toLowerCase() === 'embellishment' && value.toLowerCase() === 'none')) && (
+                {Object.keys(fixedAttributeValues).length > 0 && (
                   <li className={classes.fixed_attributes}>
                     {Object.entries(fixedAttributeValues)
-                      // A design with no embellishment says nothing about it.
-                      .filter(([name, value]) => !(name.toLowerCase() === 'embellishment' && value.toLowerCase() === 'none'))
                       .map(([name, value]) => {
                       // A fabric with a photo keeps its swatch here, and the
                       // larger photo on hover, as it has among the choices.
