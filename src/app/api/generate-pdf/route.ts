@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFFont, rgb, StandardFonts } from 'pdf-lib';
+import { getLocalizedProductField } from '@/lib/productUtils';
 
 // Türkçe karakterleri ASCII'ye çevir
 function replaceTurkishChars(text: string): string {
@@ -16,6 +17,37 @@ function replaceTurkishChars(text: string): string {
     .replace(/Ö/g, 'O')
     .replace(/ç/g, 'c')
     .replace(/Ç/g, 'C');
+}
+
+// The standard fonts only draw WinAnsi, and drawText throws on anything
+// else, so one Polish or Cyrillic letter in a description failed the whole
+// PDF. Letters lose their accents (ą → a), the rest the font can't draw goes.
+function toPdfText(text: string, font: PDFFont): string {
+  const drawable = new Set(font.getCharacterSet());
+  return replaceTurkishChars(text)
+    .replace(/ł/g, 'l')
+    .replace(/Ł/g, 'L')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .split('')
+    .filter(c => c === '\n' || drawable.has(c.codePointAt(0)!))
+    .join('');
+}
+
+// Descriptions are typed as HTML in the ERP.
+function htmlToText(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|li|h[1-6])>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 export async function GET(request: NextRequest) {
@@ -163,7 +195,7 @@ export async function GET(request: NextRequest) {
         color: goldColor,
       });
 
-      page.drawText(value, {
+      page.drawText(toPdfText(value, helvetica), {
         x: 200,
         y: yPosition,
         size: 11,
@@ -176,18 +208,20 @@ export async function GET(request: NextRequest) {
 
     // Ürün bilgileri - API'den gelen data varsa onu kullan
     const product = productData?.product;
-    const productTitle = product?.title || title || 'N/A';
+    // The description may be the ERP's JSON of translations; the PDF is in English.
+    const productTitle = (product && getLocalizedProductField(product, 'title', 'en')) || title || 'N/A';
     const productCategory = productData?.product_category || 'Premium Fabric';
-    const productDescription = product?.description || 'High-quality textile product crafted with precision and care.';
+    const productDescription = (product && htmlToText(getLocalizedProductField(product, 'description', 'en')))
+      || 'High-quality textile product crafted with precision and care.';
     const productVariants = productData?.product_variants || [];
     const productVariantAttributes = productData?.product_variant_attributes || [];
     const productVariantAttributeValues = productData?.product_variant_attribute_values || [];
     const productAttributes = productData?.product_attributes || [];
 
     // Temel bilgiler
-    addInfoRow('Product Title', replaceTurkishChars(productTitle));
+    addInfoRow('Product Title', productTitle);
     addInfoRow('SKU', sku);
-    addInfoRow('Category', replaceTurkishChars(productCategory));
+    addInfoRow('Category', productCategory);
 
     // Width lives on the variants, never on the product: list what the
     // variants on sale come in, the way ProductCard does ("320 cm", or a
@@ -223,7 +257,7 @@ export async function GET(request: NextRequest) {
         : `${lo}-${hi} cm (${inches(lo)}-${inches(hi)} in)`);
     }
     if (heightAttr?.value) {
-      addInfoRow('Height', replaceTurkishChars(heightAttr.value));
+      addInfoRow('Height', heightAttr.value);
     }
 
     yPosition -= 20;
@@ -240,7 +274,7 @@ export async function GET(request: NextRequest) {
     yPosition -= 30;
 
     // Açıklamayı satırlara böl - newline karakterlerini de işle
-    const descText = replaceTurkishChars(productDescription);
+    const descText = toPdfText(productDescription, helvetica);
     const maxCharsPerLine = 70;
     const paragraphs = descText.split('\n'); // Paragrafları ayır
     const lines: string[] = [];
