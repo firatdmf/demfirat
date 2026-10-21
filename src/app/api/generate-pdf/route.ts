@@ -189,16 +189,38 @@ export async function GET(request: NextRequest) {
     addInfoRow('SKU', sku);
     addInfoRow('Category', replaceTurkishChars(productCategory));
 
-    // Boyut bilgilerini product attributes'tan al
-    const widthAttr = productAttributes.find((attr: any) =>
-      attr.name?.toLowerCase() === 'width' || attr.name?.toLowerCase() === 'genişlik'
+    // Width lives on the variants, never on the product: list what the
+    // variants on sale come in, the way ProductCard does ("320 cm", or a
+    // range "300-320 cm" when they differ).
+    const widthAttributeIds = new Set(
+      productVariantAttributes
+        .filter((attr: any) => attr.name?.toLowerCase() === 'width' || attr.name?.toLowerCase() === 'genişlik')
+        .map((attr: any) => attr.id)
     );
+    const valuesById = new Map(productVariantAttributeValues.map((val: any) => [val.id, val]));
+    const widths = Array.from(new Set<number>(
+      productVariants
+        .filter((v: any) =>
+          v.variant_featured !== false &&
+          !(v.variant_quantity != null && Number(v.variant_quantity) <= 0)
+        )
+        .flatMap((v: any) => v.product_variant_attribute_values || [])
+        .map((id: number) => valuesById.get(id) as any)
+        .filter((val: any) => val && widthAttributeIds.has(val.product_variant_attribute_id))
+        .map((val: any) => parseFloat(val.product_variant_attribute_value))
+        .filter((n: number) => !isNaN(n))
+    )).sort((a, b) => a - b);
     const heightAttr = productAttributes.find((attr: any) =>
       attr.name?.toLowerCase() === 'height' || attr.name?.toLowerCase() === 'uzunluk' || attr.name?.toLowerCase() === 'boy'
     );
 
-    if (widthAttr?.value) {
-      addInfoRow('Width', replaceTurkishChars(widthAttr.value));
+    if (widths.length) {
+      const inches = (cm: number) => Math.round(cm / 2.54);
+      const lo = widths[0];
+      const hi = widths[widths.length - 1];
+      addInfoRow('Width', lo === hi
+        ? `${lo} cm (${inches(lo)} in)`
+        : `${lo}-${hi} cm (${inches(lo)}-${inches(hi)} in)`);
     }
     if (heightAttr?.value) {
       addInfoRow('Height', replaceTurkishChars(heightAttr.value));
