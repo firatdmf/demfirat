@@ -21,6 +21,20 @@ export const COLOR_MAP: { [key: string]: string } = {
   'beyaz': '#FFFFFF',
   'white': '#FFFFFF',
 
+  // Colour names the ERP catalog uses that had no swatch: unknown names were
+  // split on "_" as two-tone, drawing "dark" or "light" as a blank half.
+  'bluish_white': '#F0F8FF',
+  'light_peach': '#FFDAB9',
+  'peach': '#FFCBA4',
+  'dusty_rose': '#C08081',
+  'plum': '#673147',
+  'khaki': '#C3B091',
+  'dark_mink': '#6B5E4F',
+  'dark_anthracite': '#2B3339',
+  'dark_stone': '#A69F8C',
+  'earth': '#8B6B4A',
+  'dark_earth': '#5C4033',
+
   // Bej tonları
   'bej': '#F5F5DC',
   'beige': '#F5F5DC',
