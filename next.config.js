@@ -72,7 +72,11 @@ const nextConfig = {
         headers: [{ key: 'Cache-Control', value: HTML_CACHE }],
       },
       {
-        source: `/:path((?!_next/static/)(?!.*\\.(?:${ASSET_EXT})$).*)`,
+        // Pages only: not /api/, whose answers are per visitor (the session,
+        // the cart) or set their own Cache-Control. Under this rule the
+        // browser kept serving a signed-out /api/auth/session after login,
+        // until a hard refresh.
+        source: `/:path((?!_next/static/)(?!api/)(?!.*\\.(?:${ASSET_EXT})$).*)`,
         headers: [{ key: 'Cache-Control', value: HTML_CACHE }],
       },
       {
