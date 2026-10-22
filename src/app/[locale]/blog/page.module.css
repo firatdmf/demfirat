@@ -1,4 +1,9 @@
+/* Same scale as an individual post, so the index and the posts agree. */
 .blogPage {
+    --blog-body: 1.125rem;
+    --blog-h1: 2.75rem;
+    --blog-small: 0.9375rem;
+
     min-height: 100vh;
     background: var(--ivory, #faf8f3);
 }
@@ -16,16 +21,17 @@
 }
 
 .heroContent h1 {
-    font-family: var(--font-heading, 'Cormorant Garamond', serif);
-    font-size: 3rem;
+    font-family: var(--font-blog-heading, 'Lora', Georgia, serif);
+    font-size: var(--blog-h1);
+    line-height: 1.2;
     font-weight: 400;
     color: white;
     margin: 0 0 1rem 0;
 }
 
 .heroContent p {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 1.1rem;
+    font-family: var(--font-blog-body, 'Lora', Georgia, serif);
+    font-size: var(--blog-body);
     color: rgba(255, 255, 255, 0.7);
     margin: 0;
 }
@@ -91,8 +97,8 @@
     color: white;
     padding: 0.4rem 1rem;
     border-radius: 20px;
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.75rem;
+    font-family: var(--font-blog-body, 'Lora', Georgia, serif);
+    font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -106,14 +112,14 @@
 }
 
 .date {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.8rem;
+    font-family: var(--font-blog-body, 'Lora', Georgia, serif);
+    font-size: var(--blog-small);
     color: #888;
     margin-bottom: 0.5rem;
 }
 
 .cardContent h2 {
-    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-family: var(--font-blog-heading, 'Lora', Georgia, serif);
     font-size: 1.5rem;
     font-weight: 500;
     color: #1a1a1a;
@@ -122,8 +128,8 @@
 }
 
 .cardContent p {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.9rem;
+    font-family: var(--font-blog-body, 'Lora', Georgia, serif);
+    font-size: var(--blog-small);
     color: #666;
     line-height: 1.6;
     margin: 0 0 1rem 0;
@@ -131,8 +137,8 @@
 }
 
 .readMore {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.9rem;
+    font-family: var(--font-blog-body, 'Lora', Georgia, serif);
+    font-size: var(--blog-small);
     font-weight: 600;
     color: var(--gold, #c9a961);
     transition: color 0.2s;
@@ -148,12 +154,10 @@
         padding: 3rem 1.5rem;
     }
 
-    .heroContent h1 {
-        font-size: 2.25rem;
-    }
-
-    .heroContent p {
-        font-size: 1rem;
+    .blogPage {
+        --blog-body: 1rem;
+        --blog-h1: 1.95rem;
+        --blog-small: 0.875rem;
     }
 
     .blogSection {
@@ -171,8 +175,8 @@
 }
 
 @media (max-width: 480px) {
-    .heroContent h1 {
-        font-size: 1.75rem;
+    .blogPage {
+        --blog-h1: 1.875rem;
     }
 
     .cardContent h2 {

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { erpFetch } from '@/lib/erpFetch';
 
 interface ExchangeRate {
     currency_code: string;
@@ -157,7 +158,7 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode; locale?: st
             if (session?.user) {
                 try {
                     const userId = (session.user as any).id || session.user.email;
-                    const response = await fetch(
+                    const response = await erpFetch(
                         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_web_client_profile/${userId}/`
                     );
 

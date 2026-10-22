@@ -64,6 +64,7 @@ interface OrderDetail extends Order {
 
 import Link from 'next/link';
 import RateProductButton from '@/components/RateProductButton';
+import { erpFetch } from '@/lib/erpFetch';
 
 // Reviews Tab Content Component
 interface UserReview {
@@ -88,8 +89,8 @@ function ReviewsTabContent({ userId, locale, onShowToast, t }: { userId: number;
       if (!userId) return;
       try {
         const [reviewsRes, ordersRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_reviews/${userId}/`),
-          fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_orders/${userId}/`)
+          erpFetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_reviews/${userId}/`),
+          erpFetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_orders/${userId}/`)
         ]);
 
         if (reviewsRes.ok) {
@@ -107,7 +108,7 @@ function ReviewsTabContent({ userId, locale, onShowToast, t }: { userId: number;
             initialOrders.map(async (order: any) => {
               if (order.status === 'cancelled') return null; // Skip cancelled early or keep? User said include all even pending. Cancelled usually implies no purchase.
               try {
-                const detailRes = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_order_detail/${userId}/${order.id}/`);
+                const detailRes = await erpFetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_order_detail/${userId}/${order.id}/`);
                 if (detailRes.ok) {
                   return await detailRes.json();
                 }
@@ -133,7 +134,7 @@ function ReviewsTabContent({ userId, locale, onShowToast, t }: { userId: number;
     if (!confirm(locale === 'tr' ? 'Bu değerlendirmeyi silmek istediğinize emin misiniz?' : 'Are you sure you want to delete this review?')) return;
 
     try {
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/delete_review/${userId}/${reviewId}/`,
         { method: 'DELETE' }
       );
@@ -589,7 +590,7 @@ export default function ProfilePage() {
           return;
         }
 
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_orders/${userId}/`
         );
 
@@ -614,7 +615,7 @@ export default function ProfilePage() {
     setDetailLoading(true);
     try {
       const userId = (session.user as any).id;
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_order_detail/${userId}/${orderId}/`
       );
 
@@ -644,7 +645,7 @@ export default function ProfilePage() {
       try {
         // Use email to get user ID first, or modify API to accept email
         const userId = (session.user as any).id || session.user.email;
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_web_client_profile/${userId}/`
         );
 
@@ -733,7 +734,7 @@ export default function ProfilePage() {
 
       try {
         const userId = (session.user as any).id || session.user.email;
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_client_addresses/${userId}/`
         );
 
@@ -813,7 +814,7 @@ export default function ProfilePage() {
         isDefault: addresses.length === 0 // First address is default
       };
 
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_client_address/${userId}/`,
         {
           method: 'POST',
@@ -886,7 +887,7 @@ export default function ProfilePage() {
   const handleSetDefaultAddress = async (id: string) => {
     try {
       const userId = (session?.user as any)?.id || session?.user?.email;
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/set_default_address/${userId}/${id}/`,
         {
           method: 'POST',
@@ -909,7 +910,7 @@ export default function ProfilePage() {
   const handleDeleteAddress = async (id: string) => {
     try {
       const userId = (session?.user as any)?.id || session?.user?.email;
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/delete_client_address/${userId}/${id}/`,
         {
           method: 'DELETE',
@@ -961,7 +962,7 @@ export default function ProfilePage() {
 
       console.log('[Profile Update] Sending payload:', payload);
 
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${userId}/`,
         {
           method: 'POST',
@@ -1000,7 +1001,7 @@ export default function ProfilePage() {
       console.log('[Settings Save] Settings to save:', settings);
       console.log('[Settings Save] Request URL:', `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${userId}/`);
 
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_web_client_profile/${userId}/`,
         {
           method: 'PUT',
@@ -1062,7 +1063,7 @@ export default function ProfilePage() {
         throw new Error('User not authenticated');
       }
 
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/change_password/${userId}/`,
         {
           method: 'POST',

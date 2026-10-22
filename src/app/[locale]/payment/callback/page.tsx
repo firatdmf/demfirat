@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { erpFetch } from '@/lib/erpFetch';
 
 export default function PaymentCallbackPage() {
   const router = useRouter();
@@ -92,7 +93,7 @@ export default function PaymentCallbackPage() {
                 })
               }),
               // Clear cart on backend in parallel
-              fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${parsed.userId}/`, { method: 'POST' }).catch(e => {
+              erpFetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${parsed.userId}/`, { method: 'POST' }).catch(e => {
                 console.error('Failed to clear backend cart:', e);
               })
             ]);

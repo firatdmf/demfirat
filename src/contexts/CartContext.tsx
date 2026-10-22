@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
+import { erpFetch } from '@/lib/erpFetch';
 
 // Guest cart item interface
 interface GuestCartItem {
@@ -127,7 +128,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     try {
       const userId = (session.user as any)?.id || session.user.email;
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_cart/${userId}/`
       );
 
@@ -254,7 +255,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       // Add each guest cart item to user's cart
       for (const item of guestCart) {
-        await fetch(
+        await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
           {
             method: 'POST',

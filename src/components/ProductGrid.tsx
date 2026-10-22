@@ -35,6 +35,8 @@ type ProductGridProps = {
 
 // Import centralized translation utility
 import { translateTextSync } from '@/lib/translate';
+import { hasCurtainTabs } from '@/lib/productCategories';
+import { buildCatalogProducts } from '@/lib/catalogProducts';
 
 // Translation helper using centralized utility
 const translateAttributeName = (name: string, locale: string): string => {
@@ -211,51 +213,13 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
   const handleLeadSubmit = async (data: { name: string; email: string; phone: string }) => {
     setIsGeneratingCatalog(true);
     try {
-      // Prepare products for PDF (same logic as before)
-      const catalogProducts = filteredProducts?.map(product => {
-        const productVars = product_variants.filter(v => v.product_id === product.id);
-        const colors = new Set<string>();
-        const attributes = new Map<string, Set<string>>();
-
-        productVars.forEach(variant => {
-          variant.product_variant_attribute_values.forEach(avId => {
-            const av = product_variant_attribute_values.find(v => v.id === avId);
-            if (av) {
-              const attr = product_variant_attributes.find(a => a.id === av.product_variant_attribute_id);
-              if (attr?.name) {
-                const attrName = attr.name.toLowerCase();
-                if (attrName === 'color') {
-                  colors.add(av.product_variant_attribute_value);
-                } else {
-                  if (!attributes.has(attr.name)) {
-                    attributes.set(attr.name, new Set());
-                  }
-                  attributes.get(attr.name)?.add(av.product_variant_attribute_value);
-                }
-              }
-            }
-          });
-        });
-
-        const attributesArray = Array.from(attributes.entries()).map(([name, values]) => ({
-          name,
-          values: Array.from(values).slice(0, 5)
-        }));
-
-        return {
-          sku: product.sku || '',
-          title: product.title || '',
-          price: product.price ? Number(product.price) : null,
-          description: product.description ? String(product.description) : '',
-          primary_image: product.primary_image || '',
-          colors: Array.from(colors),
-          attributes: attributesArray,
-          variants: productVars.slice(0, 8).map(v => ({
-            sku: v.variant_sku,
-            price: v.variant_price ? Number(v.variant_price) : null
-          }))
-        };
-      });
+      // Prepare products for PDF — same shaping the homepage catalog band uses.
+      const catalogProducts = buildCatalogProducts(
+        filteredProducts ?? [],
+        product_variants,
+        product_variant_attributes,
+        product_variant_attribute_values,
+      );
 
       // Send to unified combined API endpoint
       const response = await fetch('/api/catalog/email', {
@@ -273,10 +237,13 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       if (response.ok) {
         setIsLeadModalOpen(false);
         trackKlaviyoCatalogRequest(data.email, data.name);
-        alert('Katalog e-posta adresinize gönderildi!');
+        alert(locale === 'tr' ? 'Katalog e-posta adresinize gönderildi!' :
+          locale === 'ru' ? 'Каталог отправлен на вашу почту!' :
+            locale === 'pl' ? 'Katalog został wysłany na Twój e-mail!' :
+              'The catalog is on its way to your inbox.');
       } else {
         const errData = await response.json();
-        throw new Error(errData.error || 'Gönderim başarısız oldu.');
+        throw new Error(errData.error || (locale === 'tr' ? 'Gönderim başarısız oldu.' : 'Sending failed. Please try again.'));
       }
     } catch (error: any) {
       console.error('Catalog email error:', error);
@@ -368,7 +335,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
     });
   }
 
-  // ── Curtain view filter (used on /product/all page) ──
+  // ── Curtain view filter (used on the /product/curtain page) ──
   // Values: 'tulle' (fabric only), 'rustic' (ready-made only)
   const activeCurtainFilter = (searchParams?.curtain_filter as string) || '';
   if (activeCurtainFilter && filteredProducts) {
@@ -684,7 +651,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
        
               */
   }
-        {product_category?.toLowerCase() === 'all' ? (
+        {hasCurtainTabs(product_category?.toLowerCase()) ? (
           <div className={classes.categoryTabs}>
             <Link
               href={`?${(() => { const p = new URLSearchParams(searchParams as Record<string, string>); p.set('curtain_filter', 'tulle'); p.delete('fabric_type'); return p.toString(); })()}`}
@@ -1375,6 +1342,7 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           onClose={() => setIsLeadModalOpen(false)}
           onSubmit={handleLeadSubmit}
           isLoading={isGeneratingCatalog}
+          locale={locale}
         />
       </div >
     );

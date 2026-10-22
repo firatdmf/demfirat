@@ -7,6 +7,7 @@ import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttribu
 // import { getVideoSKUs } from "@/lib/getProductVideo";
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
+import { getCategoryName, resolveCategories } from "@/lib/productCategories";
 
 // type apiResponse = {
 //   products: Product[];
@@ -38,15 +39,16 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   });
 
   // Calculate generic localized title
-  let categoryName = 'Products';
-  if (product_category === 'ready-made_curtain') {
-    categoryName = locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains';
-  } else if (product_category === 'fabric' || product_category === 'all') {
-    categoryName = locale === 'tr' ? 'Kumaşlar & Tül Perdeler' : locale === 'ru' ? 'Ткани и Тюлевые Шторы' : locale === 'pl' ? 'Tkaniny i Firany' : 'Fabrics & Tulle Curtains';
-  }
+  const categoryName = getCategoryName(product_category, locale);
 
   // SEO metadata block — title format avoids competing with homepage for "Demfirat Karven" brand queries
   const categoryDescriptions: Record<string, Record<string, string>> = {
+    curtain: {
+      tr: `Demfirat Karven perde koleksiyonu: tül perdeler, fon perdeler ve rustik hazır perdeler tek sayfada. Yüzlerce model, renk ve desen.`,
+      en: `The Demfirat Karven curtain collection: tulle, blackout and ready-made rustic curtains in one place. Hundreds of patterns, colors and designs.`,
+      ru: `Коллекция штор Demfirat Karven: тюль, шторы блэкаут и готовые рустикальные шторы на одной странице. Сотни узоров, цветов и дизайнов.`,
+      pl: `Kolekcja zasłon Demfirat Karven: firany, zasłony zaciemniające i gotowe zasłony rustykalne w jednym miejscu. Setki wzorów, kolorów i projektów.`,
+    },
     fabric: {
       tr: `Demfirat Karven'in özel kumaş ve tül perde koleksiyonunu keşfedin. Yüzlerce model, renk ve desen seçeneği ile hayalinizdeki perdeyi tasarlayın.`,
       en: `Explore Demfirat Karven's exclusive fabric & tulle curtain collection. Hundreds of patterns, colors, and designs to create your dream curtain.`,
@@ -103,9 +105,7 @@ export default async function Page(props: Props) {
   };
   let errorMessage = "";
 
-  const categoriesToFetch = (product_category === 'all' || product_category === 'search')
-    ? ['fabric', 'ready-made_curtain']
-    : [product_category];
+  const categoriesToFetch = resolveCategories(product_category);
 
   const categoryPromises = categoriesToFetch.map(async (category) => {
     const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products`);
@@ -199,12 +199,7 @@ export default async function Page(props: Props) {
   const baseUrl = `https://www.demfirat.com/${locale}`;
   const categoryUrl = `${baseUrl}/product/${product_category}`;
 
-  let categoryName = 'Products';
-  if (product_category === 'ready-made_curtain') {
-    categoryName = locale === 'tr' ? 'Hazır Perdeler' : locale === 'ru' ? 'Готовые Шторы' : locale === 'pl' ? 'Gotowe Zasłony' : 'Ready Made Curtains';
-  } else if (product_category === 'fabric' || product_category === 'all') {
-    categoryName = locale === 'tr' ? 'Kumaşlar & Tül Perdeler' : locale === 'ru' ? 'Ткани и Тюлевые Шторы' : locale === 'pl' ? 'Tkaniny i Firany' : 'Fabrics & Tulle Curtains';
-  }
+  const categoryName = getCategoryName(product_category, locale);
 
   // JSON-LD Breadcrumb Schema for the Category Page
   const breadcrumbJsonLd = {

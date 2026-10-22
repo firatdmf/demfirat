@@ -18,6 +18,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
 import { getLocalizedProductField, imageAltText } from '@/lib/productUtils';
 import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
+import { isCategoryGroup } from '@/lib/productCategories';
 
 interface ProductCardProps {
   product: Product;
@@ -317,9 +318,9 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const pathname = usePathname();
   const urlCategoryName = pathname.split("/").at(-1);
   const productOwnCategory = (product as any).product_category as string | undefined;
-  // Use product's own category when on a multi-category page (e.g. /product/all)
+  // Use product's own category when on a multi-category page (e.g. /product/curtain)
   // so links go to the correct /product/<actualCategory>/<sku> path.
-  const actualCategory = (urlCategoryName === 'all' || urlCategoryName === 'search')
+  const actualCategory = isCategoryGroup(urlCategoryName)
     ? (productOwnCategory || urlCategoryName)
     : urlCategoryName;
   let product_category_name = actualCategory;

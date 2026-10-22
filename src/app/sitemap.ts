@@ -55,6 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Static routes. Homepage first with priority 1.0.
     const coreRoutes = [
         '',                                   // homepage — highest priority
+        '/product/curtain',                   // all curtains (tulle + ready-made)
         '/product/fabric',                    // tulle / custom curtain listing
         '/product/ready-made_curtain',        // ready-made curtains
         '/product/bed',                       // bedroom

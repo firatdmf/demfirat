@@ -72,6 +72,9 @@ export const authOptions: NextAuthOptions = {
                         email: user.email,
                         username: user.username,
                         name: user.name,
+                        // Django's signature on this customer's id: the ERP
+                        // answers account calls only with it (lib/erpFetch).
+                        erpToken: user.token ?? data.token,
                     };
                 } catch (error: any) {
                     console.error('Login error:', error);
@@ -93,6 +96,9 @@ export const authOptions: NextAuthOptions = {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
+                                // Only this server may vouch for a Google
+                                // sign-in: the ERP trusts the email it sends.
+                                'X-Storefront-Key': process.env.NEJUM_STOREFRONT_KEY ?? '',
                             },
                             body: JSON.stringify({
                                 email: profile.email,
@@ -112,6 +118,7 @@ export const authOptions: NextAuthOptions = {
                         // Store Django user ID on the NextAuth user object
                         (user as any).djangoId = data.user.id;
                         (user as any).djangoUsername = data.user.username;
+                        (user as any).erpToken = data.user.token ?? data.token;
                         console.log('[GOOGLE LOGIN] Django user ID:', data.user.id);
                     }
                 } catch (error) {
@@ -130,7 +137,8 @@ export const authOptions: NextAuthOptions = {
                     name: token.name,
                     email: token.email,
                     image: token.picture,
-                    randomKey: token.randomKey
+                    randomKey: token.randomKey,
+                    erpToken: token.erpToken
                 }
             };
         },
@@ -140,6 +148,7 @@ export const authOptions: NextAuthOptions = {
                 // For Google OAuth, use djangoId, for credentials use id
                 token.id = u.djangoId || u.id;
                 token.randomKey = u.randomKey;
+                token.erpToken = u.erpToken;
             }
             // For Google OAuth, profile contains user info
             if (account?.provider === 'google' && profile) {

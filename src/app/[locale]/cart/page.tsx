@@ -12,6 +12,7 @@ import { getLocalizedProductField } from '@/lib/productUtils';
 import { translateTextSync } from '@/lib/translate';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import GuestCheckoutModal from '@/components/GuestCheckoutModal';
+import { erpFetch } from '@/lib/erpFetch';
 
 interface CartItem {
   id: number;
@@ -185,7 +186,7 @@ export default function CartPage() {
     try {
       setLoading(true);
       const userId = (session?.user as any)?.id || session?.user?.email;
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_cart/${userId}/`
       );
 
@@ -260,7 +261,7 @@ export default function CartPage() {
       } else {
         // For authenticated users, update via API
         const userId = (session?.user as any)?.id || session?.user?.email;
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_cart_item/${userId}/${itemId}/`,
           {
             method: 'PUT',
@@ -300,7 +301,7 @@ export default function CartPage() {
       } else {
         // For authenticated users, remove via API
         const userId = (session?.user as any)?.id || session?.user?.email;
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/remove_from_cart/${userId}/${itemId}/`,
           { method: 'DELETE' }
         );

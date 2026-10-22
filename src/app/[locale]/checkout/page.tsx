@@ -13,6 +13,7 @@ import PreInformationForm from '@/components/PreInformationForm';
 import DistanceSalesContract from '@/components/DistanceSalesContract';
 import { trackBeginCheckout } from '@/lib/tracking';
 import { identifyUser, trackKlaviyoStartedCheckout } from '@/lib/klaviyo';
+import { erpFetch } from '@/lib/erpFetch';
 import './iyzico-payment-logo.css';
 import './card-form-mobile.css';
 
@@ -451,7 +452,7 @@ export default function CheckoutPage() {
         // Task 1: Load cart items
         (async () => {
           try {
-            const cartResponse = await fetch(
+            const cartResponse = await erpFetch(
               `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_cart/${userId}/`
             );
             if (!cartResponse.ok) return null;
@@ -526,7 +527,7 @@ export default function CheckoutPage() {
         // Task 2: Load user profile (addresses)
         (async () => {
           try {
-            const profileResponse = await fetch(
+            const profileResponse = await erpFetch(
               `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_web_client_profile/${userId}/`
             );
             if (!profileResponse.ok) return null;
@@ -849,7 +850,7 @@ export default function CheckoutPage() {
       console.log('Saving address:', addressData);
 
       // Call Django API to save address
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_client_address/${userId}/`,
         {
           method: 'POST',

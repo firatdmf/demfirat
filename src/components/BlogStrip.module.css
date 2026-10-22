@@ -1,0 +1,181 @@
+.blogStrip {
+    background: var(--ivory, #faf8f3);
+    padding: var(--section-py, 5.5rem) var(--section-px, 2rem);
+    border-top: 1px solid rgba(148, 79, 5, 0.08);
+}
+
+.container {
+    width: 100%;
+    max-width: var(--container-max, 1280px);
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2.75rem;
+}
+
+.eyebrow {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7a6353;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 0.65rem;
+}
+
+.title {
+    font-family: var(--font-jost), 'Jost', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: #2c2520;
+    margin: 0;
+}
+
+.allLink {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #944f05;
+    text-decoration: none;
+    white-space: nowrap;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgba(148, 79, 5, 0.35);
+    transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.allLink:hover {
+    color: #2c2520;
+    border-bottom-color: #2c2520;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 14px rgba(44, 37, 32, 0.06);
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 28px rgba(44, 37, 32, 0.12);
+}
+
+.cardImage {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: #ede3d5;
+}
+
+.cardImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.category {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #2c2520;
+    background: rgba(250, 248, 243, 0.92);
+    padding: 0.35rem 0.75rem;
+    border-radius: 2px;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+}
+
+.date {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: #8b7d72;
+}
+
+.cardTitle {
+    font-family: var(--font-blog-heading, 'Lora', Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #2c2520;
+    margin: 0;
+}
+
+.excerpt {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: #6b6059;
+    margin: 0;
+    /* Keep the three cards the same height whatever the excerpt length. */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Third card would sit alone on a half-width row — drop it instead. */
+    .card:nth-child(3) {
+        display: none;
+    }
+}
+
+@media (max-width: 680px) {
+    .blogStrip {
+        padding: 4rem 1.25rem;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .title {
+        font-size: 1.875rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card:nth-child(3) {
+        display: flex;
+    }
+}

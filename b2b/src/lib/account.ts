@@ -15,9 +15,43 @@
  *   POST /authentication/api/toggle_favorite/{userId}/
  *   GET  /authentication/api/get_user_orders/{userId}/
  *   GET  /authentication/api/get_order_detail/{userId}/{orderId}/
+ *   (and the cart endpoints below — every one needs the customer token)
  */
 
 const API = () => process.env.NEXT_PUBLIC_NEJUM_API_URL ?? '';
+
+/*
+ * Every call above names the customer by id, and Django only answers it
+ * with the token login_web_client signed for that id. The token lives
+ * with the user in AuthContext's localStorage entry; a 401 means it is
+ * missing or expired, so the stored user is dropped and AuthContext
+ * (listening for SIGNED_OUT_EVENT) shows the sign-in again.
+ */
+export const AUTH_STORAGE_KEY = 'demfirat:user';
+export const SIGNED_OUT_EVENT = 'demfirat:signed-out';
+
+function storedToken(): string | null {
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    return raw ? ((JSON.parse(raw) as { token?: string }).token ?? null) : null;
+  } catch {
+    return null;
+  }
+}
+
+async function clientFetch(url: string, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers);
+  const token = storedToken();
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+  const res = await fetch(url, { ...init, headers });
+  if (res.status === 401) {
+    try {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+    } catch {}
+    window.dispatchEvent(new Event(SIGNED_OUT_EVENT));
+  }
+  return res;
+}
 
 async function jsonOrThrow<T>(res: Response): Promise<T> {
   const data = await res.json().catch(() => ({}));
@@ -142,7 +176,7 @@ export type OrderDetail = Order & {
 };
 
 export async function getProfile(userId: number): Promise<Profile> {
-  const res = await fetch(`${API()}/authentication/api/get_web_client_profile/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/get_web_client_profile/${userId}/`, {
     cache: 'no-store',
   });
   return jsonOrThrow<Profile>(res);
@@ -152,7 +186,7 @@ export async function updateProfile(
   userId: number,
   body: { name?: string; phone?: string; birthdate?: string },
 ): Promise<void> {
-  const res = await fetch(`${API()}/authentication/api/update_web_client_profile/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/update_web_client_profile/${userId}/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -161,7 +195,7 @@ export async function updateProfile(
 }
 
 export async function getAddresses(userId: number): Promise<Address[]> {
-  const res = await fetch(`${API()}/authentication/api/get_client_addresses/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/get_client_addresses/${userId}/`, {
     cache: 'no-store',
   });
   const data = await jsonOrThrow<{ addresses: Address[] }>(res);
@@ -172,7 +206,7 @@ export async function addAddress(
   userId: number,
   body: { title: string; address: string; city: string; country: string; isDefault?: boolean },
 ): Promise<Address> {
-  const res = await fetch(`${API()}/authentication/api/add_client_address/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/add_client_address/${userId}/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -182,7 +216,7 @@ export async function addAddress(
 }
 
 export async function setDefaultAddress(userId: number, addressId: string): Promise<void> {
-  const res = await fetch(
+  const res = await clientFetch(
     `${API()}/authentication/api/set_default_address/${userId}/${addressId}/`,
     { method: 'POST' },
   );
@@ -190,7 +224,7 @@ export async function setDefaultAddress(userId: number, addressId: string): Prom
 }
 
 export async function deleteAddress(userId: number, addressId: string): Promise<void> {
-  const res = await fetch(
+  const res = await clientFetch(
     `${API()}/authentication/api/delete_client_address/${userId}/${addressId}/`,
     { method: 'DELETE' },
   );
@@ -198,7 +232,7 @@ export async function deleteAddress(userId: number, addressId: string): Promise<
 }
 
 export async function getFavorites(userId: number): Promise<Favorite[]> {
-  const res = await fetch(`${API()}/authentication/api/get_user_favorites/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/get_user_favorites/${userId}/`, {
     cache: 'no-store',
   });
   const data = await jsonOrThrow<{ favorites: Favorite[] }>(res);
@@ -209,7 +243,7 @@ export async function toggleFavorite(
   userId: number,
   productSku: string,
 ): Promise<boolean> {
-  const res = await fetch(`${API()}/authentication/api/toggle_favorite/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/toggle_favorite/${userId}/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ product_sku: productSku }),
@@ -219,7 +253,7 @@ export async function toggleFavorite(
 }
 
 export async function getOrders(userId: number): Promise<Order[]> {
-  const res = await fetch(`${API()}/authentication/api/get_user_orders/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/get_user_orders/${userId}/`, {
     cache: 'no-store',
   });
   const data = await jsonOrThrow<{ orders: Order[] }>(res);
@@ -227,7 +261,7 @@ export async function getOrders(userId: number): Promise<Order[]> {
 }
 
 export async function getOrderDetail(userId: number, orderId: number): Promise<OrderDetail> {
-  const res = await fetch(
+  const res = await clientFetch(
     `${API()}/authentication/api/get_order_detail/${userId}/${orderId}/`,
     { cache: 'no-store' },
   );
@@ -253,7 +287,7 @@ export type DjangoCartItem = {
 };
 
 export async function getCart(userId: number): Promise<DjangoCartItem[]> {
-  const res = await fetch(`${API()}/authentication/api/get_cart/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/get_cart/${userId}/`, {
     cache: 'no-store',
   });
   const data = await jsonOrThrow<{ cart_items: DjangoCartItem[] }>(res);
@@ -264,7 +298,7 @@ export async function addCartItem(
   userId: number,
   body: { product_sku: string; variant_sku?: string; quantity: number },
 ): Promise<DjangoCartItem> {
-  const res = await fetch(`${API()}/authentication/api/add_to_cart/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/add_to_cart/${userId}/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -282,7 +316,7 @@ export async function updateCartItem(
   itemId: number,
   quantity: number,
 ): Promise<void> {
-  const res = await fetch(
+  const res = await clientFetch(
     `${API()}/authentication/api/update_cart_item/${userId}/${itemId}/`,
     {
       method: 'PUT',
@@ -294,7 +328,7 @@ export async function updateCartItem(
 }
 
 export async function removeCartItem(userId: number, itemId: number): Promise<void> {
-  const res = await fetch(
+  const res = await clientFetch(
     `${API()}/authentication/api/remove_from_cart/${userId}/${itemId}/`,
     { method: 'DELETE' },
   );
@@ -302,7 +336,7 @@ export async function removeCartItem(userId: number, itemId: number): Promise<vo
 }
 
 export async function clearCart(userId: number): Promise<void> {
-  const res = await fetch(`${API()}/authentication/api/clear_cart/${userId}/`, {
+  const res = await clientFetch(`${API()}/authentication/api/clear_cart/${userId}/`, {
     method: 'DELETE',
   });
   await jsonOrThrow(res);

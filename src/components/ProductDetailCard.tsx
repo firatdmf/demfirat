@@ -25,6 +25,7 @@ import { getLocalizedProductField, imageAltText } from '@/lib/productUtils';
 import { trackViewItem, trackAddToCart, trackSelectFabric, trackRequestSample } from '@/lib/tracking';
 import { trackKlaviyoAddToCart } from '@/lib/klaviyo';
 import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
+import { erpFetch } from '@/lib/erpFetch';
 
 // Wholesale fabric (kumaş) is ordered by the roll: 25m minimum, 25m steps.
 // Stock below the minimum — or zero — still goes through as a production
@@ -761,7 +762,7 @@ function ProductDetailCard({
       } else {
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
           {
             method: 'POST',
@@ -896,7 +897,7 @@ function ProductDetailCard({
       } else {
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
           {
             method: 'POST',
@@ -1015,7 +1016,7 @@ function ProductDetailCard({
         // For authenticated users, add via API
         const userId = (session?.user as any)?.id || session?.user?.email;
 
-        const response = await fetch(
+        const response = await erpFetch(
           `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_to_cart/${userId}/`,
           {
             method: 'POST',

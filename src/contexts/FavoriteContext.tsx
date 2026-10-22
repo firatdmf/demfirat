@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
+import { erpFetch } from '@/lib/erpFetch';
 
 interface FavoriteContextType {
   favorites: Set<string>;
@@ -51,7 +52,7 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
 
     try {
       const userId = (session.user as any)?.id || session.user.email;
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_favorites/${userId}/`
       );
 
@@ -68,7 +69,7 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
         // Push guest favorites to backend
         for (const sku of guestOnly) {
           try {
-            await fetch(
+            await erpFetch(
               `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/toggle_favorite/${userId}/`,
               {
                 method: 'POST',
@@ -119,7 +120,7 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
     // Authenticated: also sync with backend
     try {
       const userId = (session.user as any)?.id || session.user.email;
-      const response = await fetch(
+      const response = await erpFetch(
         `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/toggle_favorite/${userId}/`,
         {
           method: 'POST',

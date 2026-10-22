@@ -132,6 +132,22 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 604800,
   },
+  async redirects() {
+    return [
+      // The curtains listing used to live at the catch-all-sounding
+      // /product/all. Keep old links, ads and indexed URLs working.
+      {
+        source: '/:locale/product/all',
+        destination: '/:locale/product/curtain',
+        permanent: true,
+      },
+      {
+        source: '/product/all',
+        destination: '/tr/product/curtain',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 // module.exports = nextConfig

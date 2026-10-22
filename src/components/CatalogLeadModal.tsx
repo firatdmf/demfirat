@@ -9,13 +9,83 @@ interface CatalogLeadModalProps {
     onClose: () => void;
     onSubmit: (data: { name: string; email: string; phone: string }) => Promise<void>;
     isLoading: boolean;
+    locale?: string;
 }
 
-export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: CatalogLeadModalProps) {
+const translations = {
+    tr: {
+        title: 'Kataloğunuzu İndirin',
+        subtitle: 'Bilgilerinizi girin, Karven & Demfirat PDF kataloğunu anında e-posta adresinize gönderelim.',
+        name: 'Ad Soyad',
+        namePlaceholder: 'Örn: Ayşe Yılmaz',
+        phone: 'Telefon Numarası',
+        phonePlaceholder: 'Örn: 0555 555 55 55',
+        email: 'E-posta Adresi',
+        emailPlaceholder: 'Örn: info@ornek.com',
+        submit: 'Kataloğu E-postama Gönder',
+        sending: 'Gönderiliyor...',
+        disclaimer: 'Bilgileriniz kampanya ve bilgilendirme amaçlı kullanılabilir. Dilediğiniz zaman abonelikten çıkabilirsiniz.',
+        requiredError: 'Lütfen tüm alanları doldurunuz.',
+        emailError: 'Geçerli bir e-posta adresi giriniz.',
+        genericError: 'Bir hata oluştu. Lütfen tekrar deneyiniz.',
+    },
+    en: {
+        title: 'Download Your Catalog',
+        subtitle: 'Enter your details and we will email you the Karven & Demfirat PDF catalog right away.',
+        name: 'Full Name',
+        namePlaceholder: 'e.g. Jane Smith',
+        phone: 'Phone Number',
+        phonePlaceholder: 'e.g. +44 20 7946 0000',
+        email: 'Email Address',
+        emailPlaceholder: 'e.g. info@example.com',
+        submit: 'Email Me the Catalog',
+        sending: 'Sending...',
+        disclaimer: 'We may use your details to send offers and updates. You can unsubscribe at any time.',
+        requiredError: 'Please fill in every field.',
+        emailError: 'Please enter a valid email address.',
+        genericError: 'Something went wrong. Please try again.',
+    },
+    ru: {
+        title: 'Скачайте каталог',
+        subtitle: 'Оставьте свои данные, и мы сразу отправим PDF-каталог Karven & Demfirat на вашу почту.',
+        name: 'Имя и фамилия',
+        namePlaceholder: 'Напр.: Анна Иванова',
+        phone: 'Номер телефона',
+        phonePlaceholder: 'Напр.: +7 912 345 67 89',
+        email: 'Электронная почта',
+        emailPlaceholder: 'Напр.: info@example.com',
+        submit: 'Отправить каталог',
+        sending: 'Отправка...',
+        disclaimer: 'Мы можем использовать ваши данные для рассылки новостей и предложений. Вы можете отписаться в любой момент.',
+        requiredError: 'Пожалуйста, заполните все поля.',
+        emailError: 'Введите корректный адрес электронной почты.',
+        genericError: 'Произошла ошибка. Пожалуйста, попробуйте ещё раз.',
+    },
+    pl: {
+        title: 'Pobierz katalog',
+        subtitle: 'Podaj swoje dane, a od razu wyślemy katalog PDF Karven & Demfirat na Twój e-mail.',
+        name: 'Imię i nazwisko',
+        namePlaceholder: 'Np. Anna Kowalska',
+        phone: 'Numer telefonu',
+        phonePlaceholder: 'Np. +48 500 000 000',
+        email: 'Adres e-mail',
+        emailPlaceholder: 'Np. info@przyklad.com',
+        submit: 'Wyślij mi katalog',
+        sending: 'Wysyłanie...',
+        disclaimer: 'Możemy wykorzystać Twoje dane do wysyłki ofert i aktualności. W każdej chwili możesz zrezygnować.',
+        requiredError: 'Prosimy wypełnić wszystkie pola.',
+        emailError: 'Podaj prawidłowy adres e-mail.',
+        genericError: 'Wystąpił błąd. Prosimy spróbować ponownie.',
+    },
+};
+
+export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading, locale = 'tr' }: CatalogLeadModalProps) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
+
+    const t = translations[locale as keyof typeof translations] || translations.en;
 
     if (!isOpen) return null;
 
@@ -24,12 +94,12 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
         setError('');
 
         if (!name.trim() || !email.trim() || !phone.trim()) {
-            setError('Lütfen tüm alanları doldurunuz.');
+            setError(t.requiredError);
             return;
         }
 
         if (!email.includes('@')) {
-            setError('Geçerli bir e-posta adresi giriniz.');
+            setError(t.emailError);
             return;
         }
 
@@ -39,7 +109,7 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
             setEmail('');
             setPhone('');
         } catch (err: any) {
-            setError(err.message || 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
+            setError(err.message || t.genericError);
         }
     };
 
@@ -49,8 +119,8 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
                 <button className={styles.closeButton} onClick={onClose} disabled={isLoading}>×</button>
 
                 <div className={styles.header}>
-                    <h2>Kataloğunuzu İndirin</h2>
-                    <p>Bilgilerinizi girin, Karven & Demfirat PDF kataloğunu anında e-posta adresinize gönderelim.</p>
+                    <h2>{t.title}</h2>
+                    <p>{t.subtitle}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className={styles.formContainer}>
@@ -61,11 +131,11 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
                     )}
 
                     <div className={styles.inputGroup}>
-                        <label htmlFor="name">Ad Soyad</label>
+                        <label htmlFor="name">{t.name}</label>
                         <input
                             id="name"
                             type="text"
-                            placeholder="Örn: Ayşe Yılmaz"
+                            placeholder={t.namePlaceholder}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             disabled={isLoading}
@@ -74,11 +144,11 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
                     </div>
 
                     <div className={styles.inputGroup}>
-                        <label htmlFor="phone">Telefon Numarası</label>
+                        <label htmlFor="phone">{t.phone}</label>
                         <input
                             id="phone"
                             type="tel"
-                            placeholder="Örn: 0555 555 55 55"
+                            placeholder={t.phonePlaceholder}
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             disabled={isLoading}
@@ -87,11 +157,11 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
                     </div>
 
                     <div className={styles.inputGroup}>
-                        <label htmlFor="email">E-posta Adresi</label>
+                        <label htmlFor="email">{t.email}</label>
                         <input
                             id="email"
                             type="email"
-                            placeholder="Örn: info@ornek.com"
+                            placeholder={t.emailPlaceholder}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             disabled={isLoading}
@@ -106,15 +176,15 @@ export function CatalogLeadModal({ isOpen, onClose, onSubmit, isLoading }: Catal
                     >
                         {isLoading ? (
                             <span className={styles.loadingContainer}>
-                                Gönderiliyor...
+                                {t.sending}
                             </span>
                         ) : (
-                            'Kataloğu E-postama Gönder'
+                            t.submit
                         )}
                     </button>
 
                     <p className={styles.disclaimer}>
-                        Bilgileriniz kampanya ve bilgilendirme amaçlı kullanılabilir. Dilediğiniz zaman abonelikten çıkabilirsiniz.
+                        {t.disclaimer}
                     </p>
                 </form>
             </div>

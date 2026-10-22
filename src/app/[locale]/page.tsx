@@ -72,9 +72,10 @@ import HeroVideo from "@/components/HeroVideo";
 import CategoryCards from "@/components/CategoryCards";
 import ProductShowcase from "@/components/ProductShowcase";
 import DraggableTestimonials from "@/components/DraggableTestimonials";
+import BlogStrip from "@/components/BlogStrip";
+import CatalogCta from "@/components/CatalogCta";
 import CustomCurtainPromo from "@/components/CustomCurtainPromo";
 import BrandHistoryPromo from "@/components/BrandHistoryPromo";
-import InstagramFeed from "@/components/InstagramFeed";
 import { CUSTOM_CURTAIN_ENABLED } from "@/lib/featureFlags";
 // below is irrelevant
 // import { getDictionary } from "@/app/[locale]/dictionaries/dictionaries";
@@ -240,7 +241,7 @@ export default async function Home(props: PageProps<'/[locale]'>) {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://www.demfirat.com/{locale}/product/all?search={search_term_string}',
+        urlTemplate: 'https://www.demfirat.com/{locale}/product/search?search={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
@@ -322,9 +323,8 @@ export default async function Home(props: PageProps<'/[locale]'>) {
         <div>
           <DraggableTestimonials reviews={reviews} locale={locale} />
         </div>
-        <div>
-          <InstagramFeed locale={locale} />
-        </div>
+        <BlogStrip locale={locale} />
+        <CatalogCta locale={locale} />
       </div>
     </main>
   );

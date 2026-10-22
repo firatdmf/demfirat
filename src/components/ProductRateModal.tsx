@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl';
 import { FaStar, FaRegStar, FaTimes } from 'react-icons/fa';
 import styles from './ProductRateModal.module.css';
 import { createPortal } from 'react-dom';
+import { erpFetch } from '@/lib/erpFetch';
 
 interface ProductRateModalProps {
     isOpen: boolean;
@@ -111,7 +112,7 @@ export default function ProductRateModal({
             const userId = (session?.user as any)?.id;
             if (!userId) throw new Error('User not authenticated');
 
-            const response = await fetch(
+            const response = await erpFetch(
                 `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_product_review/${userId}/`,
                 {
                     method: 'POST',

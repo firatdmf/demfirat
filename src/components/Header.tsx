@@ -272,7 +272,7 @@ function Header({ menuTArray }: HeaderProps) {
 
                 {/* PERDELER Dropdown */}
                 <div className={classes.navDropdown}>
-                  <Link href={`/${locale}/product/all`} className={classes.navLink}>
+                  <Link href={`/${locale}/product/curtain`} className={classes.navLink}>
                     {locale === 'tr' ? 'Perdeler' : locale === 'ru' ? 'Шторы' : locale === 'pl' ? 'Zasłony' : 'Curtains'}
                     <svg className={classes.dropdownArrow} width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
                       <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" />

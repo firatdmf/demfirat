@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useLocale } from 'next-intl';
 import { FaStar, FaRegStar, FaUser } from 'react-icons/fa';
 import styles from './ProductReviewSection.module.css';
+import { erpFetch } from '@/lib/erpFetch';
 
 interface Review {
     id: number;
@@ -96,7 +97,7 @@ export default function ProductReviewSection({ productSku, productTitle }: Produ
             if (!userId) return;
 
             try {
-                const response = await fetch(
+                const response = await erpFetch(
                     `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/can_review_product/${userId}/${productSku}/`
                 );
                 if (response.ok) {
@@ -133,7 +134,7 @@ export default function ProductReviewSection({ productSku, productTitle }: Produ
         setMessage(null);
 
         try {
-            const response = await fetch(
+            const response = await erpFetch(
                 `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/add_product_review/${userId}/`,
                 {
                     method: 'POST',

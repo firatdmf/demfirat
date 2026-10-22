@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { FaCheckCircle, FaShoppingBag, FaMapMarkerAlt, FaBox, FaCreditCard, FaHome } from 'react-icons/fa';
 import { trackPurchase } from '@/lib/tracking';
+import { erpFetch } from '@/lib/erpFetch';
 
 interface OrderData {
   orderId: string;
@@ -70,7 +71,7 @@ export default function OrderConfirmationPage() {
     // Clear cart from backend
     const userId = searchParams.get('userId');
     if (userId) {
-      fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${userId}/`, {
+      erpFetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/clear_cart/${userId}/`, {
         method: 'POST'
       }).catch(error => {
         console.error('Failed to clear cart:', error);
