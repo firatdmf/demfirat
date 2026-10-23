@@ -262,42 +262,35 @@ export const isLightColor = (hexColor: string): boolean => {
   return luminance > 0.5;
 };
 
-/**
- * Renk isminin iki renkli olup olmadığını kontrol eder
- * Ör: "White-Red", "Pink-DarkBlue" gibi
- * @param colorName - Renk ismi
- * @returns true ise iki renkli, false ise tek renk
- */
-export const isTwoToneColor = (colorName: string): boolean => {
-  if (!colorName) return false;
+/** The parts of a combined colour: "gold+ecru" → ["gold", "ecru"].
+ * The ERP writes a combination with "+" and a name's own words with
+ * spaces ("silver+off white"); older values used "-" or "_" for both,
+ * so those still split when the whole name is not a colour we know. */
+const colorParts = (colorName: string): string[] => {
+  const name = withoutRecipeCode(colorName.toLowerCase().trim());
+  if (name.includes('+')) return name.split('+').map(p => p.trim()).filter(Boolean);
   // "dark_cream" and "r10287_white" are one colour, not two.
-  if (knownColorCode(colorName)) return false;
-  return colorName.includes('-') || colorName.includes('_');
+  if (knownColorCode(name)) return [name];
+  const sep = name.includes('-') ? '-' : name.includes('_') ? '_' : null;
+  return sep ? name.split(sep).map(p => p.trim()).filter(Boolean) : [name];
 };
 
-/**
- * İki renkli renk ismini ayrıştırıp her iki rengin HEX kodunu döndürür
- * @param colorName - Renk ismi (ör: "White-Red", "Pink-DarkBlue")
- * @returns { color1: string, color2: string } - HEX kodları
- */
+/** Whether a colour value is two colours ("gold+ecru"), drawn half and half. */
+export const isTwoToneColor = (colorName: string): boolean =>
+  !!colorName && colorParts(colorName).length > 1;
+
+/** The HEX codes of a two-colour value's first two colours; one colour
+ * comes back twice. */
 export const splitTwoToneColor = (colorName: string): { color1: string; color2: string } => {
   if (!colorName) return { color1: '#E0E0E0', color2: '#E0E0E0' };
 
-  // Ayıraç olarak '-' veya '_' kullanılabilir
-  let colors: string[];
-  if (colorName.includes('-')) {
-    colors = colorName.split('-');
-  } else if (colorName.includes('_')) {
-    colors = colorName.split('_');
-  } else {
-    // Tek renk ise, aynı rengi iki kere döndür
+  const colors = colorParts(colorName);
+  if (colors.length < 2) {
     const singleColor = getColorCode(colorName);
     return { color1: singleColor, color2: singleColor };
   }
-
-  // İlk iki rengi al
-  const color1Name = colors[0]?.trim() || '';
-  const color2Name = colors[1]?.trim() || '';
+  const color1Name = colors[0];
+  const color2Name = colors[1];
 
   return {
     color1: getColorCode(color1Name),

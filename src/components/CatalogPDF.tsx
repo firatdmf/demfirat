@@ -181,7 +181,10 @@ const colorMap: { [key: string]: string } = {
 
 function getColorHex(colorName: string): string {
     if (!colorName) return '#cccccc';
-    const normalized = withoutRecipeCode(colorName.toLowerCase()).replace(/[_-]/g, '');
+    // A combination ("gold+ecru") is shown by its first colour; a name's
+    // words may come with spaces ("dark cream") or, from older data, "_".
+    const first = withoutRecipeCode(colorName.toLowerCase()).split('+')[0];
+    const normalized = first.replace(/[_\s-]/g, '');
     return colorMap[normalized] || '#cccccc';
 }
 

@@ -63,7 +63,8 @@ const FABRIC_PHOTO_OF: { [fabric: string]: string } = {
 
 /** The swatch photo of a fabric value, or null if there is none. */
 function fabricPhotoUrl(value: string): string | null {
-  const key = value.toLowerCase();
+  // The photos are named with "_" (greek_tulle.avif); the value may say "greek tulle".
+  const key = value.toLowerCase().trim().replace(/\s+/g, '_');
   const photo = FABRIC_PHOTO_OF[key] ?? key;
   return FABRIC_PHOTOS.has(photo) ? `/media/fabrics/${photo}.avif?v=${FABRIC_PHOTOS_VERSION}` : null;
 }
@@ -1223,7 +1224,8 @@ function ProductDetailCard({
   };
 
   const getPanelTypeLabel = (value: string, short?: boolean): string => {
-    const v = value.toLowerCase();
+    // "rod pocket", or "rod_pocket" as older values spell it.
+    const v = value.toLowerCase().trim().replace(/\s+/g, '_');
     if (locale === 'tr') return v === 'grommet' ? (short ? 'Halkalı' : 'Halkalı (Grommet)') : v === 'rod_pocket' ? (short ? 'Büzgülü' : 'Büzgülü (Rod Pocket)') : translateAttributeName(value);
     if (locale === 'ru') return v === 'grommet' ? 'Люверсы' : v === 'rod_pocket' ? 'Кулиска' : translateAttributeName(value);
     if (locale === 'pl') return v === 'grommet' ? (short ? 'Oczka' : 'Oczka (Grommet)') : v === 'rod_pocket' ? (short ? 'Tunel' : 'Tunel (Rod Pocket)') : translateAttributeName(value);
