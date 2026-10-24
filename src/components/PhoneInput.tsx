@@ -7,6 +7,7 @@ import {
   AsYouType, getCountries, getCountryCallingCode, parsePhoneNumberFromString,
   type CountryCode as PhoneCountry,
 } from 'libphonenumber-js/min';
+import metadata from 'libphonenumber-js/min/metadata';
 import { countryOptions, searchKey } from '@/lib/countries';
 import { visitorCountry } from '@/lib/visitorCountry';
 import classes from './PhoneInput.module.css';
@@ -30,6 +31,8 @@ type Props = {
 };
 
 const DIALLED = new Set<string>(getCountries());
+// Calling code → the countries that share it, the main one first (+44: GB, GG, IM, JE).
+const SHARED_CODES: Record<string, string[]> = metadata.country_calling_codes;
 const FALLBACK: PhoneCountry = 'TR';
 
 function dialable(code: string | undefined): code is PhoneCountry {
@@ -139,7 +142,8 @@ export default function PhoneInput({ value, onChange, country, placeholder, clas
     if (open) listRef.current?.children[active]?.scrollIntoView({ block: 'nearest' });
   }, [open, active]);
 
-  // With the list open, typing letters goes to the first country they start.
+  // With the list open, typing letters goes to the first country they start,
+  // and digits to the calling code they spell ("48" → Poland, +48).
   const typed = useRef({ text: '', at: 0 });
   const onListKey = (e: React.KeyboardEvent) => {
     if (!open) {
@@ -153,8 +157,20 @@ export default function PhoneInput({ value, onChange, country, placeholder, clas
     else if (e.key.length === 1) {
       const now = Date.now();
       typed.current = { text: (now - typed.current.at < 800 ? typed.current.text : '') + e.key, at: now };
-      const key = searchKey(typed.current.text, locale);
-      const found = options.findIndex((o) => searchKey(o.name, locale).startsWith(key));
+      const text = typed.current.text;
+      let found: number;
+      if (/^\+?\d+$/.test(text)) {
+        // The smallest code the digits start ("9" → 90), at the country the
+        // code is chiefly — +44 is the UK, not Guernsey; +1 the US.
+        const digits = text.replace('+', '');
+        const code = Object.keys(SHARED_CODES).filter((c) => c.startsWith(digits))
+          .sort((a, b) => Number(a) - Number(b))[0];
+        const main = code ? SHARED_CODES[code][0] : undefined;
+        found = options.findIndex((o) => o.code === main);
+      } else {
+        const key = searchKey(text, locale);
+        found = options.findIndex((o) => searchKey(o.name, locale).startsWith(key));
+      }
       if (found >= 0) setActive(found);
     }
   };

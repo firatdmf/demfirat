@@ -14,6 +14,7 @@ import DistanceSalesContract from '@/components/DistanceSalesContract';
 import CountryPicker from '@/components/CountryPicker';
 import PhoneInput, { formatPhone } from '@/components/PhoneInput';
 import { countryName } from '@/lib/countries';
+import { defaultCountry } from '@/lib/visitorCountry';
 import { trackBeginCheckout } from '@/lib/tracking';
 import { identifyUser, trackKlaviyoStartedCheckout } from '@/lib/klaviyo';
 import { erpFetch } from '@/lib/erpFetch';
@@ -124,6 +125,15 @@ export default function CheckoutPage() {
   // Selected location for new address
   const [selectedCountry, setSelectedCountry] = useState('TR');
   const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+
+  // A new address starts in the visitor's own country, known only in the
+  // browser — so after the first render, to match the page the server sent.
+  useEffect(() => {
+    const here = defaultCountry();
+    setSelectedCountry(here);
+    setNewAddress((a) => ({ ...a, country: here }));
+    setBillingAddr((b) => ({ ...b, country: here }));
+  }, []);
 
 
   const [userPhone, setUserPhone] = useState('');
@@ -881,9 +891,9 @@ export default function CheckoutPage() {
         city: '',
         state: '',
         postal_code: '',
-        country: 'TR',
+        country: defaultCountry(),
       });
-      setSelectedCountry('TR');
+      setSelectedCountry(defaultCountry());
       setSelectedCityId(null);
       setShowNewAddressForm(false);
     } catch (error: any) {

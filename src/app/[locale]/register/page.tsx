@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
@@ -9,6 +9,7 @@ import { FaLock, FaEye, FaEyeSlash, FaEnvelope, FaBuilding, FaUserCircle, FaGlob
 import Link from 'next/link';
 import CountryPicker from '@/components/CountryPicker';
 import PhoneInput from '@/components/PhoneInput';
+import { defaultCountry } from '@/lib/visitorCountry';
 
 // This is a B2B wholesale registration form — Demfirat sells to businesses,
 // not individual consumers. Fields are deliberately generic (no
@@ -116,6 +117,11 @@ export default function RegisterPage() {
     taxId: '',
     password: '',
   });
+  // Sign-up starts in the visitor's own country, known only in the browser —
+  // so after the first render, to match the page the server sent.
+  useEffect(() => {
+    setFormData((f) => (f.country ? f : { ...f, country: defaultCountry() }));
+  }, []);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

@@ -68,6 +68,7 @@ import { erpFetch } from '@/lib/erpFetch';
 import CountryPicker from '@/components/CountryPicker';
 import PhoneInput, { formatPhone } from '@/components/PhoneInput';
 import { countryName } from '@/lib/countries';
+import { defaultCountry } from '@/lib/visitorCountry';
 
 // Reviews Tab Content Component
 interface UserReview {
@@ -397,6 +398,14 @@ export default function ProfilePage() {
   const [districts, setDistricts] = useState<Array<{ name: string }>>([]);
   const [selectedCountry, setSelectedCountry] = useState('TR');
   const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+
+  // A new address starts in the visitor's own country, known only in the
+  // browser — so after the first render, to match the page the server sent.
+  useEffect(() => {
+    const here = defaultCountry();
+    setSelectedCountry(here);
+    setNewAddress((a) => ({ ...a, country: here }));
+  }, []);
 
   // Active tab for sidebar navigation - check URL param first
   const tabParam = searchParams.get('tab');
@@ -851,9 +860,9 @@ export default function ProfilePage() {
         city: '',
         state: '',
         postal_code: '',
-        country: 'TR',
+        country: defaultCountry(),
       });
-      setSelectedCountry('TR');
+      setSelectedCountry(defaultCountry());
       setSelectedCityId(null);
       setIsAddingAddress(false);
     } catch (error: any) {
@@ -1533,9 +1542,9 @@ export default function ProfilePage() {
                             city: '',
                             state: '',
                             postal_code: '',
-                            country: 'TR',
+                            country: defaultCountry(),
                           });
-                          setSelectedCountry('TR');
+                          setSelectedCountry(defaultCountry());
                           setSelectedCityId(null);
                         }}
                       >
