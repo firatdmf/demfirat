@@ -305,6 +305,8 @@
     "buyNow": "Buy Now",
     "customCurtain": "Custom Curtain",
     "enterValidQuantity": "Please enter a valid quantity",
+    "minimumOrder": "Minimum order quantity is {quantity}",
+    "minimumOrderHint": "Min. {quantity}",
     "errorAddingToCart": "Error adding to cart",
     "pleaseLogin": "Please log in",
     "productAddedToCart": "Product added to cart!",

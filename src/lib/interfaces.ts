@@ -25,6 +25,8 @@ export type Product = {
   // has_variants: boolean | null;
   datasheet_url: string | null;
   minimum_inventory_level: number | null;
+  /** From the product, or else its group; null when neither sets one. */
+  minimum_order_quantity?: number | null;
   primary_image?: string;
   product_files?: ProductFile[] | null;
   product_attributes?: ProductAttribute[] | null;  // Product-level attributes including discount_rate

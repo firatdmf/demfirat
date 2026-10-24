@@ -305,6 +305,8 @@
     "buyNow": "Купить сейчас",
     "customCurtain": "Пошив штор",
     "enterValidQuantity": "Пожалуйста, введите правильное количество",
+    "minimumOrder": "Минимальное количество для заказа: {quantity}",
+    "minimumOrderHint": "Мин. {quantity}",
     "errorAddingToCart": "Ошибка при добавлении в корзину",
     "pleaseLogin": "Пожалуйста, войдите",
     "productAddedToCart": "Товар добавлен в корзину!",

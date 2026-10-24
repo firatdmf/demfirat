@@ -305,6 +305,8 @@
     "buyNow": "Şimdi Al",
     "customCurtain": "Perde Diktir",
     "enterValidQuantity": "Lütfen geçerli bir miktar girin",
+    "minimumOrder": "Minimum sipariş miktarı {quantity}",
+    "minimumOrderHint": "Min. {quantity}",
     "errorAddingToCart": "Sepete eklenirken bir hata oluştu",
     "pleaseLogin": "Lütfen giriş yapın",
     "productAddedToCart": "Ürün sepete eklendi!",

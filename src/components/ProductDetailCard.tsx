@@ -27,11 +27,6 @@ import { trackKlaviyoAddToCart } from '@/lib/klaviyo';
 import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
 import { erpFetch } from '@/lib/erpFetch';
 
-// Wholesale fabric (kumaş) is ordered by the roll: 25m minimum, 25m steps.
-// Stock below the minimum — or zero — still goes through as a production
-// order rather than being blocked (see handleAddToCart).
-const FABRIC_MIN_ORDER = 25;
-const FABRIC_ORDER_STEP = 25;
 
 
 type ProductDetailCardPageProps = {
@@ -237,6 +232,10 @@ function ProductDetailCard({
   // The /curtain route forces intent=custom_curtain server-side, so this is always reliable.
   const isFabricProduct = product_category?.toLowerCase().includes('fabric') || product_category?.toLowerCase().includes('kumaş');
   const isReadyMadeCurtain = product_category?.toLowerCase().includes('ready-made') || product_category?.toLowerCase().includes('curtain') && !isFabricProduct;
+  // Ordered in whole units (meters, pieces), from the minimum the ERP sets on
+  // the product or its group; with none set, any amount from 1. Stock below
+  // it, or none, still goes through as a production order (see handleAddToCart).
+  const minimumOrder = Math.max(1, Math.ceil(product.minimum_order_quantity ?? 1));
   // Gated by CUSTOM_CURTAIN_ENABLED (currently off for the B2B pivot) so this
   // stays false even if a stray/bookmarked ?intent=custom_curtain URL or the
   // /curtain route (which always injects that param) is visited directly.
@@ -307,9 +306,7 @@ function ProductDetailCard({
 
   const { isFavorite, toggleFavorite } = useFavorites();
   const { refreshCart, addToGuestCart, isGuest } = useCart();
-  // Wholesale fabric is ordered by the roll, not the meter — 25m minimum,
-  // 25m steps. Ready-made/bed products keep ordinary unit quantities.
-  const [quantity, setQuantity] = useState<string>(isFabricProduct ? String(FABRIC_MIN_ORDER) : '1');
+  const [quantity, setQuantity] = useState<string>(String(minimumOrder));
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery' | 'returns' | 'care' | null>('description');
@@ -706,21 +703,12 @@ function ProductDetailCard({
 
   const handleIncrement = () => {
     const currentQty = parseInt(quantity) || 0;
-    if (isFabricProduct) {
-      setQuantity(String(currentQty + FABRIC_ORDER_STEP));
-    } else {
-      setQuantity(String(currentQty + 1));
-    }
+    setQuantity(String(Math.max(minimumOrder, currentQty + 1)));
   };
 
   const handleDecrement = () => {
     const currentQty = parseInt(quantity) || 0;
-    if (isFabricProduct) {
-      const next = currentQty - FABRIC_ORDER_STEP;
-      setQuantity(String(next >= FABRIC_MIN_ORDER ? next : FABRIC_MIN_ORDER));
-    } else if (currentQty > 1) {
-      setQuantity(String(currentQty - 1));
-    }
+    setQuantity(String(Math.max(minimumOrder, currentQty - 1)));
   };
 
   const handleRequestSample = async () => {
@@ -819,12 +807,8 @@ function ProductDetailCard({
       setIsAdding(false);
       return false;
     }
-    if (isFabricProduct && qty < FABRIC_MIN_ORDER) {
-      alert(
-        locale === 'tr'
-          ? `Minimum sipariş miktarı ${FABRIC_MIN_ORDER} metredir.`
-          : `Minimum order quantity is ${FABRIC_MIN_ORDER} meters.`
-      );
+    if (qty < minimumOrder) {
+      alert(t('minimumOrder', { quantity: minimumOrder }));
       setIsAdding(false);
       return false;
     }
@@ -1932,14 +1916,14 @@ function ProductDetailCard({
                       <button type="button" onClick={handleDecrement} className={classes.quantityBtn} aria-label="Decrease quantity">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
                       </button>
-                      <input id="quantity" type="text" value={quantity} onChange={handleQuantityChange} className={classes.quantityInput} placeholder={isFabricProduct ? String(FABRIC_MIN_ORDER) : "1"} />
+                      <input id="quantity" type="text" value={quantity} onChange={handleQuantityChange} className={classes.quantityInput} placeholder={String(minimumOrder)} />
                       <button type="button" onClick={handleIncrement} className={classes.quantityBtn} aria-label="Increase quantity">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
                       </button>
                     </div>
-                    {isFabricProduct && (
+                    {minimumOrder > 1 && (
                       <span className={classes.minOrderHint}>
-                        {locale === 'tr' ? `Min. ${FABRIC_MIN_ORDER}m, ${FABRIC_ORDER_STEP}m artışlarla` : `Min. ${FABRIC_MIN_ORDER}m, in steps of ${FABRIC_ORDER_STEP}m`}
+                        {t('minimumOrderHint', { quantity: minimumOrder })}
                       </span>
                     )}
                   </div>
