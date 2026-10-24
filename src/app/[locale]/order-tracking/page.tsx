@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import styles from './page.module.css';
+import { countryName } from '@/lib/countries';
 
 interface OrderItem {
     product_sku: string;
@@ -301,7 +302,7 @@ export default function OrderTrackingPage() {
                             <h3>{t('deliveryAddress')}</h3>
                             <div className={styles.addressCard}>
                                 <p>{order.delivery_address.address}</p>
-                                <p>{order.delivery_address.city}, {order.delivery_address.country}</p>
+                                <p>{order.delivery_address.city}, {countryName(order.delivery_address.country, locale)}</p>
                                 {order.delivery_address.phone && (
                                     <p>{t('phone')}: {order.delivery_address.phone}</p>
                                 )}

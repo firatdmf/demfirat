@@ -65,6 +65,8 @@ interface OrderDetail extends Order {
 import Link from 'next/link';
 import RateProductButton from '@/components/RateProductButton';
 import { erpFetch } from '@/lib/erpFetch';
+import CountryPicker from '@/components/CountryPicker';
+import { countryName } from '@/lib/countries';
 
 // Reviews Tab Content Component
 interface UserReview {
@@ -374,11 +376,10 @@ export default function ProfilePage() {
     city: '',
     state: '',
     postal_code: '',
-    country: 'Turkey',
+    country: 'TR',
   });
 
   // Location data state
-  const [countries, setCountries] = useState<Array<{ code: string; name: string; flag?: string }>>([]);
 
   // Settings state
   const [settings, setSettings] = useState({
@@ -393,7 +394,7 @@ export default function ProfilePage() {
   });
   const [cities, setCities] = useState<Array<{ id: number; name: string }>>([]);
   const [districts, setDistricts] = useState<Array<{ name: string }>>([]);
-  const [selectedCountry, setSelectedCountry] = useState('Turkey');
+  const [selectedCountry, setSelectedCountry] = useState('TR');
   const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
 
   // Active tab for sidebar navigation - check URL param first
@@ -686,27 +687,9 @@ export default function ProfilePage() {
     loadUserData();
   }, [session]);
 
-  // Load countries on mount
-  useEffect(() => {
-    const loadCountries = async () => {
-      try {
-        const response = await fetch('/api/location/countries');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setCountries(data.countries);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading countries:', error);
-      }
-    };
-    loadCountries();
-  }, []);
-
   // Load Turkey cities automatically if Turkey is selected
   useEffect(() => {
-    if (selectedCountry === 'Turkey') {
+    if (selectedCountry === 'TR') {
       const loadTurkeyCities = async () => {
         try {
           const response = await fetch('/api/location/turkey-cities');
@@ -867,9 +850,9 @@ export default function ProfilePage() {
         city: '',
         state: '',
         postal_code: '',
-        country: 'Turkey',
+        country: 'TR',
       });
-      setSelectedCountry('Turkey');
+      setSelectedCountry('TR');
       setSelectedCityId(null);
       setIsAddingAddress(false);
     } catch (error: any) {
@@ -1310,7 +1293,7 @@ export default function ProfilePage() {
                           )}
                         </div>
                         <p className={classes.addressText}>{addr.address}</p>
-                        <p className={classes.addressText}>{addr.city}, {addr.country}</p>
+                        <p className={classes.addressText}>{addr.city}, {countryName(addr.country, locale)}</p>
                         <div className={classes.addressActions}>
                           {!addr.isDefault && (
                             <button
@@ -1402,26 +1385,19 @@ export default function ProfilePage() {
 
                     <div className={classes.formGroup}>
                       <label>{t('country')}</label>
-                      <select
+                      <CountryPicker
                         value={selectedCountry}
-                        onChange={(e) => {
-                          const country = e.target.value;
+                        onChange={(country) => {
                           setSelectedCountry(country);
                           setNewAddress({ ...newAddress, country, city: '', district: '', state: '' });
                           setSelectedCityId(null);
                         }}
+                        placeholder={t('selectCountry')}
                         className={classes.input}
-                      >
-                        <option value="">{t('selectCountry')}</option>
-                        {countries.map((country) => (
-                          <option key={country.code} value={country.name}>
-                            {country.name}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
 
-                    {selectedCountry === 'Turkey' ? (
+                    {selectedCountry === 'TR' ? (
                       <>
                         <div className={classes.formRow}>
                           <div className={classes.formGroup}>
@@ -1558,9 +1534,9 @@ export default function ProfilePage() {
                             city: '',
                             state: '',
                             postal_code: '',
-                            country: 'Turkey',
+                            country: 'TR',
                           });
-                          setSelectedCountry('Turkey');
+                          setSelectedCountry('TR');
                           setSelectedCityId(null);
                         }}
                       >
@@ -2035,7 +2011,7 @@ export default function ProfilePage() {
                           <p>{selectedOrder.delivery_address}</p>
                           <p>
                             {selectedOrder.delivery_city}
-                            {selectedOrder.delivery_country && `, ${selectedOrder.delivery_country}`}
+                            {selectedOrder.delivery_country && `, ${countryName(selectedOrder.delivery_country, locale)}`}
                           </p>
                           {selectedOrder.delivery_phone && <p>{selectedOrder.delivery_phone}</p>}
                         </div>

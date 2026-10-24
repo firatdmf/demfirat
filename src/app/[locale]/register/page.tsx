@@ -7,6 +7,7 @@ import classes from './page.module.css';
 import { FcGoogle } from 'react-icons/fc';
 import { FaLock, FaEye, FaEyeSlash, FaEnvelope, FaBuilding, FaUserCircle, FaPhone, FaGlobe, FaFileInvoice } from 'react-icons/fa';
 import Link from 'next/link';
+import CountryPicker from '@/components/CountryPicker';
 
 // This is a B2B wholesale registration form — Demfirat sells to businesses,
 // not individual consumers. Fields are deliberately generic (no
@@ -275,12 +276,10 @@ export default function RegisterPage() {
             <div className={classes.inputGroup}>
               <div className={classes.inputWrapper}>
                 <FaGlobe className={classes.inputIcon} />
-                <input
-                  type="text"
-                  name="country"
+                <CountryPicker
                   placeholder={t.country}
                   value={formData.country}
-                  onChange={handleChange}
+                  onChange={(country) => setFormData({ ...formData, country })}
                   className={classes.input}
                   required
                   disabled={loading}

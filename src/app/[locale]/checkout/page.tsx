@@ -11,6 +11,8 @@ import { useCart } from '@/contexts/CartContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import PreInformationForm from '@/components/PreInformationForm';
 import DistanceSalesContract from '@/components/DistanceSalesContract';
+import CountryPicker from '@/components/CountryPicker';
+import { countryName } from '@/lib/countries';
 import { trackBeginCheckout } from '@/lib/tracking';
 import { identifyUser, trackKlaviyoStartedCheckout } from '@/lib/klaviyo';
 import { erpFetch } from '@/lib/erpFetch';
@@ -88,7 +90,7 @@ export default function CheckoutPage() {
   const [billingAddr, setBillingAddr] = useState({
     address_line: '',
     city: '',
-    country: 'Turkey',
+    country: 'TR',
     postal_code: '',
   });
   const [loading, setLoading] = useState(true);
@@ -115,11 +117,11 @@ export default function CheckoutPage() {
     city: '',
     state: '',
     postal_code: '',
-    country: 'Turkey',
+    country: 'TR',
   });
 
   // Selected location for new address
-  const [selectedCountry, setSelectedCountry] = useState('Turkey');
+  const [selectedCountry, setSelectedCountry] = useState('TR');
   const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
 
 
@@ -142,7 +144,6 @@ export default function CheckoutPage() {
   const [emailError, setEmailError] = useState('');
 
   // Location data state
-  const [countries, setCountries] = useState<Array<{ code: string; name: string; flag?: string }>>([]);
   const [cities, setCities] = useState<Array<{ id: number; name: string }>>([]);
   const [districts, setDistricts] = useState<Array<{ name: string }>>([]);
 
@@ -352,27 +353,9 @@ export default function CheckoutPage() {
     }
   };
 
-  // Load countries on mount
-  useEffect(() => {
-    const loadCountries = async () => {
-      try {
-        const response = await fetch('/api/location/countries');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setCountries(data.countries);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading countries:', error);
-      }
-    };
-    loadCountries();
-  }, []);
-
   // Load Turkey cities automatically if Turkey is default
   useEffect(() => {
-    if (selectedCountry === 'Turkey') {
+    if (selectedCountry === 'TR') {
       const loadTurkeyCities = async () => {
         try {
           const response = await fetch('/api/location/turkey-cities');
@@ -897,9 +880,9 @@ export default function CheckoutPage() {
         city: '',
         state: '',
         postal_code: '',
-        country: 'Turkey',
+        country: 'TR',
       });
-      setSelectedCountry('Turkey');
+      setSelectedCountry('TR');
       setSelectedCityId(null);
       setShowNewAddressForm(false);
     } catch (error: any) {
@@ -1251,11 +1234,10 @@ export default function CheckoutPage() {
                       className={classes.input}
                       required
                     />
-                    <input
-                      type="text"
+                    <CountryPicker
                       placeholder={t('country') + ' *'}
                       value={newAddress.country}
-                      onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })}
+                      onChange={(country) => setNewAddress({ ...newAddress, country })}
                       className={classes.input}
                       required
                     />
@@ -1305,7 +1287,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className={classes.addressDetails}>
                         <p>{address.address}</p>
-                        <p>{address.city}, {address.country}</p>
+                        <p>{address.city}, {countryName(address.country, locale)}</p>
                         {address.phone && (
                           <p className={classes.phone}>
                             <FaPhone /> {address.phone}
@@ -1373,27 +1355,21 @@ export default function CheckoutPage() {
                     />
 
                     {/* Country Selection */}
-                    <select
+                    <CountryPicker
                       value={selectedCountry}
-                      onChange={(e) => {
-                        const country = e.target.value;
+                      onChange={(country) => {
                         setSelectedCountry(country);
                         setNewAddress({ ...newAddress, country, city: '', district: '', state: '' });
                         setSelectedCityId(null);
                         // Cities will be loaded automatically by useEffect
                       }}
-                      className={`${classes.input} ${classes.fullWidth}`}
-                    >
-                      <option value="">{t('selectCountry')}</option>
-                      {countries.map((country) => (
-                        <option key={country.code} value={country.name}>
-                          {country.name}
-                        </option>
-                      ))}
-                    </select>
+                      placeholder={t('selectCountry')}
+                      className={classes.input}
+                      wrapperClassName={classes.fullWidth}
+                    />
 
                     {/* City Selection - Show dropdown for Turkey, text input for others */}
-                    {selectedCountry === 'Turkey' ? (
+                    {selectedCountry === 'TR' ? (
                       <select
                         value={selectedCityId || ''}
                         onChange={async (e) => {
@@ -1441,7 +1417,7 @@ export default function CheckoutPage() {
                     )}
 
                     {/* District Selection - Only for Turkey */}
-                    {selectedCountry === 'Turkey' && selectedCityId ? (
+                    {selectedCountry === 'TR' && selectedCityId ? (
                       <select
                         value={newAddress.district}
                         onChange={(e) => setNewAddress({ ...newAddress, district: e.target.value })}
@@ -1455,7 +1431,7 @@ export default function CheckoutPage() {
                           </option>
                         ))}
                       </select>
-                    ) : selectedCountry !== 'Turkey' ? (
+                    ) : selectedCountry !== 'TR' ? (
                       <input
                         type="text"
                         placeholder={t('state')}
@@ -1539,11 +1515,10 @@ export default function CheckoutPage() {
                         className={classes.input}
                         required
                       />
-                      <input
-                        type="text"
+                      <CountryPicker
                         placeholder={t('country') + ' *'}
                         value={billingAddr.country}
-                        onChange={(e) => setBillingAddr({ ...billingAddr, country: e.target.value })}
+                        onChange={(country) => setBillingAddr({ ...billingAddr, country })}
                         className={classes.input}
                         required
                       />
@@ -1593,7 +1568,7 @@ export default function CheckoutPage() {
                         </div>
                         <div className={classes.addressDetails}>
                           <p>{address.address}</p>
-                          <p>{address.city}, {address.country}</p>
+                          <p>{address.city}, {countryName(address.country, locale)}</p>
                           {address.phone && (
                             <p className={classes.phone}>
                               <FaPhone /> {address.phone}

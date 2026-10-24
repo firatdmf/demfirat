@@ -1,11 +1,5 @@
 import turkeyCitiesData from '@/lib/data/turkey-cities.json';
 
-export interface Country {
-    code: string;
-    name: string;
-    flag?: string;
-}
-
 export interface City {
     id: number;
     name: string;
@@ -15,47 +9,6 @@ export interface City {
 export interface District {
     name: string;
     cityId: number;
-}
-
-/**
- * Fetch all countries from REST Countries API
- * Returns a sorted list of countries
- */
-export async function getCountries(): Promise<Country[]> {
-    try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        if (!response.ok) {
-            throw new Error('Failed to fetch countries');
-        }
-
-        const data = await response.json();
-
-        const countries: Country[] = data.map((country: any) => ({
-            code: country.cca2,
-            name: country.name.common,
-            flag: country.flags?.svg || country.flags?.png
-        }));
-
-        // Sort alphabetically by name
-        countries.sort((a, b) => a.name.localeCompare(b.name));
-
-        return countries;
-    } catch (error) {
-        console.error('Error fetching countries:', error);
-        // Return a fallback list of common countries
-        return [
-            { code: 'TR', name: 'Turkey' },
-            { code: 'US', name: 'United States' },
-            { code: 'GB', name: 'United Kingdom' },
-            { code: 'DE', name: 'Germany' },
-            { code: 'FR', name: 'France' },
-            { code: 'IT', name: 'Italy' },
-            { code: 'ES', name: 'Spain' },
-            { code: 'RU', name: 'Russia' },
-            { code: 'PL', name: 'Poland' },
-            { code: 'UA', name: 'Ukraine' },
-        ].sort((a, b) => a.name.localeCompare(b.name));
-    }
 }
 
 /**

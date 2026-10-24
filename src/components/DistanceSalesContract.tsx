@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './DistanceSalesContract.module.css';
+import { countryName } from '@/lib/countries';
 import { FaTimes, FaPrint } from 'react-icons/fa';
 
 interface CartItem {
@@ -171,7 +172,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <p><strong>E-posta:</strong> {userInfo.email}</p>
                     <p><strong>Telefon:</strong> {userInfo.phone}</p>
                     {deliveryAddress && (
-                        <p><strong>Adres:</strong> {deliveryAddress.address}, {deliveryAddress.city}, {deliveryAddress.country}</p>
+                        <p><strong>Adres:</strong> {deliveryAddress.address}, {deliveryAddress.city}, {countryName(deliveryAddress.country, locale)}</p>
                     )}
                 </>
             ) : (
@@ -191,7 +192,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <p><strong>Email:</strong> {userInfo.email}</p>
                     <p><strong>Phone:</strong> {userInfo.phone}</p>
                     {deliveryAddress && (
-                        <p><strong>Address:</strong> {deliveryAddress.address}, {deliveryAddress.city}, {deliveryAddress.country}</p>
+                        <p><strong>Address:</strong> {deliveryAddress.address}, {deliveryAddress.city}, {countryName(deliveryAddress.country, locale)}</p>
                     )}
                 </>
             )
@@ -482,7 +483,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <p><strong>Fatura Bilgileri:</strong></p>
                     <ul>
                         <li><strong>Ad/Soyad/Unvan:</strong> {userInfo.firstName} {userInfo.lastName}</li>
-                        <li><strong>Adres:</strong> {deliveryAddress ? `${deliveryAddress.address}, ${deliveryAddress.city}, ${deliveryAddress.country}` : 'Teslimat adresi ile aynı'}</li>
+                        <li><strong>Adres:</strong> {deliveryAddress ? `${deliveryAddress.address}, ${deliveryAddress.city}, ${countryName(deliveryAddress.country, locale)}` : 'Teslimat adresi ile aynı'}</li>
                         <li><strong>Telefon:</strong> {userInfo.phone}</li>
                         <li><strong>E-posta/Kullanıcı Adı:</strong> {userInfo.email}</li>
                     </ul>
@@ -496,7 +497,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <p><strong>Invoice Information:</strong></p>
                     <ul>
                         <li><strong>Name/Surname/Title:</strong> {userInfo.firstName} {userInfo.lastName}</li>
-                        <li><strong>Address:</strong> {deliveryAddress ? `${deliveryAddress.address}, ${deliveryAddress.city}, ${deliveryAddress.country}` : 'Same as delivery address'}</li>
+                        <li><strong>Address:</strong> {deliveryAddress ? `${deliveryAddress.address}, ${deliveryAddress.city}, ${countryName(deliveryAddress.country, locale)}` : 'Same as delivery address'}</li>
                         <li><strong>Phone:</strong> {userInfo.phone}</li>
                         <li><strong>Email/Username:</strong> {userInfo.email}</li>
                     </ul>

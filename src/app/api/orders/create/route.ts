@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/authOptions';
 import { sendEmail } from '@/lib/email';
+import { countryName } from '@/lib/countries';
 
 export async function POST(request: NextRequest) {
   // Orders are for signed-in customers only. The ERP takes the customer
@@ -239,7 +240,7 @@ export async function POST(request: NextRequest) {
             <p style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#555;margin:0;line-height:1.6;">
               ${deliveryAddress?.first_name || ''} ${deliveryAddress?.last_name || ''}<br>
               ${deliveryAddress?.address || ''}<br>
-              ${deliveryAddress?.city || ''} ${deliveryAddress?.country || ''}<br>
+              ${deliveryAddress?.city || ''} ${countryName(deliveryAddress?.country, 'tr')}<br>
               ${deliveryAddress?.phone || ''}
             </p>
           </td>

@@ -1,0 +1,50 @@
+.picker {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.list {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--light-gray, #e0dcd2);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.option,
+.empty {
+  padding: 0.6rem 0.875rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  color: var(--text-dark, #2c2c2c);
+}
+
+.option {
+  cursor: pointer;
+}
+
+.option[aria-selected='true'] {
+  font-weight: 600;
+}
+
+.active {
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.empty {
+  color: #999;
+}
