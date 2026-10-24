@@ -72,7 +72,6 @@ demfirat/
 │   │   │   │   │   ├── [product_sku]/  # Ürün detay sayfası
 │   │   │   │   │   └── page.tsx
 │   │   │   │   └── fabrics/embroidery/
-│   │   │   ├── qr-info/       # QR bilgi sayfası
 │   │   │   ├── layout.tsx     # Root layout
 │   │   │   └── page.tsx       # Ana sayfa
 │   │   └── api/
