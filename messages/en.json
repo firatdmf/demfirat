@@ -108,7 +108,7 @@
     "lastUpdate": "Last update: December 10, 2024",
     "section1": {
       "address": "Address",
-      "companyName": "Company Name",
+      "companyName": "Trade Name",
       "email": "Email",
       "phone": "Phone",
       "text": "At Karven Homedecor, we value your privacy and are committed to protecting your personal data. This General Data Protection Policy outlines how we collect, use, store, and safeguard your information when you visit our website or make a purchase, ensuring transparency and trust for our international customers.",
@@ -190,7 +190,7 @@
     "section7": {
       "methods": {
         "0": "[TRANSLATE] E-posta: hello@demfirat.com (Güvenli elektronik imza ile)",
-        "1": "[TRANSLATE] Posta: Kemalpaşa Mah Gençtürk Cad No 21A     Fatih, İstanbul 34134,  Türkiye",
+        "1": "[TRANSLATE] Posta: Vakıflar OSB Mah D100 Cad No 38     Ergene, Tekirdağ 59930,  Türkiye",
         "2": "[TRANSLATE] Islak İmzalı Dilekçe: Yukarıdaki adrese şahsen teslim"
       },
       "methodsTitle": "[TRANSLATE] Başvuru Yöntemleri:",
@@ -356,7 +356,7 @@
       "contactBox": [
         "Email: hello@demfirat.com",
         "Phone: +90 (501) 057-1884",
-        "Address: Kemalpasa Mah Gencturk Cad No 21A, Fatih, Istanbul 34134, Turkey",
+        "Address: Vakiflar OSB Mah D100 Cad No 38, Ergene, Tekirdag 59930, Turkey",
         "Working Hours: Monday - Friday, 09:00 - 18:00"
       ],
       "text": "For returns, withdrawal rights, or any questions:",
@@ -403,9 +403,9 @@
     },
     "section5": {
       "addressLines": [
-        "Dem Fırat Karven Tekstil San. ve Tic. A.Ş.",
-        "Kemalpasa Mah Gencturk Cad No 21A",
-        "Fatih, Istanbul 34134, Turkey"
+        "DEMFIRAT | Karven Home Collection",
+        "Vakiflar OSB Mah D100 Cad No 38",
+        "Ergene, Tekirdag 59930, Turkey"
       ],
       "addressTitle": "Return Address:",
       "infoItems": [

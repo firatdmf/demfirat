@@ -95,10 +95,10 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
             title: t('seller'),
             content: locale === 'tr' ? (
                 <>
-                    <p><strong>Ünvan:</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
-                    <p><strong>Adres:</strong> Karven Home Collection <br />
-                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                        Fatih, İstanbul 34134 <br />
+                    <p><strong>Ünvan:</strong> Cuma Öztürk</p>
+                    <p><strong>Adres:</strong> DEMFIRAT | Karven Home Collection <br />
+                        Vakıflar OSB Mah D100 Cad No 38 <br />
+                        Ergene, Tekirdağ 59930 <br />
                         Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-posta:</strong> hello@demfirat.com</p>
@@ -106,10 +106,10 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                 </>
             ) : locale === 'ru' ? (
                 <>
-                    <p><strong>Название:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Адрес:</strong> Karven Home Collection <br />
-                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                        Fatih, İstanbul 34134 <br />
+                    <p><strong>Название:</strong> Cuma Öztürk</p>
+                    <p><strong>Адрес:</strong> DEMFIRAT | Karven Home Collection <br />
+                        Vakıflar OSB Mah D100 Cad No 38 <br />
+                        Ergene, Tekirdağ 59930 <br />
                         Турция</p>
                     <p><strong>Телефон:</strong> +90 (501) 057-1884</p>
                     <p><strong>Эл. почта:</strong> hello@demfirat.com</p>
@@ -117,10 +117,10 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                 </>
             ) : locale === 'pl' ? (
                 <>
-                    <p><strong>Nazwa:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Adres:</strong> Karven Home Collection <br />
-                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                        Fatih, İstanbul 34134 <br />
+                    <p><strong>Nazwa:</strong> Cuma Öztürk</p>
+                    <p><strong>Adres:</strong> DEMFIRAT | Karven Home Collection <br />
+                        Vakıflar OSB Mah D100 Cad No 38 <br />
+                        Ergene, Tekirdağ 59930 <br />
                         Turcja</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-mail:</strong> hello@demfirat.com</p>
@@ -128,10 +128,10 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                 </>
             ) : (
                 <>
-                    <p><strong>Company:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Address:</strong> Karven Home Collection <br />
-                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                        Fatih, İstanbul 34134 <br />
+                    <p><strong>Trade name:</strong> Cuma Öztürk</p>
+                    <p><strong>Address:</strong> DEMFIRAT | Karven Home Collection <br />
+                        Vakıflar OSB Mah D100 Cad No 38 <br />
+                        Ergene, Tekirdağ 59930 <br />
                         Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
                     <p><strong>Email:</strong> hello@demfirat.com</p>

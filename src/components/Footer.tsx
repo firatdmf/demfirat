@@ -3,7 +3,7 @@ import { memo, useState } from "react";
 import classes from "@/components/Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import { FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { FaInstagram, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 interface FooterProps {
   StayConnected: string;
@@ -62,6 +62,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       products: { en: 'Products', tr: 'Ürünler', ru: 'Продукты', pl: 'Produkty' },
       customerServices: { en: 'Customer Services', tr: 'Müşteri Hizmetleri', ru: 'Обслуживание клиентов', pl: 'Obsługa klienta' },
       contact: { en: 'Contact', tr: 'İletişim', ru: 'Контакты', pl: 'Kontakt' },
+      ourLocations: { en: 'Our locations', tr: 'Lokasyonlarımız', ru: 'Наши адреса' },
       aboutUs: { en: 'About Us', tr: 'Hakkımızda', ru: 'О нас', pl: 'O nas' },
       privacyPolicy: { en: 'Privacy Policy & GDPR', tr: 'Gizlilik Sözleşmesi ve KVKK', ru: 'Политика конфиденциальности', pl: 'Polityka prywatności' },
       deliveryReturns: { en: 'Delivery & Returns', tr: 'Teslimat ve İade Şartları', ru: 'Доставка и возврат', pl: 'Dostawa i zwroty' },
@@ -162,16 +163,12 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
             <h4 className={classes.columnTitle}>{t('contact')}</h4>
             <ul className={classes.contactList}>
               <li>
-                <FaPhone className={classes.contactIcon} />
-                <a href="tel:+905010571884">+90 (501) 057-1884</a>
-              </li>
-              <li>
                 <FaEnvelope className={classes.contactIcon} />
                 <a href="mailto:hello@demfirat.com">hello@demfirat.com</a>
               </li>
               <li>
                 <FaMapMarkerAlt className={classes.contactIcon} />
-                <span>Fatih, İstanbul, Türkiye</span>
+                <Link href={`/${locale}/contact`}>{t('ourLocations')}</Link>
               </li>
             </ul>
           </div>

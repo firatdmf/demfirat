@@ -157,10 +157,10 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
             content: locale === 'tr' ? (
                 <>
                     <h4>SATICI (İşletme)</h4>
-                    <p><strong>Ünvan:</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
-                    <p><strong>Adres:</strong> Karven Home Collection <br />
-                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                        Fatih, İstanbul 34134 <br />
+                    <p><strong>Ünvan:</strong> Cuma Öztürk</p>
+                    <p><strong>Adres:</strong> DEMFIRAT | Karven Home Collection <br />
+                        Vakıflar OSB Mah D100 Cad No 38 <br />
+                        Ergene, Tekirdağ 59930 <br />
                         Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
                     <p><strong>E-posta:</strong> hello@demfirat.com</p>
@@ -176,11 +176,11 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                 </>
             ) : (
                 <>
-                    <h4>SELLER (Company)</h4>
-                    <p><strong>Company:</strong> KARVEN TEXTILE INDUSTRY AND TRADE LIMITED COMPANY</p>
-                    <p><strong>Address:</strong> Karven Home Collection <br />
-                        Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                        Fatih, İstanbul 34134 <br />
+                    <h4>SELLER (Business)</h4>
+                    <p><strong>Trade name:</strong> Cuma Öztürk</p>
+                    <p><strong>Address:</strong> DEMFIRAT | Karven Home Collection <br />
+                        Vakıflar OSB Mah D100 Cad No 38 <br />
+                        Ergene, Tekirdağ 59930 <br />
                         Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
                     <p><strong>Email:</strong> hello@demfirat.com</p>
@@ -619,9 +619,9 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <ul>
                         <li>E-posta: hello@demfirat.com</li>
                         <li>Telefon: +90 (501) 057-1884</li>
-                        <li>Adres: Karven Home Collection <br />
-                            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                            Fatih, İstanbul 34134 <br />
+                        <li>Adres: DEMFIRAT | Karven Home Collection <br />
+                            Vakıflar OSB Mah D100 Cad No 38 <br />
+                            Ergene, Tekirdağ 59930 <br />
                             Türkiye</li>
                     </ul>
 
@@ -647,9 +647,9 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <ul>
                         <li>Email: hello@demfirat.com</li>
                         <li>Phone: +90 (501) 057-1884</li>
-                        <li>Address: Karven Home Collection <br />
-                            Kemalpaşa Mah Gençtürk Cad No 21A <br />
-                            Fatih, İstanbul 34134 <br />
+                        <li>Address: DEMFIRAT | Karven Home Collection <br />
+                            Vakıflar OSB Mah D100 Cad No 38 <br />
+                            Ergene, Tekirdağ 59930 <br />
                             Türkiye</li>
                     </ul>
 
@@ -689,7 +689,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <div className={classes.signatures}>
                         <div className={classes.signatureBlock}>
                             <p><strong>{locale === 'tr' ? 'SATICI' : locale === 'ru' ? 'ПРОДАВЕЦ' : locale === 'pl' ? 'SPRZEDAWCA' : 'SELLER'}</strong></p>
-                            <p>Demfirat Karven Tekstil</p>
+                            <p>Cuma Öztürk</p>
                         </div>
                         <div className={classes.signatureBlock}>
                             <p><strong>{locale === 'tr' ? 'ALICI' : locale === 'ru' ? 'ПОКУПАТЕЛЬ' : locale === 'pl' ? 'KUPUJĄCY' : 'BUYER'}</strong></p>

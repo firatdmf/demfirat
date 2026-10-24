@@ -37,10 +37,10 @@ export default function MesafeliSatisSozlesmesi() {
             <section className={classes.section}>
                 <h2>{locale === 'tr' ? '1. TARAFLAR' : '1. PARTIES'}</h2>
 
-                <h3>{locale === 'tr' ? 'SATICI (İşletme)' : 'SELLER (Company)'}</h3>
+                <h3>{locale === 'tr' ? 'SATICI (İşletme)' : 'SELLER (Business)'}</h3>
                 <div className={classes.infoBox}>
-                    <p><strong>{locale === 'tr' ? 'Ünvan:' : 'Company:'}</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
-                    <p><strong>{locale === 'tr' ? 'Adres:' : 'Address:'}</strong> Karven Home Collection, Kemalpaşa Mah Gençtürk Cad No 21A, Fatih, İstanbul 34134, Türkiye</p>
+                    <p><strong>{locale === 'tr' ? 'Ünvan:' : 'Trade name:'}</strong> Cuma Öztürk</p>
+                    <p><strong>{locale === 'tr' ? 'Adres:' : 'Address:'}</strong> DEMFIRAT | Karven Home Collection, Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Türkiye</p>
                     <p><strong>{locale === 'tr' ? 'Telefon:' : 'Phone:'}</strong> +90 (501) 057-1884</p>
                     <p><strong>E-posta:</strong> hello@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
@@ -184,7 +184,7 @@ export default function MesafeliSatisSozlesmesi() {
                 <div className={classes.infoBox}>
                     <p><strong>Email:</strong> hello@demfirat.com</p>
                     <p><strong>{locale === 'tr' ? 'Telefon:' : 'Phone:'}</strong> +90 (501) 057-1884</p>
-                    <p><strong>{locale === 'tr' ? 'Adres:' : 'Address:'}</strong> Karven Home Collection, Kemalpaşa Mah Gençtürk Cad No 21A, Fatih, İstanbul 34134, Türkiye</p>
+                    <p><strong>{locale === 'tr' ? 'Adres:' : 'Address:'}</strong> DEMFIRAT | Karven Home Collection, Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Türkiye</p>
                 </div>
             </section>
         </div>

@@ -190,7 +190,7 @@
     "section7": {
       "methods": {
         "0": "[TRANSLATE] E-posta: hello@demfirat.com (Güvenli elektronik imza ile)",
-        "1": "[TRANSLATE] Posta: Kemalpaşa Mah Gençtürk Cad No 21A     Fatih, İstanbul 34134,  Türkiye",
+        "1": "[TRANSLATE] Posta: Vakıflar OSB Mah D100 Cad No 38     Ergene, Tekirdağ 59930,  Türkiye",
         "2": "[TRANSLATE] Islak İmzalı Dilekçe: Yukarıdaki adrese şahsen teslim"
       },
       "methodsTitle": "[TRANSLATE] Başvuru Yöntemleri:",
@@ -356,7 +356,7 @@
       "contactBox": [
         "E-mail: hello@demfirat.com",
         "Telefon: +90 (501) 057-1884",
-        "Adres: Kemalpasa Mah Gencturk Cad No 21A, Fatih, Stambuł 34134, Turcja",
+        "Adres: Vakiflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Turcja",
         "Godziny pracy: Poniedziałek - Piątek, 09:00 - 18:00"
       ],
       "text": "W przypadku zwrotów, prawa odstąpienia lub pytań:",
@@ -403,9 +403,9 @@
     },
     "section5": {
       "addressLines": [
-        "Dem Fırat Karven Tekstil San. ve Tic. A.Ş.",
-        "Kemalpasa Mah Gencturk Cad No 21A",
-        "Fatih, Stambuł 34134, Turcja"
+        "DEMFIRAT | Karven Home Collection",
+        "Vakiflar OSB Mah D100 Cad No 38",
+        "Ergene, Tekirdağ 59930, Turcja"
       ],
       "addressTitle": "Adres do zwrotu:",
       "infoItems": [
