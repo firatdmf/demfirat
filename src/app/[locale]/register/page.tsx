@@ -5,17 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import classes from './page.module.css';
 import { FcGoogle } from 'react-icons/fc';
-import { FaLock, FaEye, FaEyeSlash, FaEnvelope, FaBuilding, FaUserCircle, FaGlobe, FaFileInvoice } from 'react-icons/fa';
+import { FaLock, FaEye, FaEyeSlash, FaEnvelope, FaBuilding, FaUserCircle, FaGlobe } from 'react-icons/fa';
 import Link from 'next/link';
 import CountryPicker from '@/components/CountryPicker';
 import PhoneInput from '@/components/PhoneInput';
 import { defaultCountry } from '@/lib/visitorCountry';
 
-// This is a B2B wholesale registration form — Demfirat sells to businesses,
-// not individual consumers. Fields are deliberately generic (no
-// country-specific tax ID format, free-text country) since most signups are
-// expected to be international. `username` is derived from the email
-// address so the form doesn't ask for a redundant field.
+// The wholesale sign-up form. A business name or a contact name is enough,
+// and the email is required (it signs in and verifies the account); the
+// phone is optional. No tax number is asked for. `username` is the email,
+// so the form doesn't ask for a redundant field.
 const translations = {
   tr: {
     title: 'İşletme Hesabı Oluştur',
@@ -24,11 +23,11 @@ const translations = {
     or: 'veya',
     companyName: 'Şirket / İşletme Adı',
     contactName: 'Yetkili Adı Soyadı',
-    email: 'İş E-postası',
+    email: 'E-posta',
     phone: 'Telefon',
     country: 'Ülke',
-    taxId: 'Vergi / VAT Numarası (varsa)',
     password: 'Şifre (en az 6 karakter)',
+    nameRequired: 'Şirket adını ya da yetkili adını girin',
     submit: 'Hesap Oluştur',
     submitting: 'Hesap oluşturuluyor...',
     haveAccount: 'Zaten hesabınız var mı?',
@@ -45,11 +44,11 @@ const translations = {
     or: 'or',
     companyName: 'Company / Business Name',
     contactName: 'Contact Person Name',
-    email: 'Business Email',
+    email: 'Email',
     phone: 'Phone',
     country: 'Country',
-    taxId: 'Tax / VAT Number (if applicable)',
     password: 'Password (min. 6 characters)',
+    nameRequired: 'Enter a business name or a contact name',
     submit: 'Create Account',
     submitting: 'Creating account...',
     haveAccount: 'Already have an account?',
@@ -66,11 +65,11 @@ const translations = {
     or: 'или',
     companyName: 'Название компании',
     contactName: 'Контактное лицо',
-    email: 'Рабочий email',
+    email: 'Эл. почта',
     phone: 'Телефон',
     country: 'Страна',
-    taxId: 'Налоговый / VAT номер (если есть)',
     password: 'Пароль (мин. 6 символов)',
+    nameRequired: 'Укажите название компании или контактное лицо',
     submit: 'Создать аккаунт',
     submitting: 'Создание аккаунта...',
     haveAccount: 'Уже есть аккаунт?',
@@ -87,11 +86,11 @@ const translations = {
     or: 'lub',
     companyName: 'Nazwa firmy',
     contactName: 'Osoba kontaktowa',
-    email: 'Firmowy email',
+    email: 'Email',
     phone: 'Telefon',
     country: 'Kraj',
-    taxId: 'NIP / VAT (jeśli dotyczy)',
     password: 'Hasło (min. 6 znaków)',
+    nameRequired: 'Enter a business name or a contact name',
     submit: 'Utwórz konto',
     submitting: 'Tworzenie konta...',
     haveAccount: 'Masz już konto?',
@@ -114,7 +113,6 @@ export default function RegisterPage() {
     email: '',
     phone: '',
     country: '',
-    taxId: '',
     password: '',
   });
   // Sign-up starts in the visitor's own country, known only in the browser —
@@ -136,6 +134,11 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    // A business name or a person to talk to — either is enough.
+    if (!formData.companyName.trim() && !formData.name.trim()) {
+      setError(t.nameRequired);
+      return;
+    }
     setLoading(true);
 
     try {
@@ -147,14 +150,12 @@ export default function RegisterPage() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          // No separate login field for a B2B form — the business email
-          // doubles as the username.
+          // No separate login field — the email doubles as the username.
           username: formData.email,
           password: formData.password,
           company_name: formData.companyName,
           phone: formData.phone,
           country: formData.country,
-          tax_id: formData.taxId,
         }),
       });
 
@@ -225,7 +226,6 @@ export default function RegisterPage() {
                 value={formData.companyName}
                 onChange={handleChange}
                 className={classes.input}
-                required
                 disabled={loading}
               />
             </div>
@@ -241,7 +241,6 @@ export default function RegisterPage() {
                 value={formData.name}
                 onChange={handleChange}
                 className={classes.input}
-                required
                 disabled={loading}
               />
             </div>
@@ -272,7 +271,6 @@ export default function RegisterPage() {
                 onChange={(phone) => setFormData((f) => ({ ...f, phone }))}
                 country={formData.country}
                 className={classes.input}
-                required
                 disabled={loading}
               />
             </div>
@@ -293,20 +291,6 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className={classes.inputGroup}>
-            <div className={classes.inputWrapper}>
-              <FaFileInvoice className={classes.inputIcon} />
-              <input
-                type="text"
-                name="taxId"
-                placeholder={t.taxId}
-                value={formData.taxId}
-                onChange={handleChange}
-                className={classes.input}
-                disabled={loading}
-              />
-            </div>
-          </div>
 
           <div className={classes.inputGroup}>
             <div className={classes.inputWrapper}>

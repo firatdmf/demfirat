@@ -5,12 +5,12 @@ import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, username, password, company_name, phone, country, tax_id } = await request.json();
+    const { name, email, username, password, company_name, phone, country } = await request.json();
 
-    // Basic validation
-    if (!name || !email || !username || !password) {
+    // Basic validation: a business name or a contact name is enough.
+    if (!(name || company_name) || !email || !username || !password) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Email, password and a business or contact name are required' },
         { status: 400 }
       );
     }
@@ -31,7 +31,6 @@ export async function POST(request: Request) {
           company_name,
           phone,
           country,
-          tax_id,
         }),
       }
     );
