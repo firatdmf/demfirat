@@ -33,7 +33,7 @@ type Props = {
 const DIALLED = new Set<string>(getCountries());
 // Calling code → the countries that share it, the main one first (+44: GB, GG, IM, JE).
 const SHARED_CODES: Record<string, string[]> = metadata.country_calling_codes;
-const FALLBACK: PhoneCountry = 'TR';
+const FALLBACK: PhoneCountry = 'US';
 
 function dialable(code: string | undefined): code is PhoneCountry {
   return !!code && DIALLED.has(code);

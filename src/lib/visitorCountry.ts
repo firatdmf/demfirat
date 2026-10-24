@@ -12,9 +12,9 @@ export function visitorCountry(): string {
 }
 
 /** The country a new address or number starts with: the visitor's own,
- *  else Türkiye. Browser only, like visitorCountry — call it after the
+ *  else the US. Browser only, like visitorCountry — call it after the
  *  first render, or the page would differ from the one the server sent. */
 export function defaultCountry(): string {
   const here = visitorCountry();
-  return isCountryCode(here) ? here : 'TR';
+  return isCountryCode(here) ? here : 'US';
 }
