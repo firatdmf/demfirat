@@ -257,35 +257,33 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className={classes.inputRow}>
-            <div className={classes.inputGroup}>
-              <div className={classes.inputWrapper}>
-                {/* The calling code's flag stands where the phone icon was. */}
-                <PhoneInput
-                  placeholder={t.phone}
-                  value={formData.phone}
-                  onChange={(phone) => setFormData((f) => ({ ...f, phone }))}
-                  country={formData.country}
-                  className={classes.input}
-                  required
-                  disabled={loading}
-                />
-              </div>
+          <div className={classes.inputGroup}>
+            <div className={classes.inputWrapper}>
+              {/* The calling code's flag stands where the phone icon was. */}
+              <PhoneInput
+                placeholder={t.phone}
+                value={formData.phone}
+                onChange={(phone) => setFormData((f) => ({ ...f, phone }))}
+                country={formData.country}
+                className={classes.input}
+                required
+                disabled={loading}
+              />
             </div>
+          </div>
 
-            <div className={classes.inputGroup}>
-              <div className={classes.inputWrapper}>
-                {/* Once a country is chosen, its flag takes the icon's place. */}
-                {!formData.country && <FaGlobe className={classes.inputIcon} />}
-                <CountryPicker
-                  placeholder={t.country}
-                  value={formData.country}
-                  onChange={(country) => setFormData((f) => ({ ...f, country }))}
-                  className={classes.input}
-                  required
-                  disabled={loading}
-                />
-              </div>
+          <div className={classes.inputGroup}>
+            <div className={classes.inputWrapper}>
+              {/* Once a country is chosen, its flag takes the icon's place. */}
+              {!formData.country && <FaGlobe className={classes.inputIcon} />}
+              <CountryPicker
+                placeholder={t.country}
+                value={formData.country}
+                onChange={(country) => setFormData((f) => ({ ...f, country }))}
+                className={classes.input}
+                required
+                disabled={loading}
+              />
             </div>
           </div>
 

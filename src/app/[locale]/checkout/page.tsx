@@ -1167,6 +1167,7 @@ export default function CheckoutPage() {
                 onChange={(phone) => setUserInfo((u) => ({ ...u, phone }))}
                 country={newAddress.country}
                 className={classes.input}
+                wrapperClassName={classes.fullWidth}
                 required
               />
               <div style={{ width: '100%' }}>
