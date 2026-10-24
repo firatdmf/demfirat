@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         const fileName = `reviews/${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${baseName}.${extension}`;
 
         const storageZone = process.env.BUNNY_STORAGE_ZONE;
-        const apiKey = process.env.BUNNY_STORAGE_API_KEY;
+        const apiKey = process.env.BUNNY_STORAGE_ACCESS_KEY;
         const cdnUrl = process.env.BUNNY_CDN_URL;
 
         if (!storageZone || !apiKey || !cdnUrl) {
