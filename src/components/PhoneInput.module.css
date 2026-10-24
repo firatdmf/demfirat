@@ -3,18 +3,131 @@
   width: 100%;
 }
 
-.number {
+/* The page's input class draws the border; this lays out what is inside. */
+.field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   width: 100%;
   box-sizing: border-box;
+  /* The page's class may leave room for an icon; the flag is the icon here. */
+  padding-left: 0.875rem !important;
+  cursor: text;
 }
 
-/* The flag of the country the number's code says, at the start of the box. */
+.field:focus-within {
+  border-color: var(--gold, #c9a961);
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+}
+
+.disabled {
+  opacity: 0.6;
+}
+
+.country {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.country:focus-visible {
+  outline: 2px solid var(--gold, #c9a961);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
 .flag {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  border-radius: 2px;
+  flex-shrink: 0;
+  border-radius: 3px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.chevron {
+  font-size: 0.75rem;
+  color: #555;
+  transition: transform 0.15s ease;
+}
+
+.up {
+  transform: rotate(180deg);
+}
+
+.code {
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.number {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+}
+
+.list {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 32px));
+  box-sizing: border-box;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--light-gray, #e0dcd2);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.optionCode {
+  flex-shrink: 0;
+  min-width: 3.2em;
+  color: var(--text-dark, #2c2c2c);
+  font-variant-numeric: tabular-nums;
+}
+
+.optionName {
+  color: #888;
+  overflow-wrap: anywhere;
+}
+
+.active {
+  background: rgba(201, 169, 97, 0.1);
+}
+
+.selected {
+  background: rgba(201, 169, 97, 0.2);
+}
+
+.selected .optionCode,
+.selected .optionName {
+  color: #8a6d2f;
 }
