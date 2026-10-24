@@ -1,0 +1,18 @@
+.phone {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+/* "+90" with its flag; the list it opens is as wide as it needs. */
+.dial {
+  flex: 0 0 112px;
+}
+
+.number {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  /* The page's input class may leave room for an icon; the number has none. */
+  padding-left: 0.875rem !important;
+}

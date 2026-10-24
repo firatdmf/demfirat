@@ -12,6 +12,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 import PreInformationForm from '@/components/PreInformationForm';
 import DistanceSalesContract from '@/components/DistanceSalesContract';
 import CountryPicker from '@/components/CountryPicker';
+import PhoneInput, { formatPhone } from '@/components/PhoneInput';
 import { countryName } from '@/lib/countries';
 import { trackBeginCheckout } from '@/lib/tracking';
 import { identifyUser, trackKlaviyoStartedCheckout } from '@/lib/klaviyo';
@@ -1160,11 +1161,11 @@ export default function CheckoutPage() {
                 className={classes.input}
                 required
               />
-              <input
-                type="tel"
+              <PhoneInput
                 placeholder={t('phone') + ' *'}
                 value={userInfo.phone}
-                onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
+                onChange={(phone) => setUserInfo((u) => ({ ...u, phone }))}
+                country={newAddress.country}
                 className={classes.input}
                 required
               />
@@ -1290,7 +1291,7 @@ export default function CheckoutPage() {
                         <p>{address.city}, {countryName(address.country, locale)}</p>
                         {address.phone && (
                           <p className={classes.phone}>
-                            <FaPhone /> {address.phone}
+                            <FaPhone /> {formatPhone(address.phone)}
                           </p>
                         )}
                       </div>
@@ -1339,12 +1340,13 @@ export default function CheckoutPage() {
                       onChange={(e) => setNewAddress({ ...newAddress, last_name: e.target.value })}
                       className={classes.input}
                     />
-                    <input
-                      type="tel"
+                    <PhoneInput
                       placeholder={t('phone')}
                       value={newAddress.phone}
-                      onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
-                      className={`${classes.input} ${classes.fullWidth}`}
+                      onChange={(phone) => setNewAddress((a) => ({ ...a, phone }))}
+                      country={newAddress.country}
+                      className={classes.input}
+                      wrapperClassName={classes.fullWidth}
                     />
                     <input
                       type="text"
@@ -1571,7 +1573,7 @@ export default function CheckoutPage() {
                           <p>{address.city}, {countryName(address.country, locale)}</p>
                           {address.phone && (
                             <p className={classes.phone}>
-                              <FaPhone /> {address.phone}
+                              <FaPhone /> {formatPhone(address.phone)}
                             </p>
                           )}
                         </div>

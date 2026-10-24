@@ -13,7 +13,12 @@
   z-index: 50;
   top: calc(100% + 4px);
   left: 0;
-  right: 0;
+  /* As wide as its longest name, not the box: a narrow box (the phone's
+     "+90") still lists "Bosnia & Herzegovina" whole; past the cap, it wraps. */
+  min-width: 100%;
+  width: max-content;
+  max-width: min(340px, calc(100vw - 32px));
+  box-sizing: border-box;
   max-height: 240px;
   overflow-y: auto;
   margin: 0;
@@ -54,8 +59,19 @@
   pointer-events: none;
 }
 
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dial {
+  flex-shrink: 0;
+  color: #888;
+  font-variant-numeric: tabular-nums;
+}
+
 .check {
-  margin-left: auto;
   flex-shrink: 0;
   font-size: 0.75rem;
   color: var(--gold, #c9a961);

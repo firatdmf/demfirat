@@ -66,6 +66,7 @@ import Link from 'next/link';
 import RateProductButton from '@/components/RateProductButton';
 import { erpFetch } from '@/lib/erpFetch';
 import CountryPicker from '@/components/CountryPicker';
+import PhoneInput, { formatPhone } from '@/components/PhoneInput';
 import { countryName } from '@/lib/countries';
 
 // Reviews Tab Content Component
@@ -1238,16 +1239,14 @@ export default function ProfilePage() {
                       {t('phone')}
                     </label>
                     {isEditing ? (
-                      <input
-                        type="tel"
-                        name="phone"
+                      <PhoneInput
                         value={formData.phone}
-                        onChange={handleInputChange}
+                        onChange={(phone) => setFormData((f) => ({ ...f, phone }))}
                         className={classes.input}
-                        placeholder="+90 555 123 45 67"
+                        placeholder="555 123 45 67"
                       />
                     ) : (
-                      <div className={classes.displayValue}>{formData.phone || '-'}</div>
+                      <div className={classes.displayValue}>{formatPhone(formData.phone) || '-'}</div>
                     )}
                   </div>
 
@@ -1363,12 +1362,12 @@ export default function ProfilePage() {
 
                     <div className={classes.formGroup}>
                       <label>{t('phone')}</label>
-                      <input
-                        type="tel"
+                      <PhoneInput
                         value={newAddress.phone}
-                        onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
+                        onChange={(phone) => setNewAddress((a) => ({ ...a, phone }))}
+                        country={newAddress.country}
                         className={classes.input}
-                        placeholder="+90 555 123 45 67"
+                        placeholder="555 123 45 67"
                       />
                     </div>
 
@@ -2013,7 +2012,7 @@ export default function ProfilePage() {
                             {selectedOrder.delivery_city}
                             {selectedOrder.delivery_country && `, ${countryName(selectedOrder.delivery_country, locale)}`}
                           </p>
-                          {selectedOrder.delivery_phone && <p>{selectedOrder.delivery_phone}</p>}
+                          {selectedOrder.delivery_phone && <p>{formatPhone(selectedOrder.delivery_phone)}</p>}
                         </div>
                       </div>
                     )}

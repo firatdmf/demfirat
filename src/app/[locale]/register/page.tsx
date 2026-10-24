@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import classes from './page.module.css';
 import { FcGoogle } from 'react-icons/fc';
-import { FaLock, FaEye, FaEyeSlash, FaEnvelope, FaBuilding, FaUserCircle, FaPhone, FaGlobe, FaFileInvoice } from 'react-icons/fa';
+import { FaLock, FaEye, FaEyeSlash, FaEnvelope, FaBuilding, FaUserCircle, FaGlobe, FaFileInvoice } from 'react-icons/fa';
 import Link from 'next/link';
 import CountryPicker from '@/components/CountryPicker';
+import PhoneInput from '@/components/PhoneInput';
 
 // This is a B2B wholesale registration form — Demfirat sells to businesses,
 // not individual consumers. Fields are deliberately generic (no
@@ -259,13 +260,12 @@ export default function RegisterPage() {
           <div className={classes.inputRow}>
             <div className={classes.inputGroup}>
               <div className={classes.inputWrapper}>
-                <FaPhone className={classes.inputIcon} />
-                <input
-                  type="tel"
-                  name="phone"
+                {/* The calling code's flag stands where the phone icon was. */}
+                <PhoneInput
                   placeholder={t.phone}
                   value={formData.phone}
-                  onChange={handleChange}
+                  onChange={(phone) => setFormData((f) => ({ ...f, phone }))}
+                  country={formData.country}
                   className={classes.input}
                   required
                   disabled={loading}
@@ -280,7 +280,7 @@ export default function RegisterPage() {
                 <CountryPicker
                   placeholder={t.country}
                   value={formData.country}
-                  onChange={(country) => setFormData({ ...formData, country })}
+                  onChange={(country) => setFormData((f) => ({ ...f, country }))}
                   className={classes.input}
                   required
                   disabled={loading}
