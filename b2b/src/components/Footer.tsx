@@ -71,7 +71,7 @@ export default function Footer() {
             </li>
             <li>
               <Icon name="mail" size={14} />
-              <a href="mailto:info@demfirat.com">info@demfirat.com</a>
+              <a href="mailto:hello@demfirat.com">hello@demfirat.com</a>
             </li>
             <li>
               <Icon name="mapPin" size={14} />

@@ -42,7 +42,7 @@ export default function MesafeliSatisSozlesmesi() {
                     <p><strong>{locale === 'tr' ? 'Ünvan:' : 'Company:'}</strong> KARVEN TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ</p>
                     <p><strong>{locale === 'tr' ? 'Adres:' : 'Address:'}</strong> Karven Home Collection, Kemalpaşa Mah Gençtürk Cad No 21A, Fatih, İstanbul 34134, Türkiye</p>
                     <p><strong>{locale === 'tr' ? 'Telefon:' : 'Phone:'}</strong> +90 (501) 057-1884</p>
-                    <p><strong>E-posta:</strong> info@demfirat.com</p>
+                    <p><strong>E-posta:</strong> hello@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
                 </div>
 
@@ -159,8 +159,8 @@ export default function MesafeliSatisSozlesmesi() {
             <section className={classes.section}>
                 <h2>{locale === 'tr' ? '9. AYIPLI MAL VE GARANTİ' : '9. DEFECTIVE GOODS AND WARRANTY'}</h2>
                 <p>{locale === 'tr'
-                    ? 'Ürün teslimat sırasında hasarlı veya hatalı ise, derhal info@demfirat.com adresine fotoğraflarla birlikte bildiriniz. Ayıplı ürünler ücretsiz olarak değiştirilir veya onarılır.'
-                    : 'If the product is damaged or defective during delivery, immediately notify info@demfirat.com with photos. Defective products are replaced or repaired free of charge.'}</p>
+                    ? 'Ürün teslimat sırasında hasarlı veya hatalı ise, derhal hello@demfirat.com adresine fotoğraflarla birlikte bildiriniz. Ayıplı ürünler ücretsiz olarak değiştirilir veya onarılır.'
+                    : 'If the product is damaged or defective during delivery, immediately notify hello@demfirat.com with photos. Defective products are replaced or repaired free of charge.'}</p>
             </section>
 
             {/* 10. UYUŞMAZLIK */}
@@ -182,7 +182,7 @@ export default function MesafeliSatisSozlesmesi() {
             <section className={classes.section}>
                 <h2>{locale === 'tr' ? '12. İLETİŞİM' : '12. CONTACT'}</h2>
                 <div className={classes.infoBox}>
-                    <p><strong>Email:</strong> info@demfirat.com</p>
+                    <p><strong>Email:</strong> hello@demfirat.com</p>
                     <p><strong>{locale === 'tr' ? 'Telefon:' : 'Phone:'}</strong> +90 (501) 057-1884</p>
                     <p><strong>{locale === 'tr' ? 'Adres:' : 'Address:'}</strong> Karven Home Collection, Kemalpaşa Mah Gençtürk Cad No 21A, Fatih, İstanbul 34134, Türkiye</p>
                 </div>

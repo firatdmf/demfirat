@@ -167,7 +167,7 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
               </li>
               <li>
                 <FaEnvelope className={classes.contactIcon} />
-                <a href="mailto:info@demfirat.com">info@demfirat.com</a>
+                <a href="mailto:hello@demfirat.com">hello@demfirat.com</a>
               </li>
               <li>
                 <FaMapMarkerAlt className={classes.contactIcon} />

@@ -101,7 +101,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                         Fatih, İstanbul 34134 <br />
                         Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
-                    <p><strong>E-posta:</strong> info@demfirat.com</p>
+                    <p><strong>E-posta:</strong> hello@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
                 </>
             ) : locale === 'ru' ? (
@@ -112,7 +112,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                         Fatih, İstanbul 34134 <br />
                         Турция</p>
                     <p><strong>Телефон:</strong> +90 (501) 057-1884</p>
-                    <p><strong>Эл. почта:</strong> info@demfirat.com</p>
+                    <p><strong>Эл. почта:</strong> hello@demfirat.com</p>
                     <p><strong>Сайт:</strong> www.demfirat.com</p>
                 </>
             ) : locale === 'pl' ? (
@@ -123,7 +123,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                         Fatih, İstanbul 34134 <br />
                         Turcja</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
-                    <p><strong>E-mail:</strong> info@demfirat.com</p>
+                    <p><strong>E-mail:</strong> hello@demfirat.com</p>
                     <p><strong>Strona:</strong> www.demfirat.com</p>
                 </>
             ) : (
@@ -134,7 +134,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                         Fatih, İstanbul 34134 <br />
                         Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
-                    <p><strong>Email:</strong> info@demfirat.com</p>
+                    <p><strong>Email:</strong> hello@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
                 </>
             )
@@ -222,7 +222,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
             content: locale === 'tr' ? (
                 <>
                     <p><strong>Cayma Hakkı Süresi:</strong> Ürünü teslim aldığınız tarihten itibaren 14 (on dört) gün içinde cayma hakkınızı kullanabilirsiniz.</p>
-                    <p><strong>Cayma Bildirimi:</strong> Cayma hakkınızı kullanmak istediğinizi info@demfirat.com adresine e-posta göndererek veya +90 (501) 057-1884 numaralı telefonu arayarak bildirmeniz gerekmektedir.</p>
+                    <p><strong>Cayma Bildirimi:</strong> Cayma hakkınızı kullanmak istediğinizi hello@demfirat.com adresine e-posta göndererek veya +90 (501) 057-1884 numaralı telefonu arayarak bildirmeniz gerekmektedir.</p>
                     <p><strong>İade Koşulları:</strong></p>
                     <ul>
                         <li>Ürün kullanılmamış, hasarsız ve orijinal ambalajında olmalıdır</li>
@@ -235,7 +235,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
             ) : locale === 'ru' ? (
                 <>
                     <p><strong>Срок отказа:</strong> Вы можете использовать право отказа в течение 14 (четырнадцати) дней с даты получения товара.</p>
-                    <p><strong>Уведомление об отказе:</strong> Вы должны уведомить о намерении воспользоваться правом отказа, отправив электронное письмо на адрес info@demfirat.com или позвонив по телефону +90 (501) 057-1884.</p>
+                    <p><strong>Уведомление об отказе:</strong> Вы должны уведомить о намерении воспользоваться правом отказа, отправив электронное письмо на адрес hello@demfirat.com или позвонив по телефону +90 (501) 057-1884.</p>
                     <p><strong>Условия возврата:</strong></p>
                     <ul>
                         <li>Товар должен быть неиспользованным, неповрежденным и в оригинальной упаковке</li>
@@ -248,7 +248,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
             ) : locale === 'pl' ? (
                 <>
                     <p><strong>Okres odstąpienia:</strong> Możesz skorzystać z prawa odstąpienia w ciągu 14 (czternastu) dni od daty otrzymania towaru.</p>
-                    <p><strong>Zawiadomienie o odstąpieniu:</strong> Musisz powiadomić o zamiarze skorzystania z prawa odstąpienia, wysyłając e-mail na adres info@demfirat.com lub dzwoniąc pod numer +90 (501) 057-1884.</p>
+                    <p><strong>Zawiadomienie o odstąpieniu:</strong> Musisz powiadomić o zamiarze skorzystania z prawa odstąpienia, wysyłając e-mail na adres hello@demfirat.com lub dzwoniąc pod numer +90 (501) 057-1884.</p>
                     <p><strong>Warunki zwrotu:</strong></p>
                     <ul>
                         <li>Towar musi być nieużywany, nieuszkodzony i w oryginalnym opakowaniu</li>
@@ -261,7 +261,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
             ) : (
                 <>
                     <p><strong>Withdrawal Period:</strong> You can exercise your right of withdrawal within 14 (fourteen) days from the date you receive the product.</p>
-                    <p><strong>Withdrawal Notice:</strong> You must notify us of your intention to exercise the right of withdrawal by sending an email to info@demfirat.com or calling +90 (501) 057-1884.</p>
+                    <p><strong>Withdrawal Notice:</strong> You must notify us of your intention to exercise the right of withdrawal by sending an email to hello@demfirat.com or calling +90 (501) 057-1884.</p>
                     <p><strong>Return Conditions:</strong></p>
                     <ul>
                         <li>Product must be unused, undamaged and in its original packaging</li>
@@ -285,7 +285,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                         <li>2025 yılı için belirlenen parasal sınır: 149.000,00 TL'nin altında olan uyuşmazlıklarda İl veya İlçe Tüketici Hakem Heyetine, 149.000,00 TL'nin üzerinde olan uyuşmazlıklarda önce arabulucuya başvuru zorunludur.</li>
                         <li>Parasal sınırlar her yıl yeniden değerleme oranında artırılarak uygulanır.</li>
                     </ul>
-                    <p><strong>İletişim:</strong> Sorularınız için info@demfirat.com adresine e-posta gönderebilir veya +90 (501) 057-1884 numaralı telefonu arayabilirsiniz.</p>
+                    <p><strong>İletişim:</strong> Sorularınız için hello@demfirat.com adresine e-posta gönderebilir veya +90 (501) 057-1884 numaralı telefonu arayabilirsiniz.</p>
                 </>
             ) : (
                 <>
@@ -297,7 +297,7 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
                         <li>For disputes below 149,000.00 TRY, applications can be made to the Provincial or District Consumer Arbitration Committee, and for disputes above 149,000.00 TRY, mandatory mediation is required first.</li>
                         <li>Monetary limits are increased annually by the revaluation rate.</li>
                     </ul>
-                    <p><strong>Contact:</strong> For questions, you can send an email to info@demfirat.com or call +90 (501) 057-1884.</p>
+                    <p><strong>Contact:</strong> For questions, you can send an email to hello@demfirat.com or call +90 (501) 057-1884.</p>
                 </>
             )
         }

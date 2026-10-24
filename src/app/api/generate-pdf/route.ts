@@ -351,7 +351,7 @@ export async function GET(request: NextRequest) {
       color: grayColor,
     });
 
-    lastPage.drawText('Email: info@demfirat.com | Phone: +90 (282) 675-1552', {
+    lastPage.drawText('Email: hello@demfirat.com | Phone: +90 (282) 675-1552', {
       x: lastWidth / 2 - 150,
       y: footerY - 30,
       size: 9,

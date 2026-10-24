@@ -33,7 +33,7 @@ export default function KVKK() {
             Kemalpaşa Mah Gençtürk Cad No 21A <br />
             Fatih, İstanbul 34134 <br />
             Türkiye</p>}
-                    {t.has('section1.email') && <p><strong>{t('section1.email')}:</strong> info@demfirat.com</p>}
+                    {t.has('section1.email') && <p><strong>{t('section1.email')}:</strong> hello@demfirat.com</p>}
                     {t.has('section1.phone') && <p><strong>{t('section1.phone')}:</strong> +90 (501) 057-1884</p>}
                 </div>
             </section>
@@ -160,7 +160,7 @@ export default function KVKK() {
                 <h2>{t('section10.title')}</h2>
                 <p>{t('section10.text')}</p>
                 <div className={classes.infoBox}>
-                    <p><strong>{t('section10.email')}:</strong> info@demfirat.com</p>
+                    <p><strong>{t('section10.email')}:</strong> hello@demfirat.com</p>
                     <p><strong>{t('section10.phone')}:</strong> +90 (501) 057-1884</p>
                     <p><strong>{t('section10.address')}:</strong> DEMFIRAT Karven Home Collection <br />
             Kemalpaşa Mah Gençtürk Cad No 21A <br />

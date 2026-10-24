@@ -189,7 +189,7 @@
     },
     "section7": {
       "methods": {
-        "0": "[TRANSLATE] E-posta: info@demfirat.com (Güvenli elektronik imza ile)",
+        "0": "[TRANSLATE] E-posta: hello@demfirat.com (Güvenli elektronik imza ile)",
         "1": "[TRANSLATE] Posta: Kemalpaşa Mah Gençtürk Cad No 21A     Fatih, İstanbul 34134,  Türkiye",
         "2": "[TRANSLATE] Islak İmzalı Dilekçe: Yukarıdaki adrese şahsen teslim"
       },
@@ -354,7 +354,7 @@
     },
     "section10": {
       "contactBox": [
-        "Email: info@demfirat.com",
+        "Email: hello@demfirat.com",
         "Phone: +90 (501) 057-1884",
         "Address: Kemalpasa Mah Gencturk Cad No 21A, Fatih, Istanbul 34134, Turkey",
         "Working Hours: Monday - Friday, 09:00 - 18:00"
@@ -375,7 +375,7 @@
     },
     "section3": {
       "methods": [
-        "Email: Send your withdrawal notification to info@demfirat.com",
+        "Email: Send your withdrawal notification to hello@demfirat.com",
         "Phone: Call us at +90 (501) 057-1884",
         "Written Notice: Fill out the withdrawal form and send it to our address"
       ],

@@ -1238,7 +1238,7 @@ demfirat/ (root)
 
 ### Şirket İletişim
 - **Web**: www.demfirat.com
-- **Email**: info@demfirat.com
+- **Email**: hello@demfirat.com
 - **Tel**: +90 (282) 675-1552
 - **Adres**: Vakıflar OSB Mah D100 Cad No 38, Ergene, Tekirdağ 59930, Türkiye
 

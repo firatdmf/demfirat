@@ -55,8 +55,8 @@ export default function ContactPage() {
               <div style={{ fontFamily: 'var(--bel-font-body)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--bel-ink-3)', marginBottom: 6 }}>
                 {isEn ? 'Email' : 'E-posta'}
               </div>
-              <a href="mailto:info@demfirat.com" style={{ display: 'block', fontFamily: 'var(--bel-font-display)', fontSize: 24, fontWeight: 500, color: '#944f05', textDecoration: 'none', letterSpacing: '-0.01em' }}>
-                info@demfirat.com
+              <a href="mailto:hello@demfirat.com" style={{ display: 'block', fontFamily: 'var(--bel-font-display)', fontSize: 24, fontWeight: 500, color: '#944f05', textDecoration: 'none', letterSpacing: '-0.01em' }}>
+                hello@demfirat.com
               </a>
             </div>
 
@@ -143,7 +143,7 @@ export default function ContactPage() {
                 </svg>
               </button>
               <p style={{ fontSize: 12, color: 'var(--bel-ink-3)', margin: 0, fontFamily: 'var(--bel-font-body)' }}>
-                {isEn ? 'This form is currently a placeholder — emails go directly to info@demfirat.com for now.' : 'Form şu an taslak — mesajlar şimdilik doğrudan info@demfirat.com\'a gidiyor.'}
+                {isEn ? 'This form is currently a placeholder — emails go directly to hello@demfirat.com for now.' : 'Form şu an taslak — mesajlar şimdilik doğrudan hello@demfirat.com\'a gidiyor.'}
               </p>
             </form>
           </div>

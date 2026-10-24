@@ -97,10 +97,10 @@ function Page() {
           </p>
         </Link>
         <br />
-        <Link className={classes.link} href="mailto:info@demfirat.com">
+        <Link className={classes.link} href="mailto:hello@demfirat.com">
           <p>
             <TfiEmail />
-            info@demfirat.com
+            hello@demfirat.com
           </p>
         </Link>
       </div>

@@ -163,7 +163,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                         Fatih, İstanbul 34134 <br />
                         Türkiye</p>
                     <p><strong>Telefon:</strong> +90 (501) 057-1884</p>
-                    <p><strong>E-posta:</strong> info@demfirat.com</p>
+                    <p><strong>E-posta:</strong> hello@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
 
                     <h4>ALICI (Tüketici)</h4>
@@ -183,7 +183,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                         Fatih, İstanbul 34134 <br />
                         Türkiye</p>
                     <p><strong>Phone:</strong> +90 (501) 057-1884</p>
-                    <p><strong>Email:</strong> info@demfirat.com</p>
+                    <p><strong>Email:</strong> hello@demfirat.com</p>
                     <p><strong>Web:</strong> www.demfirat.com</p>
 
                     <h4>BUYER (Consumer)</h4>
@@ -424,7 +424,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                         atı tarihinden itibaren 14 (on dört) gün içinde cayma hakkına sahiptir.</p>
 
                     <p><strong>Cayma Bildiriminin Yapılması:</strong></p>
-                    <p>Cayma hakkınızı kullanmak için info@demfirat.com adresine e-posta göndererek veya +90 (501) 057-1884 numaralı telefonu arayarak cayma iradenizi açık bir şekilde ortaya koyan bir beyanda bulunmanız gerekmektedir.</p>
+                    <p>Cayma hakkınızı kullanmak için hello@demfirat.com adresine e-posta göndererek veya +90 (501) 057-1884 numaralı telefonu arayarak cayma iradenizi açık bir şekilde ortaya koyan bir beyanda bulunmanız gerekmektedir.</p>
 
                     <p><strong>Cayma Hakkının Kullanılmasının Sonuçları:</strong></p>
                     <ul>
@@ -449,7 +449,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <p><strong>Withdrawal Period:</strong> BUYER has the right to withdraw within 14 (fourteen) days from the date of delivery of the contract product to himself or to a third party indicated by him.</p>
 
                     <p><strong>Making Withdrawal Notice:</strong></p>
-                    <p>To exercise your right of withdrawal, you must inform us of your decision to withdraw by sending an email to info@demfirat.com or calling +90 (501) 057-1884.</p>
+                    <p>To exercise your right of withdrawal, you must inform us of your decision to withdraw by sending an email to hello@demfirat.com or calling +90 (501) 057-1884.</p>
 
                     <p><strong>Effects of Exercising the Right of Withdrawal:</strong></p>
                     <ul>
@@ -519,7 +519,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
             title: t('defectWarranty'),
             content: locale === 'tr' ? (
                 <>
-                    <p><strong>Ayıplı Mal:</strong> Ürün teslimat sırasında hasarlı veya hatalı ise, derhal info@demfirat.com adresine fotoğraflarla birlikte bildiriniz. Ayıplı ürünler ücretsiz olarak değiştirilir veya onarılır.</p>
+                    <p><strong>Ayıplı Mal:</strong> Ürün teslimat sırasında hasarlı veya hatalı ise, derhal hello@demfirat.com adresine fotoğraflarla birlikte bildiriniz. Ayıplı ürünler ücretsiz olarak değiştirilir veya onarılır.</p>
 
                     <p><strong>Üretici Garantisi:</strong> Ürünlerimiz kalite kontrolünden geçmiş olup, üretici garantisi altındadır. Garanti şartları ürün ile birlikte gönderilen garanti belgesinde belirtilmiştir.</p>
 
@@ -539,7 +539,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                 </>
             ) : (
                 <>
-                    <p><strong>Defective Goods:</strong> If the product is damaged or defective during delivery, immediately notify info@demfirat.com with photos. Defective products are replaced or repaired free of charge.</p>
+                    <p><strong>Defective Goods:</strong> If the product is damaged or defective during delivery, immediately notify hello@demfirat.com with photos. Defective products are replaced or repaired free of charge.</p>
 
                     <p><strong>Manufacturer's Warranty:</strong> Our products have passed quality control and are under manufacturer's warranty. Warranty conditions are specified in the warranty document sent with the product.</p>
 
@@ -617,7 +617,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <p><strong>İletişim:</strong></p>
                     <p>Sözleşme ile ilgili her türlü soru, öneri ve şikayetleriniz için:</p>
                     <ul>
-                        <li>E-posta: info@demfirat.com</li>
+                        <li>E-posta: hello@demfirat.com</li>
                         <li>Telefon: +90 (501) 057-1884</li>
                         <li>Adres: Karven Home Collection <br />
                             Kemalpaşa Mah Gençtürk Cad No 21A <br />
@@ -645,7 +645,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     <p><strong>Contact:</strong></p>
                     <p>For all questions, suggestions and complaints about the agreement:</p>
                     <ul>
-                        <li>Email: info@demfirat.com</li>
+                        <li>Email: hello@demfirat.com</li>
                         <li>Phone: +90 (501) 057-1884</li>
                         <li>Address: Karven Home Collection <br />
                             Kemalpaşa Mah Gençtürk Cad No 21A <br />

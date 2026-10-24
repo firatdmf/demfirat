@@ -583,7 +583,7 @@ export async function POST(request: NextRequest) {
             doc.setFontSize(7);
             doc.setFont('Roboto', 'normal');
             doc.setTextColor(255, 255, 255);
-            doc.text('www.demfirat.com | info@demfirat.com', margin, footerY + 2);
+            doc.text('www.demfirat.com | hello@demfirat.com', margin, footerY + 2);
             doc.setFontSize(8);
             doc.setFont('Roboto', 'bold');
             doc.text(`${i + 1} / ${products.length}`, pageWidth - margin, footerY + 2, { align: 'right' });
@@ -678,7 +678,7 @@ export async function POST(request: NextRequest) {
                     doc.setFontSize(7);
                     doc.setFont('Roboto', 'normal');
                     doc.setTextColor(255, 255, 255);
-                    doc.text('www.demfirat.com | info@demfirat.com', margin, footerY + 2);
+                    doc.text('www.demfirat.com | hello@demfirat.com', margin, footerY + 2);
                     doc.setFontSize(8);
                     const rawFooterVariantColor = translateTextSync(variant.color, locale);
                     const footerTranslatedColor = rawFooterVariantColor === 'Loading' ? variant.color : rawFooterVariantColor;
