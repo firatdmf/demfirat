@@ -65,20 +65,20 @@ export default function Contact() {
       ProductLine2: { en: 'Interior Fabrics: Drapery & Upholstery', tr: 'İç Mekan Kumaşları: Perde ve Döşemelik', ru: 'Интерьерные ткани: портьеры и обивка', pl: 'Tkaniny do Wnętrz: Zasłony i Tapicerka' },
       ProductLine3: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца', pl: 'Pościel, narzuty, pokrowce na meble, ręczniki, obrusy' },
       ProductLine4: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, duvets, pillows, mattress toppers, kids\' range, bathrobes, homewear, sheets, throws, aprons, sauna sets, ironing board covers', tr: 'Nevresim, yatak örtüsü, mobilya örtüsü, havlu, mutfak havlusu, havlu seti, masa örtüsü, yorgan, yastık, alez, çocuk ürünleri, bornoz, ev giyimi, çarşaf, battaniye, önlük, sauna seti, ütü masası kılıfı', ru: 'Постельное белье, покрывала, чехлы на мебель, полотенца, кухонные полотенца, наборы полотенец, скатерти, одеяла, подушки, наматрасники, детский ассортимент, халаты, домашняя одежда, простыни, пледы, фартуки, комплекты для сауны, чехлы для гладильных досок' },
-      Tekirdag: { en: 'Tekirdağ, Türkiye', tr: 'Tekirdağ, Türkiye', ru: 'Текирдаг, Турция' },
-      Istanbul: { en: 'Istanbul, Türkiye', tr: 'İstanbul, Türkiye', ru: 'Стамбул, Турция' },
+      Tekirdag: { en: 'Tekirdag, Turkiye', tr: 'Tekirdağ, Türkiye', ru: 'Текирдаг, Турция' },
+      Istanbul: { en: 'Istanbul, Turkiye', tr: 'İstanbul, Türkiye', ru: 'Стамбул, Турция' },
       Moscow: { en: 'Moscow, Russia', tr: 'Moskova, Rusya', ru: 'Москва, Россия' },
       Almaty: { en: 'Almaty, Kazakhstan', tr: 'Almatı, Kazakistan', ru: 'Алматы, Казахстан' },
       Reutov: { en: 'Reutov, Russia', tr: 'Reutov, Rusya', ru: 'Реутов, Россия' },
       Odesa: { en: 'Odesa, Ukraine', tr: 'Odessa, Ukrayna', ru: 'Одесса, Украина' },
       OdesaMarketAlt: { en: 'Aerial view of the 7th Kilometer market near Odesa, Ukraine: rows of market pavilions and car parks', tr: 'Odessa, Ukrayna yakınındaki 7. Kilometre pazarının havadan görünümü: sıra sıra pazar pavyonları ve otoparklar', ru: 'Вид сверху на рынок «7-й километр» под Одессой, Украина: ряды торговых павильонов и парковки' },
       Photo: { en: 'Photo', tr: 'Fotoğraf', ru: 'Фото' },
-      TekirdagAddress: { tr: 'Vakıflar OSB Mah D100 Cad No 38\nErgene, Tekirdağ 59930\nTürkiye', en: 'Vakıflar OSB, D100 Avenue No 38\nErgene, Tekirdağ 59930\nTürkiye', ru: 'Вакыфлар ОСБ, пр. D100, № 38\nЭргене, Текирдаг 59930\nТурция' },
-      CurtainStoreAddress: { tr: 'Kemalpaşa Mah Gümrük Emini Sk\nSerap Apt No 20 2. Kat\nFatih, İstanbul 34134\nTürkiye', en: 'Kemalpaşa, Gümrük Emini Street\nSerap Apt. No 20, 2nd Floor\nFatih, Istanbul 34134\nTürkiye', ru: 'Кемальпаша, ул. Гюмрюк Эмини\nСерап Апт., № 20, 2-й этаж\nФатих, Стамбул 34134\nТурция' },
-      RetailStoreAddress: { tr: 'Mesihpaşa Mah Hayriye Tüccarı Cad\nFatih, İstanbul 34130\nTürkiye', en: 'Mesihpaşa, Hayriye Tüccarı Avenue\nFatih, Istanbul 34130\nTürkiye', ru: 'Месихпаша, пр. Хайрие Тюджжары\nФатих, Стамбул 34130\nТурция' },
+      TekirdagAddress: { tr: 'Vakıflar OSB Mah D100 Cad No 38\nErgene, Tekirdağ 59930\nTürkiye', en: 'Vakiflar OSB, D100 Avenue No 38\nErgene, Tekirdag 59930\nTurkiye', ru: 'Вакыфлар ОСБ, пр. D100, № 38\nЭргене, Текирдаг 59930\nТурция' },
+      CurtainStoreAddress: { tr: 'Kemalpaşa Mah Gümrük Emini Sk\nSerap Apt No 20 Daire 4\n1. Kat\nFatih, İstanbul 34134\nTürkiye', en: 'Kemalpasa, Gumruk Emini St\nSerap Apt No 20, Suite 4\n1st Floor (one floor up)\nFatih, Istanbul 34134\nTurkiye', ru: 'Кемальпаша, ул. Гюмрюк Эмини\nСерап Апт., № 20, офис 4\n1-й этаж (на этаж выше улицы)\nФатих, Стамбул 34134\nТурция' },
+      RetailStoreAddress: { tr: 'Mesihpaşa Mah Hayriye Tüccarı Cad\nFatih, İstanbul 34130\nTürkiye', en: 'Mesihpasa, Hayriye Tuccari Avenue\nFatih, Istanbul 34130\nTurkiye', ru: 'Месихпаша, пр. Хайрие Тюджжары\nФатих, Стамбул 34130\nТурция' },
       MoscowAddress: { ru: 'г. Москва, 2-й Южнопортовый проезд\nд.12Г, стр.1\nРоссия', en: '2nd Yuzhnoportovy Proezd\n12G, Building 1\nMoscow, Russia', tr: '2. Yujnoportovıy Geçidi\nNo 12G, Bina 1\nMoskova, Rusya' },
       OdesaAddress: { uk: 'Промринок «7-й кілометр»\nОвідіопольська дорога, 7-й км\nсмт Авангард, Одеська обл., Україна', en: 'Seventh-Kilometer Manufactured Goods Market\n7th km of the Odesa-Ovidiopol Highway\nAvanhard (Odesa Oblast), Ukraine, 65000', tr: '7. Kilometre Sanayi Malları Pazarı\nOdessa-Ovidiopol Yolu 7. km\nAvangard (Odessa Bölgesi), Ukrayna, 65000', ru: 'Промрынок «7-й километр»\nОвидиопольская дорога, 7-й км\nпгт Авангард, Одесская обл., Украина, 65000' },
-      ReutovAddress: { ru: 'Московская обл., г. Реутов\nул. Победы, д. 1, корп. 2\nРоссия', en: '1 Pobedy Street, Building 2\nReutov, Moscow Oblast\nRussia', tr: 'Pobedy Sokağı No 1, Blok 2\nReutov, Moskova Oblastı\nRusya' },
+      ReutovAddress: { ru: 'Московская обл., г. Реутов\nул. Победы, д. 1, корп. 2\nРоссия', en: '1 Pobedy St, Building 2\nReutov, Moscow Oblast\nRussia', tr: 'Pobedy Sokağı No 1, Blok 2\nReutov, Moskova Oblastı\nRusya' },
       ReutovStoreAlt: { en: 'Karven tulle and drapery fabrics store in Reutov, Russia: glass shop front with lace curtains and street signs', tr: 'Reutov, Rusya\'daki Karven tül ve perdelik kumaş mağazası: dantel perdeli cam vitrin ve kaldırım tabelaları', ru: 'Магазин тюля и портьерных тканей Karven в Реутове: стеклянная витрина с кружевным тюлем и штендеры у входа' },
       AlmatyAddress: { ru: 'Казахстан, г. Алматы, рынок Мизам\n2-й ряд, бутики № 13–14', en: 'Mizam Market, Row 2\nBoutiques 13–14\nAlmaty, Kazakhstan', tr: 'Mizam Pazarı, 2. Sıra\nButik No 13–14\nAlmatı, Kazakistan' },
       AlmatyStoreAlt: { en: 'Demfirat Karven home textile store in Almaty, Kazakhstan: towels, blankets and bed linen sets on the shelves', tr: 'Demfirat Karven Almatı, Kazakistan ev tekstili mağazası: raflarda havlular, battaniyeler ve nevresim takımları', ru: 'Магазин домашнего текстиля Demfirat Karven в Алматы, Казахстан: полотенца, пледы и комплекты постельного белья на полках' },
@@ -128,7 +128,7 @@ export default function Contact() {
             {phone('+90 501 057 18 84', 'Muhammed Fırat', true)}
           </div>
           <h4>{t('Email')}:</h4>
-          <p>hello@demfirat.com</p>
+          <p>factory@demfirat.com</p>
           <h4>{t('WorkHours')}</h4>
           <p>{t('WorkHour1')}</p>
           <h4>{t('Address')}:</h4>
@@ -159,7 +159,7 @@ export default function Contact() {
             {phone('+90 501 007 07 77', 'Mirza', true)}
           </div>
           <h4>{t('Email')}:</h4>
-          <p>hello@demfirat.com</p>
+          <p>fabrics@demfirat.com</p>
           <h4>{t('WorkHours')}</h4>
           <p>{t('WorkHour2')}</p>
           <h4>{t('Address')}:</h4>
@@ -180,7 +180,7 @@ export default function Contact() {
             {phone('+90 282 675 15 52')}
           </div>
           <h4>{t('Email')}:</h4>
-          <p>hello@demfirat.com</p>
+          <p>linens@demfirat.com</p>
           {/* <p>mustafadmf@hotmail.com</p> */}
           <h4>{t('WorkHours')}</h4>
           <p>{t('WorkHour3')}</p>
@@ -240,6 +240,8 @@ export default function Contact() {
             {phone('+7 (916) 055-42-02')}
             {phone('+7 (991) 361-32-27')}
           </div>
+          <h4>{t('Email')}:</h4>
+          <p>reutov@demfirat.com</p>
           {/* <p>Demfiratreutov@mail.ru</p> */}
           <h4>{t('WorkHours')}</h4>
           <p>{t('WorkHour5')}</p>
