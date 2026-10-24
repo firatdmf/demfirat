@@ -115,6 +115,35 @@
   color: #a8843e;
 }
 
+/* Three or more phones wrap into two columns */
+.phoneList:has(> :nth-child(3)) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.25rem;
+}
+
+.textInfo a.whatsapp {
+  color: #25d366;
+  vertical-align: -0.15em;
+  margin-left: 0.3rem;
+}
+
+/* Local address beside the site-language one */
+.addressPair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.addressLines {
+  white-space: pre-line;
+}
+
+.addressPair > p + p {
+  border-left: 1px solid rgba(201, 169, 97, 0.4);
+  padding-left: 1.25rem;
+}
+
 /* ========== Map & Image Container ========== */
 .map {
   display: flex;
@@ -239,6 +268,22 @@
 
   .textInfo h2 {
     font-size: 1.2rem;
+  }
+
+  .addressPair {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .phoneList:has(> :nth-child(3)) {
+    grid-template-columns: 1fr;
+  }
+
+  .addressPair > p + p {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(201, 169, 97, 0.4);
+    padding-top: 0.5rem;
   }
 
   .map iframe,
