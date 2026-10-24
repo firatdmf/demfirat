@@ -1,18 +1,20 @@
 .phone {
-  display: flex;
-  gap: 6px;
+  position: relative;
   width: 100%;
 }
 
-/* "+90" with its flag; the list it opens is as wide as it needs. */
-.dial {
-  flex: 0 0 112px;
+.number {
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.number {
-  flex: 1;
-  min-width: 0;
-  box-sizing: border-box;
-  /* The page's input class may leave room for an icon; the number has none. */
-  padding-left: 0.875rem !important;
+/* The flag of the country the number's code says, at the start of the box. */
+.flag {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
 }

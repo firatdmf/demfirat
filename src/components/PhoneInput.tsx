@@ -1,29 +1,42 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { AsYouType, parsePhoneNumberFromString, type CountryCode as PhoneCountry } from 'libphonenumber-js/min';
-import CountryPicker, { callingCode } from '@/components/CountryPicker';
+import { useEffect, useRef, useState } from 'react';
+import {
+  AsYouType, getCountries, getCountryCallingCode, parsePhoneNumberFromString,
+  type CountryCode as PhoneCountry,
+} from 'libphonenumber-js/min';
 import classes from './PhoneInput.module.css';
 
 type Props = {
   /** The number as stored: international E.164 ("+905551112233"). A number
-   *  saved before this may be anything; it is shown as well as it parses. */
+   *  saved before this may be anything; it is shown as it was. */
   value: string;
   onChange: (value: string) => void;
-  /** The form's country (an ISO code). The calling code follows it until the
-   *  customer picks another by hand. */
+  /** The form's country (an ISO code): its calling code starts an empty
+   *  field, and a number typed without one ("0555…") is read as its. */
   country?: string;
   placeholder?: string;
-  /** The page's own input class, for both boxes. */
+  /** The page's own input class. */
   className?: string;
   /** Placement in the page's layout (a grid column, say), for the wrapper. */
   wrapperClassName?: string;
   required?: boolean;
   disabled?: boolean;
   id?: string;
+  name?: string;
 };
 
-const FALLBACK = 'TR';
+const DIALLED = new Set<string>(getCountries());
+const FALLBACK: PhoneCountry = 'TR';
+const FLAG_INDENT = 44; // px: the flag's 14px inset + its 20px + a 10px gap
+
+function home(country: string | undefined): PhoneCountry {
+  return country && DIALLED.has(country) ? (country as PhoneCountry) : FALLBACK;
+}
+
+function prefix(country: PhoneCountry): string {
+  return `+${getCountryCallingCode(country)} `;
+}
 
 /** A stored number for reading: "+90 555 111 22 33"; one that does not
  *  parse, as it is. */
@@ -32,30 +45,35 @@ export function formatPhone(value: string | null | undefined): string {
   return parsePhoneNumberFromString(value)?.formatInternational() ?? value;
 }
 
-function dialable(code: string | undefined): code is string {
-  return !!code && !!callingCode(code);
+/** What the box shows, the country it is, and the E.164 number ('' while
+ *  there are no digits past the calling code). Calling codes are
+ *  prefix-free — no country's is the start of another's — so the code is
+ *  read off the front unambiguously. */
+function read(typed: string, country: PhoneCountry) {
+  const international = typed.trim().startsWith('+');
+  const asYouType = international ? new AsYouType() : new AsYouType(country);
+  const shown = asYouType.input(typed);
+  const parsed = asYouType.getNumber();
+  const number = parsed?.nationalNumber ? parsed.number : '';
+  return {
+    // A number typed the national way ("0555…") is shown the international way.
+    shown: international || !number ? shown : new AsYouType().input(number),
+    country: asYouType.getCountry() ?? (international ? undefined : country),
+    number,
+  };
 }
 
 /*
- * A phone number as a calling code (picked from the country list, "+90")
- * and the number itself, formatted for that country as it is typed. Hands
- * back the whole number in E.164 — one way to write it, whatever the
- * customer typed: "0555 111 22 33" and "555 111 2233" are both
- * "+905551112233".
+ * One box for the whole number, international: it starts with the form's
+ * calling code, formats as it is typed, and shows the flag of whatever
+ * country the code says. Hands back E.164, one way to write any number.
  */
-export default function PhoneInput({ value, onChange, country, placeholder, className, wrapperClassName, required, disabled, id }: Props) {
-  const parsed = useMemo(() => (value ? parsePhoneNumberFromString(value) : undefined), [value]);
-  const [dial, setDial] = useState<string>(
-    parsed?.country ?? (dialable(country) ? country : FALLBACK));
-  // A number already saved, or a code picked by hand, is the customer's
-  // choice; until then the code follows the form's country.
-  const [chosen, setChosen] = useState<boolean>(!!parsed?.country);
-  const [digits, setDigits] = useState<string>(
-    parsed ? parsed.nationalNumber : (value || '').replace(/\D/g, ''));
-
-  useEffect(() => {
-    if (!chosen && dialable(country)) setDial(country);
-  }, [country, chosen]);
+export default function PhoneInput({
+  value, onChange, country, placeholder, className, wrapperClassName, required, disabled, id, name,
+}: Props) {
+  const start = (v: string) => (v ? formatPhone(v) : prefix(home(country)));
+  const [shown, setShown] = useState(() => start(value));
+  const [flag, setFlag] = useState<string | undefined>(() => read(start(value), home(country)).country);
 
   // A value that arrives from outside — the saved number, loaded after the
   // page — replaces what is shown; the box's own echo does not.
@@ -63,66 +81,55 @@ export default function PhoneInput({ value, onChange, country, placeholder, clas
   useEffect(() => {
     if (value === sent.current) return;
     sent.current = value;
-    const next = value ? parsePhoneNumberFromString(value) : undefined;
-    setDigits(next ? next.nationalNumber : (value || '').replace(/\D/g, ''));
-    if (next?.country) { setDial(next.country); setChosen(true); }
+    const next = start(value);
+    setShown(next);
+    setFlag(read(next, home(country)).country);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  const send = (next: string) => { sent.current = next; onChange(next); };
+  // Until a number is typed, the code follows the form's country.
+  useEffect(() => {
+    if (sent.current) return;
+    const next = prefix(home(country));
+    setShown(next);
+    setFlag(home(country));
+  }, [country]);
 
-  const emit = (nextDigits: string, nextDial: string) => {
-    if (!nextDigits) return send('');
-    const number = parsePhoneNumberFromString(nextDigits, nextDial as PhoneCountry);
-    send(number?.number ?? `${callingCode(nextDial)}${nextDigits}`);
-  };
-
-  const onNumber = (typed: string) => {
-    // A number pasted with its own "+code" says which country it is.
-    if (typed.trim().startsWith('+')) {
-      const intl = parsePhoneNumberFromString(typed);
-      if (intl?.country) {
-        setDial(intl.country);
-        setChosen(true);
-        setDigits(intl.nationalNumber);
-        return send(intl.number);
-      }
+  const onType = (typed: string) => {
+    let text = typed;
+    // Deleting a space the formatting put there would only see it put back;
+    // take the digit before it instead.
+    if (typed.length < shown.length && typed.replace(/\D/g, '') === shown.replace(/\D/g, '')) {
+      text = typed.replace(/\d(?=\D*$)/, '');
     }
-    const nextDigits = typed.replace(/\D/g, '');
-    setDigits(nextDigits);
-    emit(nextDigits, dial);
+    const next = read(text, home(country));
+    setShown(next.shown);
+    setFlag(next.country);
+    sent.current = next.number;
+    onChange(next.number);
   };
-
-  const onDial = (code: string) => {
-    setDial(code);
-    setChosen(true);
-    emit(digits, code);
-  };
-
-  const formatted = digits ? new AsYouType(dial as PhoneCountry).input(digits) : '';
 
   return (
     <div className={`${classes.phone} ${wrapperClassName ?? ''}`}>
-      <CountryPicker
-        callingCodes
-        value={dial}
-        onChange={onDial}
-        className={className}
-        wrapperClassName={classes.dial}
-        disabled={disabled}
-        ariaLabel="Country calling code"
-      />
       <input
         id={id}
+        name={name}
         type="tel"
         inputMode="tel"
-        autoComplete="tel-national"
+        autoComplete="tel"
         className={`${classes.number} ${className ?? ''}`}
+        style={flag ? { paddingLeft: FLAG_INDENT } : undefined}
         placeholder={placeholder}
-        value={formatted}
-        onChange={(e) => onNumber(e.target.value)}
+        value={shown}
+        onChange={(e) => onType(e.target.value)}
         required={required}
+        // The box is never empty (it starts with "+90 "), so "required" alone
+        // would always pass: ask for a number's worth of digits.
+        pattern={required ? '(\\D*\\d){7,}\\D*' : undefined}
         disabled={disabled}
       />
+      {/* An image, not an emoji flag: Windows shows those as two letters. */}
+      {flag && <img src={`/flags/${flag}.svg`} alt="" width={20} height={14} className={classes.flag} />}
     </div>
   );
 }
