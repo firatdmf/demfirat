@@ -231,8 +231,11 @@ export default function Contact() {
       <div className={`${classes.row} ${classes.row5}`}>
         <div className={`${classes.item} ${classes.textInfo}`}>
           <h2>{t('FabricShowroom')} ({t('Reutov')})</h2>
+          <h4>{t('Representative')}:</h4>
+          <p>Muhammed Ali Dinç</p>
           <h4>{t('Phone')}:</h4>
           <div className={classes.phoneList}>
+            {phone('+7 (980) 206-04-04', 'Muhammed Ali', true)}
             {phone('+7 (968) 738-13-00')}
             {phone('+7 (916) 055-42-02')}
             {phone('+7 (991) 361-32-27')}
