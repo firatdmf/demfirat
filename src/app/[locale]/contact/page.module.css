@@ -153,6 +153,23 @@
   transform: scale(1.04);
 }
 
+.photoCredit {
+  margin: -0.6rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: #999;
+  text-align: right;
+}
+
+.photoCredit a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.photoCredit a:hover {
+  text-decoration: underline;
+}
+
 /* ========== Responsive ========== */
 @media (max-width: 1024px) {
   .row {
