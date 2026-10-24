@@ -65,6 +65,7 @@ export default function Contact() {
       ProductLine2: { en: 'Interior Fabrics: Drapery & Upholstery', tr: 'İç Mekan Kumaşları: Perde ve Döşemelik', ru: 'Интерьерные ткани: портьеры и обивка', pl: 'Tkaniny do Wnętrz: Zasłony i Tapicerka' },
       ProductLine3: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, blankets, pillows, mattress covers', tr: 'Yatak çarşafı, yatak örtüsü, mobilya örtüleri, havlular, mutfak havluları', ru: 'Постельное белье, покрывала, чехлы для мебели, полотенца', pl: 'Pościel, narzuty, pokrowce na meble, ręczniki, obrusy' },
       ProductLine4: { en: 'Bed linen, bedspreads, furniture covers, towels, kitchen towels, towel sets, tablecloths, duvets, pillows, mattress toppers, kids\' range, bathrobes, homewear, sheets, throws, aprons, sauna sets, ironing board covers', tr: 'Nevresim, yatak örtüsü, mobilya örtüsü, havlu, mutfak havlusu, havlu seti, masa örtüsü, yorgan, yastık, alez, çocuk ürünleri, bornoz, ev giyimi, çarşaf, battaniye, önlük, sauna seti, ütü masası kılıfı', ru: 'Постельное белье, покрывала, чехлы на мебель, полотенца, кухонные полотенца, наборы полотенец, скатерти, одеяла, подушки, наматрасники, детский ассортимент, халаты, домашняя одежда, простыни, пледы, фартуки, комплекты для сауны, чехлы для гладильных досок' },
+      Headquarters: { en: 'Headquarters', tr: 'Genel Merkez', ru: 'Головной офис' },
       Tekirdag: { en: 'Tekirdag, Turkiye', tr: 'Tekirdağ, Türkiye', ru: 'Текирдаг, Турция' },
       Istanbul: { en: 'Istanbul, Turkiye', tr: 'İstanbul, Türkiye', ru: 'Стамбул, Турция' },
       Moscow: { en: 'Moscow, Russia', tr: 'Moskova, Rusya', ru: 'Москва, Россия' },
@@ -118,6 +119,7 @@ export default function Contact() {
       <p className={classes.pageSubtitle}>{t('PageSubtitle')}</p>
       <div className={`${classes.row} ${classes.row1}`}>
         <div className={` ${classes.item} ${classes.textInfo}`}>
+          <span className={classes.badge}>{t('Headquarters')}</span>
           <h2>{t('ManufacturingPlant')} ({t('Tekirdag')})</h2>
           <h4>{t('Representative')}:</h4>
           <p>Cuma Öztürk</p>
