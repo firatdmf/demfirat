@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import { authSecret } from '@/lib/authSecret';
 
 export async function POST(request: Request) {
     console.log('Verify email API called');
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
         // Verify JWT token
         let decoded: any;
         try {
-            decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || 'secret');
+            decoded = jwt.verify(token, authSecret());
         } catch (err) {
             return NextResponse.json({ error: 'Invalid or expired token' }, { status: 400 });
         }

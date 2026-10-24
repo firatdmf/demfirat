@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email';
 import jwt from 'jsonwebtoken';
+import { authSecret } from '@/lib/authSecret';
 
 export async function POST(request: Request) {
   try {
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
     // Generate JWT verification token
     const token = jwt.sign(
       { email, type: 'verify' },
-      process.env.NEXTAUTH_SECRET || 'secret',
+      authSecret(),
       { expiresIn: '24h' }
     );
 
