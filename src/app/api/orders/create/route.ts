@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
 import { sendEmail } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
+  // Orders are for signed-in customers only. The ERP takes the customer
+  // from the token their login issued, never from the body.
+  const session = await getServerSession(authOptions);
+  const erpToken = (session?.user as { erpToken?: string } | undefined)?.erpToken;
+  if (!erpToken) {
+    return NextResponse.json({ success: false, error: 'Sign in to place an order' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const {
@@ -25,16 +35,6 @@ export async function POST(request: NextRequest) {
 
     // Prepare order data for Django backend
     const orderData = {
-      // For guest checkout, web_client_id is null
-      web_client_id: isGuestCheckout ? null : userId,
-
-      // Guest information (for orders without registered user)
-      is_guest_order: isGuestCheckout || false,
-      guest_email: guestInfo?.email || null,
-      guest_phone: guestInfo?.phone || null,
-      guest_first_name: guestInfo?.firstName || null,
-      guest_last_name: guestInfo?.lastName || null,
-
       // Payment info — the site takes no payment. Every order is a request
       // our team follows up on to arrange payment (see the checkout page's
       // contact notice).
@@ -116,6 +116,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${erpToken}`,
       },
       body: JSON.stringify(orderData)
     });
@@ -130,73 +131,6 @@ export async function POST(request: NextRequest) {
 
     console.log('===== ORDER CREATED =====');
     console.log('Order ID:', result.order_id || result.id);
-
-    // ===== UPDATE STOCK QUANTITIES =====
-    console.log('===== UPDATING STOCK =====');
-    try {
-      for (const item of cartItems) {
-        let quantityToDeduct = 0;
-
-        if (item.is_custom_curtain && item.custom_attributes) {
-          // Custom curtain: Calculate required fabric in METERS and deduct that amount only
-          const width = parseFloat(item.custom_attributes.width) || 0;
-          const pleatDensity = item.custom_attributes.pleatDensity || '1x2';
-          const wingType = item.custom_attributes.wingType || 'single';
-
-          // Parse pile multiplier
-          let densityMultiplier = 1;
-          if (pleatDensity !== '0') {
-            const parts = pleatDensity.split('x');
-            if (parts.length === 2) {
-              densityMultiplier = parseFloat(parts[1]);
-            }
-          }
-
-          // Calculate fabric needed in meters
-          const widthMeters = width / 100;
-          let fabricNeeded = widthMeters * densityMultiplier;
-
-          if (wingType === 'double') {
-            fabricNeeded *= 2;
-          }
-
-          // Deduct in meters; backend handles units
-          quantityToDeduct = Number(fabricNeeded.toFixed(2));
-
-          console.log(`Custom curtain ${item.product_sku}: ${width}cm × ${pleatDensity} × ${wingType} = ${fabricNeeded.toFixed(2)}m (deduct meters)`);
-        } else {
-          // Regular product: use quantity directly (units)
-          quantityToDeduct = parseFloat(item.quantity);
-          console.log(`Regular product ${item.product_sku}: ${quantityToDeduct} units`);
-        }
-
-        // Update stock in Django backend
-        const stockUpdateUrl = `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/update_product_stock/`;
-
-        const stockUpdateResponse = await fetch(stockUpdateUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            product_sku: item.product_sku,
-            variant_sku: item.variant_sku || null,  // Pass variant_sku if available
-            quantity_change: -quantityToDeduct  // Negative to decrease stock
-          })
-        });
-
-        if (!stockUpdateResponse.ok) {
-          console.error(`Failed to update stock for ${item.product_sku}:`, await stockUpdateResponse.text());
-          // Continue with other items even if one fails
-        } else {
-          console.log(`✅ Stock updated for ${item.product_sku}: -${quantityToDeduct}`);
-        }
-      }
-    } catch (stockError: any) {
-      console.error('Stock update error:', stockError);
-      // Don't fail the whole order if stock update fails
-      // Order is already created successfully
-    }
 
     // ===== SİPARİŞ ONAY MAİLİ (fire-and-forget) =====
     try {
