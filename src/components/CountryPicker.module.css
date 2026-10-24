@@ -46,8 +46,19 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
-.option[aria-selected='true'] {
-  font-weight: 600;
+.chosenFlag {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.check {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--gold, #c9a961);
 }
 
 .active {

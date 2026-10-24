@@ -275,7 +275,8 @@ export default function RegisterPage() {
 
             <div className={classes.inputGroup}>
               <div className={classes.inputWrapper}>
-                <FaGlobe className={classes.inputIcon} />
+                {/* Once a country is chosen, its flag takes the icon's place. */}
+                {!formData.country && <FaGlobe className={classes.inputIcon} />}
                 <CountryPicker
                   placeholder={t.country}
                   value={formData.country}

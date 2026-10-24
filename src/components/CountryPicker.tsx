@@ -2,8 +2,11 @@
 
 import { useId, useMemo, useRef, useState } from 'react';
 import { useLocale } from 'next-intl';
-import { countryName, countryOptions, searchKey } from '@/lib/countries';
+import { FaCheck } from 'react-icons/fa';
+import { countryName, countryOptions, isCountryCode, searchKey } from '@/lib/countries';
 import classes from './CountryPicker.module.css';
+
+const FLAG_INDENT = 44; // px: the flag's 14px inset + its 20px + a 10px gap
 
 type Props = {
   /** The chosen country's ISO code, or '' for none. */
@@ -33,6 +36,8 @@ export default function CountryPicker({ value, onChange, placeholder, className,
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
+  // The chosen country's flag sits in the box — not while typing a new search.
+  const showFlag = query === null && isCountryCode(value);
 
   const matches = useMemo(() => {
     if (!query) return options;
@@ -73,6 +78,8 @@ export default function CountryPicker({ value, onChange, placeholder, className,
         aria-autocomplete="list"
         autoComplete="off"
         className={`${classes.input} ${className ?? ''}`}
+        // Room for the chosen country's flag, whatever padding the page gives.
+        style={showFlag ? { paddingLeft: FLAG_INDENT } : undefined}
         placeholder={placeholder}
         required={required && !value}
         disabled={disabled}
@@ -83,6 +90,7 @@ export default function CountryPicker({ value, onChange, placeholder, className,
         // Leaving without picking keeps the country already chosen.
         onBlur={() => { setQuery(null); setOpen(false); }}
       />
+      {showFlag && <img src={`/flags/${value}.svg`} alt="" width={20} height={14} className={`${classes.flag} ${classes.chosenFlag}`} />}
       {open && !disabled && (
         <ul id={listId} role="listbox" ref={listRef} className={classes.list}>
           {matches.length === 0 && <li className={classes.empty}>—</li>}
@@ -99,6 +107,7 @@ export default function CountryPicker({ value, onChange, placeholder, className,
               {/* An image, not an emoji flag: Windows shows those as two letters. */}
               <img src={`/flags/${o.code}.svg`} alt="" width={20} height={14} loading="lazy" className={classes.flag} />
               {o.name}
+              {o.code === value && <FaCheck className={classes.check} aria-hidden />}
             </li>
           ))}
         </ul>
