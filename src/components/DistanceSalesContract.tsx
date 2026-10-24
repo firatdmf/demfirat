@@ -381,11 +381,9 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
             title: t('payment'),
             content: locale === 'tr' ? (
                 <>
-                    <p><strong>Ödeme Yöntemi:</strong> Kredi/Banka Kartı veya Havale/EFT ile ödeme yapabilirsiniz.</p>
+                    <p><strong>Ödeme Yöntemi:</strong> Web sitemiz üzerinden ödeme alınmaz. Siparişinizi oluşturduktan sonra ekibimiz sizinle iletişime geçerek sipariş detaylarını teyit eder; ödeme Havale/EFT ile yapılır.</p>
 
-                    <p><strong>Güvenli Ödeme:</strong> Tüm kart ödemeleriniz iyzico güvenli ödeme altyapısı ile 3D Secure teknolojisi kullanılarak gerçekleştirilir. Kart bilgileriniz hiçbir şekilde sistemimizde saklanmaz.</p>
-
-                    <p><strong>Para Birimi:</strong> Ürün fiyatları ayarlardan seçili para birimi üzerinden gösterilmektedir. Kredi kartı ile yapılan ödemelerde, ödeme tutarı seçili para biriminden TRY'ye çevrilerek bankanızdan çekilir.</p>
+                    <p><strong>Para Birimi:</strong> Ürün fiyatları ayarlardan seçili para birimi üzerinden gösterilmektedir. Ödenecek tutar ve para birimi, ödemeden önce sizinle teyit edilir.</p>
 
                     <p><strong>Fiyat Bilgisi:</strong></p>
                     <ul>
@@ -393,16 +391,12 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                         <li>Kampanya fiyatları kampanya süresi boyunca geçerlidir.</li>
                         <li>Sipariş onayından sonra fiyat değişikliği yapılmaz.</li>
                     </ul>
-
-                    <p><strong>Ödeme Hatası:</strong> Ödeme işlemi sırasında hata oluşması durumunda, sipariş otomatik olarak iptal edilir. Hatalı tahsilat yapılmışsa, tutar 1-3 iş günü içinde bankanız tarafından hesabınıza iade edilir.</p>
                 </>
             ) : (
                 <>
-                    <p><strong>Payment Method:</strong> You can pay by Credit/Debit Card or Bank Transfer.</p>
+                    <p><strong>Payment Method:</strong> No payment is taken on our website. After you place your order, our team contacts you to confirm the order details; payment is made by bank transfer (EFT).</p>
 
-                    <p><strong>Secure Payment:</strong> All your card payments are made through iyzico secure payment infrastructure using 3D Secure technology. Your card information is not stored in our system in any way.</p>
-
-                    <p><strong>Currency:</strong> Product prices are displayed in the currency selected in settings. For credit card payments, the payment amount is converted from the selected currency to TRY and charged from your bank.</p>
+                    <p><strong>Currency:</strong> Product prices are displayed in the currency selected in settings. The amount to pay and its currency are confirmed with you before payment.</p>
 
                     <p><strong>Price Information:</strong></p>
                     <ul>
@@ -410,8 +404,6 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                         <li>Campaign prices are valid for the campaign period.</li>
                         <li>No price change is made after order confirmation.</li>
                     </ul>
-
-                    <p><strong>Payment Error:</strong> In case of an error during payment, the order is automatically canceled. If an incorrect charge is made, the amount will be refunded to your account by your bank within 7-14 business days.</p>
                 </>
             )
         },
@@ -435,7 +427,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     </ul>
 
                     <p><strong>Ücret İadesi:</strong></p>
-                    <p>Cayma hakkının kullanımından kaynaklanan iade, ürün SATICI'ya ulaştıktan sonra en geç 14 gün içinde tamamlanır. İade ödemesi, tahsil ettiğimiz ödeme aracı ile aynı yöntemle yapılır (kredi kartına iade, havale ile gönderimi tercih edenler için banka hesabına iade).</p>
+                    <p>Cayma hakkının kullanımından kaynaklanan iade, ürün SATICI'ya ulaştıktan sonra en geç 14 gün içinde tamamlanır. İade ödemesi, banka hesabınıza Havale/EFT ile yapılır.</p>
 
                     <p><strong>Cayma Hakkının Kullanılamayacağı Haller:</strong></p>
                     <ul>
@@ -460,7 +452,7 @@ const DistanceSalesContract: React.FC<DistanceSalesContractProps> = ({
                     </ul>
 
                     <p><strong>Refund:</strong></p>
-                    <p>Refund resulting from exercising the right of withdrawal is completed within 14 days at the latest after the product reaches SELLER. Refund payment is made through the same payment method we collected (refund to credit card, bank account refund for those who prefer bank transfer).</p>
+                    <p>Refund resulting from exercising the right of withdrawal is completed within 14 days at the latest after the product reaches SELLER. Refund payment is made by bank transfer (EFT) to your bank account.</p>
 
                     <p><strong>Cases Where Right of Withdrawal Cannot Be Exercised:</strong></p>
                     <ul>

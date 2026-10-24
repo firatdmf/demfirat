@@ -275,18 +275,6 @@
   display: none;
 }
 
-.iyzicoLogo {
-  height: 28px;
-  width: auto;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-  flex-shrink: 0;
-}
-
-.iyzicoLogo:hover {
-  opacity: 1;
-}
-
 /* ========== Responsive ========== */
 @media (max-width: 1200px) {
   .topContent {
@@ -374,10 +362,6 @@
 
   .columnTitle {
     margin-bottom: 1rem;
-  }
-
-  .iyzicoLogo {
-    height: 24px;
   }
 
   .etbisImage {

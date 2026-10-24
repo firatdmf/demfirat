@@ -231,14 +231,6 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
           <p className={classes.copyright}>
             © {currentYear} DEMFIRAT
           </p>
-          <Image
-            src="/media/iyzico/footer_iyzico_ile_ode/Colored/logo_band_colored.svg"
-            alt="iyzico ile güvenli ödeme"
-            width={300}
-            height={36}
-            style={{ objectFit: 'contain' }}
-            className={classes.iyzicoLogo}
-          />
         </div>
       </div>
     </footer>

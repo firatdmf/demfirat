@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { FaShoppingCart, FaCreditCard, FaMapMarkerAlt, FaUser, FaCheck, FaPhone, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
+import { FaShoppingCart, FaMapMarkerAlt, FaUser, FaCheck, FaPhone, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
 import classes from './page.module.css';
 import { useCart } from '@/contexts/CartContext';
@@ -14,8 +14,6 @@ import DistanceSalesContract from '@/components/DistanceSalesContract';
 import { trackBeginCheckout } from '@/lib/tracking';
 import { identifyUser, trackKlaviyoStartedCheckout } from '@/lib/klaviyo';
 import { erpFetch } from '@/lib/erpFetch';
-import './iyzico-payment-logo.css';
-import './card-form-mobile.css';
 
 interface CartItem {
   id: number;
@@ -207,7 +205,6 @@ export default function CheckoutPage() {
       pleaseAgreeToTerms: { en: 'Please accept the Distance Sales Agreement', tr: 'Lütfen Mesafeli Satış Sözleşmesini kabul edin', ru: 'Пожалуйста, примите договор дистанционной продажи', pl: 'Proszę zaakceptować umowę sprzedaży na odległość' },
       agreeToMarketing: { en: 'I want to be informed about campaigns and news.', tr: 'Kampanyalardan ve haberlerden haberdar olmak istiyorum.', ru: 'Я хочу получать информацию об акциях и новостях.', pl: 'Chcę otrzymywać informacje o kampaniach i nowościach.' },
       legalDocuments: { en: 'Legal Documents', tr: 'Yasal Belgeler', ru: 'Юридические документы', pl: 'Dokumenty prawne' },
-      securePayment: { en: 'Secure Payment', tr: 'Güvenli Ödeme', ru: 'Безопасная оплата', pl: 'Bezpieczna płatność' },
       discountCode: { en: 'Discount Code', tr: 'İndirim Kodu', ru: 'Код скидки', pl: 'Kod rabatowy' },
       apply: { en: 'Apply', tr: 'Uygula', ru: 'Применить', pl: 'Zastosuj' },
       discount: { en: 'Discount', tr: 'İndirim', ru: 'Скидка', pl: 'Rabat' },
@@ -395,30 +392,6 @@ export default function CheckoutPage() {
       setDistricts([]);
     }
   }, [selectedCountry]);
-
-  // Listen for payment success from popup
-  useEffect(() => {
-    const handleMessage = async (event: MessageEvent) => {
-      // Verify origin for security
-      if (event.origin !== window.location.origin) return;
-
-      if (event.data.type === 'PAYMENT_SUCCESS') {
-        console.log('Payment successful, redirecting to confirmation...');
-
-        // Redirect to confirmation page with userId (cart will be cleared there)
-        const queryParams = new URLSearchParams({
-          paymentId: event.data.paymentId,
-          userId: event.data.userId
-        });
-        router.push(`/${locale}/order/confirmation?${queryParams.toString()}`);
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => {
-      window.removeEventListener('message', handleMessage);
-    };
-  }, [router, locale]);
 
   // Sayfa visibility değişiminde reload'u engelle
   useEffect(() => {
@@ -767,7 +740,6 @@ export default function CheckoutPage() {
           phone: userInfo.phone
         } : null,
         paymentData: {
-          paymentId: null,
           currency: 'USD',
           paidPrice: total.toFixed(2),
           email: isGuestCheckout ? userInfo.email : (session?.user?.email || ''),
@@ -790,7 +762,20 @@ export default function CheckoutPage() {
         throw new Error(result.error || 'Order creation failed');
       }
 
-      router.push(`/${locale}/order/confirmation`);
+      // The confirmation page shows this order and fires the purchase
+      // event from it, and clears the account's cart given its userId.
+      localStorage.setItem('lastOrder', JSON.stringify({
+        orderId: result.order?.order_id,
+        cartItems,
+        deliveryAddress,
+        billingAddress,
+        totalAmount: total.toFixed(2),
+        currency: 'USD',
+        shippingCost: shipping.toFixed(2),
+        orderDate: new Date().toISOString(),
+      }));
+      const confirmationQuery = isGuestCheckout ? '' : `?${new URLSearchParams({ userId })}`;
+      router.push(`/${locale}/order/confirmation${confirmationQuery}`);
     } catch (error) {
       console.error('Error creating order:', error);
       showToast(locale === 'tr'

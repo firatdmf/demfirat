@@ -181,39 +181,27 @@ const PreInformationForm: React.FC<PreInformationFormProps> = ({
             title: t('paymentInfo'),
             content: locale === 'tr' ? (
                 <>
-                    <p><strong>Ödeme Yöntemi:</strong> Kredi/Banka Kartı veya Havale/EFT</p>
-                    <p><strong>Güvenli Ödeme:</strong> Tüm ödemelerimiz iyzico güvenli ödeme altyapısı ile 3D Secure teknolojisi kullanılarak gerçekleştirilir.</p>
+                    <p><strong>Ödeme Yöntemi:</strong> Havale/EFT. Web sitemiz üzerinden ödeme alınmaz; siparişinizden sonra ekibimiz sizinle iletişime geçer.</p>
                     <p><strong>Kargo:</strong> Ücretsiz kargo</p>
                     <p><strong>Teslimat Süresi:</strong> Tüm ürünlerimiz siparişiniz onaylandıktan sonra 1-3 iş günü içinde kargoya verilir.</p>
                     <p><strong>Teslimat Adresi:</strong> Sipariş sırasında belirttiğiniz adrese teslim edilecektir.</p>
-                    <p><strong>Önemli Not:</strong> Ödeme tutarı USD cinsinden gösterilmektedir. Kredi kartı ile yapılan ödemelerde, banka tarafından TRY'ye çevrilerek tahsil edilir.</p>
+                    <p><strong>Önemli Not:</strong> Fiyatlar USD cinsinden gösterilmektedir. Ödenecek tutar, ödemeden önce sizinle teyit edilir.</p>
                 </>
             ) : locale === 'ru' ? (
                 <>
-                    <p><strong>Способ оплаты:</strong> Кредитная/дебетовая карта или банковский перевод</p>
-                    <p><strong>Безопасная оплата:</strong> Все платежи осуществляются через безопасную платежную инфраструктуру iyzico с использованием технологии 3D Secure.</p>
+                    <p><strong>Способ оплаты:</strong> Банковский перевод. Оплата на сайте не принимается; после оформления заказа с вами свяжется наша команда.</p>
                     <p><strong>Доставка:</strong> Бесплатная доставка</p>
                     <p><strong>Срок доставки:</strong> После подтверждения заказа доставка в течение 1-3 рабочих дня.</p>
                     <p><strong>Адрес доставки:</strong> Доставка по адресу, указанному при заказе.</p>
-                    <p><strong>Важное примечание:</strong> Сумма платежа отображается в долларах США. При оплате кредитной картой сумма конвертируется банком в TRY.</p>
-                </>
-            ) : locale === 'pl' ? (
-                <>
-                    <p><strong>Metoda płatności:</strong> Karta kredytowa/debetowa lub przelew bankowy</p>
-                    <p><strong>Bezpieczna płatność:</strong> Wszystkie płatności są realizowane przez bezpieczną infrastrukturę płatniczą iyzico z użyciem technologii 3D Secure.</p>
-                    <p><strong>Wysyłka:</strong> Bezpłatna wysyłka</p>
-                    <p><strong>Czas dostawy:</strong> Po potwierdzeniu zamówienia wysyłka w ciągu 1-3 dni roboczych.</p>
-                    <p><strong>Adres dostawy:</strong> Dostawa na adres podany podczas składania zamówienia.</p>
-                    <p><strong>Ważna uwaga:</strong> Kwota płatności jest wyświetlana w USD. Przy płatności kartą kredytową kwota jest konwertowana przez bank na TRY.</p>
+                    <p><strong>Важное примечание:</strong> Цены указаны в долларах США. Сумма к оплате согласовывается с вами до оплаты.</p>
                 </>
             ) : (
                 <>
-                    <p><strong>Payment Method:</strong> Credit/Debit Card or Bank Transfer</p>
-                    <p><strong>Secure Payment:</strong> All payments are made through iyzico secure payment infrastructure using 3D Secure technology.</p>
+                    <p><strong>Payment Method:</strong> Bank transfer (EFT). No payment is taken on our website; our team contacts you after you place your order.</p>
                     <p><strong>Shipping:</strong> Free shipping</p>
                     <p><strong>Delivery Time:</strong> After order confirmation, shipped within 1-3 business days.</p>
                     <p><strong>Delivery Address:</strong> Delivered to the address specified during order.</p>
-                    <p><strong>Important Note:</strong> Payment amount is displayed in USD. Credit card payments are converted to TRY by the bank.</p>
+                    <p><strong>Important Note:</strong> Prices are shown in USD. The amount to pay is confirmed with you before payment.</p>
                 </>
             )
         },

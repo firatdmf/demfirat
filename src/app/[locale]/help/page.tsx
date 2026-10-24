@@ -172,7 +172,7 @@ export default function HelpPage() {
                 { question: 'Siparişimi iptal edebilir miyim?', answer: 'Kargoya verilmemiş siparişlerinizi iptal edebilirsiniz. Bunun için müşteri hizmetlerimizi arayarak veya whatsapp kanalı üzerinden iptal talebinde bulunabilirsiniz.' },
                 { question: 'İade süreci nasıl işliyor?', answer: 'Ürünü teslim aldıktan sonra 14 gün içinde iade edebilirsiniz. İade için ürünün kullanılmamış ve orijinal ambalajında olması gerekmektedir.' },
                 { question: 'İade kargo ücreti kim tarafından karşılanır?', answer: 'Ürün hatasından kaynaklanan iadelerde kargo ücreti tarafımızca karşılanır. Fikir değişikliği kaynaklı iadelerde kargo ücreti müşteriye aittir.' },
-                { question: 'İade ücretim ne zaman hesabıma yatar?', answer: 'İade edilen ürün depomuzda kontrol edildikten sonra 3-5 iş günü içinde ödemeniz iade edilir. Kredi kartı iadeleri banka süreçlerine göre 5-10 iş günü arasında hesabınıza yansır.' },
+                { question: 'İade ücretim ne zaman hesabıma yatar?', answer: 'İade edilen ürün depomuzda kontrol edildikten sonra 3-5 iş günü içinde ödemeniz iade edilir.' },
                 { question: 'Hasarlı ürün teslim aldım, ne yapmalıyım?', answer: 'Hasarlı ürün için teslim tarihinden itibaren 48 saat içinde bize ulaşın. Fotoğraf ile durumu bildirmeniz halinde size yeni ürün gönderilecek veya ücret iadesi yapılacaktır.' },
             ] : [
                 { question: 'Can I cancel my order?', answer: 'You can cancel orders that have not been shipped yet. Contact customer service or go to your order details to request cancellation.' },

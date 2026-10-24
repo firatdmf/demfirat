@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
     console.log('User ID:', userId);
     console.log('Is Guest Checkout:', isGuestCheckout);
     console.log('Guest Info:', guestInfo);
-    console.log('Payment ID:', paymentData?.paymentId);
     console.log('Cart Items:', cartItems?.length);
 
     // Prepare order data for Django backend
@@ -36,13 +35,12 @@ export async function POST(request: NextRequest) {
       guest_first_name: guestInfo?.firstName || null,
       guest_last_name: guestInfo?.lastName || null,
 
-      // Payment info — no online payment gateway is in use anymore.
-      // Orders with a real paymentId (legacy/future card flow) are marked
-      // paid; everything else is a request our team follows up on to
-      // arrange payment (see the checkout page's contact notice).
-      payment_id: paymentData?.paymentId || null,
-      payment_status: paymentData?.paymentId ? 'success' : 'pending',
-      payment_method: paymentData?.paymentId ? 'iyzico_card' : 'contact_after_order',
+      // Payment info — the site takes no payment. Every order is a request
+      // our team follows up on to arrange payment (see the checkout page's
+      // contact notice).
+      payment_id: null,
+      payment_status: 'pending',
+      payment_method: 'contact_after_order',
 
       // Pricing info
       original_currency: originalCurrency || 'USD',
@@ -50,11 +48,6 @@ export async function POST(request: NextRequest) {
       paid_currency: paymentData?.currency || 'TRY',
       paid_amount: paymentData?.paidPrice,
       exchange_rate: exchangeRate,
-
-      // Card details
-      card_type: paymentData?.cardType,
-      card_association: paymentData?.cardAssociation,
-      card_last_four: paymentData?.lastFourDigits,
 
       // Delivery Address (flat structure)
       delivery_address_title: deliveryAddress?.title,
@@ -111,7 +104,7 @@ export async function POST(request: NextRequest) {
 
       // Order metadata
       status: 'pending',
-      notes: `Web order - Payment via iyzico. Exchange rate: ${exchangeRate} USD/TRY`
+      notes: `Web order - not paid; contact the customer to arrange payment. Exchange rate: ${exchangeRate} USD/TRY`
     };
 
     console.log('Order data prepared:', orderData);

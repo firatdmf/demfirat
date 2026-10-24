@@ -4,13 +4,12 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
-import { FaCheckCircle, FaShoppingBag, FaMapMarkerAlt, FaBox, FaCreditCard, FaHome } from 'react-icons/fa';
+import { FaCheckCircle, FaShoppingBag, FaMapMarkerAlt, FaBox, FaHome } from 'react-icons/fa';
 import { trackPurchase } from '@/lib/tracking';
 import { erpFetch } from '@/lib/erpFetch';
 
 interface OrderData {
   orderId: string;
-  paymentId: string;
   cartItems: any[];
   deliveryAddress: any;
   billingAddress: any;
@@ -94,7 +93,6 @@ export default function OrderConfirmationPage() {
       backToHome: { en: 'Back to Home', tr: 'Ana Sayfaya Dön', ru: 'Вернуться на главную', pl: 'Powrót do strony głównej' },
       processing: { en: 'Your order is being processed and will be shipped soon.', tr: 'Siparişiniz işleme alınmıştır ve kısa süre içinde kargoya verilecektir.', ru: 'Ваш заказ обрабатывается и скоро будет отправлен.', pl: 'Twoje zamówienie jest przetwarzane i wkrótce zostanie wysłane.' },
       orderNumber: { en: 'Order Number', tr: 'Sipariş Numarası', ru: 'Номер заказа', pl: 'Numer zamówienia' },
-      paymentId: { en: 'Payment ID', tr: 'Ödeme No', ru: 'ID платежа', pl: 'ID płatności' },
       orderedItems: { en: 'Ordered Items', tr: 'Sipariş Edilen Ürünler', ru: 'Заказанные товары', pl: 'Zamówione produkty' },
       deliveryAddress: { en: 'Delivery Address', tr: 'Teslimat Adresi', ru: 'Адрес доставки', pl: 'Adres dostawy' },
       billingAddress: { en: 'Billing Address', tr: 'Fatura Adresi', ru: 'Адрес выставления счета', pl: 'Adres rozliczeniowy' },
