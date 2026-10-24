@@ -96,6 +96,8 @@ export default function CountryPicker({ value, onChange, placeholder, className,
               onMouseDown={(e) => { e.preventDefault(); choose(o.code); }}
               onMouseEnter={() => setActive(i)}
             >
+              {/* An image, not an emoji flag: Windows shows those as two letters. */}
+              <img src={`/flags/${o.code}.svg`} alt="" width={20} height={14} loading="lazy" className={classes.flag} />
               {o.name}
             </li>
           ))}
