@@ -5,7 +5,7 @@ import { Product,Product_API } from '@/lib/interfaces';
 export default async function page() {
   // if (process.env.NODE_ENV === "production") {
   const startTime = performance.now()
-  const nejum_api_link = new URL(`${process.env.NEJUM_API_URL}/marketing/api/get_products`);
+  const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products`);
   const nejum_response = await fetch(nejum_api_link)
   const endTime = performance.now()
   console.log(`Call to do took ${endTime - startTime} milliseconds`)

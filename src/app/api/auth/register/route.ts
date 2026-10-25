@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     // Forward to Django ERP API
     const djangoResponse = await fetch(
-      `${process.env.NEJUM_API_URL}/authentication/api/create_web_client/`,
+      `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/create_web_client/`,
       {
         method: 'POST',
         headers: {

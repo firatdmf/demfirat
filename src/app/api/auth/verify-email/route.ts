@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
         // Call Django API to verify email
         const djangoResponse = await fetch(
-            `${process.env.NEJUM_API_URL}/authentication/api/verify_email/`,
+            `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/verify_email/`,
             {
                 method: 'POST',
                 headers: {

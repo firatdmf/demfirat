@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await fetch(
-      `${process.env.NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`,
+      `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`,
       {
         next: { revalidate: 300 }, // Server-side'da revalidate kullanabiliriz
       }

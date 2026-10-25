@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
         // Call Django API to reset password
         const djangoResponse = await fetch(
-            `${process.env.NEJUM_API_URL}/authentication/api/reset_password/`,
+            `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/reset_password/`,
             {
                 method: 'POST',
                 headers: {

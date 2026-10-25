@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 
     try {
         // Fetch products from Django API with fabric_type filter
-        const apiUrl = new URL(`${process.env.NEJUM_API_URL}/marketing/api/get_products`);
+        const apiUrl = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products`);
         apiUrl.searchParams.append('product_category', 'fabric');
         apiUrl.searchParams.append('fabric_type', fabric_type);
 

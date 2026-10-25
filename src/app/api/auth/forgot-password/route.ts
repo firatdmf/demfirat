@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
         // Check if user exists in Django DB via API
         const djangoResponse = await fetch(
-            `${process.env.NEJUM_API_URL}/authentication/api/check_web_client_email/`,
+            `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/check_web_client_email/`,
             {
                 method: 'POST',
                 headers: {

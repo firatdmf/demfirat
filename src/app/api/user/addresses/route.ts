@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await fetch(
-      `${process.env.NEJUM_API_URL}/authentication/api/get_user_addresses/${userId}/`,
+      `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/get_user_addresses/${userId}/`,
       {
         next: { revalidate: 60 }, // Cache for 1 minute
       }

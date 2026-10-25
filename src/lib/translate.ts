@@ -52,7 +52,7 @@ export function setErpWordings(data: ErpWordings | null | undefined) {
 /** Ask the ERP for its wordings. Server side only; kept for five minutes.
  *  Any failure answers null, and terms read from their keys. */
 export async function fetchErpWordings(): Promise<ErpWordings | null> {
-    const base = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
+    const base = process.env.NEXT_PUBLIC_NEJUM_API_URL;
     if (!base) return null;
     try {
         const response = await fetch(`${base}/marketing/api/catalog_wording/`, {

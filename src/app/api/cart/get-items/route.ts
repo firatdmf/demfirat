@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
             uniqueProductSKUs.map(async (sku) => {
                 try {
                     const res = await fetch(
-                        `${process.env.NEJUM_API_URL}/marketing/api/get_product?product_sku=${sku}`,
+                        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${sku}`,
                         { next: { revalidate: 300 } }
                     );
                     if (res.ok) {

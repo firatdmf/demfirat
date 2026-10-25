@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   try {
     // get_product endpoint tüm bilgiyi içeriyor (variants, files, etc.)
     const productResponse = await fetch(
-      `${process.env.NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`,
+      `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_product?product_sku=${product_sku}`,
       {
         next: { revalidate: 300 },
       }

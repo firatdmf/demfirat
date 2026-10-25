@@ -14,7 +14,7 @@ async function getProductsWithDetails(): Promise<any[]> {
     }
 
     // Fetch fresh products from both categories
-    const baseUrl = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_NEJUM_API_URL;
 
     // Fetch both fabric and ready_made_curtain products
     const categories = ['fabric', 'ready-made_curtain'];

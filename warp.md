@@ -44,7 +44,7 @@
 - **Port**: 3000
 
 ### External APIs
-- **Backend API**: Django REST API (NEJUM_API_URL)
+- **Backend API**: Django REST API (NEXT_PUBLIC_NEJUM_API_URL)
   - URL: http://127.0.0.1:8000/
   - Endpoints:
     - `/marketing/api/get_product_categories`
@@ -323,7 +323,6 @@ DATABASE_URL="postgresql://postgres.eyzefiawzpxtwzqymyph:***@aws-0-eu-west-1.poo
 DIRECT_URL="postgresql://postgres.eyzefiawzpxtwzqymyph:***@aws-0-eu-west-1.pooler.supabase.com:5432/postgres"
 
 # Django API
-NEJUM_API_URL="http://127.0.0.1:8000/"
 NEXT_PUBLIC_NEJUM_API_URL="http://127.0.0.1:8000"
 
 # Other

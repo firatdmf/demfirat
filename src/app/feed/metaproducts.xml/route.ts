@@ -75,7 +75,7 @@ function escapeXml(str: string): string {
 
 export async function GET() {
     try {
-        const apiUrl = process.env.NEJUM_API_URL || process.env.NEXT_PUBLIC_NEJUM_API_URL;
+        const apiUrl = process.env.NEXT_PUBLIC_NEJUM_API_URL;
 
         // Fetch both categories in parallel
         const [fabricRes, readyMadeRes] = await Promise.all([

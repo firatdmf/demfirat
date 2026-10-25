@@ -3,7 +3,7 @@ import { sendEmail } from '@/lib/email';
 import { welcomeEmail } from '@/lib/welcomeEmail';
 import { checkRecaptcha } from '@/lib/recaptcha';
 
-const BACKEND_URL = process.env.NEJUM_API_URL || 'http://127.0.0.1:8000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_NEJUM_API_URL || 'http://127.0.0.1:8000';
 
 // What this route says itself, in the language of the page that called it.
 const messages = {

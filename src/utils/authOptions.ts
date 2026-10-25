@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
                 try {
                     // Call Django ERP login API
                     const response = await fetch(
-                        `${process.env.NEJUM_API_URL}/authentication/api/login_web_client/`,
+                        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/login_web_client/`,
                         {
                             method: 'POST',
                             headers: {
@@ -91,7 +91,7 @@ export const authOptions: NextAuthOptions = {
                 try {
                     // Call Django API to create/check Google user
                     const response = await fetch(
-                        `${process.env.NEJUM_API_URL}/authentication/api/create_google_client/`,
+                        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/create_google_client/`,
                         {
                             method: 'POST',
                             headers: {
