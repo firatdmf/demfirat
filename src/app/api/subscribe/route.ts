@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Storefront-Key': process.env.NEJUM_STOREFRONT_KEY ?? '',
+                'X-Storefront-Key': process.env.STOREFRONT_API_KEY ?? '',
             },
             body: JSON.stringify(subscribeBody),
         });

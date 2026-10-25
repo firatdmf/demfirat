@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
                                 'Content-Type': 'application/json',
                                 // Only this server may vouch for a Google
                                 // sign-in: the ERP trusts the email it sends.
-                                'X-Storefront-Key': process.env.NEJUM_STOREFRONT_KEY ?? '',
+                                'X-Storefront-Key': process.env.STOREFRONT_API_KEY ?? '',
                             },
                             body: JSON.stringify({
                                 email: profile.email,
