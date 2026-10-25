@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendEmail } from '@/lib/email';
 import { welcomeEmail } from '@/lib/welcomeEmail';
+import { checkRecaptcha } from '@/lib/recaptcha';
 
 const BACKEND_URL = process.env.NEJUM_API_URL || 'http://127.0.0.1:8000';
 
@@ -33,27 +34,10 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         lang = langOf(body.locale);
 
-        // Verify reCAPTCHA v3 token
-        const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
-        if (recaptchaSecret && body.recaptchaToken) {
-            const recaptchaRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `secret=${recaptchaSecret}&response=${body.recaptchaToken}`,
-            });
-            const recaptchaData = await recaptchaRes.json();
-
-            if (!recaptchaData.success || recaptchaData.score < 0.3) {
-                console.log('[Subscribe] reCAPTCHA failed:', recaptchaData);
-                return NextResponse.json(
-                    { success: false, error: messages.bot[lang] },
-                    { status: 403 }
-                );
-            }
-            console.log('[Subscribe] reCAPTCHA score:', recaptchaData.score);
-        } else if (recaptchaSecret && !body.recaptchaToken) {
+        const verdict = await checkRecaptcha(body.recaptchaToken);
+        if (verdict !== 'ok') {
             return NextResponse.json(
-                { success: false, error: messages.unverified[lang] },
+                { success: false, error: messages[verdict === 'bot' ? 'bot' : 'unverified'][lang] },
                 { status: 403 }
             );
         }

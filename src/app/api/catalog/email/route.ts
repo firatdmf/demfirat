@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email';
+import { checkRecaptcha } from '@/lib/recaptcha';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_NEJUM_API_URL || 'http://127.0.0.1:8000';
 
@@ -10,6 +11,15 @@ export async function POST(request: NextRequest) {
 
         if (!email || !name || !phone) {
             return NextResponse.json({ success: false, error: 'Eksik bilgi' }, { status: 400 });
+        }
+
+        // A catalog request sends an email to the address given: only a
+        // person, as reCAPTCHA judges it, may ask for one.
+        if (await checkRecaptcha(body.recaptchaToken) !== 'ok') {
+            const error = locale === 'tr' ? 'Doğrulama başarısız. Sayfayı yenileyip tekrar deneyin.'
+                : locale === 'ru' ? 'Не удалось проверить запрос. Обновите страницу и попробуйте ещё раз.'
+                : 'We could not verify the request. Please refresh the page and try again.';
+            return NextResponse.json({ success: false, error }, { status: 403 });
         }
 
         // 1. Backend Newsletter Subscription and Discount Code Generation

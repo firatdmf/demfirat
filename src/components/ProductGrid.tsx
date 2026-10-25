@@ -16,6 +16,7 @@ import { getColorCode } from "@/lib/colorMap"
 import { log } from "node:console";
 
 import { CatalogLeadModal } from "@/components/CatalogLeadModal";
+import { recaptchaToken } from "@/lib/recaptcha";
 import { trackKlaviyoCatalogRequest } from "@/lib/klaviyo";
 
 type ProductGridProps = {
@@ -230,7 +231,8 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
           locale,
           email: data.email,
           name: data.name,
-          phone: data.phone
+          phone: data.phone,
+          recaptchaToken: await recaptchaToken('catalog_request'),
         })
       });
 
