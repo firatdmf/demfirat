@@ -217,9 +217,9 @@ export default async function Home(props: PageProps<'/[locale]'>) {
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+90-224-XXX-XXXX',
+      telephone: '+90-501-057-18-84',
       contactType: 'customer service',
-      availableLanguage: ['Turkish', 'English', 'Russian', 'Polish'],
+      availableLanguage: ['Turkish', 'English', 'Russian'],
     },
   };
 
