@@ -612,12 +612,6 @@ GET /api/search?q=query&category=category
 Response: Product[]
 ```
 
-#### Çeviri
-```
-GET /api/translate?text=hello&to=tr
-Response: { original, translated }
-```
-
 ---
 
 ## 7️⃣ BILEŞEN ANALİZİ
