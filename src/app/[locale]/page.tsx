@@ -221,9 +221,6 @@ export default async function Home(props: PageProps<'/[locale]'>) {
       contactType: 'customer service',
       availableLanguage: ['Turkish', 'English', 'Russian', 'Polish'],
     },
-    sameAs: [
-      'https://www.instagram.com/karvenhomedecor',
-    ],
   };
 
   const websiteSchema = {

@@ -3,7 +3,7 @@ import { memo, useState } from "react";
 import classes from "@/components/Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import { FaInstagram, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 interface FooterProps {
   StayConnected: string;
@@ -195,16 +195,6 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
                 {newsletterMsg}
               </p>
             )}
-            <div className={classes.socialIcons}>
-              <Link
-                href="https://www.instagram.com/karvenhomedecor/"
-                target="_blank"
-                className={classes.socialIcon}
-                title="Instagram"
-              >
-                <FaInstagram />
-              </Link>
-            </div>
           </div>
         </div>
       </div>
