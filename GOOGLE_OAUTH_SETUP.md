@@ -34,8 +34,8 @@
 
 ```env
 # Google OAuth
-GOOGLE_CLIENT_ID=your_actual_client_id_here
-GOOGLE_CLIENT_SECRET=your_actual_client_secret_here
+GOOGLE_OAUTH_CLIENT_ID=your_actual_client_id_here
+GOOGLE_OAUTH_CLIENT_SECRET=your_actual_client_secret_here
 ```
 
 ### Adım 5: Test Et
