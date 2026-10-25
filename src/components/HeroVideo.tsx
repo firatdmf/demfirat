@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import classes from "./HeroVideo.module.css";
-import CatalogRequestForm from "./CatalogRequestForm";
+// import CatalogRequestForm from "./CatalogRequestForm"; // off for now, see below
 import Link from "next/link";
 
 interface HeroVideoProps {
@@ -95,11 +95,14 @@ export default function HeroVideo({ videoSrc, title, subtitle, locale = 'en', sh
               </div>
             )}
 
+            {/* Off for now: CatalogRequestForm only pretends to send (it waits a
+                second and shows success), so visitors were promised a catalog
+                that never came. Bring it back wired to /api/catalog/email.
             {showCatalogButton && (
               <div className={classes.catalogButtonWrapper}>
                 <CatalogRequestForm locale={locale} />
               </div>
-            )}
+            )} */}
           </div>
         </div>
       )}
