@@ -14,7 +14,6 @@ import ScrollToTop from "@/components/ScrollToTop";
 import ErpWordings from "@/components/ErpWordings";
 import { fetchErpWordings } from "@/lib/translate";
 import ScrollSmoother from "@/components/ScrollSmoother";
-import NewsletterPopup from "@/components/NewsletterPopup";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 
@@ -152,7 +151,6 @@ export default async function RootLayout(props: LayoutProps<'/[locale]'>) {
             locale={locale}
           ></Footer>
           <MobileBottomNav />
-          <NewsletterPopup locale={locale} />
           <WhatsAppButton />
           {/* <HelpWidget /> */}
         </Providers>

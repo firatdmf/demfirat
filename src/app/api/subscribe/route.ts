@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendEmail } from '@/lib/email';
 import { welcomeEmail } from '@/lib/welcomeEmail';
-import { discountEmail } from '@/lib/discountEmail';
 
 const BACKEND_URL = process.env.NEJUM_API_URL || 'http://127.0.0.1:8000';
 
@@ -60,16 +59,12 @@ export async function POST(request: NextRequest) {
         }
 
         // The footer form and the blog's subscribe box take one way to reach
-        // the person: an email address or a phone number.
-        const isFooter = body.source === 'footer' || body.source === 'blog';
+        // the person: an email address or a phone number. No sign-up here
+        // earns a discount code (the 15% pop-up is gone).
         const contact = String(body.contact ?? body.email ?? '').trim();
         const contactEmail = contact.includes('@') ? contact : '';
         const contactPhone = contactEmail ? '' : contact;
-
-        // The pop-up asks for an email, and for a phone on the Turkish site.
-        const subscribeBody = isFooter
-            ? { email: contactEmail, phone: contactPhone, skip_discount: true, language: body.locale }
-            : { email: body.email, phone: body.phone, language: body.locale };
+        const subscribeBody = { email: contactEmail, phone: contactPhone, skip_discount: true, language: body.locale };
 
         // Call Django backend to validate and create subscription. The key
         // proves the call comes from this server, after the reCAPTCHA check
@@ -85,11 +80,10 @@ export async function POST(request: NextRequest) {
 
         const data = await response.json();
 
-        // Footer and blog subscriptions: no discount code, a short welcome.
-        if (isFooter && data.success) {
-            // Someone who left a phone number has no inbox to welcome.
-            // The email goes out after the answer: talking to the mail
-            // server takes seconds, and the visitor is waiting on "Subscribed".
+        // A short welcome; someone who left a phone number has no inbox to
+        // welcome. The email goes out after the answer: talking to the mail
+        // server takes seconds, and the visitor is waiting on "Subscribed".
+        if (data.success) {
             if (contactEmail) {
                 const welcome = welcomeEmail(contactEmail, body.locale, body.source === 'blog' ? 'blog' : 'footer');
                 after(async () => {
@@ -98,20 +92,6 @@ export async function POST(request: NextRequest) {
                 });
             }
             return NextResponse.json({ success: true });
-        }
-
-        // Popup subscriptions: send discount code email
-        if (data.success && data.code) {
-            const discountCode = data.code;
-            const email = body.email;
-
-            const message = discountEmail(email, body.locale, discountCode);
-
-            // Sent after the answer, like the welcome email above.
-            after(async () => {
-                const sent = await sendEmail(email, message.subject, message.html);
-                console.log('[Subscribe] Discount email', sent.success ? 'sent to:' : 'failed for:', email);
-            });
         }
 
         return NextResponse.json(data, { status: response.status });
