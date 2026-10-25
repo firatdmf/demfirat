@@ -102,7 +102,6 @@ function Header({ menuTArray }: HeaderProps) {
       millDirect: { en: 'Mill-Direct Home Textiles for the Trade', tr: 'Fabrikadan Doğrudan Toptan Ev Tekstili', ru: 'Домашний текстиль оптом напрямую с фабрики', pl: 'Tekstylia Domowe Hurtowo Bezpośrednio z Tkalni' },
       qualityGuarantee: { en: '100% Quality Guarantee on All Products', tr: 'Tüm Ürünlerde %100 Kalite Garantisi', ru: '100% гарантия качества', pl: '100% gwarancja jakości' },
       heritage: { en: 'Premium Home Textiles Since 1991', tr: '1991\'den Beri Premium Ev Tekstili', ru: 'Премиальный домашний текстиль с 1991 года', pl: 'Tekstylia domowe premium od 1991 roku' },
-      followUs: { en: 'Follow Us', tr: 'Takip Edin', ru: 'Подписаться', pl: 'Obserwuj' },
     };
     const lang = locale === 'tr' ? 'tr' : locale === 'ru' ? 'ru' : locale === 'pl' ? 'pl' : 'en';
     return translations[key]?.[lang] || key;
@@ -197,12 +196,6 @@ function Header({ menuTArray }: HeaderProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'Search', {
-          search_string: searchQuery.trim(),
-          content_category: 'products'
-        });
-      }
       router.push(`/${locale}/product/search?search=${encodeURIComponent(searchQuery)}`);
       closeSearch();
     }

@@ -287,48 +287,6 @@ export async function POST(request: NextRequest) {
       // ignore - mail gönderemezse sipariş yine geçerli
     }
 
-    // ===== FACEBOOK CONVERSIONS API - PURCHASE EVENT (fire-and-forget) =====
-    // Don't await — send in background, don't block the response
-    try {
-      const totalAmount = parseFloat(paymentData?.paidPrice) || 0;
-      fetch(`${request.nextUrl.origin}/api/meta-conversions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventName: 'Purchase',
-          eventId: `purchase_${result.order_id || result.id}_${Date.now()}`,
-          eventSourceUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.demfirat.com'}/order/confirmation`,
-          userData: {
-            email: guestInfo?.email || paymentData?.email,
-            phone: guestInfo?.phone || deliveryAddress?.phone,
-            firstName: guestInfo?.firstName || deliveryAddress?.first_name,
-            lastName: guestInfo?.lastName || deliveryAddress?.last_name,
-            city: deliveryAddress?.city,
-            country: deliveryAddress?.country,
-            ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
-          },
-          customData: {
-            value: totalAmount,
-            currency: paymentData?.currency || 'TRY',
-            content_ids: cartItems?.map((item: any) => item.product_sku),
-            content_type: 'product',
-            contents: cartItems?.map((item: any) => ({
-              id: item.product_sku,
-              quantity: parseFloat(item.quantity) || 1,
-              item_price: parseFloat(item.product?.price || item.custom_price || 0)
-            })),
-            num_items: cartItems?.length || 0,
-            order_id: result.order_id || result.id
-          }
-        })
-      }).then(r => {
-        if (r.ok) console.log('✅ Facebook Conversions API - Purchase event sent');
-        else console.warn('⚠️ Facebook Conversions API error:', r.status);
-      }).catch(e => console.error('⚠️ Facebook Conversions API error:', e.message));
-    } catch (e) {
-      // ignore
-    }
-
     return NextResponse.json({
       success: true,
       order: result,

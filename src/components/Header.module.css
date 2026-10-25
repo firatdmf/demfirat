@@ -293,17 +293,7 @@
   color: #c9a961;
 }
 
-.instagramLink {
-  background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 600;
-}
 
-.instagramLink::after {
-  background: linear-gradient(90deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
-}
 
 /* ── Action Icons (right side of mainBar) ── */
 .actionIcons {

@@ -70,7 +70,6 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
       trackOrder: { en: 'Order Tracking', tr: 'Sipariş Takibi', ru: 'Отслеживание заказов', pl: 'Śledzenie zamówienia' },
       blog: { en: 'Blog', tr: 'Blog', ru: 'Блог', pl: 'Blog' },
       helpSupport: { en: 'Help & Support', tr: 'Yardım & Destek', ru: 'Помощь', pl: 'Pomoc' },
-      followUs: { en: 'Follow Us', tr: 'Bizi Takip Edin', ru: 'Подписывайтесь', pl: 'Obserwuj nas' },
       newsletter: { en: 'Stay updated with our latest collections', tr: 'En son koleksiyonlarımızdan haberdar olun', ru: 'Будьте в курсе наших новинок', pl: 'Bądź na bieżąco z nowościami' },
       subscribe: { en: 'Subscribe', tr: 'Kaydol', ru: 'Подписаться', pl: 'Subskrybuj' },
       emailPlaceholder: { en: 'Email or phone', tr: 'E-posta veya telefon', ru: 'Email или телефон', pl: 'E-mail lub telefon' },
@@ -154,7 +153,6 @@ function Footer({ StayConnected, OurStory, ContactUs, AllRightsReserved, locale 
               <li><Link href={`/${locale}/help`}>{t('helpSupport')}</Link></li>
               <li><Link href={`/${locale}/iade-sartlari`}>{t('deliveryReturns')}</Link></li>
               <li><Link href={`/${locale}/legal/mesafeli-satis-sozlesmesi`}>{t('distanceSales')}</Link></li>
-              <li><Link href={`/${locale}/follow-us`}>{t('followUs')}</Link></li>
             </ul>
           </div>
 
