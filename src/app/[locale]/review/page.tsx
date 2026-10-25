@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getLocalizedProductField } from '@/lib/productUtils';
+import { recaptchaToken } from '@/lib/recaptcha';
 
 function ReviewForm() {
     const searchParams = useSearchParams();
@@ -117,37 +118,19 @@ function ReviewForm() {
 
         setSubmitting(true);
         try {
-            // Step 1: Upload all photos to Bunny in parallel (only at submit time)
-            const uploadedUrls: string[] = [];
-            if (images.length > 0) {
-                const uploadResults = await Promise.all(images.map(async (img) => {
-                    const formData = new FormData();
-                    formData.append('file', img.file);
-                    try {
-                        const res = await fetch('/api/upload-image', { method: 'POST', body: formData });
-                        const data = await res.json();
-                        return data.url || null;
-                    } catch {
-                        return null;
-                    }
-                }));
-                uploadResults.forEach(url => { if (url) uploadedUrls.push(url); });
-            }
-
-            // Step 2: Submit the review with the uploaded URLs
-            const res = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/guest_review/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    product_sku: sku,
-                    first_name: firstName.trim(),
-                    last_name: lastName.trim(),
-                    hide_name: hideName,
-                    rating,
-                    comment: comment.trim(),
-                    image_urls: uploadedUrls,
-                }),
-            });
+            // The review and its photos go to our server as one form; it
+            // checks reCAPTCHA and hands them to the ERP, which stores the photos.
+            const form = new FormData();
+            form.append('product_sku', sku);
+            form.append('first_name', firstName.trim());
+            form.append('last_name', lastName.trim());
+            form.append('hide_name', String(hideName));
+            form.append('rating', String(rating));
+            form.append('comment', comment.trim());
+            images.forEach(img => form.append('images', img.file));
+            form.append('locale', locale);
+            form.append('recaptchaToken', await recaptchaToken('review'));
+            const res = await fetch('/api/review', { method: 'POST', body: form });
             const data = await res.json();
             if (data.success) {
                 setSuccess(true);
