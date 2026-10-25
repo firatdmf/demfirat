@@ -15,17 +15,6 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
-  // Skip the b2b/ workspace — it's a separate Next.js project that
-  // ships independently to b2b.demfirat.com. Without this, Next picks
-  // it up via tsconfig's broad include and fails on @/-aliased imports
-  // that resolve relative to the b2b/ src tree, not this one.
-  webpack: (config) => {
-    config.watchOptions = {
-      ...(config.watchOptions || {}),
-      ignored: ['**/node_modules', '**/b2b/**'],
-    };
-    return config;
-  },
 
   // I added these below myself. These prisma and bcrpyt are two libraries that we do not want to add
   // to our client bundle at all. Do not show them on the browser (no client side, only server side)
