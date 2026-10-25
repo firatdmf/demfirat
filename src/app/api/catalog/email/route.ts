@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                // The ERP takes sign-ups only from this server (see /api/subscribe).
+                'X-Storefront-Key': process.env.NEJUM_STOREFRONT_KEY ?? '',
             },
             body: JSON.stringify({ email, phone, name }),
         });

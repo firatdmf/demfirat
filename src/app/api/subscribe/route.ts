@@ -71,11 +71,14 @@ export async function POST(request: NextRequest) {
             ? { email: contactEmail, phone: contactPhone, skip_discount: true, language: body.locale }
             : { email: body.email, phone: body.phone, language: body.locale };
 
-        // Call Django backend to validate and create subscription
+        // Call Django backend to validate and create subscription. The key
+        // proves the call comes from this server, after the reCAPTCHA check
+        // above: the ERP refuses sign-ups without it.
         const response = await fetch(`${BACKEND_URL}/marketing/api/subscribe/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Storefront-Key': process.env.NEJUM_STOREFRONT_KEY ?? '',
             },
             body: JSON.stringify(subscribeBody),
         });
