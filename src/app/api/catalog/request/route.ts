@@ -10,7 +10,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_NEJUM_API_URL || 'http://127.0.0.1:8
 // server-side and hand it to the same endpoint. Keeps the lead payload tiny.
 export async function POST(request: NextRequest) {
     try {
-        const { email, name, phone, locale } = await request.json();
+        const { email, name, phone, locale, recaptchaToken } = await request.json();
 
         if (!email || !name || !phone) {
             return NextResponse.json({ success: false, error: 'Eksik bilgi' }, { status: 400 });
@@ -51,12 +51,14 @@ export async function POST(request: NextRequest) {
         }
 
         // Reuse the existing lead + PDF + email pipeline rather than repeating it.
+        // The reCAPTCHA token rides along unchecked: /api/catalog/email checks
+        // it, and a token passes Google's check only once.
         const protocol = request.headers.get('x-forwarded-proto') || 'http';
         const host = request.headers.get('host');
         const emailResponse = await fetch(`${protocol}://${host}/api/catalog/email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ products, locale, email, name, phone }),
+            body: JSON.stringify({ products, locale, email, name, phone, recaptchaToken }),
         });
 
         const result = await emailResponse.json();

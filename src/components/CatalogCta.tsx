@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { CatalogLeadModal } from '@/components/CatalogLeadModal';
 import { trackKlaviyoCatalogRequest } from '@/lib/klaviyo';
+import { recaptchaToken } from '@/lib/recaptcha';
 import classes from './CatalogCta.module.css';
 
 interface CatalogCtaProps {
@@ -57,7 +58,7 @@ export default function CatalogCta({ locale }: CatalogCtaProps) {
             const response = await fetch('/api/catalog/request', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...data, locale }),
+                body: JSON.stringify({ ...data, locale, recaptchaToken: await recaptchaToken('catalog_request') }),
             });
 
             if (!response.ok) {
