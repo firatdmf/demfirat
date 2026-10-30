@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaTrash, FaPlus, FaMinus, FaArrowRight, FaBox } from 'react-icons/fa';
 import Link from 'next/link';
@@ -13,6 +13,7 @@ import { translateTextSync } from '@/lib/translate';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import GuestCheckoutModal from '@/components/GuestCheckoutModal';
 import { erpFetch } from '@/lib/erpFetch';
+import { countryName } from '@/lib/countries';
 
 interface CartItem {
   id: number;
@@ -32,12 +33,26 @@ interface CartItem {
     wingType?: string;
   };
   custom_price?: string | number;
+  // Rolls picked off the product page's stock list (StockPicker): the
+  // line is those rolls, so its quantity is theirs and is not typed.
+  stock_items?: PickedRoll[];
   product?: {
     title: string;
     price: string | number | null;
     primary_image: string;
     category?: string;
   };
+}
+
+interface PickedRoll {
+  id: number;
+  quantity: number;
+  lot: string;
+  location: string;
+  city: string;
+  country: string;
+  still_free: boolean;
+  unit: string;
 }
 
 export default function CartPage() {
@@ -51,6 +66,13 @@ export default function CartPage() {
   const [updatingItems, setUpdatingItems] = useState<Set<number | string>>(new Set());
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [showGuestModal, setShowGuestModal] = useState(false);
+  const tp = useTranslations('StockPicker');
+
+  const rollPlace = (r: PickedRoll) =>
+    r.city || r.country ? [r.city, countryName(r.country, locale)].filter(Boolean).join(', ') : r.location;
+  const rollUnit = (code: string | undefined) =>
+    code && tp.has(`unit.${code}`) ? tp(`unit.${code}`) : (code || '');
+  const rollsGone = cartItems.some((item) => item.stock_items?.some((r) => !r.still_free));
 
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
@@ -290,6 +312,40 @@ export default function CartPage() {
     }
   };
 
+  // Take one picked roll out of its line; the last one takes the line.
+  const removeRoll = async (item: CartItem, rollId: number) => {
+    setUpdatingItems(prev => new Set(prev).add(item.id));
+    try {
+      const userId = (session?.user as any)?.id || session?.user?.email;
+      const response = await erpFetch(
+        `${process.env.NEXT_PUBLIC_NEJUM_API_URL}/authentication/api/update_cart_item/${userId}/${item.id}/`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            stock_items: (item.stock_items || []).filter((r) => r.id !== rollId).map((r) => r.id),
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setCartItems(prev => data.cart_item
+          ? prev.map(i => i.id === item.id
+            ? { ...i, quantity: data.cart_item.quantity, stock_items: data.cart_item.stock_items } : i)
+          : prev.filter(i => i.id !== item.id));
+        await refreshCart();
+      }
+    } catch (error) {
+      console.error('Error removing roll:', error);
+    } finally {
+      setUpdatingItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(item.id);
+        return newSet;
+      });
+    }
+  };
+
   const removeItem = async (itemId: number | string) => {
     setUpdatingItems(prev => new Set(prev).add(itemId));
 
@@ -326,6 +382,7 @@ export default function CartPage() {
   // guests are prompted to sign in or create an account (no "continue as
   // guest" option anymore, see GuestCheckoutModal).
   const handleCheckout = () => {
+    if (rollsGone) return;
     if (isGuest) {
       setShowGuestModal(true);
     } else {
@@ -523,6 +580,23 @@ export default function CartPage() {
                     </div>
                   )}
 
+                  {item.stock_items && item.stock_items.length > 0 && (
+                    <ul className={classes.pickedRolls}>
+                      {item.stock_items.map((r) => (
+                        <li key={r.id} className={r.still_free ? '' : classes.pickedRollGone}>
+                          <span>
+                            {r.lot ? tp('lotNumber', { lot: r.lot }) : tp('noLot')} · {rollPlace(r)} ·{' '}
+                            <strong>{r.quantity.toLocaleString(locale, { maximumFractionDigits: 2 })} {rollUnit(r.unit)}</strong>
+                            {!r.still_free && <em> — {tp('rollGone')}</em>}
+                          </span>
+                          <button type="button" onClick={() => removeRoll(item, r.id)}
+                            disabled={updatingItems.has(item.id)} className={classes.pickedRollRemove}
+                            aria-label={tp('removeRoll')} title={tp('removeRoll')}>×</button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
                   <p className={classes.itemSku}>SKU: {item.product_sku}</p>
                   {item.product?.category && (
                     <p className={classes.itemCategory}>
@@ -545,6 +619,12 @@ export default function CartPage() {
 
                 <div className={classes.itemQuantity}>
                   <label>{t('quantity')}</label>
+                  {item.stock_items && item.stock_items.length > 0 ? (
+                    <div className={classes.pickedQuantity}>
+                      <strong>{parseFloat(item.quantity).toLocaleString(locale, { maximumFractionDigits: 2 })} {rollUnit(item.stock_items[0]?.unit)}</strong>
+                      <span>{tp('rolls', { count: item.stock_items.length })}</span>
+                    </div>
+                  ) : (
                   <div className={classes.quantityControls}>
                     <button
                       onClick={() => updateQuantity(item.id, parseFloat(item.quantity) - 1)}
@@ -576,6 +656,7 @@ export default function CartPage() {
                       <FaPlus />
                     </button>
                   </div>
+                  )}
                 </div>
 
                 <div className={classes.itemPrice}>
@@ -669,7 +750,8 @@ export default function CartPage() {
               </span>
             </div>
 
-            <button onClick={handleCheckout} className={classes.checkoutBtn}>
+            {rollsGone && <p className={classes.pickedBlocked} role="status">{tp('cartBlocked')}</p>}
+            <button onClick={handleCheckout} className={classes.checkoutBtn} disabled={rollsGone}>
               {t('checkout')}
               <FaArrowRight />
             </button>

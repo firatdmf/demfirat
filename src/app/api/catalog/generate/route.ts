@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withoutPrice, withoutVariantPrices } from '@/lib/noPrices';
 import jsPDF from 'jspdf';
 import sharp from 'sharp';
 import { getColorCode, isTwoToneColor, splitTwoToneColor } from '@/lib/colorMap';
@@ -107,7 +108,10 @@ async function fetchProductDetails(sku: string, locale: string): Promise<{
         });
         if (!response.ok) return { description: null, attributes: [], variants: [] };
 
-        const data = await response.json();
+        // No prices in a catalogue anybody can download (lib/noPrices.ts).
+        const raw = await response.json();
+        const data = { ...raw, product: raw.product ? withoutPrice(raw.product) : raw.product,
+                       product_variants: withoutVariantPrices(raw.product_variants) };
 
         // 1. Description
         let description = null;

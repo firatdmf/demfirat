@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
 
 /**
  * Batch endpoint: Fetch multiple cart item details in a single request.
@@ -45,6 +47,34 @@ export async function POST(request: NextRequest) {
         const productMap = new Map<string, any>();
         productResponses.forEach(({ sku, data }) => {
             if (data) productMap.set(sku, data);
+        });
+
+        // Prices are the signed-in customer's only: the product API sends
+        // none, so they are asked for with the session's ERP token and put
+        // where the cart and checkout read them. Signed out: no prices.
+        const session = await getServerSession(authOptions);
+        const erpToken = (session?.user as { erpToken?: string } | undefined)?.erpToken;
+        let prices: any = null;
+        if (erpToken && uniqueProductSKUs.length > 0) {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/storefront/prices/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${erpToken}` },
+                    body: JSON.stringify({ product_skus: uniqueProductSKUs }),
+                    cache: 'no-store',
+                });
+                if (res.ok) prices = await res.json();
+            } catch (e) {
+                console.error('[Batch Cart] Failed to fetch prices:', e);
+            }
+        }
+        productMap.forEach((data, sku) => {
+            const own = prices?.products?.[sku];
+            data.product = { ...data.product, price: own?.price ?? null, prices: own?.prices ?? null };
+            data.product_variants = (data.product_variants || []).map((v: any) => {
+                const p = prices?.variants?.[v.variant_sku];
+                return { ...v, variant_price: p?.variant_price ?? null, variant_prices: p?.variant_prices ?? null };
+            });
         });
 
         // Now resolve each cart item with its product/variant details

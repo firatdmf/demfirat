@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback, memo } from "react";
+import { useFromPrices } from '@/lib/prices';
 import classes from "@/components/Header.module.css";
 import Link from "next/link";
 import Image from 'next/image';
@@ -86,6 +87,7 @@ function Header({ menuTArray }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const { priceOf: searchPriceOf } = useFromPrices(searchResults.map((p) => p.sku ?? ''));
   const [isSearching, setIsSearching] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
@@ -425,13 +427,12 @@ function Header({ menuTArray }: HeaderProps) {
                         <div className={classes.searchResultCardInfo}>
                           <span className={classes.searchResultCardTitle}>{getLocalizedProductField(product as any, 'title', locale)}</span>
                           {product.sku && <span className={classes.searchResultCardSku}>{product.sku}</span>}
-                          <span className={classes.searchResultCardPrice}>
-                            {product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice
-                              ? `${convertPrice(product.minPrice)} - ${convertPrice(product.maxPrice)}`
-                              : product.price && Number(product.price) > 0
-                                ? convertPrice(product.price)
-                                : (locale === 'tr' ? 'Fiyat için iletişime geçin' : 'Contact for price')}
-                          </span>
+                          {/* Prices are the signed-in customer's (lib/prices.ts). */}
+                          {searchPriceOf(product.sku) ? (
+                            <span className={classes.searchResultCardPrice}>
+                              {convertPrice(searchPriceOf(product.sku) as number)}
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                     ))}

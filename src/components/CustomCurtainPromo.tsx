@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useFromPrices } from '@/lib/prices';
 import Link from 'next/link';
 import classes from './CustomCurtainPromo.module.css';
 import { useCurrency } from '@/contexts/CurrencyContext';
@@ -156,6 +157,11 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
         fetchProducts();
     }, []);
 
+    // Prices are the signed-in customer's (lib/prices.ts); anybody else
+    // sees the products without one.
+    const { priceOf } = useFromPrices(products.map((p) => p.sku));
+    const shown = products.map((p) => ({ ...p, price: priceOf(p.sku) ?? 0 }));
+
     // Calculate discount from attributes
     const getDiscountInfo = (product: Product) => {
         const discountAttr = product.product_attributes?.find(
@@ -296,7 +302,7 @@ export default function CustomCurtainPromo({ locale }: CustomCurtainPromoProps) 
                                 </div>
                             ))
                         ) : (
-                            products.map((product) => (
+                            shown.map((product) => (
                                 <Link
                                     key={product.id}
                                     href={`/${locale}/product/fabric/${product.sku}/curtain#ProductDetailCard`}

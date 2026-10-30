@@ -3345,3 +3345,46 @@
     z-index: 11;
   }
 }
+
+/* Between the roll list and the quantity box (StockPicker) */
+.rollsSwitch {
+  display: block;
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  color: #5f574b;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.rollsSwitch:hover {
+  color: var(--ink, #26221c);
+}
+
+/* What a logged-out visitor sees instead of a price and the cart buttons
+   (trade only): one full-width bar that opens the log-in window. */
+.logInForPricing {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 0;
+  background: #2a2d30;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.logInForPricing:hover {
+  background: #3b3f43;
+}

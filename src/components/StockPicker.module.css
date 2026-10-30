@@ -1,0 +1,300 @@
+.picker {
+  /* Laid out by its own width: the product page's column is narrower
+     than the screen, half of it on a desktop. */
+  container-type: inline-size;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e7e2d8;
+  border-radius: 12px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink, #26221c);
+}
+
+.intro {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: #5f574b;
+}
+
+.places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.place {
+  min-height: 36px;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #d6cfc2;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink, #26221c);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.placeOn {
+  border-color: var(--ink, #26221c);
+  background: var(--ink, #26221c);
+  color: #fff;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  max-height: 340px;
+  overflow-y: auto;
+  border: 1px solid #ece7dd;
+  border-radius: 10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1.1fr) minmax(0, 0.8fr) minmax(120px, auto);
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.55rem 0.75rem;
+  border-top: 1px solid #f2eee6;
+  font-size: 0.875rem;
+  color: var(--ink, #26221c);
+}
+
+.headRow {
+  position: sticky;
+  top: 0;
+  border-top: none;
+  background: var(--ivory, #faf8f3);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5f574b;
+}
+
+.rowOn {
+  background: var(--ivory, #faf8f3);
+}
+
+.where {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.where svg {
+  flex-shrink: 0;
+  color: #8a8073;
+}
+
+.num {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: var(--ivory, #faf8f3);
+}
+
+.foot > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.count {
+  font-size: 0.8rem;
+  color: #5f574b;
+}
+
+.total {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink, #26221c);
+  font-variant-numeric: tabular-nums;
+}
+
+.addBtn {
+  min-height: 44px;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid var(--ink, #26221c);
+  border-radius: 8px;
+  background: var(--ink, #26221c);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ok,
+.warn {
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.ok {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+.warn {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.lot {
+  color: #3d372f;
+}
+
+/* The tick: an empty circle, filled with a check once the roll is picked */
+.tick {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 1.5px solid #c9c1b3;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+}
+
+.tick:checked {
+  border-color: var(--ink, #26221c);
+  background: var(--ink, #26221c);
+}
+
+.tick:checked::after {
+  content: "";
+  width: 9px;
+  height: 5px;
+  margin-top: -2px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg);
+}
+
+.tick:focus-visible {
+  outline: 2px solid var(--gold, #c9a961);
+  outline-offset: 2px;
+}
+
+.where,
+.lot {
+  cursor: pointer;
+}
+
+.length {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.free {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #5f574b;
+}
+
+.picked {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink, #26221c);
+}
+
+.scissors {
+  display: inline-grid;
+  place-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: #a16207;
+  cursor: pointer;
+}
+
+.scissors:hover {
+  background: #fef3c7;
+}
+
+.cutInput {
+  width: 52px;
+  min-height: 32px;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--ink, #26221c);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink, #26221c);
+  background: #fff;
+}
+
+.cutUnit {
+  font-size: 0.78rem;
+  color: #5f574b;
+}
+
+@container (max-width: 560px) {
+  .row {
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    row-gap: 0.2rem;
+  }
+
+  .row > .tick {
+    grid-row: 1 / span 2;
+  }
+
+  .row > .lot {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.78rem;
+    color: #5f574b;
+  }
+
+  .row > .length {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+
+  .headRow {
+    display: none;
+  }
+
+  .foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -99,7 +99,10 @@ export async function POST(request: NextRequest) {
           price,
           is_custom_curtain: isCustom,
           custom_fabric_used_meters: fabricMeters > 0 ? Number(fabricMeters.toFixed(2)) : undefined,
-          custom_attributes: item.custom_attributes || undefined
+          custom_attributes: item.custom_attributes || undefined,
+          // Rolls picked off the stock list: the ERP holds these very
+          // rolls, each for what it held when it was picked.
+          stock_items: (item.stock_items || []).map((r: any) => ({ id: r.id, quantity: r.quantity })),
         };
       }),
 
@@ -121,6 +124,14 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify(orderData)
     });
+
+    if (response.status === 409) {
+      // A picked roll was sold or cut since it went in the cart: nothing
+      // was ordered, and the cart page says which roll to remove.
+      const refused = await response.json().catch(() => ({}));
+      return NextResponse.json({ success: false, error: 'rolls_gone', gone: refused.gone || [] },
+        { status: 409 });
+    }
 
     if (!response.ok) {
       const errorText = await response.text();

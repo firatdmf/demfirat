@@ -468,5 +468,41 @@
     "heading_1": "Operasyonel Mükemmelliğin Keyfini Çıkarın",
     "heading_2": "Sınırsız Yaratıcılığı Ortaya Çıkarın",
     "heading_3": "Endüstriyel Nakış"
+  },
+  "StockPicker": {
+    "title": "Stoktan sipariş",
+    "intro": "Topu tamamen almak için işaretleyin ya da makasla tam metre kesin. Aynı lottaki toplar aynı tondadır.",
+    "allLocations": "Tüm konumlar",
+    "location": "Konum",
+    "lot": "Lot",
+    "length": "Uzunluk",
+    "lotNumber": "Lot {lot}",
+    "noLot": "Lot yok",
+    "rollLabel": "{length} top, {lot}, {location}",
+    "selected": "{count, plural, one {# toptan} other {# toptan}}",
+    "add": "Sepete ekle",
+    "adding": "Ekleniyor…",
+    "added": "Toplar sepetinizde.",
+    "gone": "Bu toplardan bazıları az önce alındı. Liste güncellendi.",
+    "error": "Toplar eklenemedi. Lütfen tekrar deneyin.",
+    "rolls": "{count, plural, one {# top} other {# top}}",
+    "removeRoll": "Bu topu çıkar",
+    "rollGone": "Artık mevcut değil — sipariş için çıkarın",
+    "cartBlocked": "Sepetinizdeki bir top artık mevcut değil. Devam etmek için çıkarın.",
+    "cutLabel": "Kesilecek metre",
+    "badCut": "Tam metre kesin ya da topun tamamını alın.",
+    "orQuantity": "Ya da miktar girin, topları biz seçelim",
+    "backToRolls": "Bunun yerine stoktaki toplardan seçin",
+    "cutPart": "Bu topun bir kısmını kes",
+    "ofRoll": "{roll} toptan {cut}",
+    "unit": {
+      "m": "m",
+      "kg": "kg",
+      "piece": "adet",
+      "pack": "paket"
+    }
+  },
+  "Pricing": {
+    "signIn": "Fiyatlar için giriş yapın"
   }
 }

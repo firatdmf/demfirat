@@ -8,6 +8,7 @@ import { Product, ProductVariant, ProductVariantAttribute, ProductVariantAttribu
 import classes from "./page.module.css"
 import ProductGrid from '@/components/ProductGrid';
 import { getCategoryName, resolveCategories } from "@/lib/productCategories";
+import { withoutPrice, withoutVariantPrices } from "@/lib/noPrices";
 
 // type apiResponse = {
 //   products: Product[];
@@ -164,14 +165,16 @@ export default async function Page(props: Props) {
     // Merge data
     if (categoryData.products) {
       // Add category to products to help with linking later
-      const productsWithCategory = categoryData.products.map((p: any) => ({
+      // No prices in the page: they are the signed-in customer's, fetched
+      // in their browser (lib/prices.ts).
+      const productsWithCategory = categoryData.products.map((p: any) => withoutPrice({
         ...p,
         product_category: category
       }));
       data.products = [...data.products, ...productsWithCategory];
     }
     if (categoryData.product_variants) {
-      data.product_variants = [...data.product_variants, ...categoryData.product_variants];
+      data.product_variants = [...data.product_variants, ...withoutVariantPrices(categoryData.product_variants)];
     }
     // For attributes, we need to be careful about duplicates if we want clean filters
     // But for now, simple concatenation to ensure filtering works at all

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { withoutPrice, withoutVariantPrices } from '@/lib/noPrices';
 
 export const revalidate = 3600; // Cache for 1 hour
 
@@ -91,15 +92,17 @@ export async function GET() {
         const readyMadeData = readyMadeRes.ok ? await readyMadeRes.json() : { products: [], product_variants: [], product_variant_attributes: [], product_variant_attribute_values: [] };
 
         // Merge data from both categories
+        // No prices, whatever the ERP sends: they are for signed-in trade
+        // customers only (lib/noPrices.ts), so no item is listed.
         const allProducts: ApiProduct[] = [
-            ...(fabricData.products || []).map((p: ApiProduct) => ({ ...p, _category: 'fabric' })),
-            ...(readyMadeData.products || []).map((p: ApiProduct) => ({ ...p, _category: 'ready-made_curtain' })),
+            ...(fabricData.products || []).map((p: ApiProduct) => withoutPrice({ ...p, _category: 'fabric' })),
+            ...(readyMadeData.products || []).map((p: ApiProduct) => withoutPrice({ ...p, _category: 'ready-made_curtain' })),
         ];
 
-        const allVariants: ApiVariant[] = [
+        const allVariants: ApiVariant[] = withoutVariantPrices([
             ...(fabricData.product_variants || []),
             ...(readyMadeData.product_variants || []),
-        ];
+        ]);
 
         const allAttrValues: ApiAttributeValue[] = [
             ...(fabricData.product_variant_attribute_values || []),
@@ -216,6 +219,10 @@ export async function GET() {
             if (variants.length === 0) {
                 // Product without variants - single item
                 const tryPrice = product.prices?.TRY ?? product.price ?? 0;
+                // Trade only: prices are for signed-in customers, and the
+                // ERP's product API sends none, so an item has no price to
+                // list. Never list it at 0 — that reads as free.
+                if (!(Number(tryPrice) > 0)) continue;
                 const price = `${Number(tryPrice).toFixed(2)} TRY`;
 
                 // ID matches pixel content_id (raw SKU)
@@ -236,6 +243,7 @@ export async function GET() {
                     const variantTitle = variantLabel ? `${trTitle} - ${variantLabel}` : trTitle;
 
                     const tryPrice = variant.variant_prices?.TRY ?? product.prices?.TRY ?? variant.variant_price ?? product.price ?? 0;
+                    if (!(Number(tryPrice) > 0)) continue; // see above
                     const price = `${Number(tryPrice).toFixed(2)} TRY`;
 
                     const quantity = variant.variant_quantity ?? 0;

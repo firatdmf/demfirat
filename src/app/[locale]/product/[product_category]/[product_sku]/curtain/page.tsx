@@ -1,4 +1,5 @@
 import ProductDetailCard from "@/components/ProductDetailCard"
+import { withoutPrice, withoutVariantPrices } from "@/lib/noPrices";
 import { Product, ProductVariant, ProductVariantAttributeValue, ProductVariantAttribute, ProductFile, ProductAttribute } from "@/lib/interfaces";
 import { getLocalizedProductField } from "@/lib/productUtils";
 import classes from "../page.module.css";
@@ -31,7 +32,6 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         const title = getLocalizedProductField(product, 'title', locale);
         const description = getLocalizedProductField(product, 'description', locale) || "";
         const imageUrl = product.primary_image || "";
-        const price = product.price;
 
         const baseUrl = `https://www.demfirat.com`;
         const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}/curtain`;
@@ -56,8 +56,6 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
                 type: 'website',
             },
             other: {
-                'product:price:amount': price?.toString() || "0",
-                'product:price:currency': 'USD',
                 'product:availability': Number(product.available_quantity || 0) > 0 ? 'instock' : 'oos',
                 'product:condition': 'new',
                 'product:brand': 'DEMFIRAT',
@@ -79,9 +77,11 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         return <div className={classes.error}>Error fetching product details.</div>;
     }
 
-    const product: Product = data.product;
+    // No prices in the page: they are the signed-in customer's, fetched in
+    // their browser (lib/prices.ts).
+    const product: Product = withoutPrice(data.product);
     const product_category: string | null = data.product_category;
-    const product_variants: ProductVariant[] = data.product_variants || [];
+    const product_variants: ProductVariant[] = withoutVariantPrices(data.product_variants);
     const product_variant_attributes: ProductVariantAttribute[] = data.product_variant_attributes || [];
     const product_variant_attribute_values: ProductVariantAttributeValue[] = data.product_variant_attribute_values || [];
     const product_files: ProductFile[] = data.product_files || [];
@@ -98,15 +98,8 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
         "image": [product.primary_image],
         "description": displayDescription,
         "sku": product.sku,
-        "brand": { "@type": "Brand", "name": "DEMFIRAT" },
-        "offers": {
-            "@type": "Offer",
-            "url": `https://www.demfirat.com/${locale}/product/${product_category}/${product_sku}/curtain`,
-            "priceCurrency": "USD",
-            "price": product.price,
-            "availability": Number(product.available_quantity || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-            "itemCondition": "https://schema.org/NewCondition"
-        }
+        "brand": { "@type": "Brand", "name": "DEMFIRAT" }
+        // No "offers": prices are for signed-in trade customers only.
     };
 
     const baseUrl = `https://www.demfirat.com/${locale}`;

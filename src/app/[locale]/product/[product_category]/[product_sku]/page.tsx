@@ -7,6 +7,7 @@ import { getLocalizedProductField } from "@/lib/productUtils";
 import classes from "./page.module.css";
 import { Metadata } from "next";
 import { cache } from "react";
+import { withoutPrice, withoutVariantPrices } from "@/lib/noPrices";
 
 // Deduplicated fetch: React.cache ensures generateMetadata and Page share the same promise
 const getProductData = cache(async (product_sku: string) => {
@@ -31,7 +32,6 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
     const description = getLocalizedProductField(product, 'description', locale) || "";
 
     const imageUrl = product.primary_image || "";
-    const price = product.price;
 
     const baseUrl = `https://www.demfirat.com`;
     const canonicalUrl = `${baseUrl}/${locale}/product/${data.product_category}/${product_sku}`;
@@ -56,8 +56,6 @@ export async function generateMetadata(props: PageProps<'/[locale]/product/[prod
         type: 'website',
       },
       other: {
-        'product:price:amount': price?.toString() || "0",
-        'product:price:currency': 'USD',
         'product:availability': Number(product.available_quantity || 0) > 0 ? 'instock' : 'oos',
         'product:condition': 'new',
         'product:brand': 'DEMFIRAT',
@@ -79,9 +77,11 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     return <div className={classes.error}>Error fetching product details.</div>;
   }
 
-  const product: Product = data.product;
+  // No prices in the page: they are the signed-in customer's, fetched in
+  // their browser (lib/prices.ts).
+  const product: Product = withoutPrice(data.product);
   const product_category: string | null = data.product_category;
-  const product_variants: ProductVariant[] = data.product_variants || [];
+  const product_variants: ProductVariant[] = withoutVariantPrices(data.product_variants);
   const product_variant_attributes: ProductVariantAttribute[] = data.product_variant_attributes || [];
   const product_variant_attribute_values: ProductVariantAttributeValue[] = data.product_variant_attribute_values || [];
   const product_files: ProductFile[] = data.product_files || [];
@@ -137,16 +137,8 @@ export default async function Page(props: PageProps<'/[locale]/product/[product_
     "brand": {
       "@type": "Brand",
       "name": "DEMFIRAT"
-    },
-    "offers": {
-      "@type": "Offer",
-      "url": productUrl,
-      "priceCurrency": "USD",
-      "price": product.price,
-      "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-      "availability": Number(product.available_quantity || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      "itemCondition": "https://schema.org/NewCondition"
     }
+    // No "offers": prices are for signed-in trade customers only.
   };
 
   return (

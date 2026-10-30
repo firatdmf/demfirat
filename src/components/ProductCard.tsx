@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect, useMemo, memo } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { useFavorites } from '@/contexts/FavoriteContext';
 
 // Importing Product interface from the parent.
@@ -40,6 +41,18 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const { convertPrice, formatPreconvertedPrice } = useCurrency();
   const placeholder_image_link = "/media/woocommerce-placeholder.svg";
   const { data: session } = useSession();
+  const tPricing = useTranslations('Pricing');
+  // Prices are for signed-in customers (lib/prices.ts): anybody else is
+  // asked to sign in; a signed-in customer sees a product with no price
+  // as one to ask about.
+  const noPrice = (
+    <span className={classes.contactPrice}>
+      {!session ? tPricing('signIn')
+        : locale === 'tr' ? 'Fiyat için iletişime geçin'
+        : locale === 'ru' ? 'Свяжитесь для уточнения цены'
+        : 'Contact for price'}
+    </span>
+  );
   const { isFavorite, toggleFavorite } = useFavorites();
   const [averageRating, setAverageRating] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
@@ -804,15 +817,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                   const validPrices = allVariantPrices.filter(p => p && Number(p) > 0);
                   if (validPrices.length === 0) {
                     // No valid prices
-                    return (
-                      <span className={classes.contactPrice}>
-                        {locale === 'tr' ? 'Fiyat için iletişime geçin' :
-                          locale === 'ru' ? 'Свяжитесь для уточнения цены' :
-                            locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
-                              locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
-                                'Contact for price'}
-                      </span>
-                    );
+                    return noPrice;
                   }
 
                   // Check if all prices are the same
@@ -835,15 +840,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 }
 
                 // No price available
-                return (
-                  <span className={classes.contactPrice}>
-                    {locale === 'tr' ? 'Fiyat için iletişime geçin' :
-                      locale === 'ru' ? 'Свяжитесь для уточнения цены' :
-                        locale === 'pl' ? 'Skontaktuj się w sprawie ceny' :
-                          locale === 'de' ? 'Kontaktieren Sie uns für den Preis' :
-                            'Contact for price'}
-                  </span>
-                );
+                return noPrice;
               })()}
             </div>
 

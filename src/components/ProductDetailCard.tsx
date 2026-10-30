@@ -26,6 +26,9 @@ import { trackViewItem, trackAddToCart, trackSelectFabric, trackRequestSample } 
 import { trackKlaviyoAddToCart } from '@/lib/klaviyo';
 import { CUSTOM_CURTAIN_ENABLED } from '@/lib/featureFlags';
 import { erpFetch } from '@/lib/erpFetch';
+import StockPicker from '@/components/StockPicker';
+import { usePriced } from '@/lib/prices';
+import LoginModal from '@/components/LoginModal';
 
 
 
@@ -64,7 +67,7 @@ function fabricPhotoUrl(value: string): string | null {
   return FABRIC_PHOTOS.has(photo) ? `/media/fabrics/${photo}.avif?v=${FABRIC_PHOTOS_VERSION}` : null;
 }
 
-function ProductDetailCard({
+function ProductDetailCardView({
   product,
   product_category,
   product_variants: all_product_variants,
@@ -83,6 +86,8 @@ function ProductDetailCard({
   );
 
   const t = useTranslations('ProductDetailCard');
+  const tsp = useTranslations('StockPicker');
+  const tPricing = useTranslations('Pricing');
   const { currency, convertPrice, formatPreconvertedPrice, rates, loading } = useCurrency();
   const placeholder_image_link = "/media/woocommerce-placeholder.svg";
 
@@ -311,6 +316,12 @@ function ProductDetailCard({
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'description' | 'details' | 'delivery' | 'returns' | 'care' | null>('description');
   const [isAdding, setIsAdding] = useState(false);
+  // Fabric with rolls in stock is ordered off the roll list (StockPicker);
+  // the quantity box stays as the fallback the buyer can switch to.
+  const [rollsOffered, setRollsOffered] = useState(false);
+  const [quantityInstead, setQuantityInstead] = useState(false);
+  // Trade only: a guest is asked to sign in rather than handed a cart.
+  const [showLogin, setShowLogin] = useState(false);
 
   const findSelectedVariant = () => {
     if (!product_variants || !product_variant_attributes || !product_variant_attribute_values) return undefined;
@@ -418,6 +429,12 @@ function ProductDetailCard({
       });
     });
   }, [selectedAttributes, product_variants, product_variant_attributes, product_variant_attribute_values]);
+
+  useEffect(() => {
+    // Each colour has rolls of its own (or none): ask again.
+    setRollsOffered(false);
+    setQuantityInstead(false);
+  }, [selectedVariant?.variant_sku]);
 
   // The address names the chosen variant by its SKU (?variant=N1466T.G126)
   // rather than spelling out every attribute. Parameters that aren't
@@ -721,6 +738,7 @@ function ProductDetailCard({
   };
 
   const handleBuySampleButtonClick = async () => {
+    if (isGuest) { setShowLogin(true); return; }
     if (isAdding) return;
     setIsAdding(true);
 
@@ -791,6 +809,7 @@ function ProductDetailCard({
   };
 
   const handleAddToCart = async (): Promise<boolean> => {
+    if (isGuest) { setShowLogin(true); return false; }
     if (isAdding || isCurrentOutOfStock) return false;
 
     // Check if variant selection is required but missing
@@ -944,6 +963,7 @@ function ProductDetailCard({
   };
 
   const handleCustomCurtainAddToCart = async (customizationData: any, totalPrice: number, quantity: number = 1, isBuyNow: boolean = false) => {
+    if (isGuest) { setShowLogin(true); return; }
     // Stock validation for custom curtain
     const requiredFabric = customizationData.width && customizationData.height
       ? (parseFloat(customizationData.width) / 100) *
@@ -1742,6 +1762,8 @@ function ProductDetailCard({
                     );
                   }
                 }
+                // Prices are for signed-in customers (lib/prices.ts); a
+                // guest is asked to log in by the button below.
                 return null;
               })()}
 
@@ -1906,8 +1928,27 @@ function ProductDetailCard({
               })()}
             </div>
 
-            {hasStandardCartOptions && (
+            {hasStandardCartOptions && isGuest && (
+              <button type="button" className={classes.logInForPricing} onClick={() => setShowLogin(true)}>
+                {tPricing('signIn')}
+              </button>
+            )}
+
+            {hasStandardCartOptions && !isGuest && (
               <>
+                {/* Fabric with rolls in stock: the roll list is the way to
+                    order; it draws nothing for goods with no roll to pick. */}
+                {status === 'authenticated' && selectedVariant?.variant_sku && !quantityInstead && (
+                  <StockPicker productSku={product.sku} variantSku={selectedVariant.variant_sku}
+                    onAdded={refreshCart} onStock={setRollsOffered} />
+                )}
+                {rollsOffered && (
+                  <button type="button" className={classes.rollsSwitch}
+                    onClick={() => setQuantityInstead((v) => !v)}>
+                    {quantityInstead ? tsp('backToRolls') : tsp('orQuantity')}
+                  </button>
+                )}
+                {(!rollsOffered || quantityInstead) && (<>
                 {/* Add to Cart is the primary action (US e-commerce
                     convention); Buy Now is the express secondary below. */}
                 <div className={classes.actionRowBottom}>
@@ -1942,8 +1983,10 @@ function ProductDetailCard({
                     {t('buyNow')}
                   </button>
                 </div>
+                </>)}
               </>
             )}
+            <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
 
             {/* PERDE DIKTIR — Wizard on demand (no button) */}
             {isFabricProduct && isCustomCurtainIntent && (
@@ -2383,6 +2426,13 @@ function ProductDetailCard({
       </div>
     </div >
   );
+}
+
+// The page with the signed-in customer's prices put in (lib/prices.ts):
+// the ERP's product API carries none.
+function ProductDetailCard(props: React.ComponentProps<typeof ProductDetailCardView>) {
+  const { products, variants } = usePriced([props.product], props.product_variants);
+  return <ProductDetailCardView {...props} product={products[0]} product_variants={variants} />;
 }
 
 export default ProductDetailCard;

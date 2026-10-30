@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FaShoppingCart, FaMapMarkerAlt, FaUser, FaCheck, FaPhone, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
@@ -64,6 +64,7 @@ export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const locale = useLocale();
+  const tp = useTranslations('StockPicker');
   const { refreshCart, guestCart, clearGuestCart, isGuest } = useCart();
   const { currency, convertPrice, rates } = useCurrency();
 
@@ -752,6 +753,12 @@ export default function CheckoutPage() {
       });
 
       const result = await response.json();
+      if (response.status === 409 && result.error === 'rolls_gone') {
+        // Nothing was ordered: back to the cart, which marks the roll.
+        showToast(tp('cartBlocked'));
+        router.push(`/${locale}/cart`);
+        return;
+      }
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Order creation failed');
       }

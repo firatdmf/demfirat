@@ -1,6 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
+import { useFromPrices } from '@/lib/prices';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -25,6 +26,8 @@ export default function FavoritesPage() {
   const { favorites: favoritesSet, toggleFavorite } = useFavorites();
   const { convertPrice } = useCurrency();
   const [products, setProducts] = useState<Product[]>([]);
+  // Prices are the signed-in customer's (lib/prices.ts).
+  const { priceOf } = useFromPrices(products.map((p) => p.sku));
   const [loading, setLoading] = useState(true);
   const [removingId, setRemovingId] = useState<string | null>(null);
   const pathname = usePathname();
@@ -153,6 +156,7 @@ export default function FavoritesPage() {
           ) : (
             <div className={classes.productsGrid}>
               {products.map((product) => {
+                const price = priceOf(product.sku);
                 const isRemoving = removingId === product.sku;
                 const productCategoryName = pathname.split("/").at(-1);
 
@@ -175,9 +179,9 @@ export default function FavoritesPage() {
                       <div className={classes.productInfo}>
                         <h3 className={classes.productTitle}>{product.title}</h3>
                         <p className={classes.productSku}>SKU: {product.sku}</p>
-                        {product.price && Number(product.price) > 0 && (
+                        {price && price > 0 && (
                           <span className={classes.productPrice}>
-                            {convertPrice(Number(product.price))}
+                            {convertPrice(price)}
                           </span>
                         )}
                       </div>

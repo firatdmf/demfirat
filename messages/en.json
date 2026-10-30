@@ -467,5 +467,41 @@
     "heading_1": "Indulge in Operational Brilliance",
     "heading_2": "Schiffli Embroidery",
     "heading_3": "Flatboard Embroidery"
+  },
+  "StockPicker": {
+    "title": "Order from stock",
+    "intro": "Tick a roll to take it whole, or use the scissors to cut whole meters off it. Rolls from one lot match in shade.",
+    "allLocations": "All locations",
+    "location": "Location",
+    "lot": "Lot",
+    "length": "Length",
+    "lotNumber": "Lot {lot}",
+    "noLot": "No lot",
+    "rollLabel": "Roll of {length}, {lot}, {location}",
+    "selected": "{count, plural, one {From # roll} other {From # rolls}}",
+    "add": "Add to cart",
+    "adding": "Adding…",
+    "added": "The rolls are in your cart.",
+    "gone": "Some of these rolls were just taken. The list has been updated.",
+    "error": "The rolls could not be added. Please try again.",
+    "rolls": "{count, plural, one {# roll} other {# rolls}}",
+    "removeRoll": "Remove this roll",
+    "rollGone": "No longer available — remove it to order",
+    "cartBlocked": "A roll in your cart is no longer available. Remove it to continue.",
+    "cutLabel": "Meters to cut",
+    "badCut": "Cut whole meters, or take the whole roll.",
+    "orQuantity": "Or order a quantity and we'll pick the rolls",
+    "backToRolls": "Choose from the rolls in stock instead",
+    "cutPart": "Cut part of this roll",
+    "ofRoll": "{cut} of {roll}",
+    "unit": {
+      "m": "m",
+      "kg": "kg",
+      "piece": "pcs",
+      "pack": "packs"
+    }
+  },
+  "Pricing": {
+    "signIn": "Log in for pricing"
   }
 }

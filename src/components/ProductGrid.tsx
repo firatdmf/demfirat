@@ -1,5 +1,6 @@
 "use client"
 import classes from "./ProductGrid.module.css";
+import { usePriced } from '@/lib/prices';
 import ProductCard from "@/components/ProductCard";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
@@ -45,7 +46,7 @@ const translateAttributeName = (name: string, locale: string): string => {
 };
 
 // Below variables are passed down
-function ProductGrid({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT, initialDisplayCount = 30, productVideoSKUs = [] }: ProductGridProps) {
+function ProductGridView({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT, initialDisplayCount = 30, productVideoSKUs = [] }: ProductGridProps) {
   // Create a Set for O(1) lookup of video SKUs
   const videoSKUsSet = new Set(productVideoSKUs);
   const { currency, symbol: currencySymbol } = useCurrency();
@@ -1349,6 +1350,13 @@ function ProductGrid({ products, product_variants, product_variant_attributes, p
       </div >
     );
   }
+}
+
+// The grid with the signed-in customer's prices put in (lib/prices.ts):
+// the ERP's product list carries none.
+function ProductGrid(props: ProductGridProps) {
+  const { products, variants } = usePriced(props.products, props.product_variants);
+  return <ProductGridView {...props} products={products} product_variants={variants} />;
 }
 
 export default ProductGrid;

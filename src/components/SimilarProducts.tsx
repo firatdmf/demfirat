@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useFromPrices } from '@/lib/prices';
 import Link from 'next/link';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import classes from './SimilarProducts.module.css';
@@ -100,17 +101,12 @@ export default function SimilarProducts({ fabricType, currentProductSku, locale 
         }
     }, [fabricType, currentProductSku]);
 
-    // Format price display: single price or range
+    // Prices are the signed-in customer's (lib/prices.ts): the "from"
+    // price, or nothing for anybody else.
+    const { priceOf } = useFromPrices(products.map((p) => p.sku));
     const formatPriceDisplay = (product: SimilarProduct) => {
-        if (product.minPrice === null || product.minPrice === undefined || product.minPrice <= 0) {
-            return null;
-        }
-
-        if (product.maxPrice && product.maxPrice > product.minPrice) {
-            return `${convertPrice(product.minPrice)} - ${convertPrice(product.maxPrice)}`;
-        }
-
-        return convertPrice(product.minPrice);
+        const price = priceOf(product.sku);
+        return price && price > 0 ? convertPrice(price) : null;
     };
 
     if (loading) {

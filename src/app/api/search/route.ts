@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withoutPrice, withoutVariantPrices } from '@/lib/noPrices';
 
 // In-memory cache
 let cachedProducts: any[] = [];
@@ -30,13 +31,14 @@ async function getProductsWithDetails(): Promise<any[]> {
 
             if (response.ok) {
                 const data = await response.json();
-                const products = (data.products || []).map((p: any) => ({
+                // No prices: they are for signed-in customers (lib/noPrices.ts).
+                const products = (data.products || []).map((p: any) => withoutPrice({
                     ...p,
                     product_category: category
                 }));
                 console.log(`[SEARCH API] Fetched ${products.length} products for ${category}`);
                 allProducts.push(...products);
-                allVariants.push(...(data.product_variants || []));
+                allVariants.push(...withoutVariantPrices(data.product_variants));
                 allVariantAttributes.push(...(data.product_variant_attributes || []));
                 allVariantAttributeValues.push(...(data.product_variant_attribute_values || []));
             } else {

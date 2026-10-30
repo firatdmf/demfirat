@@ -639,3 +639,74 @@
     padding: 1.5rem;
   }
 }
+/* Rolls picked off the product page's stock list */
+.pickedRolls {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pickedRolls li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  background: var(--ivory, #faf8f3);
+  font-size: 0.8rem;
+  color: var(--text-dark, #2c2c2c);
+}
+
+.pickedRolls li em {
+  font-style: normal;
+  color: #92400e;
+}
+
+.pickedRollGone {
+  background: #fffbeb !important;
+  border: 1px solid #fde68a;
+}
+
+.pickedRollRemove {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b6358;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pickedRollRemove:hover {
+  background: #ece7dd;
+}
+
+.pickedQuantity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.9rem;
+}
+
+.pickedQuantity span {
+  font-size: 0.78rem;
+  color: #6b6358;
+}
+
+.pickedBlocked {
+  margin: 0 0 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 0.85rem;
+}
