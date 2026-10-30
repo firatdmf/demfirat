@@ -964,6 +964,12 @@ function ProductDetailCardView({
 
   const handleCustomCurtainAddToCart = async (customizationData: any, totalPrice: number, quantity: number = 1, isBuyNow: boolean = false) => {
     if (isGuest) { setShowLogin(true); return; }
+    // The curtain is sewn from one variant of the fabric; without it the
+    // order could not say which colour to cut.
+    if (product_variants && product_variants.length > 0 && !selectedVariant) {
+      alert(t('chooseFabricVariant'));
+      return;
+    }
     // Stock validation for custom curtain
     const requiredFabric = customizationData.width && customizationData.height
       ? (parseFloat(customizationData.width) / 100) *

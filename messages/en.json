@@ -299,6 +299,7 @@
     "trackingNumber": "Tracking Number"
   },
   "ProductDetailCard": {
+    "chooseFabricVariant": "Choose the fabric's colour and options first.",
     "addToCart": "Add to Cart",
     "addToFavorites": "Add to favorites",
     "availableQuantity": "Available Quantity",
@@ -503,5 +504,8 @@
   },
   "Pricing": {
     "signIn": "Log in for pricing"
+  },
+  "Checkout": {
+    "itemUnknown": "Some items in your cart are no longer available as chosen. Remove them and add them again."
   }
 }

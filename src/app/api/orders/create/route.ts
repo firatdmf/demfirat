@@ -92,9 +92,12 @@ export async function POST(request: NextRequest) {
           price = item.custom_price ?? price;
         }
 
+        // A sample is a cut of the variant itself; the cart only marks it
+        // "<sku>-SAMPLE" to keep it apart from a full order of the same.
+        const unsample = (sku: string | null | undefined) => (sku || '').replace(/-SAMPLE$/i, '');
         return {
-          product_sku: item.product_sku,
-          product_variant_sku: item.variant_sku,
+          product_sku: unsample(item.product_sku),
+          product_variant_sku: unsample(item.variant_sku),
           quantity,
           price,
           is_custom_curtain: isCustom,
@@ -129,6 +132,12 @@ export async function POST(request: NextRequest) {
       // A picked roll was sold or cut since it went in the cart: nothing
       // was ordered, and the cart page says which roll to remove.
       const refused = await response.json().catch(() => ({}));
+      // Or a line names no variant the catalog has (renamed, or never
+      // chosen): nothing was ordered either, and the cart is put right first.
+      if ((refused.unknown || []).length) {
+        return NextResponse.json({ success: false, error: 'items_unknown', unknown: refused.unknown },
+          { status: 409 });
+      }
       return NextResponse.json({ success: false, error: 'rolls_gone', gone: refused.gone || [] },
         { status: 409 });
     }

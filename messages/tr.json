@@ -298,6 +298,7 @@
     "trackingNumber": "Takip Numarası"
   },
   "ProductDetailCard": {
+    "chooseFabricVariant": "Önce kumaşın rengini ve seçeneklerini seçin.",
     "addToCart": "Sepete Ekle",
     "addToFavorites": "Favorilere ekle",
     "availableQuantity": "Mevcut Stok",
@@ -504,5 +505,8 @@
   },
   "Pricing": {
     "signIn": "Fiyatlar için giriş yapın"
+  },
+  "Checkout": {
+    "itemUnknown": "Sepetinizdeki bazı ürünler seçildiği haliyle artık mevcut değil. Çıkarıp yeniden ekleyin."
   }
 }

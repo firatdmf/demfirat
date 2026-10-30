@@ -65,6 +65,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const locale = useLocale();
   const tp = useTranslations('StockPicker');
+  const tc = useTranslations('Checkout');
   const { refreshCart, guestCart, clearGuestCart, isGuest } = useCart();
   const { currency, convertPrice, rates } = useCurrency();
 
@@ -756,6 +757,11 @@ export default function CheckoutPage() {
       if (response.status === 409 && result.error === 'rolls_gone') {
         // Nothing was ordered: back to the cart, which marks the roll.
         showToast(tp('cartBlocked'));
+        router.push(`/${locale}/cart`);
+        return;
+      }
+      if (response.status === 409 && result.error === 'items_unknown') {
+        showToast(tc('itemUnknown'));
         router.push(`/${locale}/cart`);
         return;
       }
