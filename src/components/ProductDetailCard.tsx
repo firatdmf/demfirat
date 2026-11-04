@@ -154,9 +154,13 @@ function ProductDetailCardView({
     // 1. Check if a specific variant ID was passed in URL (e.g. from ProductCard)
     const variantIdParam = searchParams['variant'];
     if (variantIdParam && typeof variantIdParam === 'string' && product_variants) {
+      // Short (?variant=GW8) or full (?variant=RN1337.GW8, links made
+      // before), or the variant's id (product cards).
       const wanted = variantIdParam.toLowerCase();
-      const targetVariant = product_variants.find(v =>
-        String(v.variant_sku ?? '').toLowerCase() === wanted || String(v.id) === variantIdParam);
+      const full = `${product?.sku ?? ''}.${variantIdParam}`.toLowerCase();
+      const targetVariant =
+        product_variants.find(v => [wanted, full].includes(String(v.variant_sku ?? '').toLowerCase()))
+        ?? product_variants.find(v => String(v.id) === variantIdParam);
       if (targetVariant && targetVariant.product_variant_attribute_values && product_variant_attribute_values && product_variant_attributes) {
         targetVariant.product_variant_attribute_values.forEach((valId: any) => {
           const valObj = product_variant_attribute_values.find(v => String(v.id) === String(valId));
@@ -347,6 +351,43 @@ function ProductDetailCardView({
     });
   };
 
+  // Each variant's own values by attribute name: { color: 'white', header: 'grommet' }.
+  const variantValues = useMemo(() => {
+    const byId = new Map<string, ProductVariantAttributeValue>();
+    (product_variant_attribute_values ?? []).forEach(v => byId.set(String(v.id), v));
+    const nameOf = new Map<string, string>();
+    (product_variant_attributes ?? []).forEach(a => nameOf.set(String(a.id), a.name ?? ''));
+    return (product_variants ?? []).map(variant => {
+      const values: { [name: string]: string } = {};
+      (variant.product_variant_attribute_values ?? []).forEach((id: any) => {
+        const v = byId.get(String(id));
+        const name = v && nameOf.get(String(v.product_variant_attribute_id));
+        if (v && name) values[name] = v.product_variant_attribute_value ?? '';
+      });
+      return { variant, values };
+    });
+  }, [product_variants, product_variant_attributes, product_variant_attribute_values]);
+
+  const variantFor = (choice: { [name: string]: string }) =>
+    variantValues.find(({ values }) => Object.entries(choice).every(([name, v]) => values[name] === v));
+
+  // The variant nearest a choice no variant has: it keeps `keep`, then as
+  // many of the other choices as it can, earlier options counting for more
+  // (colour before size), and on a tie the one in stock.
+  const closestChoice = (choice: { [name: string]: string }, keep?: string) => {
+    const names = (product_variant_attributes ?? []).map(a => a.name ?? '');
+    let best: { [name: string]: string } | undefined;
+    let bestScore = -1;
+    variantValues.forEach(({ variant, values }) => {
+      if (keep && values[keep] !== choice[keep]) return;
+      let score = names.reduce((s, name, i) =>
+        s + (choice[name] !== undefined && values[name] === choice[name] ? 2 ** (names.length - i) : 0), 0);
+      if (variant.stock_tracked === false || Number(variant.variant_quantity ?? 0) > 0) score += 1;
+      if (score > bestScore) { bestScore = score; best = values; }
+    });
+    return best ? { ...best } : undefined;
+  };
+
   // Compute which attribute values lead ONLY to sku-"0" variants (non-selectable)
   // Hierarchy uses the API's natural attribute order.
   // Each attribute is only filtered by attributes that come BEFORE it in that order.
@@ -436,10 +477,10 @@ function ProductDetailCardView({
     setQuantityInstead(false);
   }, [selectedVariant?.variant_sku]);
 
-  // The address names the chosen variant by its SKU (?variant=N1466T.G126)
-  // rather than spelling out every attribute. Parameters that aren't
-  // attributes (intent, …) are kept. With no single variant chosen yet the
-  // attributes stand in, as before.
+  // The address names the chosen variant by its SKU without the product's
+  // (?variant=G126 on N1466T's page, for N1466T.G126) rather than spelling
+  // out every attribute. Parameters that aren't attributes (intent, …) are
+  // kept. With no single variant chosen yet the attributes stand in.
   useEffect(() => {
     const attributeNames = new Set((product_variant_attributes ?? []).map(a => a.name ?? ''));
     const newParams = new URLSearchParams();
@@ -447,7 +488,9 @@ function ProductDetailCardView({
       if (key !== 'variant' && !attributeNames.has(key)) newParams.set(key, value);
     });
     if (selectedVariant?.variant_sku) {
-      newParams.set('variant', selectedVariant.variant_sku);
+      const parent = `${product?.sku ?? ''}.`;
+      const sku = selectedVariant.variant_sku;
+      newParams.set('variant', product?.sku && sku.startsWith(parent) ? sku.slice(parent.length) : sku);
     } else {
       Object.keys(selectedAttributes).forEach(key => {
         newParams.set(key, selectedAttributes[key]);
@@ -558,22 +601,26 @@ function ProductDetailCardView({
       ) || [];
 
       const eligibleVariants = getHierarchyFilteredVariants(currentAttributeName);
+      const valuesOf = (variants: ProductVariant[]) => Array.from(new Set(
+        allAttributeValuesForThisAttribute
+          .filter(attrValue => variants.some(variant =>
+            variant.product_variant_attribute_values?.includes(attrValue.id)))
+          .map((value: ProductVariantAttributeValue) => value.product_variant_attribute_value ?? '')
+      ));
 
-      const valuesUsedInEligibleVariants = allAttributeValuesForThisAttribute.filter(attrValue => {
-        return eligibleVariants.some(variant =>
-          variant.product_variant_attribute_values?.includes(attrValue.id)
-        );
-      });
-
-      const uniqueValues = Array.from(
-        new Set(
-          valuesUsedInEligibleVariants.map((value: ProductVariantAttributeValue) => value.product_variant_attribute_value)
-        )
-      );
-
+      // Every value the product comes in is offered, so a buyer sees there
+      // is a grommet header even while a colour made only with rod pockets
+      // is chosen. A value no variant has together with what is chosen for
+      // the other options is marked; picking it moves to the closest
+      // variant that has it.
+      const others = Object.entries(selectedAttributes).filter(([name]) => name !== currentAttributeName);
+      const withTheOthers = variantValues
+        .filter(({ values }) => others.every(([name, v]) => values[name] === v))
+        .map(({ variant }) => variant);
       return {
         attribute,
-        values: uniqueValues
+        values: valuesOf(product_variants ?? []),
+        matching: new Set(valuesOf(withTheOthers)),
       };
     });
 
@@ -583,7 +630,7 @@ function ProductDetailCardView({
       const bIdx = product_variant_attributes?.indexOf(b.attribute) ?? 0;
       return aIdx - bIdx;
     });
-  }, [product_variant_attributes, product_variant_attribute_values, product_variants, selectedAttributes, precedingAttributes]);
+  }, [product_variant_attributes, product_variant_attribute_values, product_variants, selectedAttributes, precedingAttributes, variantValues]);
 
   // Attributes with one value across the whole product (every variant 320
   // wide, say) offer no choice: they are listed as plain facts, not buttons.
@@ -648,6 +695,17 @@ function ProductDetailCardView({
       // Out of stock items are now selectable — don't auto-switch away from them
     });
 
+    // A choice no variant has (an old ?color=…&size=… link, say) lands
+    // on the variant nearest it.
+    if (Object.keys(updatedAttributes).length && variantValues.length && !variantFor(updatedAttributes)) {
+      const nearest = closestChoice(updatedAttributes);
+      if (nearest) {
+        Object.keys(updatedAttributes).forEach(k => delete updatedAttributes[k]);
+        Object.assign(updatedAttributes, nearest);
+        hasChanges = true;
+      }
+    }
+
     if (hasChanges) {
       // console.log('Updated attributes:', updatedAttributes);
       setSelectedAttributes(updatedAttributes);
@@ -699,10 +757,9 @@ function ProductDetailCardView({
   const handleAttributeChange = (attributeName: string, value: string) => {
     setSelectedThumbIndex(0);
     setUserHasSelectedVariant(true); // Kullanıcı varyant seçti
-    setSelectedAttributes(prev => ({
-      ...prev,
-      [attributeName]: value
-    }));
+    const wanted = { ...selectedAttributes, [attributeName]: value };
+    const moved = variantFor(wanted) ? undefined : closestChoice(wanted, attributeName);
+    setSelectedAttributes(moved ?? wanted);
 
     // Tracking: Select Fabric Event if in custom curtain flow AND changing the primary fabric attribute (usually color/fabric type)
     if (isCustomCurtainIntent && (attributeName.toLowerCase() === 'color' || attributeName.toLowerCase() === 'fabric_type')) {
@@ -1520,7 +1577,7 @@ function ProductDetailCardView({
                 )}
                 {groupedAttributeValues?.filter(({ attribute, values }) =>
                   values.length > 0 && !(attribute.name && attribute.name in fixedAttributeValues)
-                ).map(({ attribute, values }) => {
+                ).map(({ attribute, values, matching }) => {
                   const isSizeAttribute = ['width', 'genişlik', 'beden', 'ölçü', 'size', 'size per panel'].includes(attribute.name?.toLowerCase() || '');
                   return (
                     <li key={attribute.id.toString()}>
@@ -1557,7 +1614,7 @@ function ProductDetailCardView({
                                 <Link
                                   href={href}
                                   replace
-                                  className={`${classes.fabric_swatch} ${bgImage ? "" : classes.fabric_swatch_plain} ${isChecked ? classes.checked_fabric_swatch : ""} ${isDisabled ? classes.oos_swatch : ""}`}
+                                  className={`${classes.fabric_swatch} ${bgImage ? "" : classes.fabric_swatch_plain} ${isChecked ? classes.checked_fabric_swatch : ""} ${isDisabled ? classes.oos_swatch : ""} ${matching.has(value) ? "" : classes.other_choice}`}
                                   onClick={e => {
                                     e.preventDefault();
                                     handleAttributeChange(attribute.name ?? '', value);
@@ -1607,7 +1664,7 @@ function ProductDetailCardView({
                                 <Link
                                   href={href}
                                   replace
-                                  className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""} ${isDisabled ? classes.oos_swatch : ""}`}
+                                  className={`${classes.color_swatch} ${isChecked ? classes.checked_color_swatch : ""} ${isDisabled ? classes.oos_swatch : ""} ${matching.has(value) ? "" : classes.other_choice}`}
                                   onClick={e => {
                                     e.preventDefault();
                                     handleAttributeChange(attribute.name ?? '', value);
@@ -1645,7 +1702,7 @@ function ProductDetailCardView({
                                 <Link
                                   href={href}
                                   replace
-                                  className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""} ${isDisabled ? classes.oos_variant_link : ""}`}
+                                  className={`${classes.link} ${isChecked ? classes.checked_variant_link : ""} ${isDisabled ? classes.oos_variant_link : ""} ${matching.has(value) ? "" : classes.other_choice}`}
                                   onClick={e => {
                                     e.preventDefault();
                                     handleAttributeChange(attribute.name ?? '', value);

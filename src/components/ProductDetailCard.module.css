@@ -708,6 +708,14 @@
   cursor: pointer;
 }
 
+/* Not made with the options chosen above it: still offered, and picking
+   it moves those options to a variant that has it. */
+.other_choice.other_choice {
+  border-style: dashed;
+  opacity: 0.6;
+}
+
+
 .outOfStockBadge {
   display: inline-flex;
   align-items: center;
