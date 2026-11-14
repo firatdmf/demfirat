@@ -303,6 +303,8 @@
     "addToFavorites": "Favorilere ekle",
     "availableQuantity": "Mevcut Stok",
     "buyNow": "Şimdi Al",
+    "preOrder": "Ön sipariş ver",
+    "outOfStockPreOrder": "Stokta yok — ön sipariş verebilirsiniz",
     "customCurtain": "Perde Diktir",
     "enterValidQuantity": "Lütfen geçerli bir miktar girin",
     "minimumOrder": "Minimum sipariş miktarı {quantity}",
@@ -472,7 +474,9 @@
   },
   "StockPicker": {
     "title": "Stoktan sipariş",
-    "intro": "Topu tamamen almak için işaretleyin ya da makasla tam metre kesin. Aynı lottaki toplar aynı tondadır.",
+    "intro": "İhtiyacınız olan miktarı yazın, topları biz seçelim: mümkünse tek lottan, olabildiğince az parçada.",
+    "notSentTo": "{places} deposunda da var, ancak {country} ülkesine gönderilemiyor.",
+    "twoCountries": "Bu toplar iki ayrı ülkede: ayrı gönderilir ve iki kez gümrükten geçer.",
     "allLocations": "Tüm konumlar",
     "location": "Konum",
     "lot": "Lot",
@@ -480,7 +484,6 @@
     "lotNumber": "Lot {lot}",
     "noLot": "Lot yok",
     "rollLabel": "{length} top, {lot}, {location}",
-    "selected": "{count, plural, one {# toptan} other {# toptan}}",
     "add": "Sepete ekle",
     "adding": "Ekleniyor…",
     "added": "Toplar sepetinizde.",
@@ -490,6 +493,7 @@
     "removeRoll": "Bu topu çıkar",
     "rollGone": "Artık mevcut değil — sipariş için çıkarın",
     "cartBlocked": "Sepetinizdeki bir top artık mevcut değil. Devam etmek için çıkarın.",
+    "cartNotSent": "Sepetinizdeki bir top {country} ülkesine gönderilemiyor. Başka bir teslimat adresi seçin ya da sepetinizdeki topu değiştirin.",
     "cutLabel": "Kesilecek metre",
     "badCut": "Tam metre kesin ya da topun tamamını alın.",
     "orQuantity": "Ya da miktar girin, topları biz seçelim",
@@ -500,8 +504,24 @@
       "m": "m",
       "kg": "kg",
       "piece": "adet",
-      "pack": "paket"
-    }
+      "pack": "paket",
+      "yd": "yd"
+    },
+    "need": "Ne kadar lazım?",
+    "needUnit": "Birim",
+    "yardsAre": "Tam metre kesiyoruz: {meters}.",
+    "preOrderRest": "Burada stokta yalnızca {held} var — kalan {rest} ön sipariş olarak verilecek.",
+    "inYards": "≈ {yards} yd",
+    "ofAsked": "istediğiniz {asked} miktarın",
+    "addedWithPreOrder": "Toplar sepetinizde; {rest} de ön sipariş olarak eklendi.",
+    "rollsHint": "Topu tamamen almak için işaretleyin ya da makasla tam metre kesin. Aynı lottaki toplar aynı tondadır.",
+    "pieces": "{count, plural, one {1 parça} other {# parça}}",
+    "oneLot": "Tek lot, tek ton",
+    "severalLots": "{count} farklı lottan — tonlar biraz farklı olabilir",
+    "shipsFrom": "{place} çıkışlı",
+    "shipsFromPlaces": "{count} farklı yerden gönderilir",
+    "chooseYourself": "Topları kendim seçeyim",
+    "hideRolls": "Topları gizle"
   },
   "Pricing": {
     "signIn": "Fiyatlar için giriş yapın"

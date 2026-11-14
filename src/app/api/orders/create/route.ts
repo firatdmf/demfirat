@@ -138,6 +138,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'items_unknown', unknown: refused.unknown },
           { status: 409 });
       }
+      // Or a picked roll stands where it can't be sent to the delivery
+      // country (the ERP's shipping rules).
+      if ((refused.blocked || []).length) {
+        return NextResponse.json({ success: false, error: 'rolls_blocked', blocked: refused.blocked },
+          { status: 409 });
+      }
       return NextResponse.json({ success: false, error: 'rolls_gone', gone: refused.gone || [] },
         { status: 409 });
     }

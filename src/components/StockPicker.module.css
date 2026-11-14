@@ -298,3 +298,110 @@
     align-items: stretch;
   }
 }
+
+/* The length asked for: typed once, and the rolls are ticked from it. */
+.need {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.needLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink, #26221c);
+}
+
+.needRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.needInput {
+  width: 120px;
+  min-height: 40px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #d6cfc2;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.needInput:focus {
+  outline: none;
+  border-color: var(--ink, #26221c);
+}
+
+.units {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.unitBtn {
+  min-height: 40px;
+  min-width: 44px;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid #d6cfc2;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink, #26221c);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.unitOn {
+  border-color: var(--ink, #26221c);
+  background: var(--ink, #26221c);
+  color: #fff;
+}
+
+.needNote {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #5f574b;
+}
+
+/* What we picked, in the words a buyer cares about. */
+.summary {
+  padding: 0.75rem;
+  border: 1px solid #d6cfc2;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.summaryMain {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink, #26221c);
+  font-variant-numeric: tabular-nums;
+}
+
+.summaryLine {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: #5f574b;
+}
+
+.summaryWarn {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: #9a5b13;
+}
+
+.chooseBtn {
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 0.3rem 0;
+  border: 0;
+  background: none;
+  color: var(--ink, #26221c);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

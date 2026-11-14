@@ -2,7 +2,14 @@
 
 /*
  * The free rolls of one fabric variant, for a signed-in trade customer to
- * order from: cut whole meters off any roll, or take a roll whole. Each
+ * order from. The buyer types the length they need, in meters or yards, and
+ * the rolls it comes off are ticked for them (lib/rollPlan.ts); they can
+ * still tick, untick or cut any roll by hand. What the stock can't cover
+ * goes in the cart as a pre-order line beside the rolls. The rolls come
+ * from one country, the one that ships to the buyer best: the ERP is told
+ * the visitor's country (lib/visitorCountry), uses the customer's own
+ * address first, lists only rolls that may be sent there, and orders the
+ * places best first (operating/shipping.py). Each
  * roll shows its length, its lot (rolls of one lot match in shade) and
  * where it stands. Read from the ERP's /operating/api/storefront/stock_items/,
  * which lists only warehouses offered on the storefront and sends no cost,
@@ -19,7 +26,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { erpFetch } from '@/lib/erpFetch';
+import { metersFor, planRolls, YARD_IN_METERS } from '@/lib/rollPlan';
 import { countryName } from '@/lib/countries';
+import { visitorCountry } from '@/lib/visitorCountry';
 import classes from './StockPicker.module.css';
 
 type Place = { location: string; city: string; country: string };
@@ -28,7 +37,10 @@ type Stock = {
   tracking: 'item' | 'variant';
   unit: string;
   items: Roll[];
-  locations: (Place & { available: number })[];
+  // Where the goods would go, as the ERP judged it ("" when unknown), and
+  // the places best first, each saying whether it may send there.
+  ship_to: string;
+  locations: (Place & { available: number; ships: boolean })[];
 };
 // A picked roll: whole unless the scissors were used to cut part of it.
 type Cut = { meters: string; editing: boolean };
@@ -50,6 +62,17 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
   const [cuts, setCuts] = useState<Record<number, Cut>>({});
   const [adding, setAdding] = useState(false);
   const [notice, setNotice] = useState<{ kind: 'ok' | 'warn'; text: string } | null>(null);
+  // The length asked for, as typed, and in what.
+  const [need, setNeed] = useState('');
+  const [needUnit, setNeedUnit] = useState<'m' | 'yd'>('m');
+  // The roll list is folded away: most buyers leave the choice to us.
+  const [showRolls, setShowRolls] = useState(false);
+  // The rolls listed first: the picked ones, as they stood when they were
+  // picked or the list was opened. Not re-sorted on each tick, so a roll
+  // doesn't jump away from the buyer's cursor.
+  const [onTop, setOnTop] = useState<number[]>([]);
+  // The country the plan took the rolls from.
+  const [planCountry, setPlanCountry] = useState<string | null>(null);
 
   // Read with the session's own token, never erpFetch: that signs the
   // customer out on a 401, and a stock list that can't be read (no session
@@ -59,7 +82,8 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
     if (status === 'authenticated' && erpToken) {
       try {
         const res = await fetch(
-          `${API}/operating/api/storefront/stock_items/?sku=${encodeURIComponent(variantSku)}`,
+          `${API}/operating/api/storefront/stock_items/?sku=${encodeURIComponent(variantSku)}`
+          + `&to=${encodeURIComponent(visitorCountry())}`,
           { headers: { Authorization: `Bearer ${erpToken}` } });
         data = res.ok ? await res.json() : null;
       } catch {
@@ -75,6 +99,9 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
     setCuts({});
     setPlace('');
     setNotice(null);
+    setNeed('');
+    setShowRolls(false);
+    setPlanCountry(null);
     load();
   }, [load]);
 
@@ -102,6 +129,52 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
   const isPart = (r: Roll) => !!cuts[r.id] && lengthOf(r) < r.available;
   const chosen = (stock?.items ?? []).filter((r) => lengthOf(r) > 0);
   const chosenTotal = chosen.reduce((sum, r) => sum + lengthOf(r), 0);
+  // What the summary promises: how many lots (0 when one has none on
+  // record) and which places the pieces ship from.
+  const chosenLots = chosen.some((r) => !r.lot) ? 0 : new Set(chosen.map((r) => r.lot)).size;
+  const chosenPlaces = chosen.filter((r, i) => chosen.findIndex((c) => c.location === r.location) === i);
+  const chosenCountries = new Set(chosen.map((r) => r.country)).size;
+  // The countries rolls may come from, best first; the plan keeps to one.
+  const shipping = (stock?.locations ?? []).filter((p) => p.ships);
+  const countries = shipping.map((p) => p.country).filter((c, i, all) => all.indexOf(c) === i);
+  const country = planCountry ?? countries[0] ?? '';
+  const notSent = (stock?.locations ?? []).filter((p) => !p.ships);
+
+  // Yards only for goods sold by the meter.
+  const byMeter = stock?.unit === 'm';
+  const asked = metersFor(Number(need), byMeter ? needUnit : 'm');
+  // Held where the plan takes from: the place shown, else the plan's country.
+  const held = rolls.filter((r) => place || r.country === country).reduce((sum, r) => sum + r.available, 0);
+  // What no roll here can give: pre-ordered beside the rolls.
+  const preOrder = asked > held ? Math.ceil(asked - held) : 0;
+
+  // Tick the rolls a length comes off, in the place being shown.
+  const plan = (value: string, unitNow: 'm' | 'yd', inView: Roll[]) => {
+    const meters = metersFor(Number(value), byMeter ? unitNow : 'm');
+    const { cuts: planned, country: from } = planRolls(inView, meters, countries);
+    setPlanCountry(from);
+    setOnTop(Object.keys(planned).map(Number));
+    setCuts(Object.fromEntries(Object.entries(planned).map(([id, n]) => {
+      const roll = inView.find((r) => r.id === Number(id))!;
+      return [id, { meters: n < roll.available ? String(n) : '', editing: false }];
+    })));
+  };
+  const typeNeed = (value: string) => {
+    if (value !== '' && !/^\d*[.,]?\d*$/.test(value)) return;
+    const clean = value.replace(',', '.');
+    setNeed(clean);
+    setNotice(null);
+    plan(clean, needUnit, rolls);
+  };
+  // Another place: the length is picked again from its rolls.
+  const showPlace = (location: string) => {
+    setPlace(location);
+    if (need) plan(need, needUnit, (stock?.items ?? []).filter((r) => !location || r.location === location));
+  };
+  const switchUnit = (next: 'm' | 'yd') => {
+    setNeedUnit(next);
+    if (need) plan(need, next, rolls);
+  };
 
   if (!stock || stock.tracking !== 'item' || stock.items.length === 0) return null;
 
@@ -127,28 +200,30 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
 
   const add = async () => {
     const userId = (session?.user as { id?: string } | undefined)?.id || session?.user?.email;
-    if (!userId || chosen.length === 0) return;
+    if (!userId || (chosen.length === 0 && preOrder === 0)) return;
     setAdding(true);
     setNotice(null);
     try {
-      const res = await erpFetch(`${API}/authentication/api/add_to_cart/${userId}/`, {
+      const send = (body: object) => erpFetch(`${API}/authentication/api/add_to_cart/${userId}/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          product_sku: productSku,
-          variant_sku: variantSku,
-          // A whole roll is sent without a length: the ERP takes all of it.
-          stock_items: chosen.map((r) => isPart(r) ? { id: r.id, quantity: lengthOf(r) } : { id: r.id }),
-        }),
+        body: JSON.stringify({ product_sku: productSku, variant_sku: variantSku, ...body }),
       });
-      if (res.ok) {
+      // A whole roll is sent without a length: the ERP takes all of it.
+      const res = chosen.length
+        ? await send({ stock_items: chosen.map((r) => isPart(r) ? { id: r.id, quantity: lengthOf(r) } : { id: r.id }) })
+        : null;
+      // What the rolls can't cover: a quantity line, which staff buy in.
+      const rest = (!res || res.ok) && preOrder > 0 ? await send({ quantity: preOrder }) : null;
+      if ((res ?? rest)?.ok && (!rest || rest.ok)) {
         setCuts({});
-        setNotice({ kind: 'ok', text: t('added') });
+        setNeed('');
+        setNotice({ kind: 'ok', text: preOrder > 0 ? t('addedWithPreOrder', { rest: amount(preOrder) }) : t('added') });
         await onAdded?.();
         window.dispatchEvent(new CustomEvent('cartUpdated'));
-      } else if (res.status === 409) {
+      } else if (res?.status === 409) {
         setNotice({ kind: 'warn', text: t('gone') });
-      } else if (res.status === 400) {
+      } else if (res?.status === 400) {
         setNotice({ kind: 'warn', text: t('badCut') });
       } else {
         setNotice({ kind: 'warn', text: t('error') });
@@ -170,17 +245,76 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
         <p className={classes.intro}>{t('intro')}</p>
       </div>
 
-      {stock.locations.length > 1 && (
+      <div className={classes.need}>
+        <label htmlFor="stock-picker-need" className={classes.needLabel}>{t('need')}</label>
+        <div className={classes.needRow}>
+          <input id="stock-picker-need" type="text" inputMode="decimal" className={classes.needInput}
+            value={need} onChange={(e) => typeNeed(e.target.value)} placeholder="0" />
+          {byMeter ? (
+            <div className={classes.units} role="group" aria-label={t('needUnit')}>
+              {(['m', 'yd'] as const).map((u) => (
+                <button key={u} type="button" aria-pressed={needUnit === u}
+                  className={`${classes.unitBtn} ${needUnit === u ? classes.unitOn : ''}`}
+                  onClick={() => switchUnit(u)}>
+                  {t(`unit.${u}`)}
+                </button>
+              ))}
+            </div>
+          ) : <span className={classes.cutUnit}>{unit}</span>}
+        </div>
+        {asked > 0 && byMeter && needUnit === 'yd' && (
+          <p className={classes.needNote}>{t('yardsAre', { meters: amount(asked) })}</p>
+        )}
+        {preOrder > 0 && (
+          <p className={classes.needNote}>{t('preOrderRest', { held: amount(held), rest: amount(preOrder) })}</p>
+        )}
+        {notSent.length > 0 && stock.ship_to && (
+          <p className={classes.needNote}>
+            {t('notSentTo', { places: notSent.map(placeName).join(', '), country: countryName(stock.ship_to, locale) })}
+          </p>
+        )}
+      </div>
+
+      {chosen.length > 0 && (
+        <div className={classes.summary} aria-live="polite">
+          <p className={classes.summaryMain}>
+            {t('pieces', { count: chosen.length })}
+            {chosen.length <= 4 && ` · ${chosen.map((r) => amount(lengthOf(r))).join(' + ')}`}
+          </p>
+          <p className={classes.summaryLine}>
+            {[
+              // A roll with no lot recorded can't be promised to match.
+              chosenLots === 1 ? t('oneLot') : chosenLots > 1 ? t('severalLots', { count: chosenLots }) : '',
+              chosenPlaces.length === 1 ? t('shipsFrom', { place: placeName(chosenPlaces[0]) })
+                : t('shipsFromPlaces', { count: chosenPlaces.length }),
+            ].filter(Boolean).join(' · ')}
+          </p>
+          {chosenCountries > 1 && <p className={classes.summaryWarn}>{t('twoCountries')}</p>}
+        </div>
+      )}
+
+      <button type="button" className={classes.chooseBtn} aria-expanded={showRolls}
+        onClick={() => {
+          if (!showRolls) setOnTop(chosen.map((r) => r.id));
+          setShowRolls((open) => !open);
+        }}>
+        {showRolls ? t('hideRolls') : t('chooseYourself')}
+      </button>
+
+      {showRolls && (<>
+      <p className={classes.intro}>{t('rollsHint')}</p>
+
+      {shipping.length > 1 && (
         <div className={classes.places}>
           <button type="button" aria-pressed={!place}
             className={`${classes.place} ${!place ? classes.placeOn : ''}`}
-            onClick={() => setPlace('')}>
+            onClick={() => showPlace('')}>
             {t('allLocations')} · {amount(total)}
           </button>
-          {stock.locations.map((p) => (
+          {shipping.map((p) => (
             <button key={p.location} type="button" aria-pressed={place === p.location}
               className={`${classes.place} ${place === p.location ? classes.placeOn : ''}`}
-              onClick={() => setPlace(p.location)}>
+              onClick={() => showPlace(p.location)}>
               {placeName(p)} · {amount(p.available)}
             </button>
           ))}
@@ -194,7 +328,7 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
           <span>{t('lot')}</span>
           <span className={classes.num}>{t('length')}</span>
         </div>
-        {rolls.map((r) => {
+        {[...rolls].sort((a, b) => Number(onTop.includes(b.id)) - Number(onTop.includes(a.id))).map((r) => {
           const lot = r.lot ? t('lotNumber', { lot: r.lot }) : t('noLot');
           const cut = cuts[r.id];
           const label = t('rollLabel', { length: amount(r.available), lot, location: placeName(r) });
@@ -246,13 +380,21 @@ export default function StockPicker({ productSku, variantSku, onAdded, onStock }
         })}
       </div>
 
+      </>)}
+
       <div className={classes.foot}>
         <div>
-          <span className={classes.count}>{t('selected', { count: chosen.length })}</span>
+          {/* The pieces are counted in the summary above; here, the total. */}
           <span className={classes.total}>{amount(chosenTotal)}</span>
+          {byMeter && needUnit === 'yd' && chosenTotal > 0 && (
+            <span className={classes.count}>{t('inYards', { yards: (chosenTotal / YARD_IN_METERS).toLocaleString(locale, { maximumFractionDigits: 1 }) })}</span>
+          )}
+          {asked > 0 && chosenTotal + preOrder < asked && (
+            <span className={classes.count}>{t('ofAsked', { asked: amount(asked) })}</span>
+          )}
         </div>
         <button type="button" className={classes.addBtn} onClick={add}
-          disabled={adding || chosen.length === 0}>
+          disabled={adding || (chosen.length === 0 && preOrder === 0)}>
           {adding ? t('adding') : t('add')}
         </button>
       </div>

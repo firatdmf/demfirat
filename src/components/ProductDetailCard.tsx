@@ -867,7 +867,7 @@ function ProductDetailCardView({
 
   const handleAddToCart = async (): Promise<boolean> => {
     if (isGuest) { setShowLogin(true); return false; }
-    if (isAdding || isCurrentOutOfStock) return false;
+    if (isAdding) return false;
 
     // Check if variant selection is required but missing
     if (product_variants && product_variants.length > 0 && !selectedVariant && !isCustomCurtainIntent) {
@@ -889,22 +889,8 @@ function ProductDetailCardView({
       return false;
     }
 
-    // Stock validation — wholesale fabric is produced/imported to order, so
-    // low or zero stock doesn't block the order; it just becomes a
-    // production request our team follows up on (see the checkout notice).
-    const availableQty = selectedVariant?.variant_quantity
-      ? Number(selectedVariant.variant_quantity)
-      : (product.available_quantity ? Number(product.available_quantity) : Number(product.quantity));
-
-    if (!isFabricProduct && qty > availableQty) {
-      alert(
-        locale === 'tr'
-          ? `Yetersiz stok! Gerekli: ${qty}, Mevcut: ${availableQty}`
-          : `Insufficient stock! Required: ${qty}, Available: ${availableQty}`
-      );
-      setIsAdding(false);
-      return false;
-    }
+    // No stock check: what isn't in stock is pre-ordered. The order lands
+    // in the ERP like any other, and staff buy the goods in for it.
 
     // Get price for Meta Pixel
     const itemPrice = Number(selectedVariant?.variant_price || product.price || 0);
@@ -1602,7 +1588,7 @@ function ProductDetailCardView({
                       {/* Check if this is Fabric attribute */}
                       {attribute.name?.toLowerCase() === 'fabric' || attribute.name?.toLowerCase() === 'kumaş' ? (
                         <div className={classes.fabric_swatches}>
-                          {values.filter((value: string) => !disabledValues[attribute.name ?? '']?.has(value)).map((value: string) => {
+                          {values.map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
@@ -1634,7 +1620,7 @@ function ProductDetailCardView({
                         </div>
                       ) : attribute.name?.toLowerCase() === 'color' ? (
                         <div className={classes.color_swatches}>
-                          {values.filter((value: string) => !disabledValues[attribute.name ?? '']?.has(value)).map((value: string) => {
+                          {values.map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
@@ -1693,7 +1679,7 @@ function ProductDetailCardView({
                         </div>
                       ) : (
                         <div className={classes.variant_links}>
-                          {values.filter((value: string) => !disabledValues[attribute.name ?? '']?.has(value)).map((value: string) => {
+                          {values.map((value: string) => {
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
@@ -1947,13 +1933,13 @@ function ProductDetailCardView({
                 }
 
                 if (isCurrentOutOfStock) {
-                  // Fabric is produced/imported to order — zero stock is a
-                  // lead-time note, not a purchase blocker (button stays live).
+                  // Zero stock is a lead-time note, not a purchase blocker:
+                  // the buyer pre-orders it.
                   return (
                     <span className={classes.outOfStockBadge}>
                       {isFabricProduct
                         ? (locale === 'tr' ? 'Bu renk şu an stokta yok — sipariş üretim/tedarik ile karşılanır' : locale === 'ru' ? 'Этот цвет сейчас нет на складе — заказ будет выполнен под заказ' : locale === 'pl' ? 'Ten kolor jest niedostępny — zamówienie zrealizujemy na zamówienie' : 'Out of stock — order will be fulfilled via production/import')
-                        : (locale === 'tr' ? 'Bu renk/seçenek şu an stokta yok' : locale === 'ru' ? 'Этот вариант сейчас нет в наличии' : locale === 'pl' ? 'Ten wariant jest obecnie niedostępny' : 'This option is currently out of stock')}
+                        : t('outOfStockPreOrder')}
                     </span>
                   );
                 }
@@ -2031,15 +2017,15 @@ function ProductDetailCardView({
                       </span>
                     )}
                   </div>
-                  <button onClick={handleAddToCart} className={classes.addToCartBtn} disabled={isAdding || (isCurrentOutOfStock && !isFabricProduct)}>
+                  <button onClick={handleAddToCart} className={classes.addToCartBtn} disabled={isAdding}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
                     </svg>
-                    {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t('addToCart')}
+                    {isAdding ? (locale === 'tr' ? 'Ekleniyor...' : 'Adding...') : t(isCurrentOutOfStock ? 'preOrder' : 'addToCart')}
                   </button>
                 </div>
                 <div className={classes.actionRowTop}>
-                  <button onClick={handleBuyNow} className={classes.buyNowBtn} disabled={isCurrentOutOfStock && !isFabricProduct}>
+                  <button onClick={handleBuyNow} className={classes.buyNowBtn}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={classes.buyNowIcon}>
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>

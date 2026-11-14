@@ -760,6 +760,12 @@ export default function CheckoutPage() {
         router.push(`/${locale}/cart`);
         return;
       }
+      if (response.status === 409 && result.error === 'rolls_blocked') {
+        // A picked roll stands in a country that can't send to this
+        // address: another address may do, so the buyer stays here.
+        showToast(tp('cartNotSent', { country: countryName(deliveryAddress?.country, locale) }));
+        return;
+      }
       if (response.status === 409 && result.error === 'items_unknown') {
         showToast(tc('itemUnknown'));
         router.push(`/${locale}/cart`);

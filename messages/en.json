@@ -304,6 +304,8 @@
     "addToFavorites": "Add to favorites",
     "availableQuantity": "Available Quantity",
     "buyNow": "Buy Now",
+    "preOrder": "Pre-order",
+    "outOfStockPreOrder": "Out of stock — you can pre-order it",
     "customCurtain": "Custom Curtain",
     "enterValidQuantity": "Please enter a valid quantity",
     "minimumOrder": "Minimum order quantity is {quantity}",
@@ -471,7 +473,9 @@
   },
   "StockPicker": {
     "title": "Order from stock",
-    "intro": "Tick a roll to take it whole, or use the scissors to cut whole meters off it. Rolls from one lot match in shade.",
+    "intro": "Type how much you need and we'll choose the rolls: one lot where we can, in as few pieces as possible.",
+    "notSentTo": "Also held in {places}, which can't be sent to {country}.",
+    "twoCountries": "These rolls are in two countries: they ship separately, through customs twice.",
     "allLocations": "All locations",
     "location": "Location",
     "lot": "Lot",
@@ -479,7 +483,6 @@
     "lotNumber": "Lot {lot}",
     "noLot": "No lot",
     "rollLabel": "Roll of {length}, {lot}, {location}",
-    "selected": "{count, plural, one {From # roll} other {From # rolls}}",
     "add": "Add to cart",
     "adding": "Adding…",
     "added": "The rolls are in your cart.",
@@ -489,6 +492,7 @@
     "removeRoll": "Remove this roll",
     "rollGone": "No longer available — remove it to order",
     "cartBlocked": "A roll in your cart is no longer available. Remove it to continue.",
+    "cartNotSent": "A roll in your cart can't be sent to {country}. Choose another delivery address, or swap the roll in your cart.",
     "cutLabel": "Meters to cut",
     "badCut": "Cut whole meters, or take the whole roll.",
     "orQuantity": "Or order a quantity and we'll pick the rolls",
@@ -499,8 +503,24 @@
       "m": "m",
       "kg": "kg",
       "piece": "pcs",
-      "pack": "packs"
-    }
+      "pack": "packs",
+      "yd": "yd"
+    },
+    "need": "How much do you need?",
+    "needUnit": "Unit",
+    "yardsAre": "We cut whole meters: {meters}.",
+    "preOrderRest": "Only {held} in stock here — the other {rest} will be pre-ordered.",
+    "inYards": "≈ {yards} yd",
+    "ofAsked": "of the {asked} you asked for",
+    "addedWithPreOrder": "The rolls are in your cart, and {rest} as a pre-order.",
+    "rollsHint": "Tick a roll to take it whole, or use the scissors to cut whole meters off it. Rolls from one lot match in shade.",
+    "pieces": "{count, plural, one {1 piece} other {# pieces}}",
+    "oneLot": "One lot, one shade",
+    "severalLots": "From {count} lots — shades may differ slightly",
+    "shipsFrom": "Ships from {place}",
+    "shipsFromPlaces": "Ships from {count} places",
+    "chooseYourself": "Choose the rolls yourself",
+    "hideRolls": "Hide the rolls"
   },
   "Pricing": {
     "signIn": "Log in for pricing"
