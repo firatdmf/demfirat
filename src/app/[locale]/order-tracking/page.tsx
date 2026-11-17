@@ -30,8 +30,6 @@ interface OrderData {
     id: number;
     order_number: string;
     status: string;
-    order_status: string;
-    order_status_display: string;
     created_at: string;
     updated_at: string;
     carrier: string;
@@ -171,8 +169,8 @@ export default function OrderTrackingPage() {
                                 {t('orderDate')}: {formatDate(order.created_at)}
                             </p>
                         </div>
-                        <div className={styles.statusBadge} data-status={order.order_status}>
-                            {t(`status.${order.order_status}`)}
+                        <div className={styles.statusBadge} data-status={order.status}>
+                            {t(`status.${order.status}`)}
                         </div>
                     </div>
 
@@ -181,7 +179,7 @@ export default function OrderTrackingPage() {
                         <h3>{t('orderStatus')}</h3>
                         <div className={styles.timeline}>
                             {ORDER_STATUSES.map((status, index) => {
-                                const currentIndex = getStatusIndex(order.order_status);
+                                const currentIndex = getStatusIndex(order.status);
                                 const isCompleted = index <= currentIndex;
                                 const isCurrent = index === currentIndex;
 
