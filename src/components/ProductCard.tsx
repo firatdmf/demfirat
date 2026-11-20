@@ -2,7 +2,7 @@
 import classes from "@/components/ProductCard.module.css";
 import Link from "next/link";
 import { usePathname, useRouter } from 'next/navigation'
-import { useState, useEffect, useMemo, memo } from 'react';
+import { useState, useEffect, useMemo, useRef, memo } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useFavorites } from '@/contexts/FavoriteContext';
@@ -297,6 +297,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(initialImageSrc);
+  const imageRef = useRef<HTMLImageElement>(null);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const [isTouching, setIsTouching] = useState(false);
@@ -314,14 +315,13 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
     if (initialVariant) {
       setSelectedVariantId(String(initialVariant.id));
     }
-    // For cached images: check if already loaded after a tick
+    // A cached photo has already loaded (its onLoad fired before this
+    // effect turned the spinner back on): check the card's own image.
     requestAnimationFrame(() => {
-      const imgs = document.querySelectorAll(`img[alt*="${product.sku}"]`);
-      imgs.forEach((img) => {
-        if ((img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0) {
-          setImageLoading(false);
-        }
-      });
+      const img = imageRef.current;
+      if (img && img.complete && img.naturalWidth > 0) {
+        setImageLoading(false);
+      }
     });
   }, [initialVariant, product.primary_image, product.sku]);
 
@@ -550,6 +550,7 @@ function ProductCard({ product, locale = 'en', variant_price, allVariantPrices, 
                 </div>
               )}
               <Image
+                ref={imageRef}
                 src={imageSrc}
                 alt={primaryAltText || `${getLocalizedProductField(product, 'title', locale)} - ${product.sku}`}
                 className={classes.productImage}
