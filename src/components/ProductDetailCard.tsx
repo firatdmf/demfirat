@@ -49,21 +49,15 @@ type ProductDetailCardPageProps = {
 // The fabrics there is a swatch photo of, in public/media/fabrics. A fabric
 // with one shows it in its swatch, and larger while the pointer is on it; one
 // without is drawn as a plain weave, with no enlargement to show.
-const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'greek_tulle', 'square_virtual', 'virtual']);
+const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'square_virtual', 'virtual']);
 // The photos are cached for a month under their address, so a replaced photo
 // is only seen once this number goes up.
 const FABRIC_PHOTOS_VERSION = 20261014;
-// A fabric that looks like one there is a photo of shows that photo:
-// Greek tulle with an interlining (GREK+TELA) is Greek tulle to the eye.
-const FABRIC_PHOTO_OF: { [fabric: string]: string } = {
-  'greek+interlining': 'greek_tulle',
-};
 
 /** The swatch photo of a fabric value, or null if there is none. */
 function fabricPhotoUrl(value: string): string | null {
-  // The photos are named with "_" (greek_tulle.avif); the value may say "greek tulle".
-  const key = value.toLowerCase().trim().replace(/\s+/g, '_');
-  const photo = FABRIC_PHOTO_OF[key] ?? key;
+  // The photos are named with "_" (square_virtual.avif); the value may say "square virtual".
+  const photo = value.toLowerCase().trim().replace(/\s+/g, '_');
   return FABRIC_PHOTOS.has(photo) ? `/media/fabrics/${photo}.avif?v=${FABRIC_PHOTOS_VERSION}` : null;
 }
 
@@ -1592,7 +1586,7 @@ function ProductDetailCardView({
                             const href = `?${new URLSearchParams({ ...selectedAttributes, [attribute.name ?? '']: value }).toString()}`;
                             const isChecked = selectedAttributes[attribute.name ?? ''] === value;
                             const isDisabled = disabledValues[attribute.name ?? '']?.has(value) ?? false;
-                            // The swatch photo is named after the value: /media/fabrics/greek_tulle.avif
+                            // The swatch photo is named after the value: /media/fabrics/greek.avif
                             const bgImage = fabricPhotoUrl(value);
 
                             return (
