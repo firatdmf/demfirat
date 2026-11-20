@@ -139,6 +139,27 @@ const nextConfig = {
         destination: '/tr/product/curtain',
         permanent: true,
       },
+      // One product per embroidery design (ERP catalog cleanup C139,
+      // 2026-11-20): the crystal (T) and pearl (İ) versions became variants
+      // of the plain design code. Temporary (307) while the merge is on
+      // trial — it can still be reverted.
+      ...[
+        ['N1306T', 'N1306'],
+        ['N1466T', 'N1466'],
+        ['K25289%C4%B0', 'K25289'],
+        ['K25318%C4%B0', 'K25318'],
+      ].flatMap(([from, to]) => [
+        {
+          source: `/:locale/product/:category/${from}`,
+          destination: `/:locale/product/:category/${to}`,
+          permanent: false,
+        },
+        {
+          source: `/product/:category/${from}`,
+          destination: `/tr/product/:category/${to}`,
+          permanent: false,
+        },
+      ]),
     ];
   },
 };
