@@ -49,7 +49,7 @@ type ProductDetailCardPageProps = {
 // The fabrics there is a swatch photo of, in public/media/fabrics. A fabric
 // with one shows it in its swatch, and larger while the pointer is on it; one
 // without is drawn as a plain weave, with no enlargement to show.
-const FABRIC_PHOTOS = new Set(['bamboo', 'greg', 'greek', 'square_virtual', 'virtual']);
+const FABRIC_PHOTOS = new Set(['bamboo', 'greek', 'square_virtual', 'virtual']);
 // The photos are cached for a month under their address, so a replaced photo
 // is only seen once this number goes up.
 const FABRIC_PHOTOS_VERSION = 20261014;
