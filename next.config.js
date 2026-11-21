@@ -141,8 +141,7 @@ const nextConfig = {
       },
       // One product per embroidery design (ERP catalog cleanup C139,
       // 2026-11-20): the crystal (T) and pearl (İ) versions became variants
-      // of the plain design code. Temporary (307) while the merge is on
-      // trial — it can still be reverted.
+      // of the plain design code. Kept 2026-11-21, so permanent (308).
       ...[
         ['N1306T', 'N1306'],
         ['N1466T', 'N1466'],
@@ -152,12 +151,12 @@ const nextConfig = {
         {
           source: `/:locale/product/:category/${from}`,
           destination: `/:locale/product/:category/${to}`,
-          permanent: false,
+          permanent: true,
         },
         {
           source: `/product/:category/${from}`,
           destination: `/tr/product/:category/${to}`,
-          permanent: false,
+          permanent: true,
         },
       ]),
     ];
