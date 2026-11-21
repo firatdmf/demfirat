@@ -102,40 +102,19 @@ export default async function Page(props: Props) {
     product_variant_attributes: [],
     product_variant_attribute_values: [],
     product_category: product_category,
-    product_category_description: ""
+    product_category_description: "",
+    filter_attributes: [] as string[],
   };
   let errorMessage = "";
 
   const categoriesToFetch = resolveCategories(product_category);
 
   const categoryPromises = categoriesToFetch.map(async (category) => {
+    // The whole group is fetched; the URL's filters (?color=…,
+    // ?embellishment=…) are applied in ProductGrid, which needs every
+    // product to count the other options. One cached response per group.
     const nejum_api_link = new URL(`${process.env.NEXT_PUBLIC_NEJUM_API_URL}/marketing/api/get_products`);
     nejum_api_link.searchParams.append("product_category", category);
-
-    if (searchParams) {
-      // Ignore tracking parameters from ads (Facebook, Google, UTM etc.) and UI-only intent parameters
-      const ignoredParams = [
-        'fbclid', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign',
-        'utm_term', 'utm_content', 'ref', 'mc_cid', 'mc_eid',
-        'intent', 'fabric_type', 'curtain_filter', 'color', 'size', 'width', 'height',
-        'texture', 'style', 'material', 'pattern', 'sheerness',
-        'care', 'property', 'price_min', 'price_max'
-      ];
-
-      Object.entries(searchParams).forEach(([key, value]) => {
-        // Skip ignored tracking parameters
-        if (ignoredParams.includes(key.toLowerCase())) {
-          return;
-        }
-        if (value) {
-          if (Array.isArray(value)) {
-            value.forEach((v) => nejum_api_link.searchParams.append(key, v));
-          } else {
-            nejum_api_link.searchParams.append(key, value);
-          }
-        }
-      });
-    }
 
     try {
       const nejum_response = await fetch(nejum_api_link, {
@@ -187,6 +166,11 @@ export default async function Page(props: Props) {
     }
     if (categoryData.product_variant_attribute_values) {
       data.product_variant_attribute_values = [...data.product_variant_attribute_values, ...categoryData.product_variant_attribute_values];
+    }
+
+    // A listing made of several groups offers each group's filters.
+    for (const name of categoryData.filter_attributes || []) {
+      if (!data.filter_attributes.includes(name)) data.filter_attributes.push(name);
     }
 
     if (!data.product_category_description && categoryData.product_category_description) {
@@ -246,6 +230,7 @@ export default async function Page(props: Props) {
           searchParams={searchParams}
           locale={locale}
           productVideoSKUs={productVideoSKUs}
+          filter_attributes={data.filter_attributes}
         />
       </>)
       }

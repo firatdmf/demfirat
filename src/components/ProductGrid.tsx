@@ -33,6 +33,9 @@ type ProductGridProps = {
   SearchBarT?: string;
   initialDisplayCount?: number;
   productVideoSKUs?: string[]; // SKUs of products that have local videos
+  // Attribute names the listing offers filters for, in order. Chosen per
+  // product group in the ERP (product group page → "Website filter").
+  filter_attributes?: string[];
 }
 
 // Import centralized translation utility
@@ -46,7 +49,7 @@ const translateAttributeName = (name: string, locale: string): string => {
 };
 
 // Below variables are passed down
-function ProductGridView({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT, initialDisplayCount = 30, productVideoSKUs = [] }: ProductGridProps) {
+function ProductGridView({ products, product_variants, product_variant_attributes, product_variant_attribute_values, product_category, product_category_description, searchParams, locale = 'en', HeadlineT, SearchBarT, initialDisplayCount = 30, productVideoSKUs = [], filter_attributes = [] }: ProductGridProps) {
   // Create a Set for O(1) lookup of video SKUs
   const videoSKUsSet = new Set(productVideoSKUs);
   const { currency, symbol: currencySymbol } = useCurrency();
@@ -443,13 +446,11 @@ function ProductGridView({ products, product_variants, product_variant_attribute
   }));
 
   // ── Filter section helpers ──
-  // Which variant attributes get a filter section. Historically only color;
-  // size and header exist in the data and are exactly what curtain shoppers
-  // filter by (US retailers: size + header type are standard facets).
-  const isFilterableAttribute = (attribute: ProductVariantAttribute): boolean => {
-    const name = attribute.name?.toLowerCase() || '';
-    return name === 'color' || name === 'header' || name.includes('size');
-  };
+  // Which variant attributes get a filter section, and in what order: the
+  // ones the product group ticks in the ERP (filter_attributes).
+  const filterOrder = filter_attributes.map(n => n.toLowerCase());
+  const isFilterableAttribute = (attribute: ProductVariantAttribute): boolean =>
+    filterOrder.includes(attribute.name?.toLowerCase() || '');
 
   const formatFilterTitle = (name: string): string => {
     const n = name.toLowerCase();
@@ -587,7 +588,8 @@ function ProductGridView({ products, product_variants, product_variant_attribute
         byTitle.set(titleKey, { attribute, optionCount });
       }
     }
-    return Array.from(byTitle.values()).map(entry => entry.attribute);
+    return Array.from(byTitle.values()).map(entry => entry.attribute).sort((a, b) =>
+      filterOrder.indexOf(a.name?.toLowerCase() || '') - filterOrder.indexOf(b.name?.toLowerCase() || ''));
   })();
 
   if (!products) {
