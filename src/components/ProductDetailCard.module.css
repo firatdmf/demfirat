@@ -147,8 +147,8 @@
   border-radius: 16px;
   overflow: visible;
   background: var(--ivory, #faf8f3);
-  /* 3:4 shows the fabric texture much better than the old ultra-tall 9:16 */
-  aspect-ratio: 3 / 4;
+  /* Square, like the product cards and the photos themselves */
+  aspect-ratio: 1 / 1;
   max-height: 95vh;
   display: flex;
   align-items: flex-start;
@@ -1932,7 +1932,7 @@
   }
 
   .gallery {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     max-height: 60vh;
     border-radius: 10px;
     width: 100%;
@@ -2148,7 +2148,7 @@
   }
 
   .gallery {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     max-height: 55vh;
     max-width: 100%;
     overflow: hidden;
