@@ -48,7 +48,7 @@ export default function CategoryCards({ locale = 'en' }: CategoryCardsProps) {
         {
             key: 'bedroom',
             href: `/${locale}/product/bed`,
-            image: 'https://demfiratkarven.b-cdn.net/media/product_images/product_RADOLF/Gemini_Generated_Image_aaqs7saaqs7saaqs.avif',
+            image: 'https://demfiratkarven.b-cdn.net/media/product_images/LEENA/leena-216208.avif',
         },
     ];
 
